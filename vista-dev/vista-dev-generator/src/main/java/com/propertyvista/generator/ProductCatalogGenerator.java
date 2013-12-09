@@ -42,10 +42,6 @@ public class ProductCatalogGenerator {
 
     private static final String ConcessionTypeId = "Concession.Type.Id";
 
-    private static final String IncludedUtilitiesId = "IncludedUtilitiesId";
-
-    private static final String ExcludedUtilitiesId = "ExcludedUtilitiesId";
-
     public ProductCatalogGenerator(long seed) {
         if (seed != 0) {
             DataGenerator.setRandomSeed(seed);
@@ -56,8 +52,6 @@ public class ProductCatalogGenerator {
 
         DataGenerator.cleanRandomDuplicates(ConcessionId);
         DataGenerator.cleanRandomDuplicates(ConcessionTypeId);
-        DataGenerator.cleanRandomDuplicates(IncludedUtilitiesId);
-        DataGenerator.cleanRandomDuplicates(ExcludedUtilitiesId);
 
         catalog.services().addAll(createServices(catalog));
         catalog.features().addAll(createFeatures(catalog));
@@ -213,40 +207,6 @@ public class ProductCatalogGenerator {
         item.version().effectiveDate().setValue(DataGenerator.randomDateInLastYearMonthShifted(2));
         item.version().expirationDate().setValue(DataGenerator.randomDateInLastYearMonthShifted(4));
         return item;
-    }
-
-    public List<ARCode> createIncludedUtilities() {
-        List<ARCode> allowedItemTypes = new ArrayList<ARCode>();
-        allowedItemTypes.addAll(getARCodes(ARCode.Type.Utility));
-
-        List<ARCode> items = new ArrayList<ARCode>();
-        if (!allowedItemTypes.isEmpty()) {
-            int maxItems = Math.min(DataGenerator.randomInt(allowedItemTypes.size()) + 1, allowedItemTypes.size());
-            for (int i = 0; i < maxItems; ++i) {
-                items.add(RandomUtil.random(allowedItemTypes, IncludedUtilitiesId, maxItems));
-            }
-        }
-
-        return items;
-    }
-
-    public List<ARCode> createExcludedUtilities(List<ARCode> includedOnes) {
-        List<ARCode> allowedItemTypes = new ArrayList<ARCode>();
-        for (ARCode itemType : getARCodes(ARCode.Type.Utility)) {
-            if (!includedOnes.contains(itemType)) {
-                allowedItemTypes.add(itemType);
-            }
-        }
-
-        List<ARCode> items = new ArrayList<ARCode>();
-        if (!allowedItemTypes.isEmpty()) {
-            int maxItems = Math.min(DataGenerator.randomInt(allowedItemTypes.size()) + 1, allowedItemTypes.size());
-            for (int i = 0; i < maxItems; ++i) {
-                items.add(RandomUtil.random(allowedItemTypes, ExcludedUtilitiesId, maxItems));
-            }
-        }
-
-        return items;
     }
 
     private Service getService(ProductCatalog catalog, ARCode arCode) {

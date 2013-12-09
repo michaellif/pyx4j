@@ -145,6 +145,10 @@ public interface Building extends PolicyNode, HasNotesAndAttachments {
     @Detached(level = AttachLevel.Detached)
     IList<BuildingAmenity> amenities();
 
+    /**
+     * Included in price utilities, should be copied to lease during
+     * lease (lease term) creation, then could be edited manually.
+     */
     @Owned
     @Detached(level = AttachLevel.Detached)
     IList<BuildingUtility> utilities();

@@ -40,15 +40,31 @@ public interface BuildingUtility extends IEntity {
     @XmlType(name = "BuildingUtiltiyType")
     public enum Type {
 
-        gas,
+        airConditioning,
 
-        water,
-
-        hydro,
+        electricity,
 
         internet,
 
-        cable;
+        cable,
+
+        garbage,
+
+        gas,
+
+        heating,
+
+        hydro,
+
+        sewage,
+
+        television,
+
+        telephone,
+
+        water,
+
+        other;
 
         @Override
         public String toString() {
@@ -65,6 +81,13 @@ public interface BuildingUtility extends IEntity {
     @JoinColumn
     Building building();
 
+    @Length(2048)
+    IPrimitive<String> description();
+
+    @Length(128)
+    @ToString(index = 1)
+    IPrimitive<String> name();
+
     @OrderColumn
     IPrimitive<Integer> orderInBuilding();
 
@@ -72,11 +95,4 @@ public interface BuildingUtility extends IEntity {
     @ToString(index = 0)
     @MemberColumn(name = "buildingUtilityType")
     IPrimitive<Type> type();
-
-    @Length(128)
-    @ToString(index = 1)
-    IPrimitive<String> name();
-
-    @Length(2048)
-    IPrimitive<String> description();
 }

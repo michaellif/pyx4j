@@ -42,6 +42,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
@@ -135,6 +136,10 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
         @EmbeddedEntity
         LeaseProducts leaseProducts();
+
+        @Owned
+        @Detached
+        IList<BuildingUtility> utilities();
     }
 
     // internals:   -----------------------------------------------
