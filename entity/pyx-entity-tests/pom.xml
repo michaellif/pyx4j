@@ -52,23 +52,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-server</artifactId>
-            <version>${project.version}</version>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-tests-config</artifactId>
-            <version>${project.version}</version>
-            <classifier>tests</classifier>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -114,32 +97,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-
-                    <execution>
-                        <id>process-test-classes.eclipse-sync</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                          <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <condition property="war.classes" value="${basedir}/war/WEB-INF/classes" else="${project.build.directory}/test-classes">
-                                    <available file="${basedir}/war/WEB-INF/web.xml"/>
-                                </condition>
-                                <copy todir="${war.classes}" preservelastmodified="true" overwrite="true" failonerror="false">
-                                    <fileset dir="${project.build.directory}/test-classes"/>
-                                </copy>
-                            </target>
-                        </configuration>
-                    </execution>
-
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 
