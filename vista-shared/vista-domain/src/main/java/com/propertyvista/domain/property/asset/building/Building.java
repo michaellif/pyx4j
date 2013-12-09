@@ -149,12 +149,12 @@ public interface Building extends PolicyNode, HasNotesAndAttachments {
      * Included in price utilities, should be copied to lease during
      * lease (lease term) creation, then could be edited manually.
      */
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     IList<BuildingUtility> utilities();
 
-    @Detached(level = AttachLevel.Detached)
     @Owned
+    @Detached(level = AttachLevel.Detached)
     ISet<BuildingMerchantAccount> merchantAccounts();
 
     // ----------------------------------------------------

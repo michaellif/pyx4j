@@ -137,7 +137,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
         @EmbeddedEntity
         LeaseProducts leaseProducts();
 
-        @Owned
         @Detached
         IList<BuildingUtility> utilities();
     }

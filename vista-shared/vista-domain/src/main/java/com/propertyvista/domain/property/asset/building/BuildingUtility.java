@@ -95,4 +95,7 @@ public interface BuildingUtility extends IEntity {
     @ToString(index = 0)
     @MemberColumn(name = "buildingUtilityType")
     IPrimitive<Type> type();
+
+    @NotNull
+    IPrimitive<Boolean> isDeleted();
 }
