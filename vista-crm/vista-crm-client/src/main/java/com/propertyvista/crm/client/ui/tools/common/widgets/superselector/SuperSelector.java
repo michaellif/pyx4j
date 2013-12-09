@@ -63,6 +63,8 @@ public abstract class SuperSelector<DataType> extends Composite {
 
     private final IFormat<DataType> format;
 
+    private final boolean allowSame;
+
     private boolean isFocused;
 
     private final FlowPanel containerBox;
@@ -71,8 +73,10 @@ public abstract class SuperSelector<DataType> extends Composite {
      * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
      * item.
      */
-    public SuperSelector(IFormat<DataType> format) {
+    public SuperSelector(IFormat<DataType> format, boolean allowSame) {
         this.format = format;
+        this.allowSame = allowSame;
+
         FlowPanel panel = new FlowPanel();
         panel.setStyleName(Styles.SuperSelectorStyle.name());
 
@@ -136,6 +140,10 @@ public abstract class SuperSelector<DataType> extends Composite {
         selectedWidgets = new LinkedList<SelectedItemHolder<DataType>>();
     }
 
+    public SuperSelector(IFormat<DataType> format) {
+        this(format, false);
+    }
+
     public void setInput(String input) {
         inputTextBox.setValue(input);
         onInputChanged(input);
@@ -151,10 +159,13 @@ public abstract class SuperSelector<DataType> extends Composite {
     }
 
     /**
-     * Can be overridden to make validation. Warning: <code>null</code> will be silently ignored.
+     * Warning: passing <code>null</code> will be silently ignored.
      */
     public void addItem(DataType item) {
         if (item == null) {
+            return;
+        }
+        if (!allowSame && getSelectedItems().contains(item)) {
             return;
         }
 
