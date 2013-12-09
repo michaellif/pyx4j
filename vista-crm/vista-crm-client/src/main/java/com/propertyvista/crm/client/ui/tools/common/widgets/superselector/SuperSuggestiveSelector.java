@@ -92,15 +92,6 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
     }
 
     @Override
-    public void addItem(DataType item) {
-        if (this.popup != null && this.popup.getSelectedItem() != null) {
-            super.addItem(this.popup.getSelectedItem());
-        } else {
-            super.addItem(item);
-        }
-    }
-
-    @Override
     protected void onInputChanged(final String newInput) {
         if (this.popupTimer != null) {
             this.popupTimer.cancel();

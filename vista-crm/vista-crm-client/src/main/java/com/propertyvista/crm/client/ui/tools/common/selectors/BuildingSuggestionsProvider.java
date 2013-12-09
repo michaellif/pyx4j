@@ -168,5 +168,7 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
             @Override public void delete(AsyncCallback<Boolean> callback, Key entityId) {}
         };//@formatter:off
     }
+    
+    
 
 }
