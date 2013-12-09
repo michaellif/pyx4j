@@ -21,6 +21,8 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -87,8 +89,8 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
     }
 
     @Override
-    public void createMasterOnlineApplication(Lease leaseId) {
-        new LeaseInternalManager().createMasterOnlineApplication(leaseId);
+    public void createMasterOnlineApplication(Lease leaseId, Building building, Floorplan floorplan) {
+        new LeaseInternalManager().createMasterOnlineApplication(leaseId, building, floorplan);
     }
 
     @Override

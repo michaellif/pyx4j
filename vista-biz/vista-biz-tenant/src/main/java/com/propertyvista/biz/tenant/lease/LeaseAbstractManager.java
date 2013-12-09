@@ -69,6 +69,8 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.security.CrmUser;
@@ -251,7 +253,7 @@ public abstract class LeaseAbstractManager {
 
     // Operations: ----------------------------------------------------------------------------------------------------
 
-    public void createMasterOnlineApplication(Lease leaseId) {
+    public void createMasterOnlineApplication(Lease leaseId, Building building, Floorplan floorplan) {
         Lease lease = load(leaseId, false);
 
         // Verify the status
@@ -262,7 +264,8 @@ public abstract class LeaseAbstractManager {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Application Status (\"{0}\")", lease.leaseApplication().status().getValue()));
         }
 
-        ServerSideFactory.create(OnlineApplicationFacade.class).createMasterOnlineApplication(lease.leaseApplication().onlineApplication());
+        ServerSideFactory.create(OnlineApplicationFacade.class)
+                .createMasterOnlineApplication(lease.leaseApplication().onlineApplication(), building, floorplan);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.OnlineApplication);
         lease.status().setValue(Lease.Status.Application);

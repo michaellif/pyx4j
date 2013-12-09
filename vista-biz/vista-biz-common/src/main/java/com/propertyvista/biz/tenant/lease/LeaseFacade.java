@@ -20,6 +20,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -64,7 +66,7 @@ public interface LeaseFacade {
 
     // DB-data Lease state interfaces:
 
-    void createMasterOnlineApplication(Lease leaseId);
+    void createMasterOnlineApplication(Lease leaseId, Building building, Floorplan floorplan);
 
     void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 

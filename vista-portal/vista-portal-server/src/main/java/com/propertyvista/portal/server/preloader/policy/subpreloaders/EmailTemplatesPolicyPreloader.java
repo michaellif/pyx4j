@@ -209,7 +209,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "If at anytime during the process you have any concerns or questions, please call us directly at {1} and have your Application Reference Number ready.<br/><br/>" +
                 "Your Application Reference Number is: <b>{2}</b><br/><br/>" +
                 "To get started, please login to your account [[{3}|here]]<br/><br/>" +
-                "<i>(If the link does not work please copy and paste the following URL:<br/>{4} )<br/></i>" + 
+                "<i>(If the link does not work please copy and paste the following URL:<br/>{4} )<br/></i><br/>" + 
                 "We look forward to making this application process as smooth as possible for you.<br/><br/>"+
                 "Sincerely,<br/><br/>"+
                 "{5}<br/>" +

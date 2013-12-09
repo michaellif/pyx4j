@@ -302,9 +302,7 @@ public class EmailTemplateRootObjectLoader {
             throw new Error("Context cannot be null");
         }
 
-        if (tenantInLease.application().isValueDetached()) {
-            Persistence.service().retrieve(tenantInLease.application());
-        }
+        Persistence.ensureRetrieve(tenantInLease.application(), AttachLevel.Attached);
         OnlineApplication app = tenantInLease.application();
         if (app == null || app.isNull()) {
             throw new Error("Invalid context. No Application found.");

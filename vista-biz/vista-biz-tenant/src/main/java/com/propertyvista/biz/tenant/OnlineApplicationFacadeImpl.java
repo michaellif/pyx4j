@@ -56,8 +56,10 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     private static final I18n i18n = I18n.get(OnlineApplicationFacadeImpl.class);
 
     @Override
-    public void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication) {
+    public void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication, Building building, Floorplan floorplan) {
         masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Incomplete);
+        masterOnlineApplication.building().set(building);
+        masterOnlineApplication.floorplan().set(floorplan);
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(masterOnlineApplication);
         Persistence.service().persist(masterOnlineApplication);
 
@@ -347,10 +349,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
         ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
-        lease.leaseApplication().onlineApplication().building().set(building);
-        lease.leaseApplication().onlineApplication().floorplan().set(floorplan);
-
-        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
+        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, building, floorplan);
 
         ServerSideFactory.create(CustomerFacade.class).setCustomerPassword(mainTenant.leaseParticipant().customer(), request.password().getValue());
     }

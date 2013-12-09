@@ -15,6 +15,8 @@ package com.propertyvista.biz.tenant;
 
 import java.util.List;
 
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.ProspectSignUp;
@@ -27,7 +29,7 @@ public interface OnlineApplicationFacade {
 
     void prospectSignUp(ProspectSignUp request);
 
-    void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
+    void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication, Building building, Floorplan floorplan);
 
     void approveMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
 

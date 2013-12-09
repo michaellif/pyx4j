@@ -238,7 +238,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
     @Override
     public void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(EntityFactory.createIdentityStub(Lease.class, entityId));
+        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(EntityFactory.createIdentityStub(Lease.class, entityId), null, null);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

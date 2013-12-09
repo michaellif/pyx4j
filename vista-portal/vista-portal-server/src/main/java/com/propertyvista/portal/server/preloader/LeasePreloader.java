@@ -255,7 +255,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
             if (mustHaveApplication || RandomUtil.randomBoolean()) {
-                ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
+                ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, null, null);
             }
             SystemDateManager.resetDate();
         }
