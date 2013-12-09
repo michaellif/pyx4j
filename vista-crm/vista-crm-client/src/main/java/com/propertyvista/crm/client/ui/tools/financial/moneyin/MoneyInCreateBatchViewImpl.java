@@ -40,8 +40,8 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaForm;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 
 public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements MoneyInCreateBatchView {
 
@@ -161,7 +161,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
     }
 
     @Override
-    public MoneyInCandidateSearchCriteriaDTO getSearchCriteria() {
+    public MoneyInCandidateSearchCriteriaModel getSearchCriteria() {
         return this.searchForm.getValue();
     }
 

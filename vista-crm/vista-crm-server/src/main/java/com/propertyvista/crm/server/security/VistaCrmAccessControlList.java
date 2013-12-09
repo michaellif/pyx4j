@@ -69,13 +69,13 @@ import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
-import com.propertyvista.crm.rpc.services.customer.InsuranceCertificateScanCrmUploadService;
 import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
+import com.propertyvista.crm.rpc.services.customer.InsuranceCertificateScanCrmUploadService;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileDownloadService;
@@ -107,6 +107,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysis
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
+import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.crm.rpc.services.lease.ApplicationDocumentCrmUploadService;
@@ -278,6 +279,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Financial:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AutoPayCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AutoPayReviewService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MoneyInToolService.class));
 
 // - Dashboard:
         // we want owners (dashboard creator) to have full access to dashboards they own, and other users only read-only access and only for shared.

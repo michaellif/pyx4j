@@ -14,12 +14,15 @@
 package com.propertyvista.crm.client.activity.tools.financial.moneyin;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -27,15 +30,23 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
+import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class MoneyInCreateBatchActivity extends AbstractActivity implements MoneyInCreateBatchView.Presenter {
 
@@ -49,11 +60,14 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     private final Map<Key, HashMap<Path, ValidationErrors>> validationErrorsMap;
 
+    private final MoneyInToolService service;
+
     public MoneyInCreateBatchActivity() {
         validationErrorsMap = new HashMap<Key, HashMap<Path, ValidationErrors>>();
         view = CrmSite.getViewFactory().getView(MoneyInCreateBatchView.class);
-        searchResultsProvider = new ListDataProvider<MoneyInCandidateDTO>(makeMockCandidates(), this);
+        searchResultsProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(), this);
         selectedForProcessingProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(), this);
+        service = GWT.<MoneyInToolService> create(MoneyInToolService.class);
     }
 
     @Override
@@ -71,8 +85,14 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     @Override
     public void search() {
-        // TODO 
-        System.out.println(view.getSearchCriteria());
+        service.findCandidates(new DefaultAsyncCallback<Vector<MoneyInCandidateDTO>>() {
+            @Override
+            public void onSuccess(Vector<MoneyInCandidateDTO> result) {
+                merge(result, selectedForProcessingProvider.getList());
+                searchResultsProvider.setList(result);
+            }
+
+        }, toDto(view.getSearchCriteria()));
     }
 
     @Override
@@ -220,32 +240,67 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         }
     }
 
-    private List<MoneyInCandidateDTO> makeMockCandidates() {
-        List<MoneyInCandidateDTO> mockCandidates = new LinkedList<MoneyInCandidateDTO>();
-        for (int i = 1; i < 101; ++i) {
-            mockCandidates.add(makeMockCandidate(i));
-        }
-        return mockCandidates;
-    }
+    private void merge(List<MoneyInCandidateDTO> incomingCandidates, List<MoneyInCandidateDTO> selectedCandidates) {
+        for (MoneyInCandidateDTO selected : selectedCandidates) {
+            MoneyInCandidateDTO matchingIncoming = null;
 
-    private MoneyInCandidateDTO makeMockCandidate(int n) {
-        MoneyInCandidateDTO c = EntityFactory.create(MoneyInCandidateDTO.class);
-        c.leaseIdStub().setPrimaryKey(new Key(n));
-        c.building().setValue(n % 5 != 0 ? "B1" : "B2");
-        c.unit().setValue("" + (100 + n));
-        c.leaseId().setValue("t00000" + n);
+            for (MoneyInCandidateDTO incoming : incomingCandidates) {
+                if (selected.leaseIdStub().equals(incoming.leaseIdStub())) {
+                    matchingIncoming = incoming;
+                    break;
+                }
+            }
 
-        c.prepayments().setValue(new BigDecimal("0.00"));
-        c.totalOutstanding().setValue(new BigDecimal("1077.00"));
-
-        for (int t = 1; t != 3; ++t) {
-            MoneyInLeaseParticipantDTO payer = c.payerCandidates().$();
-            payer.tenantIdStub().setPrimaryKey(new Key(t));
-            payer.name().setValue("Tenat Tenantovic #" + t);
-            c.payerCandidates().add(payer);
+            if (matchingIncoming != null) {
+                matchingIncoming.set(selected);
+            }
         }
 
-        return c;
     }
 
+//
+//    private List<MoneyInCandidateDTO> makeMockCandidates() {
+//        List<MoneyInCandidateDTO> mockCandidates = new LinkedList<MoneyInCandidateDTO>();
+//        for (int i = 1; i < 101; ++i) {
+//            mockCandidates.add(makeMockCandidate(i));
+//        }
+//        return mockCandidates;
+//    }
+
+//    private MoneyInCandidateDTO makeMockCandidate(int n) {
+//        MoneyInCandidateDTO c = EntityFactory.create(MoneyInCandidateDTO.class);
+//        c.leaseIdStub().setPrimaryKey(new Key(n));
+//        c.building().setValue(n % 5 != 0 ? "B1" : "B2");
+//        c.unit().setValue("" + (100 + n));
+//        c.leaseId().setValue("t00000" + n);
+//
+//        c.prepayments().setValue(new BigDecimal("0.00"));
+//        c.totalOutstanding().setValue(new BigDecimal("1077.00"));
+//
+//        for (int t = 1; t != 3; ++t) {
+//            MoneyInLeaseParticipantDTO payer = c.payerCandidates().$();
+//            payer.tenantIdStub().setPrimaryKey(new Key(t));
+//            payer.name().setValue("Tenat Tenantovic #" + t);
+//            c.payerCandidates().add(payer);
+//        }
+//
+//        return c;
+//    }
+
+    private MoneyInCandidateSearchCriteriaDTO toDto(MoneyInCandidateSearchCriteriaModel model) {
+        MoneyInCandidateSearchCriteriaDTO dto = EntityFactory.create(MoneyInCandidateSearchCriteriaDTO.class);
+        dto.portfolios().addAll(toIdStubs(Portfolio.class, model.portfolios()));
+        dto.buildings().addAll(toIdStubs(Building.class, model.buildings()));
+        dto.unit().setValue(model.unit().getValue());
+        dto.tenant().setValue(model.tenant().getValue());
+        return dto;
+    }
+
+    private <E extends IEntity> Collection<? extends E> toIdStubs(Class<E> identityStubClass, IList<?> entities) {
+        List<E> idStubs = new LinkedList<E>();
+        for (IEntity entity : entities) {
+            idStubs.add((EntityFactory.createIdentityStub(identityStubClass, entity.getPrimaryKey())));
+        }
+        return idStubs;
+    }
 }

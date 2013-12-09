@@ -22,8 +22,8 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 
 public interface MoneyInCreateBatchView extends IPrimePane {
@@ -47,7 +47,7 @@ public interface MoneyInCreateBatchView extends IPrimePane {
 
     void setPresenter(Presenter presenter);
 
-    MoneyInCandidateSearchCriteriaDTO getSearchCriteria();
+    MoneyInCandidateSearchCriteriaModel getSearchCriteria();
 
     HasData<MoneyInCandidateDTO> searchResults();
 

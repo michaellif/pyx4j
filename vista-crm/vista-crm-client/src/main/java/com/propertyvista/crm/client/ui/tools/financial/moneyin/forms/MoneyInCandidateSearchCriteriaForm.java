@@ -24,11 +24,10 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
 import com.propertyvista.crm.client.ui.tools.common.selectors.CSuperSelector;
 import com.propertyvista.crm.client.ui.tools.common.selectors.PortfolioSelector;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
-public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandidateSearchCriteriaDTO> {
+public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandidateSearchCriteriaModel> {
 
     private static class SearchCriteriaFormDecoratorBuilder extends FormDecoratorBuilder {
 
@@ -46,7 +45,7 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
     }
 
     public MoneyInCandidateSearchCriteriaForm() {
-        super(MoneyInCandidateSearchCriteriaDTO.class);
+        super(MoneyInCandidateSearchCriteriaModel.class);
     }
 
     @Override
@@ -65,13 +64,13 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
     private CSuperSelector<PortfolioForSelectionDTO> createPortfolioSelector() {
         return new CSuperSelector<PortfolioForSelectionDTO>(new PortfolioSelector() {//@formatter:off
             @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
-                MoneyInCandidateSearchCriteriaDTO searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
+                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.portfolios().add(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);                
             }
             @Override
             protected void onItemRemoved(PortfolioForSelectionDTO item) {
-                MoneyInCandidateSearchCriteriaDTO searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
+                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.portfolios().remove(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);            
             }
@@ -81,12 +80,12 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
     private CSuperSelector<BuildingForSelectionDTO> createBuildingSelector() {
         return new CSuperSelector<BuildingForSelectionDTO>(new BuildingSelector() {//@formatter:off
             @Override protected void onItemAdded(BuildingForSelectionDTO item) {
-                MoneyInCandidateSearchCriteriaDTO searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
+                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.buildings().add(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
             }            
             @Override protected void onItemRemoved(BuildingForSelectionDTO item) {
-                MoneyInCandidateSearchCriteriaDTO searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue();
+                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue();
                 searchCriteria.buildings().remove(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
             }            

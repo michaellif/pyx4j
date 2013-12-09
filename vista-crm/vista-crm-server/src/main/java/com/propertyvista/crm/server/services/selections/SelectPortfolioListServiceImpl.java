@@ -51,7 +51,7 @@ public class SelectPortfolioListServiceImpl extends AbstractListServiceImpl<Port
 
     private PortfolioForSelectionDTO convertTo4SelectionDto(Portfolio p) {
         PortfolioForSelectionDTO dto = EntityFactory.create(PortfolioForSelectionDTO.class);
-        dto.portfolioIdStub().setPrimaryKey(p.getPrimaryKey());
+        dto.id().setValue(p.id().getValue());
         dto.name().setValue(p.name().getValue());
         return dto;
     }

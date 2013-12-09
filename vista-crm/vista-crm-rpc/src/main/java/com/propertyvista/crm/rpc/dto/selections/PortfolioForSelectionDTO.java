@@ -17,12 +17,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.company.Portfolio;
-
 @Transient
 public interface PortfolioForSelectionDTO extends IEntity {
-
-    Portfolio portfolioIdStub();
 
     IPrimitive<String> name();
 }

@@ -44,7 +44,7 @@ import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriter
 import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.crm.server.services.reports.util.ReportProgressStatusHolderExectutionMonitorAdapter;
-import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.crm.server.util.BuildingsCriteriaNormalizer;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.EcheckInfo;
@@ -61,8 +61,9 @@ public class EftReportGenerator implements ReportExporter {
 
     private final EntityBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
 
-    public EftReportGenerator() {
+    private BuildingsCriteriaNormalizer buildingCriteriaNormalizer;
 
+    public EftReportGenerator() {
         dtoBinder = new EntityBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
 
             @Override
@@ -111,6 +112,9 @@ public class EftReportGenerator implements ReportExporter {
                 return eftReportRecordDto;
             }
         };
+
+        buildingCriteriaNormalizer = new BuildingsCriteriaNormalizer(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().lease()
+                .unit().building());
     }
 
     @Override
@@ -136,12 +140,10 @@ public class EftReportGenerator implements ReportExporter {
                 padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());
             }
 
-            normalizeBuildingsFilter(reportMetadata);
-
-            List<Building> selectedBuildings = null;
-            if (reportMetadata.filterByBuildings().getValue(false) && (!reportMetadata.selectedBuildings().isEmpty())) {
-                selectedBuildings = reportMetadata.selectedBuildings();
-            }
+            List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
+                    reportMetadata.filterByPortfolio().isBooleanTrue() ? reportMetadata.selectedPortfolios() : null,
+                    reportMetadata.filterByBuildings().isBooleanTrue() ? reportMetadata.selectedBuildings() : null
+            );//formatter:on
 
             for (LogicalDate padGenerationDate : padGenerationDays) {
                 PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
@@ -245,15 +247,12 @@ public class EftReportGenerator implements ReportExporter {
             criteria.eq(criteria.proto().padBillingCycle().billingCycleStartDate(), reportMetadata.billingCycleStartDate());
         }
 
-        normalizeBuildingsFilter(reportMetadata);
-        if (reportMetadata.filterByBuildings().isBooleanTrue()) {
-            if (!reportMetadata.selectedBuildings().isEmpty()) {
-                criteria.in(criteria.proto().billingAccount().lease().unit().building(), reportMetadata.selectedBuildings());
-            } else {
-                // not sure about that but it makes sense mathematically
-                criteria.isNull(criteria.proto().billingAccount().lease().unit().building());
-            }
-        }
+        buildingCriteriaNormalizer.addBuildingCriterion(//@formatter:off
+                criteria,
+                reportMetadata.filterByPortfolio().isBooleanTrue() ? reportMetadata.selectedPortfolios() : null,
+                reportMetadata.filterByBuildings().isBooleanTrue() ? reportMetadata.selectedBuildings() : null
+        );//@formatter:on
+
         if (reportMetadata.filterByExpectedMoveOut().isBooleanTrue()) {
             criteria.ge(criteria.proto().billingAccount().lease().expectedMoveOut(), reportMetadata.minimum());
             criteria.le(criteria.proto().billingAccount().lease().expectedMoveOut(), reportMetadata.maximum());
@@ -286,35 +285,13 @@ public class EftReportGenerator implements ReportExporter {
     }
 
     private void normalizeBuildingsFilter(EftReportMetadata reportMetadata) {
-        Vector<Building> selectedBuildings = new Vector<Building>();
-        if (reportMetadata.filterByPortfolio().isBooleanTrue()) {
-            selectedBuildings.addAll(getPortfoliosBuildings(reportMetadata.selectedPortfolios()));
-        }
-        if (reportMetadata.filterByBuildings().isBooleanTrue()) {
-            selectedBuildings.addAll(reportMetadata.selectedBuildings());
-        }
-
+        List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
+                reportMetadata.filterByPortfolio().isBooleanTrue() ? reportMetadata.selectedPortfolios() : null,
+                reportMetadata.filterByBuildings().isBooleanTrue() ? reportMetadata.selectedBuildings() : null
+        );//@formatter:on
+        reportMetadata.filterByBuildings().setValue(!selectedBuildings.isEmpty());
         reportMetadata.selectedBuildings().clear();
-        reportMetadata.filterByBuildings().setValue(reportMetadata.filterByBuildings().isBooleanTrue() | reportMetadata.filterByPortfolio().isBooleanTrue());
-        if (reportMetadata.filterByBuildings().isBooleanTrue()) {
-            reportMetadata.selectedBuildings().addAll(selectedBuildings);
-        }
-
-    }
-
-    private Vector<Building> getPortfoliosBuildings(List<Portfolio> portfolios) {
-        Vector<Building> portfoliosBuildings = new Vector<Building>();
-        if (!portfolios.isEmpty()) {
-            EntityQueryCriteria<Portfolio> portfoliosCriteria = EntityQueryCriteria.create(Portfolio.class);
-            portfoliosCriteria.in(portfoliosCriteria.proto().id(), new Vector<Portfolio>(portfolios));
-            for (Portfolio pStub : portfolios) {
-                Portfolio portfolio = Persistence.secureRetrieve(Portfolio.class, pStub.getPrimaryKey());
-                Persistence.service().retrieveMember(portfolio.buildings(), AttachLevel.IdOnly);
-                portfoliosBuildings.addAll(portfolio.buildings());
-            }
-
-        }
-        return portfoliosBuildings;
+        reportMetadata.selectedBuildings().addAll(selectedBuildings);
     }
 
 }
