@@ -26,10 +26,14 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.TextBox;
 
 public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSignature> {
 
@@ -45,6 +49,18 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
 }
 
 class SignaturePanel extends FlowPanel implements ITextWidget {
+
+    private final CheckBox checkBox;
+
+    private final TextBox textBox;
+
+    public SignaturePanel() {
+        checkBox = new CheckBox();
+        checkBox.setHTML(SafeHtmlUtils.fromTrustedString("I agree with <a>Terms</a>"));
+        add(checkBox);
+        textBox = new TextBox();
+        add(textBox);
+    }
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
