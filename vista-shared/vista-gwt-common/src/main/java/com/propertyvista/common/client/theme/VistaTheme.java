@@ -439,7 +439,6 @@ public class VistaTheme extends Theme {
 
     protected void initCheckBoxStyle() {
         Style style = new Style(".", DefaultEntityFolderTheme.StyleName.EntityFolderRowItemDecorator, " .", CSSClass.pyx4j_CheckBox);
-        style.addProperty("margin-left", "45%");
         addStyle(style);
     }
 

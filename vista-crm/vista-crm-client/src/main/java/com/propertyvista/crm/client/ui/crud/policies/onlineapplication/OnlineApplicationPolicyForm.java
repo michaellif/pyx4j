@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CSignature;
@@ -87,7 +88,7 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
                 main.setWidget(++row, 0, 2, inject(proto().content(), new LegalTermContentFolder(isEditable())));
 
                 main.setH1(++row, 0, 2, proto().signatureType().getMeta().getCaption());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureType(), new CSignature())).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureType(), new CSignature(SignatureType.AgreeBoxAndFullName))).build());
 
                 return main;
             }
