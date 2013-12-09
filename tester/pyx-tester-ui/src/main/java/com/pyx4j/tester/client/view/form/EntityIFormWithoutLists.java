@@ -30,18 +30,19 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityListBox;
-import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CRadioGroupInteger;
+import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -102,7 +103,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
                 new FormDecoratorBuilder(inject(proto().personalId(), new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class,
                         "XXX-XXX-xxx;XX-XX-xxxx"))).build());
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signature1(), new CSignature())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signature1(), new CSignature(SignatureType.AgreeBoxAndFullName))).build());
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().hue())).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().color())).build());

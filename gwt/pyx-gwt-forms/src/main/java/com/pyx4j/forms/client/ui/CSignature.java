@@ -21,13 +21,20 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 
 public class CSignature extends CTextFieldBase<ISignature, NSignature> {
 
-    public CSignature() {
+    private final SignatureType signatureType;
+
+    public CSignature(SignatureType signatureType) {
         super();
+        this.signatureType = signatureType;
         setNativeWidget(new NSignature(this));
         asWidget().setWidth("100%");
     }
 
+    public SignatureType getSignatureType() {
+        return signatureType;
+    }
 }

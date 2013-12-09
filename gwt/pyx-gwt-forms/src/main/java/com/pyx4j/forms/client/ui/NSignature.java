@@ -26,11 +26,13 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.forms.client.ui.NSignature.SignaturePanel;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.TextBox;
@@ -46,110 +48,128 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
         return new SignaturePanel();
     }
 
-}
+    class SignaturePanel extends FlowPanel implements ITextWidget {
 
-class SignaturePanel extends FlowPanel implements ITextWidget {
+        private final CheckBox checkBox;
 
-    private final CheckBox checkBox;
+        private final Anchor checkBoxHtml;
 
-    private final TextBox textBox;
+        private TextBox textBox;
 
-    public SignaturePanel() {
-        checkBox = new CheckBox();
-        checkBox.setHTML(SafeHtmlUtils.fromTrustedString("I agree with <a>Terms</a>"));
-        add(checkBox);
-        textBox = new TextBox();
-        add(textBox);
+        public SignaturePanel() {
+            checkBox = new CheckBox("I agree with");
+            add(checkBox);
+
+            add(new HTML("&nbsp;"));
+
+            checkBoxHtml = new Anchor("Terms and Conditions");
+            add(checkBoxHtml);
+
+            SignatureType signatureType = getCComponent().getSignatureType();
+
+            switch (signatureType) {
+            case AgreeBox:
+                break;
+            case AgreeBoxAndFullName:
+            case FullName:
+                textBox = new TextBox();
+                add(textBox);
+                textBox.setWidth("100%");
+            case Initials:
+                textBox.setWidth("4em");
+                break;
+
+            }
+        }
+
+        @Override
+        public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public boolean isEnabled() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public void setEditable(boolean editable) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public boolean isEditable() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public int getTabIndex() {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public void setAccessKey(char key) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void setFocus(boolean focused) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void setTabIndex(int index) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public String getText() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void setText(String text) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+            // TODO Auto-generated method stub
+            return null;
+        }
     }
-
-    @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public int getTabIndex() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void setAccessKey(char key) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setFocus(boolean focused) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setTabIndex(int index) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public String getText() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setText(String text) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }
