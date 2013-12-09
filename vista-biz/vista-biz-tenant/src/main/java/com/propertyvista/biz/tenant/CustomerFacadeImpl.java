@@ -107,7 +107,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.in(criteria.proto().status(), Lease.Status.current());
-            criteria.in(criteria.proto().unit().building().suspended(), false);
+            criteria.eq(criteria.proto().unit().building().suspended(), false);
             criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer().user(), customerUserId);
             criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
             leases.addAll(Persistence.service().query(criteria));
@@ -156,7 +156,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             CustomerUser user = EntityFactory.create(CustomerUser.class);
             user.setPrimaryKey(customerUserKey);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+            criteria.eq(criteria.proto().user(), user);
             customer = Persistence.service().retrieve(criteria);
             if (customer == null) {
                 return;
@@ -166,7 +166,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         CustomerAcceptedTerms acceptedTerms = null;
         {
             EntityQueryCriteria<CustomerAcceptedTerms> criteria = EntityQueryCriteria.create(CustomerAcceptedTerms.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
+            criteria.eq(criteria.proto().customer(), customer);
             acceptedTerms = Persistence.service().retrieve(criteria);
             if (acceptedTerms == null) {
                 acceptedTerms = EntityFactory.create(CustomerAcceptedTerms.class);
@@ -190,12 +190,15 @@ public class CustomerFacadeImpl implements CustomerFacade {
     @Override
     public void residentSelfRegistration(ResidentSelfRegistration selfRegistration) {
         // We need protection from attacks that check names of the user?
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.buildingId());
-        criteria.eq(criteria.proto().lease().unit().building().suspended(), false);
-        criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.securityCode().getValue().toUpperCase(Locale.ENGLISH));
+        List<Tenant> tenants;
+        {
+            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.buildingId());
+            criteria.eq(criteria.proto().lease().unit().building().suspended(), false);
+            criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.securityCode().getValue().toUpperCase(Locale.ENGLISH));
 
-        List<Tenant> tenants = Persistence.service().query(criteria);
+            tenants = Persistence.service().query(criteria);
+        }
 
         if (tenants.size() == 0) {
             throw EntityValidationException.make(ResidentSelfRegistrationDTO.class)
@@ -216,6 +219,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
                     .addError(selfRegistration.lastName(), i18n.tr("The name provided does not match our records"))
                     .build();//@formatter:on
         }
+
+        selfRegistration.email().setValue(EmailValidator.normalizeEmailAddress(selfRegistration.email().getValue()));
 
         tenant.customer().person().email().setValue(selfRegistration.email().getValue());
         tenant.customer().portalRegistrationToken().setValue(null);

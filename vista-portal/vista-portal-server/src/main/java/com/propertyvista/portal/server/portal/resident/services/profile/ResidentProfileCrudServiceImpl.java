@@ -21,6 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.Customer;
@@ -54,6 +55,7 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         Customer customer = ResidentPortalContext.getCustomer();
 
         customer.person().set(dto.person().cast());
+        customer.person().email().setValue(EmailValidator.normalizeEmailAddress(customer.person().email().getValue()));
 
         customer.picture().set(dto.picture());
 

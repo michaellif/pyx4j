@@ -24,15 +24,17 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.ProspectSignUp;
@@ -104,7 +106,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     public PortalProspectBehavior getOnlineApplicationBehavior(OnlineApplication application) {
         EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), application));
+        criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), application);
         LeaseTerm leaseTerm = Persistence.service().retrieve(criteria);
 
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
@@ -289,7 +291,49 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     @Override
     public void prospectSignUp(ProspectSignUp request) {
+        // Minimal Validation first
+        Validate.isFalse(request.firstName().isNull(), "First name required");
+        Validate.isFalse(request.lastName().isNull(), "Last name required");
+        Validate.isFalse(request.email().isNull(), "Email required");
+
+        request.email().setValue(EmailValidator.normalizeEmailAddress(request.email().getValue()));
+        {
+            EntityQueryCriteria<CustomerUser> criteria = EntityQueryCriteria.create(CustomerUser.class);
+            criteria.eq(criteria.proto().email(), request.email());
+            if (Persistence.service().count(criteria) > 0) {
+                throw new UserRuntimeException(true, i18n.tr("E-mail address already registered, please login to your account"));
+            }
+        }
+        // Validate Building and floorplan
+        Building building;
+        Floorplan floorplan = null;
+        AptUnit unit = null;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().propertyCode(), request.ilsBuildingId());
+            criteria.eq(criteria.proto().suspended(), false);
+            building = Persistence.service().retrieve(criteria);
+            Validate.notNull(building, "building {0} required or not found", request.ilsBuildingId());
+        }
+        if (!request.ilsFloorplanId().isNull()) {
+            EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+            criteria.eq(criteria.proto().name(), request.ilsFloorplanId());
+            criteria.eq(criteria.proto().building(), building);
+            floorplan = Persistence.service().retrieve(criteria);
+        }
+        if (!request.ilsUnitId().isNull()) {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().info().number(), request.ilsUnitId());
+            criteria.eq(criteria.proto().building(), building);
+            unit = Persistence.service().retrieve(criteria);
+            Validate.notNull(unit, "unit {0} {1} not found", request.ilsBuildingId(), request.ilsUnitId());
+        }
+
+        //Start application creation
         Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Status.Application);
+        if (unit != null) {
+            ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
+        }
 
         LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().$();
         lease.currentTerm().version().tenants().add(mainTenant);
@@ -302,6 +346,10 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
 
         ServerSideFactory.create(LeaseFacade.class).persist(lease);
+
+        lease.leaseApplication().onlineApplication().building().set(building);
+        lease.leaseApplication().onlineApplication().floorplan().set(floorplan);
+
         ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
 
         ServerSideFactory.create(CustomerFacade.class).setCustomerPassword(mainTenant.leaseParticipant().customer(), request.password().getValue());
