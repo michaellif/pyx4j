@@ -18,24 +18,36 @@ import java.text.ParseException;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CComponent;
 
+import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 
-public class CBuildingSelector extends CComponent<IList<BuildingForSelectionDTO>> {
+/**
+ * This class wrapping a native component in CComponent interface, so that a common form decorator could be used.<br>
+ * Right now I don't have the time to implement it properly.<br>
+ * Use {link {@link #getSelectorWidget()} to access the wrapped widget
+ */
+@Deprecated
+public class CSuperSelector<E extends IEntity> extends CComponent<IList<E>> {
 
-    private final BuildingSelector buildingSelector;
+    private final SuperSelector<E> superSelector;
 
     private IList<BuildingForSelectionDTO> list;
 
-    public CBuildingSelector() {
-        buildingSelector = new BuildingSelector();
+    public CSuperSelector(SuperSelector<E> superSelector) {
+        this.superSelector = superSelector;
     }
 
     @Override
     public Widget asWidget() {
-        return buildingSelector;
+        return superSelector;
+    }
+
+    public SuperSelector<E> getSelectorWidget() {
+        return superSelector;
     }
 
     @Override
@@ -44,20 +56,15 @@ public class CBuildingSelector extends CComponent<IList<BuildingForSelectionDTO>
     }
 
     @Override
-    protected void setEditorValue(IList<BuildingForSelectionDTO> list) {
-        this.list = list;
-        for (BuildingForSelectionDTO item : list) {
-            buildingSelector.addItem(item);
-        }
+    protected void setEditorValue(IList<E> value) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    protected IList<BuildingForSelectionDTO> getEditorValue() throws ParseException {
-        this.list.clear();
-        for (BuildingForSelectionDTO item : buildingSelector.getSelectedItems()) {
-            this.list.add(item);
-        }
-        return this.list;
+    protected IList<E> getEditorValue() throws ParseException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

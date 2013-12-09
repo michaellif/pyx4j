@@ -45,7 +45,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.IFormat;
 
-public abstract class SuperSelector<C> extends Composite {
+public abstract class SuperSelector<DataType> extends Composite {
 
     public enum Styles implements IStyleName {
 
@@ -57,11 +57,11 @@ public abstract class SuperSelector<C> extends Composite {
 
     private final FlowPanel selectedItemsContainerPanel;
 
-    private final List<SelectedItem<C>> selectedWidgets;
+    private final List<SelectedItemHolder<DataType>> selectedWidgets;
 
     private final int minInputBoxWidth = 50;
 
-    private final IFormat<C> format;
+    private final IFormat<DataType> format;
 
     private boolean isFocused;
 
@@ -71,7 +71,7 @@ public abstract class SuperSelector<C> extends Composite {
      * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
      * item.
      */
-    public SuperSelector(IFormat<C> format) {
+    public SuperSelector(IFormat<DataType> format) {
         this.format = format;
         FlowPanel panel = new FlowPanel();
         panel.setStyleName(Styles.SuperSelectorStyle.name());
@@ -133,7 +133,7 @@ public abstract class SuperSelector<C> extends Composite {
         containerBox.add(inputTextBox);
 
         initWidget(panel);
-        selectedWidgets = new LinkedList<SelectedItem<C>>();
+        selectedWidgets = new LinkedList<SelectedItemHolder<DataType>>();
     }
 
     public void setInput(String input) {
@@ -141,9 +141,10 @@ public abstract class SuperSelector<C> extends Composite {
         onInputChanged(input);
     }
 
-    public List<C> getSelectedItems() {
-        LinkedList<C> items = new LinkedList<C>();
-        for (SelectedItem<C> i : selectedWidgets) {
+    /** Produces a newly allocated list of selected items */
+    public List<DataType> getSelectedItems() {
+        LinkedList<DataType> items = new LinkedList<DataType>();
+        for (SelectedItemHolder<DataType> i : selectedWidgets) {
             items.add(i.getItem());
         }
         return items;
@@ -152,21 +153,22 @@ public abstract class SuperSelector<C> extends Composite {
     /**
      * Can be overridden to make validation. Warning: <code>null</code> will be silently ignored.
      */
-    public void addItem(C item) {
+    public void addItem(DataType item) {
         if (item == null) {
             return;
         }
 
-        SelectedItem<C> w = new SelectedItem<C>(this.format, this, item);
+        SelectedItemHolder<DataType> w = new SelectedItemHolder<DataType>(this.format, this, item);
         selectedWidgets.add(w);
         selectedItemsContainerPanel.add(w);
 
         updateInputTextBoxWidth();
+        onItemAdded(item);
     }
 
-    public final void removeItem(C item) {
-        SelectedItem<C> itemContainerWidget = null;
-        for (SelectedItem<C> w : selectedWidgets) {
+    public final void removeItem(DataType item) {
+        SelectedItemHolder<DataType> itemContainerWidget = null;
+        for (SelectedItemHolder<DataType> w : selectedWidgets) {
             if (w.getItem().equals(item)) {
                 itemContainerWidget = w;
                 break;
@@ -178,9 +180,28 @@ public abstract class SuperSelector<C> extends Composite {
         }
 
         updateInputTextBoxWidth();
+        onItemRemoved(item);
+    }
+
+    public final void removeAll() {
+        for (SelectedItemHolder<DataType> w : selectedWidgets) {
+            removeItem(w.getItem());
+        }
     }
 
     protected void onInputChanged(String newInput) {
+    }
+
+    /**
+     * Called after an item has been added. Default implementation does nothing.
+     */
+    protected void onItemAdded(DataType item) {
+    }
+
+    /**
+     * Called after an item has been removed. Default implementation does nothing.
+     */
+    protected void onItemRemoved(DataType item) {
     }
 
     protected void onFocus() {
@@ -215,7 +236,7 @@ public abstract class SuperSelector<C> extends Composite {
             public void execute() {
                 int maxRowWidth = containerBox.getElement().getClientWidth();
                 int rowWidth = 0;
-                for (SelectedItem<C> w : selectedWidgets) {
+                for (SelectedItemHolder<DataType> w : selectedWidgets) {
                     rowWidth += w.getElement().getOffsetWidth();
                     if (rowWidth > maxRowWidth) {
                         rowWidth = w.getElement().getOffsetWidth();

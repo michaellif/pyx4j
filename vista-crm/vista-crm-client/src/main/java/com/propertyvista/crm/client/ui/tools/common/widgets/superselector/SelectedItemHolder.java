@@ -34,9 +34,9 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-public class SelectedItem<C> extends Composite {
+public class SelectedItemHolder<C> extends Composite {
 
-    private static final I18n i18n = I18n.get(SelectedItem.class);
+    private static final I18n i18n = I18n.get(SelectedItemHolder.class);
 
     private final SuperSelector<C> parent;
 
@@ -44,15 +44,15 @@ public class SelectedItem<C> extends Composite {
 
     public enum Styles implements IStyleName {
 
-        SuperSelectedItemStyle
+        SuperSelectedItemHolder
     }
 
-    public SelectedItem(IFormat<C> format, SuperSelector<C> parent, C item) {
+    public SelectedItemHolder(IFormat<C> format, SuperSelector<C> parent, C item) {
         this.parent = parent;
         this.item = item;
 
         FlowPanel panel = new FlowPanel();
-        panel.setStyleName(Styles.SuperSelectedItemStyle.name());
+        panel.setStyleName(Styles.SuperSelectedItemHolder.name());
 
         Label itemLabel = new Label(format.format(item));
         itemLabel.getElement().getStyle().setDisplay(Display.INLINE);

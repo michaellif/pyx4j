@@ -7,33 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-12-05
+ * Created on 2013-12-09
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin;
+package com.propertyvista.crm.rpc.dto.selections;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
-import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
+import com.propertyvista.domain.company.Portfolio;
 
 @Transient
-public interface MoneyInCandidateSearchCriteriaDTO extends IEntity {
+public interface PortfolioForSelectionDTO extends IEntity {
 
-    IList<PortfolioForSelectionDTO> portfolios();
+    Portfolio portfolioIdStub();
 
-    IList<BuildingForSelectionDTO> buildings();
-
-    IPrimitive<String> unit();
-
-    IPrimitive<String> lease();
-
-    @Caption(name = "Tenant")
-    IPrimitive<String> tenant();
-
+    IPrimitive<String> name();
 }

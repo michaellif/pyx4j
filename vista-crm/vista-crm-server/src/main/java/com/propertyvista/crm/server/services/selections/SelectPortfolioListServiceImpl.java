@@ -13,8 +13,17 @@
  */
 package com.propertyvista.crm.server.services.selections;
 
-import com.pyx4j.entity.server.AbstractListServiceImpl;
+import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+
+import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.company.Portfolio;
 
@@ -28,5 +37,22 @@ public class SelectPortfolioListServiceImpl extends AbstractListServiceImpl<Port
     protected void bind() {
         bind(toProto.id(), boProto.id());
         bindCompleteObject();
+    }
+
+    @Override
+    public void getPortfoliosForSelection(AsyncCallback<Vector<PortfolioForSelectionDTO>> callback, EntityListCriteria<Portfolio> criteria) {
+        EntitySearchResult<Portfolio> portfolios = Persistence.secureQuery(criteria);
+        Vector<PortfolioForSelectionDTO> dtos = new Vector<PortfolioForSelectionDTO>(portfolios.getData().size());
+        for (Portfolio p : portfolios.getData()) {
+            dtos.add(convertTo4SelectionDto(p));
+        }
+        callback.onSuccess(dtos);
+    }
+
+    private PortfolioForSelectionDTO convertTo4SelectionDto(Portfolio p) {
+        PortfolioForSelectionDTO dto = EntityFactory.create(PortfolioForSelectionDTO.class);
+        dto.portfolioIdStub().setPrimaryKey(p.getPrimaryKey());
+        dto.name().setValue(p.name().getValue());
+        return dto;
     }
 }

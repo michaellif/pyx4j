@@ -41,6 +41,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaForm;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 
 public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements MoneyInCreateBatchView {
 
@@ -55,6 +56,8 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
     private MoneyInCandidateDataGrid searchCandidateDataGrid;
 
     private MoneyInCandidateDataGrid selectedForProcessingDataGrid;
+
+    private MoneyInCandidateSearchCriteriaForm searchForm;
 
     public MoneyInCreateBatchViewImpl() {
         initToolBars();
@@ -158,6 +161,11 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
     }
 
     @Override
+    public MoneyInCandidateSearchCriteriaDTO getSearchCriteria() {
+        return this.searchForm.getValue();
+    }
+
+    @Override
     public HasData<MoneyInCandidateDTO> searchResults() {
         return this.searchCandidateDataGrid;
     }
@@ -178,8 +186,10 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
         LayoutPanel searchBar = new LayoutPanel();
         searchBar.setWidth("100%");
         searchBar.setHeight("100%");
-        MoneyInCandidateSearchCriteriaForm searchForm = new MoneyInCandidateSearchCriteriaForm();
+
+        searchForm = new MoneyInCandidateSearchCriteriaForm();
         searchForm.initContent();
+        searchForm.populateNew();
         searchForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
         searchForm.asWidget().getElement().getStyle().setOverflow(Overflow.AUTO);
 

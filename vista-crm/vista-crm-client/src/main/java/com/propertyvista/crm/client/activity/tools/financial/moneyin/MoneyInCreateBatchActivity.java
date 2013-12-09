@@ -71,7 +71,8 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     @Override
     public void search() {
-        // TODO Auto-generated method stub        
+        // TODO 
+        System.out.println(view.getSearchCriteria());
     }
 
     @Override

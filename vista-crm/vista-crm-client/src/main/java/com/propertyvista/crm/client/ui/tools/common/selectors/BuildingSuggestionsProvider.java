@@ -60,29 +60,35 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
                 return 0;
             }
         }
-
     }
-
-    private EntityQueryCriteria<Building> prevCriteria;
-
-    private Vector<BuildingForSelectionDTO> buildingsCache;
-
-    private List<BuildingForSelectionDTO> filteredBuildings;
 
     private final SelectBuildingListService service;
 
-    /**
-     * Right now caching mechanism is not really used. This provider will bring all buildings.
-     */
+    private final Comparator<BuildingForSelectionDTO> buildingComparator;
+
+    private EntityQueryCriteria<Building> prevCriteria;
+
+    private Vector<BuildingForSelectionDTO> cachedBuildings;
+
+    private List<BuildingForSelectionDTO> filteredBuildings;
+
     public BuildingSuggestionsProvider() {
-        service = createCachingProxySelectBuildingListService();
-        buildingsCache = new Vector<BuildingForSelectionDTO>();
+        service = createCachingProxyForSelectBuildingListService();
+        cachedBuildings = new Vector<BuildingForSelectionDTO>();
         filteredBuildings = new LinkedList<BuildingForSelectionDTO>();
+
+        buildingComparator = new Comparator<BuildingForSelectionDTO>() {
+            @Override
+            public int compare(BuildingForSelectionDTO o1, BuildingForSelectionDTO o2) {
+                return o1.propertyCode().getValue().compareTo(o2.propertyCode().getValue());
+            }
+        };
+
     }
 
     @Override
     public void onSuggestionCriteriaChange(final String newSuggestion) {
-        DefaultAsyncCallback<Vector<BuildingForSelectionDTO>> callback = new DefaultAsyncCallback<Vector<BuildingForSelectionDTO>>() {
+        AsyncCallback<Vector<BuildingForSelectionDTO>> callback = new DefaultAsyncCallback<Vector<BuildingForSelectionDTO>>() {
             @Override
             public void onSuccess(Vector<BuildingForSelectionDTO> buildings) {
                 filteredBuildings = filter(buildings, newSuggestion);
@@ -90,13 +96,8 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
                 updateRowData(0, filteredBuildings);
             }
         };
-
-        if (buildingsCache.isEmpty()) {
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            service.getBuildingsForSelection(callback, criteria);
-        } else {
-            callback.onSuccess(buildingsCache);
-        }
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        service.getBuildingsForSelection(callback, criteria);
     }
 
     @Override
@@ -104,8 +105,13 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
         updateRowData(display, 0, filteredBuildings);
     }
 
-    /** @return match score: <code>0 or less</code> means doesn't match, then the higher the number the better */
-    protected int matches(BuildingForSelectionDTO buiding, String suggestion) {//@formatter:off
+    /**
+     * This is used to determine how well the suggestion matches an entity.
+     * 
+     * @return match score: <code>0 or less</code> means doesn't match, then the higher the number the better.
+     */
+    // TODO find a better name
+    protected int evaluate(BuildingForSelectionDTO buiding, String suggestion) {//@formatter:off
         if (buiding.propertyCode().getValue().contains(suggestion)) {
             return 2;
         } else if (buiding.name().getValue().contains(suggestion)) {
@@ -122,15 +128,9 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
         if (newSuggestion == null || "".equals(newSuggestion)) {
             filtered.addAll(buildings);
         } else {
-            Comparator<BuildingForSelectionDTO> buildingComparator = new Comparator<BuildingForSelectionDTO>() {
-                @Override
-                public int compare(BuildingForSelectionDTO o1, BuildingForSelectionDTO o2) {
-                    return o1.propertyCode().getValue().compareTo(o2.propertyCode().getValue());
-                }
-            };
             PriorityQueue<RankedMatch> queue = new PriorityQueue<BuildingSuggestionsProvider.RankedMatch>();
             for (BuildingForSelectionDTO b : buildings) {
-                int rank = matches(b, newSuggestion);
+                int rank = evaluate(b, newSuggestion);
                 if (rank > 0) {
                     queue.add(new RankedMatch(rank, b, buildingComparator));
                 }
@@ -142,7 +142,7 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
         return filtered;
     }
 
-    private SelectBuildingListService createCachingProxySelectBuildingListService() {
+    private SelectBuildingListService createCachingProxyForSelectBuildingListService() {
         return new SelectBuildingListService() {//@formatter:off          
             private final SelectBuildingListService delegatedService =GWT.<SelectBuildingListService> create(SelectBuildingListService.class);                    
 
@@ -151,14 +151,14 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
                     delegatedService.getBuildingsForSelection(new AsyncCallback<Vector<BuildingForSelectionDTO>>() {
                         @Override public void onSuccess(Vector<BuildingForSelectionDTO> result) {
                             prevCriteria = criteria;
-                            buildingsCache = result;
+                            cachedBuildings = result;
                             callback.onSuccess(result);
                         }
                         
                         @Override public void onFailure(Throwable caught) { callback.onFailure(caught); }
                     }, criteria);
                 } else {
-                    callback.onSuccess(buildingsCache);
+                    callback.onSuccess(cachedBuildings);
                 }
             };
             

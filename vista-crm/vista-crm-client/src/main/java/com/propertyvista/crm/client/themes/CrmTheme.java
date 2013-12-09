@@ -57,7 +57,7 @@ import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
-import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SelectedItem;
+import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SelectedItemHolder;
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1VisorStyles;
@@ -862,7 +862,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("outline", "0px");
         addStyle(style);
 
-        style = new Style("." + SelectedItem.Styles.SuperSelectedItemStyle.name()); // should be similar to a regular text box
+        style = new Style("." + SelectedItemHolder.Styles.SuperSelectedItemHolder.name()); // should be similar to a regular text box
         style.addProperty("display", "inline-block");
         style.addProperty("padding", "1px 3px");
         style.addProperty("border-width", "1px");

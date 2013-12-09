@@ -16,14 +16,34 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin.forms;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.client.ui.tools.common.selectors.CBuildingSelector;
+import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
+import com.propertyvista.crm.client.ui.tools.common.selectors.CSuperSelector;
+import com.propertyvista.crm.client.ui.tools.common.selectors.PortfolioSelector;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
+import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
+import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
 public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandidateSearchCriteriaDTO> {
+
+    private static class SearchCriteriaFormDecoratorBuilder extends FormDecoratorBuilder {
+
+        public SearchCriteriaFormDecoratorBuilder(CComponent<?> component) {
+            super(component);
+            labelPosition(LabelPosition.top);
+        }
+
+        @Override
+        public Builder componentWidth(String componentWidth) {
+            labelWidth(componentWidth);
+            contentWidth(componentWidth);
+            return super.componentWidth(componentWidth);
+        }
+    }
 
     public MoneyInCandidateSearchCriteriaForm() {
         super(MoneyInCandidateSearchCriteriaDTO.class);
@@ -32,19 +52,45 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
     @Override
     public IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
-//        panel.getElement().getStyle().setPadding(5, Unit.PX);
-//        panel.getElement().getStyle().setOverflow(Overflow.SCROLL);
 
-        panel.add(new FormDecoratorBuilder(inject(proto().buildingCriteria(), new CBuildingSelector())).componentWidth("300px").contentWidth("300px")
-                .labelWidth("300px").labelPosition(LabelPosition.top).build());
-        panel.add(new FormDecoratorBuilder(inject(proto().unit())).componentWidth("50px").contentWidth("50px").labelWidth("50px")
-                .labelPosition(LabelPosition.top).build());
-        panel.add(new FormDecoratorBuilder(inject(proto().lease())).componentWidth("100px").contentWidth("100px").labelWidth("100px")
-                .labelPosition(LabelPosition.top).build());
-        panel.add(new FormDecoratorBuilder(inject(proto().tenantCriteria())).componentWidth("200px").contentWidth("200px").labelWidth("200px")
-                .labelPosition(LabelPosition.top).build());
+        panel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().portfolios(), createPortfolioSelector())).componentWidth("300px").build());
+        panel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().buildings(), createBuildingSelector())).componentWidth("300px").build());
+        panel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().unit())).componentWidth("100px").build());
+        panel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().lease())).componentWidth("100px").build());
+        panel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().tenant())).componentWidth("150px").build());
 
         return panel;
+    }
+
+    private CSuperSelector<PortfolioForSelectionDTO> createPortfolioSelector() {
+        return new CSuperSelector<PortfolioForSelectionDTO>(new PortfolioSelector() {//@formatter:off
+            @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
+                MoneyInCandidateSearchCriteriaDTO searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
+                searchCriteria.portfolios().add(item);
+                MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);                
+            }
+            @Override
+            protected void onItemRemoved(PortfolioForSelectionDTO item) {
+                MoneyInCandidateSearchCriteriaDTO searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
+                searchCriteria.portfolios().remove(item);
+                MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);            
+            }
+        });//@formatter:on
+    }
+
+    private CSuperSelector<BuildingForSelectionDTO> createBuildingSelector() {
+        return new CSuperSelector<BuildingForSelectionDTO>(new BuildingSelector() {//@formatter:off
+            @Override protected void onItemAdded(BuildingForSelectionDTO item) {
+                MoneyInCandidateSearchCriteriaDTO searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
+                searchCriteria.buildings().add(item);
+                MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
+            }            
+            @Override protected void onItemRemoved(BuildingForSelectionDTO item) {
+                MoneyInCandidateSearchCriteriaDTO searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue();
+                searchCriteria.buildings().remove(item);
+                MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
+            }            
+        });//@formatter:on
     }
 
 }

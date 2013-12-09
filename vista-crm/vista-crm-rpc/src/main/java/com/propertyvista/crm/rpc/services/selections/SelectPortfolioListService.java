@@ -13,10 +13,18 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+
+import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 import com.propertyvista.domain.company.Portfolio;
 
 public interface SelectPortfolioListService extends AbstractListService<Portfolio> {
+
+    void getPortfoliosForSelection(AsyncCallback<Vector<PortfolioForSelectionDTO>> callback, EntityListCriteria<Portfolio> criteria);
 
 }
