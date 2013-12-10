@@ -113,11 +113,11 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
      */
     // TODO find a better name
     protected int evaluate(BuildingForSelectionDTO buiding, String suggestion) {//@formatter:off
-        if (buiding.propertyCode().getValue().contains(suggestion)) {
+        if (buiding.propertyCode().getValue().toLowerCase().contains(suggestion)) {
             return 2;
-        } else if (buiding.name().getValue().contains(suggestion)) {
+        } else if (buiding.name().getValue().toLowerCase().contains(suggestion)) {
             return 2;
-        } else if (buiding.address().getValue().contains(suggestion)) {
+        } else if (buiding.address().getValue().toLowerCase().contains(suggestion)) {
             return 1;
         } else {
             return 0;
