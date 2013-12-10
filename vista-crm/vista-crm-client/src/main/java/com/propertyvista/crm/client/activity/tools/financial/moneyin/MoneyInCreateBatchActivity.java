@@ -319,7 +319,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
                     }
                     String name2 = null;
                     for (MoneyInLeaseParticipantDTO c : o2.payerCandidates()) {
-                        if (c.tenantIdStub().getPrimaryKey().equals(tenant1.getPrimaryKey())) {
+                        if (c.tenantIdStub().getPrimaryKey().equals(tenant2.getPrimaryKey())) {
                             name2 = c.name().getValue();
                             break;
                         }
@@ -353,16 +353,16 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     
     private void sort(String memberPath, ListDataProvider<MoneyInCandidateDTO> provider, boolean isSortAscending) {
         Comparator<MoneyInCandidateDTO> cmp = sortComparatorsMap.get(memberPath);
-        if (isSortAscending) {
-            final Comparator<MoneyInCandidateDTO> reverseCmp = cmp;
-            cmp = new Comparator<MoneyInCandidateDTO>() {
-                @Override
-                public int compare(MoneyInCandidateDTO o1, MoneyInCandidateDTO o2) {
-                    return -reverseCmp.compare(o1, o2);
-                }
-            };
-        }
         if (cmp != null) {
+            if (isSortAscending) {
+                final Comparator<MoneyInCandidateDTO> reverseCmp = cmp;
+                cmp = new Comparator<MoneyInCandidateDTO>() {
+                    @Override
+                    public int compare(MoneyInCandidateDTO o1, MoneyInCandidateDTO o2) {
+                        return -reverseCmp.compare(o1, o2);
+                    }
+                };
+            }
             Collections.sort(provider.getList(), cmp);
         }
     }
