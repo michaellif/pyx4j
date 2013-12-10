@@ -47,6 +47,7 @@ import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.settings.ILSConfig;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.domain.settings.ILSVendorConfig;
@@ -82,7 +83,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         super.retrievedSingle(bo, retrieveTarget);
 
         Persistence.service().retrieveMember(bo.amenities());
-        Persistence.service().retrieveMember(bo.utilities());
+        loadUtilities(bo);
+
         //TODO count only
         Persistence.service().retrieveMember(bo.floorplans(), AttachLevel.IdOnly);
     }
@@ -218,7 +220,36 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             Persistence.service().persist(ilsData);
         }
 
+        saveUtilities(dbo);
+
         ServerSideFactory.create(BuildingFacade.class).persist(dbo);
+    }
+
+    private void loadUtilities(Building bo) {
+        EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
+        criteria.eq(criteria.proto().building(), bo);
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        bo.utilities().setAttachLevel(AttachLevel.Attached);
+        bo.utilities().addAll(Persistence.service().query(criteria));
+    }
+
+    private void saveUtilities(Building bo) {
+        EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
+        criteria.eq(criteria.proto().building(), bo);
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+
+        for (BuildingUtility utility : Persistence.service().query(criteria)) {
+            if (!bo.utilities().remove(utility)) {
+                utility.isDeleted().setValue(true);
+                Persistence.service().merge(utility);
+            }
+        }
+
+        for (BuildingUtility utility : bo.utilities()) {
+            utility.building().set(bo);
+            utility.isDeleted().setValue(false);
+            Persistence.service().merge(utility);
+        }
     }
 
     @Override

@@ -145,6 +145,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         super.enhanceRetrieved(in, to, retrieveTarget);
 
         Persistence.service().retrieve(to.lease());
+        Persistence.service().retrieve(to.version().utilities());
 
         to.carryforwardBalance().setValue(to.lease().billingAccount().carryforwardBalance().getValue());
         if (in.getPrimaryKey() != null) {
@@ -196,7 +197,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         fillserviceItems(currentValue);
 
         checkUnitMoveOut(currentValue);
-
         setAgeOfMajority(currentValue);
 
         return currentValue;
@@ -401,5 +401,4 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         return newLease;
     }
-
 }

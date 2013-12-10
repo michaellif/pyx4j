@@ -45,6 +45,7 @@ import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -354,11 +355,32 @@ public class BuildingsGenerator {
         building.amenities().add(amenity);
 
         amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
-
         amenity.name().setValue(amenity.type().getStringView() + " " + RandomUtil.randomLetters(2));
         amenity.description().setValue(CommonsGenerator.lipsumShort());
 
         return amenity;
+    }
+
+    // Utilities
+    public List<BuildingUtility> createBuildingUtilities(Building owner, int num) {
+        List<BuildingUtility> items = new ArrayList<BuildingUtility>();
+        for (int i = 0; i < num; i++) {
+            items.add(createBuildingUtility(owner));
+        }
+        return items;
+    }
+
+    public BuildingUtility createBuildingUtility(Building building) {
+        BuildingUtility utility = EntityFactory.create(BuildingUtility.class);
+        building.utilities().add(utility);
+
+        utility.building().set(building);
+        utility.isDeleted().setValue(false);
+        utility.type().setValue(RandomUtil.randomEnum(BuildingUtility.Type.class));
+        utility.name().setValue(utility.type().getStringView() + " " + RandomUtil.randomLetters(2));
+        utility.description().setValue(CommonsGenerator.lipsumShort());
+
+        return utility;
     }
 
 // Floorplans:

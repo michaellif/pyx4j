@@ -48,6 +48,7 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
@@ -195,6 +196,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             // Amenities:
             buildingGenerator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(5));
 
+            // Utilities:
+            buildingGenerator.createBuildingUtilities(building, 1 + RandomUtil.randomInt(3));
+
             // Floorplans:
             List<Floorplan> floorplans = buildingGenerator.createFloorplans(building, config().numFloorplans);
             for (Floorplan floorplan : floorplans) {
@@ -204,6 +208,10 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             Persistence.service().persist(building);
+
+            for (BuildingUtility utility : building.utilities()) {
+                Persistence.service().merge(utility);
+            }
 
             // fill Service Catalog with building elements:
 // VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported

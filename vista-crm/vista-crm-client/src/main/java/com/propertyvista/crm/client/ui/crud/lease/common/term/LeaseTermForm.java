@@ -13,23 +13,33 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -44,9 +54,11 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
@@ -56,8 +68,10 @@ import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.selections.SelectBuildingUtilityListService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -80,39 +94,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         setTabBarVisible(false);
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
-        get(proto().lease().completion()).setVisible(!getValue().lease().completion().isNull());
-        get(proto().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
-
-        // disable some editing on signed lease:
-        if (isEditable()) {
-            boolean isDraft = getValue().lease().status().getValue().isDraft();
-            boolean isCurrent = getValue().getPrimaryKey() == null
-                    || getValue().getPrimaryKey().equalsIgnoreVersion(getValue().lease().currentTerm().getPrimaryKey());
-
-            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
-
-            get(proto().building()).setEditable(isDraft);
-            get(proto().unit()).setEditable(isDraft);
-
-            get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
-            get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
-            get(proto().termTo()).setMandatory(getValue().type().getValue() != Type.Periodic);
-        } else {
-            featuresHeader.setVisible(!getValue().version().leaseProducts().featureItems().isEmpty());
-            if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-                concessionsHeader.setVisible(!getValue().version().leaseProducts().concessions().isEmpty());
-            }
-        }
-
-        setUnitNote(getValue().unitMoveOutNote().getValue());
-        setAgeOfMajority(getValue().ageOfMajority().getValue(), false);
     }
 
     private TwoColumnFlexFormPanel createDetailsTab(String title) {
@@ -324,6 +305,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             flexPanel.setWidget(++leftRow, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
         }
 
+        // Utilities: -----------------------------------------------------------------------------------------------------------
+        flexPanel.setH1(++leftRow, 0, 2, proto().version().utilities().getMeta().getCaption());
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().utilities(), new BuildingUtilityFolder()).asWidget());
+
         // Tenants/Guarantors: --------------------------------------------------------------------------------------------------
         flexPanel.setH1(++leftRow, 0, 2, proto().version().tenants().getMeta().getCaption());
 
@@ -345,7 +330,42 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 return LeaseTermForm.this.getValue().version().tenants();
             }
         }));
+
         return flexPanel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
+        get(proto().lease().completion()).setVisible(!getValue().lease().completion().isNull());
+        get(proto().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
+
+        // disable some editing on signed lease:
+        if (isEditable()) {
+            boolean isDraft = getValue().lease().status().getValue().isDraft();
+            boolean isCurrent = getValue().getPrimaryKey() == null
+                    || getValue().getPrimaryKey().equalsIgnoreVersion(getValue().lease().currentTerm().getPrimaryKey());
+
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
+
+            get(proto().building()).setEditable(isDraft);
+            get(proto().unit()).setEditable(isDraft);
+
+            get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
+            get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
+            get(proto().termTo()).setMandatory(getValue().type().getValue() != Type.Periodic);
+
+        } else {
+            featuresHeader.setVisible(!getValue().version().leaseProducts().featureItems().isEmpty());
+            if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
+                concessionsHeader.setVisible(!getValue().version().leaseProducts().concessions().isEmpty());
+            }
+        }
+
+        setUnitNote(getValue().unitMoveOutNote().getValue());
+        setAgeOfMajority(getValue().ageOfMajority().getValue(), false);
     }
 
     @Override
@@ -427,6 +447,87 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         if (revalidate) {
             ((LeaseTermParticipantFolder) get(proto().version().tenants())).revalidate();
             ((LeaseTermParticipantFolder) get(proto().version().guarantors())).revalidate();
+        }
+    }
+
+    private class BuildingUtilityFolder extends VistaTableFolder<BuildingUtility> {
+
+        public BuildingUtilityFolder() {
+            super(BuildingUtility.class, LeaseTermForm.this.isEditable());
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+            return columns;
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof BuildingUtility) {
+                return new BuildingUtilityEditor();
+            }
+            return super.create(member);
+        }
+
+        @Override
+        protected void addItem() {
+            if (LeaseTermForm.this.getValue().unit().isNull()) {
+                MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Unit First"));
+            } else {
+                new BuildingUtilitySelectorDialog().show();
+            }
+        }
+
+        private class BuildingUtilityEditor extends CEntityFolderRowEditor<BuildingUtility> {
+
+            public BuildingUtilityEditor() {
+                super(BuildingUtility.class, columns());
+                setViewable(true);
+            }
+        }
+
+        private class BuildingUtilitySelectorDialog extends EntitySelectorTableDialog<BuildingUtility> {
+
+            public BuildingUtilitySelectorDialog() {
+                super(BuildingUtility.class, true, getValue(), i18n.tr("Select Building Utility"));
+                setParentFiltering(LeaseTermForm.this.getValue().unit().building().getPrimaryKey());
+                setDialogPixelWidth(700);
+            }
+
+            @Override
+            public boolean onClickOk() {
+                if (getSelectedItems().isEmpty()) {
+                    return false;
+                } else {
+                    for (BuildingUtility selected : getSelectedItems()) {
+                        addItem(selected);
+                    }
+                    return true;
+                }
+            }
+
+            @Override
+            protected List<ColumnDescriptor> defineColumnDescriptors() {
+                return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().description()).build()
+            );//@formatter:on
+            }
+
+            @Override
+            public List<Sort> getDefaultSorting() {
+                return Arrays.asList(new Sort(proto().type(), false), new Sort(proto().name(), false));
+            }
+
+            @Override
+            protected AbstractListService<BuildingUtility> getSelectService() {
+                return GWT.<AbstractListService<BuildingUtility>> create(SelectBuildingUtilityListService.class);
+            }
         }
     }
 }

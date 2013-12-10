@@ -71,6 +71,7 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.security.CrmUser;
@@ -729,6 +730,7 @@ public abstract class LeaseAbstractManager {
 
             lease.unit().set(unit);
             lease.currentTerm().unit().set(unit);
+            setBuildingUtilities(lease.currentTerm());
 
             // set LeaseBillingPolicy offsets
             LeaseBillingPolicy billingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.building(), LeaseBillingPolicy.class);
@@ -751,6 +753,16 @@ public abstract class LeaseAbstractManager {
         }
 
         return lease;
+    }
+
+    private void setBuildingUtilities(LeaseTerm term) {
+        assert (!term.unit().isNull());
+        assert (!term.unit().isValueDetached());
+
+        EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
+        criteria.eq(criteria.proto().building(), term.unit().building());
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        term.version().utilities().addAll(Persistence.service().query(criteria));
     }
 
     private LeaseTerm setService(Lease lease, LeaseTerm leaseTerm, ProductItem serviceId) {
