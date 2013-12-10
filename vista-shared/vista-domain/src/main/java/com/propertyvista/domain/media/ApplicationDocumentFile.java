@@ -13,26 +13,15 @@
  */
 package com.propertyvista.domain.media;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-
-import com.propertyvista.shared.adapters.ApplicationDocumentUploadedBlobSecurityAdapter;
 
 public interface ApplicationDocumentFile extends IFile {
-
-    @Override
-    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-    //TODO review What it was doing it does
-    @MemberColumn(modificationAdapters = { ApplicationDocumentUploadedBlobSecurityAdapter.class })
-    IPrimitive<Key> blobKey();
 
     @Owner
     @JoinColumn

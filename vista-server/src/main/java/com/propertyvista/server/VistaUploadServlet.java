@@ -20,13 +20,15 @@ import com.propertyvista.crm.server.services.MediaUploadFloorplanServiceImpl;
 import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
 import com.propertyvista.crm.server.services.admin.SiteImageResourceUploadServiceImpl;
-import com.propertyvista.crm.server.services.customer.InsuranceCertificateScanUploadCrmServiceImpl;
 import com.propertyvista.crm.server.services.customer.CustomerPictureCrmUploadServiceImpl;
+import com.propertyvista.crm.server.services.customer.InsuranceCertificateScanUploadCrmServiceImpl;
 import com.propertyvista.crm.server.services.customer.TenantPadFileUploadServiceImpl;
+import com.propertyvista.crm.server.services.lease.ApplicationDocumentCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.organization.EmployeeSignatureUploadServiceImpl;
 import com.propertyvista.operations.server.services.EncryptedStorageServicePrivateKeyUploadServiceImpl;
 import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.operations.server.services.MerchantAccountFileUploadServiceImpl;
+import com.propertyvista.portal.server.portal.prospect.services.ApplicationDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.services.InsuranceCertificateScanUploadResidentServiceImpl;
 import com.propertyvista.portal.server.portal.shared.services.CustomerPicturePortalUploadServiceImpl;
 
@@ -41,13 +43,15 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(SiteImageResourceUploadServiceImpl.class);
         register(CustomerPictureCrmUploadServiceImpl.class);
         register(CustomerPicturePortalUploadServiceImpl.class);
-        register(InsuranceCertificateScanUploadResidentServiceImpl.class);
         register(InsuranceCertificateScanUploadCrmServiceImpl.class);
+        register(InsuranceCertificateScanUploadResidentServiceImpl.class);
         register(PmcDocumentFileUploadServiceImpl.class);
         register(EncryptedStorageServicePrivateKeyUploadServiceImpl.class);
         register(TenantPadFileUploadServiceImpl.class);
         register(MerchantAccountFileUploadServiceImpl.class);
         register(EmployeeSignatureUploadServiceImpl.class);
+        register(ApplicationDocumentCrmUploadServiceImpl.class);
+        register(ApplicationDocumentProspectUploadServiceImpl.class);
     }
 
 }

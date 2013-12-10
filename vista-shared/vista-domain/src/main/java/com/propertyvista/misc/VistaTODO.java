@@ -49,8 +49,6 @@ public class VistaTODO {
 
     public static final boolean Equifax_Off_VISTA_478 = false;
 
-    public static final boolean UploadedBlobSecurity = true;
-
     public static final boolean ApplicationDocumentationPolicyRefacotring = true;
 
     public static final boolean VISTA_2127_Attachments_For_Notes = true;

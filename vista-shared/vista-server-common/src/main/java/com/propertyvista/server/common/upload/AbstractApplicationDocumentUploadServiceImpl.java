@@ -25,7 +25,6 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.server.adapters.ApplicationDocumentUploadedBlobSecurityAdapterImpl;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public abstract class AbstractApplicationDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, ApplicationDocumentFile> {
@@ -62,11 +61,6 @@ public abstract class AbstractApplicationDocumentUploadServiceImpl extends Abstr
 
         Persistence.service().persist(blob);
         response.blobKey().setValue(blob.getPrimaryKey());
-
-        //TODO review What it was doing it does
-        if (false) {
-            ApplicationDocumentUploadedBlobSecurityAdapterImpl.blobUploaded(blob.getPrimaryKey());
-        }
 
         Persistence.service().commit();
     }
