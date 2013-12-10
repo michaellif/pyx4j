@@ -21,6 +21,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -49,6 +50,7 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
 
     @Override
     public void findCandidates(AsyncCallback<Vector<MoneyInCandidateDTO>> callback, MoneyInCandidateSearchCriteriaDTO criteriaEntity) {
+        // part of the filtering is done in the DB and part on server side utilizing 'matches()' function 
         EntityQueryCriteria<Lease> criteria = makeCriteria(criteriaEntity);
         List<Lease> leases = Persistence.secureQuery(criteria);
 
@@ -72,11 +74,13 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.in(criteria.proto().status(), Lease.Status.active());
         buildingCriteriaNormalizer.addBuildingCriterion(criteria, criteriaEntity.portfolios(), criteriaEntity.buildings());
+        if (!CommonsStringUtils.isEmpty(criteriaEntity.unit().getValue())) {
+            criteria.like(criteria.proto().unit().info().number(), "%" + criteriaEntity.unit().getValue() + "%");
+        }
+        if (!CommonsStringUtils.isEmpty(criteriaEntity.lease().getValue())) {
+            criteria.like(criteria.proto().leaseId(), "%" + criteriaEntity.lease().getValue() + "%");
+        }
         return criteria;
-    }
-
-    private boolean matches(MoneyInCandidateDTO candidate, MoneyInCandidateSearchCriteriaDTO criteriaEntity) {
-        return candidate.totalOutstanding().getValue().compareTo(BigDecimal.ZERO) > 0;
     }
 
     private MoneyInCandidateDTO toCandidate(Lease lease) {
@@ -114,5 +118,22 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         moneyInLeaseParticipant.tenantIdStub().set(leaseTermParticipant.leaseParticipant().duplicate(Tenant.class).createIdentityStub());
         moneyInLeaseParticipant.name().setValue(leaseTermParticipant.leaseParticipant().customer().person().name().getStringView());
         return moneyInLeaseParticipant;
+    }
+
+    private static boolean matches(MoneyInCandidateDTO candidate, MoneyInCandidateSearchCriteriaDTO criteriaEntity) {
+        return candidate.totalOutstanding().getValue().compareTo(BigDecimal.ZERO) > 0 && matchesTenant(candidate, criteriaEntity.tenant().getValue());
+    }
+
+    private static boolean matchesTenant(MoneyInCandidateDTO candidate, String tenantNamePart) {
+        return CommonsStringUtils.isEmpty(tenantNamePart) || anyTenantNameMatches(candidate.payerCandidates(), tenantNamePart);
+    }
+
+    private static boolean anyTenantNameMatches(List<MoneyInLeaseParticipantDTO> participants, String tenantNamePart) {
+        for (MoneyInLeaseParticipantDTO p : participants) {
+            if (p.name().getValue().toLowerCase().contains(tenantNamePart)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

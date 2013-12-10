@@ -291,8 +291,9 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         MoneyInCandidateSearchCriteriaDTO dto = EntityFactory.create(MoneyInCandidateSearchCriteriaDTO.class);
         dto.portfolios().addAll(toIdStubs(Portfolio.class, model.portfolios()));
         dto.buildings().addAll(toIdStubs(Building.class, model.buildings()));
-        dto.unit().setValue(model.unit().getValue());
-        dto.tenant().setValue(model.tenant().getValue());
+        dto.unit().setValue(model.unit().getValue("").toLowerCase());
+        dto.lease().setValue(model.lease().getValue("").toLowerCase());
+        dto.tenant().setValue(model.tenant().getValue("").toLowerCase());
         return dto;
     }
 
