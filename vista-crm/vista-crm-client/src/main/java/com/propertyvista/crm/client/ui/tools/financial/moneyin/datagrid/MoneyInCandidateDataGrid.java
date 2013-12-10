@@ -86,7 +86,6 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         defTextColumn(proto().leaseId(), i18n.tr("Lease"), 40, Unit.PX);
         defTenantsColumn();
         defPayerColumn();
-        defPrepaymentsColumn();
         defTotalUnpaidColumn();
         defAmountToPayColumn();
         defCheckNumberColumn();
@@ -118,13 +117,6 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
             }
         });
         defColumn(payerSelectionColumn, i18n.tr("Payer"), 100, Unit.PX);
-    }
-
-    private void defPrepaymentsColumn() {
-        Column<MoneyInCandidateDTO, Number> prepaymentsColumn = new EntityFieldColumn<MoneyInCandidateDTO, Number>(proto().prepayments(), new NumberCell(
-                CURRENCY_FORMAT));
-        prepaymentsColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
-        defColumn(prepaymentsColumn, i18n.tr("Prepayments"), 50, Unit.PX);
     }
 
     private void defTotalUnpaidColumn() {

@@ -91,9 +91,6 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         candidate.payerCandidates().addAll(fetchPayerCandidates(lease));
         candidate.totalOutstanding().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
 
-        // TODO prepayments?        
-        candidate.prepayments();
-
         return candidate;
     }
 
