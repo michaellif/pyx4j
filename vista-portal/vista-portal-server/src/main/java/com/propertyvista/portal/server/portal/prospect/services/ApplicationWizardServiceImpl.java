@@ -20,6 +20,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
@@ -49,7 +54,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 .getPrimaryKey());
 
         OnlineApplicationDTO to = EntityFactory.create(OnlineApplicationDTO.class);
-        to.unit().set(bo.masterOnlineApplication().leaseApplication().lease().unit());
+        to.unit().set(createUnitTO(bo.masterOnlineApplication().leaseApplication().lease().unit()));
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
         to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
         to.leasePrice().set(term.version().leaseProducts().serviceItem().agreedPrice());
@@ -57,6 +62,21 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         fillApplicantData(bo, to);
 
         callback.onSuccess(to);
+    }
+
+    //TODO use binders
+    private AptUnit createUnitTO(AptUnit unit) {
+        AptUnit to = EntityFactory.create(AptUnit.class);
+        to.id().set(unit.id());
+        to.info().number().set(unit.info().number());
+
+        to.building().id().set(unit.building().id());
+        to.building().info().address().set(unit.building().info().address().duplicate());
+
+        to.floorplan().id().set(unit.floorplan().id());
+        to.floorplan().name().set(unit.floorplan().name());
+        to.floorplan().marketingName().set(unit.floorplan().marketingName());
+        return to;
     }
 
     @Override
@@ -81,7 +101,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), tenant, AttachLevel.Attached);
 
             to.applicant().person().set(tenant.leaseParticipant().customer().person());
+
             to.applicant().picture().set(tenant.leaseParticipant().customer().picture());
+
             to.applicant().emergencyContacts().set(tenant.leaseParticipant().customer().emergencyContacts());
 
             to.applicant().currentAddress().set(tenant.effectiveScreening().version().currentAddress());
@@ -98,5 +120,19 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
         }
 
+        // TO optimizations
+        to.applicant().picture().customer().setAttachLevel(AttachLevel.IdOnly);
+        for (IdentificationDocument i : to.applicant().documents()) {
+            i.owner().setAttachLevel(AttachLevel.IdOnly);
+        }
+        for (EmergencyContact i : to.applicant().emergencyContacts()) {
+            i.customer().setAttachLevel(AttachLevel.IdOnly);
+        }
+        for (CustomerScreeningIncome i : to.applicant().incomes()) {
+            i.owner().setAttachLevel(AttachLevel.IdOnly);
+        }
+        for (CustomerScreeningPersonalAsset i : to.applicant().assets()) {
+            i.owner().setAttachLevel(AttachLevel.IdOnly);
+        }
     }
 }
