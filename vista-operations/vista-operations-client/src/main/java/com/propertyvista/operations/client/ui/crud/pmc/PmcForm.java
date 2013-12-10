@@ -109,8 +109,13 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status())).build());
+
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated()), 10).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().created()), 10).build());
+
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 15).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().namespace()), 15).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().dnsName()), 15).build());
 

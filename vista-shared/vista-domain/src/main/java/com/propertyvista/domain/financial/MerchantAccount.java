@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -87,10 +88,12 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
     @MemberColumn(notNull = true)
     IPrimitive<Boolean> invalid();
 
-    @Timestamp(Timestamp.Update.Created)
     @ReadOnly
+    @Format("yyyy-MM-dd HH:mm")
+    @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
+    @Format("yyyy-MM-dd HH:mm")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 

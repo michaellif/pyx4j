@@ -69,8 +69,8 @@ public interface DirectDebitRecord extends IEntity {
     @Length(35)
     IPrimitive<String> customerName();
 
-    @Timestamp(Timestamp.Update.Created)
     @Format("yyyy-MM-dd HH:mm")
+    @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> receivedDate();
 
     @NotNull

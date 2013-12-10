@@ -119,14 +119,18 @@ public interface PadFile extends IEntity {
     @OrderBy(PrimaryKey.class)
     IList<PadBatch> batches();
 
+    @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> sent();
 
+    @Format("yyyy-MM-dd HH:mm")
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
+    @Format("yyyy-MM-dd HH:mm")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
+    @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> acknowledged();
 
     // Updated when batch is sent to Caledon

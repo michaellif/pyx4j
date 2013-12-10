@@ -69,16 +69,23 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
+
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().created()), 10).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().updated()), 10).build());
+
         content.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)))).build());
-
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().status())).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().paymentsStatus())).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().bankId()), 5).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().invalid())).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().branchTransitNumber()), 5).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().chargeDescription())).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().accountNumber()), 15).build());
 
         content.setH2(++row, 0, 2, i18n.tr("Assigned Buildings"));

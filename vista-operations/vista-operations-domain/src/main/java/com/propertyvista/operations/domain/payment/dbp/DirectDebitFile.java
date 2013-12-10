@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.payment.dbp;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
@@ -34,6 +35,7 @@ public interface DirectDebitFile extends IEntity {
 
     IPrimitive<String> fileName();
 
+    @Format("yyyy-MM-dd HH:mm")
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
