@@ -31,6 +31,8 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -67,36 +69,24 @@ public abstract class SuperSelector<DataType> extends Composite {
 
     private boolean isFocused;
 
-    private final FlowPanel containerBox;
+    private FlowPanel containerBox;
+
+    private boolean inlineInput;
 
     /**
      * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
      * item.
      */
-    public SuperSelector(IFormat<DataType> format, boolean allowSame) {
+    public SuperSelector(IFormat<DataType> format, boolean allowSame, boolean inlineInput) {
         this.format = format;
         this.allowSame = allowSame;
+        this.inlineInput = inlineInput;
 
         FlowPanel panel = new FlowPanel();
         panel.setStyleName(Styles.SuperSelectorStyle.name());
 
-        // this 'container box' is used to calculate client width of the panel that does not include padding
-        containerBox = new FlowPanel();
-        containerBox.getElement().getStyle().setWidth(100, Unit.PCT);
-        containerBox.getElement().getStyle().setHeight(100, Unit.PCT);
-        containerBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
-        containerBox.getElement().getStyle().setBorderWidth(0, Unit.PX);
-        containerBox.getElement().getStyle().setPadding(0, Unit.PX);
-        containerBox.getElement().getStyle().setMargin(0, Unit.PX);
-        panel.add(containerBox);
-
-        selectedItemsContainerPanel = new FlowPanel();
-        selectedItemsContainerPanel.getElement().getStyle().setDisplay(Display.INLINE);
-        selectedItemsContainerPanel.getElement().getStyle().setBorderWidth(0, Unit.PX);
-        containerBox.add(selectedItemsContainerPanel);
-
         inputTextBox = new TextBox();
-        inputTextBox.getElement().getStyle().setDisplay(Display.INLINE);
+        inputTextBox.getElement().getStyle().setDisplay(Display.BLOCK);
         inputTextBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
 
         inputTextBox.addKeyDownHandler(new KeyDownHandler() {
@@ -119,7 +109,6 @@ public abstract class SuperSelector<DataType> extends Composite {
             }
         });
         inputTextBox.addFocusHandler(new FocusHandler() {
-
             @Override
             public void onFocus(FocusEvent event) {
                 SuperSelector.this.isFocused = true;
@@ -130,18 +119,59 @@ public abstract class SuperSelector<DataType> extends Composite {
             @Override
             public void onBlur(BlurEvent event) {
                 SuperSelector.this.isFocused = false;
+                if (!SuperSelector.this.inlineInput) {
+                    if (!selectedWidgets.isEmpty()) {
+                        inputTextBox.getElement().getStyle().setDisplay(Display.NONE);
+                        adjustInnerWidgetSizes();
+                    }
+                }
                 SuperSelector.this.onBlur();
             }
         });
 
-        containerBox.add(inputTextBox);
+        selectedItemsContainerPanel = new FlowPanel();
+        selectedItemsContainerPanel.addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!SuperSelector.this.inlineInput) {
+                    inputTextBox.getElement().getStyle().setDisplay(Display.BLOCK);
+                    inputTextBox.setFocus(true);
+                    adjustInnerWidgetSizes();
+                }
+            }
+        }, ClickEvent.getType());
+        selectedItemsContainerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+        selectedItemsContainerPanel.getElement().getStyle().setBorderWidth(0, Unit.PX);
+
+        // this 'container box' is used to calculate client width of the panel that does not include padding
+        if (inlineInput) {
+            containerBox = new FlowPanel();
+            containerBox.getElement().getStyle().setWidth(100, Unit.PCT);
+            containerBox.getElement().getStyle().setHeight(100, Unit.PCT);
+            containerBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+            containerBox.getElement().getStyle().setBorderWidth(0, Unit.PX);
+            containerBox.getElement().getStyle().setPadding(0, Unit.PX);
+            containerBox.getElement().getStyle().setMargin(0, Unit.PX);
+            panel.add(containerBox);
+
+            selectedItemsContainerPanel.getElement().getStyle().setDisplay(Display.INLINE);
+            containerBox.add(selectedItemsContainerPanel);
+
+            inputTextBox.getElement().getStyle().setDisplay(Display.INLINE);
+            containerBox.add(inputTextBox);
+        } else {
+            inputTextBox.setWidth("100%");
+            inputTextBox.getElement().getStyle().setMarginBottom(2, Unit.PX);
+            panel.add(inputTextBox);
+            panel.add(selectedItemsContainerPanel);
+        }
 
         initWidget(panel);
         selectedWidgets = new LinkedList<SelectedItemHolder<DataType>>();
     }
 
     public SuperSelector(IFormat<DataType> format) {
-        this(format, false);
+        this(format, false, false);
     }
 
     public void setInput(String input) {
@@ -173,7 +203,7 @@ public abstract class SuperSelector<DataType> extends Composite {
         selectedWidgets.add(w);
         selectedItemsContainerPanel.add(w);
 
-        updateInputTextBoxWidth();
+        adjustInnerWidgetSizes();
         onItemAdded(item);
     }
 
@@ -190,7 +220,10 @@ public abstract class SuperSelector<DataType> extends Composite {
             selectedItemsContainerPanel.remove(itemContainerWidget);
         }
 
-        updateInputTextBoxWidth();
+        if (!inlineInput && selectedWidgets.isEmpty()) {
+            inputTextBox.getElement().getStyle().setDisplay(Display.BLOCK);
+        }
+        adjustInnerWidgetSizes();
         onItemRemoved(item);
     }
 
@@ -245,37 +278,49 @@ public abstract class SuperSelector<DataType> extends Composite {
         }
     }
 
-    private void updateInputTextBoxWidth() {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                int maxRowWidth = containerBox.getElement().getClientWidth();
-                int rowWidth = 0;
-                for (SelectedItemHolder<DataType> w : selectedWidgets) {
-                    rowWidth += w.getElement().getOffsetWidth();
-                    if (rowWidth > maxRowWidth) {
-                        rowWidth = w.getElement().getOffsetWidth();
+    private void adjustInnerWidgetSizes() {
+        if (inlineInput) {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    int maxRowWidth = containerBox.getElement().getClientWidth();
+                    int rowWidth = 0;
+                    for (SelectedItemHolder<DataType> w : selectedWidgets) {
+                        rowWidth += w.getElement().getOffsetWidth();
+                        if (rowWidth > maxRowWidth) {
+                            rowWidth = w.getElement().getOffsetWidth();
+                        }
+                    }
+                    int proposedInputWidth = maxRowWidth - rowWidth;
+                    int effectiveInputWidth = (proposedInputWidth < minInputBoxWidth ? maxRowWidth : proposedInputWidth) - 2;
+                    inputTextBox.getElement().getStyle().setWidth(effectiveInputWidth, Unit.PX);
+                    if (SuperSelector.this.isAttached()) {
+                        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                            @Override
+                            public void execute() {
+                                onRedraw();
+                            }
+                        });
                     }
                 }
-                int proposedInputWidth = maxRowWidth - rowWidth;
-                int effectiveInputWidth = (proposedInputWidth < minInputBoxWidth ? maxRowWidth : proposedInputWidth) - 2;
-                inputTextBox.getElement().getStyle().setWidth(effectiveInputWidth, Unit.PX);
-                if (SuperSelector.this.isAttached()) {
-                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            onRedraw();
-                        }
-                    });
-                }
+
+            });
+        } else {
+            if (SuperSelector.this.isAttached()) {
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        onRedraw();
+                    }
+                });
             }
-        });
+        }
     }
 
     @Override
     protected void onAttach() {
         super.onAttach();
-        updateInputTextBoxWidth();
+        adjustInnerWidgetSizes();
     }
 
     protected void onRedraw() {

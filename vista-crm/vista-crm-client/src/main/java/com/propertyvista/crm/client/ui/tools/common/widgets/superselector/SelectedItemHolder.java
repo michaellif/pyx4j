@@ -68,6 +68,7 @@ public class SelectedItemHolder<C> extends Composite {
         deleteItemAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+                event.stopPropagation();
                 remove();
             }
         });
