@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -302,6 +303,7 @@ public class ScreeningGenerator {
             Persistence.service().persist(applicationDocumentData);
             applicationDocument.fileSize().setValue(applicationDocumentData.data().getValue().length);
             applicationDocument.blobKey().set(applicationDocumentData.id());
+            FileUploadRegistry.register(applicationDocument);
         }
     }
 
