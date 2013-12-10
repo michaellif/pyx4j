@@ -21,7 +21,7 @@ import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
 import com.propertyvista.crm.server.services.admin.SiteImageResourceUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.CustomerPictureCrmUploadServiceImpl;
-import com.propertyvista.crm.server.services.customer.InsuranceCertificateScanUploadCrmServiceImpl;
+import com.propertyvista.crm.server.services.customer.InsuranceCertificateScanCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.TenantPadFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.lease.ApplicationDocumentCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.organization.EmployeeSignatureUploadServiceImpl;
@@ -29,7 +29,7 @@ import com.propertyvista.operations.server.services.EncryptedStorageServicePriva
 import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.operations.server.services.MerchantAccountFileUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.ApplicationDocumentProspectUploadServiceImpl;
-import com.propertyvista.portal.server.portal.resident.services.services.InsuranceCertificateScanUploadResidentServiceImpl;
+import com.propertyvista.portal.server.portal.resident.services.services.InsuranceCertificateScanResidentUploadServiceImpl;
 import com.propertyvista.portal.server.portal.shared.services.CustomerPicturePortalUploadServiceImpl;
 
 @SuppressWarnings("serial")
@@ -43,8 +43,8 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(SiteImageResourceUploadServiceImpl.class);
         register(CustomerPictureCrmUploadServiceImpl.class);
         register(CustomerPicturePortalUploadServiceImpl.class);
-        register(InsuranceCertificateScanUploadCrmServiceImpl.class);
-        register(InsuranceCertificateScanUploadResidentServiceImpl.class);
+        register(InsuranceCertificateScanCrmUploadServiceImpl.class);
+        register(InsuranceCertificateScanResidentUploadServiceImpl.class);
         register(PmcDocumentFileUploadServiceImpl.class);
         register(EncryptedStorageServicePrivateKeyUploadServiceImpl.class);
         register(TenantPadFileUploadServiceImpl.class);

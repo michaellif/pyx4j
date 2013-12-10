@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-28
- * @author ArtyomB
+ * Created on Oct 23, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.customer;
+package com.propertyvista.portal.server.portal.resident.services.services;
 
-import com.propertyvista.crm.rpc.services.customer.InsuranceCertificateScanCrmUploadService;
+import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
 import com.propertyvista.server.common.upload.AbstractInsuranceCertificateScanUploadServiceImpl;
 
-public class InsuranceCertificateScanUploadCrmServiceImpl extends AbstractInsuranceCertificateScanUploadServiceImpl implements
-        InsuranceCertificateScanCrmUploadService {
+public class InsuranceCertificateScanResidentUploadServiceImpl extends AbstractInsuranceCertificateScanUploadServiceImpl implements
+        InsuranceCertificateScanResidentUploadService {
 
 }
