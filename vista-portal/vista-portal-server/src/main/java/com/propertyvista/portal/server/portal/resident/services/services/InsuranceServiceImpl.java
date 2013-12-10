@@ -27,12 +27,8 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     @Override
     public void retreiveInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback) {
-        if (false) {
-            new InsuranceServiceMockImpl().retreiveInsuranceStatus(callback);
-        } else {
-            callback.onSuccess(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                    ResidentPortalContext.getLeaseTermTenant().leaseParticipant().<Tenant> createIdentityStub()));
-        }
+        callback.onSuccess(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                ResidentPortalContext.getLeaseTermTenant().leaseParticipant().<Tenant> createIdentityStub()));
     }
 
 }
