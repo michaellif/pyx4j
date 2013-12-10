@@ -37,17 +37,17 @@ public class VistaFileURLBuilder<FILE extends IFile> implements IFileURLBuilder<
     }
 
     @Override
-    public String getUrl(FILE image) {
-        if (!image.accessKey().isNull()) {
-            return getUrl(DeploymentConsts.TRANSIENT_FILE_PREF + image.accessKey().getStringView(), image.fileName().getValue());
-        } else if (image.id().isNull() || image.blobKey().isNull()) {
+    public String getUrl(FILE file) {
+        if (!file.accessKey().isNull()) {
+            return getUrl(DeploymentConsts.TRANSIENT_FILE_PREF + file.accessKey().getStringView(), file.fileName().getValue());
+        } else if (file.id().isNull() || file.blobKey().isNull()) {
             return null;
         } else {
-            return getUrl(image.id().getStringView(), image.fileName().getValue());
+            return getUrl(file.id().getStringView(), file.fileName().getValue());
         }
     }
 
-    protected String getUrl(String blobId, String fileName) {
-        return GWT.getModuleBaseURL() + DeploymentConsts.FILE_SERVLET_MAPPING + fileClassName + "/" + blobId + "/" + fileName;
+    protected String getUrl(String fileId, String fileName) {
+        return GWT.getModuleBaseURL() + DeploymentConsts.FILE_SERVLET_MAPPING + fileClassName + "/" + fileId + "/" + fileName;
     }
 }

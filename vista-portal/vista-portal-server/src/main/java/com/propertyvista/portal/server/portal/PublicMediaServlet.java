@@ -30,7 +30,6 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
@@ -89,11 +88,8 @@ public class PublicMediaServlet extends HttpServlet {
             // treat id as accessKey
             file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
         } else {
-            // treat id as blobKey
-            Key blobKey = new Key(id);
-            EntityQueryCriteria<MediaFile> crit = EntityQueryCriteria.create(MediaFile.class);
-            crit.eq(crit.proto().blobKey(), blobKey);
-            file = Persistence.service().retrieve(crit);
+            // treat id as MediaFile key
+            file = Persistence.service().retrieve(MediaFile.class, new Key(id));
         }
         if (file == null) {
             log.debug("no media {} {}", id, filename);

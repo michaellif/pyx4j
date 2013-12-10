@@ -27,8 +27,8 @@ public class PublicMediaURLBuilder extends VistaFileURLBuilder<MediaFile> {
     }
 
     @Override
-    protected String getUrl(String blobId, String fileName) {
-        return GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + blobId + "/" + ThumbnailSize.large.name() + "."
+    protected String getUrl(String fileId, String fileName) {
+        return GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + fileId + "/" + ThumbnailSize.large.name() + "."
                 + ImageConsts.THUMBNAIL_TYPE;
     }
 }
