@@ -19,14 +19,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -35,6 +41,7 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCand
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPaymentDTO;
+import com.propertyvista.crm.rpc.dto.tools.TooManyResultsException;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.server.util.BuildingsCriteriaNormalizer;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -44,24 +51,44 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class MoneyInToolServiceImpl implements MoneyInToolService {
 
+    private static final Logger log = LoggerFactory.getLogger(MoneyInToolServiceImpl.class);
+
+    /** I'm not sure current UI implementation will be able to support more than that without lag or 'unresponsive script' */
+    private final static int DEFAULT_MAX_NUM_OF_RESULTS = 600;
+
     private final BuildingsCriteriaNormalizer buildingCriteriaNormalizer;
+
+    private final int maxNumberOfResults;
 
     public MoneyInToolServiceImpl() {
         buildingCriteriaNormalizer = new BuildingsCriteriaNormalizer(EntityFactory.getEntityPrototype(Lease.class).unit().building());
+        maxNumberOfResults = DEFAULT_MAX_NUM_OF_RESULTS;
     }
 
     @Override
     public void findCandidates(AsyncCallback<Vector<MoneyInCandidateDTO>> callback, MoneyInCandidateSearchCriteriaDTO criteriaEntity) {
-        // part of the filtering is done in the DB and part on server side utilizing 'matches()' function 
+        // part of the filtering is done in the DB and part on server side utilizing 'matches()' function
         EntityQueryCriteria<Lease> criteria = makeCriteria(criteriaEntity);
-        List<Lease> leases = Persistence.secureQuery(criteria);
 
         Vector<MoneyInCandidateDTO> candidates = new Vector<MoneyInCandidateDTO>();
-        for (Lease lease : leases) {
-            MoneyInCandidateDTO candidate = toCandidate(lease);
-            if (matches(candidate, criteriaEntity)) {
-                candidates.add(candidate);
+        ICursorIterator<Lease> leases = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
+        try {
+
+            while (leases.hasNext()) {
+                Lease lease = leases.next();
+                MoneyInCandidateDTO candidate = toCandidate(lease);
+                if (matches(candidate, criteriaEntity)) {
+                    candidates.add(candidate);
+                }
             }
+        } catch (Throwable e) {
+            log.error("got error during creation candiates for Money In", e);
+            IOUtils.closeQuietly(leases);
+        }
+
+        if (candidates.size() > maxNumberOfResults) {
+            log.warn("Got too many results while searching for candidates for Money In Batch creation (# of results = " + candidates.size() + ")");
+            throw new TooManyResultsException();
         }
         callback.onSuccess(candidates);
     }

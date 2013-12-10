@@ -54,6 +54,7 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCand
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPaymentDTO;
+import com.propertyvista.crm.rpc.dto.tools.TooManyResultsException;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -103,11 +104,21 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     @Override
     public void search() {
+        searchResultsProvider.getList().clear();
         service.findCandidates(new DefaultAsyncCallback<Vector<MoneyInCandidateDTO>>() {
             @Override
             public void onSuccess(Vector<MoneyInCandidateDTO> result) {
                 merge(result, selectedForProcessingProvider.getList());
                 searchResultsProvider.setList(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof TooManyResultsException) {
+                    view.displayMessage(i18n.tr("Your search has found too many results. Please refine the criteria and try again."), Type.Warning);
+                } else {
+                    super.onFailure(caught);
+                }
             }
 
         }, toDto(view.getSearchCriteria()));
