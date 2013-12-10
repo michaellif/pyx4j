@@ -49,7 +49,7 @@ public interface IObject<VALUE_TYPE> extends IStringView {
     /**
      * Internally used by persistence layer when loading values for object.
      */
-    public void setAttachLevel(AttachLevel level);
+    public void setAttachLevel(AttachLevel attachLevel);
 
     public Path getPath();
 

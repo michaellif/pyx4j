@@ -26,6 +26,9 @@ public enum AttachLevel implements Serializable {
 
     /**
      * Data not retrieved.
+     * 
+     * Use Persistence.service().retrieveMember(entity.memeber()) to load the data.
+     * Persistence.ensureRetrieveMember(entity.memeber())
      */
     Detached,
 

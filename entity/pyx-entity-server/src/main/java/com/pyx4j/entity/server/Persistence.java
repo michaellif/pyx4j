@@ -40,7 +40,7 @@ import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
+import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMemberMethod;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -197,13 +197,23 @@ public class Persistence {
     }
 
     public static <T extends IEntity> void retrieveOwned(final T rootEntity) {
-        EntityGraph.applyRecursively(rootEntity, new ApplyMethod() {
+        EntityGraph.applyRecursively(rootEntity, new ApplyMemberMethod() {
             @Override
             public boolean apply(IEntity entity) {
                 if ((rootEntity == entity) || entity.getMeta().isOwnedRelationships()) {
                     if (entity.isValueDetached()) {
                         service().retrieve(entity);
                     }
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            @Override
+            public boolean apply(ICollection<IEntity, ?> memberCollection) {
+                if (memberCollection.getMeta().isOwnedRelationships()) {
+                    ensureRetrieveMember(memberCollection, AttachLevel.Attached);
                     return true;
                 } else {
                     return false;
@@ -224,6 +234,18 @@ public class Persistence {
         }
         for (T entity : entityIterable) {
             ensureRetrieve(entity, attachLevel);
+        }
+    }
+
+    public static <T extends IEntity> void ensureRetrieveMember(T entityMember, AttachLevel attachLevel) {
+        if (entityMember.getAttachLevel().ordinal() < attachLevel.ordinal()) {
+            service().retrieveMember(entityMember, attachLevel);
+        }
+    }
+
+    public static <T extends IEntity> void ensureRetrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
+        if (collectionMember.getAttachLevel().ordinal() < attachLevel.ordinal()) {
+            service().retrieveMember(collectionMember, attachLevel);
         }
     }
 

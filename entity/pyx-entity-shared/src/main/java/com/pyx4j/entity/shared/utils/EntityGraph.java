@@ -59,6 +59,20 @@ public class EntityGraph {
 
     }
 
+    public static interface ApplyMemberMethod {
+
+        /**
+         * @return true if we need to go recursively inside this entity or collection.
+         */
+        public boolean apply(IEntity memberEntity);
+
+        public boolean apply(ICollection<IEntity, ?> memberCollection);
+
+    }
+
+    /**
+     * Apply to Entity members
+     */
     public static void applyRecursively(IEntity entity, ApplyMethod method) {
         applyRecursively(entity, method, new HashSet<IEntity>(), new IdentityHashSet<Map<String, Serializable>>());
     }
@@ -97,6 +111,53 @@ public class EntityGraph {
             } else if (IList.class.equals(memberMeta.getObjectClass())) {
                 for (IEntity value : (IList<?>) member) {
                     applyRecursively(value, method, processed, processedValues);
+                }
+            }
+        }
+    }
+
+    /**
+     * Apply to Non primitive members Collection and Entity
+     */
+    public static void applyRecursively(IEntity entity, ApplyMemberMethod method) {
+        applyRecursively(entity, method, new HashSet<IEntity>(), new IdentityHashSet<Map<String, Serializable>>());
+    }
+
+    private static void applyRecursively(IEntity entity, ApplyMemberMethod method, Set<IEntity> processed, Set<Map<String, Serializable>> processedValues) {
+        if (processed.contains(entity) || processedValues.contains(entity.getValue())) {
+            return;
+        }
+        boolean applyRecursively = method.apply(entity);
+        processed.add(entity);
+        if (entity.isNull()) {
+            return;
+        }
+        processedValues.add(entity.getValue());
+        if (!applyRecursively) {
+            return;
+        }
+
+        EntityMeta em = entity.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            IObject<?> member = entity.getMember(memberName);
+            if (memberMeta.isEntity()) {
+                applyRecursively((IEntity) member, method, processed, processedValues);
+            } else if (ISet.class.equals(memberMeta.getObjectClass())) {
+                @SuppressWarnings("unchecked")
+                ICollection<IEntity, ?> memberCollection = (ISet<IEntity>) member;
+                if (method.apply(memberCollection)) {
+                    for (IEntity value : memberCollection) {
+                        applyRecursively(value, method, processed, processedValues);
+                    }
+                }
+            } else if (IList.class.equals(memberMeta.getObjectClass())) {
+                @SuppressWarnings("unchecked")
+                ICollection<IEntity, ?> memberCollection = (IList<IEntity>) member;
+                if (method.apply(memberCollection)) {
+                    for (IEntity value : (IList<?>) member) {
+                        applyRecursively(value, method, processed, processedValues);
+                    }
                 }
             }
         }
