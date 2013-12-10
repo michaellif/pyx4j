@@ -307,7 +307,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         // Utilities: -----------------------------------------------------------------------------------------------------------
         flexPanel.setH1(++leftRow, 0, 2, proto().version().utilities().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().utilities(), new BuildingUtilityFolder()).asWidget());
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().utilities(), new BuildingUtilityFolder()));
 
         // Tenants/Guarantors: --------------------------------------------------------------------------------------------------
         flexPanel.setH1(++leftRow, 0, 2, proto().version().tenants().getMeta().getCaption());
@@ -516,7 +516,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     new MemberColumnDescriptor.Builder(proto().type()).build(),
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().description()).build()
-            );//@formatter:on
+                  );//@formatter:on
             }
 
             @Override

@@ -46,6 +46,8 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     protected void enhanceRetrieved(Lease in, DTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(in, to, retrieveTarget);
 
+        Persistence.service().retrieve(to.currentTerm().version().utilities());
+
         if (!VistaFeatures.instance().yardiIntegration()) {
             // create bill preview for draft leases/applications:
             if (in.status().getValue().isDraft() && (!Lease.Status.isApplicationWithoutUnit(in))) {
