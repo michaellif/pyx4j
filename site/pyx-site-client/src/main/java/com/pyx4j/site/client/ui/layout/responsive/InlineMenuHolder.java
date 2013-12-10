@@ -73,4 +73,11 @@ public class InlineMenuHolder extends SimplePanel {
         onPositionChange();
     }
 
+    public int getMenuWidth() {
+        if (getWidget() == null) {
+            return 0;
+        } else {
+            return getWidget().getElement().getOffsetWidth();
+        }
+    }
 }

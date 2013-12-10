@@ -359,12 +359,12 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     private void resizeComponents() {
         onScroll();
 
-        contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
+        contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
 
         if (getExtraDisplay().isVisible()) {
-            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - extraHolder.getOffsetWidth()) + "px");
+            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - extraHolder.getOffsetWidth()) + "px");
         } else {
-            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth()) + "px");
+            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth()) + "px");
         }
 
         for (DisplayPanel displayPanel : displays.values()) {
