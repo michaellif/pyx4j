@@ -132,8 +132,8 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         void setValue(ResidentSummaryDTO value) {
             nameLabel.setHTML(value.tenantName().getValue());
-            Image img = value.picture().isNull() ? new Image(VistaImages.INSTANCE.profilePicture()) : new Image(MediaUtils.createCustomerPictureUrl(value
-                    .picture()));
+            Image img = value.picture().hasValues() ? new Image(MediaUtils.createCustomerPictureUrl(value.picture())) : new Image(
+                    VistaImages.INSTANCE.profilePicture());
             picture.setImage(img);
         }
     }

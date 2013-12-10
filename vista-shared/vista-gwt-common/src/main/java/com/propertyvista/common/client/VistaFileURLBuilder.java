@@ -38,10 +38,12 @@ public class VistaFileURLBuilder<FILE extends IFile> implements IFileURLBuilder<
 
     @Override
     public String getUrl(FILE image) {
-        if (image.id().isNull()) {
-            return getUrl(DeploymentConsts.TRANSIENT_FILE_PREF + image.accessKey().getStringView(), "blob");
+        if (!image.accessKey().isNull()) {
+            return getUrl(DeploymentConsts.TRANSIENT_FILE_PREF + image.accessKey().getStringView(), image.fileName().getValue());
+        } else if (image.id().isNull() || image.blobKey().isNull()) {
+            return null;
         } else {
-            return getUrl(image.blobKey().getStringView(), image.fileName().getValue());
+            return getUrl(image.id().getStringView(), image.fileName().getValue());
         }
     }
 

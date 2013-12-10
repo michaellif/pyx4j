@@ -31,7 +31,6 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -39,6 +38,7 @@ import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.domain.IFileBlob;
 
 public class VistaAbstractFileAccessServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
     private final static Logger log = LoggerFactory.getLogger(VistaAbstractFileAccessServlet.class);
@@ -83,21 +83,15 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
         }
 
         IFile file = null;
-        Key blobKey = null;
         if (id.startsWith(DeploymentConsts.TRANSIENT_FILE_PREF)) {
             // treat id as accessKey
             file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
-            blobKey = file.blobKey().getValue();
         } else {
-            // treat id as blobKey
-            blobKey = new Key(id);
             // ensure access allowed
-            EntityQueryCriteria<? extends IFile> crit = EntityQueryCriteria.create(blobEntry.fileClass);
-            crit.eq(crit.proto().blobKey(), blobKey);
-            file = Persistence.secureRetrieve(crit);
+            file = Persistence.secureRetrieve(blobEntry.fileClass, new Key(id));
         }
 
-        IFileBlob blob = Persistence.service().retrieve(blobClass, blobKey);
+        IFileBlob blob = Persistence.service().retrieve(blobClass, file.blobKey().getValue());
         if (file == null || blob == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -133,6 +127,7 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
     }
 
     static class BlobEntry {
+
         public final Class<? extends IFile> fileClass;
 
         public final Class<? extends IFileBlob> blobClass;
