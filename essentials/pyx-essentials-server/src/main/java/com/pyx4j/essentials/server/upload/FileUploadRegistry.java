@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.server.contexts.Context;
@@ -62,7 +63,7 @@ public class FileUploadRegistry {
         if (userUploadedFile == null) {
             return false;
         } else {
-            return userUploadedFile.blobKey().equals(valueNew);
+            return EqualsHelper.equals(userUploadedFile.blobKey().getValue(), valueNew);
         }
     }
 }

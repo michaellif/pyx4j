@@ -1126,24 +1126,26 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             } else {
                 value = member.getMemberValue(entity);
             }
-            MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
-            if (memberColumn != null && memberColumn.modificationAdapters() != null) {
-                for (Class<? extends MemberModificationAdapter<?>> adapterClass : memberColumn.modificationAdapters()) {
-                    @SuppressWarnings("rawtypes")
-                    MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
-                    if (!adapter.allowModifications(entity, memberMeta, null, value)) {
-                        log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
-                        throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
+            if (value != null) {
+                MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+                if (memberColumn != null && memberColumn.modificationAdapters() != null) {
+                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : memberColumn.modificationAdapters()) {
+                        @SuppressWarnings("rawtypes")
+                        MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
+                        if (!adapter.allowModifications(entity, memberMeta, null, value)) {
+                            log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
+                            throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
+                        }
                     }
                 }
-            }
-            if (entityMembersModificationAdapters != null) {
-                for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMembersModificationAdapters) {
-                    @SuppressWarnings("rawtypes")
-                    MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
-                    if (!adapter.allowModifications(entity, memberMeta, null, value)) {
-                        log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
-                        throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
+                if (entityMembersModificationAdapters != null) {
+                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMembersModificationAdapters) {
+                        @SuppressWarnings("rawtypes")
+                        MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
+                        if (!adapter.allowModifications(entity, memberMeta, null, value)) {
+                            log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
+                            throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
+                        }
                     }
                 }
             }
