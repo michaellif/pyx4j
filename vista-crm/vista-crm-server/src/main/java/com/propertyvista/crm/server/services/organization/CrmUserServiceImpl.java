@@ -77,6 +77,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
             BuildingFolderUtil.stripExtraData(to.buildingAccess());
             Persistence.service().retrieve(item.portfolios());
         }
+        Persistence.service().retrieve(to.signature());
     }
 
     @Override
