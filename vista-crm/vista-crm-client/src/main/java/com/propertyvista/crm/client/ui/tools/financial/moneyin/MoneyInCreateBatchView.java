@@ -43,6 +43,10 @@ public interface MoneyInCreateBatchView extends IPrimePane {
         void createBatch();
 
         ValidationErrors getValidationErrors(MoneyInCandidateDTO object, Path memberPath);
+
+        void sortFoundCandidates(String memberPath, boolean isAscending);
+
+        void sortSelectedCandidates(String memberPath, boolean isAscending);
     }
 
     void setPresenter(Presenter presenter);

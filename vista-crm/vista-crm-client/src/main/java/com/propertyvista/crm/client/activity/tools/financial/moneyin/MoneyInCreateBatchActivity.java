@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.activity.tools.financial.moneyin;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +34,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -47,6 +50,7 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeas
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class MoneyInCreateBatchActivity extends AbstractActivity implements MoneyInCreateBatchView.Presenter {
 
@@ -62,12 +66,19 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     private final MoneyInToolService service;
 
+    private final MoneyInCandidateDTO proto;
+
+    private final Map<String, Comparator<MoneyInCandidateDTO>> sortComparatorsMap;
+
     public MoneyInCreateBatchActivity() {
+        proto = EntityFactory.getEntityPrototype(MoneyInCandidateDTO.class);
         validationErrorsMap = new HashMap<Key, HashMap<Path, ValidationErrors>>();
         view = CrmSite.getViewFactory().getView(MoneyInCreateBatchView.class);
         searchResultsProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(), this);
         selectedForProcessingProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(), this);
         service = GWT.<MoneyInToolService> create(MoneyInToolService.class);
+
+        sortComparatorsMap = createSortComparatorsMap();
     }
 
     @Override
@@ -143,6 +154,16 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     @Override
     public void createBatch() {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sortFoundCandidates(String memberPath, boolean isSortAscending) {
+        sort(memberPath, searchResultsProvider, isSortAscending);
+    }
+
+    @Override
+    public void sortSelectedCandidates(String memberPath, boolean isSortAscending) {
+        sort(memberPath, selectedForProcessingProvider, isSortAscending);
     }
 
     @Override
@@ -255,7 +276,6 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
                 matchingIncoming.set(selected);
             }
         }
-
     }
 
     private MoneyInCandidateSearchCriteriaDTO toDto(MoneyInCandidateSearchCriteriaModel model) {
@@ -274,5 +294,76 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
             idStubs.add((EntityFactory.createIdentityStub(identityStubClass, entity.getPrimaryKey())));
         }
         return idStubs;
+    }
+
+    private Map<String, Comparator<MoneyInCandidateDTO>> createSortComparatorsMap() {//@formatter:off
+        HashMap<String, Comparator<MoneyInCandidateDTO>> map = new HashMap<String, Comparator<MoneyInCandidateDTO>>();        
+        putMemberValueComparator(map, proto.building());
+        putMemberValueComparator(map, proto.unit());
+        putMemberValueComparator(map, proto.leaseId());
+        // TODO add comparator for tenants?        
+        map.put(proto.payment().payerTenantIdStub().getPath().toString(), new Comparator<MoneyInCandidateDTO>() {
+            @Override
+            public int compare(MoneyInCandidateDTO o1, MoneyInCandidateDTO o2) {
+                Tenant tenant1 = o1.payment().payerTenantIdStub();
+                Tenant tenant2 = o2.payment().payerTenantIdStub();                
+                if (tenant1.isNull() || tenant2.isNull()) {
+                    return tenant1.isNull() && tenant2.isNull() ? 0 : (tenant1.isNull() ? -1 : 1);
+                } else {
+                    String name1 = null;
+                    for (MoneyInLeaseParticipantDTO c : o1.payerCandidates()) {
+                        if (c.tenantIdStub().getPrimaryKey().equals(tenant1.getPrimaryKey())) {
+                            name1 = c.name().getValue();
+                            break;
+                        }
+                    }
+                    String name2 = null;
+                    for (MoneyInLeaseParticipantDTO c : o2.payerCandidates()) {
+                        if (c.tenantIdStub().getPrimaryKey().equals(tenant1.getPrimaryKey())) {
+                            name2 = c.name().getValue();
+                            break;
+                        }
+                    }
+                    return name1.compareTo(name2);
+                }
+            }           
+        });
+        putMemberValueComparator(map, proto.totalOutstanding());
+        putMemberValueComparator(map, proto.payment().payedAmount());
+        putMemberValueComparator(map, proto.payment().checkNumber());
+        putMemberValueComparator(map, proto.processPayment());
+        return map;
+    }//@formatter:off
+    
+    private void putMemberValueComparator(Map<String, Comparator<MoneyInCandidateDTO>> map, IObject<?> member) {
+        final Path path = member.getPath();
+        map.put(path.toString(), new Comparator<MoneyInCandidateDTO>() {
+            @Override
+            public int compare(MoneyInCandidateDTO o1, MoneyInCandidateDTO o2) {
+                Comparable c1 = (Comparable)o1.getMember(path).getValue();
+                Comparable c2 = (Comparable)o2.getMember(path).getValue();
+                if (c1 == null || c2 == null) {
+                    return c1 == c2 ? 0 : (c1 == null ? -1 : 1);
+                } else {
+                    return c1.compareTo(c2);
+                } 
+            }
+        });
+    }
+    
+    private void sort(String memberPath, ListDataProvider<MoneyInCandidateDTO> provider, boolean isSortAscending) {
+        Comparator<MoneyInCandidateDTO> cmp = sortComparatorsMap.get(memberPath);
+        if (isSortAscending) {
+            final Comparator<MoneyInCandidateDTO> reverseCmp = cmp;
+            cmp = new Comparator<MoneyInCandidateDTO>() {
+                @Override
+                public int compare(MoneyInCandidateDTO o1, MoneyInCandidateDTO o2) {
+                    return -reverseCmp.compare(o1, o2);
+                }
+            };
+        }
+        if (cmp != null) {
+            Collections.sort(provider.getList(), cmp);
+        }
     }
 }

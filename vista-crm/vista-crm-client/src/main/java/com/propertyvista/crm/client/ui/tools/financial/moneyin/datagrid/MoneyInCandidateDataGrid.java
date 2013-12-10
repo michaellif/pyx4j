@@ -23,6 +23,7 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.forms.client.ui.IFormat;
@@ -68,7 +69,7 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
             };
         };
         initColumns();
-
+        initSortHandler();
     }
 
     public void setPresenter(MoneyInCreateBatchView.Presenter presenter) {
@@ -80,19 +81,53 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         return this.presenter;
     }
 
-    private void initColumns() {
-        defTextColumn(proto().building(), i18n.tr("Building"), 40, Unit.PX);
-        defTextColumn(proto().unit(), i18n.tr("Unit"), 40, Unit.PX);
-        defTextColumn(proto().leaseId(), i18n.tr("Lease"), 40, Unit.PX);
-        defTenantsColumn();
-        defPayerColumn();
-        defTotalUnpaidColumn();
-        defAmountToPayColumn();
-        defCheckNumberColumn();
-        defProcessColumn();
+    protected void onSort(String memberPath, boolean isAscending) {
     }
 
-    private void defTenantsColumn() {
+    private void initColumns() {
+        initBuildingColumn();
+        initUnitColumn();
+        initLeaseColumn();
+        initTenantsColumn();
+        initPayerColumn();
+        initTotalUnpaidColumn();
+        initAmountToPayColumn();
+        initCheckNumberColumn();
+        initProcessColumn();
+    }
+
+    private void initSortHandler() {
+        ColumnSortEvent.Handler sortHandler = new ColumnSortEvent.Handler() {
+            @Override
+            public void onColumnSort(ColumnSortEvent event) {
+                MoneyInCandidateDataGrid.this.onSort(event.getColumn().getDataStoreName(), event.isSortAscending());
+            }
+        };
+        this.addColumnSortHandler(sortHandler);
+    }
+
+    private Column<?, ?> initBuildingColumn() {
+        Column<?, ?> c = defTextColumn(proto().building(), i18n.tr("Building"), 40, Unit.PX);
+        c.setSortable(true);
+        c.setDataStoreName(proto().building().getPath().toString());
+        return c;
+    }
+
+    private Column<?, ?> initUnitColumn() {
+        Column<?, ?> c = defTextColumn(proto().unit(), i18n.tr("Unit"), 40, Unit.PX);
+        c.setSortable(true);
+        c.setDataStoreName(proto().unit().getPath().toString());
+        return c;
+    }
+
+    private Column<?, ?> initLeaseColumn() {
+        Column<?, ?> c = defTextColumn(proto().leaseId(), i18n.tr("Lease"), 40, Unit.PX);
+        c.setSortable(true);
+        c.setDataStoreName(proto().leaseId().getPath().toString());
+        return c;
+    }
+
+    private Column<?, ?> initTenantsColumn() {
         Column<MoneyInCandidateDTO, String> leaseParticipantsColumn = new Column<MoneyInCandidateDTO, String>(new TextCell()) {
             @Override
             public String getValue(MoneyInCandidateDTO object) {
@@ -100,9 +135,12 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
             }
         };
         defColumn(leaseParticipantsColumn, i18n.tr("Tenants"), 100, Unit.PX);
+        leaseParticipantsColumn.setSortable(true);
+        leaseParticipantsColumn.setDataStoreName(proto().payerCandidates().getPath().toString());
+        return leaseParticipantsColumn;
     }
 
-    private void defPayerColumn() {
+    private Column<?, ?> initPayerColumn() {
         Column<MoneyInCandidateDTO, ObjectSelectionState<MoneyInLeaseParticipantDTO>> payerSelectionColumn = new Column<MoneyInCandidateDTO, ObjectSelectionState<MoneyInLeaseParticipantDTO>>(
                 new ObjectSelectionCell<MoneyInLeaseParticipantDTO>(new PayerOptionFormat())) {
             @Override
@@ -117,16 +155,22 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
             }
         });
         defColumn(payerSelectionColumn, i18n.tr("Payer"), 100, Unit.PX);
+        payerSelectionColumn.setSortable(true);
+        payerSelectionColumn.setDataStoreName(proto().payment().payerTenantIdStub().getPath().toString());
+        return payerSelectionColumn;
     }
 
-    private void defTotalUnpaidColumn() {
+    private Column<MoneyInCandidateDTO, Number> initTotalUnpaidColumn() {
         Column<MoneyInCandidateDTO, Number> totalUnpaidColumn = new EntityFieldColumn<MoneyInCandidateDTO, Number>(proto().totalOutstanding(), new NumberCell(
                 CURRENCY_FORMAT));
         totalUnpaidColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(totalUnpaidColumn, i18n.tr("Total Unpaid"), 50, Unit.PX);
+        totalUnpaidColumn.setSortable(true);
+        totalUnpaidColumn.setDataStoreName(proto().totalOutstanding().getPath().toString());
+        return totalUnpaidColumn;
     }
 
-    private void defAmountToPayColumn() {
+    private Column<MoneyInCandidateDTO, BigDecimal> initAmountToPayColumn() {
         amountToPayCell = new ObjectEditCell<BigDecimal>(new MoneyFormat(), moneyEditCellStyle);
         Column<MoneyInCandidateDTO, BigDecimal> amountToPayColumn = new Column<MoneyInCandidateDTO, BigDecimal>(amountToPayCell) {
             @Override
@@ -144,9 +188,13 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         });
         amountToPayColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(amountToPayColumn, i18n.tr("Amount to Pay"), 50, Unit.PX);
+
+        amountToPayColumn.setSortable(true);
+        amountToPayColumn.setDataStoreName(proto().payment().payedAmount().getPath().toString());
+        return amountToPayColumn;
     }
 
-    private void defCheckNumberColumn() {
+    private Column<MoneyInCandidateDTO, String> initCheckNumberColumn() {
         IFormat<String> checkFormat = new IFormat<String>() {
             @Override
             public String format(String value) {
@@ -178,10 +226,23 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         });
         checkNumberColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(checkNumberColumn, i18n.tr("Ref #"), 40, Unit.PX);
+
+        checkNumberColumn.setSortable(true);
+        checkNumberColumn.setDataStoreName(proto().payment().checkNumber().getPath().toString());
+
+        return checkNumberColumn;
+    }
+
+    private Column<MoneyInCandidateDTO, ?> initProcessColumn() {
+        Column<MoneyInCandidateDTO, ?> processColumn = createProcessColumn();
+        defColumn(processColumn, createProcessColumnTitle(), 50, Unit.PX);
+        processColumn.setSortable(true);
+        processColumn.setDataStoreName(proto().processPayment().getPath().toString());
+        return processColumn;
     }
 
     // TODO this method doesn't indicate in any way that it renders 'process' column, maybe rename it to defLastColumn? 
-    protected void defProcessColumn() {
+    protected Column<MoneyInCandidateDTO, ?> createProcessColumn() {
         Column<MoneyInCandidateDTO, Boolean> processColumn = new Column<MoneyInCandidateDTO, Boolean>(new CheckboxCell(false, false)) {
             @Override
             public Boolean getValue(MoneyInCandidateDTO object) {
@@ -194,7 +255,11 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
                 presenter.setProcessCandidate(object, value);
             }
         });
-        defColumn(processColumn, i18n.tr("Process?"), 50, Unit.PX);
+        return processColumn;
+    }
+
+    protected String createProcessColumnTitle() {
+        return i18n.tr("Process?");
     }
 
     private String renderLeaseParticipants(MoneyInCandidateDTO candidate) {

@@ -80,7 +80,12 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
             gridsHolder.setWidgetLeftRight(foundHolder, 0, Unit.PX, 0, Unit.PX);
 
             // found:
-            foundHolder.add(searchCandidateDataGrid = new MoneyInCandidateDataGrid());
+            foundHolder.add(searchCandidateDataGrid = new MoneyInCandidateDataGrid() {
+                @Override
+                protected void onSort(String memberPath, boolean isAscending) {
+                    presenter.sortFoundCandidates(memberPath, isAscending);
+                }
+            });
             foundHolder.setWidgetTopBottom(searchCandidateDataGrid, 0, Unit.PX, 33, Unit.PX);
             foundHolder.setWidgetLeftRight(searchCandidateDataGrid, 0, Unit.PX, 0, Unit.PX);
 
@@ -116,7 +121,17 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
 
             selectedHolder.add(selectedForProcessingDataGrid = new MoneyInCandidateDataGrid() {
                 @Override
-                protected void defProcessColumn() {
+                protected void onSort(String memberPath, boolean isAscending) {
+                    presenter.sortSelectedCandidates(memberPath, isAscending);
+                };
+
+                @Override
+                protected String createProcessColumnTitle() {
+                    return "";
+                };
+
+                @Override
+                protected Column<MoneyInCandidateDTO, ?> createProcessColumn() {
                     Column<MoneyInCandidateDTO, MoneyInCandidateDTO> processColumn = new Column<MoneyInCandidateDTO, MoneyInCandidateDTO>(
                             new ActionCell<MoneyInCandidateDTO>(i18n.tr("Remove"), new Delegate<MoneyInCandidateDTO>() {
                                 @Override
@@ -130,9 +145,8 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
                         public MoneyInCandidateDTO getValue(MoneyInCandidateDTO object) {
                             return object;
                         }
-
                     };
-                    defColumn(processColumn, "", 50, Unit.PX);
+                    return processColumn;
                 }
             });
             selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 31, Unit.PX, 33, Unit.PX);

@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
-
 /**
  * Same as GWT DataGrid, but with some convenience methods for defining columns based on subject contained entity type
  */
@@ -52,15 +51,16 @@ public class VistaDataGrid<E extends IEntity> extends DataGrid<E> {
         defTextColumn(columnField, columnField.getMeta().getCaption(), columWidth, columnWidthUnit);
     }
 
-    protected void defTextColumn(IObject<String> columnField, String headerCaption, double columWidth, Unit columnWidthUnit) {
+    protected Column<?, ?> defTextColumn(IObject<String> columnField, String headerCaption, double columWidth, Unit columnWidthUnit) {
         EntityFieldColumn<E, String> column = new EntityFieldColumn<E, String>(columnField, new TextCell());
-        defColumn(column, headerCaption, columWidth, columnWidthUnit);
+        return defColumn(column, headerCaption, columWidth, columnWidthUnit);
     }
 
-    protected void defColumn(Column<E, ?> column, String headerCaption, double columWidth, Unit columnWidthUnit) {
+    protected Column<?, ?> defColumn(Column<E, ?> column, String headerCaption, double columWidth, Unit columnWidthUnit) {
         this.addColumn(column, new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml(),
                 createFooter ? new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml() : null);
         this.setColumnWidth(column, columWidth, columnWidthUnit);
+        return column;
     }
 
 }
