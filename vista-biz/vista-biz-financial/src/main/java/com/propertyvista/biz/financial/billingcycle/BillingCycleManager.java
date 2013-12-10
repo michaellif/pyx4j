@@ -95,16 +95,17 @@ class BillingCycleManager {
 
     protected BillingCycle getLeaseFirstBillingCycle(Lease lease) {
         BillingAccount billingAccount = lease.billingAccount();
-        LogicalDate firstCycleStartDate = null;
+        LogicalDate leaseStartDate = null;
         if (!billingAccount.carryforwardBalance().isNull()) {
             if (!lease.leaseFrom().getValue().before(lease.creationDate().getValue())) {
                 throw new BillingException("Existing lease start date should be earlier than creation date");
             }
-            firstCycleStartDate = lease.creationDate().getValue();
+            // for not-approved leases use current date
+            leaseStartDate = lease.approvalDate().isNull() ? SystemDateManager.getLogicalDate() : lease.approvalDate().getValue();
         } else {
-            firstCycleStartDate = lease.leaseFrom().getValue();
+            leaseStartDate = lease.leaseFrom().getValue();
         }
-        return ensureBillingCycle(lease, firstCycleStartDate);
+        return getBillingCycleForDate(lease, leaseStartDate);
     }
 
     /** Find/Create BillingCycle for a new lease based on the BillingType policy for the given building */
