@@ -13,18 +13,15 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -45,9 +42,6 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
     private static final I18n i18n = I18n.get(TenantInsuranceFacadeImpl.class);
 
-    // TODO remove this mockup
-    public static final boolean TENANT_SURE_MOCKUP = true;
-
     @Override
     public List<InsuranceCertificate<?>> getInsuranceCertificates(Tenant tenantId, boolean ownedOnly) {
         LogicalDate today = new LogicalDate(SystemDateManager.getDate());
@@ -67,18 +61,11 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
         List<InsuranceCertificate<?>> certificates = Persistence.service().query(ownInsuranceCriteira);
         for (InsuranceCertificate<?> certificate : certificates) {
-            Persistence.service().retrieve(certificate.insurancePolicy());
-            Persistence.service().retrieve(certificate.insurancePolicy().tenant());
+            Persistence.ensureRetrieve(certificate.insurancePolicy(), AttachLevel.Attached);
         }
         List<InsuranceCertificate<?>> sorted = sortInsuranceCertificates(certificates, tenantId);
         for (InsuranceCertificate<?> certificate : sorted) {
             certificate.insurancePolicy().detach();
-        }
-        if (false) {
-            if (sorted == Collections.EMPTY_LIST) {
-                sorted = new ArrayList<InsuranceCertificate<?>>();
-            }
-            sorted.add(makeMockupTenantSureCertificate());
         }
         return sorted;
     }
@@ -164,20 +151,4 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         return sortedInsuranceCertificates;
     }
 
-    private TenantSureInsuranceCertificate makeMockupTenantSureCertificate() {
-        TenantSureInsuranceCertificate mockupCert = EntityFactory.create(TenantSureInsuranceCertificate.class);
-        mockupCert.insurancePolicy().setPrimaryKey(new Key(1L));
-        mockupCert.insuranceCertificateNumber().setValue("TS-MOCKUP-001");
-
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.eq(criteria.proto().customer().person().email(), "t001@pyx4j.com");
-        mockupCert.insurancePolicy().tenant().set(Persistence.service().retrieve(criteria));
-        Calendar cal = new GregorianCalendar();
-        mockupCert.inceptionDate().setValue(new LogicalDate(cal.getTime()));
-        cal.add(Calendar.MONTH, 12);
-        mockupCert.expiryDate().setValue(new LogicalDate(cal.getTime()));
-        mockupCert.liabilityCoverage().setValue(new BigDecimal("10000000"));
-
-        return mockupCert;
-    }
 }

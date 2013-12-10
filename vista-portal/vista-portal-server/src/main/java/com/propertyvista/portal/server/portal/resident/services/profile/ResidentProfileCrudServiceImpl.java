@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -25,6 +26,7 @@ import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -39,15 +41,21 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         Customer customer = Persistence.service().retrieve(criteria);
         Persistence.service().retrieve(customer.emergencyContacts());
         Persistence.service().retrieve(customer.picture());
-        // build dto
-        ResidentProfileDTO dto = EntityFactory.create(ResidentProfileDTO.class);
-        dto.person().setValue(customer.person().getValue());
+        // build To
+        ResidentProfileDTO to = EntityFactory.create(ResidentProfileDTO.class);
+        to.person().setValue(customer.person().getValue());
         if (customer.picture().hasValues()) {
-            dto.picture().set(customer.picture().detach());
+            to.picture().set(customer.picture().duplicate());
+            to.picture().customer().setAttachLevel(AttachLevel.IdOnly);
         }
-        dto.emergencyContacts().addAll(customer.emergencyContacts());
+        to.emergencyContacts().addAll(customer.emergencyContacts());
 
-        callback.onSuccess(dto);
+        // TO optimizations
+        for (EmergencyContact i : to.emergencyContacts()) {
+            i.customer().setAttachLevel(AttachLevel.IdOnly);
+        }
+
+        callback.onSuccess(to);
     }
 
     @Override
