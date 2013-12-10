@@ -1132,7 +1132,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     @SuppressWarnings("rawtypes")
                     MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                     if (!adapter.allowModifications(entity, memberMeta, null, value)) {
-                        log.error("Forbidden change -> [{}]", value);
+                        log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
                         throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
                     }
                 }
@@ -1142,7 +1142,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     @SuppressWarnings("rawtypes")
                     MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                     if (!adapter.allowModifications(entity, memberMeta, null, value)) {
-                        log.error("Forbidden change -> [{}]", value);
+                        log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
                         throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
                     }
                 }
