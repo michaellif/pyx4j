@@ -42,6 +42,7 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
 
         form.get(form.proto().unit()).setValue(value.unit());
         form.get(form.proto().building()).setValue(value.unit().building());
+        form.get(form.proto().version().utilities()).setValue(value.version().utilities());
 
         form.setUnitNote(value.unitMoveOutNote().getValue());
         form.setAgeOfMajority(value.ageOfMajority().getValue(), true);
