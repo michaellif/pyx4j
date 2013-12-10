@@ -36,6 +36,7 @@ import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
 import com.propertyvista.pmsite.server.panels.InquiryPanel;
 
 public class InquiryPage extends BasePage {
+
     private static final long serialVersionUID = 1L;
 
     private static final Logger log = LoggerFactory.getLogger(InquiryPage.class);

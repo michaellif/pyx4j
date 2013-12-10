@@ -84,8 +84,8 @@ public interface Floorplan extends PolicyNode, HasNotesAndAttachments {
 
     IPrimitive<AreaMeasurementUnit> areaUnits();
 
-    @Detached
     @Owned
+    @Detached(level = AttachLevel.Detached)
     IList<MediaFile> media();
 
     @Owned

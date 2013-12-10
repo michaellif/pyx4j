@@ -90,9 +90,11 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    protected void enhanceRetrieved(Building in, BuildingDTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Building bo, BuildingDTO to, RetrieveTarget retrieveTarget) {
         // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
-        Persistence.service().retrieve(to.media());
+        Persistence.service().retrieveMember(bo.media());
+        to.media().set(bo.media());
+
         Persistence.service().retrieve(to.productCatalog());
         Persistence.service().retrieve(to.contacts().propertyContacts());
         Persistence.service().retrieve(to.contacts().organizationContacts());
@@ -113,8 +115,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         // Geotagging:
         to.geoLocation().set(EntityFactory.create(GeoLocation.class));
-        if (!in.info().location().isNull()) {
-            double lat = in.info().location().getValue().getLat();
+        if (!bo.info().location().isNull()) {
+            double lat = bo.info().location().getValue().getLat();
             if (lat < 0) {
                 to.geoLocation().latitudeType().setValue(LatitudeType.South);
                 to.geoLocation().latitude().setValue(-lat);
@@ -122,7 +124,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
                 to.geoLocation().latitudeType().setValue(LatitudeType.North);
                 to.geoLocation().latitude().setValue(lat);
             }
-            double lng = in.info().location().getValue().getLng();
+            double lng = bo.info().location().getValue().getLng();
             if (lng < 0) {
                 to.geoLocation().longitudeType().setValue(LongitudeType.West);
                 to.geoLocation().longitude().setValue(-lng);
@@ -133,15 +135,15 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         }
 
         // Financial
-        Persistence.service().retrieveMember(in.merchantAccounts());
-        if (!in.merchantAccounts().isEmpty()) {
-            MerchantAccount oneAccount = in.merchantAccounts().iterator().next().merchantAccount();
+        Persistence.service().retrieveMember(bo.merchantAccounts());
+        if (!bo.merchantAccounts().isEmpty()) {
+            MerchantAccount oneAccount = bo.merchantAccounts().iterator().next().merchantAccount();
             to.merchantAccount().set(ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(oneAccount));
         }
 
         // ils
         EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
-        criteria.eq(criteria.proto().building(), in);
+        criteria.eq(criteria.proto().building(), bo);
         to.ilsProfile().addAll(Persistence.service().query(criteria));
 
     }
@@ -175,54 +177,54 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    protected void persist(Building dbo, BuildingDTO in) {
+    protected void persist(Building bo, BuildingDTO to) {
         // Geotagging:
-        if (!in.geoLocation().isNull()) {
-            Double lat = in.geoLocation().latitude().getValue();
-            Double lng = in.geoLocation().longitude().getValue();
+        if (!to.geoLocation().isNull()) {
+            Double lat = to.geoLocation().latitude().getValue();
+            Double lng = to.geoLocation().longitude().getValue();
             if ((lng != null) && (lat != null)) {
-                if (LatitudeType.South.equals(in.geoLocation().latitudeType().getValue())) {
+                if (LatitudeType.South.equals(to.geoLocation().latitudeType().getValue())) {
                     lat = -lat;
                 }
-                if (LongitudeType.West.equals(in.geoLocation().longitudeType().getValue())) {
+                if (LongitudeType.West.equals(to.geoLocation().longitudeType().getValue())) {
                     lng = -lng;
                 }
-                dbo.info().location().setValue(new GeoPoint(lat, lng));
+                bo.info().location().setValue(new GeoPoint(lat, lng));
             }
         } else {
-            if (in.info().location().isNull()) {
-                SharedGeoLocator.populateGeo(in);
+            if (to.info().location().isNull()) {
+                SharedGeoLocator.populateGeo(to);
             } else {
-                dbo.info().location().set(null);
+                bo.info().location().set(null);
             }
         }
 
         {
-            Persistence.service().retrieveMember(dbo.merchantAccounts());
-            dbo.merchantAccounts().clear();
-            if (!in.merchantAccount().isNull()) {
-                BuildingMerchantAccount bma = dbo.merchantAccounts().$();
-                bma.merchantAccount().set(in.merchantAccount());
-                dbo.merchantAccounts().add(bma);
+            Persistence.service().retrieveMember(bo.merchantAccounts());
+            bo.merchantAccounts().clear();
+            if (!to.merchantAccount().isNull()) {
+                BuildingMerchantAccount bma = bo.merchantAccounts().$();
+                bma.merchantAccount().set(to.merchantAccount());
+                bo.merchantAccounts().add(bma);
             }
         }
 
         // ils marketing
         {
             EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
-            criteria.eq(criteria.proto().building(), in);
+            criteria.eq(criteria.proto().building(), to);
             List<ILSProfileBuilding> ilsData = Persistence.service().query(criteria);
             ilsData.clear();
-            for (ILSProfileBuilding profile : in.ilsProfile()) {
-                profile.building().set(dbo);
+            for (ILSProfileBuilding profile : to.ilsProfile()) {
+                profile.building().set(bo);
                 ilsData.add(profile);
             }
             Persistence.service().persist(ilsData);
         }
 
-        saveUtilities(dbo);
+        saveUtilities(bo);
 
-        ServerSideFactory.create(BuildingFacade.class).persist(dbo);
+        ServerSideFactory.create(BuildingFacade.class).persist(bo);
     }
 
     private void loadUtilities(Building bo) {

@@ -183,7 +183,7 @@ public class PropertyFinder {
     public static List<Building> getPropertyList(PropertySearchCriteria searchCriteria, EntityQueryCriteria<Building> dbCriteria) {
         if (dbCriteria == null) {
             dbCriteria = EntityQueryCriteria.create(Building.class);
-            dbCriteria.add(PropertyCriterion.isNotNull(dbCriteria.proto().productCatalog()));
+            dbCriteria.isNotNull(dbCriteria.proto().productCatalog());
         }
         // if search criteria returns nothing, quit now!
         if (searchCriteria != null && !addSearchCriteria(dbCriteria, searchCriteria)) {
@@ -211,6 +211,10 @@ public class PropertyFinder {
         }
         buildings.removeAll(remove);
 
+        for (Building building : buildings) {
+            Persistence.service().retrieveMember(building.media());
+        }
+
         return buildings;
     }
 
@@ -220,33 +224,34 @@ public class PropertyFinder {
 
     public static Building getBuildingDetails(long propId) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), new Key(propId)));
+        dbCriteria.eq(dbCriteria.proto().id(), new Key(propId));
         return getBuildingDetails(dbCriteria);
     }
 
     public static Building getBuildingDetails(String propCode) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().propertyCode(), propCode));
+        dbCriteria.eq(dbCriteria.proto().propertyCode(), propCode);
         return getBuildingDetails(dbCriteria);
     }
 
     private static Building getBuildingDetails(EntityQueryCriteria<Building> dbCriteria) {
-        dbCriteria.add(PropertyCriterion.isNotNull(dbCriteria.proto().productCatalog()));
+        dbCriteria.isNotNull(dbCriteria.proto().productCatalog());
         List<Building> buildings = Persistence.service().query(dbCriteria);
         if (buildings.size() != 1) {
             return null;
         }
-        Building bld = buildings.get(0);
-        if (!isPropertyVisible(bld)) {
+        Building building = buildings.get(0);
+        if (!isPropertyVisible(building)) {
             return null;
         }
         // check if we have any valid floorplans
-        if (getBuildingFloorplans(bld).size() < 1) {
+        if (getBuildingFloorplans(building).size() < 1) {
             return null;
         }
         // attach phone info
-        Persistence.service().retrieve(bld.contacts().propertyContacts());
-        return bld;
+        Persistence.service().retrieve(building.contacts().propertyContacts());
+        Persistence.service().retrieveMember(building.media());
+        return building;
     }
 
     public static Map<Floorplan, List<AptUnit>> getBuildingFloorplans(Building bld) {
@@ -255,12 +260,13 @@ public class PropertyFinder {
         }
         final Map<Floorplan, List<AptUnit>> floorplans = new HashMap<Floorplan, List<AptUnit>>();
         EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), bld));
+        criteria.eq(criteria.proto().building(), bld);
         for (Floorplan fp : Persistence.service().query(criteria)) {
             List<AptUnit> units = getBuildingAptUnits(bld, fp);
             // do some sanity check so we don't render incomplete floorplans
             if (units.size() > 0) {
                 floorplans.put(fp, units);
+                Persistence.service().retrieveMember(fp.media());
             }
         }
         return floorplans;
@@ -302,13 +308,13 @@ public class PropertyFinder {
         }
 
         EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), bld));
+        criteria.eq(criteria.proto().building(), bld);
         return Persistence.service().query(criteria);
     }
 
     public static Floorplan getFloorplanDetails(long planId) {
         EntityQueryCriteria<Floorplan> dbCriteria = EntityQueryCriteria.create(Floorplan.class);
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), new Key(planId)));
+        dbCriteria.eq(dbCriteria.proto().id(), new Key(planId));
         List<Floorplan> plans = Persistence.service().query(dbCriteria);
         if (plans.size() != 1) {
             return null;
@@ -321,6 +327,7 @@ public class PropertyFinder {
         if (getFloorplanUnits(fp).size() < 1) {
             return null;
         }
+        Persistence.service().retrieveMember(fp.media());
         return fp;
     }
 
@@ -330,8 +337,8 @@ public class PropertyFinder {
         }
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), fp.building()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
+        criteria.eq(criteria.proto().building(), fp.building());
+        criteria.eq(criteria.proto().floorplan(), fp);
         return Persistence.service().query(criteria);
     }
 
@@ -340,7 +347,7 @@ public class PropertyFinder {
             return null;
         }
         EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
+        criteria.eq(criteria.proto().floorplan(), fp);
         return Persistence.service().query(criteria);
     }
 

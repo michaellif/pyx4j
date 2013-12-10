@@ -119,7 +119,7 @@ public interface Building extends PolicyNode, HasNotesAndAttachments {
     Marketing marketing();
 
     @Owned
-    @Detached
+    @Detached(level = AttachLevel.Detached)
     IList<MediaFile> media();
 
     @Detached

@@ -74,20 +74,20 @@ public class AptDetailsPage extends BasePage {
             }
         }
 
-        final Building propInfo = PropertyFinder.getBuildingDetails(propCode);
-        if (propInfo == null) {
+        final Building building = PropertyFinder.getBuildingDetails(propCode);
+        if (building == null) {
             // redirect to findapt page
             redirectOrFail(FindAptPage.class, "Could not get building details: " + propCode);
         }
-        final Map<Floorplan, List<AptUnit>> fpUnits = PropertyFinder.getBuildingFloorplans(propInfo);
+        final Map<Floorplan, List<AptUnit>> fpUnits = PropertyFinder.getBuildingFloorplans(building);
         if (fpUnits == null || fpUnits.size() < 1) {
             // redirect to findapt page
             redirectOrFail(FindAptPage.class, "No units found");
         }
-        final List<BuildingAmenity> amenities = PropertyFinder.getBuildingAmenities(propInfo);
+        final List<BuildingAmenity> amenities = PropertyFinder.getBuildingAmenities(building);
 
         // left side - building info
-        add(new BuildingInfoPanel("buildingInfoPanel", propInfo));
+        add(new BuildingInfoPanel("buildingInfoPanel", building));
 
         // right side - floorplan listing
         add(new Label("backButton", i18n.tr("Back")).add(AttributeModifier.replace("onClick", "history.back()")));
@@ -134,7 +134,7 @@ public class AptDetailsPage extends BasePage {
                         floorPlan.id().getValue())));
             }
         });
-        add(new Label("description", propInfo.marketing().description().getValue()));
+        add(new Label("description", building.marketing().description().getValue()));
         add(new ListView<BuildingAmenity>("amenities", amenities) {
             private static final long serialVersionUID = 1L;
 
@@ -146,7 +146,7 @@ public class AptDetailsPage extends BasePage {
         add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, params).setBody(new Model<String>(i18n.tr("Request Appointment"))));
 
         String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
-                ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, propInfo.propertyCode().getValue());
+                ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, building.propertyCode().getValue());
         add(new ExternalLink("applyNow", applyUrl).setBody(new Model<String>(i18n.tr("Apply Now"))));
 
     }

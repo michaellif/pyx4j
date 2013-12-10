@@ -462,21 +462,21 @@ public class PMSiteContentManager implements Serializable {
         // TODO promo building lookup
         EntityListCriteria<Building> dbCriteria = EntityListCriteria.create(Building.class);
         // account for visibility type
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().marketing().visibility(), PublicVisibilityType.global));
+        dbCriteria.eq(dbCriteria.proto().marketing().visibility(), PublicVisibilityType.global);
         if (city != null) {
-            dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
+            dbCriteria.eq(dbCriteria.proto().info().address().city(), city);
         }
         dbCriteria.setPageSize(4);
         List<Building> buildings = PropertyFinder.getPropertyList(null, dbCriteria);
-        for (Building bld : buildings) {
+        for (Building building : buildings) {
             PromoDataModel item = new PromoDataModel();
-            if (bld.media().isEmpty() || bld.info().address().isEmpty()) {
+            if (building.media().isEmpty() || building.info().address().isEmpty()) {
                 continue;
             }
-            item.setPropCode(bld.propertyCode().getValue());
-            item.setImg(getFistVisibleMediaImgUrl(bld.media(), ThumbnailSize.medium));
-            item.setAddress(bld.info().address().streetNumber().getValue() + " " + bld.info().address().streetName().getValue() + ", "
-                    + bld.info().address().city().getValue());
+            item.setPropCode(building.propertyCode().getValue());
+            item.setImg(getFistVisibleMediaImgUrl(building.media(), ThumbnailSize.medium));
+            item.setAddress(building.info().address().streetNumber().getValue() + " " + building.info().address().streetName().getValue() + ", "
+                    + building.info().address().city().getValue());
             promo.add(item);
         }
 
