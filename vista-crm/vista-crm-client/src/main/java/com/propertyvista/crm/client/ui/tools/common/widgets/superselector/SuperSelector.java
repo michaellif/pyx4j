@@ -103,7 +103,7 @@ public abstract class SuperSelector<DataType> extends Composite {
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if (KeyCodes.KEY_ENTER == event.getNativeEvent().getKeyCode() || KeyCodes.KEY_TAB == event.getNativeEvent().getKeyCode()) {
-                    addItemFromInputBox();
+                    SuperSelector.this.onAddItemRequest();
                     event.preventDefault();
                 } else if (KeyCodes.KEY_BACKSPACE == event.getNativeEvent().getKeyCode()) {
                     if ("".equals(inputTextBox.getValue())) {
@@ -198,6 +198,10 @@ public abstract class SuperSelector<DataType> extends Composite {
         for (SelectedItemHolder<DataType> w : selectedWidgets) {
             removeItem(w.getItem());
         }
+    }
+
+    protected void onAddItemRequest() {
+        addItemFromInputBox();
     }
 
     protected void onInputChanged(String newInput) {

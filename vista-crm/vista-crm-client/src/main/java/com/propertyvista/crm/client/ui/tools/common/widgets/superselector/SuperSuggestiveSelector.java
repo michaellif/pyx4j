@@ -113,6 +113,15 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
     }
 
     @Override
+    protected void onAddItemRequest() {
+        if (this.popup != null) {
+            addItem(this.popup.getSelectedItem());
+        } else {
+            super.onAddItemRequest();
+        }
+    }
+
+    @Override
     protected void onFocus() {
         this.suggestionsInUse = false;
         if (alwaysSuggest) {
