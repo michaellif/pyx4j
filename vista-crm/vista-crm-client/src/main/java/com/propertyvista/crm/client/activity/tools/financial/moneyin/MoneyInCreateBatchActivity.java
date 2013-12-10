@@ -258,35 +258,6 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     }
 
-//
-//    private List<MoneyInCandidateDTO> makeMockCandidates() {
-//        List<MoneyInCandidateDTO> mockCandidates = new LinkedList<MoneyInCandidateDTO>();
-//        for (int i = 1; i < 101; ++i) {
-//            mockCandidates.add(makeMockCandidate(i));
-//        }
-//        return mockCandidates;
-//    }
-
-//    private MoneyInCandidateDTO makeMockCandidate(int n) {
-//        MoneyInCandidateDTO c = EntityFactory.create(MoneyInCandidateDTO.class);
-//        c.leaseIdStub().setPrimaryKey(new Key(n));
-//        c.building().setValue(n % 5 != 0 ? "B1" : "B2");
-//        c.unit().setValue("" + (100 + n));
-//        c.leaseId().setValue("t00000" + n);
-//
-//        c.prepayments().setValue(new BigDecimal("0.00"));
-//        c.totalOutstanding().setValue(new BigDecimal("1077.00"));
-//
-//        for (int t = 1; t != 3; ++t) {
-//            MoneyInLeaseParticipantDTO payer = c.payerCandidates().$();
-//            payer.tenantIdStub().setPrimaryKey(new Key(t));
-//            payer.name().setValue("Tenat Tenantovic #" + t);
-//            c.payerCandidates().add(payer);
-//        }
-//
-//        return c;
-//    }
-
     private MoneyInCandidateSearchCriteriaDTO toDto(MoneyInCandidateSearchCriteriaModel model) {
         MoneyInCandidateSearchCriteriaDTO dto = EntityFactory.create(MoneyInCandidateSearchCriteriaDTO.class);
         dto.portfolios().addAll(toIdStubs(Portfolio.class, model.portfolios()));
