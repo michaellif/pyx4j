@@ -34,7 +34,6 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
@@ -326,27 +325,17 @@ public class AvailabilityReportManager {
     }
 
     private BigDecimal getMarketRent() {
-        BigDecimal residentialUnitMarketRent = null;
 
-        EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices()));
-
-        for (Service service : Persistence.secureQuery(criteria)) {
-            Persistence.service().retrieve(service.version().items());
-            for (ProductItem item : service.version().items()) {
-                if (item.element() == null || item.element().isNull()) {
-                    System.out.println("++++++++++++++==");
-                }
-                if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unit.getPrimaryKey())) {
-                    if (service.code().type().getValue() == ARCode.Type.Residential) {
-                        residentialUnitMarketRent = item.price().getValue();
-                        break;
-                    }
-                }
-            }
+        EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
+        criteria.eq(criteria.proto().product().holder().catalog().building().units(), unit);
+        //criteria.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices());
+        criteria.in(criteria.proto().product().holder().code().type(), ARCode.Type.Residential);
+        criteria.eq(criteria.proto().element(), unit);
+        ProductItem item = Persistence.service().retrieve(criteria);
+        if (item != null) {
+            return item.price().getValue();
+        } else {
+            return null;
         }
-
-        return residentialUnitMarketRent;
     }
 }

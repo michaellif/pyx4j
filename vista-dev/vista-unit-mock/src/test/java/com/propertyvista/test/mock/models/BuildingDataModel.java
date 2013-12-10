@@ -99,6 +99,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
         productItem.description().setValue(productItem.name().getValue());
 
         standardResidentialService.version().items().add(productItem);
+
         Persistence.service().persist(standardResidentialService);
 
         return productItem;

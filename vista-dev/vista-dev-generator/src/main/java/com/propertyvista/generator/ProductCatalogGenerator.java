@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -245,6 +246,7 @@ public class ProductCatalogGenerator {
         item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
         item.element().set(buildingElement);
 
+        Persistence.ensureRetrieveMember(service.version().items(), AttachLevel.Attached);
         service.version().items().add(item);
 
         return item;

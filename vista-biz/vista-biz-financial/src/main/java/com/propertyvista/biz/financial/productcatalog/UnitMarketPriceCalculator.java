@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -37,6 +38,7 @@ public class UnitMarketPriceCalculator {
         ProductCatalog productCatalog;
         List<AptUnit> units;
 
+        //TODO  VladL This is WRONG, We need only "Find only first Service/ ProductItem that apply to units".
         // Retrieve productCatalog with Services that we need e.g. residentialUnit
         {
             EntityQueryCriteria<ProductCatalog> criteria = EntityQueryCriteria.create(ProductCatalog.class);
@@ -45,7 +47,7 @@ public class UnitMarketPriceCalculator {
             Persistence.service().retrieveMember(productCatalog.services());
             for (Service service : productCatalog.services()) {
                 if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
-                    Persistence.service().retrieve(service.version().items());
+                    Persistence.ensureRetrieveMember(service.version().items(), AttachLevel.Attached);
                 }
             }
         }

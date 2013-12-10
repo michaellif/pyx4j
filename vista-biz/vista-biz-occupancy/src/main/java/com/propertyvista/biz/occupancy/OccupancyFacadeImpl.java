@@ -41,7 +41,6 @@ import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstr
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -883,24 +882,12 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     private boolean isInProductCatalog(Key unitPk) {
-
-        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
-
-        EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
-
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices()));
-
-        for (Service service : Persistence.secureQuery(criteria)) {
-            Persistence.service().retrieve(service.version().items());
-            for (ProductItem item : service.version().items()) {
-                if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unitPk)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        AptUnit unit = EntityFactory.createIdentityStub(AptUnit.class, unitPk);
+        EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
+        criteria.eq(criteria.proto().product().holder().catalog().building().units(), unit);
+        criteria.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices());
+        criteria.eq(criteria.proto().element(), unit);
+        return Persistence.service().exists(criteria);
     }
 
     /*

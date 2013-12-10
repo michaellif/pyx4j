@@ -26,6 +26,7 @@ import junit.framework.Assert;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
@@ -357,7 +358,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
 
             if (arCode.equals(feature.code())) {
 
-                Persistence.service().retrieve(feature.version().items());
+                Persistence.ensureRetrieveMember(feature.version().items(), AttachLevel.Attached);
                 for (ProductItem item : feature.version().items()) {
 
                     LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);

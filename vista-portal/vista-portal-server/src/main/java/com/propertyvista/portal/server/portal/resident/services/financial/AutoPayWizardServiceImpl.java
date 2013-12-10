@@ -225,7 +225,8 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
             itemDto.percent().setValue(BigDecimal.ONE);
         }
 
-        itemDto.billableItem().set(billableItem);
+        itemDto.billableItem().set(billableItem.duplicate());
+        itemDto.billableItem().item().product().setAttachLevel(AttachLevel.ToStringMembers);
 
         return itemDto;
     }

@@ -32,6 +32,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ILooseVersioning;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -78,7 +79,7 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     public interface ProductV<P extends Product<?>> extends IVersionData<P> {
 
         @Owned
-        @Detached
+        @Detached(level = AttachLevel.Detached)
         IList<ProductItem> items();
 
         @Length(50)
