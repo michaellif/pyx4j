@@ -14,6 +14,7 @@
 package com.propertyvista.oapi.marshaling;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.Building;
@@ -46,7 +47,7 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
         Persistence.service().retrieve(building.contacts().propertyContacts());
         buildingIO.contacts = ContactMarshaller.getInstance().marshal(building.contacts().propertyContacts());
 
-        Persistence.service().retrieve(building.media());
+        Persistence.ensureRetrieveMember(building.media(), AttachLevel.Attached);
         buildingIO.medias = MediaMarshaller.getInstance().marshal(building.media());
 
         Persistence.service().retrieveMember(building.amenities());
