@@ -260,12 +260,14 @@ public abstract class SuperSelector<DataType> extends Composite {
                 int proposedInputWidth = maxRowWidth - rowWidth;
                 int effectiveInputWidth = (proposedInputWidth < minInputBoxWidth ? maxRowWidth : proposedInputWidth) - 2;
                 inputTextBox.getElement().getStyle().setWidth(effectiveInputWidth, Unit.PX);
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        onRedraw();
-                    }
-                });
+                if (SuperSelector.this.isAttached()) {
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            onRedraw();
+                        }
+                    });
+                }
             }
         });
     }

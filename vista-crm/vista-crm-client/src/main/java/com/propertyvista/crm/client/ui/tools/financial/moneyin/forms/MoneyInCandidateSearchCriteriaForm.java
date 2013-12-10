@@ -44,6 +44,13 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
         }
     }
 
+    // TODO actually top row height depends on decorators labels but i'm to lazy right now and this seems to work fine
+    private static final int TOP_ROW_HEIGHT = 50;
+
+    private PortfolioSelector portfolioSelector;
+
+    private BuildingSelector buildingSelector;
+
     public MoneyInCandidateSearchCriteriaForm() {
         super(MoneyInCandidateSearchCriteriaModel.class);
     }
@@ -59,10 +66,19 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
         panel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().tenant())).componentWidth("150px").build());
 
         return panel;
+
+    }
+
+    public int getRequiredHeight() {
+        return TOP_ROW_HEIGHT + Math.max(portfolioSelector.getElement().getScrollHeight(), buildingSelector.getElement().getScrollHeight());
+    }
+
+    protected void onSuperSelectorResized() {
+
     }
 
     private CSuperSelector<PortfolioForSelectionDTO> createPortfolioSelector() {
-        return new CSuperSelector<PortfolioForSelectionDTO>(new PortfolioSelector() {//@formatter:off
+        return new CSuperSelector<PortfolioForSelectionDTO>(portfolioSelector = new PortfolioSelector() {//@formatter:off
             @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
                 MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.portfolios().add(item);
@@ -74,11 +90,16 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
                 searchCriteria.portfolios().remove(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);            
             }
+            
+            @Override protected void onRedraw() {
+                super.onRedraw();
+                MoneyInCandidateSearchCriteriaForm.this.onSuperSelectorResized();
+            }
         });//@formatter:on
     }
 
     private CSuperSelector<BuildingForSelectionDTO> createBuildingSelector() {
-        return new CSuperSelector<BuildingForSelectionDTO>(new BuildingSelector() {//@formatter:off
+        return new CSuperSelector<BuildingForSelectionDTO>(buildingSelector = new BuildingSelector() {//@formatter:off
             @Override protected void onItemAdded(BuildingForSelectionDTO item) {
                 MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.buildings().add(item);
@@ -88,7 +109,11 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
                 MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue();
                 searchCriteria.buildings().remove(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
-            }            
+            }
+            @Override protected void onRedraw() {
+                super.onRedraw();
+                MoneyInCandidateSearchCriteriaForm.this.onSuperSelectorResized();
+            }
         });//@formatter:on
     }
 

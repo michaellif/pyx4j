@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
@@ -54,11 +56,15 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
 
     private static final I18n i18n = I18n.get(MoneyInCreateBatchViewImpl.class);
 
+    private static final int MAX_SEARCH_FORM_HEIGHT = 250;
+
     private MoneyInCreateBatchView.Presenter presenter;
 
     private final LayoutPanel viewPanel;
 
     private LayoutPanel searchBar;
+
+    private LayoutPanel gridsHolder;
 
     private MoneyInCandidateDataGrid searchCandidateDataGrid;
 
@@ -75,9 +81,9 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
         viewPanel.setWidgetTopHeight(searchBar, 0, Unit.PX, 100, Unit.PX);
         viewPanel.setWidgetLeftRight(searchBar, 0, Unit.PX, 0, Unit.PX);
 
-        LayoutPanel gridsHolder = new LayoutPanel();
+        gridsHolder = new LayoutPanel();
         viewPanel.add(gridsHolder);
-        viewPanel.setWidgetTopBottom(gridsHolder, 100, Unit.PX, 0, Unit.PX);
+        viewPanel.setWidgetTopBottom(gridsHolder, 101, Unit.PX, 0, Unit.PX);
         viewPanel.setWidgetLeftRight(gridsHolder, 0, Unit.PX, 0, Unit.PX);
 
         {
@@ -220,9 +226,13 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
     private LayoutPanel initSearchBar() {
         LayoutPanel searchBar = new LayoutPanel();
         searchBar.setWidth("100%");
-        searchBar.setHeight("100%");
 
-        searchForm = new MoneyInCandidateSearchCriteriaForm();
+        searchForm = new MoneyInCandidateSearchCriteriaForm() {
+            @Override
+            protected void onSuperSelectorResized() {
+                resizeSearch();
+            }
+        };
         searchForm.initContent();
         searchForm.populateNew();
         searchForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
@@ -288,6 +298,19 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
         headerPanel.addAndReplaceElement(createBatchButtonHolder, creatBatchButtonHolderTagId);
 
         return headerPanel;
+    }
+
+    private void resizeSearch() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                int height = searchForm.getRequiredHeight();
+                if (height <= MAX_SEARCH_FORM_HEIGHT) {
+                    viewPanel.setWidgetTopHeight(searchBar, 0, Unit.PX, height, Unit.PX);
+                    viewPanel.setWidgetTopBottom(gridsHolder, height + 1, Unit.PX, 0, Unit.PX);
+                }
+            }
+        });
     }
 
 }
