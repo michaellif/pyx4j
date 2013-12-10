@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.adapters.FileUploadBlobSecurityAdapter;
 import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -56,5 +57,6 @@ public interface IFile extends IEntity {
     IPrimitive<String> accessKey();
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    @MemberColumn(modificationAdapters = { FileUploadBlobSecurityAdapter.class })
     IPrimitive<Key> blobKey();
 }
