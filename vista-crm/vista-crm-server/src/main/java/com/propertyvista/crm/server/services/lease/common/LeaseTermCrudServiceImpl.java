@@ -280,7 +280,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             Persistence.service().retrieve(selectedService.features());
             for (Feature feature : selectedService.features()) {
                 if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
-                    Persistence.service().retrieve(feature.version().items());
+                    Persistence.service().retrieveMember(feature.version().items());
                     for (ProductItem item : feature.version().items()) {
                         Persistence.service().retrieve(item.product());
                         currentValue.selectedFeatureItems().add(item);
