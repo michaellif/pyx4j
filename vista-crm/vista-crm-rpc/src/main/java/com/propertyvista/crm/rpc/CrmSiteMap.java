@@ -308,6 +308,9 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(navigLabel = "Money In", caption = "Money In - Quick Collect")
         public static class MoneyIn extends CrmCrudAppPlace {
 
+            public static class Batches extends CrmCrudAppPlace {
+            }
+
         }
     }
 

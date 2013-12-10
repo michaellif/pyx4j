@@ -17,8 +17,8 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
@@ -28,6 +28,10 @@ public interface MoneyInToolService extends IService {
 
     void findCandidates(AsyncCallback<Vector<MoneyInCandidateDTO>> callback, MoneyInCandidateSearchCriteriaDTO criteria);
 
-    void createPaymentBatch(AsyncCallback<VoidSerializable> callback, Vector<MoneyInPaymentDTO> payments);
+    /**
+     * @param callback
+     *            will return Deferred process id
+     */
+    void createPaymentBatch(AsyncCallback<String> callback, LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments);
 
 }

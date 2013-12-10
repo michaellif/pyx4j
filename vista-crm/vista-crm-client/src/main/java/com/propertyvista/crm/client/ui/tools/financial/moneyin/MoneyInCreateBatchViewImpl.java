@@ -16,27 +16,34 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaForm;
@@ -59,9 +66,9 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
 
     private MoneyInCandidateSearchCriteriaForm searchForm;
 
-    public MoneyInCreateBatchViewImpl() {
-        initToolBars();
+    private CDatePicker receiptDate;
 
+    public MoneyInCreateBatchViewImpl() {
         viewPanel = initViewPanel();
 
         viewPanel.add(searchBar = initSearchBar());
@@ -110,13 +117,12 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
             gridsHolder.setWidgetLeftRight(selectedHolder, 0, Unit.PX, 0, Unit.PX);
 
             // selected:
-            HTML selectedHeader = new HTML(i18n.tr("Click \"Create Batch\" to Process the Following Payments:"));
+            Widget selectedHeader = initSelectedItemsHeaderPanel();
             selectedHeader.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-            selectedHeader.getElement().getStyle().setLineHeight(30, Unit.PX);
             selectedHeader.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
             selectedHolder.add(selectedHeader);
-            selectedHolder.setWidgetTopHeight(selectedHeader, 0, Unit.PX, 30, Unit.PX);
+            selectedHolder.setWidgetTopHeight(selectedHeader, 0, Unit.PX, 40, Unit.PX);
             selectedHolder.setWidgetLeftRight(selectedHeader, 0, Unit.PX, 0, Unit.PX);
 
             selectedHolder.add(selectedForProcessingDataGrid = new MoneyInCandidateDataGrid() {
@@ -149,7 +155,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
                     return processColumn;
                 }
             });
-            selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 31, Unit.PX, 33, Unit.PX);
+            selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 41, Unit.PX, 33, Unit.PX);
             selectedHolder.setWidgetLeftRight(selectedForProcessingDataGrid, 0, Unit.PX, 0, Unit.PX);
 
             SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
@@ -187,6 +193,21 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
     @Override
     public HasData<MoneyInCandidateDTO> selectedForProcessing() {
         return selectedForProcessingDataGrid;
+    }
+
+    @Override
+    public LogicalDate getRecieptDate() {
+        return receiptDate.getValue();
+    }
+
+    @Override
+    public void displayMessage(String message, Type messageType) {
+        MessageDialog.show("", message, messageType);
+    }
+
+    @Override
+    public void confirm(String message, Command onConfirmed, Command onDeclined) {
+        MessageDialog.confirm("", message, onConfirmed, onDeclined);
     }
 
     private LayoutPanel initViewPanel() {
@@ -234,13 +255,39 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
         return searchBar;
     }
 
-    private void initToolBars() {
-        addFooterToolbarItem(new Button(i18n.tr("Create Batch"), new Command() {
+    private Widget initSelectedItemsHeaderPanel() {
+        String receiptDateHolderTagId = "receiptDateHolder";
+        String creatBatchButtonHolderTagId = "createBatchHolder";
+
+        SafeHtmlBuilder headerPanelBuilder = new SafeHtmlBuilder();
+        headerPanelBuilder.appendHtmlConstant("<div>");
+        headerPanelBuilder.appendHtmlConstant(i18n.tr("Enter the receipt date {0}, and click {1} to process the following payments:", "<span id=\""
+                + receiptDateHolderTagId + "\"></span>", "<span id=\"" + creatBatchButtonHolderTagId + "\"></span>"));
+        headerPanelBuilder.appendHtmlConstant("</div>");
+
+        HTMLPanel headerPanel = new HTMLPanel(headerPanelBuilder.toSafeHtml());
+
+        receiptDate = new CDatePicker();
+        receiptDate.getWidget().getElement().getStyle().setWidth(100, Unit.PX);
+        receiptDate.getWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        receiptDate.getWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
+        Button createBatchButton = new Button(i18n.tr("Create Batch"), new Command() {
             @Override
             public void execute() {
                 presenter.createBatch();
             }
-        }));
+        });
+        SimplePanel createBatchButtonHolder = new SimplePanel(); // this panel is to apply 'toolbar style' to the button
+        createBatchButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        createBatchButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        createBatchButtonHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+        createBatchButtonHolder.setWidget(createBatchButton);
+
+        headerPanel.addAndReplaceElement(receiptDate, receiptDateHolderTagId);
+        headerPanel.addAndReplaceElement(createBatchButtonHolder, creatBatchButtonHolderTagId);
+
+        return headerPanel;
     }
 
 }

@@ -22,13 +22,15 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
@@ -65,9 +67,8 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
     }
 
     @Override
-    public void createPaymentBatch(AsyncCallback<VoidSerializable> callback, Vector<MoneyInPaymentDTO> payments) {
-        // TODO implement this
-        callback.onSuccess(null);
+    public void createPaymentBatch(AsyncCallback<String> callback, LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInCreateBatchDeferredProcess(receiptDate, payments), ThreadPoolNames.IMPORTS));
     }
 
     private EntityQueryCriteria<Lease> makeCriteria(MoneyInCandidateSearchCriteriaDTO criteriaEntity) {

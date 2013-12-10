@@ -26,6 +26,7 @@ import java.util.Vector;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -36,17 +37,23 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPaymentDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -153,7 +160,26 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     @Override
     public void createBatch() {
-        // TODO Auto-generated method stub
+        if (selectedForProcessingProvider.getList().isEmpty()) {
+            view.displayMessage(i18n.tr("Please select some payments first."), Type.Info);
+            return;
+        }
+        if (view.getRecieptDate() == null) {
+            view.displayMessage(i18n.tr("Please Enter the \"Receipt Date\"."), Type.Info);
+            return;
+        }
+        if (!validationErrorsMap.isEmpty()) {
+            view.displayMessage(
+                    i18n.tr("Cannot create batch due to validation errors. Please enter all the required data for payments selected for processing."),
+                    Type.Info);
+            return;
+        }
+        service.createPaymentBatch(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String deferredCorellationId) {
+                startProcessingProgress(deferredCorellationId);
+            }
+        }, view.getRecieptDate(), createPayments(selectedForProcessingProvider.getList()));
     }
 
     @Override
@@ -189,12 +215,12 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         return null;
     }
 
-    // TODO needs refactoring
+    // TODO validation needs refactoring
     private void validate(MoneyInCandidateDTO candidate) {
         if (candidate.processPayment().isBooleanTrue()) {
             List<String> paymentAmountErrors = new LinkedList<String>();
             if (candidate.payment().payedAmount().isNull()) {
-                paymentAmountErrors.add(i18n.tr("Amount is required for processing."));
+                paymentAmountErrors.add(i18n.tr("Amount is required."));
             } else {
                 if (candidate.payment().payedAmount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
                     paymentAmountErrors.add(i18n.tr("Amount must be greater than zero."));
@@ -208,7 +234,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
             List<String> checkNumberErrors = new LinkedList<String>();
             if (CommonsStringUtils.isEmpty(candidate.payment().checkNumber().getValue())) {
-                checkNumberErrors.add(i18n.tr("Check number is required to for processing."));
+                checkNumberErrors.add(i18n.tr("Check number is required."));
             }
             if (!checkNumberErrors.isEmpty()) {
                 setValidationErrors(candidate, candidate.payment().checkNumber().getPath(), new ValidationErrors(checkNumberErrors));
@@ -254,6 +280,9 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
             } else {
                 if (objectValidationErrors != null) {
                     objectValidationErrors.remove(path);
+                    if (objectValidationErrors.isEmpty()) {
+                        this.validationErrorsMap.remove(getKey(candidate));
+                    }
                 }
             }
         } else {
@@ -366,4 +395,49 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
             Collections.sort(provider.getList(), cmp);
         }
     }
+    
+    private Vector<MoneyInPaymentDTO> createPayments(List<MoneyInCandidateDTO> candidates) {
+        Vector<MoneyInPaymentDTO> payments = new Vector<MoneyInPaymentDTO>(candidates.size());
+        for (MoneyInCandidateDTO candidate : candidates) {
+            payments.add(candidate.payment().duplicate(MoneyInPaymentDTO.class));
+        }
+        return payments;
+    }
+    
+    private void startProcessingProgress(String deferredCorrelationId) {
+        DeferredProcessDialog d = new DeferredProcessDialog("", i18n.tr("Processing..."), false) {
+            @Override
+            public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                super.onDeferredSuccess(result);
+                MoneyInCreateBatchActivity.this.onProccessingSuccess(result);
+                search();
+            }
+
+            @Override
+            protected void onDeferredCompleate() {
+                super.onDeferredCompleate();
+                this.hide();
+            }
+        };
+        d.show();
+        d.startProgress(deferredCorrelationId);
+    }
+    
+    private void onProccessingSuccess(DeferredProcessProgressResponse result) {
+        Command displayBatches = new Command() {
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.MoneyIn.Batches());
+            }            
+        };
+        Command refreshData = new Command() {
+            @Override
+            public void execute() {
+                selectedForProcessingProvider.getList().clear();
+                MoneyInCreateBatchActivity.this.search();
+            }            
+        };
+        view.confirm(i18n.tr("Batch has been created successfully. Do you wish to see the created batch?"), displayBatches, refreshData);        
+    }
+
 }
