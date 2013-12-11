@@ -36,7 +36,7 @@ public interface ISignature extends IEntity {
         FullName, Initials, AgreeBox, AgreeBoxAndFullName
     }
 
-    IEntity user();
+    IEntity signingUser();
 
     @Format("MM/dd/yyyy hh:mm a")
     IPrimitive<Date> signDate();
