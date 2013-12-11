@@ -86,8 +86,8 @@ public class N4GenerationSettingsForm extends CEntityForm<N4CandidateSearchCrite
         panel.setWidget(0, 0, 2, inject(proto().n4PolicyErrors(), policyErrorsLabel));
 
         n4FillingSettingsPanel = new FlowPanel();
-        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().query().noticeDate())).componentWidth("150px").contentWidth("150px").build());
-        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().query().deliveryMethod())).componentWidth("150px").contentWidth("150px").build());
+        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().n4batchProperties().noticeDate())).componentWidth("150px").contentWidth("150px").build());
+        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().n4batchProperties().deliveryMethod())).componentWidth("150px").contentWidth("150px").build());
         agentComboBox = new CComboBox<Employee>(CComboBox.NotInOptionsPolicy.DISCARD) {
             @Override
             public String getItemName(Employee o) {
@@ -96,7 +96,7 @@ public class N4GenerationSettingsForm extends CEntityForm<N4CandidateSearchCrite
         };
         agentComboBox.setMandatory(true);
         n4FillingSettingsPanel
-                .add(new MyDecoratorBuilder(inject(proto().query().agent(), agentComboBox)).componentWidth("150px").contentWidth("150px").build());
+                .add(new MyDecoratorBuilder(inject(proto().n4batchProperties().agent(), agentComboBox)).componentWidth("150px").contentWidth("150px").build());
 
         panel.setWidget(1, 0, n4FillingSettingsPanel);
 

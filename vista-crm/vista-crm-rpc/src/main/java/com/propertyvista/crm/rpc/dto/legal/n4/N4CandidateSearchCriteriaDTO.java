@@ -30,7 +30,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 @Transient
 public interface N4CandidateSearchCriteriaDTO extends IEntity {
 
-    N4GenerationQueryDTO query();
+    N4BatchSettingsDTO n4batchProperties();
 
     IPrimitive<Boolean> filterByBuildings();
 

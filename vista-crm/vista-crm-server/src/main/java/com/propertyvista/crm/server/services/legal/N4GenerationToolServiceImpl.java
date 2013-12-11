@@ -38,8 +38,8 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO.DeliveryMethod;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -81,7 +81,7 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     }
 
     @Override
-    public void process(AsyncCallback<String> callback, N4GenerationQueryDTO query) {
+    public void process(AsyncCallback<String> callback, N4BatchSettingsDTO query) {
         callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(query.targetDelinquentLeases(), query.agent(), query.noticeDate()
                 .getValue(), query.deliveryMethod().getValue()), ThreadPoolNames.IMPORTS));
     }
@@ -89,9 +89,9 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     @Override
     public void initSettings(AsyncCallback<N4GenerationInitParamsDTO> callback) {
         N4CandidateSearchCriteriaDTO settings = EntityFactory.create(N4CandidateSearchCriteriaDTO.class);
-        settings.query().noticeDate().setValue(new LogicalDate());
-        settings.query().deliveryMethod().setValue(DeliveryMethod.Hand);
-        settings.query().agent().set(CrmAppContext.getCurrentUserEmployee());
+        settings.n4batchProperties().noticeDate().setValue(new LogicalDate());
+        settings.n4batchProperties().deliveryMethod().setValue(DeliveryMethod.Hand);
+        settings.n4batchProperties().agent().set(CrmAppContext.getCurrentUserEmployee());
 
         N4GenerationInitParamsDTO initParams = EntityFactory.create(N4GenerationInitParamsDTO.class);
         initParams.settings().set(settings);

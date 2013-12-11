@@ -20,7 +20,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
 
 public class N4GenerationQueryDialog extends OkCancelDialog {
 
@@ -41,14 +41,14 @@ public class N4GenerationQueryDialog extends OkCancelDialog {
         return form.isValid();
     }
 
-    public N4GenerationQueryDTO getValue() {
+    public N4BatchSettingsDTO getValue() {
         return form.getValue();
     }
 
-    private static final class N4GenerationQueryForm extends CEntityDecoratableForm<N4GenerationQueryDTO> {
+    private static final class N4GenerationQueryForm extends CEntityDecoratableForm<N4BatchSettingsDTO> {
 
         public N4GenerationQueryForm() {
-            super(N4GenerationQueryDTO.class);
+            super(N4BatchSettingsDTO.class);
         }
 
         @Override

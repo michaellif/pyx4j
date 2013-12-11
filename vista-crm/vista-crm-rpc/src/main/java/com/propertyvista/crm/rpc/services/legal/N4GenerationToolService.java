@@ -19,16 +19,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 
-public interface N4GenerationToolService extends AbstractBulkOperationService<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
+public interface N4GenerationToolService extends AbstractBulkOperationService<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchSettingsDTO> {
 
     @Override
     void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4CandidateSearchCriteriaDTO settings);
 
     @Override
-    void process(AsyncCallback<String> callback, N4GenerationQueryDTO query);
+    void process(AsyncCallback<String> callback, N4BatchSettingsDTO query);
 
     void initSettings(AsyncCallback<N4GenerationInitParamsDTO> initParams);
 

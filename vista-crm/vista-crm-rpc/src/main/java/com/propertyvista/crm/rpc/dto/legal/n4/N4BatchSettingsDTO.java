@@ -28,7 +28,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-public interface N4GenerationQueryDTO extends IEntity {
+public interface N4BatchSettingsDTO extends IEntity {
 
     @I18n(context = "Delivery Method")
     @XmlType(name = "DeliveryMethod")

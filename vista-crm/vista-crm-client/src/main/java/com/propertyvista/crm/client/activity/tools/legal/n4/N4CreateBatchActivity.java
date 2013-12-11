@@ -28,12 +28,12 @@ import com.propertyvista.crm.client.activity.tools.common.AbstractBulkOperationT
 import com.propertyvista.crm.client.ui.tools.legal.n4.N4GenerationToolView;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
+public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchSettingsDTO> {
 
     public N4CreateBatchActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().getView(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class),
@@ -41,8 +41,8 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
     }
 
     @Override
-    protected N4GenerationQueryDTO makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
-        N4GenerationQueryDTO query = getView().getSettings().query().duplicate(N4GenerationQueryDTO.class);
+    protected N4BatchSettingsDTO makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
+        N4BatchSettingsDTO query = getView().getSettings().n4batchProperties().duplicate(N4BatchSettingsDTO.class);
 
         for (LegalNoticeCandidateDTO noticeCandidate : selectedItems) {
             query.targetDelinquentLeases().add(noticeCandidate.leaseId().<Lease> duplicate());
