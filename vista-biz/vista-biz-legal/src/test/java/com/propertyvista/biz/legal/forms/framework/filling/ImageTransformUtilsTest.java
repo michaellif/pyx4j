@@ -45,17 +45,17 @@ public class ImageTransformUtilsTest {
 
     @Test
     public void testCenter() {
-        int[] centered1 = ImageTransformUtils.center(dim(50, 50), rect(1, 1, 100, 100));
+        int[] centered1 = ImageTransformUtils.center(dim(50, 50), rect(0, 0, 100, 100));
         Assert.assertArrayEquals(upperLeftCorner(25, 25), centered1);
 
-        int[] centered2 = ImageTransformUtils.center(dim(50, 50), rect(1, 1, 50, 100));
-        Assert.assertArrayEquals(upperLeftCorner(1, 25), centered2);
+        int[] centered2 = ImageTransformUtils.center(dim(50, 50), rect(0, 0, 50, 100));
+        Assert.assertArrayEquals(upperLeftCorner(0, 25), centered2);
 
-        int[] centered3 = ImageTransformUtils.center(dim(100, 50), rect(1, 1, 100, 60));
-        Assert.assertArrayEquals(upperLeftCorner(1, 5), centered3);
+        int[] centered3 = ImageTransformUtils.center(dim(100, 50), rect(0, 0, 100, 60));
+        Assert.assertArrayEquals(upperLeftCorner(0, 5), centered3);
 
-        int[] centered4 = ImageTransformUtils.center(dim(50, 100), rect(1, 1, 60, 100));
-        Assert.assertArrayEquals(upperLeftCorner(5, 1), centered4);
+        int[] centered4 = ImageTransformUtils.center(dim(50, 100), rect(0, 0, 60, 100));
+        Assert.assertArrayEquals(upperLeftCorner(5, 0), centered4);
     }
 
     private static int[] dim(int... dimensions) {

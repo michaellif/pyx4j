@@ -20,6 +20,8 @@
  */
 package com.propertyvista.biz.legal.forms.framework.filling;
 
+import java.util.Arrays;
+
 public class ImageTransformUtils {
 
     /**
@@ -96,8 +98,8 @@ public class ImageTransformUtils {
         int itemHeight = dimensions[1];
 
         if (rectWidth < itemWidth || rectHeight < itemHeight) {
-            throw new IllegalArgumentException("the rectangle to is too small to contain the an item of given dimensions (rect: " + rect + ", item dimensions:"
-                    + dimensions + ")");
+            throw new IllegalArgumentException("the rectangle to is too small (width=" + rectWidth + ", height=" + rectHeight
+                    + ") to contain the an item of given dimensions (rect: " + Arrays.toString(rect) + ", item dimensions:" + Arrays.toString(dimensions) + ")");
         }
 
         int offsetX = (rectWidth - itemWidth) / 2;
