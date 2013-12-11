@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -25,10 +27,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.offering.ProductItem;
 
 @Transient
+@ToStringFormat("{0}, ${1}")
 public interface OptionDTO extends IEntity {
 
+    @ToString(index = 0)
     ProductItem item();
 
+    @ToString(index = 1)
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> price();

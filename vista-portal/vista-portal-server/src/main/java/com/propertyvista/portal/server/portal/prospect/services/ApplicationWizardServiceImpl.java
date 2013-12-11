@@ -64,24 +64,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         callback.onSuccess(to);
     }
 
-    private void fillLeaseData(OnlineApplication bo, OnlineApplicationDTO to) {
-        assert (!bo.masterOnlineApplication().leaseApplication().lease().isValueDetached());
-
-        LeaseTerm term = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
-                .getPrimaryKey());
-
-        to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
-        to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
-
-        to.leasePrice().setValue(term.version().leaseProducts().serviceItem().agreedPrice().getValue());
-
-        for (BillableItem bi : term.version().leaseProducts().featureItems()) {
-            OptionDTO oto = EntityFactory.create(OptionDTO.class);
-            oto.item().set(bi.item());
-            oto.price().setValue(bi.agreedPrice().getValue());
-        }
-    }
-
     @Override
     public void save(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
         callback.onSuccess(null);
@@ -130,6 +112,27 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         return res;
+    }
+
+    private void fillLeaseData(OnlineApplication bo, OnlineApplicationDTO to) {
+        assert (!bo.masterOnlineApplication().leaseApplication().lease().isValueDetached());
+
+        LeaseTerm term = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
+                .getPrimaryKey());
+
+        to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
+        to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
+
+        to.leasePrice().setValue(term.version().leaseProducts().serviceItem().agreedPrice().getValue());
+
+        for (BillableItem bi : term.version().leaseProducts().featureItems()) {
+            OptionDTO oto = EntityFactory.create(OptionDTO.class);
+
+            oto.item().set(bi.item());
+            oto.price().setValue(bi.agreedPrice().getValue());
+
+            to.options().add(oto);
+        }
     }
 
     private void fillApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {

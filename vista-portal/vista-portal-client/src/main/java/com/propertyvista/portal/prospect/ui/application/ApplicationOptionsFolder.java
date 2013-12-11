@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
@@ -78,7 +79,7 @@ public class ApplicationOptionsFolder extends CEntityFolder<OptionDTO> {
             mainPanel.setWidget(++row, 0,
                     new FormWidgetDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 200).customLabel(i18n.tr("Item Name")).build());
 
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().price()), 200).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().price(), new CMoneyLabel()), 100).build());
             return mainPanel;
         }
 
