@@ -23,9 +23,9 @@ package com.pyx4j.security.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
@@ -61,7 +61,9 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     private boolean logChangeSessionCookieOnce = true;
 
-    private static final String SESSION_ID_KEY = "pyx.session-key";
+    private static final String HTML5_SESSION_ID_KEY = "pyx.session-key";
+
+    private static final String HTML5_SESSION_ACTIVITY_KEY = "pyx.session-acivity-key";
 
     public static void startMonitoring() {
         if (instance == null) {
@@ -146,6 +148,8 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
         case START:
             checkSessionCookie();
             break;
+        default:
+            break;
         }
     }
 
@@ -167,6 +171,9 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
         };
         timer.scheduleRepeating((int) (3 * Consts.MIN2MSEC));
         monitoring = true;
+        if (HTML5Storage.isSupported()) {
+            HTML5Storage.getLocalStorage().setItem(HTML5_SESSION_ACTIVITY_KEY, String.valueOf(lastActivity));
+        }
     }
 
     private void update() {
@@ -188,7 +195,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
         if (HTML5Storage.isSupported()) {
             log.debug("set session code {}", sessionCookieValueHashCode);
-            HTML5Storage.getLocalStorage().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
+            HTML5Storage.getLocalStorage().setItem(HTML5_SESSION_ID_KEY, sessionCookieValueHashCode);
         }
     }
 
@@ -206,6 +213,9 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
     }
 
     private void checkActivity() {
+        if (HTML5Storage.isSupported()) {
+            HTML5Storage.getLocalStorage().setItem(HTML5_SESSION_ACTIVITY_KEY, String.valueOf(lastActivity));
+        }
         if ((maxInactiveIntervalMillis > 0) && (System.currentTimeMillis() > (lastActivity + maxInactiveIntervalMillis))) {
             log.debug("Session Inactive; lastActivity {} now {}", lastActivity, System.currentTimeMillis());
             onSessionInactive(true);
@@ -236,11 +246,17 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
             // Avoid infinite loop if Event handlers are changing Storage 
             return;
         }
-        String newHashCode = HTML5Storage.getLocalStorage().getItem(SESSION_ID_KEY);
+        String newHashCode = HTML5Storage.getLocalStorage().getItem(HTML5_SESSION_ID_KEY);
         if (!CommonsStringUtils.equals(sessionCookieValueHashCode, newHashCode)) {
             log.debug("SessionHash change {} -> {}", sessionCookieValueHashCode, newHashCode);
             ClientContext.obtainAuthenticationData(null, null, true, null);
         }
-
+        String otherSessionActivityValue = HTML5Storage.getLocalStorage().getItem(HTML5_SESSION_ACTIVITY_KEY);
+        if (otherSessionActivityValue != null) {
+            long otherSessionLastActivity = Long.parseLong(otherSessionActivityValue);
+            if (otherSessionLastActivity > lastActivity) {
+                lastActivity = otherSessionLastActivity;
+            }
+        }
     }
 }
