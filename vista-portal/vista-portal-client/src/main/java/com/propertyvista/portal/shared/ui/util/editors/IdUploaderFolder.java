@@ -52,7 +52,6 @@ public class IdUploaderFolder extends CEntityFolder<IdentificationDocument> {
         super(IdentificationDocument.class);
 
         if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
-
             addValueValidator(new EditableValueValidator<IList<IdentificationDocument>>() {
                 @Override
                 public ValidationError isValid(CComponent<IList<IdentificationDocument>> component, IList<IdentificationDocument> value) {
@@ -69,7 +68,6 @@ public class IdUploaderFolder extends CEntityFolder<IdentificationDocument> {
                     return null;
                 }
             });
-
         }
 
         asWidget().setSize("100%", "100%");

@@ -124,7 +124,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             pmcCustomStep = addStep(createLegalStep());
             summaryStep = addStep(createSummaryStep());
             paymentStep = addStep(createPaymentStep());
-
         } else {
             leaseStep = addStep(createLeaseStep());
             personalInfoAStep = addStep(createPersonalInfoAStep());
@@ -144,7 +143,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private BasicFlexFormPanel createLeaseStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Information"));
         int row = -1;
-
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setH3(++row, 0, 1, i18n.tr("Unit"));
@@ -178,7 +176,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private BasicFlexFormPanel createUnitStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Selection"));
         int row = -1;
-
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         return panel;
@@ -452,6 +449,5 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             useLabelSemicolon(false);
             labelAlignment(Alignment.left);
         }
-
     }
 }
