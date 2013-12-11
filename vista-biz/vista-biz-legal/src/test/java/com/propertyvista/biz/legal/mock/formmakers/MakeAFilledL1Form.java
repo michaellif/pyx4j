@@ -18,11 +18,14 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.mock.formmakers;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import com.propertyvista.biz.legal.L1GenerationFacadeImpl;
+import com.propertyvista.biz.legal.mock.MockL1FormDataFactory;
 
 /** this is just a utility to generate a document to see how it looks like */
 public class MakeAFilledL1Form {

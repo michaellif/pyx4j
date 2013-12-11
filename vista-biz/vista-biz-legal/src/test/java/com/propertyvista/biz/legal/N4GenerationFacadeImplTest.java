@@ -22,6 +22,7 @@ package com.propertyvista.biz.legal;
 
 import org.junit.Test;
 
+import com.propertyvista.biz.legal.mock.MockN4FormDataFactory;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 
 public class N4GenerationFacadeImplTest {

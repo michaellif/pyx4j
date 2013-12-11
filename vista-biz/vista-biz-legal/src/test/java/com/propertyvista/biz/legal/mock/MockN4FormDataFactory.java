@@ -18,7 +18,7 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.mock;
 
 import java.math.BigDecimal;
 
@@ -28,6 +28,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.legal.N4GenerationFacadeImpl;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;

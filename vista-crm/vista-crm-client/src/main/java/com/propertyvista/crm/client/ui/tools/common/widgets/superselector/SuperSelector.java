@@ -171,7 +171,7 @@ public abstract class SuperSelector<DataType> extends Composite {
     }
 
     public SuperSelector(IFormat<DataType> format) {
-        this(format, false, false);
+        this(format, false, true);
     }
 
     public void setInput(String input) {

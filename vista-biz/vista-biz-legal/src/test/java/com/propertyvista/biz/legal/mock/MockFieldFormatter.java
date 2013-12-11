@@ -18,19 +18,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.mock;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
 
-@Transient
-public interface MockFormFieldsData extends IEntity {
+/**
+ * separates letters by <code>!</code>, i.e <code>abcde</code> will be turned into <code>a!b!c!d!e!</code>
+ */
+public class MockFieldFormatter implements Formatter {
 
-    IPrimitive<String> field1();
-
-    IPrimitive<String> field2();
-
-    IPrimitive<String> field10();
-
+    @Override
+    public String format(Object object) {
+        String value = object.toString();
+        String formattedValue = "";
+        for (int i = 0; i < value.length(); ++i) {
+            formattedValue += value.charAt(i);
+            formattedValue += "!";
+        }
+        return formattedValue;
+    }
 }

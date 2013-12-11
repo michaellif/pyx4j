@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.mock;
 
 import com.propertyvista.biz.legal.forms.framework.mapping.Partitioner;
 

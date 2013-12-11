@@ -110,19 +110,33 @@ public class FormFillerImpl implements FormFiller {
         fields.setField(fieldDescriptor.mappedFields().get(0), value);
     }
 
-    private static void setImageField(PdfFieldDescriptor fieldDescriptor, AcroFields fields, PdfStamper stamper, byte[] image) throws IOException,
+    private static void setImageField(PdfFieldDescriptor fieldDescriptor, AcroFields fields, PdfStamper stamper, byte[] imageData) throws IOException,
             DocumentException {
         List<FieldPosition> fieldPositions = fields.getFieldPositions(fieldDescriptor.mappedFields().get(0));
         if (fieldPositions == null || fieldPositions.size() == 0) {
             return;
         }
 
-        FieldPosition signaturePosition = fieldPositions.get(0);
-        PdfContentByte canvas = stamper.getOverContent(signaturePosition.page);
-        Image signature = Image.getInstance(image);
-        signature.scaleAbsolute(signaturePosition.position.getWidth(), signaturePosition.position.getHeight());
-        signature.setAbsolutePosition(signaturePosition.position.getLeft(), signaturePosition.position.getBottom());
-        canvas.addImage(signature);
+        FieldPosition imageHolderPosition = fieldPositions.get(0);
+        PdfContentByte canvas = stamper.getOverContent(imageHolderPosition.page);
+        Image image = Image.getInstance(imageData);
+        int[] scaledImageDimensions = ImageTransformUtils.scaleProportionallyToFit(//@formatter:off
+                new int[] {(int) image.getWidth(), (int)image.getHeight()},
+                new int[] {(int) imageHolderPosition.position.getWidth(), (int)imageHolderPosition.position.getHeight()}
+        );//@formatter:on
+        image.scaleAbsolute(scaledImageDimensions[0], scaledImageDimensions[1]);
+
+        int[] upperLeftCorner = ImageTransformUtils.center(//@formatter:off
+                scaledImageDimensions,
+                new int[] {
+                        (int) imageHolderPosition.position.getLeft(),
+                        (int) imageHolderPosition.position.getBottom(),
+                        (int) imageHolderPosition.position.getRight(),
+                        (int) imageHolderPosition.position.getTop()
+                }
+        );//@formatter:on
+        image.setAbsolutePosition(upperLeftCorner[0], upperLeftCorner[1]);
+        canvas.addImage(image);
 
     }
 
