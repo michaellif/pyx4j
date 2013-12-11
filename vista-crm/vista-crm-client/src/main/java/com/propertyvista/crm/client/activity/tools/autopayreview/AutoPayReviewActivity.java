@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.tools.common.AbstractBulkOperationToolActivity;
-import com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewView;
+import com.propertyvista.crm.client.ui.tools.financial.autopayreview.AutoPayReviewView;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;

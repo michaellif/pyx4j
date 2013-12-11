@@ -19,7 +19,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmWizardActivity;
-import com.propertyvista.crm.client.ui.tools.l1generation.L1FormDataReviewWizardView;
+import com.propertyvista.crm.client.ui.tools.legal.l1.L1FormDataReviewWizardView;
 import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 import com.propertyvista.crm.rpc.services.legal.L1FormDataReviewWizardService;
 

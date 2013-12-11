@@ -48,9 +48,6 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
-import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewCaptionViewer;
-import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewFolder;
-import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewsHolderForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
 import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
@@ -61,10 +58,13 @@ import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SelectedItemHolder;
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
-import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1VisorStyles;
-import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
-import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
-import com.propertyvista.crm.client.ui.tools.n4generation.N4GenerationToolViewImpl;
+import com.propertyvista.crm.client.ui.tools.financial.autopayreview.PapReviewCaptionViewer;
+import com.propertyvista.crm.client.ui.tools.financial.autopayreview.PapReviewFolder;
+import com.propertyvista.crm.client.ui.tools.financial.autopayreview.PapReviewsHolderForm;
+import com.propertyvista.crm.client.ui.tools.legal.l1.visors.L1VisorStyles;
+import com.propertyvista.crm.client.ui.tools.legal.n4.LegalNoticeCandidateFolderHolderForm;
+import com.propertyvista.crm.client.ui.tools.legal.n4.LegalNoticeCandidateForm;
+import com.propertyvista.crm.client.ui.tools.legal.n4.N4GenerationToolViewImpl;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
