@@ -37,8 +37,6 @@ public class EntityFormComponentFactory extends BaseEditableComponentFactory {
         CComponent<?> comp = null;
         if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.EntityList) {
             comp = createMemberFolderEditor(member);
-        } else if (mm.isOwnedRelationships() && mm.isEntity()) {
-            comp = createMemberEditor(member);
         } else if (mm.getObjectClassType() == ObjectClassType.EntityList && EditorType.entityselector.equals(mm.getEditorType())) {
             comp = createMemberFolderEditor(member);
         } else {
@@ -51,7 +49,4 @@ public class EntityFormComponentFactory extends BaseEditableComponentFactory {
         throw new Error("No MemberFolderEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
     }
 
-    protected CEntityForm<?> createMemberEditor(IObject<?> member) {
-        throw new Error("No MemberEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
-    }
 }

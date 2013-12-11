@@ -28,6 +28,8 @@ import java.util.EnumSet;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.widgets.client.RadioGroup;
 
@@ -124,7 +126,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                         || (mm.getValueClass().equals(LogicalDate.class))) {
                     CDateLabel comp = new CDateLabel();
                     if (mm.getFormat() != null) {
-                        (comp).setDateFormat(mm.getFormat());
+                        comp.setDateFormat(mm.getFormat());
                     }
                     return comp;
                 } else if (mm.getValueClass() == Boolean.class) {
@@ -142,7 +144,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
         } else if (mm.isEntity()) {
             CEntityComboBox comp = new CEntityComboBox(mm.getObjectClass());
             if (mm.isEmbedded()) {
-                (comp).setUseNamesComparison(true);
+                comp.setUseNamesComparison(true);
             }
             return comp;
         } else if (mm.getValueClass().isEnum()) {
@@ -164,7 +166,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
         } else if (mm.getValueClass().equals(Time.class)) {
             CTimeField comp = new CTimeField();
             if (mm.getFormat() != null) {
-                (comp).setTimeFormat(mm.getFormat());
+                comp.setTimeFormat(mm.getFormat());
             }
             return comp;
         } else if (mm.getValueClass().equals(Boolean.class)) {
@@ -178,11 +180,9 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
         } else if (mm.getValueClass().equals(Double.class)) {
             CDoubleField comp = new CDoubleField();
             if (mm.getFormat() != null) {
-                (comp).setNumberPattern(mm.getFormat());
+                comp.setNumberPattern(mm.getFormat());
             }
             return comp;
-        } else if (mm.getValueClass().equals(String.class)) {
-            return new CTextField();
         } else {
             throw new Error("No Component factory for member '" + member.getMeta().getFieldName() + "' of class " + member.getValueClass());
         }

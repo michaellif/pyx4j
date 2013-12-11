@@ -82,19 +82,23 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
 
     class SignaturePanel extends FlowPanel implements ITextWidget {
 
-        private CheckBox checkBox;
+        private final CheckBox checkBox;
 
-        private TextBox textBox;
+        private final TextBox textBox;
 
         public SignaturePanel() {
+
+            checkBox = new CheckBox(getCComponent().getCheckBoxText());
+            add(checkBox);
+            add(new InlineHTML("&nbsp;"));
+            textBox = new TextBox();
+            add(textBox);
 
             switch (getCComponent().getSignatureType()) {
             case AgreeBox:
             case AgreeBoxAndFullName:
-                checkBox = new CheckBox(getCComponent().getCheckBoxText());
-                add(checkBox);
 
-                add(new InlineHTML("&nbsp;"));
+                checkBox.setVisible(true);
 
                 if (getCComponent().getCheckBoxAnchorText() != null) {
                     Anchor checkBoxAnchor = new Anchor(getCComponent().getCheckBoxAnchorText(), getCComponent().getCheckBoxAnchorCommand());
@@ -108,14 +112,15 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
 
             switch (getCComponent().getSignatureType()) {
             case AgreeBox:
+                textBox.setVisible(false);
                 break;
             case AgreeBoxAndFullName:
             case FullName:
-                textBox = new TextBox();
-                add(textBox);
+                textBox.setVisible(true);
                 textBox.setWidth("100%");
                 break;
             case Initials:
+                textBox.setVisible(true);
                 textBox.setWidth("4em");
                 break;
 
