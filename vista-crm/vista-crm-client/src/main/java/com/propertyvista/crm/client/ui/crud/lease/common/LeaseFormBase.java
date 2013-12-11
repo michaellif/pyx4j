@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
@@ -54,8 +52,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     protected static final I18n i18n = I18n.get(LeaseFormBase.class);
 
     private Tab chargesTab;
-
-    private Widget featuresHeader, concessionsHeader;
 
     protected LeaseFormBase(Class<DTO> clazz, IForm<DTO> view) {
         super(clazz, view);
@@ -107,11 +103,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
             get(proto().approvalDate()).setVisible(false);
             get(proto().creationDate()).setVisible(false);
-        }
-
-        featuresHeader.setVisible(!getValue().currentTerm().version().leaseProducts().featureItems().isEmpty());
-        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            concessionsHeader.setVisible(!getValue().currentTerm().version().leaseProducts().concessions().isEmpty());
         }
 
         CComponent<?> comp = get(proto().currentTerm().version().tenants());
@@ -210,12 +201,10 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         }));
 
         flexPanel.setH2(++leftRow, 0, 2, proto().currentTerm().version().leaseProducts().featureItems().getMeta().getCaption());
-        featuresHeader = flexPanel.getWidget(leftRow, 0);
         flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().leaseProducts().featureItems(), new BillableItemFolder()));
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             flexPanel.setH2(++leftRow, 0, 2, proto().currentTerm().version().leaseProducts().concessions().getMeta().getCaption());
-            concessionsHeader = flexPanel.getWidget(leftRow, 0);
             flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().leaseProducts().concessions(), new ConcessionFolder()));
         }
 

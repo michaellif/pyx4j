@@ -22,7 +22,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -86,8 +85,6 @@ import com.propertyvista.misc.VistaTODO;
 public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     protected static final I18n i18n = I18n.get(LeaseTermForm.class);
-
-    private Widget featuresHeader, concessionsHeader;
 
     protected LeaseTermForm(IForm<LeaseTermDTO> view) {
         super(LeaseTermDTO.class, view);
@@ -295,13 +292,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }));
 
         flexPanel.setH2(++leftRow, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
-        featuresHeader = flexPanel.getWidget(leftRow, 0);
         flexPanel.setWidget(++leftRow, 0, 2,
                 inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseTermEditorView)));
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             flexPanel.setH2(++leftRow, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
-            concessionsHeader = flexPanel.getWidget(leftRow, 0);
             flexPanel.setWidget(++leftRow, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
         }
 
@@ -356,12 +351,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setMandatory(getValue().type().getValue() != Type.Periodic);
-
-        } else {
-            featuresHeader.setVisible(!getValue().version().leaseProducts().featureItems().isEmpty());
-            if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-                concessionsHeader.setVisible(!getValue().version().leaseProducts().concessions().isEmpty());
-            }
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
