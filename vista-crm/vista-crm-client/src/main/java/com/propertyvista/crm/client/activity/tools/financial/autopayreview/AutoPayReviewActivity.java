@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.tools.autopayreview;
+package com.propertyvista.crm.client.activity.tools.financial.autopayreview;
 
 import java.util.List;
 

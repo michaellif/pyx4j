@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.tools.n4generation;
+package com.propertyvista.crm.client.activity.tools.legal.n4;
 
 import java.util.List;
 import java.util.Vector;

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.tools.l1generation;
+package com.propertyvista.crm.client.activity.tools.legal.l1;
 
 import com.google.gwt.core.shared.GWT;
 

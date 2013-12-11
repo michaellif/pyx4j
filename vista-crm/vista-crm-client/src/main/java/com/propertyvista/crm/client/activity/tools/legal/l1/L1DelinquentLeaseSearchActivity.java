@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.tools.l1generation;
+package com.propertyvista.crm.client.activity.tools.legal.l1;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;

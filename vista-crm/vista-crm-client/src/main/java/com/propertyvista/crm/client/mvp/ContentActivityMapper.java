@@ -242,12 +242,12 @@ import com.propertyvista.crm.client.activity.reports.ResidentInsuranceReportActi
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
-import com.propertyvista.crm.client.activity.tools.autopayreview.AutoPayReviewActivity;
+import com.propertyvista.crm.client.activity.tools.financial.autopayreview.AutoPayReviewActivity;
 import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInCreateBatchActivity;
-import com.propertyvista.crm.client.activity.tools.l1generation.L1DelinquentLeaseSearchActivity;
-import com.propertyvista.crm.client.activity.tools.l1generation.L1FormDataReviewWizardActivity;
-import com.propertyvista.crm.client.activity.tools.n4generation.N4DownloadToolActivity;
-import com.propertyvista.crm.client.activity.tools.n4generation.N4GenerationToolActivity;
+import com.propertyvista.crm.client.activity.tools.legal.l1.L1DelinquentLeaseSearchActivity;
+import com.propertyvista.crm.client.activity.tools.legal.l1.L1FormDataReviewWizardActivity;
+import com.propertyvista.crm.client.activity.tools.legal.n4.N4DownloadToolActivity;
+import com.propertyvista.crm.client.activity.tools.legal.n4.N4GenerationToolActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusViewerActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
