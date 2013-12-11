@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -35,6 +36,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
@@ -113,11 +115,15 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
         panel.setWidget(++row, 0, personalDisclaimer);
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().isAgreedToPersonalDisclaimer())).build());
-        get(proto().isAgreedToPersonalDisclaimer()).addValueValidator(new EditableValueValidator<Boolean>() {
+        panel.setWidget(
+                ++row,
+                0,
+                new FormWidgetDecoratorBuilder(inject(proto().personalDisclaimerSignature())).customLabel("").labelPosition(LabelPosition.hidden)
+                        .contentWidth("250px").componentWidth("250px").build());
+        get(proto().personalDisclaimerSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
-            public ValidationError isValid(CComponent<Boolean> component, Boolean value) {
-                if (value != null && !value) {
+            public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
+                if (!value.agreeBox().isBooleanTrue()) {
                     return new ValidationError(component, i18n.tr("You must agree to the personal disclaimer terms to continue"));
                 }
                 return null;

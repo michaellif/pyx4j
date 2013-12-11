@@ -16,20 +16,27 @@ package com.propertyvista.common.client.ui.components;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntitySuggestBox;
+import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.EntityFormComponentFactory;
 import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.common.client.ui.components.editors.GeoLocationEditor;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.security.CustomerSignature;
 
 public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
+        MemberMeta mm = member.getMeta();
+        if (mm.getValueClass().equals(CustomerSignature.class)) {
+            return new CSignature(SignatureType.AgreeBox, mm.getCaption());
+        } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {
 

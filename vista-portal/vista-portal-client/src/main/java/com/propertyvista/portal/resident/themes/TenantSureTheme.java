@@ -109,8 +109,8 @@ public class TenantSureTheme extends Theme {
         {
             Style style = new Style(".", TenantSureTheme.StyleName.TenantSurePresonalDisclaimer.name(), " ", "li");
             style.addProperty("text-align", "justify");
-            style.addProperty("margin-left", "50px");
-            style.addProperty("margin-right", "50px");
+            style.addProperty("margin-left", "5%");
+            style.addProperty("margin-right", "5%");
             addStyle(style);
         }
         {

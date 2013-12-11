@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
@@ -35,7 +36,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     public CPortalEntityWizard(Class<E> rootClass, final IWizardView<? extends IEntity> view, String headerCaption, String endButtonCaption,
             ThemeColor themeColor) {
-        super(rootClass);
+        super(rootClass, new VistaEditorsComponentFactory());
         this.view = view;
         this.headerCaption = headerCaption;
         this.endButtonCaption = endButtonCaption;
