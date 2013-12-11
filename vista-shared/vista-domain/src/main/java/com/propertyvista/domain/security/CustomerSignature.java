@@ -18,6 +18,6 @@ import com.pyx4j.entity.shared.ISignature;
 public interface CustomerSignature extends ISignature {
 
     @Override
-    CustomerUser user();
+    CustomerUser signingUser();
 
 }
