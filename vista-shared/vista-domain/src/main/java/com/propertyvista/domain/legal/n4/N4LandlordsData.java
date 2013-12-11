@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.contact.AddressSimple;
 
+/** This is data common to all N4 forms filled in a single batch */
 @Transient
 public interface N4LandlordsData extends IEntity {
 

@@ -26,6 +26,7 @@ import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
+import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4DownloadSettingsForm;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;

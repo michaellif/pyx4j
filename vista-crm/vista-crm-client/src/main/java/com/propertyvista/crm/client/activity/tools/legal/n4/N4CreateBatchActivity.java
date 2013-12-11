@@ -19,17 +19,21 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.visor.IVisorEditor;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.tools.common.AbstractBulkOperationToolActivity;
 import com.propertyvista.crm.client.ui.tools.legal.n4.N4GenerationToolView;
+import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4AddressInputFormVisor;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4AddressInputDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -41,8 +45,44 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
     }
 
     @Override
+    public void acceptSelected() {
+        IVisorEditor.Controller visorController = new IVisorEditor.Controller() {
+
+            private N4AddressInputFormVisor visor;
+
+            {
+                visor = new N4AddressInputFormVisor(this);
+            }
+
+            @Override
+            public void show() {
+                visor.populate(EntityFactory.create(N4AddressInputDTO.class));
+                getView().showVisor(visor);
+            }
+
+            @Override
+            public void hide() {
+                getView().hideVisor();
+            }
+
+            @Override
+            public void save() {
+                apply();
+                hide();
+            }
+
+            @Override
+            public void apply() {
+                N4CreateBatchActivity.super.acceptSelected();
+            }
+
+        };
+        visorController.show();
+    }
+
+    @Override
     protected N4BatchSettingsDTO makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
-        N4BatchSettingsDTO query = getView().getSettings().n4batchProperties().duplicate(N4BatchSettingsDTO.class);
+        N4BatchSettingsDTO query = getView().getSettings().batchSettings().duplicate(N4BatchSettingsDTO.class);
 
         for (LegalNoticeCandidateDTO noticeCandidate : selectedItems) {
             query.targetDelinquentLeases().add(noticeCandidate.leaseId().<Lease> duplicate());

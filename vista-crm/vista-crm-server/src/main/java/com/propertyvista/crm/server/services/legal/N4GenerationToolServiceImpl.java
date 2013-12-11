@@ -89,9 +89,9 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     @Override
     public void initSettings(AsyncCallback<N4GenerationInitParamsDTO> callback) {
         N4CandidateSearchCriteriaDTO settings = EntityFactory.create(N4CandidateSearchCriteriaDTO.class);
-        settings.n4batchProperties().noticeDate().setValue(new LogicalDate());
-        settings.n4batchProperties().deliveryMethod().setValue(DeliveryMethod.Hand);
-        settings.n4batchProperties().agent().set(CrmAppContext.getCurrentUserEmployee());
+        settings.batchSettings().noticeDate().setValue(new LogicalDate());
+        settings.batchSettings().deliveryMethod().setValue(DeliveryMethod.Hand);
+        settings.batchSettings().agent().set(CrmAppContext.getCurrentUserEmployee());
 
         N4GenerationInitParamsDTO initParams = EntityFactory.create(N4GenerationInitParamsDTO.class);
         initParams.settings().set(settings);
