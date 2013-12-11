@@ -58,7 +58,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendProspectWelcome(LeaseTermTenant tenant) {
-        MailMessage m = MessageTemplates.createProspectWelcome(tenant);
+        MailMessage m = MessageTemplatesCustomizable.createProspectWelcome(tenant);
         Mail.send(m);
     }
 
@@ -82,7 +82,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
-        MailMessage m = MessageTemplates.createTenantInvitationEmail(leaseParticipant, emailTemplateType, token);
+        MailMessage m = MessageTemplatesCustomizable.createTenantInvitationEmail(leaseParticipant, emailTemplateType, token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
@@ -105,7 +105,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         default:
             throw new IllegalArgumentException();
         }
-        MailMessage m = MessageTemplates.createApplicationStatusEmail(tenant, emailType);
+        MailMessage m = MessageTemplatesCustomizable.createApplicationStatusEmail(tenant, emailType);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
@@ -124,7 +124,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
         EmailTemplateType emailType = EmailTemplateType.TenantInvitation;
 
-        MailMessage m = MessageTemplates.createTenantInvitationEmail(tenant, emailType, token);
+        MailMessage m = MessageTemplatesCustomizable.createTenantInvitationEmail(tenant, emailType, token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException("Mail delivery failed: " + user.email().getValue());
         }
@@ -136,7 +136,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
-        MailMessage m = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, customer.user(), token);
+        MailMessage m = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, customer.user(), token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
@@ -148,19 +148,19 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
-        MailMessage m = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, customer.user(), token);
+        MailMessage m = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, customer.user(), token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
     }
 
     @Override
-    public void sendAdminPasswordRetrievalToken(OperationsUser user) {
+    public void sendOperationsPasswordRetrievalToken(OperationsUser user) {
         String token = AccessKey.createAccessToken(user, OperationsUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
-        MailMessage m = MessageTemplates.createAdminPasswordResetEmail(user, token);
+        MailMessage m = MessageTemplatesCrmNotification.createOperationsPasswordResetEmail(user, token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
@@ -172,7 +172,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
-        MailMessage m = MessageTemplates.createCrmPasswordResetEmail(user, token);
+        MailMessage m = MessageTemplatesCustomizable.createCrmPasswordResetEmail(user, token);
 
         CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
         if (!credential.recoveryEmail().isNull()) {
@@ -186,7 +186,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendNewPmcEmail(OnboardingUser user, Pmc pmc) {
-        MailMessage m = MessageTemplates.createNewPmcEmail(user, pmc);
+        MailMessage m = MessageTemplatesCrmNotification.createNewPmcEmail(user, pmc);
 
         m.setTo(user.email().getValue());
 
@@ -201,31 +201,21 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
-        MailMessage m = MessageTemplates.createTenantSurePaymentNotProcessedEmail(gracePeriodEndDate, cancellationDate);
-
+        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentNotProcessedEmail(gracePeriodEndDate, cancellationDate);
         m.setTo(tenantEmail);
-
-        if (MailDeliveryStatus.Success != Mail.send(m, getTenantSureConfig())) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
-
+        Mail.send(m, getTenantSureConfig());
     }
 
     @Override
     public void sendTenantSurePaymentsResumedEmail(String tenantEmail) {
-        MailMessage m = MessageTemplates.createTenantSurePaymentsResumedEmail();
-
+        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumedEmail();
         m.setTo(tenantEmail);
-
-        if (MailDeliveryStatus.Success != Mail.send(m, getTenantSureConfig())) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
-
+        Mail.send(m, getTenantSureConfig());
     }
 
     @Override
     public void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail) {
-        MailMessage m = MessageTemplates.createOnlinePaymentSetupCompletedEmail(userName);
+        MailMessage m = MessageTemplatesCrmNotification.createOnlinePaymentSetupCompletedEmail(userName);
 
         m.setTo(userEmail);
 
@@ -236,60 +226,60 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendPaymentRejectedNotification(List<String> targetEmails, PaymentRecord paymentRecord, boolean applyNSF) {
-        MailMessage m = MessageTemplates.createPaymentRejectedNotificationEmail(paymentRecord, applyNSF);
+        MailMessage m = MessageTemplatesCrmNotification.createPaymentRejectedNotificationEmail(paymentRecord, applyNSF);
         m.setTo(targetEmails);
         Mail.send(m);
     }
 
     @Override
     public void sendPaymentYardiUnableToRejectNotification(List<String> targetEmails, PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage) {
-        MailMessage m = MessageTemplates.createPostToYardiFailedNotificationEmail(paymentRecord, applyNSF, yardiErrorMessage);
+        MailMessage m = MessageTemplatesCrmNotification.createPostToYardiFailedNotificationEmail(paymentRecord, applyNSF, yardiErrorMessage);
         m.setTo(targetEmails);
         Mail.send(m);
     }
 
     @Override
     public void sendAutoPayReviewRequiredNotification(List<String> targetEmails, List<Lease> leaseIds) {
-        MailMessage m = MessageTemplates.createAutoPayReviewRequiredNotificationEmail(leaseIds);
+        MailMessage m = MessageTemplatesCrmNotification.createAutoPayReviewRequiredNotificationEmail(leaseIds);
         m.setTo(targetEmails);
         Mail.send(m);
     }
 
     @Override
     public void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds, Map<Lease, List<AutopayAgreement>> canceledAgreements) {
-        MailMessage m = MessageTemplates.createAutoPayCancelledBySystemNotificationEmail(leaseIds, canceledAgreements);
+        MailMessage m = MessageTemplatesCrmNotification.createAutoPayCancelledBySystemNotificationEmail(leaseIds, canceledAgreements);
         m.setTo(targetEmails);
         Mail.send(m);
     }
 
     @Override
     public void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId, List<AutopayAgreement> canceledAgreements) {
-        MailMessage m = MessageTemplates.createAutoPayCancelledByResidentNotificationEmail(leaseId, canceledAgreements);
+        MailMessage m = MessageTemplatesCrmNotification.createAutoPayCancelledByResidentNotificationEmail(leaseId, canceledAgreements);
         m.setTo(targetEmails);
         Mail.send(m);
     }
 
     @Override
     public void sendTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord) {
-        MailMessage m = MessageTemplates.createTenantOneTimePaymentSubmitted(paymentRecord);
+        MailMessage m = MessageTemplatesCustomizable.createTenantOneTimePaymentSubmitted(paymentRecord);
         Mail.send(m);
     }
 
     @Override
     public void sendTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF) {
-        MailMessage m = MessageTemplates.createTenantPaymenttRejected(paymentRecord, applyNSF);
+        MailMessage m = MessageTemplatesCustomizable.createTenantPaymenttRejected(paymentRecord, applyNSF);
         Mail.send(m);
     }
 
     @Override
     public void sendTenantPaymentCleared(PaymentRecord paymentRecord) {
-        MailMessage m = MessageTemplates.createTenantPaymentCleared(paymentRecord);
+        MailMessage m = MessageTemplatesCustomizable.createTenantPaymentCleared(paymentRecord);
         Mail.send(m);
     }
 
     @Override
     public void sendTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement) {
-        MailMessage m = MessageTemplates.createTenantAutopaySetupCompleted(autopayAgreement);
+        MailMessage m = MessageTemplatesCustomizable.createTenantAutopaySetupCompleted(autopayAgreement);
         Mail.send(m);
     }
 
@@ -334,7 +324,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (sendTo == null) {
             return null;
         }
-        MailMessage m = MessageTemplates.createMaintenanceRequestEmail(emailType, request);
+        MailMessage m = MessageTemplatesCustomizable.createMaintenanceRequestEmail(emailType, request);
         m.setTo(sendTo);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));

@@ -201,21 +201,21 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         EmailTemplateType type = EmailTemplateType.ApplicationApproved;
         String expected = getTemplateContent(type, true);
         MailMessage email = null;
-        email = MessageTemplates.createApplicationStatusEmail(mainAplt, type);
+        email = MessageTemplatesCustomizable.createApplicationStatusEmail(mainAplt, type);
         String received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationDeclined;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createApplicationStatusEmail(mainAplt, type);
+        email = MessageTemplatesCustomizable.createApplicationStatusEmail(mainAplt, type);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalTenant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.leaseParticipant().customer().user(),
+        email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.leaseParticipant().customer().user(),
                 token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
@@ -223,7 +223,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         type = EmailTemplateType.PasswordRetrievalProspect;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.leaseParticipant().customer().user(),
+        email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.leaseParticipant().customer().user(),
                 token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
@@ -231,28 +231,28 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         type = EmailTemplateType.PasswordRetrievalCrm;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createCrmPasswordResetEmail(crmUser, token);
+        email = MessageTemplatesCustomizable.createCrmPasswordResetEmail(crmUser, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.TenantInvitation;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createTenantInvitationEmail(mainAplt, type, token);
+        email = MessageTemplatesCustomizable.createTenantInvitationEmail(mainAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationCreatedApplicant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createTenantInvitationEmail(mainAplt, type, token);
+        email = MessageTemplatesCustomizable.createTenantInvitationEmail(mainAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationCreatedCoApplicant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createTenantInvitationEmail(coAplt, type, token);
+        email = MessageTemplatesCustomizable.createTenantInvitationEmail(coAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.debug(type.toString() + " content: " + received);
@@ -263,7 +263,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // Maintenance Request templates
         for (EmailTemplateType emailType : EmailTemplateType.maintenanceTemplates()) {
             expected = getTemplateContent(emailType, true);
-            email = MessageTemplates.createMaintenanceRequestEmail(emailType, mr);
+            email = MessageTemplatesCustomizable.createMaintenanceRequestEmail(emailType, mr);
             received = email.getHtmlBody();
             assertEquals(emailType.toString(), expected, received);
             log.debug(type.toString() + " content: " + received);
@@ -513,7 +513,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     public String getTemplateContent(EmailTemplateType type, boolean asString) {
         String content = getTemplateContentBody(type, asString);
         if (asString) {
-            return SimpleMessageFormat.format(MessageTemplates.getEmailHTMLBody(),//@formatter:off
+            return SimpleMessageFormat.format(MessageTemplatesCustomizable.getEmailHTMLBody(),//@formatter:off
                     getHeader(true),
                     content,
                     getFooter(true)

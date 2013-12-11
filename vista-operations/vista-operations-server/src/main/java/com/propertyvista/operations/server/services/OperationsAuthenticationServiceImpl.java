@@ -71,7 +71,7 @@ public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServ
 
     @Override
     protected void sendPasswordRetrievalToken(OperationsUser user) {
-        ServerSideFactory.create(CommunicationFacade.class).sendAdminPasswordRetrievalToken(user);
+        ServerSideFactory.create(CommunicationFacade.class).sendOperationsPasswordRetrievalToken(user);
         Persistence.service().commit();
     }
 

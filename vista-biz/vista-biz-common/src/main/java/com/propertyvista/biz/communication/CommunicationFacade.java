@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -39,16 +40,16 @@ import com.propertyvista.operations.domain.security.OperationsUser;
 public interface CommunicationFacade {
 
     //TODO move to OprationsNotificationFacade
-    void sendAdminPasswordRetrievalToken(OperationsUser user);
+    void sendOperationsPasswordRetrievalToken(OperationsUser user) throws UserRuntimeException;
 
-    void sendCrmPasswordRetrievalToken(CrmUser user);
+    void sendCrmPasswordRetrievalToken(CrmUser user) throws UserRuntimeException;
 
     /**
      * customer may be Guarantor as well
      */
-    void sendProspectPasswordRetrievalToken(Customer customer);
+    void sendProspectPasswordRetrievalToken(Customer customer) throws UserRuntimeException;
 
-    void sendTenantPasswordRetrievalToken(Customer customer);
+    void sendTenantPasswordRetrievalToken(Customer customer) throws UserRuntimeException;
 
     void sendProspectWelcome(LeaseTermTenant tenant);
 
