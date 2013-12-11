@@ -104,6 +104,8 @@ public class YardiARIntegrationAgent {
 
     public static InvoiceLineItem createCharge(BillingAccount account, ChargeDetail detail) {
         BigDecimal amount = new BigDecimal(detail.getAmount());
+        BigDecimal amountPaid = new BigDecimal(detail.getAmountPaid());
+        BigDecimal balanceDue = new BigDecimal(detail.getBalanceDue());
         // TODO - This calculation assumes that TransactionDate is set to or shortly after start date of cycle
         LogicalDate transactionDate = new LogicalDate(detail.getTransactionDate().getTime());
         BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(account.lease(), transactionDate);
@@ -114,9 +116,9 @@ public class YardiARIntegrationAgent {
         if (amount.compareTo(BigDecimal.ZERO) >= 0) {
             YardiDebit charge = EntityFactory.create(YardiDebit.class);
             charge.arCode().set(new ARCodeAdapter().findARCode(ActionType.Debit, detail.getChargeCode(), detail.getCustomerID()));
-            charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
-            charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
-            charge.outstandingDebit().setValue(amount);
+            charge.amountPaid().setValue(amountPaid);
+            charge.balanceDue().setValue(balanceDue);
+            charge.outstandingDebit().setValue(balanceDue);
             charge.taxTotal().setValue(BigDecimal.ZERO);
             charge.dueDate().setValue(ARYardiTransactionManager.instance().getTransactionDueDate(account, transactionDate));
             if (detail.getService() != null) {
@@ -128,10 +130,11 @@ public class YardiARIntegrationAgent {
             }
             item = charge;
         } else {
+            // got "negative charge" - create a credit item
             YardiCredit credit = EntityFactory.create(YardiCredit.class);
             credit.arCode().set(new ARCodeAdapter().findARCode(ActionType.Credit, detail.getChargeCode(), detail.getCustomerID()));
             credit.postDate().setValue(transactionDate);
-            credit.outstandingCredit().setValue(amount);
+            credit.outstandingCredit().setValue(balanceDue);
             item = credit;
         }
         item.chargeCode().setValue(detail.getChargeCode());
@@ -139,9 +142,10 @@ public class YardiARIntegrationAgent {
         item.transactionId().setValue(detail.getTransactionID());
         item.description().setValue(detail.getDescription());
 
+        // calculate original amount; if differs from the balanceDue an additional credit will be created by the caller
+        item.amount().setValue(amountPaid.add(balanceDue));
         // we don't have postDate
         item.billingAccount().set(account);
-        item.amount().setValue(amount);
         item.description().setValue(detail.getDescription());
         item.billingCycle().set(billingCycle);
 

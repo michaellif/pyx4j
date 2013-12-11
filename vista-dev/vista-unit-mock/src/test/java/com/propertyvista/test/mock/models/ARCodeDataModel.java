@@ -82,8 +82,9 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
         code = generateARCode("Superintendent", ARCode.Type.AccountCredit, 0, 1, false, new String[] { "rsuper" });
         codeMap.put(Code.superintendentDiscount, code);
 
-        generateARCode("Unknown External Credit", ARCode.Type.ExternalCredit, 0, 1, false);
-        generateARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, 1, false);
+        // for default ar codes reserved() must be true here
+        generateARCode("Unknown External Credit", ARCode.Type.ExternalCredit, 0, 1, true);
+        generateARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, 1, true);
 
         generateARCode("Deposit", ARCode.Type.Deposit, 0, 1, true);
         generateARCode("LatePayment", ARCode.Type.LatePayment, 0, 1, true);

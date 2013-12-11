@@ -35,6 +35,7 @@ import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.PropertyIDType;
 import com.yardi.entity.mits.Unit;
+import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
@@ -454,9 +455,22 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             if (tr != null) {
                                 if (tr.getCharge() != null) {
                                     log.info("          Updating charge");
-                                    InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, tr.getCharge().getDetail());
+                                    ChargeDetail detail = tr.getCharge().getDetail();
+                                    BigDecimal amountPaid = new BigDecimal(detail.getAmountPaid());
+                                    BigDecimal balanceDue = new BigDecimal(detail.getBalanceDue());
+                                    BigDecimal amount = amountPaid.add(balanceDue);
+                                    InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, detail);
                                     Persistence.service().persist(charge);
                                     state.addCharge(charge.amount().getValue());
+                                    // for a partially paid charge add fully consumed credit for the amount paid
+                                    if (amount.compareTo(BigDecimal.ZERO) > 0 && amountPaid.compareTo(BigDecimal.ZERO) > 0) {
+                                        detail.setAmount("-" + detail.getAmountPaid());
+                                        detail.setBalanceDue("0.00"); // translates to fully consumed credit
+                                        detail.setDescription(i18n.tr("{0} amount paid", detail.getDescription()));
+                                        charge = YardiARIntegrationAgent.createCharge(account, detail);
+                                        Persistence.service().persist(charge);
+                                        state.addCharge(charge.amount().getValue());
+                                    }
                                 }
 
                                 if (tr.getPayment() != null) {
