@@ -18,9 +18,7 @@ import java.util.HashMap;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
-import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -32,10 +30,13 @@ import com.propertyvista.portal.prospect.ui.application.steps.ContactsStep;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
+import com.propertyvista.portal.prospect.ui.application.steps.OptionsStep;
+import com.propertyvista.portal.prospect.ui.application.steps.PaymentStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PersonalInfoAStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PersonalInfoBStep;
 import com.propertyvista.portal.prospect.ui.application.steps.SummaryStep;
+import com.propertyvista.portal.prospect.ui.application.steps.UnitStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 
@@ -47,24 +48,13 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     private ApplicationWizardPresenter presenter;
 
-    // ------------------------------------
-    // TODO - remove gradually
-
-    private WizardStep unitStep;
-
-    private WizardStep optionsStep;
-
-    private WizardStep paymentStep;
-
-    // ------------------------------------
-
     public ApplicationWizard(ApplicationWizardViewImpl view) {
         super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast2);
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             if (SecurityController.checkBehavior(PortalProspectBehavior.CanEditLeaseTerms)) {
-                unitStep = addStep(createUnitStep());
-                optionsStep = addStep(createOptionsStep());
+                addStep(new UnitStep());
+                addStep(new OptionsStep());
             } else {
                 addStep(new LeaseStep());
             }
@@ -75,7 +65,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new ContactsStep());
             addStep(new LegalStep());
             addStep(new SummaryStep());
-            paymentStep = addStep(createPaymentStep());
+            addStep(new PaymentStep());
         } else {
             addStep(new LeaseStep());
             addStep(new PersonalInfoAStep());
@@ -100,30 +90,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         step.setWizard(this);
         steps.put(step.getClass(), step);
         super.addStep(step);
-    }
-
-    private BasicFlexFormPanel createUnitStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Selection"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-
-        return panel;
-    }
-
-    private BasicFlexFormPanel createOptionsStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Options"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-
-        return panel;
-    }
-
-    private BasicFlexFormPanel createPaymentStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-
-        return panel;
     }
 
     @Override
