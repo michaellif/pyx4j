@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.media.IdentificationDocument;
@@ -29,9 +30,11 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
@@ -60,6 +63,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillLeaseData(bo, to);
         fillApplicantData(bo, to);
+        fillCoApplicants(bo, to);
 
         callback.onSuccess(to);
     }
@@ -176,6 +180,24 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
         for (CustomerScreeningPersonalAsset i : to.applicant().assets()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
+        }
+    }
+
+    private void fillCoApplicants(OnlineApplication bo, OnlineApplicationDTO to) {
+        EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
+        criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
+        criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
+
+        for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
+            CoapplicantDTO cant = EntityFactory.create(CoapplicantDTO.class);
+
+            cant.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
+            cant.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
+
+            cant.dependent().setValue(ltt.role().getValue() == Role.Dependent);
+            cant.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
+
+            to.coapplicants().add(cant);
         }
     }
 }
