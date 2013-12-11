@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.onlineapplication;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
@@ -88,7 +89,18 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
                 main.setWidget(++row, 0, 2, inject(proto().content(), new LegalTermContentFolder(isEditable())));
 
                 main.setH1(++row, 0, 2, proto().signatureType().getMeta().getCaption());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureType(), new CSignature(SignatureType.AgreeBoxAndFullName))).build());
+                main.setWidget(
+                        ++row,
+                        0,
+                        new FormDecoratorBuilder(inject(proto().signatureType(), new CSignature(SignatureType.AgreeBoxAndFullName, i18n.tr("I Agree With"),
+                                i18n.tr("Terms and Conditions"), new Command() {
+
+                                    @Override
+                                    public void execute() {
+                                        // TODO Auto-generated method stub
+
+                                    }
+                                }))).build());
 
                 return main;
             }
