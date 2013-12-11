@@ -87,7 +87,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     public void addStep(ApplicationWizardStep step) {
-        step.setWizard(this);
+        step.init(this);
         steps.put(step.getClass(), step);
         super.addStep(step);
     }

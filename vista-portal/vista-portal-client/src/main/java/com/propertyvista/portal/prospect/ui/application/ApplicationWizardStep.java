@@ -29,11 +29,11 @@ public abstract class ApplicationWizardStep extends WizardStep {
     private ApplicationWizard wizard;
 
     public ApplicationWizardStep() {
-        setStepContent(createStepContent());
     }
 
-    public void setWizard(ApplicationWizard wizard) {
+    public void init(ApplicationWizard wizard) {
         this.wizard = wizard;
+        setStepContent(createStepContent());
     }
 
     public ApplicationWizard getWizard() {
