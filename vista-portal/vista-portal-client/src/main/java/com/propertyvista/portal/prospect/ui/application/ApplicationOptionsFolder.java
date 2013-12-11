@@ -37,9 +37,9 @@ public class ApplicationOptionsFolder extends CEntityFolder<OptionDTO> {
 
     private static final I18n i18n = I18n.get(ApplicationOptionsFolder.class);
 
-    private final ApplicationWizardViewImpl view;
+    private final ApplicationWizardView view;
 
-    public ApplicationOptionsFolder(ApplicationWizardViewImpl view) {
+    public ApplicationOptionsFolder(ApplicationWizardView view) {
         super(OptionDTO.class);
         this.view = view;
         setEditable(false);

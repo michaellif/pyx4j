@@ -25,12 +25,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -49,13 +45,12 @@ import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidat
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
+import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
 import com.propertyvista.portal.prospect.ui.application.steps.SummaryStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
@@ -81,8 +76,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     // ------------------------------------
     // TODO - remove gradually
-
-    private WizardStep leaseStep;
 
     private WizardStep unitStep;
 
@@ -120,7 +113,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 unitStep = addStep(createUnitStep());
                 optionsStep = addStep(createOptionsStep());
             } else {
-                leaseStep = addStep(createLeaseStep());
+                addStep(new LeaseStep());
             }
             peopleStep = addStep(createPeopleStep());
             personalInfoAStep = addStep(createPersonalInfoAStep());
@@ -133,7 +126,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
             paymentStep = addStep(createPaymentStep());
         } else {
-            leaseStep = addStep(createLeaseStep());
+            addStep(new LeaseStep());
+
             personalInfoAStep = addStep(createPersonalInfoAStep());
             personalInfoBStep = addStep(createPersonalInfoBStep());
             financialStep = addStep(createFinancialStep());
@@ -157,39 +151,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         step.setWizard(this);
         steps.put(step.getClass(), step);
         super.addStep(step);
-    }
-
-    private BasicFlexFormPanel createLeaseStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Information"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-
-        panel.setH3(++row, 0, 1, i18n.tr("Unit"));
-
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().info().number(), new CLabel<String>())).build());
-        panel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().unit().building().info().address(), new CEntityLabel<AddressStructured>())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().utilities(), new CLabel<String>())).build());
-
-        panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
-
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseFrom(), new CDateLabel())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseTo(), new CDateLabel())).build());
-
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leasePrice(), new CMoneyLabel())).build());
-
-        panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
-
-        panel.setWidget(++row, 0, inject(proto().options(), new ApplicationOptionsFolder((ApplicationWizardViewImpl) getView())));
-
-        if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
-            panel.setH3(++row, 0, 1, i18n.tr("People"));
-
-            panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder((ApplicationWizardViewImpl) getView())));
-        }
-
-        return panel;
     }
 
     private BasicFlexFormPanel createUnitStep() {

@@ -28,16 +28,15 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
-import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class CoapplicantsFolder extends CEntityFolder<CoapplicantDTO> {
 
     private static final I18n i18n = I18n.get(CoapplicantsFolder.class);
 
-    private final ApplicationWizardViewImpl view;
+    private final ApplicationWizardView view;
 
-    public CoapplicantsFolder(ApplicationWizardViewImpl view) {
+    public CoapplicantsFolder(ApplicationWizardView view) {
         super(CoapplicantDTO.class);
         this.view = view;
         setRemovable(true);

@@ -13,8 +13,16 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import java.util.List;
+
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 
 public abstract class ApplicationWizardStep extends WizardStep {
 
@@ -38,5 +46,35 @@ public abstract class ApplicationWizardStep extends WizardStep {
     }
 
     public void onValueSet() {
+    }
+
+    // helpers:
+
+    public ApplicationWizardView getView() {
+        return (ApplicationWizardView) getWizard().getView();
+    }
+
+    public OnlineApplicationDTO proto() {
+        return getWizard().proto();
+    }
+
+    public CComponent<?> inject(IObject<?> member) {
+        return getWizard().inject(member);
+    }
+
+    public final <T extends CComponent<?>> T inject(IObject<?> member, T comp) {
+        return getWizard().inject(member, comp);
+    }
+
+    public <T extends IEntity> CComponent<T> get(T member) {
+        return getWizard().get(member);
+    }
+
+    public <T extends IEntity> CComponent<List<T>> get(IList<T> member) {
+        return getWizard().get(member);
+    }
+
+    public <T> CComponent<T> get(IObject<T> member) {
+        return getWizard().get(member);
     }
 }
