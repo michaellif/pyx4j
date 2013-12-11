@@ -54,6 +54,10 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return (ApplicationWizardView) getWizard().getView();
     }
 
+    public OnlineApplicationDTO getValue() {
+        return getWizard().getValue();
+    }
+
     public OnlineApplicationDTO proto() {
         return getWizard().proto();
     }
@@ -62,7 +66,7 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return getWizard().inject(member);
     }
 
-    public final <T extends CComponent<?>> T inject(IObject<?> member, T comp) {
+    public <T extends CComponent<?>> T inject(IObject<?> member, T comp) {
         return getWizard().inject(member, comp);
     }
 
