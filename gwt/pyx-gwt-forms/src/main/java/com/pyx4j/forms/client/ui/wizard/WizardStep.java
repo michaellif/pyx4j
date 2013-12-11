@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 
 public class WizardStep extends SimplePanel implements IValidatable {
 
-    private final Widget content;
+    private Widget content;
 
     private String title;
 
@@ -48,9 +48,12 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     public WizardStep(Widget content, String title) {
         setStepTitle(title);
-        assert (content != null);
-        setWidget(this.content = content);
+        setStepContent(content);
         addStyleName(WizardDecoratorTheme.StyleName.WizardStep.name());
+    }
+
+    protected void setStepContent(Widget content) {
+        setWidget(this.content = content);
     }
 
     public String getStepTitle() {
