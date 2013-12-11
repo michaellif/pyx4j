@@ -7,21 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 23, 2013
- * @author vlads
+ * Created on 2013-01-08
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.admin;
+package com.propertyvista.crm.client.ui.crud.administration.profile.paymentmethods;
 
-import com.pyx4j.entity.annotations.ExtendsBO;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.i18n.annotations.I18n;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 
-import com.propertyvista.domain.settings.PmcCompanyInfo;
+public class PmcPaymentMethodsEditorViewImpl extends CrmEditorViewImplBase<PmcPaymentMethodsDTO> implements PmcPaymentMethodsEditorView {
 
-@Transient
-@ExtendsBO
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface PmcCompanyInfoDTO extends PmcCompanyInfo {
+    public PmcPaymentMethodsEditorViewImpl() {
+        setForm(new PmcPaymentMethodsForm(this));
+    }
 
 }

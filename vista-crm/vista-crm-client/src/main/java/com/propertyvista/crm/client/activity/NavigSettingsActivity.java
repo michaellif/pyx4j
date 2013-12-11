@@ -65,6 +65,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         folder = new NavigFolder(i18n.tr("Profile"));
         if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1)));
             folder.addNavigItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)));
         }
         list.add(folder);

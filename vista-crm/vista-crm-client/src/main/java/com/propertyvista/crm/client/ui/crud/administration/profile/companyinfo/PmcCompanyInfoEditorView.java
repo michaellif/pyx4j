@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-08
- * @author ArtyomB
+ * Created on Dec 10, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
+package com.propertyvista.crm.client.ui.crud.administration.profile.companyinfo;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
+import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 
-public interface PmcPaymentMethodsViewerView extends IViewer<PmcPaymentMethodsDTO> {
-
-    public interface PmcPaymentMethodsViewer extends IViewer.Presenter {
-    }
+public interface PmcCompanyInfoEditorView extends IEditor<PmcCompanyInfoDTO> {
 
 }

@@ -38,6 +38,7 @@ import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
+import com.propertyvista.crm.rpc.services.admin.PmcCompanyInfoCrudService;
 import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
@@ -527,7 +528,10 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckWizardService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCardValidationService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(OnlinePaymentWizardService.class));
+
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(PmcPaymentMethodsCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(PmcCompanyInfoCrudService.class));
+
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(ILSConfigCrudService.class));
 
         grant(VistaCrmBehavior.Equifax, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));

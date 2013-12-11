@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
+package com.propertyvista.crm.client.ui.crud.administration.profile.paymentmethods;
 
 import java.util.EnumSet;
 import java.util.Set;

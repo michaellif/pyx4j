@@ -51,6 +51,10 @@ import com.propertyvista.crm.client.activity.crud.administration.ils.ILSConfigVi
 import com.propertyvista.crm.client.activity.crud.administration.merchantaccount.MerchantAccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.administration.merchantaccount.MerchantAccountListerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.merchantaccount.MerchantAccountViewerActivity;
+import com.propertyvista.crm.client.activity.crud.administration.profile.PmcCompanyInfoEditorActivity;
+import com.propertyvista.crm.client.activity.crud.administration.profile.PmcCompanyInfoViewerActivity;
+import com.propertyvista.crm.client.activity.crud.administration.profile.PmcPaymentMethodsEditorActivity;
+import com.propertyvista.crm.client.activity.crud.administration.profile.PmcPaymentMethodsViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.role.CrmRoleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.administration.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.role.CrmRoleViewerActivity;
@@ -229,8 +233,6 @@ import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsu
 import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterfacePolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterfacePolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterfacePolicyViewerActivity;
-import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsEditorActivity;
-import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsViewerActivity;
 import com.propertyvista.crm.client.activity.reports.AutoPayChangesReportActivity;
 import com.propertyvista.crm.client.activity.reports.AvailabilityReportActivity;
 import com.propertyvista.crm.client.activity.reports.CustomerCreditCheckReportActivity;
@@ -1296,6 +1298,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         default:
                             activity = new ILSConfigDefaultActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Administration.Profile.CompanyInfo) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new PmcCompanyInfoEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PmcCompanyInfoViewerActivity(crudPlace);
+                            break;
+                        default:
                             break;
                         }
 

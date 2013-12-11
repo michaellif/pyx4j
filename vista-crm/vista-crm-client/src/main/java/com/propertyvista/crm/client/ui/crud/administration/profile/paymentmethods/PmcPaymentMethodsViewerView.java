@@ -11,15 +11,15 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
+package com.propertyvista.crm.client.ui.crud.administration.profile.paymentmethods;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
+
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 
-public class PmcPaymentMethodsEditorViewImpl extends CrmEditorViewImplBase<PmcPaymentMethodsDTO> implements PmcPaymentMethodsEditorView {
+public interface PmcPaymentMethodsViewerView extends IViewer<PmcPaymentMethodsDTO> {
 
-    public PmcPaymentMethodsEditorViewImpl() {
-        setForm(new PmcPaymentMethodsForm(this));
+    public interface PmcPaymentMethodsViewer extends IViewer.Presenter {
     }
 
 }

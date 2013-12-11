@@ -11,23 +11,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.profile;
+package com.propertyvista.crm.client.activity.crud.administration.profile;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsViewerView;
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
+import com.propertyvista.crm.client.ui.crud.administration.profile.paymentmethods.PmcPaymentMethodsEditorView;
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
 
-public class PmcPaymentMethodsViewerActivity extends CrmViewerActivity<PmcPaymentMethodsDTO> implements PmcPaymentMethodsViewerView.Presenter {
+public class PmcPaymentMethodsEditorActivity extends CrmEditorActivity<PmcPaymentMethodsDTO> implements PmcPaymentMethodsEditorView.Presenter {
 
-    public PmcPaymentMethodsViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PmcPaymentMethodsViewerView.class), GWT
-                .<PmcPaymentMethodsCrudService> create(PmcPaymentMethodsCrudService.class));
+    public PmcPaymentMethodsEditorActivity(CrudAppPlace place) {
+        super(place,  CrmSite.getViewFactory().getView(PmcPaymentMethodsEditorView.class), GWT
+                .<PmcPaymentMethodsCrudService> create(PmcPaymentMethodsCrudService.class), PmcPaymentMethodsDTO.class);
     }
 
 }

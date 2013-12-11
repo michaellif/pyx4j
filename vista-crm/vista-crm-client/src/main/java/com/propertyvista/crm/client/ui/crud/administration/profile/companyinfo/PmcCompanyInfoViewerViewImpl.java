@@ -7,24 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-08
- * @author ArtyomB
+ * Created on Dec 10, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
+package com.propertyvista.crm.client.ui.crud.administration.profile.companyinfo;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
+import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 
-public class PmcPaymentMethodsViewerViewImpl extends CrmViewerViewImplBase<PmcPaymentMethodsDTO> implements PmcPaymentMethodsViewerView {
+public class PmcCompanyInfoViewerViewImpl extends CrmViewerViewImplBase<PmcCompanyInfoDTO> implements PmcCompanyInfoViewerView {
 
-    public PmcPaymentMethodsViewerViewImpl() {
-        setNotesVisible(false);
-        setForm(new PmcPaymentMethodsForm(this));
-    }
-
-    @Override
-    protected void populateBreadcrumbs(PmcPaymentMethodsDTO value) {
-        // DO NOTHING
+    public PmcCompanyInfoViewerViewImpl() {
+        setForm(new PmcCompanyInfoForm(this));
     }
 }

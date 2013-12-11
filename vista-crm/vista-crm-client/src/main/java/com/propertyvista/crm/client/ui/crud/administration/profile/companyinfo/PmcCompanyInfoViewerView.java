@@ -7,21 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 23, 2013
- * @author vlads
+ * Created on Dec 10, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.admin;
+package com.propertyvista.crm.client.ui.crud.administration.profile.companyinfo;
 
-import com.pyx4j.entity.annotations.ExtendsBO;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.domain.settings.PmcCompanyInfo;
+import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 
-@Transient
-@ExtendsBO
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface PmcCompanyInfoDTO extends PmcCompanyInfo {
+public interface PmcCompanyInfoViewerView extends IViewer<PmcCompanyInfoDTO> {
 
 }

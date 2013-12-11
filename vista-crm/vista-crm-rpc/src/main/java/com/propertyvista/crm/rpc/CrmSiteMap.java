@@ -420,10 +420,13 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Profile extends AppPlace {
 
+            @PlaceProperties(caption = "Company Info")
+            public static class CompanyInfo extends CrmCrudAppPlace {
+            }
+
             @PlaceProperties(caption = "Payment Methods")
             public static class PaymentMethods extends CrmCrudAppPlace {
             }
-
         }
 
         public static class Settings extends AppPlace {
