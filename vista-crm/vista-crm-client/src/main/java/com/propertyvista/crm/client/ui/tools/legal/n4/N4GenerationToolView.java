@@ -17,10 +17,10 @@ import java.util.List;
 
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolView;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.domain.company.Employee;
 
-public interface N4GenerationToolView extends BulkOperationToolView<N4GenerationSettingsDTO, LegalNoticeCandidateDTO> {
+public interface N4GenerationToolView extends BulkOperationToolView<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO> {
 
     void setAgents(List<Employee> employee);
 }

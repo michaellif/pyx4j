@@ -40,7 +40,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
@@ -59,7 +59,7 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     private static final I18n i18n = I18n.get(N4GenerationToolServiceImpl.class);
 
     @Override
-    public void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4GenerationSettingsDTO settings) {
+    public void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4CandidateSearchCriteriaDTO settings) {
         assertN4PolicyIsSet();
 
         List<Building> buildingsFilter = queryBuildingsFilter(settings);
@@ -88,7 +88,7 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
     @Override
     public void initSettings(AsyncCallback<N4GenerationInitParamsDTO> callback) {
-        N4GenerationSettingsDTO settings = EntityFactory.create(N4GenerationSettingsDTO.class);
+        N4CandidateSearchCriteriaDTO settings = EntityFactory.create(N4CandidateSearchCriteriaDTO.class);
         settings.query().noticeDate().setValue(new LogicalDate());
         settings.query().deliveryMethod().setValue(DeliveryMethod.Hand);
         settings.query().agent().set(CrmAppContext.getCurrentUserEmployee());
@@ -149,7 +149,7 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
         }
     }
 
-    private List<Building> queryBuildingsFilter(N4GenerationSettingsDTO settings) {
+    private List<Building> queryBuildingsFilter(N4CandidateSearchCriteriaDTO settings) {
         Set<Building> buildingsFilter = new HashSet<Building>();
         if (!settings.filterByBuildings().isBooleanTrue() && !settings.filterByPortfolios().isBooleanTrue()) {
             buildingsFilter.addAll(Persistence.secureQuery(EntityQueryCriteria.create(Building.class)));

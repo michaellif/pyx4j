@@ -40,14 +40,14 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDTO> {
+public class N4GenerationSettingsForm extends CEntityForm<N4CandidateSearchCriteriaDTO> {
 
-    private static final I18n i18n = I18n.get(N4GenerationSettingsDTO.class);
+    private static final I18n i18n = I18n.get(N4CandidateSearchCriteriaDTO.class);
 
     private CComboBox<Employee> agentComboBox;
 
@@ -60,7 +60,7 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
     private FlowPanel leasesQuerySettingsPanel;
 
     public N4GenerationSettingsForm() {
-        super(N4GenerationSettingsDTO.class);
+        super(N4CandidateSearchCriteriaDTO.class);
         visibilityChangeHandler = new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -128,9 +128,9 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
     @Override
     public void addValidations() {
         super.addValidations();
-        addValueValidator(new EditableValueValidator<N4GenerationSettingsDTO>() {
+        addValueValidator(new EditableValueValidator<N4CandidateSearchCriteriaDTO>() {
             @Override
-            public ValidationError isValid(CComponent<N4GenerationSettingsDTO> component, N4GenerationSettingsDTO value) {
+            public ValidationError isValid(CComponent<N4CandidateSearchCriteriaDTO> component, N4CandidateSearchCriteriaDTO value) {
                 if (value != null && !CommonsStringUtils.isEmpty(value.n4PolicyErrors().getValue())) {
                     return new ValidationError(component, value.n4PolicyErrors().getValue());
                 }

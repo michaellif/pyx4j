@@ -29,15 +29,15 @@ import com.propertyvista.crm.client.ui.tools.legal.n4.N4GenerationToolView;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
+public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
 
     public N4CreateBatchActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().getView(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class),
-                N4GenerationSettingsDTO.class);
+                N4CandidateSearchCriteriaDTO.class);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4G
     }
 
     @Override
-    protected void initSettings(final AsyncCallback<N4GenerationSettingsDTO> callback) {
+    protected void initSettings(final AsyncCallback<N4CandidateSearchCriteriaDTO> callback) {
         (GWT.<N4GenerationToolService> create(N4GenerationToolService.class)).initSettings(new DefaultAsyncCallback<N4GenerationInitParamsDTO>() {
             @Override
             public void onSuccess(N4GenerationInitParamsDTO result) {
@@ -68,7 +68,7 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4G
     }
 
     @Override
-    protected void initView(N4GenerationSettingsDTO settings) {
+    protected void initView(N4CandidateSearchCriteriaDTO settings) {
         super.initView(settings);
         getView().setSearchEnabled(CommonsStringUtils.isEmpty(settings.n4PolicyErrors().getValue()));
     }

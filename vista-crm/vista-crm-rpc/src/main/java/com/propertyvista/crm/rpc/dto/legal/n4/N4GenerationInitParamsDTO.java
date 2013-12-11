@@ -22,7 +22,7 @@ import com.propertyvista.domain.company.Employee;
 @Transient
 public interface N4GenerationInitParamsDTO extends IEntity {
 
-    N4GenerationSettingsDTO settings();
+    N4CandidateSearchCriteriaDTO settings();
 
     IList<Employee> availableAgents();
 

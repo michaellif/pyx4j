@@ -26,8 +26,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
+// TODO change names of this (N4GenerationSettings should be N4CandidateSearchCriteria, and N4GenerationQuery should be the N4GenerationSettings
 @Transient
-public interface N4GenerationSettingsDTO extends IEntity {
+public interface N4CandidateSearchCriteriaDTO extends IEntity {
 
     N4GenerationQueryDTO query();
 
