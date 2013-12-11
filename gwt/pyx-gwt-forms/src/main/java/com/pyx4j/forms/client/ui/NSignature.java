@@ -25,12 +25,13 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.InlineHTML;
 
 import com.pyx4j.entity.shared.ISignature;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.forms.client.ui.NSignature.SignaturePanel;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
@@ -48,26 +49,64 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
         return new SignaturePanel();
     }
 
+    @Override
+    public void setNativeValue(ISignature value) {
+        super.setNativeValue(value);
+        if (value != null && getEditor() != null) {
+            getEditor().checkBox.setValue(value.agreeBox().getValue());
+        }
+    }
+
+    @Override
+    public ISignature getNativeValue() throws java.text.ParseException {
+        ISignature signature = super.getNativeValue();
+        if (getEditor() != null) {
+            signature.agreeBox().setValue(getEditor().checkBox.getValue());
+        }
+        return signature.duplicate();
+    }
+
+    @Override
+    protected void onEditorCreate() {
+        super.onEditorCreate();
+        getEditor().checkBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                setFocus(true);
+                getCComponent().onEditingStop();
+            }
+        });
+
+    }
+
     class SignaturePanel extends FlowPanel implements ITextWidget {
 
-        private final CheckBox checkBox;
-
-        private final Anchor checkBoxHtml;
+        private CheckBox checkBox;
 
         private TextBox textBox;
 
         public SignaturePanel() {
-            checkBox = new CheckBox("I agree with");
-            add(checkBox);
 
-            add(new HTML("&nbsp;"));
+            switch (getCComponent().getSignatureType()) {
+            case AgreeBox:
+            case AgreeBoxAndFullName:
+                checkBox = new CheckBox(getCComponent().getCheckBoxText());
+                add(checkBox);
 
-            checkBoxHtml = new Anchor("Terms and Conditions");
-            add(checkBoxHtml);
+                add(new InlineHTML("&nbsp;"));
 
-            SignatureType signatureType = getCComponent().getSignatureType();
+                if (getCComponent().getCheckBoxAnchorText() != null) {
+                    Anchor checkBoxAnchor = new Anchor(getCComponent().getCheckBoxAnchorText(), getCComponent().getCheckBoxAnchorCommand());
+                    add(checkBoxAnchor);
+                }
+                break;
+            default:
+                break;
 
-            switch (signatureType) {
+            }
+
+            switch (getCComponent().getSignatureType()) {
             case AgreeBox:
                 break;
             case AgreeBoxAndFullName:
@@ -75,101 +114,90 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
                 textBox = new TextBox();
                 add(textBox);
                 textBox.setWidth("100%");
+                break;
             case Initials:
                 textBox.setWidth("4em");
                 break;
 
             }
+
         }
 
         @Override
-        public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-            // TODO Auto-generated method stub
-            return null;
+        public HandlerRegistration addFocusHandler(FocusHandler handler) {
+            return textBox.addFocusHandler(handler);
         }
 
         @Override
-        public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-            // TODO Auto-generated method stub
-            return null;
+        public HandlerRegistration addBlurHandler(BlurHandler handler) {
+            return textBox.addBlurHandler(handler);
         }
 
         @Override
         public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-            // TODO Auto-generated method stub
-            return null;
+            return textBox.addKeyDownHandler(handler);
         }
 
         @Override
         public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-            // TODO Auto-generated method stub
-            return null;
+            return textBox.addKeyUpHandler(handler);
         }
 
         @Override
         public void setEnabled(boolean enabled) {
-            // TODO Auto-generated method stub
-
+            textBox.setEnabled(enabled);
+            checkBox.setEnabled(enabled);
         }
 
         @Override
         public boolean isEnabled() {
-            // TODO Auto-generated method stub
-            return false;
+            return textBox.isEnabled();
         }
 
         @Override
         public void setEditable(boolean editable) {
-            // TODO Auto-generated method stub
-
+            textBox.setEditable(editable);
+            checkBox.setEditable(editable);
         }
 
         @Override
         public boolean isEditable() {
-            // TODO Auto-generated method stub
-            return false;
+            return textBox.isEditable();
         }
 
         @Override
         public int getTabIndex() {
-            // TODO Auto-generated method stub
-            return 0;
+            return textBox.getTabIndex();
         }
 
         @Override
         public void setAccessKey(char key) {
-            // TODO Auto-generated method stub
-
+            textBox.setAccessKey(key);
         }
 
         @Override
         public void setFocus(boolean focused) {
-            // TODO Auto-generated method stub
-
+            textBox.setFocus(focused);
         }
 
         @Override
         public void setTabIndex(int index) {
-            // TODO Auto-generated method stub
-
+            textBox.setTabIndex(index);
         }
 
         @Override
         public String getText() {
-            // TODO Auto-generated method stub
-            return null;
+            return textBox.getText().trim();
         }
 
         @Override
         public void setText(String text) {
-            // TODO Auto-generated method stub
-
+            textBox.setText(text);
         }
 
         @Override
         public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-            // TODO Auto-generated method stub
-            return null;
+            return textBox.addChangeHandler(handler);
         }
     }
 }

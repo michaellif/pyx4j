@@ -29,6 +29,8 @@ import java.util.List;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
+import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.tester.client.TesterUtils;
 import com.pyx4j.tester.domain.TFile;
 
@@ -115,6 +117,13 @@ public class DomainFactory {
 
         retVal.textBox().setValue(optstrvalues[pos]);
         retVal.integerBox().setValue(intvalues[pos]);
+
+        ISignature signature = EntityFactory.create(ISignature.class);
+        signature.fullName().setValue("John Doe");
+        signature.agreeBox().setValue(true);
+        signature.signatureType().setValue(SignatureType.AgreeBoxAndFullName);
+        retVal.signature1().set(signature);
+
         retVal.enumBox().setValue(enumvalues[pos]);
 
         retVal.textArea().setValue(opttxtvalues[pos]);

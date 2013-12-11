@@ -44,6 +44,8 @@ public interface ISignature extends IEntity {
     @Caption(name = "IP Address")
     IPrimitive<String> ipAddress();
 
+    IPrimitive<SignatureType> signatureType();
+
     @NotNull
     @Caption(name = "Type Your Full Name")
     IPrimitive<String> fullName();

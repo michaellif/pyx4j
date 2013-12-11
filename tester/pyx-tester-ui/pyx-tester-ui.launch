@@ -17,6 +17,6 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.HostedMode"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-noserver -bindAddress 0.0.0.0 -codeServerPort 9991 -startupUrl http://localhost:8881/tester/ -war &quot;${workspace_loc:pyx-tester-server}/src/main/webapp&quot; -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO com.pyx4j.tester.Client"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="pyx-tester-ui"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -enableassertions -Djava.net.preferIPv4Stack"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms512m -Xmx2048m -enableassertions -Djava.net.preferIPv4Stack"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="/pyx-tester-ui/src/test/webapp"/>
 </launchConfiguration>

@@ -29,9 +29,9 @@ import com.google.gwt.user.client.ui.Focusable;
 
 public interface IFocusWidget extends IWidget, Focusable {
 
-    HandlerRegistration addFocusHandler(FocusHandler focusHandler);
+    HandlerRegistration addFocusHandler(FocusHandler handler);
 
-    HandlerRegistration addBlurHandler(BlurHandler blurHandler);
+    HandlerRegistration addBlurHandler(BlurHandler handler);
 
     HandlerRegistration addKeyDownHandler(KeyDownHandler handler);
 

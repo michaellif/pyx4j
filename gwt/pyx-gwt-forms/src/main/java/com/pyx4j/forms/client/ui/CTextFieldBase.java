@@ -49,7 +49,7 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
         return format;
     }
 
-    public String format(DATA value) {
+    public final String format(DATA value) {
         String text = null;
         try {
             text = getFormat().format(value);
