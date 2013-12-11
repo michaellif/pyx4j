@@ -151,6 +151,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         panel.setWidget(++row, 0,
                 new FormWidgetDecoratorBuilder(inject(proto().unit().building().info().address(), new CEntityLabel<AddressStructured>())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>())).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().utilities(), new CLabel<String>())).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
 
@@ -205,8 +206,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class),
-                new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class));
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(
+                GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder<CustomerPicture>(
+                        CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().picture(), imageHolder)).customLabel("").build());

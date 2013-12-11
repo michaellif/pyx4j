@@ -16,6 +16,7 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -32,6 +33,9 @@ public interface OnlineApplicationDTO extends IEntity {
     ApplicantDTO applicant();
 
     AptUnit unit();
+
+    @Caption(name = "Included Utilities")
+    IPrimitive<String> utilities();
 
     IPrimitive<LogicalDate> leaseFrom();
 
