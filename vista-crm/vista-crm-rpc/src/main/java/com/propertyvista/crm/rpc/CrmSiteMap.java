@@ -237,23 +237,18 @@ public class CrmSiteMap implements SiteMap {
 
     public static class LegalAndCollections extends AppPlace {
 
-        @PlaceProperties(navigLabel = "N4 Generation Tool")
+        @PlaceProperties(navigLabel = "N4 Create Batch")
         public static class N4GenerationTool extends CrmCrudAppPlace {
 
         }
 
-        @PlaceProperties(navigLabel = "Generated N4's")
+        @PlaceProperties(navigLabel = "N4 Batches")
         public static class N4DownloadTool extends CrmCrudAppPlace {
 
         }
 
-        @PlaceProperties(navigLabel = "Generate L1", caption = "L1")
+        @PlaceProperties(navigLabel = "L1 Create Batch")
         public static class L1GenerationTool extends CrmCrudAppPlace {
-
-        }
-
-        @PlaceProperties(navigLabel = "Review L1 Form", caption = "Review L1 Form")
-        public static class L1FormDataReview extends CrmCrudAppPlace {
 
         }
 
@@ -302,6 +297,7 @@ public class CrmSiteMap implements SiteMap {
         public static class AutoPay extends CrmCrudAppPlace {
         }
 
+        @PlaceProperties(navigLabel = "Auto Pays Review")
         public static class AutoPayReview extends AppPlace {
         }
 

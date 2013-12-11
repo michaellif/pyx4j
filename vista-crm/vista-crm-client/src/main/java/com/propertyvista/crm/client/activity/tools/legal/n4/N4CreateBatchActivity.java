@@ -33,9 +33,9 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
+public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
 
-    public N4GenerationToolActivity(AppPlace place) {
+    public N4CreateBatchActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().getView(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class),
                 N4GenerationSettingsDTO.class);
     }

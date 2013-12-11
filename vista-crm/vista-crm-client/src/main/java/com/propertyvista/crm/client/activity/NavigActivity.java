@@ -139,19 +139,15 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool());
 
         folder.addNavigItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool());
-        folder.addNavigItem(new CrmSiteMap.LegalAndCollections.L1FormDataReview());
         list.add(folder);
 
         //Finance
         folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(), CrmImages.INSTANCE.financeActive());
-        if (SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial)) {
-            folder.addNavigItem(new CrmSiteMap.Finance.AutoPay());
-        }
         if (SecurityController.checkBehavior(VistaCrmBehavior.AggregatedTransfer)) {
             folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
         }
-        if (SecurityController.checkAnyBehavior(VistaCrmBehavior.AggregatedTransfer, VistaCrmBehavior.Billing)) {
-            folder.addNavigItem(new CrmSiteMap.Finance.Payment());
+        if (SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial)) {
+            folder.addNavigItem(new CrmSiteMap.Finance.AutoPay());
         }
         if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
             folder.addNavigItem(new CrmSiteMap.Finance.AutoPayReview());
