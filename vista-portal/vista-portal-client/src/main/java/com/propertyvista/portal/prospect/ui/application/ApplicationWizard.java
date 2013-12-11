@@ -14,6 +14,7 @@
 package com.propertyvista.portal.prospect.ui.application;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -55,6 +56,8 @@ import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
+import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
+import com.propertyvista.portal.prospect.ui.application.steps.SummaryStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
@@ -72,6 +75,13 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     private static final I18n i18n = I18n.get(ApplicationWizard.class);
 
+    private final HashMap<Class<? extends ApplicationWizardStep>, ApplicationWizardStep> steps = new HashMap<Class<? extends ApplicationWizardStep>, ApplicationWizardStep>();
+
+    private ApplicationWizardPresenter presenter;
+
+    // ------------------------------------
+    // TODO - remove gradually
+
     private WizardStep leaseStep;
 
     private WizardStep unitStep;
@@ -88,13 +98,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     private WizardStep contactsStep;
 
-    private WizardStep pmcCustomStep;
-
-    private WizardStep summaryStep;
-
     private WizardStep paymentStep;
 
-    private ApplicationWizardPresenter presenter;
+    // ------------------------------------
 
     private final BasicFlexFormPanel previousAddress = new BasicFlexFormPanel() {
         @Override
@@ -121,8 +127,10 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             personalInfoBStep = addStep(createPersonalInfoBStep());
             financialStep = addStep(createFinancialStep());
             contactsStep = addStep(createContactsStep());
-            pmcCustomStep = addStep(createLegalStep());
-            summaryStep = addStep(createSummaryStep());
+
+            addStep(new LegalStep());
+            addStep(new SummaryStep());
+
             paymentStep = addStep(createPaymentStep());
         } else {
             leaseStep = addStep(createLeaseStep());
@@ -130,14 +138,25 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             personalInfoBStep = addStep(createPersonalInfoBStep());
             financialStep = addStep(createFinancialStep());
             contactsStep = addStep(createContactsStep());
-            pmcCustomStep = addStep(createLegalStep());
-            summaryStep = addStep(createSummaryStep());
+
+            addStep(new LegalStep());
+            addStep(new SummaryStep());
         }
     }
 
     public void setPresenter(ApplicationWizardPresenter presenter) {
         this.presenter = presenter;
         updateProgress();
+    }
+
+    public ApplicationWizardPresenter getPresenter() {
+        return presenter;
+    }
+
+    public void addStep(ApplicationWizardStep step) {
+        step.setWizard(this);
+        steps.put(step.getClass(), step);
+        super.addStep(step);
     }
 
     private BasicFlexFormPanel createLeaseStep() {
@@ -289,22 +308,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         return panel;
     }
 
-    private BasicFlexFormPanel createLegalStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Legal"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-
-        return panel;
-    }
-
-    private BasicFlexFormPanel createSummaryStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Summary"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-
-        return panel;
-    }
-
     private BasicFlexFormPanel createPaymentStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment"));
         int row = -1;
@@ -321,6 +324,10 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     @Override
     public void addValidations() {
         super.addValidations();
+
+        for (ApplicationWizardStep step : steps.values()) {
+            step.addValidations();
+        }
 
         // ------------------------------------------------------------------------------------------------
         // PersonalInfoBStep:
@@ -384,6 +391,10 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        for (ApplicationWizardStep step : steps.values()) {
+            step.onValueSet();
+        }
 
         if (isEditable()) {
             fileUpload.setParentEntity(getValue());
