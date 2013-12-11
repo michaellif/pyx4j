@@ -30,11 +30,13 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
@@ -62,8 +64,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.utilities().setValue(retrieveUtilities(bo.masterOnlineApplication().leaseApplication().lease().unit()));
 
         fillLeaseData(bo, to);
+
         fillApplicantData(bo, to);
+
         fillCoApplicants(bo, to);
+        fillGuarantors(bo, to);
 
         callback.onSuccess(to);
     }
@@ -191,13 +196,31 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
             CoapplicantDTO cant = EntityFactory.create(CoapplicantDTO.class);
 
+            cant.dependent().setValue(ltt.role().getValue() == Role.Dependent);
+
             cant.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
             cant.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
 
-            cant.dependent().setValue(ltt.role().getValue() == Role.Dependent);
             cant.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
 
             to.coapplicants().add(cant);
+        }
+    }
+
+    private void fillGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
+        EntityQueryCriteria<LeaseTermGuarantor> criteria = new EntityQueryCriteria<LeaseTermGuarantor>(LeaseTermGuarantor.class);
+        criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
+        criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
+
+        for (LeaseTermGuarantor ltt : Persistence.service().query(criteria)) {
+            GuarantorDTO grnt = EntityFactory.create(GuarantorDTO.class);
+
+            grnt.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
+            grnt.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
+
+            grnt.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
+
+            to.guarantors().add(grnt);
         }
     }
 }
