@@ -48,6 +48,7 @@ public class ApplicationOptionsFolder extends CEntityFolder<OptionDTO> {
     @Override
     public IFolderItemDecorator<OptionDTO> createItemDecorator() {
         BoxFolderItemDecorator<OptionDTO> decor = new BoxFolderItemDecorator<OptionDTO>(VistaImages.INSTANCE);
+        decor.setExpended(false);
         return decor;
     }
 
@@ -82,6 +83,5 @@ public class ApplicationOptionsFolder extends CEntityFolder<OptionDTO> {
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().price(), new CMoneyLabel()), 100).build());
             return mainPanel;
         }
-
     }
 }
