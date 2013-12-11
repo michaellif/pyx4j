@@ -20,6 +20,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
 
 import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
+import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 
 // TODO VISTA-3598 Clean up unnecessary styles
 public class TenantSureTheme extends Theme {
@@ -110,6 +111,13 @@ public class TenantSureTheme extends Theme {
             style.addProperty("text-align", "justify");
             style.addProperty("margin-left", "50px");
             style.addProperty("margin-right", "50px");
+            addStyle(style);
+        }
+        {
+            Style style = new Style(".", TenantSureTheme.StyleName.TenantSurePresonalDisclaimer.name(), " .",
+                    NavigationAnchorTheme.StyleName.NavigationAnchor.name());
+            style.addProperty("font-size", "1em");
+            style.addProperty("padding", "0");
             addStyle(style);
         }
         {
