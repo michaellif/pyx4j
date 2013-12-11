@@ -166,7 +166,7 @@ public class CaledonHttpClient {
     }
 
     private CaledonResponse buildResponse(String responseBody) {
-        log.debug("responseBody {}", responseBody);
+        log.debug("card transaction response body {}", responseBody);
         if (responseBody.length() == 0) {
             throw new PaymentProcessingException("Response is empty");
         }
@@ -185,7 +185,7 @@ public class CaledonHttpClient {
             }
         }
         int tokenCount = 0;
-        for (Field field : CaledonResponse.class.getDeclaredFields()) {
+        for (Field field : CaledonResponse.class.getFields()) {
             HttpResponseField nameDeclared = field.getAnnotation(HttpResponseField.class);
             if (nameDeclared == null) {
                 continue;

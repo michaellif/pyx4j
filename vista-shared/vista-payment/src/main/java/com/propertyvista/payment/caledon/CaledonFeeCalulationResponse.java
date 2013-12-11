@@ -18,16 +18,7 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class CaledonFeeCalulationResponse {
-
-    @HttpResponseField(value = "type")
-    @NotNull
-    public String type;
-
-    @HttpResponseField(value = "terminal_id")
-    @NotNull
-    @Size(max = 8)
-    public String terminalID;
+public class CaledonFeeCalulationResponse extends CaledonFeeResponseBase {
 
     @HttpResponseField(value = "fee_reference_number")
     @NotNull
@@ -63,10 +54,6 @@ public class CaledonFeeCalulationResponse {
     public BigDecimal getTotalAmount() {
         return CaledonCardsUtils.parsAmount(totalAmount);
     }
-
-    @HttpResponseField("response_code")
-    @NotNull
-    public String responseCode;
 
     @HttpResponseField("response_text")
     @NotNull

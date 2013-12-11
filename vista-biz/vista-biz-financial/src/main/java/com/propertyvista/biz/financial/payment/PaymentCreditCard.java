@@ -121,7 +121,7 @@ class PaymentCreditCard {
                             record.finalizeDate().setValue(now);
                             Persistence.service().persist(record);
                         } else {
-                            log.error("Unable to void CC transaction {} {} {}; response {} {}", //
+                            log.error("Unable to void Card transaction {} {} {}; response {} {}", //
                                     account.merchantTerminalId(), //
                                     paymentRecord.id(), //
                                     paymentRecord.amount(), //
@@ -129,7 +129,7 @@ class PaymentCreditCard {
                                     voidResponse.message());
 
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
-                                    "Unable to void CC transaction {0} {1} {2}; response {3} {4}",//
+                                    "Unable to void Card transaction {0} {1} {2}; response {3} {4}",//
                                     account.merchantTerminalId(), //
                                     paymentRecord.id(), // 
                                     paymentRecord.amount(), //
@@ -137,9 +137,10 @@ class PaymentCreditCard {
                                     voidResponse.message());
                         }
                     } catch (Throwable e) {
-                        log.error("Unable to void CC transaction {} {} {}", account.merchantTerminalId(), paymentRecord.id(), paymentRecord.amount(), e);
+                        log.error("Unable to void Card transaction {} {} {}", account.merchantTerminalId(), paymentRecord.id(), paymentRecord.amount(), e);
 
-                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to void CC transaction {0} {1} {2}; response {3}",//
+                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
+                                "Unable to void Card transaction {0} {1} {2}; response {3}",//
                                 account.merchantTerminalId(), //
                                 paymentRecord.id(), //
                                 paymentRecord.amount(), //

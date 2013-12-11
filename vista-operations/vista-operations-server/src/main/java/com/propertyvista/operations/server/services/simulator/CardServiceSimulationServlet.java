@@ -154,7 +154,7 @@ public class CardServiceSimulationServlet extends HttpServlet {
     private String buildResponse(Object caledonResponse) throws IOException {
         StringBuilder responseBody = new StringBuilder();
 
-        for (Field field : caledonResponse.getClass().getDeclaredFields()) {
+        for (Field field : caledonResponse.getClass().getFields()) {
             HttpResponseField nameDeclared = field.getAnnotation(HttpResponseField.class);
             if (nameDeclared == null) {
                 continue;

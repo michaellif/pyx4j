@@ -49,6 +49,8 @@ public class CaledonHttpClientFee {
 
     private final static Logger log = LoggerFactory.getLogger(CaledonHttpClientFee.class);
 
+    private final boolean debug = true;
+
     private final String urlProd = "https://portal.caledoncard.com/convfee_testing/";
 
     public CaledonFeeCalulationResponse transaction(CaledonFeeCalulationRequest request) {
@@ -59,7 +61,7 @@ public class CaledonHttpClientFee {
         return transaction(request, new CaledonPaymentWithFeeResponse());
     }
 
-    private <E> E transaction(Object request, E responseInstance) {
+    private <E extends CaledonFeeResponseBase> E transaction(Object request, E responseInstance) {
         String url;
         boolean useCardServiceSimulator = VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().getValue(Boolean.FALSE);
         if (useCardServiceSimulator) {
@@ -139,16 +141,20 @@ public class CaledonHttpClientFee {
         }
 
         pairs.add(0, new NameValuePair("TESTING", "1"));
-        log.debug("Request {}", pairs);
+        if (debug) {
+            log.debug("Request {}", pairs);
+        }
 
         return pairs.toArray(new NameValuePair[pairs.size()]);
     }
 
-    private <E> E buildResponse(String responseBody, E response) {
-        log.debug("responseBody {}", responseBody);
+    private <E extends CaledonFeeResponseBase> E buildResponse(String responseBody, E response) {
+        log.debug("card transaction response body {}", responseBody);
         if (responseBody.length() == 0) {
             throw new PaymentProcessingException("Response is empty");
         }
+        response.responseBody = responseBody;
+
         Map<String, String> values = new HashMap<String, String>();
         String[] nameValues = responseBody.split("&");
         if (nameValues.length > 0) {
@@ -163,7 +169,7 @@ public class CaledonHttpClientFee {
             }
         }
         int tokenCount = 0;
-        for (Field field : response.getClass().getDeclaredFields()) {
+        for (Field field : response.getClass().getFields()) {
             HttpResponseField nameDeclared = field.getAnnotation(HttpResponseField.class);
             if (nameDeclared == null) {
                 continue;
@@ -173,7 +179,7 @@ public class CaledonHttpClientFee {
                 try {
                     field.set(response, value);
                 } catch (Exception e) {
-                    log.error("object value access error", e);
+                    log.error("object {} value access error", field, e);
                     throw new PaymentProcessingException("System error", e);
                 }
                 tokenCount++;

@@ -29,23 +29,13 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
         CreditCardProcessor.persistToken(merchantTerminalId, cc);
     }
 
-    //TODO temporary caledon testing Hack
-    @Deprecated
-    final boolean caldeonHack = true;
-
     @Override
     public String getTransactionreferenceNumber(ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber) {
-        if (caldeonHack) {
-            return referenceNumber.getStringView();
-        }
         return uniquePrefix.getValue() + PadTransactionUtils.toCaldeonTransactionId(referenceNumber);
     }
 
     @Override
     public Key getVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber) {
-        if (caldeonHack) {
-            return new Key(transactionreferenceNumber);
-        }
         return PadTransactionUtils.toVistaPaymentRecordId(transactionreferenceNumber.substring(uniquePrefix.getValue().length()));
     }
 

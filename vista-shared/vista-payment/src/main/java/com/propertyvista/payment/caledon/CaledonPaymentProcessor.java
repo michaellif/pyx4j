@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -34,6 +37,8 @@ import com.propertyvista.payment.Token;
 import com.propertyvista.payment.caledon.dev.VisaDebitInternalValidator;
 
 public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade {
+
+    private final static Logger log = LoggerFactory.getLogger(CaledonPaymentProcessor.class);
 
     private static final Set<String> networkErrorCodes = initNetworkErrorCodes();
 
@@ -148,8 +153,47 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
         response.code().setValue(cresponse.responseCode);
         response.message().setValue(cresponse.responsePaymentAuthorization);
 
-        //TODO pars the amount values returned by caledon 
-        response.authorizationNumber().setValue(cresponse.responsePaymentAuthorization + " " + cresponse.responseFeeAuthorization);
+        if (response.success().getValue()) {
+            response.authorizationNumber().setValue(cresponse.responsePaymentAuthorization + " " + cresponse.responseFeeAuthorization);
+
+            //Validate the values returned by caledon
+            if ((cresponse.terminalID == null) || (merchant.terminalID().getValue().compareTo(cresponse.terminalID) != 0)) {
+                log.error("Erred Card transaction {} {} {} {}; response {}", //
+                        merchant.terminalID(), //
+                        request.referenceNumber(), //
+                        request.amount(), //
+                        request.convenienceFee(), //
+                        cresponse.responseBody);
+                throw new PaymentProcessingException("Protocol error, returned terminalID does not match");
+            }
+            if ((cresponse.referenceNumber == null) || (request.referenceNumber().getValue().compareTo(cresponse.referenceNumber) != 0)) {
+                log.error("Erred Card transaction {} {} {} {}; response {}", //
+                        merchant.terminalID(), //
+                        request.referenceNumber(), //
+                        request.amount(), //
+                        request.convenienceFee(), //
+                        cresponse.responseBody);
+                throw new PaymentProcessingException("Protocol error, returned referenceNumber does not match");
+            }
+            if ((cresponse.getFeeAmount() == null) || (request.convenienceFee().getValue().compareTo(cresponse.getFeeAmount()) != 0)) {
+                log.error("Erred Card transaction {} {} {} {}; response {}", //
+                        merchant.terminalID(), //
+                        request.referenceNumber(), //
+                        request.amount(), //
+                        request.convenienceFee(), //
+                        cresponse.responseBody);
+                throw new PaymentProcessingException("Protocol error, returned fee amount does not match");
+            }
+            if ((cresponse.getAmount() == null) || (request.amount().getValue().compareTo(cresponse.getAmount()) != 0)) {
+                log.error("Erred Card transaction {} {} {} {}; response {}", //
+                        merchant.terminalID(), //
+                        request.referenceNumber(), //
+                        request.amount(), //
+                        request.convenienceFee(), //
+                        cresponse.responseBody);
+                throw new PaymentProcessingException("Protocol error, returned amount does not match");
+            }
+        }
 
         return response;
     }
@@ -300,6 +344,10 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
         crequest.terminalID = merchant.terminalID().getValue();
         crequest.referenceNumber = request.referenceNumber().getValue();
         crequest.referenceNumberFeeCalulation = request.convenienceFeeReferenceNumber().getValue();
+
+        crequest.creditCardNumber = "0";
+        crequest.expiryDate = "0000";
+
         crequest.setAmount(request.amount().getValue());
         crequest.setFeeAmount(request.convenienceFee().getValue());
         crequest.setTotalAmount(request.amount().getValue().add(request.convenienceFee().getValue()));
@@ -348,9 +396,19 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
 
         if (response.success().getValue()) {
             if ((cresponse.getFeeAmount() == null) || (cresponse.getTotalAmount() == null) || (cresponse.getAmount() == null)) {
+                log.error("Erred Card transaction {} {} {}; response {}", //
+                        merchant.terminalID(), //
+                        request.referenceNumber(), //
+                        request.amount(), //
+                        cresponse.responseBody);
                 throw new PaymentProcessingException("Protocol error, amounts are not returned");
             }
             if (request.amount().getValue().compareTo(cresponse.getAmount()) != 0) {
+                log.error("Erred Card transaction {} {} {}; response {}", //
+                        merchant.terminalID(), //
+                        request.referenceNumber(), //
+                        request.amount(), //
+                        cresponse.responseBody);
                 throw new PaymentProcessingException("Protocol error, returned amount are do not match");
             }
 
@@ -358,9 +416,12 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
             response.totalAmount().setValue(cresponse.getTotalAmount());
 
             if (response.feeAmount().getValue().add(cresponse.getAmount()).compareTo(response.totalAmount().getValue()) != 0) {
-//                // TODO use this validation
-//                response.totalAmount().setValue(response.feeAmount().getValue().add(cresponse.getAmount()));
-                throw new PaymentProcessingException("Protocol error, returned amounts are do not match");
+                log.error("Erred Card transaction {} {} {}; response {}", //
+                        merchant.terminalID(), //
+                        request.referenceNumber(), //
+                        request.amount(), //
+                        cresponse.responseBody);
+                throw new PaymentProcessingException("Protocol error, returned amounts total does not match");
             }
         }
         return response;
