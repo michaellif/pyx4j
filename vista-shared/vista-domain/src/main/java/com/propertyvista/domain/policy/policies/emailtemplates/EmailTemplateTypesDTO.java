@@ -13,12 +13,11 @@
  */
 package com.propertyvista.domain.policy.policies.emailtemplates;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import java.io.Serializable;
+import java.util.Vector;
 
-@Transient
-public interface EmailTemplateTypesDTO extends IEntity {
+@SuppressWarnings("serial")
+public class EmailTemplateTypesDTO implements Serializable {
 
-    IList<EmailTemplateTypeDTO> types();
+    public Vector<EmailTemplateTypeDTO> types;
 }

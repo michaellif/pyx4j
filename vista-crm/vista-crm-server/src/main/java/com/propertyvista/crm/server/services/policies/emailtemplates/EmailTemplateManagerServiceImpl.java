@@ -13,10 +13,11 @@
  */
 package com.propertyvista.crm.server.services.policies.emailtemplates;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.communication.CommunicationTemplateFacade;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
@@ -28,14 +29,14 @@ public class EmailTemplateManagerServiceImpl implements EmailTemplateManagerServ
 
     @Override
     public void getTemplateDataObjects(AsyncCallback<EmailTemplateTypesDTO> callback) {
-        EmailTemplateTypesDTO dto = EntityFactory.create(EmailTemplateTypesDTO.class);
+        EmailTemplateTypesDTO dto = new EmailTemplateTypesDTO();
+        dto.types = new Vector<EmailTemplateTypeDTO>();
         for (EmailTemplateType tplType : EmailTemplateType.values()) {
-            EmailTemplateTypeDTO typeDto = EntityFactory.create(EmailTemplateTypeDTO.class);
-            typeDto.type().setValue(tplType);
-            typeDto.objectNames().setValue(ServerSideFactory.create(CommunicationTemplateFacade.class).getTemplateDataObjectSelection(tplType));
-            dto.types().add(typeDto);
+            EmailTemplateTypeDTO typeDto = new EmailTemplateTypeDTO();
+            typeDto.type = tplType;
+            typeDto.objectNames = new Vector<String>(ServerSideFactory.create(CommunicationTemplateFacade.class).getTemplateDataObjectSelection(tplType));
+            dto.types.add(typeDto);
         }
         callback.onSuccess(dto);
     }
-
 }

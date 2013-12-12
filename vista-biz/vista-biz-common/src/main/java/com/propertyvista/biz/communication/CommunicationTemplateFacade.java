@@ -13,12 +13,12 @@
  */
 package com.propertyvista.biz.communication;
 
-import java.util.Set;
+import java.util.List;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
 
 public interface CommunicationTemplateFacade {
 
-    public Set<String> getTemplateDataObjectSelection(EmailTemplateType template);
+    public List<String> getTemplateDataObjectSelection(EmailTemplateType template);
 
 }

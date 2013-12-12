@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
-import java.util.Set;
+import java.util.List;
 
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.domain.communication.EmailTemplateType;
@@ -21,7 +21,7 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 public class CommunicationTemplateFacadeImpl implements CommunicationTemplateFacade {
 
     @Override
-    public Set<String> getTemplateDataObjectSelection(EmailTemplateType template) {
+    public List<String> getTemplateDataObjectSelection(EmailTemplateType template) {
         return EmailTemplateManager.getTemplateDataObjectSelection(template);
     }
 

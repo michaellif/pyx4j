@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -90,7 +89,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     }
 
     private static class EmailTemplateEditorFolder extends VistaBoxFolder<EmailTemplate> {
-        private static final Map<EmailTemplateType, Set<String>> templateObjects = new HashMap<EmailTemplateType, Set<String>>();
+        private static final Map<EmailTemplateType, List<String>> templateObjects = new HashMap<EmailTemplateType, List<String>>();
 
         public EmailTemplateEditorFolder() {
             super(EmailTemplate.class);
@@ -105,8 +104,8 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
                 @Override
                 public void onSuccess(EmailTemplateTypesDTO result) {
-                    for (EmailTemplateTypeDTO tplType : result.types()) {
-                        templateObjects.put(tplType.type().getValue(), tplType.objectNames().getValue());
+                    for (EmailTemplateTypeDTO tplType : result.types) {
+                        templateObjects.put(tplType.type, tplType.objectNames);
                     }
                 }
             });
@@ -221,7 +220,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                     showRelativeTo(target);
                 }
 
-                public void setItems(Set<String> items) {
+                public void setItems(List<String> items) {
                     if (items == null) {
                         return;
                     }

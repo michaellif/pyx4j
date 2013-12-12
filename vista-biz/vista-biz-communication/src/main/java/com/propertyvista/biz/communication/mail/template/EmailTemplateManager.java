@@ -15,9 +15,7 @@ package com.propertyvista.biz.communication.mail.template;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -134,9 +132,9 @@ public class EmailTemplateManager {
     /**
      * Used for template editing
      */
-    public static Set<String> getTemplateDataObjectSelection(EmailTemplateType template) {
+    public static List<String> getTemplateDataObjectSelection(EmailTemplateType template) {
         List<IEntity> dataObjects = getTemplateDataObjects(template);
-        Set<String> selection = new HashSet<String>();
+        List<String> selection = new ArrayList<String>();
         for (IEntity obj : dataObjects) {
             for (Path path : getTemplateEntityMemberGraph(obj, new ArrayList<Path>())) {
                 selection.add(pathToVarname(path.toString()));
