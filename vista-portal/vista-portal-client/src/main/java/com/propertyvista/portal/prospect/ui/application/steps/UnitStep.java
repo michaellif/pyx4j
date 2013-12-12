@@ -29,6 +29,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class UnitStep extends ApplicationWizardStep {
@@ -101,6 +102,18 @@ public class UnitStep extends ApplicationWizardStep {
                         unitSelector.setOptions(result);
                     }
                 }, event.getValue(), get(proto().unitSelection().moveIn()).getValue());
+            }
+        });
+
+        unitSelector.addValueChangeHandler(new ValueChangeHandler<AptUnit>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<AptUnit> event) {
+                getWizard().getPresenter().getAvailableUnitOptions(new DefaultAsyncCallback<UnitOptionsSelectionDTO>() {
+                    @Override
+                    public void onSuccess(UnitOptionsSelectionDTO result) {
+                        // TODO update unitOptions step here!? 
+                    }
+                }, event.getValue());
             }
         });
     }

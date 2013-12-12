@@ -254,7 +254,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private UnitOptionsSelectionDTO retriveAvailableUnitOptions(AptUnit unit) {
         UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
+
+        options.unit().set(unit);
         options.restrictions().set(retriveUnitOptionRestrictions(unit));
+        retrieveAvailableCatalogItems(options);
 
         return options;
     }
@@ -268,5 +271,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         restrictions.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
 
         return restrictions;
+    }
+
+    private void retrieveAvailableCatalogItems(UnitOptionsSelectionDTO options) {
+        assert (!options.unit().isNull());
+
     }
 }

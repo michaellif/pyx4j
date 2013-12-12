@@ -74,11 +74,16 @@ public interface MasterOnlineApplication extends IEntity {
 
     IPrimitive<Status> status();
 
+    // -----------------------------------------------
+    // Selected on Vista Site:
+
     @Detached
     Building building();
 
     @Detached
     Floorplan floorplan();
+
+    // -----------------------------------------------
 
     @Owned
     @Detached

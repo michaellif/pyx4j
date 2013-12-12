@@ -16,9 +16,12 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 
 @Transient
 public interface UnitOptionsSelectionDTO extends IEntity {
@@ -41,4 +44,24 @@ public interface UnitOptionsSelectionDTO extends IEntity {
     AptUnit unit();
 
     Restrictions restrictions();
+
+    // Product Catalog stuff:
+
+    IList<BillableItem> agreedParking();
+
+    IList<BillableItem> agreedStorage();
+
+    IList<BillableItem> agreedPets();
+
+    IList<BillableItem> agreedOther();
+
+    // ---------------------------------
+
+    IList<ProductItem> availableParking();
+
+    IList<ProductItem> availableStorage();
+
+    IList<ProductItem> availablePets();
+
+    IList<ProductItem> availableOther();
 }
