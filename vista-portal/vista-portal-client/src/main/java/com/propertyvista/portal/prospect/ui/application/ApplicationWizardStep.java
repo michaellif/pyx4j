@@ -33,7 +33,9 @@ public abstract class ApplicationWizardStep extends WizardStep {
 
     public void init(ApplicationWizard wizard) {
         this.wizard = wizard;
-        setStepContent(createStepContent());
+        BasicFlexFormPanel content = createStepContent();
+        setStepContent(content);
+        setStepTitle(content.getTitle());
     }
 
     public ApplicationWizard getWizard() {
