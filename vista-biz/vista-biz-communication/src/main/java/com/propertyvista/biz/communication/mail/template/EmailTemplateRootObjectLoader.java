@@ -57,6 +57,7 @@ import com.propertyvista.domain.settings.PmcCompanyInfoContact.CompanyInfoContac
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
@@ -107,7 +108,7 @@ public class EmailTemplateRootObjectLoader {
             AbstractUser user = context.user();
             String token = context.accessToken().getValue();
             t.RequestorName().set(user.name());
-            t.PasswordResetUrl().setValue(getPortalAccessUrl(token));
+            t.PasswordResetUrl().setValue(getResidentPortalAccessUrl(token));
         } else if (tObj instanceof PasswordRequestProspectT) {
             PasswordRequestProspectT t = (PasswordRequestProspectT) tObj;
             if (context.user().isNull() || context.accessToken().isNull()) {
@@ -116,7 +117,7 @@ public class EmailTemplateRootObjectLoader {
             AbstractUser user = context.user();
             String token = context.accessToken().getValue();
             t.RequestorName().set(user.name());
-            t.PasswordResetUrl().setValue(getPtappAccessUrl(token));
+            t.PasswordResetUrl().setValue(getProspectAccessUrl(token));
         } else if (tObj instanceof PasswordRequestCrmT) {
             PasswordRequestCrmT t = (PasswordRequestCrmT) tObj;
             if (context.user().isNull() || context.accessToken().isNull()) {
@@ -187,11 +188,22 @@ public class EmailTemplateRootObjectLoader {
                 t.Guarantor().Name().setValue(customer.person().name().getStringView());
                 t.Guarantor().FirstName().setValue(customer.person().name().firstName().getStringView());
                 t.Guarantor().LastName().setValue(customer.person().name().lastName().getStringView());
+
+                LeaseTermGuarantor leaseTermGuarantor = context.leaseTermParticipant().cast();
+                t.GuarantorRequester().Name().setValue(leaseTermGuarantor.tenant().customer().person().name().getStringView());
+                t.GuarantorRequester().FirstName().setValue(leaseTermGuarantor.tenant().customer().person().name().firstName().getStringView());
+                t.GuarantorRequester().LastName().setValue(leaseTermGuarantor.tenant().customer().person().name().lastName().getStringView());
+            }
+            if (t.Applicant().isNull()) {
+                Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+                t.Applicant().Name().setValue(lease._applicant().customer().person().name().getStringView());
+                t.Applicant().FirstName().setValue(lease._applicant().customer().person().name().firstName().getStringView());
+                t.Applicant().LastName().setValue(lease._applicant().customer().person().name().lastName().getStringView());
             }
 
             t.ReferenceNumber().setValue(app.getPrimaryKey().toString());
             if (!context.accessToken().isNull()) {
-                t.SignUpUrl().setValue(getPtappAccessUrl(context.accessToken().getValue()));
+                t.SignUpUrl().setValue(getProspectAccessUrl(context.accessToken().getValue()));
             } else {
                 t.SignUpUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
             }
@@ -305,13 +317,13 @@ public class EmailTemplateRootObjectLoader {
 
     }
 
-    private static String getPtappAccessUrl(String token) {
+    private static String getProspectAccessUrl(String token) {
         return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PortalSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }
 
-    private static String getPortalAccessUrl(String token) {
+    private static String getResidentPortalAccessUrl(String token) {
         return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true, PortalSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
     }
