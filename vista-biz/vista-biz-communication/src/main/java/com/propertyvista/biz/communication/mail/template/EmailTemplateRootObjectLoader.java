@@ -171,9 +171,9 @@ public class EmailTemplateRootObjectLoader {
             } else {
                 throw new Error("LeaseTermParticipant should be provided in context");
             }
-            t.ApplicantName().setValue(customer.person().name().getStringView());
-            t.ApplicantFirstName().setValue(customer.person().name().firstName().getStringView());
-            t.ApplicantLastName().setValue(customer.person().name().lastName().getStringView());
+            t.Applicant().Name().setValue(customer.person().name().getStringView());
+            t.Applicant().FirstName().setValue(customer.person().name().firstName().getStringView());
+            t.Applicant().LastName().setValue(customer.person().name().lastName().getStringView());
             t.ReferenceNumber().setValue(app.getPrimaryKey().toString());
             if (!context.accessToken().isNull()) {
                 t.SignUpUrl().setValue(getPtappAccessUrl(context.accessToken().getValue()));

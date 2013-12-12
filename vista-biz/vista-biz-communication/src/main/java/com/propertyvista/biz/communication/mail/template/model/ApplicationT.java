@@ -22,13 +22,17 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ApplicationT extends IEntity {
 
-    IPrimitive<String> ApplicantName();
+    TenantT Applicant();
 
-    IPrimitive<String> ApplicantFirstName();
+    TenantT CoApplicant();
 
-    IPrimitive<String> ApplicantLastName();
+    GuarantorT Guarantor();
+
+    TenantT GuarantorRequeste();
 
     IPrimitive<String> ReferenceNumber();
+
+    IPrimitive<String> UnitAddress();
 
     IPrimitive<String> SignUpUrl();
 }

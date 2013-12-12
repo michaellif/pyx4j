@@ -215,16 +215,16 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         type = EmailTemplateType.PasswordRetrievalTenant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.leaseParticipant().customer().user(),
-                token);
+        email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.leaseParticipant().customer()
+                .user(), token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalProspect;
         expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.leaseParticipant().customer().user(),
-                token);
+        email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.leaseParticipant()
+                .customer().user(), token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.debug(type.toString() + " content: " + received);
@@ -593,7 +593,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.ApplicantName()),
+                    EmailTemplateManager.getVarname(appT.Applicant().Name()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(appT.SignUpUrl()),
                     EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
@@ -619,7 +619,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.ApplicantName()),
+                    EmailTemplateManager.getVarname(appT.Applicant().Name()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(appT.SignUpUrl()),
                     EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
@@ -647,7 +647,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.ApplicantName()),
+                    EmailTemplateManager.getVarname(appT.Applicant().Name()),
                     EmailTemplateManager.getVarname(leaseT.StartDateWeekDay()),
                     EmailTemplateManager.getVarname(leaseT.StartDate()),
                     EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
@@ -673,7 +673,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.ApplicantName()),
+                    EmailTemplateManager.getVarname(appT.Applicant().Name()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
                     EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),

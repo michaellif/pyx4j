@@ -199,25 +199,34 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Lease Application Created"));
+        template.subject().setValue(i18n.tr("Start your Application"));
         template.content().setValue(i18n.tr(//@formatter:off
-                "Dear {0},<br/><br/>" +
-                "Welcome to your Online Application.<br/><br/>" + 
-                "We have created a secure and safe environment for you that allows you to complete the Application at your leisure from any internet connected device. Once you login, you will have the opportunity to select the Rental Suite that is best suited to your needs.<br/><br/>" +
-                "During this process you, your roommates, dependents and guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete where you left off when you are ready.<br/><br/>" +
-                "Please keep in mind, Applications get processed on a first-come-first-served basis and will not be processed until completed in full.<br/><br/>" + 
-                "If at anytime during the process you have any concerns or questions, please call us directly at {1} and have your Application Reference Number ready.<br/><br/>" +
-                "Your Application Reference Number is: <b>{2}</b><br/><br/>" +
-                "To get started, please login to your account [[{3}|here]]<br/><br/>" +
-                "<i>(If the link does not work please copy and paste the following URL:<br/>{4} )<br/></i><br/>" + 
-                "We look forward to making this application process as smooth as possible for you.<br/><br/>"+
+                "Dear {0},<br/>"+
+                "<br/>" +
+                "Welcome to your Online Application.<br/>"+
+                "<br/>" + 
+                "We have created a secure and safe environment for you that allows you to complete the Application at your leisure from any internet connected device. Once you login, you will have the opportunity to select the Rental Suite that is best suited to your needs.<br/>"+
+                "<br/>" +
+                "During this process you, your roommates, dependents and guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete where you left off when you are ready.<br/>"+
+                "<br/>" +
+                "Please keep in mind, Applications get processed on a first-come-first-served basis and will not be processed until completed in full.<br/>"+
+                "<br/>" + 
+                "If at anytime during the process you have any concerns or questions, please call us directly at {1} and have your Application Reference Number ready.<br/>"+
+                "<br/>" +
+                "Your Application Reference Number is: <b>{2}</b><br/>"+
+                "<br/>" +
+                "To get started, please login to your account [[{3}|here]]<br/>"+
+                "<br/>" +
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>" +
+                "{3} )<br/></small></i><br/>" + 
+                "We look forward to making this application process as smooth as possible for you.<br/>"+
+                "<br/>"+
                 "Sincerely,<br/><br/>"+
-                "{5}<br/>" +
-                "{6}",
-                EmailTemplateManager.getVarname(appT.ApplicantFirstName()),
+                "{4}<br/>" +
+                "{5}",
+                EmailTemplateManager.getVarname(appT.Applicant().FirstName()),
                 EmailTemplateManager.getVarname(companyT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
                 EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
                 EmailTemplateManager.getVarname(companyT.Administrator().ContactName()),
                 EmailTemplateManager.getVarname(companyT.CompanyName())
@@ -235,21 +244,37 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Lease Application Created"));
+        template.subject().setValue(i18n.tr("Start your Application"));
         template.content().setValue(i18n.tr(//@formatter:off
-                "Dear {0},<br/><br/>" +
-                "Your lease application has been created. The Application Reference Number is: {1}<br/><br/>" +
-                "You can now start completing it online by logging to your account using following link: <br/><br/>" +
-                "{2}<br/><br/>" +
-                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                "{3}. Please have your Application Reference Number available.<br/><br/>" +
-                "Sincerely,<br/><br/>" +
-                "{4}<br/>" +
+                "Dear {0},<br/>"+
+                "<br/>" +
+                "Welcome to your Online Application.<br/>"+ 
+                "<br/>" +
+                "We have created a Secure and Safe Environment for you that allows you to complete the Application at your leisure from any internet connected device.<br/>"+ 
+                "<br/>" +
+                "During this process you, your roommates, dependents and guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete when you are ready from where you left off.<br/>"+
+                "<br/>" +
+                "Please keep in mind, Applications get processed on a First Come basis and will not be processed until completed in full. <br/>"+
+                "<br/>" +
+                "If at anytime during the process you have any concerns or questions, please call us directly at {1} and have your Application Reference Number ready.<br/>"+
+                "<br/>" +
+                "Your Application Reference Number is: {2}<br/>"+
+                "<br/>" +
+                "To get started, please login to your account [[{3}|here]]<br/>"+
+                "<br/>" +
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
+                "{3} )</small></i><br/>"+
+                "<br/>" +
+                "We look forward to making this application process as smooth as possible for you.<br/>"+
+                "<br/>" +
+                "Sincerely,<br/>"+
+                "<br/>" +
+                "{4}<br/>"+
                 "{5}<br/>",
-                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                EmailTemplateManager.getVarname(appT.Applicant().FirstName()),
+                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
-                EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ));//@formatter:on
@@ -266,21 +291,41 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Lease Application Created"));
+        template.subject().setValue(i18n.tr("Start your Application"));
         template.content().setValue(i18n.tr(//@formatter:off
-                "Dear {0},<br/><br/>" +
-                "Your lease application has been created. The Application Reference Number is: {1}<br/><br/>" +
-                "You can now start completing it online by logging to your account using following link: <br/><br/>" +
-                "{2}<br/><br/>" +
-                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                "{3}. Please have your Application Reference Number available.<br/><br/>" +
-                "Sincerely,<br/><br/>" +
-                "{4}<br/>" +
-                "{5}<br/>",
-                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                "Dear {0},<br/>"+
+                "<br/>" +
+                "Welcome to your Online Application.<br/>"+ 
+                "<br/>" +
+                "You have received this email invitation because {1} has indicated you as a co-applicant for {2}.<br/>"+ 
+                "<br/>" +
+                "We have created a Secure and Safe Environment for you that allows you to complete the Application at your leisure from any internet connected device.<br/>"+
+                "<br/>" +
+                "During this process you and your guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete when you are ready from where you left off.<br/>"+
+                "<br/>" +
+                "Please keep in mind, Applications get processed on a First Come basis and will not be processed until completed in full.<br/>"+ 
+                "<br/>" +
+                "If at anytime during the process you have any concerns or questions, please call us directly at {3} and have your Application Reference Number ready.<br/>"+
+                "<br/>" +
+                "Your Application Reference Number is: {4}<br/>"+
+                "<br/>" +
+                "To get started, please login to your account [[{5}|here]]<br/>"+
+                "<br/>" +
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
+                "{5} )</small></i><br/>"+
+                "<br/>" +
+                "We look forward to making this application process as smooth as possible for you.<br/>"+
+                "<br/>" +
+                "Sincerely,<br/>"+
+                "<br/>" +
+                "{6}<br/>"+
+                "{7}<br/>",
+                EmailTemplateManager.getVarname(appT.CoApplicant().Name()),
+                EmailTemplateManager.getVarname(appT.Applicant().Name()),
+                EmailTemplateManager.getVarname(appT.UnitAddress()),
+                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
-                EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ));//@formatter:on
@@ -297,21 +342,43 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Guarantor Application Created"));
+        template.subject().setValue(i18n.tr("Start your Guarantor's Application"));
         template.content().setValue(i18n.tr(//@formatter:off
-                "Dear {0},<br/><br/>" +
-                "Your guarantor application has been created. The Application Reference Number is: {1}<br/><br/>" +
-                "You can now start completing it online by logging to your account using following link: <br/><br/>" +
-                "{2}<br/><br/>" +
-                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                "{3}. Please have your Application Reference Number available.<br/><br/>" +
-                "Sincerely,<br/><br/>" +
-                "{4}<br/>" +
-                "{5}<br/>",
-                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                "Dear {0},<br/>"+
+                "<br/>" +
+                "Welcome to your online Guarantor's agreement.<br/>"+ 
+                "<br/>" +
+                "You have been asked to be a Guarantor.<br/>"+
+                "<br/>" +
+                "You have received this email invitation because {1} has indicated you as a Guarantor for {2}.<br/>"+ 
+                "<br/>" +
+                "We have created a Secure and Safe Environment for you that allows you to complete the Guarantor Application at your leisure from any internet connected device.<br/>"+ 
+                "<br/>" +
+                "During this process you will have the opportunity to complete all necessary information needed to process your Guarantor Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete when you are ready from where you left off.<br/>"+
+                "<br/>" +
+                "Please keep in mind, the entire Application gets processed on a First Come basis and will not be processed until completed in full by all applicants and guarantors.<br/>"+ 
+                "<br/>" +
+                "If at anytime during the process you have any concerns or questions, please call us directly at {3} and have your Application Reference Number ready.<br/>"+
+                "<br/>" +
+                "Your Application Reference Number is: {4}<br/>"+
+                "<br/>" +
+                "To get started, please login to your account [[{5}|here]]<br/>"+
+                "<br/>" +
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
+                "{5} )</small></i><br/>"+
+                "<br/>" +
+                "We look forward to making this application process as smooth as possible for you.<br/>"+
+                "<br/>" +
+                "Sincerely,<br/>"+
+                "<br/>" +
+                "{6}<br/>"+
+                "{7}<br/>",
+                EmailTemplateManager.getVarname(appT.Guarantor().Name()),
+                EmailTemplateManager.getVarname(appT.Guarantor().Applicant().Name()),
+                EmailTemplateManager.getVarname(appT.UnitAddress()),
+                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
-                EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ));//@formatter:on
@@ -344,7 +411,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{5}<br/>" +
                 "{6}<br/>",                        
-                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                EmailTemplateManager.getVarname(appT.Applicant().Name()),
                 EmailTemplateManager.getVarname(leaseT.StartDateWeekDay()),
                 EmailTemplateManager.getVarname(leaseT.StartDate()),
                 EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
@@ -380,7 +447,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{3}<br/>" +
                 "{4}<br/>",                        
-                EmailTemplateManager.getVarname(appT.ApplicantName()),          
+                EmailTemplateManager.getVarname(appT.Applicant().Name()),          
                 EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
