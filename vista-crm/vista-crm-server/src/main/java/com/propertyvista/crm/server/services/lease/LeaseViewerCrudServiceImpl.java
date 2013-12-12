@@ -41,7 +41,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
@@ -279,7 +279,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4BatchSettingsDTO n4GenerationQuery) {
+    public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4BatchRequestDTO n4GenerationQuery) {
         ServerSideFactory.create(N4ManagementFacade.class).issueN4(n4GenerationQuery.targetDelinquentLeases(), n4GenerationQuery.agent(),
                 n4GenerationQuery.noticeDate().getValue(), n4GenerationQuery.deliveryMethod().getValue(), new AtomicInteger());
         Persistence.service().commit();

@@ -26,11 +26,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
-// TODO change names of this (N4GenerationSettings should be N4CandidateSearchCriteria, and N4GenerationQuery should be the N4GenerationSettings
 @Transient
 public interface N4CandidateSearchCriteriaDTO extends IEntity {
-
-    N4BatchSettingsDTO batchSettings();
 
     IPrimitive<Boolean> filterByBuildings();
 
@@ -40,11 +37,12 @@ public interface N4CandidateSearchCriteriaDTO extends IEntity {
 
     IList<Portfolio> portfolios();
 
-    @Caption(name = "Amount Owed >")
+    @Caption(name = "Minimum Amount Owed")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> minAmountOwed();
 
     /** errors in definition of n4 policy delimited by '\n' char */
+    // TODO Theoretically errors doesn't belong to this entity
     IPrimitive<String> n4PolicyErrors();
 
 }

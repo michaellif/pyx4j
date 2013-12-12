@@ -37,10 +37,10 @@ import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO.DeliveryMethod;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO.DeliveryMethod;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
@@ -72,7 +72,6 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
             for (LegalNoticeCandidate candidate : n4Candidates) {
                 dtoCandidates.add(makeLegalNoticeCandidateDto(candidate));
             }
-
             callback.onSuccess(dtoCandidates);
 
         } else {
@@ -81,29 +80,23 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     }
 
     @Override
-    public void process(AsyncCallback<String> callback, N4BatchSettingsDTO query) {
+    public void process(AsyncCallback<String> callback, N4BatchRequestDTO query) {
         callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(query.targetDelinquentLeases(), query.agent(), query.noticeDate()
                 .getValue(), query.deliveryMethod().getValue()), ThreadPoolNames.IMPORTS));
     }
 
     @Override
-    public void initSettings(AsyncCallback<N4GenerationInitParamsDTO> callback) {
-        N4CandidateSearchCriteriaDTO settings = EntityFactory.create(N4CandidateSearchCriteriaDTO.class);
-        settings.batchSettings().noticeDate().setValue(new LogicalDate());
-        settings.batchSettings().deliveryMethod().setValue(DeliveryMethod.Hand);
-        settings.batchSettings().agent().set(CrmAppContext.getCurrentUserEmployee());
+    public void initSettings(AsyncCallback<N4GenerationDefaultParamsDTO> callback) {
+        N4GenerationDefaultParamsDTO defaults = EntityFactory.create(N4GenerationDefaultParamsDTO.class);
+        defaults.searchCriteria().n4PolicyErrors().setValue(StringUtils.join(validateN4Policy(), "\n"));
 
-        N4GenerationInitParamsDTO initParams = EntityFactory.create(N4GenerationInitParamsDTO.class);
-        initParams.settings().set(settings);
+        defaults.batchRequest().noticeDate().setValue(new LogicalDate());
+        defaults.batchRequest().deliveryMethod().setValue(DeliveryMethod.Hand);
+        defaults.batchRequest().agent().set(CrmAppContext.getCurrentUserEmployee());
 
-        List<Employee> employees = Persistence.secureQuery(EntityQueryCriteria.create(Employee.class));
-        for (Employee employee : employees) {
-            Persistence.service().retrieve(employee.signature(), AttachLevel.IdOnly, false);
-        }
-        initParams.availableAgents().addAll(employees);
-        initParams.settings().n4PolicyErrors().setValue(StringUtils.join(validateN4Policy(), "\n"));
+        defaults.availableAgents().addAll(getAvailableAgents());
 
-        callback.onSuccess(initParams);
+        callback.onSuccess(defaults);
     }
 
     private LegalNoticeCandidateDTO makeLegalNoticeCandidateDto(LegalNoticeCandidate candidate) {
@@ -121,6 +114,14 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
         dto.moveOut().setValue(lease.expectedMoveOut().getValue());
         dto.n4Issued().setValue(N4Utils.pastN4sCount(lease));
         return dto;
+    }
+
+    private List<Employee> getAvailableAgents() {
+        List<Employee> employees = Persistence.secureQuery(EntityQueryCriteria.create(Employee.class));
+        for (Employee employee : employees) {
+            Persistence.service().retrieve(employee.signature(), AttachLevel.IdOnly, false);
+        }
+        return employees;
     }
 
     private void assertN4PolicyIsSet() {

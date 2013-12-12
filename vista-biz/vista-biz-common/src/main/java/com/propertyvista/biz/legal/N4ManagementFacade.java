@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO.DeliveryMethod;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO.DeliveryMethod;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;

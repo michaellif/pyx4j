@@ -23,7 +23,7 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -71,7 +71,7 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void onInsuredTenantClicked(Tenant tenantId);
 
-        void issueN4(N4BatchSettingsDTO n4GenerationQuery);
+        void issueN4(N4BatchRequestDTO n4GenerationQuery);
 
         void viewApplication();
 

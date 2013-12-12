@@ -7,12 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-12-11
+ * Created on 2013-10-25
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.legal.n4.forms;
+package com.propertyvista.crm.rpc.dto.legal.n4;
 
-public class N4AddressInputVisor {
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.company.Employee;
+
+@Transient
+public interface N4GenerationDefaultParamsDTO extends IEntity {
+
+    N4CandidateSearchCriteriaDTO searchCriteria();
+
+    N4BatchRequestDTO batchRequest();
+
+    IList<Employee> availableAgents();
 
 }

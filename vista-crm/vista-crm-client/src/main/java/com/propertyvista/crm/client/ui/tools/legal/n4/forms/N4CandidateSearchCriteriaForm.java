@@ -13,21 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.tools.legal.n4.forms;
 
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityListBox;
@@ -37,29 +33,21 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class N4GenerationSettingsForm extends CEntityForm<N4CandidateSearchCriteriaDTO> {
-
-    private static final I18n i18n = I18n.get(N4CandidateSearchCriteriaDTO.class);
-
-    private CComboBox<Employee> agentComboBox;
+public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearchCriteriaDTO> {
 
     private final ValueChangeHandler<Boolean> visibilityChangeHandler;
 
     private CLabel<String> policyErrorsLabel;
 
-    private FlowPanel n4FillingSettingsPanel;
+    private BasicFlexFormPanel searchCriteriaPanel;
 
-    private FlowPanel leasesQuerySettingsPanel;
-
-    public N4GenerationSettingsForm() {
+    public N4CandidateSearchCriteriaForm() {
         super(N4CandidateSearchCriteriaDTO.class);
         visibilityChangeHandler = new ValueChangeHandler<Boolean>() {
             @Override
@@ -72,7 +60,8 @@ public class N4GenerationSettingsForm extends CEntityForm<N4CandidateSearchCrite
     @Override
     public IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        panel.setWidth("100%");
+        panel.getElement().getStyle().setWidth(100, Unit.PCT);
+        panel.getElement().getStyle().setOverflow(Overflow.AUTO);
         panel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
         panel.getFlexCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
         panel.getFlexCellFormatter().setVerticalAlignment(1, 1, HasVerticalAlignment.ALIGN_TOP);
@@ -85,44 +74,27 @@ public class N4GenerationSettingsForm extends CEntityForm<N4CandidateSearchCrite
         policyErrorsLabel.asWidget().getElement().getStyle().setProperty("marginRight", "auto");
         panel.setWidget(0, 0, 2, inject(proto().n4PolicyErrors(), policyErrorsLabel));
 
-        n4FillingSettingsPanel = new FlowPanel();
-        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().batchSettings().noticeDate())).componentWidth("150px").contentWidth("150px").build());
-        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().batchSettings().deliveryMethod())).componentWidth("150px").contentWidth("150px").build());
-        agentComboBox = new CComboBox<Employee>(CComboBox.NotInOptionsPolicy.DISCARD) {
-            @Override
-            public String getItemName(Employee o) {
-                return (o != null && !o.isNull()) ? o.name().getStringView() + (o.signature().getPrimaryKey() == null ? i18n.tr(" (No Signature)") : "") : "";
-            }
-        };
-        agentComboBox.setMandatory(true);
-        n4FillingSettingsPanel
-                .add(new MyDecoratorBuilder(inject(proto().batchSettings().agent(), agentComboBox)).componentWidth("150px").contentWidth("150px").build());
+        int row = 0;
 
-        panel.setWidget(1, 0, n4FillingSettingsPanel);
+        searchCriteriaPanel = new BasicFlexFormPanel();
+        searchCriteriaPanel.setWidget(row, 0, 1, new MyDecoratorBuilder(inject(proto().minAmountOwed())).componentWidth("150px").contentWidth("200px").build());
+        searchCriteriaPanel.setWidget(row, 1, 1, new MyDecoratorBuilder(inject(proto().filterByBuildings())).componentWidth("150px").contentWidth("200px")
+                .build());
+        searchCriteriaPanel.setWidget(++row, 1, 1,
+                new MyDecoratorBuilder(inject(proto().buildings(), new CEntityListBox<Building>(Building.class, SelectionMode.SINGLE_PANEL)))
+                        .useLabelSemicolon(false).customLabel("").componentWidth("200px").contentWidth("200px").build());
 
-        leasesQuerySettingsPanel = new FlowPanel();
-        leasesQuerySettingsPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
+        searchCriteriaPanel.setWidget(++row, 1, 1, new MyDecoratorBuilder(inject(proto().filterByPortfolios())).componentWidth("150px").contentWidth("200px")
+                .build());
+        searchCriteriaPanel.setWidget(++row, 1, 1,
+                new MyDecoratorBuilder(inject(proto().portfolios(), new CEntityListBox<Portfolio>(Portfolio.class, SelectionMode.SINGLE_PANEL)))
+                        .useLabelSemicolon(false).customLabel("").componentWidth("200px").contentWidth("200px").build());
 
-        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().minAmountOwed())).componentWidth("150px").contentWidth("200px").build());
-        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().filterByBuildings())).componentWidth("150px").contentWidth("200px").build());
-
-        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().buildings(),
-                new CEntityListBox<Building>(Building.class, SelectionMode.SINGLE_PANEL))).useLabelSemicolon(false).customLabel("").componentWidth("200px")
-                .contentWidth("200px").build());
-
-        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().filterByPortfolios())).componentWidth("150px").contentWidth("200px").build());
-        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().portfolios(), new CEntityListBox<Portfolio>(Portfolio.class,
-                SelectionMode.SINGLE_PANEL))).useLabelSemicolon(false).customLabel("").componentWidth("200px").contentWidth("200px").build());
-
-        panel.setWidget(1, 1, leasesQuerySettingsPanel);
+        panel.setWidget(1, 0, 2, searchCriteriaPanel);
 
         get(proto().filterByBuildings()).addValueChangeHandler(visibilityChangeHandler);
         get(proto().filterByPortfolios()).addValueChangeHandler(visibilityChangeHandler);
         return panel;
-    }
-
-    public void setAgents(List<Employee> agents) {
-        agentComboBox.setOptions(agents);
     }
 
     @Override
@@ -149,8 +121,7 @@ public class N4GenerationSettingsForm extends CEntityForm<N4CandidateSearchCrite
         get(proto().buildings()).setVisible(getValue().filterByBuildings().isBooleanTrue());
         get(proto().portfolios()).setVisible(getValue().filterByPortfolios().isBooleanTrue());
         policyErrorsLabel.setVisible(!CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
-        n4FillingSettingsPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
-        leasesQuerySettingsPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
+        searchCriteriaPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
     }
 
     private static class MyDecoratorBuilder extends FormDecoratorBuilder {
@@ -162,7 +133,7 @@ public class N4GenerationSettingsForm extends CEntityForm<N4CandidateSearchCrite
         @Override
         public WidgetDecorator build() {
             WidgetDecorator d = super.build();
-            d.asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
+            d.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             return d;
         };
     }

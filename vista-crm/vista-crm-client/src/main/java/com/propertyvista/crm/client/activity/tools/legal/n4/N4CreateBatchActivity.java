@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
@@ -28,16 +29,20 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.tools.common.AbstractBulkOperationToolActivity;
 import com.propertyvista.crm.client.ui.tools.legal.n4.N4GenerationToolView;
-import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4AddressInputFormVisor;
+import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4BatchSettingsVisor;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4AddressInputDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchSettingsDTO> {
+public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchRequestDTO> {
+
+    protected N4BatchRequestDTO batchRequest;
+
+    protected IList<Employee> agents;
 
     public N4CreateBatchActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().getView(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class),
@@ -46,49 +51,34 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
 
     @Override
     public void acceptSelected() {
-        IVisorEditor.Controller visorController = new IVisorEditor.Controller() {
+        IVisorEditor.Controller visorController = new IVisorEditor.Controller() {//@formatter:off
+            private N4BatchSettingsVisor visor;
+            { visor = new N4BatchSettingsVisor(this); }
 
-            private N4AddressInputFormVisor visor;
-
-            {
-                visor = new N4AddressInputFormVisor(this);
-            }
-
-            @Override
-            public void show() {
-                visor.populate(EntityFactory.create(N4AddressInputDTO.class));
+            @Override public void show() {
+                visor.populate(batchRequest);
+                visor.setAgents(agents);
                 getView().showVisor(visor);
             }
 
-            @Override
-            public void hide() {
-                getView().hideVisor();
-            }
+            @Override public void hide() { getView().hideVisor(); }
+
+            @Override public void save() { apply(); hide(); }
 
             @Override
-            public void save() {
-                apply();
-                hide();
-            }
+            public void apply() { N4CreateBatchActivity.super.acceptSelected(); }
 
-            @Override
-            public void apply() {
-                N4CreateBatchActivity.super.acceptSelected();
-            }
-
-        };
+        };//@formatter:on
         visorController.show();
     }
 
     @Override
-    protected N4BatchSettingsDTO makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
-        N4BatchSettingsDTO query = getView().getSettings().batchSettings().duplicate(N4BatchSettingsDTO.class);
-
+    protected N4BatchRequestDTO makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
+        N4BatchRequestDTO batchRequest = this.batchRequest.duplicate(N4BatchRequestDTO.class);
         for (LegalNoticeCandidateDTO noticeCandidate : selectedItems) {
-            query.targetDelinquentLeases().add(noticeCandidate.leaseId().<Lease> duplicate());
+            batchRequest.targetDelinquentLeases().add(noticeCandidate.leaseId().<Lease> duplicate());
         }
-
-        return query;
+        return batchRequest;
     }
 
     @Override
@@ -98,11 +88,12 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
 
     @Override
     protected void initSettings(final AsyncCallback<N4CandidateSearchCriteriaDTO> callback) {
-        (GWT.<N4GenerationToolService> create(N4GenerationToolService.class)).initSettings(new DefaultAsyncCallback<N4GenerationInitParamsDTO>() {
+        (GWT.<N4GenerationToolService> create(N4GenerationToolService.class)).initSettings(new DefaultAsyncCallback<N4GenerationDefaultParamsDTO>() {
             @Override
-            public void onSuccess(N4GenerationInitParamsDTO result) {
-                ((N4GenerationToolView) getView()).setAgents(result.availableAgents());
-                callback.onSuccess(result.settings());
+            public void onSuccess(N4GenerationDefaultParamsDTO result) {
+                N4CreateBatchActivity.this.batchRequest = result.batchRequest().duplicate();
+                N4CreateBatchActivity.this.agents = result.availableAgents();
+                callback.onSuccess(EntityFactory.create(N4CandidateSearchCriteriaDTO.class));
             }
         });
     }

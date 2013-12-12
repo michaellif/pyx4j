@@ -25,10 +25,11 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-public interface N4BatchSettingsDTO extends IEntity {
+public interface N4BatchRequestDTO extends IEntity {
 
     @I18n(context = "Delivery Method")
     @XmlType(name = "DeliveryMethod")
@@ -51,5 +52,21 @@ public interface N4BatchSettingsDTO extends IEntity {
     IPrimitive<LogicalDate> noticeDate();
 
     IPrimitive<DeliveryMethod> deliveryMethod();
+
+    // this is filled from N4Policy can can be overridden by user
+    @NotNull
+    IPrimitive<String> companyName();
+
+    // this is filled from N4Policy can can be overridden by user
+    @NotNull
+    AddressSimple mailingAddress();
+
+    @NotNull
+    IPrimitive<String> buildingOwnerName();
+
+    @NotNull
+    AddressSimple buildingOwnerMailingAddress();
+
+    IPrimitive<Boolean> useSameAddressAsCompany();
 
 }
