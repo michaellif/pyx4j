@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -40,6 +41,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
@@ -47,6 +49,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
@@ -248,8 +251,31 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void fillUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
-        // TODO Auto-generated method stub
+        to.unitSelection().set(null);
 
+        MasterOnlineApplication mo = ProspectPortalContext.getMasterOnlineApplication();
+        if (!mo.building().isNull() || !mo.floorplan().isNull()) {
+            UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
+
+            unitSelection.building().set(mo.building());
+            unitSelection.floorplan().set(mo.floorplan());
+            unitSelection.moveIn().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+            {
+                EntityQueryCriteria<Floorplan> criteria = new EntityQueryCriteria<Floorplan>(Floorplan.class);
+                criteria.eq(criteria.proto().building(), mo.building());
+                unitSelection.availableFloorplans().addAll(Persistence.service().query(criteria));
+            }
+
+            if (!mo.floorplan().isNull()) {
+                EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+                criteria.eq(criteria.proto().floorplan(), mo.floorplan());
+                criteria.ge(criteria.proto()._availableForRent(), unitSelection.moveIn());
+                unitSelection.availableUnits().addAll(Persistence.service().query(criteria));
+            }
+
+            to.unitSelection().set(unitSelection);
+        }
     }
 
     private UnitOptionsSelectionDTO retriveAvailableUnitOptions(AptUnit unit) {
