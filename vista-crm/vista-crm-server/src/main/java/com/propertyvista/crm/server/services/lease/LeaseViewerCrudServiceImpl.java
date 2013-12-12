@@ -65,7 +65,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<Lease> dbCriteria, EntityListCriteria<LeaseDTO> dtoCriteria) {
-        PropertyCriterion papCriteria = dtoCriteria.getCriterion(dtoCriteria.proto().papPresent());
+        PropertyCriterion papCriteria = dtoCriteria.getCriterion(dtoCriteria.proto().preauthorizedPaymentPresent());
         if (papCriteria != null) {
             dtoCriteria.getFilters().remove(papCriteria);
 
@@ -92,7 +92,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
             EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
             criteria.eq(criteria.proto().tenant().lease(), in);
             criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-            dto.papPresent().setValue(Persistence.service().count(criteria) != 0);
+            dto.preauthorizedPaymentPresent().setValue(Persistence.service().count(criteria) != 0);
         }
     }
 

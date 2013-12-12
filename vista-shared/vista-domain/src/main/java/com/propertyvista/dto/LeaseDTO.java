@@ -42,7 +42,7 @@ public interface LeaseDTO extends Lease {
 
     IPrimitive<String> unitMoveOutNote();
 
-    IPrimitive<Boolean> papPresent();
+    IPrimitive<Boolean> preauthorizedPaymentPresent();
 
     IPrimitive<Boolean> historyPresent();
 
