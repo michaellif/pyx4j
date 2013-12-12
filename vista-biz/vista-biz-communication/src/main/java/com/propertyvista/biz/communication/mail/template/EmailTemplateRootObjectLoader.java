@@ -15,7 +15,10 @@ package com.propertyvista.biz.communication.mail.template;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -60,6 +63,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -175,7 +179,7 @@ public class EmailTemplateRootObjectLoader {
             } else {
                 throw new Error("LeaseTermParticipant should be provided in context");
             }
-            Lease lease = getLease(context.leaseTermParticipant());
+            Lease lease = app.masterOnlineApplication().leaseApplication().lease();
             if (context.leaseTermParticipant().role().getValue() == Role.Applicant) {
                 t.Applicant().Name().setValue(customer.person().name().getStringView());
                 t.Applicant().FirstName().setValue(customer.person().name().firstName().getStringView());
@@ -200,6 +204,19 @@ public class EmailTemplateRootObjectLoader {
                 t.Applicant().FirstName().setValue(lease._applicant().customer().person().name().firstName().getStringView());
                 t.Applicant().LastName().setValue(lease._applicant().customer().person().name().lastName().getStringView());
             }
+            Collection<String> applicantsNames = new ArrayList<String>();
+            Collection<String> applicantsAndGuarantorsNames = new ArrayList<String>();
+
+            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+                applicantsNames.add(tenant.leaseParticipant().customer().person().name().getStringView());
+                applicantsAndGuarantorsNames.add(tenant.leaseParticipant().customer().person().name().getStringView());
+            }
+            for (LeaseTermGuarantor guarantor : lease.currentTerm().version().guarantors()) {
+                applicantsAndGuarantorsNames.add(guarantor.leaseParticipant().customer().person().name().getStringView());
+            }
+
+            t.ApplicantsAndGuarantorsNames().setValue(ConverterUtils.convertStringCollection(applicantsNames, ", "));
+            t.ApplicantsAndGuarantorsNames().setValue(ConverterUtils.convertStringCollection(applicantsAndGuarantorsNames, ", "));
 
             t.ReferenceNumber().setValue(app.getPrimaryKey().toString());
             if (!context.accessToken().isNull()) {
@@ -346,10 +363,8 @@ public class EmailTemplateRootObjectLoader {
             throw new Error("Context cannot be null");
         }
 
-        if (tenantInLease.leaseTermV().isValueDetached()) {
-            Persistence.service().retrieve(tenantInLease.leaseTermV());
-        }
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+        Persistence.ensureRetrieve(tenantInLease.leaseTermV(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(tenantInLease.leaseTermV().holder().lease(), AttachLevel.Attached);
 
         Lease lease = tenantInLease.leaseTermV().holder().lease();
         if (lease == null || lease.isNull()) {
@@ -362,14 +377,9 @@ public class EmailTemplateRootObjectLoader {
         if (lease.isNull()) {
             throw new Error("Context cannot be null");
         }
-        if (lease.unit().isValueDetached()) {
-            Persistence.service().retrieve(lease.unit());
-        }
-        if (lease.unit().building().isValueDetached()) {
-            Persistence.service().retrieve(lease.unit().building());
-        }
-
-        Persistence.service().retrieve(lease.unit().building().contacts().propertyContacts());
+        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.unit().building().contacts().propertyContacts(), AttachLevel.Attached);
         return lease.unit().building();
     }
 
