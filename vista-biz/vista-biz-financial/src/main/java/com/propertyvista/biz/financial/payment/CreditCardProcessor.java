@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -375,6 +376,9 @@ class CreditCardProcessor {
             to.amount().setValue(amount);
             to.feeAmount().setValue(response.feeAmount().getValue());
             to.total().setValue(response.totalAmount().getValue());
+
+            to.feePercentage().setValue(response.feeAmount().getValue().divide(response.totalAmount().getValue(), RoundingMode.HALF_UP));
+
             return to;
         } else {
             log.debug("ConvenienceFee Calculation #{} rejected {} {}", request.referenceNumber(), response.code(), response.message());

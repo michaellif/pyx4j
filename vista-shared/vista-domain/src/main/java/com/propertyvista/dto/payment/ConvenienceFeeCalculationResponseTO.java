@@ -42,6 +42,11 @@ public interface ConvenienceFeeCalculationResponseTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> feeAmount();
 
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.percentage)
+    IPrimitive<BigDecimal> feePercentage();
+
     @ToString(index = 3)
     @Format("$#,##0.00")
     @Editor(type = EditorType.money)
