@@ -22,7 +22,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 
-public interface N4GenerationToolService extends AbstractBulkOperationService<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchRequestDTO> {
+public interface N4CreateBatchService extends AbstractBulkOperationService<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchRequestDTO> {
 
     @Override
     void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4CandidateSearchCriteriaDTO settings);

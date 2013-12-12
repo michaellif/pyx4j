@@ -30,6 +30,8 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 
 @DiscriminatorValue("N4Policy")
+//TODO in order to change Lowest Applicable Node there must be a UI and whole N4 generation infrastructure that allows to set up the defaults listed here on lease level
+//      right now there's nothing like that
 @LowestApplicableNode(value = OrganizationPoliciesNode.class)
 public interface N4Policy extends Policy {
 

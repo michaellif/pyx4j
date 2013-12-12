@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.legal.n4.forms;
+package com.propertyvista.crm.client.ui.tools.legal.n4.visors;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ import com.pyx4j.site.client.ui.visor.AbstractVisorForm;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4BatchRequestForm;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.domain.company.Employee;
 
@@ -31,7 +32,7 @@ public class N4BatchSettingsVisor extends AbstractVisorForm<N4BatchRequestDTO> {
 
     public N4BatchSettingsVisor(com.pyx4j.site.client.ui.visor.IVisorEditor.Controller controller) {
         super(controller);
-        setForm(new N4BatchSettingsForm());
+        setForm(new N4BatchRequestForm());
         Button createBatch = new Button(i18n.tr("Create Batch"), new Command() {
             @Override
             public void execute() {
@@ -53,7 +54,7 @@ public class N4BatchSettingsVisor extends AbstractVisorForm<N4BatchRequestDTO> {
     }
 
     public void setAgents(List<Employee> agents) {
-        ((N4BatchSettingsForm) getForm()).setAgents(agents);
+        ((N4BatchRequestForm) getForm()).setAgents(agents);
     }
 
     @Override

@@ -15,7 +15,6 @@ package com.propertyvista.crm.server.services.lease;
 
 import java.rmi.RemoteException;
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -36,7 +35,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -280,10 +278,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4BatchRequestDTO n4GenerationQuery) {
-        ServerSideFactory.create(N4ManagementFacade.class).issueN4(n4GenerationQuery.targetDelinquentLeases(), n4GenerationQuery.agent(),
-                n4GenerationQuery.noticeDate().getValue(), n4GenerationQuery.deliveryMethod().getValue(), new AtomicInteger());
-        Persistence.service().commit();
-        defaultAsyncCallback.onSuccess(null);
+        // TODO implement this 
     }
 
 }

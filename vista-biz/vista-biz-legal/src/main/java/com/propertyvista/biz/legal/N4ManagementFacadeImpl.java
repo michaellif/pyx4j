@@ -41,7 +41,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO.DeliveryMethod;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.financial.ARCode;
@@ -49,8 +49,8 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4BatchData;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.N4LandlordsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -100,50 +100,32 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     @Override
-    public void issueN4(List<Lease> delinquentLeases, Employee employee, LogicalDate noticeDate, DeliveryMethod deliveryMethod, AtomicInteger progress)
-            throws IllegalStateException {
+    public void issueN4(N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException {
 
+        N4BatchData batchData = EntityFactory.create(N4BatchData.class);
+        batchData.noticeDate().setValue(batchRequest.noticeDate().getValue());
+        batchData.deliveryMethod().setValue(batchRequest.deliveryMethod().getValue());
+        batchData.buildingOwnerLegalName().setValue(batchRequest.buildingOwnerName().getValue());
+        batchData.buildingOwnerAddress().set(batchRequest.buildingOwnerMailingAddress());
+        batchData.companyLegalName().setValue(batchRequest.companyName().getValue());
+        batchData.signingEmployee().set(Persistence.service().retrieve(Employee.class, batchRequest.agent().getPrimaryKey()));
+        batchData.companyAddress().set(batchRequest.mailingAddress());
+
+        batchData.companyPhoneNumber().setValue(batchRequest.phoneNumber().getValue());
+        batchData.companyFaxNumber().setValue(batchRequest.faxNumber().getValue());
+        batchData.companyEmailAddress().setValue(batchRequest.emailAddress().getValue());
+
+        batchData.isLandlord().setValue(false); // TODO right now we always assume it's agent
+        batchData.signatureDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        batchData.signature().setValue(retrieveSignature(batchData.signingEmployee()));
+
+        // TODO fix this: policy should be applied on lease level, right now n4 policy can be set up for Organization so it should be fine        
         N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
 
-        N4LandlordsData n4LandLordsData = EntityFactory.create(N4LandlordsData.class);
-        {
-            n4LandLordsData.landlordsLegalName().setValue(n4policy.companyName().getValue());
-            n4LandLordsData.signingEmployee().set(Persistence.service().retrieve(Employee.class, employee.getPrimaryKey()));
-            n4LandLordsData.landlordsAddress().set(n4policy.mailingAddress());
-            n4LandLordsData.landlordsPhoneNumber().setValue(n4policy.phoneNumber().getValue());
-            n4LandLordsData.faxNumber().setValue(n4policy.faxNumber().getValue());
-            n4LandLordsData.emailAddress().setValue(n4policy.emailAddress().getValue());
-            n4LandLordsData.isLandlord().setValue(false);
-            n4LandLordsData.signatureDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-
-            EmployeeSignature signature = Persistence.service()
-                    .retrieve(EmployeeSignature.class, n4LandLordsData.signingEmployee().signature().getPrimaryKey());
-            if (!n4LandLordsData.signingEmployee().signature().isNull()) {
-                EmployeeSignatureBlob signatureBlob = Persistence.service().retrieve(EmployeeSignatureBlob.class, signature.blobKey().getValue());
-                n4LandLordsData.signature().setValue(signatureBlob.data().getValue());
-            }
-        }
-
-        Date generationTime = SystemDateManager.getDate();
-
-        int terminationDateAdvanceDays = 0;
-        switch (deliveryMethod) {
-        case Mail:
-            terminationDateAdvanceDays = n4policy.mailDeliveryAdvanceDays().getValue();
-            break;
-        case Hand:
-            terminationDateAdvanceDays = n4policy.handDeliveryAdvanceDays().getValue();
-            break;
-        case Courier:
-            terminationDateAdvanceDays = n4policy.courierDeliveryAdvanceDays().getValue();
-            break;
-        default:
-            throw new IllegalArgumentException("unknown delivery method '" + deliveryMethod.name() + "'");
-        }
-
-        for (Lease leaseId : delinquentLeases) {
-            issueN4ForLease(leaseId, n4LandLordsData, noticeDate, terminationDateAdvanceDays, new HashSet<ARCode>(n4policy.relevantARCodes()), generationTime);
+        Date batchGenerationDate = SystemDateManager.getDate();
+        for (Lease leaseId : batchRequest.targetDelinquentLeases()) {
+            generateN4ForLease(leaseId, batchData, new HashSet<ARCode>(n4policy.relevantARCodes()), batchGenerationDate);
             progress.set(progress.get() + 1);
         }
 
@@ -167,12 +149,10 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate noticeDate, int terminationDateAdvanceDays,
-            Collection<ARCode> relevantArCodes, Date generationTime) {
-
-        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, noticeDate, terminationDateAdvanceDays,
-                relevantArCodes);
-        N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).populateFormData(n4LeaseData, n4LandLordsData);
+    private void generateN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) {
+        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
+                batchData.deliveryMethod().getValue(), relevantArCodes);
+        N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
 
         LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
@@ -186,7 +166,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         n4Letter.generatedOn().setValue(generationTime);
         n4Letter.blobKey().setValue(blob.getPrimaryKey());
         n4Letter.fileSize().setValue(n4LetterBinary.length);
-        n4Letter.fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", SystemDateManager.getDate()));
+        n4Letter.fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
         Persistence.service().persist(n4Letter);
     }
 
@@ -201,6 +181,17 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
         }
         return amountOwed;
+    }
+
+    /** Retrieves Employee's signature image from the db or returns <code>null</code> if the employee hasn't uploaded a signature image */
+    private byte[] retrieveSignature(Employee signingEmployee) {
+        if (!signingEmployee.signature().isNull()) {
+            EmployeeSignature signature = Persistence.service().retrieve(EmployeeSignature.class, signingEmployee.signature().getPrimaryKey());
+            EmployeeSignatureBlob signatureBlob = Persistence.service().retrieve(EmployeeSignatureBlob.class, signature.blobKey().getValue());
+            return signatureBlob.data().getValue();
+        } else {
+            return null;
+        }
     }
 
 }

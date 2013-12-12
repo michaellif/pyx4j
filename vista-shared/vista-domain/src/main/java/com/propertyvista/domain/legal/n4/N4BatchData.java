@@ -23,26 +23,34 @@ import com.propertyvista.domain.contact.AddressSimple;
 
 /** This is data common to all N4 forms filled in a single batch */
 @Transient
-public interface N4LandlordsData extends IEntity {
+public interface N4BatchData extends IEntity {
 
-    IPrimitive<String> landlordsLegalName();
+    IPrimitive<LogicalDate> noticeDate();
 
-    Employee signingEmployee();
+    IPrimitive<N4DeliveryMethod> deliveryMethod();
 
-    AddressSimple landlordsAddress();
+    IPrimitive<String> buildingOwnerLegalName();
+
+    AddressSimple buildingOwnerAddress();
+
+    IPrimitive<String> companyLegalName();
+
+    AddressSimple companyAddress();
 
     /** must have the following format: (XXX) XXX-XXXX */
-    IPrimitive<String> landlordsPhoneNumber();
+    IPrimitive<String> companyPhoneNumber();
 
     /** optional, but must have the following format: (XXX) XXX-XXXX */
-    IPrimitive<String> faxNumber();
+    IPrimitive<String> companyFaxNumber();
 
-    IPrimitive<String> emailAddress();
+    IPrimitive<String> companyEmailAddress();
 
     /** Determines if its Landlord's or Agent's signature */
     IPrimitive<Boolean> isLandlord();
 
     IPrimitive<LogicalDate> signatureDate();
+
+    Employee signingEmployee();
 
     /** optional */
     IPrimitive<byte[]> signature();

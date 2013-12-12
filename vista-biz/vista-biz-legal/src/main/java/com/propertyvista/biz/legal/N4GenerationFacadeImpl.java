@@ -29,21 +29,25 @@ import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4BatchData;
+import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
-import com.propertyvista.domain.legal.n4.N4LandlordsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4Signature.SignedBy;
+import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -72,12 +76,12 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData) {
+    public N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData) {
         N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
         fieldsData.to().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", formatTenants(leaseData.leaseTenants()), formatRentalAddress(leaseData.rentalUnitAddress())));
         fieldsData.from().setValue(
-                SimpleMessageFormat.format("{0}\n{1}", landlordsData.landlordsLegalName().getValue(), formatLandlordAddress(landlordsData.landlordsAddress())));
+                SimpleMessageFormat.format("{0}\n{1}", batchData.buildingOwnerLegalName().getValue(), formatBuildingOwnerAddress(batchData.buildingOwnerAddress())));
 
         // TODO review this: refactor to eliminate unnecessary code duplication
         fieldsData.rentalUnitAddress().streetNumber()
@@ -95,30 +99,30 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.owedRent().rentOwingBreakdown().addAll(leaseData.rentOwingBreakdown());
         fieldsData.owedRent().totalRentOwing().setValue(leaseData.totalRentOwning().getValue());
 
-        fieldsData.signature().signedBy().setValue(landlordsData.isLandlord().isBooleanTrue() ? SignedBy.Landlord : SignedBy.Agent);
-        fieldsData.signature().signature().setValue(landlordsData.signature().getValue());
-        fieldsData.signature().signatureDate().setValue(landlordsData.signatureDate().getValue());
+        fieldsData.signature().signedBy().setValue(batchData.isLandlord().isBooleanTrue() ? SignedBy.Landlord : SignedBy.Agent);
+        fieldsData.signature().signature().setValue(batchData.signature().getValue());
+        fieldsData.signature().signatureDate().setValue(batchData.signatureDate().getValue());
 
-        fieldsData.landlordsContactInfo().firstName().setValue(landlordsData.signingEmployee().name().firstName().getStringView());
-        fieldsData.landlordsContactInfo().lastName().setValue(landlordsData.signingEmployee().name().lastName().getStringView());
-        fieldsData.landlordsContactInfo().companyName().setValue(landlordsData.landlordsLegalName().getStringView());
+        fieldsData.landlordsContactInfo().firstName().setValue(batchData.signingEmployee().name().firstName().getStringView());
+        fieldsData.landlordsContactInfo().lastName().setValue(batchData.signingEmployee().name().lastName().getStringView());
+        fieldsData.landlordsContactInfo().companyName().setValue(batchData.companyLegalName().getStringView());
 
-        fieldsData.landlordsContactInfo().mailingAddress().setValue(landlordsData.landlordsAddress().street1().getValue());
-        fieldsData.landlordsContactInfo().unit().setValue(landlordsData.landlordsAddress().street2().getValue());
-        fieldsData.landlordsContactInfo().municipality().setValue(landlordsData.landlordsAddress().city().getValue());
-        fieldsData.landlordsContactInfo().province().setValue(landlordsData.landlordsAddress().province().code().getStringView());
-        fieldsData.landlordsContactInfo().postalCode().setValue(landlordsData.landlordsAddress().postalCode().getValue());
+        fieldsData.landlordsContactInfo().mailingAddress().setValue(batchData.companyAddress().street1().getValue());
+        fieldsData.landlordsContactInfo().unit().setValue(batchData.companyAddress().street2().getValue());
+        fieldsData.landlordsContactInfo().municipality().setValue(batchData.companyAddress().city().getValue());
+        fieldsData.landlordsContactInfo().province().setValue(batchData.companyAddress().province().code().getStringView());
+        fieldsData.landlordsContactInfo().postalCode().setValue(batchData.companyAddress().postalCode().getValue());
 
-        fieldsData.landlordsContactInfo().phoneNumber().setValue(landlordsData.landlordsPhoneNumber().getValue());
-        fieldsData.landlordsContactInfo().faxNumber().setValue(landlordsData.faxNumber().getValue());
+        fieldsData.landlordsContactInfo().phoneNumber().setValue(batchData.companyPhoneNumber().getValue());
+        fieldsData.landlordsContactInfo().faxNumber().setValue(batchData.companyFaxNumber().getValue());
 
-        fieldsData.landlordsContactInfo().email().setValue(landlordsData.emailAddress().getValue());
+        fieldsData.landlordsContactInfo().email().setValue(batchData.companyEmailAddress().getValue());
 
         return fieldsData;
     }
 
     @Override
-    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, int terminationAdvanceDays, Collection<ARCode> acceptableArCodes) {
+    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, Collection<ARCode> acceptableArCodes) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
 
@@ -128,15 +132,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         }
 
         n4LeaseData.rentalUnitAddress().set(AddressRetriever.getUnitLegalAddress(lease.unit()));
-
-        int noticeAdvanceDays = terminationDaysAdvance(lease);
-
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(noticeDate);
-        cal.add(GregorianCalendar.DAY_OF_YEAR, noticeAdvanceDays + terminationAdvanceDays);
-        LogicalDate terminationDate = new LogicalDate(cal.getTime());
-
-        n4LeaseData.terminationDate().setValue(terminationDate);
+        n4LeaseData.terminationDate().setValue(computeTerminationDate(lease, noticeDate, deliveryMethod));
 
         List<InvoiceDebit> filteredDebits = invoiceDebitFetcher.getInvoiceDebits(acceptableArCodes, lease.billingAccount(), SystemDateManager.getLogicalDate());
         InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
@@ -165,34 +161,42 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return address.getStringView();
     }
 
-    private String formatLandlordAddress(AddressSimple address) {
+    private String formatBuildingOwnerAddress(AddressSimple address) {
         return address.getStringView();
     }
 
-    private int terminationDaysAdvance(Lease lease) {
-        if (isByMonthLease(lease) || isByYearLease(lease)) {
-            return 14;
-        } else if (isByDayLease(lease) || isByWeekLease(lease)) {
-            return 7;
-        } else {
-            throw new IllegalArgumentException("lease must be either 'by year', 'by month', 'by week' or 'by day'");
+    private LogicalDate computeTerminationDate(Lease lease, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod) {
+        int advanceDays = terminationAdvanceDaysForDeliveryMethod(deliveryMethod, lease) + terminationAdvanceDaysForLeaseType(lease);
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(noticeDate);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, advanceDays);
+        LogicalDate terminationDate = new LogicalDate(cal.getTime());
+
+        return terminationDate;
+    }
+
+    private int terminationAdvanceDaysForDeliveryMethod(N4DeliveryMethod deliveryMethod, Lease lease) {
+        N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), N4Policy.class);
+        if (policy == null) {
+            throw new RuntimeException("Failed to compute n4 termination date advance days for lease '" + lease.getPrimaryKey() + "': N4 Policy wasn't found");
         }
+        switch (deliveryMethod) {
+        case Hand:
+            return policy.handDeliveryAdvanceDays().getValue();
+        case Mail:
+            return policy.mailDeliveryAdvanceDays().getValue();
+        case Courier:
+            return policy.courierDeliveryAdvanceDays().getValue();
+        default:
+            throw new RuntimeException("Unknown delivery method: " + deliveryMethod);
+        }
+
     }
 
-    private boolean isByMonthLease(Lease lease) {
-        return true; // TODO fix this
-    }
-
-    private boolean isByYearLease(Lease lease) {
-        return true; // TODO fix this
-    }
-
-    private boolean isByDayLease(Lease lease) {
-        return false; // TODO fix this
-    }
-
-    private boolean isByWeekLease(Lease lease) {
-        return false; // TODO fix this
+    private int terminationAdvanceDaysForLeaseType(Lease leaseId) {
+        // TODO this is value for Yearly or Month-to-Month lease (we don't have other kinds of leases therefore it's fine now, but later can become a problem)
+        return 14;
     }
 
 }

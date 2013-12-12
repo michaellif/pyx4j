@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.legal.n4;
+package com.propertyvista.crm.client.ui.tools.legal.n4.datawidget;
 
 import com.pyx4j.entity.annotations.Transient;
 

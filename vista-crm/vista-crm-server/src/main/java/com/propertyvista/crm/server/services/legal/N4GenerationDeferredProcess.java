@@ -13,18 +13,14 @@
  */
 package com.propertyvista.crm.server.services.legal;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.biz.legal.N4ManagementFacade;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO.DeliveryMethod;
-import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 
 public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
 
@@ -34,28 +30,18 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
 
     private final int progressMax;
 
-    private final List<Lease> delinquentLeases;
+    private final N4BatchRequestDTO batchRequest;
 
-    private final Employee issuingEmployee;
-
-    private final LogicalDate noticeDate;
-
-    private final DeliveryMethod deliveryMethod;
-
-    public N4GenerationDeferredProcess(List<Lease> delinquentLeases, Employee issuingEmployee, LogicalDate noticeDate, DeliveryMethod deliveryMethod) {
-        progress = new AtomicInteger();
-        progress.set(0);
-        progressMax = delinquentLeases.size();
-
-        this.delinquentLeases = delinquentLeases;
-        this.issuingEmployee = issuingEmployee;
-        this.noticeDate = noticeDate;
-        this.deliveryMethod = deliveryMethod;
+    public N4GenerationDeferredProcess(N4BatchRequestDTO batchRequest) {
+        this.progress = new AtomicInteger();
+        this.progress.set(0);
+        this.progressMax = batchRequest.targetDelinquentLeases().size();
+        this.batchRequest = batchRequest;
     }
 
     @Override
     public void execute() {
-        ServerSideFactory.create(N4ManagementFacade.class).issueN4(delinquentLeases, issuingEmployee, noticeDate, deliveryMethod, progress);
+        ServerSideFactory.create(N4ManagementFacade.class).issueN4(batchRequest, progress);
         completed = true;
     }
 

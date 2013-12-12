@@ -60,7 +60,7 @@ public class N4DownloadToolServiceImpl implements N4DownloadToolService {
     @Override
     public void getGenerations(AsyncCallback<Vector<N4GenerationDTO>> callback) {
         EntityQueryCriteria<N4LegalLetter> criteria = EntityQueryCriteria.create(N4LegalLetter.class);
-        criteria.asc(criteria.proto().generatedOn());
+        criteria.desc(criteria.proto().generatedOn());
 
         N4LegalLetter lastGenerationRepresentative = null;
 

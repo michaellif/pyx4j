@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -38,14 +39,15 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO.DeliveryMethod;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
-import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
+import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
+import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -54,9 +56,9 @@ import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class N4GenerationToolServiceImpl implements N4GenerationToolService {
+public class N4CreateBatchServiceImpl implements N4CreateBatchService {
 
-    private static final I18n i18n = I18n.get(N4GenerationToolServiceImpl.class);
+    private static final I18n i18n = I18n.get(N4CreateBatchServiceImpl.class);
 
     @Override
     public void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4CandidateSearchCriteriaDTO settings) {
@@ -80,22 +82,29 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     }
 
     @Override
-    public void process(AsyncCallback<String> callback, N4BatchRequestDTO query) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(query.targetDelinquentLeases(), query.agent(), query.noticeDate()
-                .getValue(), query.deliveryMethod().getValue()), ThreadPoolNames.IMPORTS));
+    public void process(AsyncCallback<String> callback, N4BatchRequestDTO batchRequest) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(batchRequest), ThreadPoolNames.IMPORTS));
     }
 
     @Override
     public void initSettings(AsyncCallback<N4GenerationDefaultParamsDTO> callback) {
+
         N4GenerationDefaultParamsDTO defaults = EntityFactory.create(N4GenerationDefaultParamsDTO.class);
         defaults.searchCriteria().n4PolicyErrors().setValue(StringUtils.join(validateN4Policy(), "\n"));
+        if (CommonsStringUtils.isEmpty(defaults.searchCriteria().n4PolicyErrors().getValue())) {
+            defaults.batchRequest().noticeDate().setValue(new LogicalDate());
+            defaults.batchRequest().deliveryMethod().setValue(N4DeliveryMethod.Hand);
+            defaults.batchRequest().agent().set(CrmAppContext.getCurrentUserEmployee());
+            defaults.availableAgents().addAll(getAvailableAgents());
 
-        defaults.batchRequest().noticeDate().setValue(new LogicalDate());
-        defaults.batchRequest().deliveryMethod().setValue(DeliveryMethod.Hand);
-        defaults.batchRequest().agent().set(CrmAppContext.getCurrentUserEmployee());
-
-        defaults.availableAgents().addAll(getAvailableAgents());
-
+            N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
+                    N4Policy.class);
+            defaults.batchRequest().companyName().setValue(n4policy.companyName().getValue());
+            defaults.batchRequest().mailingAddress().set(n4policy.mailingAddress().duplicate(AddressSimple.class));
+            defaults.batchRequest().phoneNumber().setValue(n4policy.phoneNumber().getValue());
+            defaults.batchRequest().faxNumber().setValue(n4policy.faxNumber().getValue());
+            defaults.batchRequest().emailAddress().setValue(n4policy.emailAddress().getValue());
+        }
         callback.onSuccess(defaults);
     }
 

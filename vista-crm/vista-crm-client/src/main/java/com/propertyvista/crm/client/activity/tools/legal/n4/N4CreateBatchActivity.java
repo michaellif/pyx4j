@@ -29,12 +29,12 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.tools.common.AbstractBulkOperationToolActivity;
 import com.propertyvista.crm.client.ui.tools.legal.n4.N4GenerationToolView;
-import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4BatchSettingsVisor;
+import com.propertyvista.crm.client.ui.tools.legal.n4.visors.N4BatchSettingsVisor;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
-import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
+import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -45,7 +45,7 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
     protected IList<Employee> agents;
 
     public N4CreateBatchActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class),
+        super(place, CrmSite.getViewFactory().getView(N4GenerationToolView.class), GWT.<N4CreateBatchService> create(N4CreateBatchService.class),
                 N4CandidateSearchCriteriaDTO.class);
     }
 
@@ -53,6 +53,7 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
     public void acceptSelected() {
         IVisorEditor.Controller visorController = new IVisorEditor.Controller() {//@formatter:off
             private N4BatchSettingsVisor visor;
+
             { visor = new N4BatchSettingsVisor(this); }
 
             @Override public void show() {
@@ -88,7 +89,7 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
 
     @Override
     protected void initSettings(final AsyncCallback<N4CandidateSearchCriteriaDTO> callback) {
-        (GWT.<N4GenerationToolService> create(N4GenerationToolService.class)).initSettings(new DefaultAsyncCallback<N4GenerationDefaultParamsDTO>() {
+        (GWT.<N4CreateBatchService> create(N4CreateBatchService.class)).initSettings(new DefaultAsyncCallback<N4GenerationDefaultParamsDTO>() {
             @Override
             public void onSuccess(N4GenerationDefaultParamsDTO result) {
                 N4CreateBatchActivity.this.batchRequest = result.batchRequest().duplicate();

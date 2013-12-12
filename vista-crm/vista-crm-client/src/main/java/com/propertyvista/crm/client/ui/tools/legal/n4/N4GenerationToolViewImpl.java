@@ -17,6 +17,8 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
+import com.propertyvista.crm.client.ui.tools.legal.n4.datawidget.LegalNoticeCandidateFolderHolderForm;
+import com.propertyvista.crm.client.ui.tools.legal.n4.datawidget.LegalNoticeCandidateHolder;
 import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4CandidateSearchCriteriaForm;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;

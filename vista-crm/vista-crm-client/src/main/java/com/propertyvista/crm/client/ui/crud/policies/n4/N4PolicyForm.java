@@ -53,41 +53,39 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private ARCodeFolder arCodeFolder;
 
-    private IFormat<String> phoneNumberFormatWithoutExtension;
+    public static final IFormat<String> PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT = new IFormat<String>() {
+
+        private final IFormat<String> phoneFormat = new CPhoneField.PhoneFormat();
+
+        private final String regex = "^[\\s\\d\\(\\)-]+$";
+
+        private final String errorMessage = i18n.tr("Invalid phone format. Use (123) 456-7890 format");
+
+        @Override
+        public String format(String value) {
+            return phoneFormat.format(value);
+        }
+
+        @Override
+        public String parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null;
+            }
+            String parsed = null;
+            if (!string.matches(regex)) {
+                throw new ParseException(errorMessage, 0);
+            }
+            try {
+                parsed = phoneFormat.parse(string);
+            } catch (ParseException e) {
+                throw new ParseException(errorMessage, 0);
+            }
+            return parsed;
+        }
+    };
 
     public N4PolicyForm(IForm<N4PolicyDTO> view) {
         super(N4PolicyDTO.class, view);
-        phoneNumberFormatWithoutExtension = new IFormat<String>() {
-
-            private final IFormat<String> phoneFormat = new CPhoneField.PhoneFormat();
-
-            private final String regex = "^[\\s\\d\\(\\)-]+$";
-
-            private final String errorMessage = i18n.tr("Invalid phone format. Use (123) 456-7890 format");
-
-            @Override
-            public String format(String value) {
-                return phoneFormat.format(value);
-            }
-
-            @Override
-            public String parse(String string) throws ParseException {
-                if (CommonsStringUtils.isEmpty(string)) {
-                    return null;
-                }
-                String parsed = null;
-                if (!string.matches(regex)) {
-                    throw new ParseException(errorMessage, 0);
-                }
-                try {
-                    parsed = phoneFormat.parse(string);
-                } catch (ParseException e) {
-                    throw new ParseException(errorMessage, 0);
-                }
-                return parsed;
-            }
-
-        };
     }
 
     public void setARCodeOptions(List<ARCode> arCodeOptions) {
@@ -107,21 +105,21 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         CPhoneField phoneNumberField = inject(proto().phoneNumber(), new CPhoneField() {
             @Override
             public IFormat<String> getFormat() {
-                return phoneNumberFormatWithoutExtension;
+                return PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT;
             }
         });
         phoneNumberField.setWatermark("(___) ___-____");
-        phoneNumberField.setFormat(phoneNumberFormatWithoutExtension); // TODO y setFormat not working?
+        phoneNumberField.setFormat(PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
         companyNameAndPhones.add(new FormDecoratorBuilder(phoneNumberField).build());
 
         CPhoneField faxNumberField = inject(proto().faxNumber(), new CPhoneField() {
             @Override
             public IFormat<String> getFormat() {
-                return phoneNumberFormatWithoutExtension;
+                return PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT;
             }
         });
         faxNumberField.setWatermark("(___) ___-____");
-        faxNumberField.setFormat(phoneNumberFormatWithoutExtension); // TODO y setFormat not working?
+        faxNumberField.setFormat(PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
         companyNameAndPhones.add(new FormDecoratorBuilder(faxNumberField).build());
         companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().emailAddress())).build());
         signaturePanel.setWidget(++row, 0, 1, companyNameAndPhones);
