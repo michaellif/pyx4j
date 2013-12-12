@@ -42,6 +42,7 @@ import com.propertyvista.biz.communication.mail.template.model.TenantT;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
@@ -57,10 +58,12 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class EmailTemplateRootObjectLoader {
     private static final I18n i18n = I18n.get(EmailTemplateRootObjectLoader.class);
@@ -171,15 +174,29 @@ public class EmailTemplateRootObjectLoader {
             } else {
                 throw new Error("LeaseTermParticipant should be provided in context");
             }
-            t.Applicant().Name().setValue(customer.person().name().getStringView());
-            t.Applicant().FirstName().setValue(customer.person().name().firstName().getStringView());
-            t.Applicant().LastName().setValue(customer.person().name().lastName().getStringView());
+            Lease lease = getLease(context.leaseTermParticipant());
+            if (context.leaseTermParticipant().role().getValue() == Role.Applicant) {
+                t.Applicant().Name().setValue(customer.person().name().getStringView());
+                t.Applicant().FirstName().setValue(customer.person().name().firstName().getStringView());
+                t.Applicant().LastName().setValue(customer.person().name().lastName().getStringView());
+            } else if (context.leaseTermParticipant().role().getValue() == Role.CoApplicant) {
+                t.CoApplicant().Name().setValue(customer.person().name().getStringView());
+                t.CoApplicant().FirstName().setValue(customer.person().name().firstName().getStringView());
+                t.CoApplicant().LastName().setValue(customer.person().name().lastName().getStringView());
+            } else if (context.leaseTermParticipant().role().getValue() == Role.Guarantor) {
+                t.Guarantor().Name().setValue(customer.person().name().getStringView());
+                t.Guarantor().FirstName().setValue(customer.person().name().firstName().getStringView());
+                t.Guarantor().LastName().setValue(customer.person().name().lastName().getStringView());
+            }
+
             t.ReferenceNumber().setValue(app.getPrimaryKey().toString());
             if (!context.accessToken().isNull()) {
                 t.SignUpUrl().setValue(getPtappAccessUrl(context.accessToken().getValue()));
             } else {
                 t.SignUpUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
             }
+            AddressStructured address = AddressRetriever.getLeaseLegalAddress(lease);
+            t.UnitAddress().setValue(address.getStringView());
         } else if (tObj instanceof TenantT) {
             TenantT t = (TenantT) tObj;
             Customer customer;
@@ -203,6 +220,8 @@ public class EmailTemplateRootObjectLoader {
             t.ApplicantName().setValue(context.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView());
             t.StartDate().setValue(context.lease().currentTerm().termFrom().getStringView());
             t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().currentTerm().termFrom().getValue()));
+            AddressStructured address = AddressRetriever.getLeaseLegalAddress(context.lease());
+            t.UnitAddress().setValue(address.getStringView());
         } else if (tObj instanceof MaintenanceRequestT) {
             MaintenanceRequestT t = (MaintenanceRequestT) tObj;
 

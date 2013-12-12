@@ -26,9 +26,13 @@ public interface ApplicationT extends IEntity {
 
     TenantT CoApplicant();
 
-    GuarantorT Guarantor();
+    TenantT Guarantor();
 
-    TenantT GuarantorRequeste();
+    TenantT GuarantorRequester();
+
+    IPrimitive<String> ApplicantsNames();
+
+    IPrimitive<String> ApplicantsAndGuarantorsNames();
 
     IPrimitive<String> ReferenceNumber();
 

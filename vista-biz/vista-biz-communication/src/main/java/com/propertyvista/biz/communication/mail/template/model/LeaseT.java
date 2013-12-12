@@ -27,4 +27,6 @@ public interface LeaseT extends IEntity {
     IPrimitive<String> StartDate();
 
     IPrimitive<String> StartDateWeekDay();
+
+    IPrimitive<String> UnitAddress();
 }

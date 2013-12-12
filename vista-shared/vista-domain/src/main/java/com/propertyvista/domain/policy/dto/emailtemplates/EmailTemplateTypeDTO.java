@@ -11,13 +11,17 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies.emailtemplates;
+package com.propertyvista.domain.policy.dto.emailtemplates;
 
 import java.io.Serializable;
 import java.util.Vector;
 
-@SuppressWarnings("serial")
-public class EmailTemplateTypesDTO implements Serializable {
+import com.propertyvista.domain.communication.EmailTemplateType;
 
-    public Vector<EmailTemplateTypeDTO> types;
+@SuppressWarnings("serial")
+public class EmailTemplateTypeDTO implements Serializable {
+
+    public EmailTemplateType type;
+
+    public Vector<String> objectNames;
 }

@@ -22,8 +22,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.communication.CommunicationTemplateFacade;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypeDTO;
-import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypesDTO;
+import com.propertyvista.domain.policy.dto.emailtemplates.EmailTemplateTypeDTO;
+import com.propertyvista.domain.policy.dto.emailtemplates.EmailTemplateTypesDTO;
 
 public class EmailTemplateManagerServiceImpl implements EmailTemplateManagerService {
 

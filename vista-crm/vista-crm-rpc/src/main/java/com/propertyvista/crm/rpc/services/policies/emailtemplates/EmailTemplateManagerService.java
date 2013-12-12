@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypesDTO;
+import com.propertyvista.domain.policy.dto.emailtemplates.EmailTemplateTypesDTO;
 
 public interface EmailTemplateManagerService extends IService {
     void getTemplateDataObjects(AsyncCallback<EmailTemplateTypesDTO> callback);

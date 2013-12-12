@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,14 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 11, 2013
- * @author vlads
+ * Created on Feb 16, 2012
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail.template.model;
+package com.propertyvista.domain.policy.dto.emailtemplates;
 
-public interface GuarantorT extends TenantT {
+import java.io.Serializable;
+import java.util.Vector;
 
-    TenantT Applicant();
+@SuppressWarnings("serial")
+public class EmailTemplateTypesDTO implements Serializable {
 
+    public Vector<EmailTemplateTypeDTO> types;
 }

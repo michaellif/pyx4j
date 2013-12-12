@@ -71,7 +71,17 @@ class MessageTemplatesCustomizable {
      */
     private static EmailTemplate getEmailTemplate(EmailTemplateType type, PolicyNode policyNode) {
         EmailTemplatesPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, EmailTemplatesPolicy.class).duplicate();
-        return fetchEmailTemplate(type, policy);
+        EmailTemplate template = fetchEmailTemplate(type, policy);
+        if (template == null) {
+            //TODO hierarchical load with found item.
+            policy = ServerSideFactory
+                    .create(PolicyFacade.class)
+                    .obtainEffectivePolicy(Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)),
+                            EmailTemplatesPolicy.class).duplicate();
+            return fetchEmailTemplate(type, policy);
+        } else {
+            return template;
+        }
     }
 
     static EmailTemplate getEmailTemplate(EmailTemplateType type, BillingAccount billingAccountId) {

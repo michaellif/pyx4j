@@ -211,11 +211,11 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Please keep in mind, Applications get processed on a first-come-first-served basis and will not be processed until completed in full.<br/>"+
                 "<br/>" + 
-                "If at anytime during the process you have any concerns or questions, please call us directly at {1} and have your Application Reference Number ready.<br/>"+
+                "If at anytime during the process you have any concerns or questions, please call us directly at <b>{1}</b> and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
                 "Your Application Reference Number is: <b>{2}</b><br/>"+
                 "<br/>" +
-                "To get started, please login to your account [[{3}|here]]<br/>"+
+                "To get started, please login to your account <b>[[{3}|here]]</b><br/>"+
                 "<br/>" +
                 "<i><small>(If the link does not work please copy and paste the following URL:<br/>" +
                 "{3} )<br/></small></i><br/>" + 
@@ -239,6 +239,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -256,11 +257,11 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Please keep in mind, Applications get processed on a First Come basis and will not be processed until completed in full. <br/>"+
                 "<br/>" +
-                "If at anytime during the process you have any concerns or questions, please call us directly at {1} and have your Application Reference Number ready.<br/>"+
+                "If at anytime during the process you have any concerns or questions, please call us directly at <b>{1}</b> and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
-                "Your Application Reference Number is: {2}<br/>"+
+                "Your Application Reference Number is: <b>{2}</b><br/>"+
                 "<br/>" +
-                "To get started, please login to your account [[{3}|here]]<br/>"+
+                "To get started, please login to your account <b>[[{3}|here]]</b><br/>"+
                 "<br/>" +
                 "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
                 "{3} )</small></i><br/>"+
@@ -270,13 +271,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/>"+
                 "<br/>" +
                 "{4}<br/>"+
-                "{5}<br/>",
+                "{5}<br/>"+
+                "{6}<br/>",
                 EmailTemplateManager.getVarname(appT.Applicant().FirstName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+                EmailTemplateManager.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -286,6 +289,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -305,11 +309,11 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Please keep in mind, Applications get processed on a First Come basis and will not be processed until completed in full.<br/>"+ 
                 "<br/>" +
-                "If at anytime during the process you have any concerns or questions, please call us directly at {3} and have your Application Reference Number ready.<br/>"+
+                "If at anytime during the process you have any concerns or questions, please call us directly at <b>{3}</b> and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
-                "Your Application Reference Number is: {4}<br/>"+
+                "Your Application Reference Number is: <b>{4}</b><br/>"+
                 "<br/>" +
-                "To get started, please login to your account [[{5}|here]]<br/>"+
+                "To get started, please login to your account <b>[[{5}|here]]</b><br/>"+
                 "<br/>" +
                 "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
                 "{5} )</small></i><br/>"+
@@ -319,15 +323,17 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/>"+
                 "<br/>" +
                 "{6}<br/>"+
-                "{7}<br/>",
+                "{7}<br/>"+
+                "{8}<br/>",
                 EmailTemplateManager.getVarname(appT.CoApplicant().Name()),
                 EmailTemplateManager.getVarname(appT.Applicant().Name()),
                 EmailTemplateManager.getVarname(appT.UnitAddress()),
                 EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+                EmailTemplateManager.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -337,6 +343,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -346,7 +353,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>"+
                 "<br/>" +
-                "Welcome to your online Guarantor's agreement.<br/>"+ 
+                "Welcome to your online Guarantor''s agreement.<br/>"+ 
                 "<br/>" +
                 "You have been asked to be a Guarantor.<br/>"+
                 "<br/>" +
@@ -358,11 +365,11 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Please keep in mind, the entire Application gets processed on a First Come basis and will not be processed until completed in full by all applicants and guarantors.<br/>"+ 
                 "<br/>" +
-                "If at anytime during the process you have any concerns or questions, please call us directly at {3} and have your Application Reference Number ready.<br/>"+
+                "If at anytime during the process you have any concerns or questions, please call us directly at <b>{3}</b> and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
-                "Your Application Reference Number is: {4}<br/>"+
+                "Your Application Reference Number is: <b>{4}</b><br/>"+
                 "<br/>" +
-                "To get started, please login to your account [[{5}|here]]<br/>"+
+                "To get started, please login to your account <b>[[{5}|here]]</b><br/>"+
                 "<br/>" +
                 "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
                 "{5} )</small></i><br/>"+
@@ -372,15 +379,17 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/>"+
                 "<br/>" +
                 "{6}<br/>"+
-                "{7}<br/>",
+                "{7}<br/>"+
+                "{8}<br/>",
                 EmailTemplateManager.getVarname(appT.Guarantor().Name()),
-                EmailTemplateManager.getVarname(appT.Guarantor().Applicant().Name()),
+                EmailTemplateManager.getVarname(appT.GuarantorRequester().Name()),
                 EmailTemplateManager.getVarname(appT.UnitAddress()),
                 EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+                EmailTemplateManager.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -392,32 +401,49 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
         LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
+        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Application To Lease has been approved"));
+        template.subject().setValue(i18n.tr("Congratulations!"));
         template.content().setValue(i18n.tr(//@formatter:off
-                "<h3>Welcome {0} to your new home!</h3><br/><br/>" +                        
-                "Your Application To Lease has been approved!<br/><br/>" +
-                "As per your application, your lease start date is on {1}, {2}<br/></br>" +
-                "We are excited to have you live with us. Please maintain your username and password that you have used for the application process. " +
-                "This username and password will stay with you throughout your tenancy and will give you access to our Online Tenant Portal. " +
-                "You can access the Portal at anytime by going to our website {3} " +
-                "and clicking under residents. Alternatively you can reach the site directly by going to {4}<br/><br/>" +
-                "A member of our team will be in touch with you shortly to make move-in arrangements.<br/><br/>" +
-                "In the meantime, should you have any concerns or questions, please do not hesistate to contact us directly.<br/><br/>" +
-                "Sincerely,<br/><br/>" +
-                "{5}<br/>" +
-                "{6}<br/>",                        
-                EmailTemplateManager.getVarname(appT.Applicant().Name()),
-                EmailTemplateManager.getVarname(leaseT.StartDateWeekDay()),
-                EmailTemplateManager.getVarname(leaseT.StartDate()),
-                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
+                "Dear {0}<br/>"+
+                "<br/>" +
+                "Welcome to your new home!<br/>"+  
+                "<br/>" +
+                "Your application has been reviewed and has been successfully approved.<br/>"+
+                "<br/>" +
+                "We look forward to having you move-in to {1}.<br/>"+ 
+                "<br/>" +
+                "In order to make the transition as smooth as possible for you we have arranged an online portal for you to complete the signing of the lease, book your move-in date, setup your automatic payment withdrawals, along with other useful tips for your big moving day.<br/>"+ 
+                "<br/>" +
+                "You can use the same username and password that you have used during the application process to complete this process.<br/>"+ 
+                "<br/>" +
+                "In order to move to the next steps, click <b>[[{2}|here]]</b>.<br/>"+
+                "<br/>" +
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
+                "{2} )</small></i><br/>"+
+                "If at anytime during the process you have any concerns or questions, please call us directly at {3} and have your Application Reference Number ready.<br/>"+
+                "<br/>" +
+                "Your Application Reference Number is: <b>{4}</b><br/>"+
+                "<br/>" +
+                "We look forward to making this application process as smooth as possible for you.<br/>"+
+                "<br/>" +
+                "Sincerely,<br/>"+
+                "<br/>" +
+                "{5}<br/>"+
+                "{6}<br/>"+
+                "{7}<br/>",
+                EmailTemplateManager.getVarname(appT.ApplicantsAndGuarantorsNames()),
+                EmailTemplateManager.getVarname(leaseT.UnitAddress()),
                 EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
+                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+                EmailTemplateManager.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -425,7 +451,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationDeclined() {
         EmailTemplateType type = EmailTemplateType.ApplicationDeclined;
 
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
@@ -433,25 +459,29 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Application has been declined"));
+        template.subject().setValue(i18n.tr("Application Declined"));
         template.content().setValue(i18n.tr(//@formatter:off
-                "Dear {0},<br/><br/>"+
-                "Unfortunately, based on the information provided your application has been DECLINED.<br/><br/>" +
-                "We do encourage you to add more information to your application that could assist us in re-assessing this application.<br/>" +
-                "Typically, additional Proof of Income or Guarantor(s)can change the application decision and allow us to re-evaluate the entire application.<br/>" +
-                "We welcome you to access the application again utilizing the username and password you have previously created at {1} " +
-                "to add more information.<br/>" +
-                "Should you wish the cancel the application procedure at this time completely, no further actions are required.<br/><br/>" +
-                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly and reference " +
-                "your Application Reference Number {2}<br/><br/>" +
-                "Sincerely,<br/><br/>" +
+                "Dear {0}<br/>"+
+                "<br/>" +
+                "Your application has been reviewed and, unfortunately, has not met our building criteria based on the information provided to us.<br/>"+ 
+                "<br/>" +
+                "If you have concerns about our decision you can contact us here {1} and have your Application Reference Number ready.<br/>"+
+                "<br/>" +
+                "Your Application Reference Number is: {2}<br/>"+
+                "<br/>" +
+                "We are sorry it did not work out for you for this building and wish you continued success in finding your perfect home.<br/>"+
+                "<br/>" +
+                "Sincerely,<br/>"+
+                "<br/>" +
                 "{3}<br/>" +
-                "{4}<br/>",                        
-                EmailTemplateManager.getVarname(appT.Applicant().Name()),          
-                EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
+                "{4}<br/>" +
+                "{5}<br/>",                      
+                EmailTemplateManager.getVarname(appT.ApplicantsAndGuarantorsNames()),
+                EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
-                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+                EmailTemplateManager.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -886,13 +916,20 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("{0} - Your payment has been Submitted", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
-                "Dear {0},<br/><br/>" +
-                "Thank you for submitting your payment.<br/><br/>" +
-                "Your payment of <b>{1}</b> was submitted successfully on <b>{2}</b>.<br/><br/>" + 
-                "Please keep in mind, your payment is not considered paid until it processed by the bank successfully, which can take 1-3 business days.<br/><br/>" +
-                "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
-                "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
-                "You can review the status of your payment at anytime in your myCommunity portal [[{4}|here]]<br/><br/>" +
+                "Dear {0},<br/>" +
+                "<br/>" +
+                "Thank you for submitting your payment.<br/>" +
+                "<br/>" +
+                "Your payment of <b>{1}</b> was submitted successfully on <b>{2}</b>.<br/>" +
+                "<br/>" +
+                "Please keep in mind, your payment is not considered paid until it processed by the bank successfully, which can take 1-3 business days.<br/>" +
+                "<br/>" +
+                "Your Payment Identification Reference Number for this payment is:<br/>" +
+                "<br/>" +
+                "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/>" +
+                "<br/>" +
+                "You can review the status of your payment at anytime in your myCommunity portal <b>[[{4}|here]]</b><br/>" +
+                "<br/>" +
                 "Thank you for choosing {5}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),
@@ -922,7 +959,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Your payment of <b>{1}</b> was successfully processed on <b>{2}</b> and your file has been updated accordingly.<br/><br/>" + 
                 "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
-                "You can review the status of your payment at anytime in your myCommunity portal [[{4}|here]]<br/><br/>" +
+                "You can review the status of your payment at anytime in your myCommunity portal <b>[[{4}|here]]</b><br/><br/>" +
                 "Thank you for choosing {5}.",
                 //TODO (If you do not wish to receive this notice any further you can opt out under your personal settings in your myCommunity portal here)
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
@@ -954,7 +991,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "You will see two transaction lines for the payments above from your payment provider. The convenience fee will be shown as TBD<br/><br/>" +
                 "Your Payment Identification Reference Number for these payments is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{4}</b></div><br/><br/>" +
-                "You can review the status of your payment at anytime in your myCommunity portal [[{5}|here]]<br/><br/>" +
+                "You can review the status of your payment at anytime in your myCommunity portal <b>[[{5}|here]]</b><br/><br/>" +
                 "Thank you for choosing {6}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),
@@ -987,7 +1024,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<b>Please sign in to your myCommunity account [[{4}|here]] to resubmit your payment to avoid any legal consequences.</b> <br/><br/>" +
                 "For your reference, your payment Reference number for this transaction is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{5}</b></div><br/><br/>" +
-                "You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click [[{6}|here]]<br/><br/>" +
+                "You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click <b>[[{6}|here]]</b><br/><br/>" +
                 "Thank you for choosing {7}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),
@@ -1018,7 +1055,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Thank you for setting up your AutoPay payment.<br/><br/>" + 
                 "Your payment of <b>{1}</b> has been successfully setup and will be processed automatically on the 1st of the month.<br/><br/>" + 
                 "Your first payment will be processed on <b>{2}</b><br/><br/>" + 
-                "You can review the status of your payment at anytime in your myCommunity portal [[{3}|here]] and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
+                "You can review the status of your payment at anytime in your myCommunity portal <b>[[{3}|here]]</b> and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
                 "Thank you for choosing {4}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),

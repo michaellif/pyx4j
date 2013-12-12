@@ -77,7 +77,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         sendInvitationEmail(guarantor, EmailTemplateType.ApplicationCreatedGuarantor);
     }
 
-    private static void sendInvitationEmail(LeaseTermParticipant leaseParticipant, EmailTemplateType emailTemplateType) {
+    private static void sendInvitationEmail(LeaseTermParticipant<?> leaseParticipant, EmailTemplateType emailTemplateType) {
         String token = AccessKey.createAccessToken(leaseParticipant.leaseParticipant().customer().user(), CustomerUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);

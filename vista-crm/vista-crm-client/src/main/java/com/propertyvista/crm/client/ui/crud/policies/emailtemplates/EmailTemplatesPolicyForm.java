@@ -52,9 +52,9 @@ import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBas
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
+import com.propertyvista.domain.policy.dto.emailtemplates.EmailTemplateTypeDTO;
+import com.propertyvista.domain.policy.dto.emailtemplates.EmailTemplateTypesDTO;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
-import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypeDTO;
-import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypesDTO;
 
 public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTemplatesPolicyDTO> {
 
