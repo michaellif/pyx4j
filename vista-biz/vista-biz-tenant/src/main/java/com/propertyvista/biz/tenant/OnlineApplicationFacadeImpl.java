@@ -293,6 +293,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         app.customer().set(participant.leaseParticipant().customer());
         app.role().setValue(role);
         app.progress().setValue(BigDecimal.ZERO);
+
         Persistence.service().persist(app);
         return app;
     }

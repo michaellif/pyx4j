@@ -16,15 +16,20 @@ package com.propertyvista.domain.tenant.insurance;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+
+import com.propertyvista.domain.security.CustomerSignature;
 
 @DiscriminatorValue("TenantSureInsurancePolicy")
 public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureInsuranceCertificate> {
@@ -121,5 +126,10 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<TenantSureTransaction> transactions();
+
+    @NotNull
+    @Caption(name = "I agree to the Terms")
+    @MemberColumn(name = "signature")
+    CustomerSignature personalDisclaimerSignature();
 
 }

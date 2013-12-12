@@ -13,12 +13,15 @@
  */
 package com.propertyvista.domain.payment;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.validator.NotNull;
 
+import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @DiscriminatorValue("InsurancePaymentMethod")
@@ -30,4 +33,8 @@ public interface InsurancePaymentMethod extends PaymentMethod {
     @Indexed
     Tenant tenant();
 
+    @NotNull
+    @Caption(name = "I agree to the Terms")
+    @MemberColumn(name = "signature")
+    CustomerSignature preAuthorizedAgreementSignature();
 }

@@ -13,15 +13,11 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.dto.insurance;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISignature;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
@@ -62,9 +58,5 @@ public interface TenantSureInsurancePolicyDTO extends TenantSureInsurancePolicy 
     TenantSurePaymentDTO nextPaymentDetails();
 
     IList<TenantSureMessageDTO> messages();
-
-    @NotNull
-    @Caption(name = "I agree to the Terms")
-    CustomerSignature personalDisclaimerSignature();
 
 }

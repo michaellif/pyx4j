@@ -7,19 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 11, 2013
+ * Created on Dec 12, 2013
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.domain.tenant.prospect;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.entity.shared.IEntity;
 
-@EmbeddedEntity
-public interface CustomerSignature extends ISignature {
+import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
+import com.propertyvista.domain.security.CustomerSignature;
 
-    @Override
-    CustomerUser signingUser();
+public interface SignedLegalTerm extends IEntity {
+
+    OnlineApplicationLegalTerm term();
+
+    CustomerSignature signature();
 
 }

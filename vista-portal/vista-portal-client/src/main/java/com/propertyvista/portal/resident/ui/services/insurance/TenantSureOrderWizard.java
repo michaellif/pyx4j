@@ -123,7 +123,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         get(proto().personalDisclaimerSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
             public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
-                if (!value.agreeBox().isBooleanTrue()) {
+                if (!value.agree().isBooleanTrue()) {
                     return new ValidationError(component, i18n.tr("You must agree to the personal disclaimer terms to continue"));
                 }
                 return null;

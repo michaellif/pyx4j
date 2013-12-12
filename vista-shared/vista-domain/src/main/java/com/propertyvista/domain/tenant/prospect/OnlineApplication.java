@@ -90,6 +90,9 @@ public interface OnlineApplication extends IEntity {
     @ReadOnly
     IPrimitive<Role> role();
 
+    @Owned
+    IList<SignedLegalTerm> legalTerms();
+
     IPrimitive<Status> status();
 
     /**

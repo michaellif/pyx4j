@@ -14,7 +14,9 @@
 package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -38,9 +40,16 @@ public interface OnlineApplicationLegalTerm extends IEntity {
     OnlineApplicationPolicy policy();
 
     // per locale
+    @Deprecated
     @Owned
     @OrderBy(value = PrimaryKey.class)
     IList<OnlineApplicationLegalTermContent> content();
+
+    IPrimitive<String> title();
+
+    @Editor(type = Editor.EditorType.richtextarea)
+    @Length(48000)
+    IPrimitive<String> body();
 
     IPrimitive<SignatureType> signatureType();
 
