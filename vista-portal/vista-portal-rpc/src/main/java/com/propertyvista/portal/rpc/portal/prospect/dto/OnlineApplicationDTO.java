@@ -51,7 +51,7 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IList<GuarantorDTO> guarantors();
 
-    // Unit selection :
+    UnitSelectionDTO unitSelection();
 
-    IList<AptUnit> availableUnits();
+    UnitOptionsSelectionDTO unitOptionsSelection();
 }

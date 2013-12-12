@@ -13,16 +13,23 @@
  */
 package com.propertyvista.portal.server.portal.prospect.services;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -39,6 +46,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
@@ -46,7 +54,6 @@ import com.propertyvista.server.common.util.LeaseParticipantUtils;
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     public ApplicationWizardServiceImpl() {
-
     }
 
     @Override
@@ -70,6 +77,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         fillCoApplicants(bo, to);
         fillGuarantors(bo, to);
 
+        fillUnitSelectionData(bo, to);
+
         callback.onSuccess(to);
     }
 
@@ -81,6 +90,20 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     @Override
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplan, LogicalDate moveIn) {
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        criteria.eq(criteria.proto().floorplan(), floorplan);
+        criteria.ge(criteria.proto()._availableForRent(), moveIn);
+
+        callback.onSuccess(new Vector<AptUnit>(Persistence.service().query(criteria)));
+    }
+
+    @Override
+    public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, AptUnit unit) {
+        callback.onSuccess(retriveAvailableUnitOptions(unit));
     }
 
     // internals: -----------------------------------------------------------------------------------------------------
@@ -222,5 +245,28 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             to.guarantors().add(grnt);
         }
+    }
+
+    private void fillUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private UnitOptionsSelectionDTO retriveAvailableUnitOptions(AptUnit unit) {
+        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
+        options.restrictions().set(retriveUnitOptionRestrictions(unit));
+
+        return options;
+    }
+
+    private UnitOptionsSelectionDTO.Restrictions retriveUnitOptionRestrictions(AptUnit unit) {
+        UnitOptionsSelectionDTO.Restrictions restrictions = EntityFactory.create(UnitOptionsSelectionDTO.Restrictions.class);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit, RestrictionsPolicy.class);
+
+        restrictions.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
+        restrictions.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
+        restrictions.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
+
+        return restrictions;
     }
 }

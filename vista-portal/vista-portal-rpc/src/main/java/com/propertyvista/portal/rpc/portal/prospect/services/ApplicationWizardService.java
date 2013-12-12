@@ -13,13 +13,19 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 
 public interface ApplicationWizardService extends IService {
 
@@ -30,4 +36,7 @@ public interface ApplicationWizardService extends IService {
 
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity);
 
+    void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplan, LogicalDate moveIn);
+
+    void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, AptUnit unit);
 }
