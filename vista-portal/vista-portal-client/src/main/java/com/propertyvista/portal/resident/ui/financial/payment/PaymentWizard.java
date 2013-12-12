@@ -399,7 +399,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             @Override
             public void onSuccess(ConvenienceFeeCalculationResponseTO result) {
                 if (result != null) {
-                    panel.add(createDecorator(i18n.tr("Convenience Fee:"), result.feeAmount().getStringView()));
+                    panel.add(createDecorator(i18n.tr("Service Fee:"), result.feeAmount().getStringView()));
                     panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
 
                     getValue().convenienceFee().setValue(result.feeAmount().getValue());
