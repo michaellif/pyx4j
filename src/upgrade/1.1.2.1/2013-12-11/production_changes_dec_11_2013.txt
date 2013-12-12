@@ -1,0 +1,25 @@
+Terminated lease 30642 with date 12/10/2013, Moved Out, Closed the lease with reason "Re-creating the lease due to incorrect billing cycles."
+Changed Billing policy to have Billing Cycle Start Date as 21
+Created Current Lease 31149 for the same unit 51194. Lease From = 06/21/2013, Lease To = 06/20/2013. Tenant = Jeff Smith 46032. Agreed Price = 3800.
+Activated the lease. Verified that bills properly start on 21.
+This user did not have an autopay set up fort he lease.
+
+Terminated lease 30663 with date 12/10/2013, Moved Out, Closed the lease with reason "Re-creating the lease due to incorrect billing cycles."
+Changed Billing policy to have Billing Cycle Start Date as 1.
+Created Current Lease 31150 for the same unit 20225. Lease From = 06/01/2012, Lease To = 05/31/2014. Tenant = John Schable 46033. Agreed Price = 4219.
+Activated the lease. Verified that bills properly start on 1.
+The user had an autopay for pervious lease. Re-created an autopay 10308 for full price based on Payment Method 6228.
+
+Terminated lease 30808 with date 12/10/2013, Moved Out, Closed the lease with reason "Re-creating the lease due to incorrect billing cycles."
+Changed Billing policy to have Billing Cycle Start Date as 15.
+Created Current Lease 31151 for the same unit 51225. Lease From = 06/15/2012, Lease To = 05/31/2014. Tenant = John Schable 46034. Agreed Price = 1401.
+Activated the lease. Verified that bills properly start on 15.
+The user had an autopay for pervious lease. Re-created an autopay 10309 for full price based on Payment Method 6228.
+
+Terminated lease 30935 with date 12/10/2013, Moved Out, Closed the lease with reason "Re-creating the lease due to incorrect billing cycles."
+Changed Billing policy to have Billing Cycle Start Date as 1.
+Created Current Lease 31152 for the same unit 51240. Lease From = 07/01/2013, Lease To = 05/31/2014. Tenant = Jeff Smith 46035. Agreed Price = 807.
+Activated the lease. Verified that bills properly start on 1.
+The user had an autopay for pervious lease. Re-created an autopay 10310 for full price based on Payment Method 6398.
+
+Changed Billing policy to have Billing Cycle Start Date as "Same as Lease Start Day".
