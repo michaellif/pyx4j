@@ -43,7 +43,7 @@ public interface ConvenienceFeeCalculationResponseTO extends IEntity {
     IPrimitive<BigDecimal> feeAmount();
 
     @NotNull
-    @Format("#,##0.00")
+    @Format("#.00%")
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> feePercentage();
 

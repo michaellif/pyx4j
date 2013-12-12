@@ -377,7 +377,7 @@ class CreditCardProcessor {
             to.feeAmount().setValue(response.feeAmount().getValue());
             to.total().setValue(response.totalAmount().getValue());
 
-            to.feePercentage().setValue(response.feeAmount().getValue().divide(response.totalAmount().getValue(), RoundingMode.HALF_UP));
+            to.feePercentage().setValue(response.feeAmount().getValue().divide(response.totalAmount().getValue(), 4, RoundingMode.HALF_UP));
 
             return to;
         } else {
