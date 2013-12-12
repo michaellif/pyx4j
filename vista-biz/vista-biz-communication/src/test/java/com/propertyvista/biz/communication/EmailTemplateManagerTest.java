@@ -92,6 +92,7 @@ import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
@@ -120,6 +121,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     private LeaseTermTenant mainAplt;
 
     private LeaseTermTenant coAplt;
+
+    private LeaseTermGuarantor guarantor;
 
     private Lease lease;
 
@@ -604,6 +607,30 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             }
             break;
         case ApplicationCreatedCoApplicant:
+            if (asString) {
+                String[] args = {
+                    coAplt.leaseParticipant().customer().user().name().getValue(),
+                    coApp.id().getStringView(),
+                    appUrl,
+                    officePhone,
+                    building.marketing().name().getValue(),
+                    adminName
+                };
+                fmtArgs = args;
+            } else {
+                ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
+                BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+                String[] args = {
+                    EmailTemplateManager.getVarname(appT.CoApplicant().Name()),
+                    EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                    EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                    EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
+                    EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
+                    EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+                };
+                fmtArgs = args;
+            }
+            break;
         case ApplicationCreatedGuarantor:
             if (asString) {
                 String[] args = {
@@ -619,7 +646,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.Applicant().Name()),
+                    EmailTemplateManager.getVarname(appT.Guarantor().Name()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(appT.SignUpUrl()),
                     EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
@@ -1117,38 +1144,57 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         lease.currentTerm().termFrom().setValue(new LogicalDate());
 
         // main applicant
-        Customer customer = EntityFactory.create(Customer.class);
-        customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
-        customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
-        customer.person()
-                .email()
-                .setValue(
-                        customer.person().name().lastName() + String.valueOf(uniqueForTestInt()) + "@" + customer.person().name().firstName().getValue()
-                                + ".com");
+        {
+            Customer customer = EntityFactory.create(Customer.class);
+            customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
+            customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
+            customer.person()
+                    .email()
+                    .setValue(
+                            customer.person().name().lastName() + String.valueOf(uniqueForTestInt()) + "@" + customer.person().name().firstName().getValue()
+                                    + ".com");
 
-        mainAplt = EntityFactory.create(LeaseTermTenant.class);
-        mainAplt.leaseParticipant().customer().set(customer);
-        mainAplt.role().setValue(LeaseTermParticipant.Role.Applicant);
-        lease.currentTerm().version().tenants().add(mainAplt);
+            mainAplt = EntityFactory.create(LeaseTermTenant.class);
+            mainAplt.leaseParticipant().customer().set(customer);
+            mainAplt.role().setValue(LeaseTermParticipant.Role.Applicant);
+            lease.currentTerm().version().tenants().add(mainAplt);
+        }
 
         // co-applicant
-        customer = EntityFactory.create(Customer.class);
-        customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
-        customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
-        customer.person()
-                .email()
-                .setValue(
-                        customer.person().name().lastName() + String.valueOf(uniqueForTestInt()) + "@" + customer.person().name().firstName().getValue()
-                                + ".com");
+        {
+            Customer customer = EntityFactory.create(Customer.class);
+            customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
+            customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
+            customer.person()
+                    .email()
+                    .setValue(
+                            customer.person().name().lastName() + String.valueOf(uniqueForTestInt()) + "@" + customer.person().name().firstName().getValue()
+                                    + ".com");
 
-        coAplt = EntityFactory.create(LeaseTermTenant.class);
-        coAplt.leaseParticipant().customer().set(customer);
-        coAplt.role().setValue(LeaseTermParticipant.Role.CoApplicant);
-        coAplt.application().set(mainApp);
-        lease.currentTerm().version().tenants().add(coAplt);
+            coAplt = EntityFactory.create(LeaseTermTenant.class);
+            coAplt.leaseParticipant().customer().set(customer);
+            coAplt.role().setValue(LeaseTermParticipant.Role.CoApplicant);
+            coAplt.application().set(mainApp);
+            lease.currentTerm().version().tenants().add(coAplt);
+        }
 
-        // TODO load guarantors
-        // ...
+        // guarantor
+        {
+            Customer customer = EntityFactory.create(Customer.class);
+            customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
+            customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
+            customer.person()
+                    .email()
+                    .setValue(
+                            customer.person().name().lastName() + String.valueOf(uniqueForTestInt()) + "@" + customer.person().name().firstName().getValue()
+                                    + ".com");
+
+            guarantor = EntityFactory.create(LeaseTermGuarantor.class);
+            guarantor.leaseParticipant().customer().set(customer);
+            guarantor.role().setValue(LeaseTermParticipant.Role.CoApplicant);
+            guarantor.application().set(mainApp);
+            lease.currentTerm().version().guarantors().add(guarantor);
+        }
 
         ServerSideFactory.create(LeaseFacade.class).persist(lease);
         ServerSideFactory.create(LeaseFacade.class).finalize(lease);
