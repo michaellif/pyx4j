@@ -91,4 +91,10 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
 
     }
 
+    @Override
+    public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

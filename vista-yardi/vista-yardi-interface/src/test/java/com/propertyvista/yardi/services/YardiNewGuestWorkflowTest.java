@@ -96,6 +96,8 @@ public class YardiNewGuestWorkflowTest {
 
     private static final String SOURCE = "ILS";
 
+    private static YardiGuestProcessor guestProcessor;
+
     public static void main(String[] args) {
 
         try {
@@ -135,6 +137,8 @@ public class YardiNewGuestWorkflowTest {
                 System.out.println("Marketing Source 'ILS' is not configured. Exit.");
                 return;
             }
+
+            guestProcessor = new YardiGuestProcessor(agentName, sourceName);
 
             // retrieve guests
             LeadManagement guestActivity = stub.getGuestActivity(yc, yc.propertyListCodes().getValue());
@@ -213,7 +217,13 @@ public class YardiNewGuestWorkflowTest {
                     continue;
                 }
             }
-            Prospect guest = new YardiGuestProcessor().getProspect(guestName, ilsUnit, moveIn, agentName, sourceName);
+            String[] names = guestName.split(" ", 2);
+            Prospect guest = guestProcessor.getProspect(names[0], names[1], null, yc.propertyListCodes().getValue());
+            guestProcessor //
+                    .addUnit(guest, ilsUnit.getUnit()) //
+                    .addMoveInDate(guest, moveIn) //
+                    // add first contact event
+                    .addEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
             updateGuest(guest);
             // allocate unit
             holdUnit(guest, ilsUnit);
@@ -274,7 +284,7 @@ public class YardiNewGuestWorkflowTest {
     }
 
     static void holdUnit(Prospect guest, ILSUnit ilsUnit) {
-        EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, EventTypes.HOLD, false);
+        EventType event = guestProcessor.getNewEvent(EventTypes.HOLD, false);
         Identification holdId = new Identification();
         holdId.setIDType(ilsUnit.getUnit().getInformation().get(0).getUnitID());
         holdId.setIDValue("0");
@@ -324,7 +334,7 @@ public class YardiNewGuestWorkflowTest {
                 item.setValue("03");
                 guest.getCustomerPreferences().getCustomerAdditionalPreferences().add(item);
             }
-            EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, EventTypes.OTHER, false);
+            EventType event = guestProcessor.getNewEvent(EventTypes.OTHER, false);
             guest.getEvents().getEvent().clear();
             guest.getEvents().getEvent().add(event);
             guest.getCustomers().getCustomer().get(0).setType(CustomerInfo.PROSPECT);
@@ -347,10 +357,10 @@ public class YardiNewGuestWorkflowTest {
                 // ignore
             }
             if (type != null) {
-                EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, type, false);
+                EventType event = guestProcessor.getNewEvent(type, false);
                 switch (type) {
                 case LEASE_SIGN:
-                    event.setQuotes(new YardiGuestProcessor().getNewQuotes(900));
+                    event.setQuotes(guestProcessor.getNewQuotes(900));
                     break;
                 default:
                     break;

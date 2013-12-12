@@ -32,6 +32,8 @@ public interface YardiGuestManagementStub extends ExternalInterfaceLoggingStub {
 
     LeadManagement getGuestActivity(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
 
+    LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException;
+
     void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException;
 
     void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException;

@@ -32,6 +32,8 @@ import com.yardi.ws.operations.guestcard40.GetYardiAgentsSourcesResults_Login;
 import com.yardi.ws.operations.guestcard40.GetYardiAgentsSourcesResults_LoginResponse;
 import com.yardi.ws.operations.guestcard40.GetYardiGuestActivity_Login;
 import com.yardi.ws.operations.guestcard40.GetYardiGuestActivity_LoginResponse;
+import com.yardi.ws.operations.guestcard40.GetYardiGuestActivity_Search;
+import com.yardi.ws.operations.guestcard40.GetYardiGuestActivity_SearchResponse;
 import com.yardi.ws.operations.guestcard40.GetYardiRentableItems_Login;
 import com.yardi.ws.operations.guestcard40.GetYardiRentableItems_LoginResponse;
 import com.yardi.ws.operations.guestcard40.ImportYardiGuest_Login;
@@ -244,6 +246,53 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             LeadManagement guestInfo = MarshallUtil.unmarshal(LeadManagement.class, xml);
 
             log.debug("\n--- GetYardiGuestActivity ---\n{}\n", guestInfo);
+
+            return guestInfo;
+        } catch (Throwable e) {
+            throw new YardiServiceException(e);
+        }
+    }
+
+    @Override
+    public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException {
+        try {
+            init(Action.GetYardiGuestSearch);
+
+            GetYardiGuestActivity_Search request = new GetYardiGuestActivity_Search();
+
+            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
+
+            request.setUserName(yc.username().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+
+            request.setYardiPropertyId(propertyId);
+            request.setThirdPartyId(guestId);
+
+            GetYardiGuestActivity_SearchResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Search(request);
+            if (response.getGetYardiGuestActivity_SearchResult() == null) {
+                throw new Error("Received response is null");
+            }
+
+            String xml = response.getGetYardiGuestActivity_SearchResult().getExtraElement().toString();
+
+            log.info("GetYardiGuestSearch Result: {}", xml);
+
+            if (Messages.isMessageResponse(xml)) {
+                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+                if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
+                    throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
+                }
+            }
+            LeadManagement guestInfo = MarshallUtil.unmarshal(LeadManagement.class, xml);
+
+            log.debug("\n--- GetYardiGuestSearch ---\n{}\n", guestInfo);
 
             return guestInfo;
         } catch (Throwable e) {
