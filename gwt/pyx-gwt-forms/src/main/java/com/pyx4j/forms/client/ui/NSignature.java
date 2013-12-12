@@ -53,7 +53,7 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
     public void setNativeValue(ISignature value) {
         super.setNativeValue(value);
         if (value != null && getEditor() != null) {
-            getEditor().checkBox.setValue(value.agreeBox().getValue());
+            getEditor().checkBox.setValue(value.agree().getValue());
         }
     }
 
@@ -61,7 +61,7 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
     public ISignature getNativeValue() throws java.text.ParseException {
         ISignature signature = super.getNativeValue();
         if (getEditor() != null) {
-            signature.agreeBox().setValue(getEditor().checkBox.getValue());
+            signature.agree().setValue(getEditor().checkBox.getValue());
         }
         return signature.duplicate();
     }

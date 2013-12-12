@@ -54,6 +54,6 @@ public interface ISignature extends IEntity {
     @Caption(name = "Type Your Initials", description = "Maximum 3 letters. Do not use periods or spaces.")
     IPrimitive<String> initials();
 
-    IPrimitive<Boolean> agreeBox();
+    IPrimitive<Boolean> agree();
 
 }

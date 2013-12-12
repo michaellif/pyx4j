@@ -120,7 +120,7 @@ public class DomainFactory {
 
         ISignature signature = EntityFactory.create(ISignature.class);
         signature.fullName().setValue("John Doe");
-        signature.agreeBox().setValue(true);
+        signature.agree().setValue(true);
         signature.signatureType().setValue(SignatureType.AgreeBoxAndFullName);
         retVal.signature1().set(signature);
 
