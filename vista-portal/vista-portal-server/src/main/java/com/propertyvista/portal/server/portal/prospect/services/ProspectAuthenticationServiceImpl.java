@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.portal.prospect.services;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +32,6 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
@@ -103,15 +103,16 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
                 throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
             }
         } else if (selectedApplication != null) {
-            PortalProspectBehavior behavior = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationBehavior(selectedApplication);
-            if (behavior == null) {
+            EnumSet<PortalProspectBehavior> applicationBehaviors = ServerSideFactory.create(OnlineApplicationFacade.class)
+                    .getOnlineApplicationBehavior(selectedApplication);
+            if (applicationBehaviors.isEmpty()) {
                 if (ApplicationMode.isDevelopment()) {
                     throw new Error("User Not Authorized to access application, " + user.getStringView());
                 } else {
                     throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
                 }
             }
-            actualBehaviors.add(behavior);
+            actualBehaviors.addAll(applicationBehaviors);
             actualBehaviors.addAll(behaviors);
             if (applications.size() > 1) {
                 actualBehaviors.add(PortalProspectBehavior.HasMultipleApplications);

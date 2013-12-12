@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -35,7 +36,7 @@ public interface OnlineApplicationFacade {
 
     List<OnlineApplication> getOnlineApplications(CustomerUser customerUser);
 
-    PortalProspectBehavior getOnlineApplicationBehavior(OnlineApplication application);
+    EnumSet<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication application);
 
     void submitOnlineApplication(OnlineApplication application);
 

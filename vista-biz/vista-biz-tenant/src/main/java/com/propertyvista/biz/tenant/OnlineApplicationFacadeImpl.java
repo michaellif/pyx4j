@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.commons.UserRuntimeException;
@@ -23,7 +24,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.server.EmailValidator;
 
@@ -41,7 +41,6 @@ import com.propertyvista.domain.tenant.ProspectSignUp;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -105,34 +104,41 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public PortalProspectBehavior getOnlineApplicationBehavior(OnlineApplication application) {
-        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
-        criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-        criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), application);
-        LeaseTerm leaseTerm = Persistence.service().retrieve(criteria);
+    public EnumSet<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication application) {
+        EnumSet<PortalProspectBehavior> retVal = EnumSet.noneOf(PortalProspectBehavior.class);
 
-        for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
-            Persistence.service().retrieve(tenant);
-            if (application.customer().equals(tenant.leaseParticipant().customer())) {
-
+        {
+            EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+            criteria.eq(criteria.proto().leaseTermV().holder().lease().leaseApplication().onlineApplication().applications(), application);
+            criteria.eq(criteria.proto().leaseParticipant().customer(), application.customer());
+            for (LeaseTermTenant tenant : Persistence.service().query(criteria)) {
                 switch (tenant.role().getValue()) {
                 case Applicant:
-                    return PortalProspectBehavior.Applicant;
+                    retVal.add(PortalProspectBehavior.Applicant);
                 case CoApplicant:
-                    return PortalProspectBehavior.CoApplicant;
-                default:
-                    return null;
+                    retVal.add(PortalProspectBehavior.CoApplicant);
                 }
             }
         }
-        for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
-            Persistence.service().retrieve(guarantor);
-            if (application.customer().equals(guarantor.leaseParticipant().customer())) {
-                return PortalProspectBehavior.Guarantor;
+        {
+            EntityQueryCriteria<LeaseTermGuarantor> criteria = EntityQueryCriteria.create(LeaseTermGuarantor.class);
+            criteria.eq(criteria.proto().leaseTermV().holder().lease().leaseApplication().onlineApplication().applications(), application);
+            criteria.eq(criteria.proto().leaseParticipant().customer(), application.customer());
+            if (Persistence.service().exists(criteria)) {
+                retVal.add(PortalProspectBehavior.Guarantor);
             }
         }
 
-        return null;
+        if (retVal.contains(PortalProspectBehavior.Applicant)) {
+            EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
+            criteria.eq(criteria.proto().applications(), application);
+            MasterOnlineApplication moa = Persistence.service().retrieve(criteria);
+            if (moa != null && (!moa.building().isNull() || !moa.floorplan().isNull())) {
+                retVal.add(PortalProspectBehavior.CanEditLeaseTerms);
+            }
+        }
+
+        return retVal;
     }
 
     @Override
@@ -140,7 +146,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         application.status().setValue(OnlineApplication.Status.Submitted);
         Persistence.service().persist(application);
 
-// TODO: update behaviour somehow: 
+// TODO: update behavior somehow: 
 //            CustomerUser user = application.customer().user();
 //            CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
 //            boolean isApplicant = false;

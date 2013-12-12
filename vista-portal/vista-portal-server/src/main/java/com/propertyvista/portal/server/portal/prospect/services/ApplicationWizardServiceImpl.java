@@ -195,6 +195,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
 
         case Guarantor:
+            // TODO process guarantor case here...
             break;
         }
 
@@ -253,23 +254,23 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void fillUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
         to.unitSelection().set(null);
 
-        MasterOnlineApplication mo = ProspectPortalContext.getMasterOnlineApplication();
-        if (!mo.building().isNull() || !mo.floorplan().isNull()) {
+        MasterOnlineApplication moa = ProspectPortalContext.getMasterOnlineApplication();
+        if (!moa.building().isNull() || !moa.floorplan().isNull()) {
             UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
 
-            unitSelection.building().set(mo.building());
-            unitSelection.floorplan().set(mo.floorplan());
+            unitSelection.building().set(moa.building());
+            unitSelection.floorplan().set(moa.floorplan());
             unitSelection.moveIn().setValue(new LogicalDate(SystemDateManager.getDate()));
 
             {
                 EntityQueryCriteria<Floorplan> criteria = new EntityQueryCriteria<Floorplan>(Floorplan.class);
-                criteria.eq(criteria.proto().building(), mo.building());
+                criteria.eq(criteria.proto().building(), moa.building());
                 unitSelection.availableFloorplans().addAll(Persistence.service().query(criteria));
             }
 
-            if (!mo.floorplan().isNull()) {
+            if (!moa.floorplan().isNull()) {
                 EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-                criteria.eq(criteria.proto().floorplan(), mo.floorplan());
+                criteria.eq(criteria.proto().floorplan(), moa.floorplan());
                 criteria.ge(criteria.proto()._availableForRent(), unitSelection.moveIn());
                 unitSelection.availableUnits().addAll(Persistence.service().query(criteria));
             }
