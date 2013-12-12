@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.processors;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -155,7 +156,7 @@ public class YardiGuestProcessor {
         return unit;
     }
 
-    public Quotes getNewQuotes(int amount) {
+    public Quotes getRentQuote(BigDecimal amount) {
         Quote quote = new Quote();
         CurrencyRangeType value = new CurrencyRangeType();
         value.setExact(String.valueOf(amount));

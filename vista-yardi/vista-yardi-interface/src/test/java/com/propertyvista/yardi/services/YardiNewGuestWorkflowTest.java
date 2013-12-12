@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -360,7 +361,7 @@ public class YardiNewGuestWorkflowTest {
                 EventType event = guestProcessor.getNewEvent(type, false);
                 switch (type) {
                 case LEASE_SIGN:
-                    event.setQuotes(guestProcessor.getNewQuotes(900));
+                    event.setQuotes(guestProcessor.getRentQuote(new BigDecimal(900)));
                     break;
                 default:
                     break;

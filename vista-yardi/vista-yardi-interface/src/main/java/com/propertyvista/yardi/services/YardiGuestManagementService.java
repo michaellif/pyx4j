@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
@@ -100,7 +101,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
             guestProcessor.addRentableItem(guest, type);
         }
         guestProcessor.addEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
-        updateGuest(yc, guest);
+        submitGuest(yc, guest);
 
         // add unit hold event
         EventType event = guestProcessor.getNewEvent(EventTypes.HOLD, false);
@@ -109,14 +110,14 @@ public class YardiGuestManagementService extends YardiAbstractService {
         holdId.setIDValue("0");
         event.setEventID(holdId);
         guestProcessor.addEvent(guest, event);
-        updateGuest(yc, guest);
+        submitGuest(yc, guest);
 
         // create lease
         for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
             event = guestProcessor.getNewEvent(type, false);
-            event.setQuotes(guestProcessor.getNewQuotes(900));
+            event.setQuotes(guestProcessor.getRentQuote(getRentPrice()));
             guestProcessor.addEvent(guest, event);
-            updateGuest(yc, guest);
+            submitGuest(yc, guest);
         }
 
         // do guest search to retrieve lease id
@@ -132,12 +133,17 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return ServerSideFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, propertyId);
     }
 
-    private List<String> getLeaseProducts(Lease lease) {
-        // TODO: VladL - return list of rentable item types
-        return null;
+    private BigDecimal getRentPrice() {
+        // TODO: VladL - return rent price (service only)
+        return new BigDecimal(950);
     }
 
-    private void updateGuest(PmcYardiCredential yc, Prospect guest) throws YardiServiceException {
+    private List<String> getLeaseProducts(Lease lease) {
+        // TODO: VladL - return list of rentable item types
+        return Arrays.asList("parking", "locker");
+    }
+
+    private void submitGuest(PmcYardiCredential yc, Prospect guest) throws YardiServiceException {
         LeadManagement lead = new LeadManagement();
         lead.setProspects(new Prospects());
         lead.getProspects().getProspect().add(guest);
