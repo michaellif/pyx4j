@@ -140,37 +140,6 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     }
 
     @Override
-    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quoteIdHolder, String tenantName, String tenantPhone,
-            InsurancePaymentMethod paymentMethod) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
-            throw new TenantSureOnMaintenanceException();
-        }
-
-        paymentMethod.tenant().set(ResidentPortalContext.getTenant());
-
-        // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
-        ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(//@formatter:off
-                paymentMethod,
-                ResidentPortalContext.getTenant().<Tenant> createIdentityStub()
-        );//@formatter:on
-
-        TenantSureQuoteDTO quote = ServerSideQuteStorage.get(quoteIdHolder.quoteId().getValue());
-        if (quote == null) {
-            throw new Error("The requested quote " + quoteIdHolder.quoteId().getValue() + " was not found in client's context");
-        }
-        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(//@formatter:off
-                quote,
-                ResidentPortalContext.getTenant().<Tenant> createIdentityStub(),
-                tenantName,
-                tenantPhone
-        );//@formatter:on
-
-        ServerSideQuteStorage.clear();
-
-        callback.onSuccess(null);
-    }
-
-    @Override
     public void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
@@ -180,8 +149,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         if (ServerSideQuteStorage.get(quoteId) == null) {
             throw new Error("The requested quote " + quoteId + " was not found in client's context");
         }
-        String email = ServerSideFactory.create(TenantSureFacade.class).sendQuote(ResidentPortalContext.getTenant().<Tenant> createIdentityStub(),
-                quoteId);
+        String email = ServerSideFactory.create(TenantSureFacade.class).sendQuote(ResidentPortalContext.getTenant().<Tenant> createIdentityStub(), quoteId);
         asyncCallback.onSuccess(email);
     }
 
@@ -269,7 +237,8 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
                 quote,
                 ResidentPortalContext.getTenant().<Tenant> createIdentityStub(),
                 policyDto.tenantSureCoverageRequest().tenantName().getValue(),
-                policyDto.tenantSureCoverageRequest().tenantPhone().getValue()
+                policyDto.tenantSureCoverageRequest().tenantPhone().getValue(),
+                policyDto.personalDisclaimerSignature()
         );//@formatter:on
 
         ServerSideQuteStorage.clear();
@@ -284,8 +253,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
         paymentMethod.tenant().set(ResidentPortalContext.getTenant());
 
-        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
-                ResidentPortalContext.getTenant().<Tenant> createIdentityStub());
+        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod, ResidentPortalContext.getTenant().<Tenant> createIdentityStub());
 
         Persistence.service().commit();
 
@@ -309,8 +277,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
             throw new TenantSureOnMaintenanceException();
         }
 
-        ServerSideFactory.create(TenantSureFacade.class).reinstate(
-                ResidentPortalContext.getLeaseTermTenant().leaseParticipant().<Tenant> createIdentityStub());
+        ServerSideFactory.create(TenantSureFacade.class).reinstate(ResidentPortalContext.getLeaseTermTenant().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
     }
 

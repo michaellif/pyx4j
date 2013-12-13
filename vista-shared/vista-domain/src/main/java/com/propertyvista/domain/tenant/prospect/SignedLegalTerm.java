@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.prospect;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
@@ -22,6 +24,8 @@ public interface SignedLegalTerm extends IEntity {
 
     OnlineApplicationLegalTerm term();
 
+    @Owned
+    @Detached
     CustomerSignature signature();
 
 }

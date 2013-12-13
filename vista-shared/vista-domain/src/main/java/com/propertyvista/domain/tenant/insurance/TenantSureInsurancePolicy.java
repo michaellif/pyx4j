@@ -19,7 +19,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -127,6 +126,8 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
     @Detached(level = AttachLevel.Detached)
     ISet<TenantSureTransaction> transactions();
 
+    @Owned
+    @Detached
     @NotNull
     @Caption(name = "I agree to the Terms")
     @MemberColumn(name = "signature")

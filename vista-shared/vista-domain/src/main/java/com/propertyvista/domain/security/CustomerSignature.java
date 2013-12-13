@@ -13,10 +13,12 @@
  */
 package com.propertyvista.domain.security;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Adapters;
 import com.pyx4j.entity.shared.ISignature;
 
-@EmbeddedEntity
+import com.propertyvista.shared.adapters.CustomerSignatureAdapter;
+
+@Adapters(entityModificationAdapters = CustomerSignatureAdapter.class)
 public interface CustomerSignature extends ISignature {
 
     @Override

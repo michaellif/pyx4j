@@ -47,6 +47,7 @@ import com.propertyvista.biz.tenant.insurance.tenantsure.rules.TenantSurePayment
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
@@ -58,9 +59,9 @@ import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO.PreviousClaims;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO.PreviousClaims;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
@@ -163,7 +164,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
      * Function implements this: http://jira.birchwoodsoftwaregroup.com/wiki/pages/viewpage.action?pageId=10027234
      */
     @Override
-    public Key buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantPhone, String tenantName) {
+    public Key buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantPhone, String tenantName, CustomerSignature signature) {
         Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
 
         Object mutex = TENANT_SURE_PURCHASE_MUTEX[(int) tenantId.getPrimaryKey().asLong() % TENANT_SURE_PURCHASE_MUTEX_COUNT];
@@ -190,6 +191,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             tenantSurePolicy.totalMonthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
             tenantSurePolicy.totalAnniversaryFirstMonthPayable().setValue(quote.totalAnniversaryFirstMonthPayable().getValue());
             tenantSurePolicy.totalFirstPayable().setValue(quote.totalFirstPayable().getValue());
+            tenantSurePolicy.personalDisclaimerSignature().set(signature);
 
             TenantSureInsuranceCertificate certificate = EntityFactory.create(TenantSureInsuranceCertificate.class);
             certificate.insuranceCertificateNumber().setValue(null); // we will get certificate number later: after we have managed to preauthorize a payment transaction

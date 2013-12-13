@@ -26,11 +26,6 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuot
 
 public interface TenantSureInsurancePolicyCrudService extends AbstractCrudService<TenantSureInsurancePolicyDTO> {
 
-    @Deprecated
-    /** TenantSure Purchase service finish should be used */
-    void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
-            InsurancePaymentMethod paymentMethod);
-
     void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO coverageRequest);
 
     void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback);

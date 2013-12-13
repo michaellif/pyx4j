@@ -17,6 +17,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
@@ -43,7 +44,7 @@ public interface TenantSureFacade {
      * 
      * @return key of the TenantSurePolicy
      */
-    Key buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantName, String tenantPhone);
+    Key buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantName, String tenantPhone, CustomerSignature signature);
 
     /**
      * Sends a cancellation request (cancellation itself should happen on expiry date)
