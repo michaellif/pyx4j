@@ -29,12 +29,14 @@ public class MoneyInBatchesViewImpl extends AbstractPrimePaneWithMessagesPopup i
 
     public MoneyInBatchesViewImpl() {
         LayoutPanel viewPanel = new LayoutPanel();
+        viewPanel.setSize("100%", "100%");
         batchesDataGrid = new MoneyInBatchDataGrid();
         viewPanel.add(batchesDataGrid);
         viewPanel.setWidgetTopBottom(batchesDataGrid, 0, Unit.PX, 0, Unit.PX);
         viewPanel.setWidgetLeftRight(batchesDataGrid, 0, Unit.PX, 0, Unit.PX);
 
         setContentPane(viewPanel);
+        setSize("100%", "100%");
     }
 
     @Override

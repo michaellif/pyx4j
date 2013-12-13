@@ -17,12 +17,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 @Transient
 public interface MoneyInLeaseParticipantDTO extends IEntity {
 
-    Tenant leaseTermTenantIdStub();
+    LeaseTermTenant leaseTermTenantIdStub();
 
     IPrimitive<String> name();
 
