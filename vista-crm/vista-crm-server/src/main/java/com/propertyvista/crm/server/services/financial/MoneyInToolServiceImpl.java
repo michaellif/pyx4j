@@ -124,6 +124,7 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         candidate.totalOutstanding().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
 
         candidate.processPayment().setValue(false);
+        candidate.payment().leaseIdStub().set(lease.createIdentityStub());
         candidate.payment().payerLeaseTermTenantIdStub().set(candidate.payerCandidates().get(0).leaseTermTenantIdStub());
 
         return candidate;
