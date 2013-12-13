@@ -68,8 +68,8 @@ import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
  * - It is NOT expected to fail unless a runtime exception occurs.
  * - All checked exceptions only reported by logging ERROR message.
  */
-public class YardiCreateNewLeaseTest extends IntegrationTestBase {
-    private final static Logger log = LoggerFactory.getLogger(YardiCreateNewLeaseTest.class);
+public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
+    private final static Logger log = LoggerFactory.getLogger(YardiCreateNewLeaseTestManual.class);
 
     private static PmcYardiCredential yc = getTestPmcYardiCredential();
 
