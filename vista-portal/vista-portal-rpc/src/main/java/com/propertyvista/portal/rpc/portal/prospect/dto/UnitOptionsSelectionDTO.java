@@ -47,29 +47,27 @@ public interface UnitOptionsSelectionDTO extends IEntity {
 
     // Product Catalog stuff:
 
-    BillableItem agreedService();
+    BillableItem selectedService();
 
     // ---------------------------------
+    IList<BillableItem> selectedUtilities();
 
-    IList<BillableItem> agreedParking();
+    IList<BillableItem> selectedParking();
 
-    IList<BillableItem> agreedStorage();
+    IList<BillableItem> selectedStorage();
 
-    IList<BillableItem> agreedPets();
+    IList<BillableItem> selectedPets();
 
-    IList<BillableItem> agreedUtilities();
-
-    IList<BillableItem> agreedOther();
+    IList<BillableItem> selectedOther();
 
     // ---------------------------------
+    IList<ProductItem> availableUtilities();
 
     IList<ProductItem> availableParking();
 
     IList<ProductItem> availableStorage();
 
     IList<ProductItem> availablePets();
-
-    IList<ProductItem> availableUtilities();
 
     IList<ProductItem> availableOther();
 }

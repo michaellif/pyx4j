@@ -323,33 +323,55 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             criteria.eq(criteria.proto().product(), service.version());
             criteria.eq(criteria.proto().element(), options.unit());
 
-            options.agreedService().item().set(Persistence.service().retrieve(criteria));
-            options.agreedService().agreedPrice().setValue(options.agreedService().item().price().getValue());
+            options.selectedService().set(createBillableItem(Persistence.service().retrieve(criteria)));
 
-            Persistence.service().retrieve(service.version().features());
+            Persistence.service().retrieveMember(service.version().features());
             for (Feature feature : service.version().features()) {
-                Persistence.service().retrieve(feature.version().items());
+                Persistence.service().retrieveMember(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
-                    Persistence.service().retrieve(item.product());
                     switch (feature.code().type().getValue()) {
                     case AddOn:
                     case Utility:
                         options.availableUtilities().add(item);
+                        if (feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedUtilities().add(createBillableItem(item));
+                        }
                         break;
                     case Pet:
                         options.availablePets().add(item);
+                        if (feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedPets().add(createBillableItem(item));
+                        }
                         break;
                     case Parking:
                         options.availableParking().add(item);
+                        if (feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedParking().add(createBillableItem(item));
+                        }
                         break;
                     case Locker:
                         options.availableStorage().add(item);
+                        if (feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedStorage().add(createBillableItem(item));
+                        }
                         break;
                     default:
                         options.availableOther().add(item);
+                        if (feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedOther().add(createBillableItem(item));
+                        }
                     }
                 }
             }
         }
+    }
+
+    public BillableItem createBillableItem(ProductItem productItem) {
+        BillableItem newItem = EntityFactory.create(BillableItem.class);
+
+        newItem.item().set(productItem);
+        newItem.agreedPrice().setValue(productItem.price().getValue());
+
+        return newItem;
     }
 }

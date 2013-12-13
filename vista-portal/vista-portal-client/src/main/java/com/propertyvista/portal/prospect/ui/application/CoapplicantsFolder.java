@@ -18,40 +18,22 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class CoapplicantsFolder extends CEntityFolder<CoapplicantDTO> {
+public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
 
     private static final I18n i18n = I18n.get(CoapplicantsFolder.class);
 
     private final ApplicationWizardView view;
 
     public CoapplicantsFolder(ApplicationWizardView view) {
-        super(CoapplicantDTO.class);
+        super(CoapplicantDTO.class, i18n.tr("Occupant"));
         this.view = view;
-        setRemovable(true);
-        setOrderable(true);
-    }
-
-    @Override
-    public IFolderItemDecorator<CoapplicantDTO> createItemDecorator() {
-        BoxFolderItemDecorator<CoapplicantDTO> decor = new BoxFolderItemDecorator<CoapplicantDTO>(VistaImages.INSTANCE);
-        return decor;
-    }
-
-    @Override
-    protected IFolderDecorator<CoapplicantDTO> createFolderDecorator() {
-        return new BoxFolderDecorator<CoapplicantDTO>(VistaImages.INSTANCE, i18n.tr("Add Occupant"));
     }
 
     @Override
@@ -81,6 +63,5 @@ public class CoapplicantsFolder extends CEntityFolder<CoapplicantDTO> {
 
             return mainPanel;
         }
-
     }
 }
