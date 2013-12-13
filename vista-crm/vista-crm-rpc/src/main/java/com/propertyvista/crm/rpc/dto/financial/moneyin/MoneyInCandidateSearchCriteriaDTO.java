@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin;
+package com.propertyvista.crm.rpc.dto.financial.moneyin;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;

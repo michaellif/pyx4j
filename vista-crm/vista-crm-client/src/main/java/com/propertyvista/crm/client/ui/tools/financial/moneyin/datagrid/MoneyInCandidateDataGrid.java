@@ -39,8 +39,8 @@ import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGrid;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView.Presenter;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
 public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO> {
 

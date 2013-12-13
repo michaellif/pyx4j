@@ -17,7 +17,7 @@ import java.text.ParseException;
 
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
 public class PayerOptionFormat implements IFormat<MoneyInLeaseParticipantDTO> {
 

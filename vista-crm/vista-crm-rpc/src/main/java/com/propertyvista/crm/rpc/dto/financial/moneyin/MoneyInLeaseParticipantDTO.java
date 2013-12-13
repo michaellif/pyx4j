@@ -11,34 +11,19 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin;
-
-import java.math.BigDecimal;
+package com.propertyvista.crm.rpc.dto.financial.moneyin;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
-public interface MoneyInCandidateDTO extends IEntity {
+public interface MoneyInLeaseParticipantDTO extends IEntity {
 
-    Lease leaseIdStub();
+    Tenant tenantIdStub();
 
-    IPrimitive<String> building();
-
-    IPrimitive<String> unit();
-
-    IPrimitive<String> leaseId();
-
-    IList<MoneyInLeaseParticipantDTO> payerCandidates();
-
-    IPrimitive<BigDecimal> totalOutstanding();
-
-    IPrimitive<Boolean> processPayment();
-
-    MoneyInPaymentDTO payment();
+    IPrimitive<String> name();
 
 }

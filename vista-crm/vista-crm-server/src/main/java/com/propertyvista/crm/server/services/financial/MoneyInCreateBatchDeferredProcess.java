@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPaymentDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInPaymentDTO;
 
 public class MoneyInCreateBatchDeferredProcess extends AbstractDeferredProcess {
 

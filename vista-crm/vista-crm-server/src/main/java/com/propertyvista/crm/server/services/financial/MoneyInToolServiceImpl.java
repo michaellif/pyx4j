@@ -37,10 +37,10 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.config.ThreadPoolNames;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPaymentDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateSearchCriteriaDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInPaymentDTO;
 import com.propertyvista.crm.rpc.dto.tools.TooManyResultsException;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.server.util.BuildingsCriteriaNormalizer;

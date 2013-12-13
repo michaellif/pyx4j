@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionState;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
 public class PayerCandidateSelectionState extends ObjectSelectionState<MoneyInLeaseParticipantDTO> {
 

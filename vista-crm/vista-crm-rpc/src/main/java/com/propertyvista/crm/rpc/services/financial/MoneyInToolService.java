@@ -20,9 +20,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPaymentDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateSearchCriteriaDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInPaymentDTO;
 
 public interface MoneyInToolService extends IService {
 
