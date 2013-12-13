@@ -59,6 +59,7 @@ public class UnitsMapper {
         }
 
         floorplan.name().setValue(floorplanName);
+        floorplan.code().setValue(info.getFloorPlanID());
         floorplan.bedrooms().setValue(info.getUnitBedrooms() != null ? info.getUnitBedrooms().intValue() : null);
         floorplan.bathrooms().setValue(info.getUnitBathrooms() != null ? info.getUnitBathrooms().intValue() : null);
         floorplan.area().setValue(getArea(info.getMinSquareFeet(), info.getMaxSquareFeet()));
