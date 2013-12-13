@@ -160,7 +160,9 @@ public class CaledonHttpClientFee {
         if (nameValues.length > 0) {
             for (int i = 0; i < nameValues.length; i++) {
                 String[] nameAndValue = nameValues[i].split("=");
-                if (nameAndValue.length == 2) {
+                if (nameAndValue.length == 1) {
+                    // Empty response
+                } else if (nameAndValue.length == 2) {
                     values.put(nameAndValue[0], nameAndValue[1]);
                 } else {
                     log.warn("Can't pars argument '{}'", nameValues[i]);
