@@ -25,6 +25,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 @Transient
 public interface MoneyInPaymentDTO extends IEntity {
 
+    // TODO change to Lease term Tenant
     Tenant payerTenantIdStub();
 
     IPrimitive<BigDecimal> payedAmount();
