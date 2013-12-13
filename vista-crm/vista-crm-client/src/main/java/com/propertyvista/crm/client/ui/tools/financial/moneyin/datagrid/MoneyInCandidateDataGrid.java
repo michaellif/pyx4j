@@ -141,7 +141,7 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         });
         defColumn(payerSelectionColumn, i18n.tr("Payer"), 100, Unit.PX);
         payerSelectionColumn.setSortable(true);
-        payerSelectionColumn.setDataStoreName(proto().payment().payerTenantIdStub().getPath().toString());
+        payerSelectionColumn.setDataStoreName(proto().payment().payerLeaseTermTenantIdStub().getPath().toString());
         return payerSelectionColumn;
     }
 

@@ -25,9 +25,9 @@ public class PayerCandidateSelectionState extends ObjectSelectionState<MoneyInLe
 
     private static MoneyInLeaseParticipantDTO extractSelected(MoneyInCandidateDTO candidate) {
         MoneyInLeaseParticipantDTO selected = null;
-        if (candidate.payment().payerTenantIdStub().getPrimaryKey() != null) {
+        if (candidate.payment().payerLeaseTermTenantIdStub().getPrimaryKey() != null) {
             for (MoneyInLeaseParticipantDTO payerCandidate : candidate.payerCandidates()) {
-                if (payerCandidate.tenantIdStub().getPrimaryKey().equals(candidate.payment().payerTenantIdStub().getPrimaryKey())) {
+                if (payerCandidate.leaseTermTenantIdStub().getPrimaryKey().equals(candidate.payment().payerLeaseTermTenantIdStub().getPrimaryKey())) {
                     selected = payerCandidate;
                     break;
                 }

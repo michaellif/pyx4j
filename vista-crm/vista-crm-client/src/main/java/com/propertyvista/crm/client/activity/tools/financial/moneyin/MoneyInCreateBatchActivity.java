@@ -58,7 +58,7 @@ import com.propertyvista.crm.rpc.dto.tools.TooManyResultsException;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class MoneyInCreateBatchActivity extends AbstractActivity implements MoneyInCreateBatchView.Presenter {
 
@@ -141,9 +141,9 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     @Override
     public void setPayer(MoneyInCandidateDTO candidate, MoneyInLeaseParticipantDTO payer) {
         if (payer == null) {
-            candidate.payment().payerTenantIdStub().set(null);
+            candidate.payment().payerLeaseTermTenantIdStub().set(null);
         } else {
-            candidate.payment().payerTenantIdStub().set(payer.tenantIdStub().duplicate());
+            candidate.payment().payerLeaseTermTenantIdStub().set(payer.leaseTermTenantIdStub().duplicate());
         }
         validate(candidate);
 
@@ -342,24 +342,24 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         putMemberValueComparator(map, proto.unit());
         putMemberValueComparator(map, proto.leaseId());
         // TODO add comparator for tenants?        
-        map.put(proto.payment().payerTenantIdStub().getPath().toString(), new Comparator<MoneyInCandidateDTO>() {
+        map.put(proto.payment().payerLeaseTermTenantIdStub().getPath().toString(), new Comparator<MoneyInCandidateDTO>() {
             @Override
             public int compare(MoneyInCandidateDTO o1, MoneyInCandidateDTO o2) {
-                Tenant tenant1 = o1.payment().payerTenantIdStub();
-                Tenant tenant2 = o2.payment().payerTenantIdStub();                
+                LeaseTermTenant tenant1 = o1.payment().payerLeaseTermTenantIdStub();
+                LeaseTermTenant tenant2 = o2.payment().payerLeaseTermTenantIdStub();                
                 if (tenant1.isNull() || tenant2.isNull()) {
                     return tenant1.isNull() && tenant2.isNull() ? 0 : (tenant1.isNull() ? -1 : 1);
                 } else {
                     String name1 = null;
                     for (MoneyInLeaseParticipantDTO c : o1.payerCandidates()) {
-                        if (c.tenantIdStub().getPrimaryKey().equals(tenant1.getPrimaryKey())) {
+                        if (c.leaseTermTenantIdStub().getPrimaryKey().equals(tenant1.getPrimaryKey())) {
                             name1 = c.name().getValue();
                             break;
                         }
                     }
                     String name2 = null;
                     for (MoneyInLeaseParticipantDTO c : o2.payerCandidates()) {
-                        if (c.tenantIdStub().getPrimaryKey().equals(tenant2.getPrimaryKey())) {
+                        if (c.leaseTermTenantIdStub().getPrimaryKey().equals(tenant2.getPrimaryKey())) {
                             name2 = c.name().getValue();
                             break;
                         }

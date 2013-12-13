@@ -20,13 +20,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 @Transient
 public interface MoneyInPaymentDTO extends IEntity {
 
-    // TODO change to Lease term Tenant
-    Tenant payerTenantIdStub();
+    LeaseTermTenant payerLeaseTermTenantIdStub();
 
     IPrimitive<BigDecimal> payedAmount();
 

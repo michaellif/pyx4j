@@ -22,7 +22,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 @Transient
 public interface MoneyInLeaseParticipantDTO extends IEntity {
 
-    Tenant tenantIdStub();
+    Tenant leaseTermTenantIdStub();
 
     IPrimitive<String> name();
 

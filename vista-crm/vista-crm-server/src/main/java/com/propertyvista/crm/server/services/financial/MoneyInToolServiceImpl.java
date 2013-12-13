@@ -47,7 +47,7 @@ import com.propertyvista.crm.server.util.BuildingsCriteriaNormalizer;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class MoneyInToolServiceImpl implements MoneyInToolService {
 
@@ -124,7 +124,7 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         candidate.totalOutstanding().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
 
         candidate.processPayment().setValue(false);
-        candidate.payment().payerTenantIdStub().set(candidate.payerCandidates().get(0).tenantIdStub());
+        candidate.payment().payerLeaseTermTenantIdStub().set(candidate.payerCandidates().get(0).leaseTermTenantIdStub());
 
         return candidate;
     }
@@ -146,7 +146,7 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
 
     private MoneyInLeaseParticipantDTO toMoneyInLeaseParticipant(LeaseTermParticipant leaseTermParticipant) {
         MoneyInLeaseParticipantDTO moneyInLeaseParticipant = EntityFactory.create(MoneyInLeaseParticipantDTO.class);
-        moneyInLeaseParticipant.tenantIdStub().set(leaseTermParticipant.leaseParticipant().duplicate(Tenant.class).createIdentityStub());
+        moneyInLeaseParticipant.leaseTermTenantIdStub().set(leaseTermParticipant.duplicate(LeaseTermTenant.class).createIdentityStub());
         moneyInLeaseParticipant.name().setValue(leaseTermParticipant.leaseParticipant().customer().person().name().getStringView());
         return moneyInLeaseParticipant;
     }
