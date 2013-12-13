@@ -46,7 +46,7 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
     @Override
     protected void enhanceRetrieved(CustomerScreening bo, CustomerScreening to, RetrieveTarget retrieveTarget) {
         // load detached entities:        
-        Persistence.service().retrieve(to.documents());
+        Persistence.service().retrieve(to.version().documents());
         Persistence.service().retrieve(to.version().incomes());
         Persistence.service().retrieve(to.version().assets());
         Persistence.service().retrieve(to.screene(), AttachLevel.ToStringMembers, false);

@@ -34,10 +34,10 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.domain.media.IdentificationDocument;
-import com.propertyvista.domain.media.ProofOfEmploymentDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -67,7 +67,7 @@ public class ScreeningGenerator {
 
         // Documents
         for (int i = 0; i < 2 + RandomUtil.randomInt(2); i++) {
-            screening.documents().add(createIdentificationDocument());
+            screening.version().documents().add(createIdentificationDocument());
         }
 
         // Address
@@ -247,8 +247,8 @@ public class ScreeningGenerator {
         return list;
     }
 
-    private IdentificationDocument createIdentificationDocument() {
-        IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
+    private IdentificationDocumentFolder createIdentificationDocument() {
+        IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
         document.idNumber().setValue(RandomUtil.randomLetters(10));
         if (identificationDocumentTypes == null) {
             identificationDocumentTypes = Persistence.service().query(EntityQueryCriteria.create(IdentificationDocumentType.class));
@@ -258,32 +258,32 @@ public class ScreeningGenerator {
         return document;
     }
 
-    private ProofOfEmploymentDocument createProofOfEmploymentDocument() {
-        ProofOfEmploymentDocument document = EntityFactory.create(ProofOfEmploymentDocument.class);
+    private ProofOfEmploymentDocumentFolder createProofOfEmploymentDocument() {
+        ProofOfEmploymentDocumentFolder document = EntityFactory.create(ProofOfEmploymentDocumentFolder.class);
         document.description().setValue("proof of employment document " + RandomUtil.randomLetters(10));
         document.documentPages().add(createDocumentPage("doc-income" + RandomUtil.randomInt(3) + ".jpg"));
         return document;
     }
 
-    public ApplicationDocumentFile createDocumentPage(String fileName) {
-        ApplicationDocumentFile applicationDocument = EntityFactory.create(ApplicationDocumentFile.class);
+    public ApplicationDocumentFile<?> createDocumentPage(String fileName) {
+        ApplicationDocumentFile<?> applicationDocument = EntityFactory.create(ApplicationDocumentFile.class);
         applicationDocument.fileName().setValue(fileName);
         return applicationDocument;
     }
 
     public static void attachDocumentData(CustomerScreening screening) {
-        for (ApplicationDocument document : screening.documents()) {
+        for (ApplicationDocumentFolder<?> document : screening.version().documents()) {
             attachDocumentData(document);
         }
         for (CustomerScreeningIncome income : screening.version().incomes()) {
-            for (ApplicationDocument document : income.documents()) {
+            for (ApplicationDocumentFolder<?> document : income.documents()) {
                 attachDocumentData(document);
             }
         }
     }
 
-    private static void attachDocumentData(ApplicationDocument document) {
-        for (ApplicationDocumentFile applicationDocument : document.documentPages()) {
+    private static void attachDocumentData(ApplicationDocumentFolder<?> document) {
+        for (ApplicationDocumentFile<?> applicationDocument : document.documentPages()) {
             String fileName = applicationDocument.fileName().getValue();
             ApplicationDocumentBlob applicationDocumentData;
             try {

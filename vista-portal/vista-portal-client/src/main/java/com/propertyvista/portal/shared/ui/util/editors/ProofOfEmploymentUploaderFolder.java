@@ -27,40 +27,40 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.domain.media.ProofOfEmploymentDocument;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class ProofOfEmploymentUploaderFolder extends CEntityFolder<ProofOfEmploymentDocument> {
+public class ProofOfEmploymentUploaderFolder extends CEntityFolder<ProofOfEmploymentDocumentFolder> {
 
     private final static I18n i18n = I18n.get(ProofOfEmploymentUploaderFolder.class);
 
     public ProofOfEmploymentUploaderFolder() {
-        super(ProofOfEmploymentDocument.class);
+        super(ProofOfEmploymentDocumentFolder.class);
     }
 
     @Override
-    public IFolderItemDecorator<ProofOfEmploymentDocument> createItemDecorator() {
-        BoxFolderItemDecorator<ProofOfEmploymentDocument> decor = new BoxFolderItemDecorator<ProofOfEmploymentDocument>(VistaImages.INSTANCE);
+    public IFolderItemDecorator<ProofOfEmploymentDocumentFolder> createItemDecorator() {
+        BoxFolderItemDecorator<ProofOfEmploymentDocumentFolder> decor = new BoxFolderItemDecorator<ProofOfEmploymentDocumentFolder>(VistaImages.INSTANCE);
         return decor;
     }
 
     @Override
-    protected IFolderDecorator<ProofOfEmploymentDocument> createFolderDecorator() {
-        return new BoxFolderDecorator<ProofOfEmploymentDocument>(VistaImages.INSTANCE, "Add Proof Of Employment");
+    protected IFolderDecorator<ProofOfEmploymentDocumentFolder> createFolderDecorator() {
+        return new BoxFolderDecorator<ProofOfEmploymentDocumentFolder>(VistaImages.INSTANCE, "Add Proof Of Employment");
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof ProofOfEmploymentDocument) {
+        if (member instanceof ProofOfEmploymentDocumentFolder) {
             return new ProofOfEmploymentDocumentEditor();
         }
         return super.create(member);
     }
 
-    private class ProofOfEmploymentDocumentEditor extends CEntityForm<ProofOfEmploymentDocument> {
+    private class ProofOfEmploymentDocumentEditor extends CEntityForm<ProofOfEmploymentDocumentFolder> {
 
         public ProofOfEmploymentDocumentEditor() {
-            super(ProofOfEmploymentDocument.class);
+            super(ProofOfEmploymentDocumentFolder.class);
         }
 
         @Override

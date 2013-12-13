@@ -21,13 +21,13 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ApplicationDocumentFile extends IFile {
+public interface ApplicationDocumentFile<OWNER extends ApplicationDocumentFolder<?>> extends IFile {
 
     @Owner
     @JoinColumn
     @Detached
     @ReadOnly
-    ApplicationDocument owner();
+    OWNER owner();
 
     @OrderColumn
     IPrimitive<Integer> orderInOwner();

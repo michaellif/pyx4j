@@ -72,8 +72,11 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveS
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.portal.server.security.access.prospect.ApplicationDocumentFileIdentificationProspectDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.prospect.ApplicationDocumentFileProofOfEmploymentProspectDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.resident.CustomrPictureTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.CustomerPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.InsuranceCertificateScanDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.LeasePaymentMethodTenantDatasetAccessRule;
@@ -209,12 +212,20 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.ResidentSecondary, PortalResidentBehavior.Resident);
 
         // Data Access
-        grant(PortalResidentBehavior.Resident, VistaDataAccessBehavior.TenantInPortal);
-        grant(VistaDataAccessBehavior.TenantInPortal, new CustomrPictureTenantDatasetAccessRule(), CustomerPicture.class);
-        grant(VistaDataAccessBehavior.TenantInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
-        grant(VistaDataAccessBehavior.TenantInPortal, new AutopayAgreementTenantDatasetAccessRule(), AutopayAgreement.class);
-        grant(VistaDataAccessBehavior.TenantInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
-        grant(VistaDataAccessBehavior.TenantInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
+        grant(PortalResidentBehavior.Resident, VistaDataAccessBehavior.ResidentInPortal);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new CustomerPictureTenantDatasetAccessRule(), CustomerPicture.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new AutopayAgreementTenantDatasetAccessRule(), AutopayAgreement.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
+
+        grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);
+        grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerPictureProspectDatasetAccessRule(), CustomerPicture.class);
+        if (false) {
+            grant(VistaDataAccessBehavior.ProspectInPortal, new ApplicationDocumentFileProofOfEmploymentProspectDatasetAccessRule(),
+                    ApplicationDocumentFile.class);
+            grant(VistaDataAccessBehavior.ProspectInPortal, new ApplicationDocumentFileIdentificationProspectDatasetAccessRule(), ApplicationDocumentFile.class);
+        }
 
         grant(new IServiceExecutePermission(PortalContentService.class));
         freeze();

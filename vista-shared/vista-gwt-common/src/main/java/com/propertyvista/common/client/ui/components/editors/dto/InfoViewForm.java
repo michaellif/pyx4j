@@ -95,7 +95,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Identification Documents"));
-        main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
+        main.setWidget(++row, 0, 2, inject(proto().version().documents(), fileUpload = new IdUploaderFolder()));
 
         main.setH1(++row, 0, 2, proto().version().currentAddress().getMeta().getCaption());
         main.setWidget(++row, 0, 2, inject(proto().version().currentAddress(), new PriorAddressEditor()));

@@ -7,25 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 17, 2012
- * @author vlads
+ * Created on Mar 28, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.media;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@AbstractEntity
 @Inheritance
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface ApplicationDocumentHolder<E extends ApplicationDocument> extends IEntity {
+@AbstractEntity
+public interface ApplicationDocumentFolder<OWNER extends ApplicationDocumentOwner<?>> extends IEntity {
+
+    @Owner
+    @Detached
+    @ReadOnly
+    @JoinColumn
+    OWNER owner();
 
     @Owned
-    IList<E> documents();
+    @Caption(name = "Files")
+    IList<ApplicationDocumentFile<?>> documentPages();
 
+    @OrderColumn
+    IPrimitive<Integer> orderInOwner();
 }

@@ -32,7 +32,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -186,7 +186,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             to.applicant().person().set(tenant.leaseParticipant().customer().person());
             to.applicant().picture().set(tenant.leaseParticipant().customer().picture());
-            to.applicant().documents().set(tenant.effectiveScreening().documents());
+            to.applicant().documents().set(tenant.effectiveScreening().version().documents());
 
             to.applicant().currentAddress().set(tenant.effectiveScreening().version().currentAddress());
             to.applicant().previousAddress().set(tenant.effectiveScreening().version().previousAddress());
@@ -205,7 +205,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // TO optimizations
         to.applicant().picture().customer().setAttachLevel(AttachLevel.IdOnly);
-        for (IdentificationDocument i : to.applicant().documents()) {
+        for (IdentificationDocumentFolder i : to.applicant().documents()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
         }
         for (EmergencyContact i : to.applicant().emergencyContacts()) {

@@ -27,13 +27,13 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.media.ApplicationDocumentHolder;
-import com.propertyvista.domain.media.ProofOfEmploymentDocument;
+import com.propertyvista.domain.media.ApplicationDocumentOwner;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
 @ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
 @DiscriminatorValue("CustomerScreeningIncome")
-public interface CustomerScreeningIncome extends IEntity, ApplicationDocumentHolder<ProofOfEmploymentDocument> {
+public interface CustomerScreeningIncome extends IEntity, ApplicationDocumentOwner<ProofOfEmploymentDocumentFolder> {
 
     @Owner
     @NotNull

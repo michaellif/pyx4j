@@ -17,15 +17,15 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.tenant.CustomerPicture;
-import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
-public class CustomrPictureTenantDatasetAccessRule implements DatasetAccessRule<CustomerPicture> {
+public class CustomerPictureTenantDatasetAccessRule implements DatasetAccessRule<CustomerPicture> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
     public void applyRule(EntityQueryCriteria<CustomerPicture> criteria) {
-        criteria.eq(criteria.proto().id(), ResidentPortalContext.getLeaseTermTenant().leaseParticipant().customer().picture());
+        criteria.eq(criteria.proto().customer().user(), PortalVistaContext.getCustomerUserIdStub());
     }
 
 }

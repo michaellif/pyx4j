@@ -89,7 +89,7 @@ public class TenantConverter {
         protected void bind() {
             bind(toProto.version().currentAddress(), boProto.version().currentAddress());
             bind(toProto.version().previousAddress(), boProto.version().previousAddress());
-            bind(toProto.documents(), boProto.documents());
+            bind(toProto.version().documents(), boProto.version().documents());
             bind(toProto.version().legalQuestions(), boProto.version().legalQuestions());
         }
     }

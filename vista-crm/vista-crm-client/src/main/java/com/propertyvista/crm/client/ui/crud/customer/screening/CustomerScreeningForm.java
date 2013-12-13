@@ -140,7 +140,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
+        main.setWidget(++row, 0, 2, inject(proto().version().documents(), fileUpload = new IdUploaderFolder()));
 
         return main;
     }

@@ -32,25 +32,25 @@ import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUplo
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.VistaTODO;
 
-public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
+public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolder> {
 
     final static I18n i18n = I18n.get(IdUploaderFolder.class);
 
     protected ApplicationDocumentationPolicy documentationPolicy = null;
 
     public IdUploaderFolder() {
-        super(IdentificationDocument.class);
+        super(IdentificationDocumentFolder.class);
 
         if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
 
-            addValueValidator(new EditableValueValidator<IList<IdentificationDocument>>() {
+            addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
                 @Override
-                public ValidationError isValid(CComponent<IList<IdentificationDocument>> component, IList<IdentificationDocument> value) {
+                public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
                     if (value != null) {
 // TODO it should be enough, but now validate is called on populate!?                    
 //                    assert (documentationPolicy != null);
@@ -89,7 +89,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
         new DocumentTypeSelectorDialog() {
             @Override
             public boolean onClickOk() {
-                IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
+                IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
                 document.idType().set(getSelectedItems().get(0));
                 addItem(document);
                 return true;
@@ -99,17 +99,17 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof IdentificationDocument) {
+        if (member instanceof IdentificationDocumentFolder) {
             return new IdentificationDocumentEditor();
         } else {
             return super.create(member);
         }
     }
 
-    private class IdentificationDocumentEditor extends CEntityForm<IdentificationDocument> {
+    private class IdentificationDocumentEditor extends CEntityForm<IdentificationDocumentFolder> {
 
         public IdentificationDocumentEditor() {
-            super(IdentificationDocument.class);
+            super(IdentificationDocumentFolder.class);
         }
 
         @Override

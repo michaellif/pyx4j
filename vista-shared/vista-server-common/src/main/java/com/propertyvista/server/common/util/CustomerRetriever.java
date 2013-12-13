@@ -86,7 +86,7 @@ public class CustomerRetriever {
             if (screening.isValueDetached()) {
                 Persistence.service().retrieve(screening);
             }
-            Persistence.service().retrieve(screening.documents());
+            Persistence.service().retrieve(screening.version().documents());
             if (retrieveFinancialData) {
                 Persistence.service().retrieve(screening.version().incomes());
                 Persistence.service().retrieve(screening.version().assets());
@@ -116,7 +116,7 @@ public class CustomerRetriever {
             Persistence.service().merge(screening);
 
             // save detached entities:
-            Persistence.service().merge(screening.documents());
+            Persistence.service().merge(screening.version().documents());
             if (retrieveFinancialData) {
                 Persistence.service().merge(screening.version().incomes());
                 Persistence.service().merge(screening.version().assets());

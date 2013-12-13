@@ -23,28 +23,28 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.media.ProofOfEmploymentDocument;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 
-public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmploymentDocument> {
+public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmploymentDocumentFolder> {
 
     private final static I18n i18n = I18n.get(ProofOfEmploymentUploaderFolder.class);
 
     public ProofOfEmploymentUploaderFolder() {
-        super(ProofOfEmploymentDocument.class);
+        super(ProofOfEmploymentDocumentFolder.class);
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof ProofOfEmploymentDocument) {
+        if (member instanceof ProofOfEmploymentDocumentFolder) {
             return new ProofOfEmploymentDocumentEditor();
         }
         return super.create(member);
     }
 
-    private class ProofOfEmploymentDocumentEditor extends CEntityForm<ProofOfEmploymentDocument> {
+    private class ProofOfEmploymentDocumentEditor extends CEntityForm<ProofOfEmploymentDocumentFolder> {
 
         public ProofOfEmploymentDocumentEditor() {
-            super(ProofOfEmploymentDocument.class);
+            super(ProofOfEmploymentDocumentFolder.class);
         }
 
         @Override

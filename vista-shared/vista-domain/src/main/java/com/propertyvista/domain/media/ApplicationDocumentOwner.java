@@ -7,41 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 28, 2012
- * @author ArtyomB
+ * Created on Jan 17, 2012
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.domain.media;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-@Inheritance
 @AbstractEntity
-//TODO Rename to ApplicationDocumentFolder
-public interface ApplicationDocument extends IEntity {
+@Inheritance
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface ApplicationDocumentOwner<E extends ApplicationDocumentFolder<?>> extends IEntity {
 
-    @Owner
-    @Detached
-    @ReadOnly
-    @JoinColumn
-    ApplicationDocumentHolder<?> owner();
-
+    //TODO make detached
     @Owned
-    @Caption(name = "Files")
-    //TODO Rename documentPages to files
-    IList<ApplicationDocumentFile> documentPages();
+    IList<E> documents();
 
-    @OrderColumn
-    IPrimitive<Integer> orderInOwner();
 }

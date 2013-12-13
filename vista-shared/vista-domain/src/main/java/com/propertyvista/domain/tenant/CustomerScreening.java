@@ -36,14 +36,14 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.ApplicationDocumentHolder;
-import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentOwner;
+import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 
 @DiscriminatorValue("CustomerScreening")
-public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV>, ApplicationDocumentHolder<IdentificationDocument> {
+public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> {
 
     @Owner
     @NotNull
@@ -57,7 +57,7 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV>,
     @Detached(level = AttachLevel.Detached)
     ISet<CustomerCreditCheck> creditChecks();
 
-    public interface CustomerScreeningV extends IVersionData<CustomerScreening> {
+    public interface CustomerScreeningV extends IVersionData<CustomerScreening>, ApplicationDocumentOwner<IdentificationDocumentFolder> {
 
         @Timestamp(Update.Created)
         IPrimitive<LogicalDate> createDate();

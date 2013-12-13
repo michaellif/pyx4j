@@ -14,12 +14,26 @@
 package com.propertyvista.domain.media;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("ProofOfEmploymentDocument")
-public interface ProofOfEmploymentDocument extends ApplicationDocument {
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
+
+@DiscriminatorValue("IdentificationDocument")
+public interface IdentificationDocumentFolder extends ApplicationDocumentFolder<CustomerScreeningV> {
 
     @NotNull
-    IPrimitive<String> description();
+    @ToString(index = 0)
+    IdentificationDocumentType idType();
+
+    @NotNull
+    @ToString(index = 1)
+    IPrimitive<String> idNumber();
+
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> notes();
 }
