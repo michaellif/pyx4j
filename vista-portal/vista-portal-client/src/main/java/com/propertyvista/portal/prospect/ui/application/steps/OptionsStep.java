@@ -34,6 +34,8 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.YardiDataEditor;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
@@ -184,6 +186,19 @@ public class OptionsStep extends ApplicationWizardStep {
 
                 return content;
             }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                @SuppressWarnings("unchecked")
+                CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
+                item.setRemovable(isMandatoryFeature(getValue().item().product()));
+            }
+
+            private boolean isMandatoryFeature(Product.ProductV product) {
+                return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().isBooleanTrue();
+            }
         }
 
         @Override
@@ -249,13 +264,11 @@ public class OptionsStep extends ApplicationWizardStep {
             }
         }
 
-        class FeatureExItemForm extends CEntityForm<BillableItem> {
+        class FeatureExItemForm extends FeatureItemForm {
 
             private final SimplePanel extraDataPanel = new SimplePanel();
 
             public FeatureExItemForm() {
-                super(BillableItem.class);
-                setEditable(false);
             }
 
             @Override
