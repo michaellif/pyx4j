@@ -58,7 +58,7 @@ public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloa
 
     private OnlineApplicationLegalTerm randomTerm() {
         OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
-        term.signature().signatureType().setValue(RandomUtil.randomEnum(SignatureType.class));
+        term.signatureType().setValue(RandomUtil.randomEnum(SignatureType.class));
 
         term.title().setValue(CommonsGenerator.lipsumShort());
         term.body().setValue(CommonsGenerator.lipsum());

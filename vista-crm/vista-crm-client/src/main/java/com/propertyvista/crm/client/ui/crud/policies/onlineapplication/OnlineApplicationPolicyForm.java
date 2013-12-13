@@ -16,14 +16,11 @@ package com.propertyvista.crm.client.ui.crud.policies.onlineapplication;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -87,19 +84,7 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
 
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().body()), 35).build());
-                main.setWidget(
-                        ++row,
-                        0,
-                        new FormDecoratorBuilder(inject(proto().signature(), new CSignature(SignatureType.AgreeBoxAndFullName, i18n.tr("I Agree With"),
-                                i18n.tr("Terms and Conditions"), new Command() {
-
-                                    @Override
-                                    public void execute() {
-                                        // TODO Auto-generated method stub
-
-                                    }
-                                }))).build());
-
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureType()), 35).build());
                 return main;
             }
         }

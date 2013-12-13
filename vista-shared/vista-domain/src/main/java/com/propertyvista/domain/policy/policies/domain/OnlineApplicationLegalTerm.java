@@ -23,9 +23,9 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
-import com.propertyvista.domain.security.CustomerSignature;
 
 public interface OnlineApplicationLegalTerm extends IEntity {
 
@@ -42,7 +42,7 @@ public interface OnlineApplicationLegalTerm extends IEntity {
     @Length(48000)
     IPrimitive<String> body();
 
-    CustomerSignature signature();
+    IPrimitive<SignatureType> signatureType();
 
     @OrderColumn
     IPrimitive<Integer> orderId();
