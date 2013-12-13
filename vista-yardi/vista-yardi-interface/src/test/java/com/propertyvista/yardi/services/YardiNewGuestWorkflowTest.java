@@ -63,6 +63,8 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
@@ -219,12 +221,12 @@ public class YardiNewGuestWorkflowTest {
                 }
             }
             String[] names = guestName.split(" ", 2);
-            Prospect guest = guestProcessor.getProspect(names[0], names[1], null, yc.propertyListCodes().getValue());
+            Prospect guest = guestProcessor.getProspect(names[0], names[1], getAddress(), null, yc.propertyListCodes().getValue());
             guestProcessor //
-                    .addUnit(guest, ilsUnit.getUnit()) //
+                    .addUnit(guest, ilsUnit.getUnit().getInformation().get(0)) //
                     .addMoveInDate(guest, moveIn) //
                     // add first contact event
-                    .addEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
+                    .setEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
             updateGuest(guest);
             // allocate unit
             holdUnit(guest, ilsUnit);
@@ -246,6 +248,18 @@ public class YardiNewGuestWorkflowTest {
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
+    }
+
+    static AddressStructured getAddress() {
+        AddressStructured addr = EntityFactory.create(AddressStructured.class);
+        addr.county().setValue("US");
+        addr.province().name().setValue("CA");
+        addr.postalCode().setValue("90123");
+        addr.city().setValue("Hometown");
+        addr.streetName().setValue("Main");
+        addr.streetNumber().setValue("123");
+        addr.streetType().setValue(StreetType.avenue);
+        return addr;
     }
 
     static PmcYardiCredential getTestPmcYardiCredential() {

@@ -52,6 +52,11 @@ public interface Floorplan extends PolicyNode, HasNotesAndAttachments {
     @JoinColumn
     Building building();
 
+    // third party identifier
+    @NotNull
+    @ReadOnly
+    IPrimitive<String> code();
+
     @NotNull
     @ToString(index = 0)
     @Caption(watermark = "e.g. 1bdrm+f")

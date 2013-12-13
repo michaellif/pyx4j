@@ -186,7 +186,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
             String xml = response.getUnitAvailability_LoginResult().getExtraElement().toString();
 
-            log.info("GetMarketingInfo Result: {}", xml);
+            log.debug("GetMarketingInfo Result: {}", xml);
 
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
@@ -232,7 +232,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
             String xml = response.getGetYardiGuestActivity_LoginResult().getExtraElement().toString();
 
-            log.info("GetYardiGuestActivity Result: {}", xml);
+            log.debug("GetYardiGuestActivity Result: {}", xml);
 
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
@@ -272,6 +272,14 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setYardiPropertyId(propertyId);
             request.setThirdPartyId(guestId);
 
+            // all search fields are required
+            request.setFirstName("");
+            request.setLastName("");
+            request.setEmailAddress("");
+            request.setPhoneNumber("");
+            request.setDateOfBirth("");
+            request.setFederalId("");
+
             GetYardiGuestActivity_SearchResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Search(request);
             if (response.getGetYardiGuestActivity_SearchResult() == null) {
                 throw new Error("Received response is null");
@@ -279,7 +287,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
             String xml = response.getGetYardiGuestActivity_SearchResult().getExtraElement().toString();
 
-            log.info("GetYardiGuestSearch Result: {}", xml);
+            log.debug("GetYardiGuestSearch Result: {}", xml);
 
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);

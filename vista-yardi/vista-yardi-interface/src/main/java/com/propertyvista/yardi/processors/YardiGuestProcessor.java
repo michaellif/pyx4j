@@ -32,6 +32,7 @@ import com.yardi.entity.guestcard40.EventTypes;
 import com.yardi.entity.guestcard40.Events;
 import com.yardi.entity.guestcard40.IDScopeType;
 import com.yardi.entity.guestcard40.Identification;
+import com.yardi.entity.guestcard40.LeaseType;
 import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.NumericRangeType;
 import com.yardi.entity.guestcard40.Prospect;
@@ -39,8 +40,8 @@ import com.yardi.entity.guestcard40.Quote;
 import com.yardi.entity.guestcard40.Quotes;
 import com.yardi.entity.guestcard40.UnitType;
 import com.yardi.entity.mits.Information;
-import com.yardi.entity.mits.Unit;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiGuestProcessor {
@@ -55,28 +56,33 @@ public class YardiGuestProcessor {
         return getProspect( //
                 lease._applicant().customer().person().name().firstName().getValue(), //
                 lease._applicant().customer().person().name().lastName().getValue(), //
+                getCurrentAddress(lease), //
                 lease._applicant().getPrimaryKey().toString(), //
                 lease.unit().building().propertyCode().getValue() //
         );
     }
 
-    public Prospect getProspect(String firstName, String lastName, String prospectId, String propertyId) {
+    public Prospect getProspect(String firstName, String lastName, AddressStructured addr, String prospectId, String propertyId) {
         Prospect guest = new Prospect();
         guest.setLastUpdateDate(new Timestamp(new Date().getTime()));
         // add prospect
         Customers customers = new Customers();
-        customers.getCustomer().add(getCustomer(CustomerInfo.PROSPECT, firstName, lastName, propertyId, prospectId));
+        customers.getCustomer().add(getCustomer(firstName, lastName, addr, propertyId, prospectId));
         guest.setCustomers(customers);
 
         return guest;
     }
 
-    public YardiGuestProcessor addUnit(Prospect guest, Unit unit) {
+    public YardiGuestProcessor clearPreferences(Prospect guest) {
+        guest.setCustomerPreferences(new CustomerPreferences());
+        return this;
+    }
+
+    public YardiGuestProcessor addUnit(Prospect guest, Information unitInfo) {
         CustomerPreferences pref = guest.getCustomerPreferences();
         if (pref == null) {
             guest.setCustomerPreferences(pref = new CustomerPreferences());
         }
-        Information unitInfo = unit.getInformation().get(0);
         if (unitInfo != null) {
             NumericRangeType exactBeds = new NumericRangeType();
             int beds = unitInfo.getUnitBedrooms().intValue();
@@ -86,6 +92,16 @@ public class YardiGuestProcessor {
             pref.getDesiredUnit().add(getUnitType(unitInfo));
         }
 
+        return this;
+    }
+
+    public YardiGuestProcessor addLeaseTerm(Prospect guest, Date from, Date to) {
+        Customer cust = guest.getCustomers().getCustomer().get(0);
+        // lease from-to
+        LeaseType ilsLease = new LeaseType();
+        ilsLease.setLeaseFromDate(from);
+        ilsLease.setLeaseToDate(to);
+        cust.setLease(ilsLease);
         return this;
     }
 
@@ -110,7 +126,7 @@ public class YardiGuestProcessor {
         return this;
     }
 
-    public YardiGuestProcessor addEvent(Prospect guest, EventType event) {
+    public YardiGuestProcessor setEvent(Prospect guest, EventType event) {
         // add first contact event
         Events events = new Events();
         events.getEvent().add(event);
@@ -129,23 +145,28 @@ public class YardiGuestProcessor {
         return appEvent;
     }
 
-    private Customer getCustomer(CustomerInfo type, String firstName, String lastName, String propertyId, String thirdPartyId) {
+    private Customer getCustomer(String firstName, String lastName, AddressStructured addr, String propertyId, String thirdPartyId) {
         Customer customer = new Customer();
-        customer.setType(type);
+        customer.setType(CustomerInfo.PROSPECT);
         customer.getIdentification().add(getThirdPartyId(thirdPartyId));
         customer.getIdentification().add(getPropertyId(propertyId));
         customer.setName(getName(firstName, lastName));
-        customer.getAddress().add(getAddress());
+        customer.getAddress().add(getAddress(addr));
         return customer;
     }
 
-    private AddressType getAddress() {
+    private AddressStructured getCurrentAddress(Lease lease) {
+        // TODO: VladL - update address retrieval logic as needed
+        return lease._applicant().customer().personScreening().version().currentAddress();
+    }
+
+    private AddressType getAddress(AddressStructured as) {
         AddressType addr = new AddressType();
-        addr.setCountry("US");
-        addr.setState("CA");
-        addr.setPostalCode("90123");
-        addr.setCity("Hometown");
-        addr.setAddressLine1("123 Main St");
+        addr.setCountry(as.county().getValue());
+        addr.setState(as.province().name().getValue());
+        addr.setPostalCode(as.postalCode().getValue());
+        addr.setCity(as.city().getValue());
+        addr.setAddressLine1(as.streetNumber().getValue() + " " + as.streetName().getValue() + " " + as.streetType().getValue().name());
         addr.setAddressType(AddressInfo.CURRENT);
         return addr;
     }
