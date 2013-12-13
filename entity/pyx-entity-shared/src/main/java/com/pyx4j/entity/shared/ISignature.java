@@ -25,6 +25,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -42,6 +43,7 @@ public interface ISignature extends IEntity {
     IPrimitive<Date> signDate();
 
     @Caption(name = "IP Address")
+    @Length(39)
     IPrimitive<String> ipAddress();
 
     IPrimitive<SignatureType> signatureType();
