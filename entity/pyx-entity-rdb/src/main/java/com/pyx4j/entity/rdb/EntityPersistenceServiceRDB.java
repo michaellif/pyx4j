@@ -1149,22 +1149,36 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     }
                 }
             }
-            if (memberMeta.isOwnedRelationships() && ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                // Special case for child collections update. Collection itself is the same and in the same order.
-                ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                if (collectionMember.getAttachLevel() == AttachLevel.Detached) {
-                    // Ignore Detached collections.
-                    continue;
-                }
-                Iterator<IEntity> iterator = collectionMember.iterator();
-                for (; iterator.hasNext();) {
-                    IEntity childEntity = iterator.next();
-                    if (!childEntity.isValueDetached()) {
-                        childEntity = childEntity.cast();
-                        TableModel childTM = tableModel(childEntity.getEntityMeta());
-                        fireModificationAdapters(childTM, childEntity);
+            if (memberMeta.isOwnedRelationships()) {
+                if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    // Special case for child collections update. Collection itself is the same and in the same order.
+                    ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                    if (collectionMember.getAttachLevel() == AttachLevel.Detached) {
+                        // Ignore Detached collections.
+                        continue;
+                    }
+                    Iterator<IEntity> iterator = collectionMember.iterator();
+                    for (; iterator.hasNext();) {
+                        IEntity childEntity = iterator.next();
+                        if (!childEntity.isValueDetached()) {
+                            childEntity = childEntity.cast();
+                            TableModel childTM = tableModel(childEntity.getEntityMeta());
+                            fireModificationAdapters(childTM, childEntity);
+                        }
+                    }
+                } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
+                    if (!childEntity.isValueDetached() && childEntity.hasValues()) {
+                        fireModificationAdapters(tableModel(childEntity.getEntityMeta()), childEntity);
                     }
                 }
+            }
+        }
+        if ((adapters != null) && (adapters.entityModificationAdapters() != null)) {
+            for (Class<? extends EntityModificationAdapter<?>> adapterClass : adapters.entityModificationAdapters()) {
+                @SuppressWarnings("rawtypes")
+                EntityModificationAdapter adapter = AdapterFactory.getEntityModificationAdapters(adapterClass);
+                adapter.onBeforeUpdate(null, entity);
             }
         }
     }

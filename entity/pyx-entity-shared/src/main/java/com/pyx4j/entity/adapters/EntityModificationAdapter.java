@@ -24,6 +24,12 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface EntityModificationAdapter<E extends IEntity> {
 
+    /**
+     * 
+     * @param origEntity
+     *            null on Entity creation
+     * @param newEntity
+     */
     public void onBeforeUpdate(E origEntity, E newEntity);
 
 }
