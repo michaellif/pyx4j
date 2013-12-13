@@ -23,7 +23,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTabTitle;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
-import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTermContent;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
@@ -59,13 +58,10 @@ public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloa
 
     private OnlineApplicationLegalTerm randomTerm() {
         OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
-        term.signatureType().setValue(RandomUtil.randomEnum(SignatureType.class));
+        term.signature().signatureType().setValue(RandomUtil.randomEnum(SignatureType.class));
 
-        OnlineApplicationLegalTermContent content = EntityFactory.create(OnlineApplicationLegalTermContent.class);
-        content.locale().set(getDefaultLocale());
-        content.title().setValue(CommonsGenerator.lipsumShort());
-        content.body().setValue(CommonsGenerator.lipsum());
-        term.content().add(content);
+        term.title().setValue(CommonsGenerator.lipsumShort());
+        term.body().setValue(CommonsGenerator.lipsum());
 
         return term;
     }

@@ -85,14 +85,12 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                main.setH1(++row, 0, 2, proto().content().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().content(), new LegalTermContentFolder(isEditable())));
-
-                main.setH1(++row, 0, 2, proto().signatureType().getMeta().getCaption());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 35).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().body()), 35).build());
                 main.setWidget(
                         ++row,
                         0,
-                        new FormDecoratorBuilder(inject(proto().signatureType(), new CSignature(SignatureType.AgreeBoxAndFullName, i18n.tr("I Agree With"),
+                        new FormDecoratorBuilder(inject(proto().signature(), new CSignature(SignatureType.AgreeBoxAndFullName, i18n.tr("I Agree With"),
                                 i18n.tr("Terms and Conditions"), new Command() {
 
                                     @Override

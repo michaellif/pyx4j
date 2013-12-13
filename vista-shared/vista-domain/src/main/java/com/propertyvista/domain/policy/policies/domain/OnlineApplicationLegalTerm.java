@@ -18,17 +18,14 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
+import com.propertyvista.domain.security.CustomerSignature;
 
 public interface OnlineApplicationLegalTerm extends IEntity {
 
@@ -39,19 +36,13 @@ public interface OnlineApplicationLegalTerm extends IEntity {
     @JoinColumn
     OnlineApplicationPolicy policy();
 
-    // per locale
-    @Deprecated
-    @Owned
-    @OrderBy(value = PrimaryKey.class)
-    IList<OnlineApplicationLegalTermContent> content();
-
     IPrimitive<String> title();
 
     @Editor(type = Editor.EditorType.richtextarea)
     @Length(48000)
     IPrimitive<String> body();
 
-    IPrimitive<SignatureType> signatureType();
+    CustomerSignature signature();
 
     @OrderColumn
     IPrimitive<Integer> orderId();
