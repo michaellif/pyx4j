@@ -92,6 +92,10 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         super.addStep(step);
     }
 
+    public ApplicationWizardStep getStep(Class<? extends ApplicationWizardStep> stepClass) {
+        return steps.get(stepClass);
+    }
+
     @Override
     protected IDecorator<?> createDecorator() {
         return new ApplicationWizardDecorator();

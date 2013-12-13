@@ -218,6 +218,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             //Set users that can login using UI
             boolean mustHaveApplication = false;
+            boolean mustSelectUnitInApplication = false;
             if (i < DemoData.UserType.PTENANT.getDefaultMax()) {
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 String email = DemoData.UserType.PTENANT.getEmail(i + 1);
@@ -227,6 +228,10 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 // Make one (Third) Customer with Two Applications
                 if (i == 2) {
                     dualPotentialCustomer = mainTenant.leaseParticipant().customer();
+                }
+                // Allow (Fifth) Customer unit selection
+                if (i == 4) {
+                    mustSelectUnitInApplication = true;
                 }
 
                 //Set PCOAPPLICANT users that can login using UI
@@ -255,7 +260,11 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
             if (mustHaveApplication || RandomUtil.randomBoolean()) {
-                ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, null, null);
+                if (mustSelectUnitInApplication) {
+                    ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, lease.unit().building(), null);
+                } else {
+                    ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, null, null);
+                }
             }
             SystemDateManager.resetDate();
         }

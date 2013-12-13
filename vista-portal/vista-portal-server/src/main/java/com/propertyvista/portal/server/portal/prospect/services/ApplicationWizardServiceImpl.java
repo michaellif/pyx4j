@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.prospect.services;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -256,8 +257,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void fillUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
-        to.unitSelection().set(null);
-
         MasterOnlineApplication moa = ProspectPortalContext.getMasterOnlineApplication();
         if (!moa.building().isNull() || !moa.floorplan().isNull()) {
             UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
@@ -280,6 +279,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             }
 
             to.unitSelection().set(unitSelection);
+
+            Persistence.ensureRetrieve(unitSelection.building(), AttachLevel.ToStringMembers);
+            Persistence.ensureRetrieve(unitSelection.floorplan(), AttachLevel.ToStringMembers);
         }
     }
 
@@ -289,8 +291,25 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         options.unit().set(unit);
         options.restrictions().set(retriveUnitOptionRestrictions(unit));
         retrieveAvailableCatalogItems(options);
+        loadDetachedProducts(options);
 
         return options;
+    }
+
+    private void loadDetachedProducts(UnitOptionsSelectionDTO options) {
+        Persistence.service().retrieve(options.selectedService().item().product());
+
+        loadDetachedProducts(options.selectedPets());
+        loadDetachedProducts(options.selectedParking());
+        loadDetachedProducts(options.selectedStorage());
+        loadDetachedProducts(options.selectedUtilities());
+        loadDetachedProducts(options.selectedOther());
+    }
+
+    private void loadDetachedProducts(List<BillableItem> items) {
+        for (BillableItem item : items) {
+            Persistence.service().retrieve(item.item().product());
+        }
     }
 
     private UnitOptionsSelectionDTO.Restrictions retriveUnitOptionRestrictions(AptUnit unit) {

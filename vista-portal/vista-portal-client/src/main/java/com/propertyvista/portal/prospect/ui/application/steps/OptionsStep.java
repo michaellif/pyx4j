@@ -73,46 +73,69 @@ public class OptionsStep extends ApplicationWizardStep {
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
-        petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
-        petsPanel.setWidget(1, 0, inject(proto().unitOptionsSelection().selectedPets(), petFolder = new FeatureExFolder(ARCode.Type.Pet)));
-        panel.setWidget(++row, 0, petsPanel);
-
-        parkingPanel.setH2(0, 0, 1, i18n.tr("Parking"));
-        parkingPanel.setWidget(1, 0, inject(proto().unitOptionsSelection().selectedParking(), parkingFolder = new FeatureExFolder(ARCode.Type.Parking)));
-        panel.setWidget(++row, 0, parkingPanel);
-
-        storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));
-        storagePanel.setWidget(1, 0, inject(proto().unitOptionsSelection().selectedStorage(), lockerFolder = new FeatureFolder(ARCode.Type.Locker)));
-        panel.setWidget(++row, 0, storagePanel);
-
-        chargedPanel.setH1(0, 0, 1, i18n.tr("Utilities"));
-        chargedPanel.setWidget(1, 0, inject(proto().unitOptionsSelection().selectedUtilities(), new FeatureFolder(ARCode.Type.Utility)));
-        panel.setWidget(++row, 0, chargedPanel);
-
-        otherPanel.setH2(0, 0, 1, i18n.tr("Other"));
-        otherPanel.setWidget(1, 0, inject(proto().unitOptionsSelection().selectedOther(), new FeatureFolder(ARCode.Type.OneTime)));
-        panel.setWidget(++row, 0, otherPanel);
+        panel.setWidget(++row, 0, inject(proto().unitOptionsSelection(), new StepDataForm()));
 
         return panel;
+    }
+
+    public void setStepValue(UnitOptionsSelectionDTO value) {
+        get(proto().unitOptionsSelection()).setValue(value);
     }
 
     public UnitOptionsSelectionDTO getStepValue() {
         return getWizard().getValue().unitOptionsSelection();
     }
 
-    @Override
-    public void onValueSet() {
-        super.onValueSet();
+    private class StepDataForm extends CEntityForm<UnitOptionsSelectionDTO> {
 
-        petsPanel.setVisible(!getStepValue().selectedPets().isEmpty() || !getStepValue().availablePets().isEmpty());
-        parkingPanel.setVisible(!getStepValue().selectedParking().isEmpty() || !getStepValue().availableParking().isEmpty());
-        storagePanel.setVisible(!getStepValue().selectedStorage().isEmpty() || !getStepValue().availableStorage().isEmpty());
-        chargedPanel.setVisible(!getStepValue().selectedUtilities().isEmpty() || !getStepValue().availableOther().isEmpty());
-        otherPanel.setVisible(!getStepValue().selectedOther().isEmpty() || !getStepValue().availableOther().isEmpty());
+        public StepDataForm() {
+            super(UnitOptionsSelectionDTO.class);
+        }
 
-        petFolder.setMaxCount(getStepValue().restrictions().maxPets().getValue());
-        parkingFolder.setMaxCount(getStepValue().restrictions().maxParkingSpots().getValue());
-        lockerFolder.setMaxCount(getStepValue().restrictions().maxParkingSpots().getValue());
+        @Override
+        public IsWidget createContent() {
+            BasicFlexFormPanel content = new BasicFlexFormPanel();
+
+            int row = -1;
+            petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
+            petsPanel.setWidget(1, 0, inject(proto().selectedPets(), petFolder = new FeatureExFolder(ARCode.Type.Pet)));
+            content.setWidget(++row, 0, petsPanel);
+
+            parkingPanel.setH2(0, 0, 1, i18n.tr("Parking"));
+            parkingPanel.setWidget(1, 0, inject(proto().selectedParking(), parkingFolder = new FeatureExFolder(ARCode.Type.Parking)));
+            content.setWidget(++row, 0, parkingPanel);
+
+            storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));
+            storagePanel.setWidget(1, 0, inject(proto().selectedStorage(), lockerFolder = new FeatureFolder(ARCode.Type.Locker)));
+            content.setWidget(++row, 0, storagePanel);
+
+            chargedPanel.setH1(0, 0, 1, i18n.tr("Utilities"));
+            chargedPanel.setWidget(1, 0, inject(proto().selectedUtilities(), new FeatureFolder(ARCode.Type.Utility)));
+            content.setWidget(++row, 0, chargedPanel);
+
+            otherPanel.setH2(0, 0, 1, i18n.tr("Other"));
+            otherPanel.setWidget(1, 0, inject(proto().selectedOther(), new FeatureFolder(ARCode.Type.OneTime)));
+            content.setWidget(++row, 0, otherPanel);
+
+            return content;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            petsPanel.setVisible(!getValue().selectedPets().isEmpty() || !getValue().availablePets().isEmpty());
+            parkingPanel.setVisible(!getValue().selectedParking().isEmpty() || !getValue().availableParking().isEmpty());
+            storagePanel.setVisible(!getValue().selectedStorage().isEmpty() || !getValue().availableStorage().isEmpty());
+            chargedPanel.setVisible(!getValue().selectedUtilities().isEmpty() || !getValue().availableOther().isEmpty());
+            otherPanel.setVisible(!getValue().selectedOther().isEmpty() || !getValue().availableOther().isEmpty());
+
+            if (!getValue().restrictions().isEmpty()) {
+                petFolder.setMaxCount(getValue().restrictions().maxPets().getValue());
+                parkingFolder.setMaxCount(getValue().restrictions().maxParkingSpots().getValue());
+                lockerFolder.setMaxCount(getValue().restrictions().maxParkingSpots().getValue());
+            }
+        }
     }
 
     private class FeatureFolder extends PortalBoxFolder<BillableItem> {

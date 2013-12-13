@@ -111,7 +111,7 @@ public class UnitStep extends ApplicationWizardStep {
                 getWizard().getPresenter().getAvailableUnitOptions(new DefaultAsyncCallback<UnitOptionsSelectionDTO>() {
                     @Override
                     public void onSuccess(UnitOptionsSelectionDTO result) {
-                        // TODO update unitOptions step here!? 
+                        ((OptionsStep) getWizard().getStep(OptionsStep.class)).setStepValue(result);
                     }
                 }, event.getValue());
             }
