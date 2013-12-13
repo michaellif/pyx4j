@@ -17,38 +17,19 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
+public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactFolder.class);
 
     public EmergencyContactFolder() {
-        super(EmergencyContact.class);
-        setOrderable(true);
-        setRemovable(true);
-        setAddable(true);
-    }
-
-    @Override
-    public IFolderItemDecorator<EmergencyContact> createItemDecorator() {
-        BoxFolderItemDecorator<EmergencyContact> decor = new BoxFolderItemDecorator<EmergencyContact>(VistaImages.INSTANCE);
-        return decor;
-    }
-
-    @Override
-    protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
-        return new BoxFolderDecorator<EmergencyContact>(VistaImages.INSTANCE, "Add Emergency Contact");
+        super(EmergencyContact.class, i18n.tr("Emergency Contact"));
     }
 
     @Override

@@ -19,41 +19,22 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class PersonalIncomeFolder extends CEntityFolder<CustomerScreeningIncome> {
+public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncome> {
 
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
     public PersonalIncomeFolder() {
-        super(CustomerScreeningIncome.class);
-        setOrderable(true);
-        setRemovable(true);
-        setAddable(true);
-    }
-
-    @Override
-    public IFolderItemDecorator<CustomerScreeningIncome> createItemDecorator() {
-        BoxFolderItemDecorator<CustomerScreeningIncome> decor = new BoxFolderItemDecorator<CustomerScreeningIncome>(VistaImages.INSTANCE);
-        return decor;
-    }
-
-    @Override
-    protected IFolderDecorator<CustomerScreeningIncome> createFolderDecorator() {
-        return new BoxFolderDecorator<CustomerScreeningIncome>(VistaImages.INSTANCE, "Add Personal Income");
+        super(CustomerScreeningIncome.class, i18n.tr("Personal Income"));
     }
 
     @Override

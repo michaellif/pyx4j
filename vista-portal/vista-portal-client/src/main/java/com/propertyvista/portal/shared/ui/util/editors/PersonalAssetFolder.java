@@ -20,41 +20,22 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class PersonalAssetFolder extends CEntityFolder<CustomerScreeningPersonalAsset> {
+public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPersonalAsset> {
 
     private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
 
     public PersonalAssetFolder() {
-        super(CustomerScreeningPersonalAsset.class);
-        setOrderable(true);
-        setRemovable(true);
-        setAddable(true);
-    }
-
-    @Override
-    public IFolderItemDecorator<CustomerScreeningPersonalAsset> createItemDecorator() {
-        BoxFolderItemDecorator<CustomerScreeningPersonalAsset> decor = new BoxFolderItemDecorator<CustomerScreeningPersonalAsset>(VistaImages.INSTANCE);
-        return decor;
-    }
-
-    @Override
-    protected IFolderDecorator<CustomerScreeningPersonalAsset> createFolderDecorator() {
-        return new BoxFolderDecorator<CustomerScreeningPersonalAsset>(VistaImages.INSTANCE, "Add Personal Asset");
+        super(CustomerScreeningPersonalAsset.class, i18n.tr("Personal Asset"));
     }
 
     @Override

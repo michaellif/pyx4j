@@ -24,38 +24,19 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class ApplicationDocumentFileUploaderFolder extends CEntityFolder<ApplicationDocumentFile> {
+public class ApplicationDocumentFileUploaderFolder extends PortalBoxFolder<ApplicationDocumentFile> {
 
     private static final I18n i18n = I18n.get(ApplicationDocumentFileUploaderFolder.class);
 
     public ApplicationDocumentFileUploaderFolder() {
-        super(ApplicationDocumentFile.class);
-        setOrderable(true);
-        setRemovable(true);
-        setAddable(true);
-    }
-
-    @Override
-    public IFolderItemDecorator<ApplicationDocumentFile> createItemDecorator() {
-        BoxFolderItemDecorator<ApplicationDocumentFile> decor = new BoxFolderItemDecorator<ApplicationDocumentFile>(VistaImages.INSTANCE);
-        return decor;
-    }
-
-    @Override
-    protected IFolderDecorator<ApplicationDocumentFile> createFolderDecorator() {
-        return new BoxFolderDecorator<ApplicationDocumentFile>(VistaImages.INSTANCE, "Add Document");
+        super(ApplicationDocumentFile.class, i18n.tr("Document"));
     }
 
     @Override
