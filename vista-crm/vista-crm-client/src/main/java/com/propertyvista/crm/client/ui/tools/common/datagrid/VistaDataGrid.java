@@ -17,6 +17,7 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.DataGrid;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -28,19 +29,25 @@ import com.pyx4j.entity.shared.IObject;
  */
 public class VistaDataGrid<E extends IEntity> extends DataGrid<E> {
 
+    private static final int DEFAULT_PAGE_SIZE = 50;
+
     private final E proto;
 
     private final boolean createFooter;
 
     public VistaDataGrid(Class<E> klass, boolean createFooter) {
-        super(50, VistaDataGridResources.getInstance());
+        super(DEFAULT_PAGE_SIZE, VistaDataGridResources.getInstance());
         DataGridScrollFixerHack.apply(this);
         this.createFooter = createFooter;
         this.proto = EntityFactory.getEntityPrototype(klass);
+        this.addDefaultSortHandler();
     }
 
     protected E proto() {
         return this.proto;
+    }
+
+    protected void onSort(String memberPath, boolean isAscending) {
     }
 
     @Deprecated
@@ -61,6 +68,16 @@ public class VistaDataGrid<E extends IEntity> extends DataGrid<E> {
                 createFooter ? new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml() : null);
         this.setColumnWidth(column, columWidth, columnWidthUnit);
         return column;
+    }
+
+    private void addDefaultSortHandler() {
+        ColumnSortEvent.Handler sortHandler = new ColumnSortEvent.Handler() {
+            @Override
+            public void onColumnSort(ColumnSortEvent event) {
+                VistaDataGrid.this.onSort(event.getColumn().getDataStoreName(), event.isSortAscending());
+            }
+        };
+        this.addColumnSortHandler(sortHandler);
     }
 
 }

@@ -245,8 +245,8 @@ import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivi
 import com.propertyvista.crm.client.activity.tools.financial.autopayreview.AutoPayReviewActivity;
 import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInCreateBatchActivity;
 import com.propertyvista.crm.client.activity.tools.legal.l1.L1DelinquentLeaseSearchActivity;
-import com.propertyvista.crm.client.activity.tools.legal.n4.N4DownloadToolActivity;
 import com.propertyvista.crm.client.activity.tools.legal.n4.N4CreateBatchActivity;
+import com.propertyvista.crm.client.activity.tools.legal.n4.N4DownloadToolActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusViewerActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
@@ -778,8 +778,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                         default:
                             break;
                         }
-                    } else if (crudPlace instanceof Finance.MoneyIn) {
-                        activity = new MoneyInCreateBatchActivity();
 
 // - Organization-related:
                     } else if (crudPlace instanceof Organization.Employee) {
@@ -1344,14 +1342,22 @@ public class ContentActivityMapper implements AppActivityMapper {
                     // Dashboard related stuff again
                 } else if (place instanceof Dashboard.View) {
                     activity = new DashboardActivity((Dashboard.View) place);
+
+                    // BEGIN: Bulk Operations Tools
                 } else if (place instanceof Finance.AutoPayReview) {
                     activity = new AutoPayReviewActivity((AppPlace) place);
+                } else if (place instanceof Finance.MoneyIn) {
+                    activity = new MoneyInCreateBatchActivity();
+
+                    // END: Bulk Operations Tools                    
+
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();
                 } else if (place instanceof Administration.Settings.CreditCheck.Setup) {
                     activity = new CreditCheckWizardActivity((Administration.Settings.CreditCheck.Setup) place);
                 } else if (place instanceof Administration.Settings.OnlinePaymentSetup) {
                     activity = new OnlinePaymentWizardActivity((Administration.Settings.OnlinePaymentSetup) place);
+
                 } else if (place instanceof PasswordChange) {
                     activity = new PasswordChangeActivity(place);
 

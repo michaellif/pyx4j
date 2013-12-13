@@ -23,7 +23,6 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.forms.client.ui.IFormat;
@@ -61,15 +60,14 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
 
     public MoneyInCandidateDataGrid() {
         super(MoneyInCandidateDTO.class, false);
-        setPageSize(PAGE_SIZE);
-        moneyEditCellStyle = new ObjectEditCell.DefaultStyle() {
-            @Override
-            public String objectEditCell() {
+
+        moneyEditCellStyle = new ObjectEditCell.DefaultStyle() {//@formatter:off
+            @Override public String objectEditCell() {
                 return StyleNames.ObjectEditCell.name() + " " + VistaDataGridStyles.VistaMoneyCell.name();
             };
-        };
+        };//@formatter:on
+
         initColumns();
-        initSortHandler();
     }
 
     public void setPresenter(MoneyInCreateBatchView.Presenter presenter) {
@@ -79,9 +77,6 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
     @Override
     public ProvidesKey<MoneyInCandidateDTO> getKeyProvider() {
         return this.presenter;
-    }
-
-    protected void onSort(String memberPath, boolean isAscending) {
     }
 
     private void initColumns() {
@@ -94,16 +89,6 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         initAmountToPayColumn();
         initCheckNumberColumn();
         initProcessColumn();
-    }
-
-    private void initSortHandler() {
-        ColumnSortEvent.Handler sortHandler = new ColumnSortEvent.Handler() {
-            @Override
-            public void onColumnSort(ColumnSortEvent event) {
-                MoneyInCandidateDataGrid.this.onSort(event.getColumn().getDataStoreName(), event.isSortAscending());
-            }
-        };
-        this.addColumnSortHandler(sortHandler);
     }
 
     private Column<?, ?> initBuildingColumn() {

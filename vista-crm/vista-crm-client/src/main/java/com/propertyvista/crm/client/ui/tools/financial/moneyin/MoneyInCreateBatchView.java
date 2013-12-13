@@ -15,21 +15,20 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
+import com.propertyvista.crm.client.ui.tools.common.view.HasMessages;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
-public interface MoneyInCreateBatchView extends IPrimePane {
+public interface MoneyInCreateBatchView extends IPrimePane, HasMessages {
 
     interface Presenter extends IPrimePane.Presenter, ProvidesKey<MoneyInCandidateDTO> {
 
@@ -54,16 +53,14 @@ public interface MoneyInCreateBatchView extends IPrimePane {
 
     void setPresenter(Presenter presenter);
 
-    MoneyInCandidateSearchCriteriaModel getSearchCriteria();
-
+    // This is used only to bind the data provider in presenter
     HasData<MoneyInCandidateDTO> searchResults();
 
+    // This is used only to bind the data provider in presenter
     HasData<MoneyInCandidateDTO> selectedForProcessing();
 
+    MoneyInCandidateSearchCriteriaModel getSearchCriteria();
+
     LogicalDate getRecieptDate();
-
-    void displayMessage(String meesage, MessageDialog.Type messageType);
-
-    void confirm(String message, Command onConfirmed, Command onDeclined);
 
 }

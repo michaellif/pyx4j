@@ -41,18 +41,16 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 
+import com.propertyvista.crm.client.ui.tools.common.view.AbstractPrimePaneWithMessagesPopup;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaForm;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 
-public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements MoneyInCreateBatchView {
+public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup implements MoneyInCreateBatchView {
 
     private static final I18n i18n = I18n.get(MoneyInCreateBatchViewImpl.class);
 
@@ -204,16 +202,6 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
     @Override
     public LogicalDate getRecieptDate() {
         return receiptDate.getValue();
-    }
-
-    @Override
-    public void displayMessage(String message, Type messageType) {
-        MessageDialog.show("", message, messageType);
-    }
-
-    @Override
-    public void confirm(String message, Command onConfirmed, Command onDeclined) {
-        MessageDialog.confirm("", message, onConfirmed, onDeclined);
     }
 
     private LayoutPanel initViewPanel() {
