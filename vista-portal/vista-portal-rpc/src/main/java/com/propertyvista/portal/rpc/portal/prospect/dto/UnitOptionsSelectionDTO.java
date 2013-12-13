@@ -47,11 +47,17 @@ public interface UnitOptionsSelectionDTO extends IEntity {
 
     // Product Catalog stuff:
 
+    BillableItem agreedService();
+
+    // ---------------------------------
+
     IList<BillableItem> agreedParking();
 
     IList<BillableItem> agreedStorage();
 
     IList<BillableItem> agreedPets();
+
+    IList<BillableItem> agreedUtilities();
 
     IList<BillableItem> agreedOther();
 
@@ -62,6 +68,8 @@ public interface UnitOptionsSelectionDTO extends IEntity {
     IList<ProductItem> availableStorage();
 
     IList<ProductItem> availablePets();
+
+    IList<ProductItem> availableUtilities();
 
     IList<ProductItem> availableOther();
 }

@@ -28,6 +28,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -302,6 +306,50 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void retrieveAvailableCatalogItems(UnitOptionsSelectionDTO options) {
         assert (!options.unit().isNull());
+        Persistence.ensureRetrieve(options.unit().building(), AttachLevel.Attached);
 
+        Service service;
+        {
+            EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
+            criteria.eq(criteria.proto().catalog(), options.unit().building().productCatalog());
+            criteria.in(criteria.proto().code().type(), ARCode.Type.Residential);
+            criteria.eq(criteria.proto().isDefaultCatalogItem(), Boolean.FALSE);
+            criteria.isCurrent(criteria.proto().version());
+
+            service = Persistence.service().retrieve(criteria);
+        }
+        if (service != null) {
+            EntityQueryCriteria<ProductItem> criteria = new EntityQueryCriteria<ProductItem>(ProductItem.class);
+            criteria.eq(criteria.proto().product(), service.version());
+            criteria.eq(criteria.proto().element(), options.unit());
+
+            options.agreedService().item().set(Persistence.service().retrieve(criteria));
+            options.agreedService().agreedPrice().setValue(options.agreedService().item().price().getValue());
+
+            Persistence.service().retrieve(service.version().features());
+            for (Feature feature : service.version().features()) {
+                Persistence.service().retrieve(feature.version().items());
+                for (ProductItem item : feature.version().items()) {
+                    Persistence.service().retrieve(item.product());
+                    switch (feature.code().type().getValue()) {
+                    case AddOn:
+                    case Utility:
+                        options.availableUtilities().add(item);
+                        break;
+                    case Pet:
+                        options.availablePets().add(item);
+                        break;
+                    case Parking:
+                        options.availableParking().add(item);
+                        break;
+                    case Locker:
+                        options.availableStorage().add(item);
+                        break;
+                    default:
+                        options.availableOther().add(item);
+                    }
+                }
+            }
+        }
     }
 }
