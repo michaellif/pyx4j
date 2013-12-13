@@ -33,6 +33,7 @@ import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageVi
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.PrintUtils;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequestDTO> {
@@ -40,6 +41,8 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     private static final I18n i18n = I18n.get(MaintenanceRequestPage.class);
 
     private final Button btnCancel;
+
+    private final Button btnPrint;
 
     public MaintenanceRequestPage(MaintenanceRequestPageViewImpl view) {
         super(MaintenanceRequestDTO.class, view, "Maintenance Request", ThemeColor.contrast5);
@@ -55,6 +58,14 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
                 });
             }
         });
+
+        btnPrint = new Button(i18n.tr("Print"), new Command() {
+            @Override
+            public void execute() {
+                PrintUtils.print(MaintenanceRequestPage.this.asWidget());
+            }
+        });
+
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 
@@ -105,6 +116,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> decorator = super.createDecorator();
 
         decorator.addHeaderToolbarWidget(btnCancel);
+        decorator.addHeaderToolbarWidget(btnPrint);
 
         return decorator;
     }
