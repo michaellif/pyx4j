@@ -106,7 +106,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
     public void testCase() {
         createLease("01-Dec-2013", "30-Nov-2014");
-        setTenantId(null);
+        fixTenantName(null);
         setMoveIn(new LogicalDate());
         setPropertyCode("prvista2");
         setFloorplan("prv21b1", 1);
@@ -277,14 +277,12 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         Persistence.service().persist(lease._applicant().customer().personScreening());
     }
 
-    private void setTenantId(String key) {
-        if (key == null) {
-            key = new SimpleDateFormat("ddHHmm").format(new Date());
+    private void fixTenantName(String fix) {
+        if (fix == null) {
+            fix = new SimpleDateFormat("ddHHmm").format(new Date());
         }
-        lease._applicant().participantId().setValue(key);
-        Persistence.service().persist(lease._applicant());
         String lastName = lease._applicant().customer().person().name().lastName().getValue();
-        lease._applicant().customer().person().name().lastName().setValue(lastName + "-" + key);
+        lease._applicant().customer().person().name().lastName().setValue(lastName + "-" + fix);
         Persistence.service().persist(lease._applicant().customer());
     }
 

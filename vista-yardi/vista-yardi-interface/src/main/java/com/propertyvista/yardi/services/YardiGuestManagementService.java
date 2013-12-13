@@ -139,7 +139,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
             }
         }
         // do guest search to retrieve lease id
-        String guestId = lease._applicant().participantId().getValue();
+        String guestId = lease._applicant().getPrimaryKey().toString();
         leaseId = getTenantId(yc, propertyCode, guestId);
         if (leaseId == null) {
             throw new YardiServiceException("Tenant not found: " + guestId);

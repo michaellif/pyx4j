@@ -57,7 +57,7 @@ public class YardiGuestProcessor {
                 lease._applicant().customer().person().name().firstName().getValue(), //
                 lease._applicant().customer().person().name().lastName().getValue(), //
                 getCurrentAddress(lease), //
-                lease._applicant().getPrimaryKey().toString(), //
+                lease._applicant().getPrimaryKey().toString(), // use primary key as third-party guest id
                 lease.unit().building().propertyCode().getValue() //
         );
     }
