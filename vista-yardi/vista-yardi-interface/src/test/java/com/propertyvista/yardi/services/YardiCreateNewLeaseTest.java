@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -271,7 +271,7 @@ public class YardiCreateNewLeaseTest extends IntegrationTestBase {
         Persistence.service().persist(unit);
     }
 
-    private void setCurrentAddress(AddressStructured addr) {
+    private void setCurrentAddress(PriorAddress addr) {
         Persistence.service().retrieveMember(lease._applicant().customer().personScreening());
         lease._applicant().customer().personScreening().version().currentAddress().set(addr);
         Persistence.service().persist(lease._applicant().customer().personScreening());
@@ -288,8 +288,8 @@ public class YardiCreateNewLeaseTest extends IntegrationTestBase {
         Persistence.service().persist(lease._applicant().customer());
     }
 
-    private AddressStructured getAddress() {
-        AddressStructured addr = EntityFactory.create(AddressStructured.class);
+    private PriorAddress getAddress() {
+        PriorAddress addr = EntityFactory.create(PriorAddress.class);
         addr.county().setValue("US");
         addr.province().code().setValue("CA");
         addr.postalCode().setValue("98765");
