@@ -172,7 +172,7 @@ public class OptionsStep extends ApplicationWizardStep {
 
             public FeatureItemForm() {
                 super(BillableItem.class);
-                setEditable(false);
+                setViewable(true);
             }
 
             @Override
@@ -193,7 +193,7 @@ public class OptionsStep extends ApplicationWizardStep {
 
                 @SuppressWarnings("unchecked")
                 CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
-                item.setRemovable(isMandatoryFeature(getValue().item().product()));
+                item.setRemovable(!isMandatoryFeature(getValue().item().product()));
             }
 
             private boolean isMandatoryFeature(Product.ProductV product) {
@@ -203,7 +203,7 @@ public class OptionsStep extends ApplicationWizardStep {
 
         @Override
         protected void addItem() {
-            if (getValue().size() < getMaxCount()) {
+            if (getMaxCount() < 0 || getValue().size() < getMaxCount()) {
                 new SelectFeatureBox(type, OptionsStep.this.getStepValue()) {
                     @Override
                     public boolean onClickOk() {
@@ -327,6 +327,8 @@ public class OptionsStep extends ApplicationWizardStep {
                     }
 
                     if (editor != null) {
+                        editor.setViewable(false);
+                        editor.inheritViewable(false);
                         this.inject(proto().extraData(), editor);
                         editor.populate(extraData.cast());
                         extraDataPanel.setWidget(editor);

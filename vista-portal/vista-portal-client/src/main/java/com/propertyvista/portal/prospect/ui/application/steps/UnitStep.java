@@ -56,7 +56,7 @@ public class UnitStep extends ApplicationWizardStep {
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().moveIn())).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().moveIn()), 120).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().building(), new CEntityLabel<Building>())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().floorplan(), floorplanSelector)).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().unit(), unitSelector)).build());
