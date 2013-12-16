@@ -169,11 +169,7 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public boolean isAptListEnabled() {
-        if (siteDescriptor.disableBuildingDetails().isNull()) {
-            return true;
-        } else {
-            return !siteDescriptor.disableBuildingDetails().getValue();
-        }
+        return !siteDescriptor.disableBuildingDetails().isBooleanTrue();
     }
 
     public List<AvailableLocale> getAllAvailableLocale() {

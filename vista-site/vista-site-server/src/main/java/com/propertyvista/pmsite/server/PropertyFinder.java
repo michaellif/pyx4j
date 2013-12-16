@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
 
 import com.pyx4j.commons.Key;
@@ -61,11 +62,11 @@ public class PropertyFinder {
         // add search criteria
         if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
             String prov = searchCriteria.province().getValue();
-            if (prov != null) {
+            if (!StringUtils.isEmpty(prov)) {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().province().name(), prov));
             }
             String city = searchCriteria.city().getValue();
-            if (city != null) {
+            if (!StringUtils.isEmpty(city)) {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }
         } else {
