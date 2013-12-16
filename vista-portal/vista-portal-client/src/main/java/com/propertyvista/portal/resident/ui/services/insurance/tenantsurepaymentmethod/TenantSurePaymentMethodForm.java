@@ -17,15 +17,15 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -35,7 +35,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
 public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePaymentMethod> {
@@ -44,11 +44,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
 
     private final Command onSameAsCurrentAddressSelected;
 
-    private final CCheckBox iAgreeBox = new CCheckBox();
-
     private final HTML legalTerms = new HTML();
-
-    private boolean isAgreedToPreauthorizedPayments;
 
     public TenantSurePaymentMethodForm() {
         this(null);
@@ -57,22 +53,36 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
     public TenantSurePaymentMethodForm(Command onSameAsCurrentAddressSelected) {
         super(InsurancePaymentMethod.class);
         this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
-        this.isAgreedToPreauthorizedPayments = false;
     }
 
     @Override
-    protected String getNameOn() {
-        return ClientContext.getUserVisit().getName();
+    public void addValidations() {
+        super.addValidations();
+        get(proto().preAuthorizedAgreementSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
+            @Override
+            public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
+                if (value != null && !value.agree().isBooleanTrue()) {
+                    return new ValidationError(component, i18n.tr("You must agree to preauthorized payment agreement to continue"));
+                }
+                return null;
+            }
+        });
     }
 
     @Override
     public IsWidget createContent() {
         BasicFlexFormPanel content = (BasicFlexFormPanel) super.createContent();
-
-        content.setBR(content.getRowCount(), 0, 1);
-
-        content.setWidget(content.getRowCount() + 1, 0, createLegalTermsPanel());
-
+        int row = content.getRowCount() + 1;
+        content.setBR(row, 0, 2);
+        content.setWidget(++row, 0, 2, createLegalTermsPanel());
+        content.setBR(++row, 0, 2);
+        content.setWidget(
+                ++row,
+                0,
+                2,
+                inject(proto().preAuthorizedAgreementSignature(),
+                        new CSignature(SignatureType.AgreeBox, i18n.tr("I agree to the preauthorized payments agreement"))));
+        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         return content;
     }
 
@@ -82,26 +92,6 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
         panel.setH1(0, 0, 1, i18n.tr("Pre-Authorized Agreement"));
         legalTerms.getElement().getStyle().setTextAlign(TextAlign.JUSTIFY);
         panel.setWidget(1, 0, legalTerms);
-        panel.setWidget(2, 0, new FormWidgetDecoratorBuilder(iAgreeBox, FormWidgetDecoratorBuilder.LABEL_WIDTH, 5, 15).customLabel(i18n.tr("I Agree")).build());
-
-        iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                onIAgree(event.getValue());
-            }
-        });
-
-        addValueValidator(new EditableValueValidator<InsurancePaymentMethod>() {
-            @Override
-            public ValidationError isValid(CComponent<InsurancePaymentMethod> component, InsurancePaymentMethod value) {
-                if (!isAgreedToPreauthorizedPayments()) {
-                    return new ValidationError(component, i18n.tr("You must agree to Preauthorized Payments Agreement in order to continue!"));
-                } else {
-                    return null;
-                }
-            }
-        });
-
         return panel;
     }
 
@@ -112,20 +102,13 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
     }
 
     @Override
-    public void setVisited(boolean visited) {
-        super.setVisited(visited);
-        if (iAgreeBox != null) {
-            iAgreeBox.setValue(false);
-        }
-    }
-
-    @Override
     public Set<PaymentType> defaultPaymentTypes() {
         return EnumSet.of(PaymentType.CreditCard);
     }
 
     public void setPreAuthorizedAgreement(String agreementHtml) {
         legalTerms.setHTML(agreementHtml);
+
     }
 
     @Override
@@ -135,13 +118,9 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
         }
     }
 
-    protected void onIAgree(boolean set) {
-        isAgreedToPreauthorizedPayments = set;
-        revalidate();
-    }
-
-    public boolean isAgreedToPreauthorizedPayments() {
-        return isAgreedToPreauthorizedPayments;
+    @Override
+    protected String getNameOn() {
+        return ClientContext.getUserVisit().getName();
     }
 
 }
