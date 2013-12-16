@@ -36,6 +36,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerSignature;
+import com.propertyvista.portal.resident.themes.TenantSureTheme;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
 public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePaymentMethod> {
@@ -74,7 +75,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
         BasicFlexFormPanel content = (BasicFlexFormPanel) super.createContent();
         int row = content.getRowCount() + 1;
         content.setBR(row, 0, 2);
-        content.setWidget(++row, 0, 2, createLegalTermsPanel());
+        content.setWidget(++row, 0, 2, createPapAgreementTermsPanel());
         content.setBR(++row, 0, 2);
         content.setWidget(
                 ++row,
@@ -86,9 +87,9 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
         return content;
     }
 
-    private Widget createLegalTermsPanel() {
+    private Widget createPapAgreementTermsPanel() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
-
+        panel.addStyleName(TenantSureTheme.StyleName.TenantSurePapAgreementPanel.name());
         panel.setH1(0, 0, 1, i18n.tr("Pre-Authorized Agreement"));
         legalTerms.getElement().getStyle().setTextAlign(TextAlign.JUSTIFY);
         panel.setWidget(1, 0, legalTerms);

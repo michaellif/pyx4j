@@ -17,6 +17,7 @@ import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
 import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
@@ -52,6 +53,7 @@ public class TenantSureTheme extends Theme {
         TSSendDocs,
         TSPurchaseViewError, 
         TSPaymentAmount,
+        TenantSurePapAgreementPanel,
         
         TenantSureAboutContactInfo,
         
@@ -168,6 +170,12 @@ public class TenantSureTheme extends Theme {
         {
             Style style = new Style(".", TenantSureTheme.StyleName.TSSendDocs.name(), " .Button");
             style.addProperty("float", "none");
+            addStyle(style);
+        }
+
+        {
+            Style style = new Style("." + TenantSureTheme.StyleName.TenantSurePapAgreementPanel.name(), " a");
+            style.addProperty("color", ThemeColor.contrast1);
             addStyle(style);
         }
 
