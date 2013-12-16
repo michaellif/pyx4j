@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import java.util.Collection;
 import java.util.Vector;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -24,6 +25,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -84,8 +86,7 @@ public class UnitStep extends ApplicationWizardStep {
                     getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<Vector<AptUnit>>() {
                         @Override
                         public void onSuccess(Vector<AptUnit> result) {
-                            unitSelector.reset();
-                            unitSelector.setOptions(result);
+                            setAvailableUnits(result);
                         }
                     }, floorplanSelected, event.getValue());
                 }
@@ -98,8 +99,7 @@ public class UnitStep extends ApplicationWizardStep {
                 getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<Vector<AptUnit>>() {
                     @Override
                     public void onSuccess(Vector<AptUnit> result) {
-                        unitSelector.reset();
-                        unitSelector.setOptions(result);
+                        setAvailableUnits(result);
                     }
                 }, event.getValue(), get(proto().unitSelection().moveIn()).getValue());
             }
@@ -116,5 +116,15 @@ public class UnitStep extends ApplicationWizardStep {
                 }, event.getValue());
             }
         });
+    }
+
+    public void setAvailableUnits(Collection<AptUnit> result) {
+        unitSelector.reset();
+        unitSelector.setOptions(result);
+
+        if (result.isEmpty()) {
+            MessageDialog.warn(i18n.tr("Sorry"),
+                    i18n.tr("There are no available from {0} units for selected floorplan!", get(proto().unitSelection().moveIn()).getValue()));
+        }
     }
 }

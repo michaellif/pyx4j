@@ -98,8 +98,12 @@ public class VehicleDataEditor extends CEntityDecoratableForm<Vehicle> {
     }
 
     private void devGenerateVehicle() {
-        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
-        get(proto().plateNumber()).setValue("DriveFast1");
+        get(proto().make()).setValue("BMW");
+        get(proto().model()).setValue("i666");
+        get(proto().color()).setValue("Rose");
         get(proto().year()).setValue(new LogicalDate());
+        get(proto().plateNumber()).setValue("LastTimeDrive");
+        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
+
     }
 }
