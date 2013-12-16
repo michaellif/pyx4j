@@ -45,6 +45,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
+import com.propertyvista.domain.financial.PaymentPostingBatch;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -201,5 +202,9 @@ public interface Building extends PolicyNode, HasNotesAndAttachments {
     ISet<BillingCycle> billingCycles();
 
     IPrimitive<Boolean> useExternalBilling();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<PaymentPostingBatch> postingBatches();
 
 }
