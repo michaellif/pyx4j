@@ -280,6 +280,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new IllegalArgumentException("paymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         }
 
+        if ((paymentBatchContext == null) && (!paymentRecord.batch().isNull())) {
+            // Detach from posting batch
+            paymentRecord.batch().set(null);
+        }
+
         Persistence.service().merge(paymentRecord);
 
         if (paymentRecord.paymentStatus().getValue() != PaymentRecord.PaymentStatus.Rejected) {
