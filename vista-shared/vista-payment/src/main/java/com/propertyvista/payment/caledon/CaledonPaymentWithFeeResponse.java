@@ -61,7 +61,7 @@ public class CaledonPaymentWithFeeResponse extends CaledonFeeResponseBase {
         return CaledonCardsUtils.parsAmount(feeAmount);
     }
 
-    @HttpResponseField("payment_total")
+    @HttpResponseField("total_amount")
     @NotNull
     @Size(max = 10)
     public String totalAmount;

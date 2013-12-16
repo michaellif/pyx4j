@@ -345,9 +345,6 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
         crequest.referenceNumber = request.referenceNumber().getValue();
         crequest.referenceNumberFeeCalulation = request.convenienceFeeReferenceNumber().getValue();
 
-        crequest.creditCardNumber = "0";
-        crequest.expiryDate = "0000";
-
         crequest.setAmount(request.amount().getValue());
         crequest.setFeeAmount(request.convenienceFee().getValue());
         crequest.setTotalAmount(request.amount().getValue().add(request.convenienceFee().getValue()));

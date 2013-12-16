@@ -88,7 +88,7 @@ public class CaledonPaymentWithFeeRequest {
         this.feeAmount = CaledonCardsUtils.formatAmount(value);
     }
 
-    @HttpRequestField("payment_total")
+    @HttpRequestField("total_amount")
     @NotNull
     @Size(max = 10)
     public String totalAmount;
