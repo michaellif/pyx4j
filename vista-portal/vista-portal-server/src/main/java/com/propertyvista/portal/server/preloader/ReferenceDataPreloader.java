@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.maintenance.IssueElementType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
@@ -60,27 +61,31 @@ public class ReferenceDataPreloader extends AbstractDataPreloader {
         MaintenanceRequestMetadata meta = EntityFactory.create(MaintenanceRequestMetadata.class);
         meta.rootCategory().set(EntityFactory.create(MaintenanceRequestCategory.class));
         meta.rootCategory().name().setValue("ROOT");
-        createMaintenanceCategories(meta.rootCategory());
+        createMaintenanceCategories(meta.rootCategory(), "maintenance-tree-unit.csv", IssueElementType.ApartmentUnit);
+        createMaintenanceCategories(meta.rootCategory(), "maintenance-tree-amenities.csv", IssueElementType.Amenities);
+        createMaintenanceCategories(meta.rootCategory(), "maintenance-tree-exterior.csv", IssueElementType.Exterior);
+
         meta.priorities().addAll(createMaintenancePriorities());
         meta.statuses().addAll(createMaintenanceStatuses());
         Persistence.service().persist(meta.rootCategory());
         Persistence.service().persist(meta);
     }
 
-    private MaintenanceRequestCategory createMaintenanceCategories(MaintenanceRequestCategory root) {
+    private MaintenanceRequestCategory createMaintenanceCategories(MaintenanceRequestCategory root, String dataFile, IssueElementType type) {
         // create categories for each level
         List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadResourceFile(
-                IOUtils.resourceFileName("maintenance-tree.csv", ReferenceDataPreloader.class));
+                IOUtils.resourceFileName(dataFile, ReferenceDataPreloader.class));
 
         Map<String, MaintenanceRequestCategory> categories = new HashMap<String, MaintenanceRequestCategory>();
         for (MaintenanceTreeImport row : data) {
             // Find or create Element
-            MaintenanceRequestCategory element = categories.get(row.type().getValue() + row.rooms().getValue());
+            MaintenanceRequestCategory element = categories.get(type.toString() + row.rooms().getValue());
             if (element == null) {
                 element = createMaintenanceCategory(row.rooms().getValue(), root);
-                categories.put(row.type().getValue() + row.rooms().getValue(), element);
+                categories.put(type.toString() + row.rooms().getValue(), element);
                 root.subCategories().add(element);
             }
+            element.type().setValue(type);
             // Find or create  Subject
             MaintenanceRequestCategory subject = null;
             for (MaintenanceRequestCategory subj : element.subCategories()) {

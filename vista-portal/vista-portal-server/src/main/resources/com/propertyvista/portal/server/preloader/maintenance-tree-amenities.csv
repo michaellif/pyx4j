@@ -1,0 +1,220 @@
+Type,Rooms,Issue,Subject Details,Repair Subject,Priority
+Amenities,Business Center,,,Ceiling Repair,STANDARD
+Amenities,Business Center,,,Door Repair,STANDARD
+Amenities,Business Center,,,Equipment repair (explain),STANDARD
+Amenities,Business Center,,,Fire Sprinkler Repair,EMERGENCY
+Amenities,Business Center,,,Floor Repair,STANDARD
+Amenities,Business Center,,Window Repair,Glass Door / Window,STANDARD
+Amenities,Business Center,,,Heat or Air Repair,STANDARD
+Amenities,Business Center,,,Light Repair,STANDARD
+Amenities,Business Center,,,Not In List,STANDARD
+Amenities,Business Center,,,Room Dirty,STANDARD
+Amenities,Business Center,,,Smoke Detector Repair,STANDARD
+Amenities,Business Center,,,Wall Repair,STANDARD
+Amenities,Business Center,,,Water Leak (Explain),EMERGENCY
+Amenities,Clubhouse,,,Alarm Repair,EMERGENCY
+Amenities,Clubhouse,,,Bathroom Repair,STANDARD
+Amenities,Clubhouse,,,Blind  Repair,STANDARD
+Amenities,Clubhouse,,,Ceiling Repair,STANDARD
+Amenities,Clubhouse,,,Dirty,STANDARD
+Amenities,Clubhouse,,,Door Repair,EMERGENCY
+Amenities,Clubhouse,,,Fire equipment Repair,STANDARD
+Amenities,Clubhouse,,,Floor Repair,STANDARD
+Amenities,Clubhouse,,,Furniture Repair,STANDARD
+Amenities,Clubhouse,,,Game Table Repair,STANDARD
+Amenities,Clubhouse,,,Heat or air Repair,STANDARD
+Amenities,Clubhouse,,,Kitchen Repair,STANDARD
+Amenities,Clubhouse,,,Light  Repair,STANDARD
+Amenities,Clubhouse,,,Not In List,STANDARD
+Amenities,Clubhouse,,,Plumbing repair,STANDARD
+Amenities,Clubhouse,,,Sauna Repair,STANDARD
+Amenities,Clubhouse,,,Spa Repair,STANDARD
+Amenities,Clubhouse,,,Wall Repair,STANDARD
+Amenities,Clubhouse,,,Water Heater  Repair,STANDARD
+Amenities,Clubhouse,,,Water Leak (Explain),EMERGENCY
+Amenities,Clubhouse,,,Window Repair,EMERGENCY
+Amenities,Day Care,,,Alarm Repair,EMERGENCY
+Amenities,Day Care,,,Appliance repair,STANDARD
+Amenities,Day Care,,,Bath accessory repair,STANDARD
+Amenities,Day Care,,,Blind repair,STANDARD
+Amenities,Day Care,,,Door Repair,EMERGENCY
+Amenities,Day Care,,,Electrical repair,STANDARD
+Amenities,Day Care,,,Fire Safety Repair,EMERGENCY
+Amenities,Day Care,,,Flooring Repair,STANDARD
+Amenities,Day Care,,,Heat / Air repair,STANDARD
+Amenities,Day Care,,,Leak,EMERGENCY
+Amenities,Day Care,,,Not In List,STANDARD
+Amenities,Day Care,,,Screen Repair,STANDARD
+Amenities,Day Care,,,Sink / Faucet repair,STANDARD
+Amenities,Day Care,,,Toilet repair,STANDARD
+Amenities,Day Care,,,Wall / Ceiling repair,STANDARD
+Amenities,Day Care,,,Window repair,STANDARD
+Amenities,Elevator,,,Alarm Repair,EMERGENCY
+Amenities,Elevator,,,Dirty,STANDARD
+Amenities,Elevator,,,Door Repair,STANDARD
+Amenities,Elevator,,,Elevator Repair,EMERGENCY
+Amenities,Elevator,,,Floor  Repair,STANDARD
+Amenities,Elevator,,,Light Repair,EMERGENCY
+Amenities,Elevator,,,Not In List,STANDARD
+Amenities,Elevator,,,Water Leak (Explain),EMERGENCY
+Amenities,Exterior Activity Areas,,,Bicycle/Jogging Track Repair,STANDARD
+Amenities,Exterior Activity Areas,,,Dirty,STANDARD
+Amenities,Exterior Activity Areas,,,Fence / gate Repair,STANDARD
+Amenities,Exterior Activity Areas,,,Light Repair,STANDARD
+Amenities,Exterior Activity Areas,,,Miniature Golf Course Repair,STANDARD
+Amenities,Exterior Activity Areas,,,Not In List,STANDARD
+Amenities,Exterior Activity Areas,,,Playground Equipment Repair,STANDARD
+Amenities,Exterior Activity Areas,,,Sport Court Repair,STANDARD
+Amenities,Fitness Center,,,Bathroom Repair,STANDARD
+Amenities,Fitness Center,,,Ceiling Repair,STANDARD
+Amenities,Fitness Center,,,Dirty,STANDARD
+Amenities,Fitness Center,,,Door Repair,EMERGENCY
+Amenities,Fitness Center,,,Electrical Repair,STANDARD
+Amenities,Fitness Center,,,Fire Extinguisher  Repair,STANDARD
+Amenities,Fitness Center,,,Fire Sprinkler Repair,EMERGENCY
+Amenities,Fitness Center,,,Fitness Equipment Repair,STANDARD
+Amenities,Fitness Center,,,Floor Repair,STANDARD
+Amenities,Fitness Center,,,Heat or Air Repair,STANDARD
+Amenities,Fitness Center,,,Light Repair,STANDARD
+Amenities,Fitness Center,,,Mirror Repair,STANDARD
+Amenities,Fitness Center,,,Not In List,STANDARD
+Amenities,Fitness Center,,,Smoke Detector Repair,STANDARD
+Amenities,Fitness Center,,,TV Repair,STANDARD
+Amenities,Fitness Center,,,Wall Repair,STANDARD
+Amenities,Fitness Center,,,Water Leak (Explain),EMERGENCY
+Amenities,Fitness Center,,,Window Repair,STANDARD
+Amenities,Garage / Carports,,Damaged,Doors,EMERGENCY
+Amenities,Garage / Carports,,Leaks at bottom,Doors,EMERGENCY
+Amenities,Garage / Carports,,Leaks at top,Doors,EMERGENCY
+Amenities,Garage / Carports,,Misplaced opener,Doors,STANDARD
+Amenities,Garage / Carports,,Not In List,Doors,STANDARD
+Amenities,Garage / Carports,,Will not close,Doors,EMERGENCY
+Amenities,Garage / Carports,,Will not open,Doors,EMERGENCY
+Amenities,Garage / Carports,,Fire Sprinkler Head,Plumbing,EMERGENCY
+Amenities,Garage / Carports,,Fire Sprinkler Head,Plumbing,STANDARD
+Amenities,Garage / Carports,,Leak,Plumbing,STANDARD
+Amenities,Garage / Carports,,Water Heater,Plumbing,EMERGENCY
+Amenities,Garage / Carports,,Damaged,Trim,STANDARD
+Amenities,Garage / Carports,,Loose,Trim,STANDARD
+Amenities,Garage / Carports,,Missing,Trim,STANDARD
+Amenities,Garage / Carports,,Not In List,Trim,STANDARD
+Amenities,Laundry Room,,,Ceiling Repair,STANDARD
+Amenities,Laundry Room,,,Controlled Access Device Repair,STANDARD
+Amenities,Laundry Room,,,Door Repair,EMERGENCY
+Amenities,Laundry Room,,,Dryer repair,STANDARD
+Amenities,Laundry Room,,,Fire Extinguisher Repair,STANDARD
+Amenities,Laundry Room,,,Fire Sprinkler Repair,EMERGENCY
+Amenities,Laundry Room,,,Floor Repair,STANDARD
+Amenities,Laundry Room,,,Floor is wet,EMERGENCY
+Amenities,Laundry Room,,,Heat or Air Repair,STANDARD
+Amenities,Laundry Room,,,Light Repair,EMERGENCY
+Amenities,Laundry Room,,,No Hot Water,STANDARD
+Amenities,Laundry Room,,,Not In List,STANDARD
+Amenities,Laundry Room,,Water Heater,Plumbing,EMERGENCY
+Amenities,Laundry Room,,,Room Dirty,STANDARD
+Amenities,Laundry Room,,,Smoke Detector Repair,STANDARD
+Amenities,Laundry Room,,,Wall Repair,STANDARD
+Amenities,Laundry Room,,,Washer repair,STANDARD
+Amenities,Laundry Room,,,Water Leak (Explain),EMERGENCY
+Amenities,Laundry Room,,,Window Repair,STANDARD
+Amenities,Leasing Office,,,Alarm Repair,EMERGENCY
+Amenities,Leasing Office,,,Bathroom Repair,STANDARD
+Amenities,Leasing Office,,,Blind Repair,STANDARD
+Amenities,Leasing Office,,,Ceiling Repair,STANDARD
+Amenities,Leasing Office,,,Dirty,STANDARD
+Amenities,Leasing Office,,,Door Repair,STANDARD
+Amenities,Leasing Office,,,Fire equipment Repair,EMERGENCY
+Amenities,Leasing Office,,,Floor Repair,STANDARD
+Amenities,Leasing Office,,,Furniture Repair,STANDARD
+Amenities,Leasing Office,,,Heat or air Repair,STANDARD
+Amenities,Leasing Office,,,Light Repair,STANDARD
+Amenities,Leasing Office,,,Not In List,STANDARD
+Amenities,Leasing Office,,,Plumbing repair,STANDARD
+Amenities,Leasing Office,,,Wall  Repair,STANDARD
+Amenities,Leasing Office,,,Water Heater Repair,STANDARD
+Amenities,Leasing Office,,,Water Leak (Explain),EMERGENCY
+Amenities,Leasing Office,,,Window Repair,STANDARD
+Amenities,Mail Center,,,Ceiling Repair,STANDARD
+Amenities,Mail Center,,,Dirty,STANDARD
+Amenities,Mail Center,,,Door Repair,STANDARD
+Amenities,Mail Center,,,Fire Equipment repair,EMERGENCY
+Amenities,Mail Center,,,Floor  Repair,STANDARD
+Amenities,Mail Center,,,Light Repair,STANDARD
+Amenities,Mail Center,,,Mail Box Repair,STANDARD
+Amenities,Mail Center,,,Not In List,STANDARD
+Amenities,Mail Center,,,Trash Receptacle Repair,STANDARD
+Amenities,Mail Center,,,Wall Repair,STANDARD
+Amenities,Mail Center,,,Water Leak (Explain),EMERGENCY
+Amenities,Maintenance Shop,,,Ceiling Repair,STANDARD
+Amenities,Maintenance Shop,,,Dirty,STANDARD
+Amenities,Maintenance Shop,,,Door Repair,STANDARD
+Amenities,Maintenance Shop,,,Fire equipment repair,EMERGENCY
+Amenities,Maintenance Shop,,,Floor Repair,STANDARD
+Amenities,Maintenance Shop,,,Garage Door Repair,STANDARD
+Amenities,Maintenance Shop,,,Heat or Air Repair,STANDARD
+Amenities,Maintenance Shop,,,Light Repair,STANDARD
+Amenities,Maintenance Shop,,,Not In List,STANDARD
+Amenities,Maintenance Shop,,,Plumbing repair,STANDARD
+Amenities,Maintenance Shop,,,Wall Repair,STANDARD
+Amenities,Maintenance Shop,,,Water Heater Repair,STANDARD
+Amenities,Maintenance Shop,,,Water Leak (Explain),EMERGENCY
+Amenities,Maintenance Shop,,,Window Repair,EMERGENCY
+Amenities,Parking Garage,,,Ceiling Repair,STANDARD
+Amenities,Parking Garage,,,Dirty,STANDARD
+Amenities,Parking Garage,,,Door Repair,STANDARD
+Amenities,Parking Garage,,,Fire Extinguisher  Repair,STANDARD
+Amenities,Parking Garage,,,Fire Sprinkler Repair,EMERGENCY
+Amenities,Parking Garage,,,Floor Drain Repair,STANDARD
+Amenities,Parking Garage,,,Floor Repair,STANDARD
+Amenities,Parking Garage,,,Light Repair,EMERGENCY
+Amenities,Parking Garage,,,Not In List,STANDARD
+Amenities,Parking Garage,,,Parking Stop Repair,STANDARD
+Amenities,Parking Garage,,,Sign Repair,STANDARD
+Amenities,Parking Garage,,,Trash Chute Repair,STANDARD
+Amenities,Parking Garage,,,Wall Repair,STANDARD
+Amenities,Parking Garage,,,Water Leak (Explain),EMERGENCY
+Amenities,Pet Stations,,,Bag Dispenser Empty,STANDARD
+Amenities,Pet Stations,,,Dirty,STANDARD
+Amenities,Pet Stations,,,Not In List,STANDARD
+Amenities,Pet Stations,,,Receptacle Full,STANDARD
+Amenities,Pet Stations,,,Station Repair,STANDARD
+Amenities,Phone / Cable Rooms,,,Alarm Repair,EMERGENCY
+Amenities,Phone / Cable Rooms,,,Door Repair,STANDARD
+Amenities,Phone / Cable Rooms,,,Electrical Repair,STANDARD
+Amenities,Phone / Cable Rooms,,,Fire equipment Repair,EMERGENCY
+Amenities,Phone / Cable Rooms,,,Floor  Repair,STANDARD
+Amenities,Phone / Cable Rooms,,,Heat or Air Repair,STANDARD
+Amenities,Phone / Cable Rooms,,,Not In List,STANDARD
+Amenities,Phone / Cable Rooms,,,Water Leak (Explain),EMERGENCY
+Amenities,Pool / Spa,,Crack,Coping,STANDARD
+Amenities,Pool / Spa,,Dirty,Coping,STANDARD
+Amenities,Pool / Spa,,Not In List,Coping,STANDARD
+Amenities,Pool / Spa,,Stained,Coping,STANDARD
+Amenities,Pool / Spa,,Crack,Decking,EMERGENCY
+Amenities,Pool / Spa,,Dirty,Decking,STANDARD
+Amenities,Pool / Spa,,Not In List,Decking,STANDARD
+Amenities,Pool / Spa,,Stained,Decking,STANDARD
+Amenities,Pool / Spa,,Dirty,Pool / Spa,STANDARD
+Amenities,Pool / Spa,,Heater not working,Pool / Spa,STANDARD
+Amenities,Pool / Spa,,Not In List,Pool / Spa,STANDARD
+Amenities,Retail,,Ceiling Repair,Retail Corridors,STANDARD
+Amenities,Retail,,Compactor Repair,Retail Corridors,STANDARD
+Amenities,Retail,,Dirty,Retail Corridors,STANDARD
+Amenities,Retail,,Door Repair,Retail Corridors,STANDARD
+Amenities,Retail,,Electrical Repair,Retail Corridors,STANDARD
+Amenities,Retail,,Fire equipment Repair,Retail Corridors,STANDARD
+Amenities,Retail,,Floor Drain Repair,Retail Corridors,STANDARD
+Amenities,Retail,,Floor Repair,Retail Corridors,STANDARD
+Amenities,Retail,,Light Repair,Retail Corridors,EMERGENCY
+Amenities,Retail,,Not In List,Retail Corridors,STANDARD
+Amenities,Retail,,Pest Control,Retail Corridors,STANDARD
+Amenities,Retail,,Wall Repair,Retail Corridors,STANDARD
+Amenities,Retail,,Water Leak (Explain),Retail Corridors,EMERGENCY
+Amenities,Retail,,Curb Repair,Retail Storefront (Exterior),STANDARD
+Amenities,Retail,,Dirty,Retail Storefront (Exterior),STANDARD
+Amenities,Retail,,Light Repair,Retail Storefront (Exterior),EMERGENCY
+Amenities,Retail,,Not In List,Retail Storefront (Exterior),STANDARD
+Amenities,Retail,,Pest Control,Retail Storefront (Exterior),STANDARD
+Amenities,Retail,,Sidewalk Repair,Retail Storefront (Exterior),STANDARD
+Amenities,Retail,,Storefront Window Repair,Retail Storefront (Exterior),EMERGENCY
+Amenities,Retail,,Water Leak (Explain),Retail Storefront (Exterior),EMERGENCY

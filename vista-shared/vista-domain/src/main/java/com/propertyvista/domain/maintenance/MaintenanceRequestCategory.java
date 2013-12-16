@@ -38,6 +38,9 @@ public interface MaintenanceRequestCategory extends IEntity {
     @Transient
     IPrimitive<Integer> level();
 
+    @ReadOnly
+    IPrimitive<IssueElementType> type();
+
     @ToString(index = 0)
     IPrimitive<String> name();
 

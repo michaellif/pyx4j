@@ -80,6 +80,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private TwoColumnFlexFormPanel accessPanel;
 
+    private TwoColumnFlexFormPanel unitAccessPanel;
+
     private TwoColumnFlexFormPanel statusPanel;
 
     private TwoColumnFlexFormPanel scheduledPanel;
@@ -156,16 +158,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int row = -1;
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).mockValue(true).build());
+        panel.setBR(++row, 0, 1);
+
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().requestId()), 20, true).build());
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().building(), buildingSelector), 20, true).build());
-        buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Building> event) {
-                unitSelector.setValue(null);
-                reporterSelector.setValue(null);
-            }
-        });
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().unit(), unitSelector), 20, true).build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().reporter(), reporterSelector), 20, true).build());
@@ -182,21 +180,18 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         // --------------------------------------------------------------------------------------------------------------------
 
-        panel.setH1(++row, 0, 2, i18n.tr("Unit Access"));
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().permissionToEnter()), 20, true).build());
+        unitAccessPanel = new TwoColumnFlexFormPanel();
+        unitAccessPanel.setH1(++row, 0, 2, i18n.tr("Unit Access"));
+        panel.setWidget(++row, 0, 2, unitAccessPanel);
+
+        accessPanel = new TwoColumnFlexFormPanel();
+        accessPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().permissionToEnter()), 20, true).build());
 
         get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
-        get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                accessPanel.setVisible(event.getValue());
-            }
-        });
 
         // --------------------------------------------------------------------------------------------------------------------
 
         // --------------------------------------------------------------------------------------------------------------------
-        accessPanel = new TwoColumnFlexFormPanel();
 
         accessPanel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().petInstructions()), 40, true).build());
         get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
@@ -254,8 +249,46 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.setWidget(++row, 0, 2, surveyPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
+        buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Building> event) {
+                unitSelector.setValue(null);
+                reporterSelector.setValue(null);
+                setMaintenanceRequestCategoryMeta();
+            }
+        });
+
+        get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                accessPanel.setVisible(event.getValue());
+                if (!event.getValue().booleanValue()) {
+                    unitSelector.setValue(null);
+                }
+                unitSelector.setVisible(event.getValue());
+                get(proto().permissionToEnter()).setVisible(event.getValue());
+                unitAccessPanel.setVisible(event.getValue());
+                getValue().category().set(null);
+                setMaintenanceRequestCategoryMeta();
+            }
+        });
 
         return panel;
+    }
+
+    @Override
+    protected MaintenanceRequestDTO preprocessValue(MaintenanceRequestDTO value, boolean fireEvent, boolean populate) {
+        if (value.reportedForOwnUnit().isNull()) {
+            value.reportedForOwnUnit().setValue(true);
+            accessPanel.setVisible(true);
+            unitSelector.setVisible(true);
+            get(proto().permissionToEnter()).setVisible(true);
+            unitAccessPanel.setVisible(true);
+        }
+        if (value.permissionToEnter().isNull()) {
+            value.permissionToEnter().setValue(true);
+        }
+        return value;
     }
 
     private TwoColumnFlexFormPanel createWorkHistoryTab() {
@@ -287,7 +320,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
         if (!isViewable()) {
             // set options
-            mrCategory.setOptionsMeta(meta);
+            mrCategory.setOptionsMeta(meta, getValue().reportedForOwnUnit().isNull() ? true : getValue().reportedForOwnUnit().isBooleanTrue());
         }
         // re-populate after parent categories have been added
         mrCategory.populate(getValue().category());
@@ -326,7 +359,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         statusPanel.setVisible(!mr.id().isNull());
         surveyPanel.setVisible(phase == StatusPhase.Resolved);
-        accessPanel.setVisible(getValue().permissionToEnter().isBooleanTrue());
+        accessPanel.setVisible(getValue().permissionToEnter().isBooleanTrue() && getValue().reportedForOwnUnit().getValue());
     }
 
     class BuildingSelector extends CEntitySelectorHyperlink<Building> {

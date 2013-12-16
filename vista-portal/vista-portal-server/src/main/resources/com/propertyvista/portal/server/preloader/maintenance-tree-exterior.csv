@@ -1,0 +1,207 @@
+Type,Rooms,Issue,Subject Details,Repair Subject,Priority
+Exterior,Access Gates,,Gate bent/damaged,Entry Gate,EMERGENCY
+Exterior,Access Gates,,Gate not closing,Entry Gate,EMERGENCY
+Exterior,Access Gates,,Gate not opening,Entry Gate,EMERGENCY
+Exterior,Access Gates,,Gate off track,Entry Gate,EMERGENCY
+Exterior,Access Gates,,Not In List,Entry Gate,STANDARD
+Exterior,Access Gates,,Reset/change gate code,Entry Gate,STANDARD
+Exterior,Access Gates,,Gate bent/damaged,Exit Gate,STANDARD
+Exterior,Access Gates,,Gate not closing,Exit Gate,EMERGENCY
+Exterior,Access Gates,,Gate not opening,Exit Gate,EMERGENCY
+Exterior,Access Gates,,Gate off track,Exit Gate,EMERGENCY
+Exterior,Access Gates,,Not In List,Exit Gate,STANDARD
+Exterior,Access Gates,,Reset/change gate code,Exit Gate,STANDARD
+Exterior,Brick,,,Crack,STANDARD
+Exterior,Brick,,,Missing brick(s),STANDARD
+Exterior,Brick,,,Not In List,STANDARD
+Exterior,Carpentry,,Damaged,Fascia,STANDARD
+Exterior,Carpentry,,Not In List,Fascia,STANDARD
+Exterior,Carpentry,,Damaged,Siding,STANDARD
+Exterior,Carpentry,,Not In List,Siding,STANDARD
+Exterior,Carpentry,,Damaged,Soffit,STANDARD
+Exterior,Carpentry,,Not In List,Soffit,STANDARD
+Exterior,Carpentry,,Damaged,Trim,STANDARD
+Exterior,Carpentry,,Not In List,Trim,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Broken,Curbs,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Crack,Curbs,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Not In List,Curbs,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Seal expansion joints,Curbs,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Broken,Driveways,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Cracking,Driveways,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Not In List,Driveways,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Seal expansion joints,Driveways,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Crack,Parking lot,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Not In List,Parking lot,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Pot hole,Parking lot,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Seal expansion joints,Parking lot,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Broken,Sidewalks,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Crack,Sidewalks,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Not In List,Sidewalks,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Seal expansion joints,Sidewalks,STANDARD
+Exterior,Concrete / Curbs / Driveways,,Uneven,Sidewalks,STANDARD
+Exterior,Door,,,Damaged,STANDARD
+Exterior,Door,,,Not In List,STANDARD
+Exterior,Door,,,Will not close,EMERGENCY
+Exterior,Door,,,Will not lock,EMERGENCY
+Exterior,Door,,,Will not open,STANDARD
+Exterior,Door,,,Will not unlock,EMERGENCY
+Exterior,Drywall,,Not In List,Ceiling,STANDARD
+Exterior,Drywall,,Repair hole,Ceiling,STANDARD
+Exterior,Drywall,,Water stained,Ceiling,EMERGENCY
+Exterior,Drywall,,Not In List,Walls,STANDARD
+Exterior,Drywall,,Repair hole,Walls,STANDARD
+Exterior,Drywall,,Water stained,Walls,EMERGENCY
+Exterior,Electrical,,Fixture repair,Light,STANDARD
+Exterior,Electrical,,Flickers,Light,EMERGENCY
+Exterior,Electrical,,Not In List,Light,STANDARD
+Exterior,Electrical,,Pulling loose from ceiling/wall,Light,EMERGENCY
+Exterior,Electrical,,Will not come on,Light,STANDARD
+Exterior,Electrical,,Will not come on (ALL),Light,EMERGENCY
+Exterior,Electrical,,Will not come on (individual),Light,STANDARD
+Exterior,Electrical,,Cover plate repair,Outlet,STANDARD
+Exterior,Electrical,,GFI will not reset,Outlet,EMERGENCY
+Exterior,Electrical,,Loose from wall,Outlet,STANDARD
+Exterior,Electrical,,No power,Outlet,EMERGENCY
+Exterior,Electrical,,Not In List,Outlet,STANDARD
+Exterior,Fencing,,,Damaged,STANDARD
+Exterior,Fencing,,,Falling,STANDARD
+Exterior,Fencing,,,Not In List,STANDARD
+Exterior,Fire / Life Safety,,Beeping,Alarm panel,EMERGENCY
+Exterior,Fire / Life Safety,,Does not work,Alarm panel,EMERGENCY
+Exterior,Fire / Life Safety,,Not In List,Alarm panel,STANDARD
+Exterior,Fire / Life Safety,,Beauty ring repair,Sprinkler heads,STANDARD
+Exterior,Fire / Life Safety,,Leaking,Sprinkler heads,EMERGENCY
+Exterior,Fire / Life Safety,,Not In List,Sprinkler heads,STANDARD
+Exterior,Fire / Life Safety,,Painted/dirty,Sprinkler heads,STANDARD
+Exterior,Fireplace,,,Chimney cap damaged,STANDARD
+Exterior,Fireplace,,,Cracked,STANDARD
+Exterior,Fireplace,,,Not In List,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Clogged,Downspouts,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Damaged,Downspouts,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Not In List,Downspouts,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Clogged,Gutter,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Damaged,Gutter,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Not In List,Gutter,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Broken,Splashblocks,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Missing,Splashblocks,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Not In List,Splashblocks,STANDARD
+Exterior,Gutter / Downspout / Splash blocks,,Reverse direction,Splashblocks,STANDARD
+Exterior,Handrails,,,Damaged,EMERGENCY
+Exterior,Handrails,,,Loose,EMERGENCY
+Exterior,Handrails,,,Missing,EMERGENCY
+Exterior,Handrails,,,Not In List,STANDARD
+Exterior,Hardware,,Broken,Doorknobs/Gate handles,STANDARD
+Exterior,Hardware,,Loose,Doorknobs/Gate handles,STANDARD
+Exterior,Hardware,,Missing,Doorknobs/Gate handles,STANDARD
+Exterior,Hardware,,Not In List,Doorknobs/Gate handles,STANDARD
+Exterior,Hardware,,Broken,Hinges,STANDARD
+Exterior,Hardware,,Damaged,Hinges,STANDARD
+Exterior,Hardware,,Loose,Hinges,STANDARD
+Exterior,Hardware,,Not In List,Hinges,STANDARD
+Exterior,Irrigation,,,Adjust head,STANDARD
+Exterior,Irrigation,,,Adjust timer,STANDARD
+Exterior,Irrigation,,,Leak,EMERGENCY
+Exterior,Irrigation,,,Not In List,STANDARD
+Exterior,Janitorial,,,Breezeway(s) need to be cleaned,STANDARD
+Exterior,Janitorial,,,Broken glass needs to be removed,STANDARD
+Exterior,Janitorial,,,Not In List,STANDARD
+Exterior,Janitorial,,,Parking lot needs to be cleaned,STANDARD
+Exterior,Janitorial,,,Sidewalk needs to be cleaned,STANDARD
+Exterior,Janitorial,,,Trash can(s) are full,STANDARD
+Exterior,Janitorial,,,Trash needs to be removed,STANDARD
+Exterior,Landscaping,,Dying,Flowers,STANDARD
+Exterior,Landscaping,,Not In List,Flowers,STANDARD
+Exterior,Landscaping,,Dying,Grass,STANDARD
+Exterior,Landscaping,,Not In List,Grass,STANDARD
+Exterior,Landscaping,,Dying,Shrubs,STANDARD
+Exterior,Landscaping,,Needs trimmed,Shrubs,STANDARD
+Exterior,Landscaping,,Not In List,Shrubs,STANDARD
+Exterior,Landscaping,,Grate is loose/missing,Sub-surface drains,STANDARD
+Exterior,Landscaping,,Needs to be cleaned,Sub-surface drains,STANDARD
+Exterior,Landscaping,,Not In List,Sub-surface drains,STANDARD
+Exterior,Landscaping,,Dying,Trees,STANDARD
+Exterior,Landscaping,,Needs trimmed,Trees,STANDARD
+Exterior,Landscaping,,Not In List,Trees,STANDARD
+Exterior,Masonry / Retaining Walls,,,Crack,STANDARD
+Exterior,Masonry / Retaining Walls,,,Falling,STANDARD
+Exterior,Masonry / Retaining Walls,,,Missing bricks/rocks,STANDARD
+Exterior,Masonry / Retaining Walls,,,Not In List,STANDARD
+Exterior,Metal Work,,,Damaged,STANDARD
+Exterior,Metal Work,,,Not In List,STANDARD
+Exterior,Metal Work,,,Rusted,STANDARD
+Exterior,Paint,,Not In List,Brick,STANDARD
+Exterior,Paint,,Peeling,Brick,STANDARD
+Exterior,Paint,,Needs caulked,Fascia,STANDARD
+Exterior,Paint,,Not In List,Fascia,STANDARD
+Exterior,Paint,,Peeling,Fascia,STANDARD
+Exterior,Paint,,Water stained,Fascia,STANDARD
+Exterior,Paint,,Needs caulked,Siding,STANDARD
+Exterior,Paint,,Not In List,Siding,STANDARD
+Exterior,Paint,,Peeling,Siding,STANDARD
+Exterior,Paint,,Water stained,Siding,STANDARD
+Exterior,Paint,,Needs caulked,Soffit,STANDARD
+Exterior,Paint,,Not In List,Soffit,STANDARD
+Exterior,Paint,,Peeling,Soffit,STANDARD
+Exterior,Paint,,Water stained,Soffit,STANDARD
+Exterior,Paint,,Crack,Stucco,STANDARD
+Exterior,Paint,,Needs caulked,Stucco,STANDARD
+Exterior,Paint,,Not In List,Stucco,STANDARD
+Exterior,Paint,,Peeling,Stucco,STANDARD
+Exterior,Paint,,Needs caulked,Trim,STANDARD
+Exterior,Paint,,Not In List,Trim,STANDARD
+Exterior,Paint,,Peeling,Trim,STANDARD
+Exterior,Paint,,Water stained,Trim,STANDARD
+Exterior,Pest Control,,,Ants,STANDARD
+Exterior,Pest Control,,,Millipedes,STANDARD
+Exterior,Pest Control,,,Other,STANDARD
+Exterior,Pest Control,,,Rats/mice,STANDARD
+Exterior,Pest Control,,,Spiders,STANDARD
+Exterior,Pest Control,,,Termites,STANDARD
+Exterior,Plumbing,,Cleanout missing cap,Drain/sewer,STANDARD
+Exterior,Plumbing,,Not In List,Drain/sewer,STANDARD
+Exterior,Plumbing,,Sewer back up,Drain/sewer,EMERGENCY
+Exterior,Plumbing,,Dripping,Hose bibs,STANDARD
+Exterior,Plumbing,,Handle broken,Hose bibs,STANDARD
+Exterior,Plumbing,,Leaks,Hose bibs,EMERGENCY
+Exterior,Plumbing,,Low water pressure,Hose bibs,STANDARD
+Exterior,Plumbing,,Not In List,Hose bibs,STANDARD
+Exterior,Roofing,,Damaged,Flashing,STANDARD
+Exterior,Roofing,,Loose,Flashing,STANDARD
+Exterior,Roofing,,Missing,Flashing,STANDARD
+Exterior,Roofing,,Not In List,Flashing,STANDARD
+Exterior,Roofing,,Damaged,Ridge vent,STANDARD
+Exterior,Roofing,,Loose,Ridge vent,STANDARD
+Exterior,Roofing,,Missing,Ridge vent,STANDARD
+Exterior,Roofing,,Not In List,Ridge vent,STANDARD
+Exterior,Roofing,,Damaged,Shingles,STANDARD
+Exterior,Roofing,,Loose,Shingles,STANDARD
+Exterior,Roofing,,Missing,Shingles,STANDARD
+Exterior,Roofing,,Not In List,Shingles,STANDARD
+Exterior,Screen,,,Damaged,STANDARD
+Exterior,Screen,,,Missing,STANDARD
+Exterior,Screen,,,Not In List,STANDARD
+Exterior,Signs / Flags,,Flag is worn needs replaced,Flags,STANDARD
+Exterior,Signs / Flags,,Flag needs to be lowered to half staff,Flags,STANDARD
+Exterior,Signs / Flags,,Flag needs to be raised to full staff,Flags,STANDARD
+Exterior,Signs / Flags,,Flag pole damaged,Flags,STANDARD
+Exterior,Signs / Flags,,Damaged,Signs,STANDARD
+Exterior,Signs / Flags,,Faded,Signs,STANDARD
+Exterior,Signs / Flags,,Falling,Signs,STANDARD
+Exterior,Signs / Flags,,Not In List,Signs,STANDARD
+Exterior,Stairs,,,Broken,EMERGENCY
+Exterior,Stairs,,,Cracked,STANDARD
+Exterior,Stairs,,,Loose,EMERGENCY
+Exterior,Stairs,,,Missing,EMERGENCY
+Exterior,Stairs,,,Not In List,STANDARD
+Exterior,Stucco,,Damaged,Control Joints,STANDARD
+Exterior,Stucco,,Not In List,Control Joints,STANDARD
+Exterior,Stucco,,Crack,Effus band,STANDARD
+Exterior,Stucco,,Not In List,Effus band,STANDARD
+Exterior,Stucco,,Crack,Walls,STANDARD
+Exterior,Stucco,,Not In List,Walls,STANDARD
+Exterior,Window,,,Broken,EMERGENCY
+Exterior,Window,,,Cracked,STANDARD
+Exterior,Window,,,Leak at bottom,EMERGENCY
+Exterior,Window,,,Leak at top,EMERGENCY
+Exterior,Window,,,Missing,EMERGENCY
+Exterior,Window,,,Not In List,STANDARD

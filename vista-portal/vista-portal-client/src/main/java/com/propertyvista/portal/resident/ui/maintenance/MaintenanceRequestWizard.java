@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,6 +12,9 @@
  * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.maintenance;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -44,6 +47,8 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
     private final static I18n i18n = I18n.get(MaintenanceRequestWizard.class);
 
+    private final Map<Boolean, MaintenanceRequestMetadata> cachedMeta = new HashMap<Boolean, MaintenanceRequestMetadata>();
+
     private MaintenanceRequestMetadata meta;
 
     private MaintenanceRequestCategoryChoice mrCategory;
@@ -68,6 +73,10 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         if (meta == null || meta.isNull()) {
             throw new RuntimeException(i18n.tr("Maintenance Metadata not configured."));
         }
+        assignMetaAccordingIssueType(true, meta);
+    }
+
+    private void assignMetaAccordingIssueType(Boolean issueType, MaintenanceRequestMetadata meta) {
         this.meta = meta;
         initSelectors();
     }
@@ -127,6 +136,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 permissionPanel.setVisible(event.getValue());
+                getValue().category().set(null);
+                categoryPanel.clear();
+                assignMetaAccordingIssueType(event.getValue(), meta);
             }
         });
 
@@ -147,6 +159,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     protected MaintenanceRequestDTO preprocessValue(MaintenanceRequestDTO value, boolean fireEvent, boolean populate) {
         if (value.reportedForOwnUnit().isNull()) {
             value.reportedForOwnUnit().setValue(true);
+            assignMetaAccordingIssueType(true, this.meta);
         }
         if (value.permissionToEnter().isNull()) {
             value.permissionToEnter().setValue(true);
@@ -206,7 +219,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         }
         if (!isViewable()) {
             // set options and re-populate
-            mrCategory.setOptionsMeta(meta);
+            mrCategory.setOptionsMeta(meta, getValue().reportedForOwnUnit().isNull() ? true : getValue().reportedForOwnUnit().isBooleanTrue());
         }
         // re-populate after parent categories have been added
         if (getValue() != null) {

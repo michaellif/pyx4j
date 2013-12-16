@@ -1,0 +1,2571 @@
+﻿Type,Rooms,Repair Subject,Subject Details,Issue,Priority
+Suite,All Rooms,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,All Rooms,Air Conditioning / Heat,Air Conditioning,AC not working - EMERGENCY,EMERGENCY
+Suite,All Rooms,Air Conditioning / Heat,Air Conditioning,AC not working - EMERGENCY,EMERGENCY
+Suite,All Rooms,Air Conditioning / Heat,Air Conditioning,AC not working - NON-emergency,STANDARD
+Suite,All Rooms,Air Conditioning / Heat,Air Conditioning,AC not working - NON-emergency,STANDARD
+Suite,All Rooms,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,EMERGENCY
+Suite,All Rooms,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,EMERGENCY
+Suite,All Rooms,Air Conditioning / Heat,Air Conditioning,Thermostat,STANDARD
+Suite,All Rooms,Air Conditioning / Heat,Heat,Fan blowing will not heat,EMERGENCY
+Suite,All Rooms,Air Conditioning / Heat,Heat,Fan not blowing will not heat,EMERGENCY
+Suite,All Rooms,Air Conditioning / Heat,Heat,Heat not working - EMERGENCY,EMERGENCY
+Suite,All Rooms,Air Conditioning / Heat,Heat,Heat not working - EMERGENCY,EMERGENCY
+Suite,All Rooms,Air Conditioning / Heat,Heat,Heat not working - NON-emergency,STANDARD
+Suite,All Rooms,Air Conditioning / Heat,Heat,Heat not working - NON-emergency,STANDARD
+Suite,All Rooms,Air Conditioning / Heat,Heat,Thermostat,STANDARD
+Suite,All Rooms,Electrical,No Power,,EMERGENCY
+Suite,All Rooms,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,All Rooms,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,All Rooms,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,All Rooms,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,All Rooms,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,All Rooms,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,All Rooms,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,All Rooms,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,All Rooms,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,All Rooms,Flooring,Apartment Carpet,Wet Vac,STANDARD
+Suite,All Rooms,Pest Control,Insects,Ants,STANDARD
+Suite,All Rooms,Pest Control,Insects,Bees,STANDARD
+Suite,All Rooms,Pest Control,Insects,Fleas,STANDARD
+Suite,All Rooms,Pest Control,Insects,Not In List,STANDARD
+Suite,All Rooms,Pest Control,Insects,Roaches,STANDARD
+Suite,All Rooms,Pest Control,Insects,Scorpions,STANDARD
+Suite,All Rooms,Pest Control,Insects,Silverfish,STANDARD
+Suite,All Rooms,Pest Control,Insects,Spiders,STANDARD
+Suite,All Rooms,Pest Control,Pests,Birds,STANDARD
+Suite,All Rooms,Pest Control,Pests,Mice,STANDARD
+Suite,All Rooms,Pest Control,Pests,Not In List,STANDARD
+Suite,All Rooms,Pest Control,Pests,Rats,STANDARD
+Suite,All Rooms,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,All Rooms,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,All Rooms,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,All Rooms,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,All Rooms,Plumbing,Low water pressure,,STANDARD
+Suite,All Rooms,Plumbing,No Hot Water,,EMERGENCY
+Suite,All Rooms,Plumbing,No Water,,EMERGENCY
+Suite,All Rooms,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,All Rooms,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,All Rooms,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,All Rooms,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,All Rooms,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,All Rooms,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,All Rooms,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,All Rooms,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,All Rooms,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,All Rooms,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,All Rooms,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,All Rooms,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,All Rooms,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,All Rooms,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Bathroom - Guest,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Bathroom - Guest,Bath Accessories,Hardware,Medicine Cabinet,STANDARD
+Suite,Bathroom - Guest,Bath Accessories,Hardware,Mirror,STANDARD
+Suite,Bathroom - Guest,Bath Accessories,Hardware,Not In List,STANDARD
+Suite,Bathroom - Guest,Bath Accessories,Hardware,Shower rod,STANDARD
+Suite,Bathroom - Guest,Bath Accessories,Hardware,Soap dish,STANDARD
+Suite,Bathroom - Guest,Bath Accessories,Hardware,Toilet tissue holder,STANDARD
+Suite,Bathroom - Guest,Bath Accessories,Hardware,Towel bar,STANDARD
+Suite,Bathroom - Guest,Bath Accessories,Hardware,Towel ring,STANDARD
+Suite,Bathroom - Guest,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Bathroom - Guest,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Bathroom - Guest,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Bathroom - Guest,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Bathroom - Guest,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Bathroom - Guest,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Bathroom - Guest,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Bathroom - Guest,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Bathroom - Guest,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Bathroom - Guest,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Bathroom - Guest,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Bathroom - Guest,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Bathroom - Guest,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Bathroom - Guest,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Bathroom - Guest,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Bathroom - Guest,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Bathroom - Guest,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Bathroom - Guest,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Bathroom - Guest,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Bathroom - Guest,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Bathroom - Guest,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Bathroom - Guest,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Bathroom - Guest,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Bathroom - Guest,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Bathroom - Guest,Carpentry,Shelves,Damaged,STANDARD
+Suite,Bathroom - Guest,Carpentry,Shelves,Not In List,STANDARD
+Suite,Bathroom - Guest,Carpentry,Shelves,Paint,STANDARD
+Suite,Bathroom - Guest,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Bathroom - Guest,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Bathroom - Guest,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Bathroom - Guest,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Bathroom - Guest,Carpentry,Window sill,Damaged,STANDARD
+Suite,Bathroom - Guest,Carpentry,Window sill,Not In List,STANDARD
+Suite,Bathroom - Guest,Carpentry,Window sill,Paint,STANDARD
+Suite,Bathroom - Guest,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Bathroom - Guest,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Bathroom - Guest,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Bathroom - Guest,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Bathroom - Guest,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Bathroom - Guest,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Door stop,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Not In List,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Will not close,STANDARD
+Suite,Bathroom - Guest,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Bathroom - Guest,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Bathroom - Guest,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Bathroom - Guest,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Bathroom - Guest,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Bathroom - Guest,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Bathroom - Guest,Electrical,Light Switch,Does not work,STANDARD
+Suite,Bathroom - Guest,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Bathroom - Guest,Electrical,Light Switch,Not In List,STANDARD
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Bathroom - Guest,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Bathroom - Guest,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Bathroom - Guest,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Bathroom - Guest,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Bathroom - Guest,Electrical,Outlet,No power,EMERGENCY
+Suite,Bathroom - Guest,Electrical,Outlet,Not In List,STANDARD
+Suite,Bathroom - Guest,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Bathroom - Guest,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Bathroom - Guest,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Bathroom - Guest,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Bathroom - Guest,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Bathroom - Guest,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Bathroom - Guest,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Bathroom - Guest,Flooring,Apartment Carpet,Wet Vac,STANDARD
+Suite,Bathroom - Guest,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Bathroom - Guest,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Bathroom - Guest,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Bathroom - Guest,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Bathroom - Guest,Flooring,Floor General,Leak,EMERGENCY
+Suite,Bathroom - Guest,Flooring,Floor General,Not In List,STANDARD
+Suite,Bathroom - Guest,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Bathroom - Guest,Flooring,Hardwood,Not In List,STANDARD
+Suite,Bathroom - Guest,Flooring,Hardwood,Warped,STANDARD
+Suite,Bathroom - Guest,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Bathroom - Guest,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Bathroom - Guest,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Bathroom - Guest,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Bathroom - Guest,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Bathroom - Guest,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Bathroom - Guest,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Bathroom - Guest,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Bathroom - Guest,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Bathroom - Guest,Janitorial,Clean,Not In List,STANDARD
+Suite,Bathroom - Guest,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Bathroom - Guest,Pest Control,Insects,Ants,STANDARD
+Suite,Bathroom - Guest,Pest Control,Insects,Bees,STANDARD
+Suite,Bathroom - Guest,Pest Control,Insects,Fleas,STANDARD
+Suite,Bathroom - Guest,Pest Control,Insects,Not In List,STANDARD
+Suite,Bathroom - Guest,Pest Control,Insects,Roaches,STANDARD
+Suite,Bathroom - Guest,Pest Control,Insects,Scorpions,STANDARD
+Suite,Bathroom - Guest,Pest Control,Insects,Silverfish,STANDARD
+Suite,Bathroom - Guest,Pest Control,Insects,Spiders,STANDARD
+Suite,Bathroom - Guest,Pest Control,Pests,Birds,STANDARD
+Suite,Bathroom - Guest,Pest Control,Pests,Mice,STANDARD
+Suite,Bathroom - Guest,Pest Control,Pests,Not In List,STANDARD
+Suite,Bathroom - Guest,Pest Control,Pests,Rats,STANDARD
+Suite,Bathroom - Guest,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Bathroom - Guest,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Bathroom - Guest,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Faucet,Faucet drips,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Faucet,Handle broken,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Faucet,Leak at faucet stem,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Lavatory Faucet,Low water pressure,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Faucet,No water,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Lavatory Faucet,Not In List,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Faucet,Stopper does not work,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Faucet,Stopper missing,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Sink,Chip in sink,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Sink,Leak under sink,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Lavatory Sink,Sewer back-up,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Lavatory Sink,Sink will not hold water,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Sink,Stopper missing,STANDARD
+Suite,Bathroom - Guest,Plumbing,Lavatory Sink,Will not drain,STANDARD
+Suite,Bathroom - Guest,Plumbing,Low water pressure,,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Back loose from base,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Base loose from floor,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Broken seat,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Constantly runs,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Leak at base,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Toilet,Leak at tank,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Toilet,Not In List,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Runs intermittently,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Sewer back-up,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Toilet,Stopped Up (Only one in unit),EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Toilet,Stopped up (Other working toilet available),STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Tank lid broken,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Water valve dripping,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Toilet,Will not fill,STANDARD
+Suite,Bathroom - Guest,Plumbing,Toilet,Will not flush,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Caulk or grout,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Ceramic tile repair,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Diverter not working,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Door repair,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Not In List,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Shower head repair,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Shower rod repair,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Soap dish repair,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Stopper does not work / missing,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Tub / shower will not drain,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Tub spout repair,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Tub will not hold water,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub / Shower,Water on floor when showering,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Tub/Shower Faucet,Faucet drips,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub/Shower Faucet,Handle broken,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub/Shower Faucet,Low water pressure,STANDARD
+Suite,Bathroom - Guest,Plumbing,Tub/Shower Faucet,No water,EMERGENCY
+Suite,Bathroom - Guest,Plumbing,Tub/Shower Faucet,Not In List,STANDARD
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Leak above shower or tub,EMERGENCY
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Bathroom - Guest,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Bathroom - Guest,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Bathroom - Guest,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Bathroom - Guest,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Bathroom - Guest,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Bathroom - Guest,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Bathroom - Guest,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Bathroom - Guest,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Bathroom - Half,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Bathroom - Half,Bath Accessories,Hardware,Medicine Cabinet,STANDARD
+Suite,Bathroom - Half,Bath Accessories,Hardware,Mirror,STANDARD
+Suite,Bathroom - Half,Bath Accessories,Hardware,Not In List,STANDARD
+Suite,Bathroom - Half,Bath Accessories,Hardware,Shower rod,STANDARD
+Suite,Bathroom - Half,Bath Accessories,Hardware,Soap dish,STANDARD
+Suite,Bathroom - Half,Bath Accessories,Hardware,Toilet tissue holder,STANDARD
+Suite,Bathroom - Half,Bath Accessories,Hardware,Towel bar,STANDARD
+Suite,Bathroom - Half,Bath Accessories,Hardware,Towel ring,STANDARD
+Suite,Bathroom - Half,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Bathroom - Half,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Bathroom - Half,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Bathroom - Half,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Bathroom - Half,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Bathroom - Half,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Bathroom - Half,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Bathroom - Half,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Bathroom - Half,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Bathroom - Half,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Bathroom - Half,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Bathroom - Half,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Bathroom - Half,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Bathroom - Half,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Bathroom - Half,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Bathroom - Half,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Bathroom - Half,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Bathroom - Half,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Bathroom - Half,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Bathroom - Half,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Bathroom - Half,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Bathroom - Half,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Bathroom - Half,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Bathroom - Half,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Bathroom - Half,Carpentry,Shelves,Damaged,STANDARD
+Suite,Bathroom - Half,Carpentry,Shelves,Not In List,STANDARD
+Suite,Bathroom - Half,Carpentry,Shelves,Paint,STANDARD
+Suite,Bathroom - Half,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Bathroom - Half,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Bathroom - Half,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Bathroom - Half,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Bathroom - Half,Carpentry,Window sill,Damaged,STANDARD
+Suite,Bathroom - Half,Carpentry,Window sill,Not In List,STANDARD
+Suite,Bathroom - Half,Carpentry,Window sill,Paint,STANDARD
+Suite,Bathroom - Half,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Bathroom - Half,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Bathroom - Half,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Bathroom - Half,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Bathroom - Half,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Bathroom - Half,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Bathroom - Half,Doors,Interior Doors,Door stop,STANDARD
+Suite,Bathroom - Half,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Bathroom - Half,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Bathroom - Half,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Bathroom - Half,Doors,Interior Doors,Not In List,STANDARD
+Suite,Bathroom - Half,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Bathroom - Half,Doors,Interior Doors,Will not close,STANDARD
+Suite,Bathroom - Half,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Bathroom - Half,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Bathroom - Half,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Bathroom - Half,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Bathroom - Half,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Bathroom - Half,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Bathroom - Half,Electrical,Light Switch,Does not work,STANDARD
+Suite,Bathroom - Half,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Bathroom - Half,Electrical,Light Switch,Not In List,STANDARD
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Bathroom - Half,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Bathroom - Half,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Bathroom - Half,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Bathroom - Half,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Bathroom - Half,Electrical,Outlet,No power,EMERGENCY
+Suite,Bathroom - Half,Electrical,Outlet,Not In List,STANDARD
+Suite,Bathroom - Half,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Bathroom - Half,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Bathroom - Half,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Bathroom - Half,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Bathroom - Half,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Bathroom - Half,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Bathroom - Half,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Bathroom - Half,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Bathroom - Half,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Bathroom - Half,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Bathroom - Half,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Bathroom - Half,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Bathroom - Half,Flooring,Floor General,Leak,EMERGENCY
+Suite,Bathroom - Half,Flooring,Floor General,Not In List,STANDARD
+Suite,Bathroom - Half,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Bathroom - Half,Flooring,Hardwood,Not In List,STANDARD
+Suite,Bathroom - Half,Flooring,Hardwood,Warped,STANDARD
+Suite,Bathroom - Half,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Bathroom - Half,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Bathroom - Half,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Bathroom - Half,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Bathroom - Half,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Bathroom - Half,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Bathroom - Half,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Bathroom - Half,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Bathroom - Half,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Bathroom - Half,Janitorial,Clean,Not In List,STANDARD
+Suite,Bathroom - Half,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Bathroom - Half,Pest Control,Insects,Ants,STANDARD
+Suite,Bathroom - Half,Pest Control,Insects,Bees,STANDARD
+Suite,Bathroom - Half,Pest Control,Insects,Fleas,STANDARD
+Suite,Bathroom - Half,Pest Control,Insects,Not In List,STANDARD
+Suite,Bathroom - Half,Pest Control,Insects,Roaches,STANDARD
+Suite,Bathroom - Half,Pest Control,Insects,Scorpions,STANDARD
+Suite,Bathroom - Half,Pest Control,Insects,Silverfish,STANDARD
+Suite,Bathroom - Half,Pest Control,Insects,Spiders,STANDARD
+Suite,Bathroom - Half,Pest Control,Pests,Birds,STANDARD
+Suite,Bathroom - Half,Pest Control,Pests,Mice,STANDARD
+Suite,Bathroom - Half,Pest Control,Pests,Not In List,STANDARD
+Suite,Bathroom - Half,Pest Control,Pests,Rats,STANDARD
+Suite,Bathroom - Half,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Faucet,Faucet drips,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Faucet,Handle broken,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Faucet,Leak at faucet stem,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Lavatory Faucet,Low water pressure,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Faucet,No water,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Lavatory Faucet,Not In List,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Faucet,Stopper does not work,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Faucet,Stopper missing,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Sink,Chip in sink,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Sink,Leak under sink,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Lavatory Sink,Not In List,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Sink,Sewer back-up,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Lavatory Sink,Sink will not hold water,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Sink,Stopper missing,STANDARD
+Suite,Bathroom - Half,Plumbing,Lavatory Sink,Will not drain,STANDARD
+Suite,Bathroom - Half,Plumbing,Low water pressure,,STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Back loose from base,STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Base loose from floor,STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Broken seat,STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Constantly runs,STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Leak at base,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Toilet,Leak at tank,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Toilet,Runs intermittently,STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Sewer back-up,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Toilet,Stopped Up (Only one in unit),EMERGENCY
+Suite,Bathroom - Half,Plumbing,Toilet,Stopped up (Other working toilet available),STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Tank lid broken,STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Water valve dripping,EMERGENCY
+Suite,Bathroom - Half,Plumbing,Toilet,Will not fill,STANDARD
+Suite,Bathroom - Half,Plumbing,Toilet,Will not flush,STANDARD
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Leak above shower or tub,EMERGENCY
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Bathroom - Half,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Bathroom - Half,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Bathroom - Half,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Bathroom - Half,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Bathroom - Half,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Bathroom - Half,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Bathroom - Half,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Bathroom - Half,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Bathroom - Hallway,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Bathroom - Hallway,Bath Accessories,Hardware,Medicine Cabinet,STANDARD
+Suite,Bathroom - Hallway,Bath Accessories,Hardware,Mirror,STANDARD
+Suite,Bathroom - Hallway,Bath Accessories,Hardware,Not In List,STANDARD
+Suite,Bathroom - Hallway,Bath Accessories,Hardware,Shower rod,STANDARD
+Suite,Bathroom - Hallway,Bath Accessories,Hardware,Soap dish,STANDARD
+Suite,Bathroom - Hallway,Bath Accessories,Hardware,Toilet tissue holder,STANDARD
+Suite,Bathroom - Hallway,Bath Accessories,Hardware,Towel bar,STANDARD
+Suite,Bathroom - Hallway,Bath Accessories,Hardware,Towel ring,STANDARD
+Suite,Bathroom - Hallway,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Bathroom - Hallway,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Bathroom - Hallway,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Bathroom - Hallway,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Bathroom - Hallway,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Bathroom - Hallway,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Bathroom - Hallway,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Bathroom - Hallway,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Bathroom - Hallway,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Bathroom - Hallway,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Bathroom - Hallway,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Bathroom - Hallway,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Bathroom - Hallway,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Bathroom - Hallway,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Shelves,Damaged,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Shelves,Not In List,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Shelves,Paint,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Window sill,Damaged,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Window sill,Not In List,STANDARD
+Suite,Bathroom - Hallway,Carpentry,Window sill,Paint,STANDARD
+Suite,Bathroom - Hallway,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Bathroom - Hallway,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Bathroom - Hallway,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Bathroom - Hallway,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Bathroom - Hallway,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Bathroom - Hallway,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Bathroom - Hallway,Doors,Interior Doors,Door stop,STANDARD
+Suite,Bathroom - Hallway,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Bathroom - Hallway,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Bathroom - Hallway,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Bathroom - Hallway,Doors,Interior Doors,Not In List,STANDARD
+Suite,Bathroom - Hallway,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Bathroom - Hallway,Doors,Interior Doors,Will not close,STANDARD
+Suite,Bathroom - Hallway,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Bathroom - Hallway,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Bathroom - Hallway,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Bathroom - Hallway,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light Switch,Does not work,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light Switch,Not In List,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Bathroom - Hallway,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Bathroom - Hallway,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Bathroom - Hallway,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Bathroom - Hallway,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Bathroom - Hallway,Electrical,Outlet,No power,EMERGENCY
+Suite,Bathroom - Hallway,Electrical,Outlet,Not In List,STANDARD
+Suite,Bathroom - Hallway,Electrical,Outlet,Sparks,STANDARD
+Suite,Bathroom - Hallway,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Bathroom - Hallway,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Bathroom - Hallway,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Bathroom - Hallway,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Bathroom - Hallway,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Bathroom - Hallway,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Bathroom - Hallway,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Bathroom - Hallway,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Bathroom - Hallway,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Bathroom - Hallway,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Bathroom - Hallway,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Bathroom - Hallway,Flooring,Floor General,Leak,EMERGENCY
+Suite,Bathroom - Hallway,Flooring,Floor General,Not In List,STANDARD
+Suite,Bathroom - Hallway,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Bathroom - Hallway,Flooring,Hardwood,Not In List,STANDARD
+Suite,Bathroom - Hallway,Flooring,Hardwood,Warped,STANDARD
+Suite,Bathroom - Hallway,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Bathroom - Hallway,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Bathroom - Hallway,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Bathroom - Hallway,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Bathroom - Hallway,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Bathroom - Hallway,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Bathroom - Hallway,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Bathroom - Hallway,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Bathroom - Hallway,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Bathroom - Hallway,Janitorial,Clean,Not In List,STANDARD
+Suite,Bathroom - Hallway,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Insects,Ants,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Insects,Bees,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Insects,Fleas,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Insects,Not In List,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Insects,Roaches,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Insects,Scorpions,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Insects,Silverfish,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Insects,Spiders,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Pests,Birds,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Pests,Mice,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Pests,Not In List,STANDARD
+Suite,Bathroom - Hallway,Pest Control,Pests,Rats,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Faucet,Faucet drips,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Faucet,Handle broken,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Faucet,Leak at faucet stem,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Lavatory Faucet,Low water pressure,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Faucet,No water,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Lavatory Faucet,Not In List,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Faucet,Stopper does not work,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Faucet,Stopper missing,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Sink,Chip in sink,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Sink,Leak under sink,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Lavatory Sink,Not In List,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Sink,Sewer back-up,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Lavatory Sink,Sink will not hold water,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Sink,Stopper missing,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Lavatory Sink,Will not drain,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Low water pressure,,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Back loose from base,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Base loose from floor,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Broken seat,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Constantly runs,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Leak at base,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Toilet,Leak at tank,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Toilet,Not In List,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Runs intermittently,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Sewer back-up,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Toilet,Stopped Up (Only one in unit),EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Toilet,Stopped up (Other working toilet available),STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Tank lid broken,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Water valve dripping,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Toilet,Will not fill,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Toilet,Will not flush,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Caulk or grout,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Ceramic tile repair,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Diverter not working,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Door repair,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Not In List,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Sewer back-up,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Shower head repair,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Shower rod repair,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Soap dish repair,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Stopper does not work / missing,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Tub / shower will not drain,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Tub spout repair,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Tub will not hold water,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub / Shower,Water on floor when showering,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Tub/Shower Faucet,Faucet drips,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub/Shower Faucet,Handle broken,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub/Shower Faucet,Low water pressure,STANDARD
+Suite,Bathroom - Hallway,Plumbing,Tub/Shower Faucet,No water,EMERGENCY
+Suite,Bathroom - Hallway,Plumbing,Tub/Shower Faucet,Not In List,STANDARD
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Leak above shower or tub,EMERGENCY
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Bathroom - Hallway,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Bathroom - Hallway,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Bathroom - Hallway,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Bathroom - Hallway,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Bathroom - Hallway,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Bathroom - Hallway,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Bathroom - Hallway,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Bathroom - Hallway,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Bathroom - Master,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Bathroom - Master,Bath Accessories,Hardware,Medicine Cabinet,STANDARD
+Suite,Bathroom - Master,Bath Accessories,Hardware,Mirror,STANDARD
+Suite,Bathroom - Master,Bath Accessories,Hardware,Not In List,STANDARD
+Suite,Bathroom - Master,Bath Accessories,Hardware,Shower rod,STANDARD
+Suite,Bathroom - Master,Bath Accessories,Hardware,Soap dish,STANDARD
+Suite,Bathroom - Master,Bath Accessories,Hardware,Toilet tissue holder,STANDARD
+Suite,Bathroom - Master,Bath Accessories,Hardware,Towel bar,STANDARD
+Suite,Bathroom - Master,Bath Accessories,Hardware,Towel ring,STANDARD
+Suite,Bathroom - Master,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Bathroom - Master,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Bathroom - Master,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Bathroom - Master,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Bathroom - Master,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Bathroom - Master,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Bathroom - Master,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Bathroom - Master,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Bathroom - Master,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Bathroom - Master,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Bathroom - Master,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Bathroom - Master,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Bathroom - Master,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Bathroom - Master,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Bathroom - Master,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Bathroom - Master,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Bathroom - Master,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Bathroom - Master,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Bathroom - Master,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Bathroom - Master,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Bathroom - Master,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Bathroom - Master,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Bathroom - Master,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Bathroom - Master,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Bathroom - Master,Carpentry,Shelves,Damaged,STANDARD
+Suite,Bathroom - Master,Carpentry,Shelves,Not In List,STANDARD
+Suite,Bathroom - Master,Carpentry,Shelves,Paint,STANDARD
+Suite,Bathroom - Master,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Bathroom - Master,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Bathroom - Master,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Bathroom - Master,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Bathroom - Master,Carpentry,Window sill,Damaged,STANDARD
+Suite,Bathroom - Master,Carpentry,Window sill,Not In List,STANDARD
+Suite,Bathroom - Master,Carpentry,Window sill,Paint,STANDARD
+Suite,Bathroom - Master,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Bathroom - Master,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Bathroom - Master,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Bathroom - Master,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Bathroom - Master,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Bathroom - Master,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Door stop,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Not In List,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Will not close,STANDARD
+Suite,Bathroom - Master,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Bathroom - Master,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Bathroom - Master,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Bathroom - Master,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Bathroom - Master,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Bathroom - Master,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Bathroom - Master,Electrical,Light Switch,Does not work,STANDARD
+Suite,Bathroom - Master,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Bathroom - Master,Electrical,Light Switch,Not In List,STANDARD
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Bathroom - Master,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Bathroom - Master,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Bathroom - Master,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Bathroom - Master,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Bathroom - Master,Electrical,Outlet,No power,EMERGENCY
+Suite,Bathroom - Master,Electrical,Outlet,Not In List,STANDARD
+Suite,Bathroom - Master,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Bathroom - Master,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Bathroom - Master,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Bathroom - Master,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Bathroom - Master,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Bathroom - Master,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Bathroom - Master,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Bathroom - Master,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Bathroom - Master,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Bathroom - Master,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Bathroom - Master,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Bathroom - Master,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Bathroom - Master,Flooring,Floor General,Leak,STANDARD
+Suite,Bathroom - Master,Flooring,Floor General,Not In List,STANDARD
+Suite,Bathroom - Master,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Bathroom - Master,Flooring,Hardwood,Not In List,STANDARD
+Suite,Bathroom - Master,Flooring,Hardwood,Warped,STANDARD
+Suite,Bathroom - Master,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Bathroom - Master,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Bathroom - Master,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Bathroom - Master,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Bathroom - Master,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Bathroom - Master,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Bathroom - Master,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Bathroom - Master,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Bathroom - Master,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Bathroom - Master,Janitorial,Clean,Not In List,STANDARD
+Suite,Bathroom - Master,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Bathroom - Master,Pest Control,Insects,Ants,STANDARD
+Suite,Bathroom - Master,Pest Control,Insects,Bees,STANDARD
+Suite,Bathroom - Master,Pest Control,Insects,Fleas,STANDARD
+Suite,Bathroom - Master,Pest Control,Insects,Not In List,STANDARD
+Suite,Bathroom - Master,Pest Control,Insects,Roaches,STANDARD
+Suite,Bathroom - Master,Pest Control,Insects,Scorpions,STANDARD
+Suite,Bathroom - Master,Pest Control,Insects,Silverfish,STANDARD
+Suite,Bathroom - Master,Pest Control,Insects,Spiders,STANDARD
+Suite,Bathroom - Master,Pest Control,Pests,Birds,STANDARD
+Suite,Bathroom - Master,Pest Control,Pests,Mice,STANDARD
+Suite,Bathroom - Master,Pest Control,Pests,Not In List,STANDARD
+Suite,Bathroom - Master,Pest Control,Pests,Rats,STANDARD
+Suite,Bathroom - Master,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Bathroom - Master,Plumbing,Fire Sprinkler Head,Head leaks,STANDARD
+Suite,Bathroom - Master,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Bathroom - Master,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Faucet,Faucet drips,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Faucet,Handle broken,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Faucet,Leak at faucet stem,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Lavatory Faucet,Low water pressure,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Faucet,No water,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Lavatory Faucet,Not In List,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Faucet,Stopper does not work,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Faucet,Stopper missing,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Sink,Chip in sink,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Sink,Leak under sink,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Lavatory Sink,Not In List,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Sink,Sewer back-up,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Lavatory Sink,Sink will not hold water,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Sink,Stopper missing,STANDARD
+Suite,Bathroom - Master,Plumbing,Lavatory Sink,Will not drain,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Back loose from base,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Base loose from floor,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Broken seat,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Constantly runs,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Leak at base,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Toilet,Leak at tank,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Toilet,Not In List,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Runs intermittently,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Sewer back-up,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Toilet,Stopped Up (Only one in unit),EMERGENCY
+Suite,Bathroom - Master,Plumbing,Toilet,Stopped up (Other working toilet available),STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Tank lid broken,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Water valve dripping,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Will not fill,STANDARD
+Suite,Bathroom - Master,Plumbing,Toilet,Will not flush,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Caulk or grout,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Ceramic tile repair,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Diverter not working,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Door repair,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Not In List,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Sewer back-up,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Shower head repair,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Shower rod repair,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Soap dish repair,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Stopper does not work / missing,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Tub / shower will not drain,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Tub spout repair,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Tub will not hold water,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub / Shower,Water on floor when showering,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Tub/Shower Faucet,Faucet drips,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub/Shower Faucet,Handle broken,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub/Shower Faucet,Low water pressure,STANDARD
+Suite,Bathroom - Master,Plumbing,Tub/Shower Faucet,No water,EMERGENCY
+Suite,Bathroom - Master,Plumbing,Tub/Shower Faucet,Not In List,STANDARD
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Leak above shower or tub,EMERGENCY
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Bathroom - Master,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Bathroom - Master,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Bathroom - Master,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Bathroom - Master,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Bathroom - Master,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Bathroom - Master,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Bathroom - Master,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Bathroom - Master,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Bedroom,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Bedroom,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Bedroom,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Bedroom,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Bedroom,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Bedroom,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Bedroom,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Bedroom,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Bedroom,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Bedroom,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Bedroom,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Bedroom,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Bedroom,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Bedroom,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Bedroom,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Bedroom,Carpentry,Desk,Damaged,STANDARD
+Suite,Bedroom,Carpentry,Desk,Not In List,STANDARD
+Suite,Bedroom,Carpentry,Shelves,Damaged,STANDARD
+Suite,Bedroom,Carpentry,Shelves,Not In List,STANDARD
+Suite,Bedroom,Carpentry,Shelves,Paint,STANDARD
+Suite,Bedroom,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Bedroom,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Bedroom,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Bedroom,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Bedroom,Carpentry,Window sill,Damaged,STANDARD
+Suite,Bedroom,Carpentry,Window sill,Not In List,STANDARD
+Suite,Bedroom,Carpentry,Window sill,Paint,STANDARD
+Suite,Bedroom,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Bedroom,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Bedroom,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Bedroom,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Bedroom,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Bedroom,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Door stop,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Not In List,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Will not close,STANDARD
+Suite,Bedroom,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Bedroom,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Bedroom,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Bedroom,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Bedroom,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Bedroom,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Bedroom,Electrical,Light Switch,Does not work,STANDARD
+Suite,Bedroom,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Bedroom,Electrical,Light Switch,Not In List,STANDARD
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Bedroom,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Bedroom,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Bedroom,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Bedroom,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Bedroom,Electrical,Outlet,No power,EMERGENCY
+Suite,Bedroom,Electrical,Outlet,Not In List,STANDARD
+Suite,Bedroom,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Bedroom,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Bedroom,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Bedroom,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Bedroom,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Bedroom,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Bedroom,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Bedroom,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Bedroom,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Bedroom,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Bedroom,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Bedroom,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Bedroom,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Bedroom,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Bedroom,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Bedroom,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Bedroom,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Bedroom,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Bedroom,Flooring,Floor General,Leak,EMERGENCY
+Suite,Bedroom,Flooring,Floor General,Not In List,STANDARD
+Suite,Bedroom,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Bedroom,Flooring,Hardwood,Not In List,STANDARD
+Suite,Bedroom,Flooring,Hardwood,Warped,STANDARD
+Suite,Bedroom,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Bedroom,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Bedroom,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Bedroom,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Bedroom,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Bedroom,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Bedroom,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Bedroom,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Bedroom,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Bedroom,Janitorial,Clean,Not In List,STANDARD
+Suite,Bedroom,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Bedroom,Pest Control,Insects,Ants,STANDARD
+Suite,Bedroom,Pest Control,Insects,Bees,STANDARD
+Suite,Bedroom,Pest Control,Insects,Fleas,STANDARD
+Suite,Bedroom,Pest Control,Insects,Not In List,STANDARD
+Suite,Bedroom,Pest Control,Insects,Roaches,STANDARD
+Suite,Bedroom,Pest Control,Insects,Scorpions,STANDARD
+Suite,Bedroom,Pest Control,Insects,Silverfish,STANDARD
+Suite,Bedroom,Pest Control,Insects,Spiders,STANDARD
+Suite,Bedroom,Pest Control,Pests,Birds,STANDARD
+Suite,Bedroom,Pest Control,Pests,Mice,STANDARD
+Suite,Bedroom,Pest Control,Pests,Not In List,STANDARD
+Suite,Bedroom,Pest Control,Pests,Rats,STANDARD
+Suite,Bedroom,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Bedroom,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Bedroom,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Bedroom,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,Alarm,Control panel repair,EMERGENCY
+Suite,Bedroom,TV / Phone / Alarm / Internet,Alarm,Not In List,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,Internet,Cover plate missing,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,Internet,Jack or wire repair,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,Internet,Not In List,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,Phone,Cover plate missing,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,Phone,Jack repair,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,Phone,Not In List,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,Phone,Poor reception,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,TV / Cable,No service,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,TV / Cable,Not In List,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,TV / Cable,Poor reception,STANDARD
+Suite,Bedroom,TV / Phone / Alarm / Internet,TV / Cable,Wall plate repair,STANDARD
+Suite,Bedroom,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Bedroom,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Bedroom,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Bedroom,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Bedroom,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Bedroom,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Bedroom,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Bedroom,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Bedroom,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Bedroom,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Bedroom,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Bedroom,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Bedroom,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Bedroom,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Bedroom,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Bedroom - Master,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Bedroom - Master,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Bedroom - Master,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Bedroom - Master,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Bedroom - Master,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Bedroom - Master,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Bedroom - Master,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Bedroom - Master,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Bedroom - Master,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Bedroom - Master,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Bedroom - Master,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Bedroom - Master,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Bedroom - Master,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Bedroom - Master,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Bedroom - Master,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Bedroom - Master,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Bedroom - Master,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Bedroom - Master,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Bedroom - Master,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Bedroom - Master,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Bedroom - Master,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Bedroom - Master,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Bedroom - Master,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Bedroom - Master,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Bedroom - Master,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Bedroom - Master,Carpentry,Desk,Damaged,STANDARD
+Suite,Bedroom - Master,Carpentry,Desk,Not In List,STANDARD
+Suite,Bedroom - Master,Carpentry,Shelves,Damaged,STANDARD
+Suite,Bedroom - Master,Carpentry,Shelves,Not In List,STANDARD
+Suite,Bedroom - Master,Carpentry,Shelves,Paint,STANDARD
+Suite,Bedroom - Master,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Bedroom - Master,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Bedroom - Master,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Bedroom - Master,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Bedroom - Master,Carpentry,Window sill,Damaged,STANDARD
+Suite,Bedroom - Master,Carpentry,Window sill,Not In List,STANDARD
+Suite,Bedroom - Master,Carpentry,Window sill,Paint,STANDARD
+Suite,Bedroom - Master,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Bedroom - Master,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Bedroom - Master,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Bedroom - Master,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Bedroom - Master,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Bedroom - Master,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Door stop,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Not In List,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Will not close,STANDARD
+Suite,Bedroom - Master,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Bedroom - Master,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Bedroom - Master,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Bedroom - Master,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Bedroom - Master,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Bedroom - Master,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Bedroom - Master,Electrical,Light Switch,Does not work,STANDARD
+Suite,Bedroom - Master,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Bedroom - Master,Electrical,Light Switch,Not In List,STANDARD
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,STANDARD
+Suite,Bedroom - Master,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Bedroom - Master,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Bedroom - Master,Electrical,Outlet,GFI will not reset,STANDARD
+Suite,Bedroom - Master,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Bedroom - Master,Electrical,Outlet,No power,EMERGENCY
+Suite,Bedroom - Master,Electrical,Outlet,Not In List,STANDARD
+Suite,Bedroom - Master,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Bedroom - Master,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Bedroom - Master,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Bedroom - Master,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Bedroom - Master,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Bedroom - Master,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Bedroom - Master,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Bedroom - Master,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Bedroom - Master,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Bedroom - Master,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Bedroom - Master,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Bedroom - Master,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Bedroom - Master,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Bedroom - Master,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Bedroom - Master,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Bedroom - Master,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Bedroom - Master,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Bedroom - Master,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Bedroom - Master,Flooring,Floor General,Leak,EMERGENCY
+Suite,Bedroom - Master,Flooring,Floor General,Not In List,STANDARD
+Suite,Bedroom - Master,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Bedroom - Master,Flooring,Hardwood,Not In List,STANDARD
+Suite,Bedroom - Master,Flooring,Hardwood,Warped,STANDARD
+Suite,Bedroom - Master,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Bedroom - Master,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Bedroom - Master,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Bedroom - Master,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Bedroom - Master,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Bedroom - Master,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Bedroom - Master,Janitorial,Clean,Not In List,STANDARD
+Suite,Bedroom - Master,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Bedroom - Master,Pest Control,Insects,Ants,STANDARD
+Suite,Bedroom - Master,Pest Control,Insects,Bees,STANDARD
+Suite,Bedroom - Master,Pest Control,Insects,Fleas,STANDARD
+Suite,Bedroom - Master,Pest Control,Insects,Not In List,STANDARD
+Suite,Bedroom - Master,Pest Control,Insects,Roaches,STANDARD
+Suite,Bedroom - Master,Pest Control,Insects,Scorpions,STANDARD
+Suite,Bedroom - Master,Pest Control,Insects,Silverfish,STANDARD
+Suite,Bedroom - Master,Pest Control,Insects,Spiders,STANDARD
+Suite,Bedroom - Master,Pest Control,Pests,Birds,STANDARD
+Suite,Bedroom - Master,Pest Control,Pests,Mice,STANDARD
+Suite,Bedroom - Master,Pest Control,Pests,Not In List,STANDARD
+Suite,Bedroom - Master,Pest Control,Pests,Rats,STANDARD
+Suite,Bedroom - Master,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Bedroom - Master,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Bedroom - Master,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Bedroom - Master,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Alarm,Control panel repair,EMERGENCY
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Alarm,Not In List,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Internet,Cover plate missing,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Internet,Jack or wire repair,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Internet,Not In List,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Phone,Cover plate missing,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Phone,Jack repair,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Phone,Not In List,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,Phone,Poor reception,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,TV / Cable,No service,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,TV / Cable,Not In List,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,TV / Cable,Poor reception,STANDARD
+Suite,Bedroom - Master,TV / Phone / Alarm / Internet,TV / Cable,Wall plate repair,STANDARD
+Suite,Bedroom - Master,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Bedroom - Master,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Bedroom - Master,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Bedroom - Master,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Bedroom - Master,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Bedroom - Master,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Bedroom - Master,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Bedroom - Master,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Bedroom - Master,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Bedroom - Master,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Bedroom - Master,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Bedroom - Master,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Bedroom - Master,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Bedroom - Master,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Bedroom - Master,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Den,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Condensing unit outside makes excessive noise,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Condensing unit outside runs when inside unit is off,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Cover panel repair,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Fan makes noise,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Replace filter,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,T-stat repair,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Den,Air Conditioning / Heat,Air Conditioning,Water leak from condensation overflow,EMERGENCY
+Suite,Den,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Den,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Den,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Den,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Den,Air Conditioning / Heat,Heat,Replace filter,STANDARD
+Suite,Den,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Den,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Den,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Den,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Den,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Den,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Den,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Den,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Den,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Den,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Den,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Den,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Den,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Den,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Den,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Den,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Den,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Den,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Den,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Den,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Den,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Den,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Den,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Den,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Den,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Den,Carpentry,Desk,Damaged,STANDARD
+Suite,Den,Carpentry,Desk,Not In List,STANDARD
+Suite,Den,Carpentry,Shelves,Damaged,STANDARD
+Suite,Den,Carpentry,Shelves,Not In List,STANDARD
+Suite,Den,Carpentry,Shelves,Paint,STANDARD
+Suite,Den,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Den,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Den,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Den,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Den,Carpentry,Window sill,Damaged,STANDARD
+Suite,Den,Carpentry,Window sill,Not In List,STANDARD
+Suite,Den,Carpentry,Window sill,Paint,STANDARD
+Suite,Den,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Den,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Den,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Den,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Den,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Den,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Den,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Den,Doors,Interior Doors,Door stop,STANDARD
+Suite,Den,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Den,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Den,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Den,Doors,Interior Doors,Not In List,STANDARD
+Suite,Den,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Den,Doors,Interior Doors,Will not close,STANDARD
+Suite,Den,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Den,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Den,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Den,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Den,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Den,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Den,Electrical,Light Switch,Does not work,STANDARD
+Suite,Den,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Den,Electrical,Light Switch,Not In List,STANDARD
+Suite,Den,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Den,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Den,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Den,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Den,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Den,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Den,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Den,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Den,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Den,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Den,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Den,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Den,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Den,Electrical,Outlet,No power,EMERGENCY
+Suite,Den,Electrical,Outlet,Not In List,STANDARD
+Suite,Den,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Den,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Den,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Den,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Den,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Den,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Den,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Den,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Den,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Den,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Den,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Den,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Den,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Den,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Den,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Den,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Den,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Den,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Den,Flooring,Floor General,Leak,EMERGENCY
+Suite,Den,Flooring,Floor General,Not In List,STANDARD
+Suite,Den,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Den,Flooring,Hardwood,Not In List,STANDARD
+Suite,Den,Flooring,Hardwood,Warped,STANDARD
+Suite,Den,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Den,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Den,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Den,Glass Door / Window,Glass Door,Broken glass,EMERGENCY
+Suite,Den,Glass Door / Window,Glass Door,Door handle,STANDARD
+Suite,Den,Glass Door / Window,Glass Door,Door lock,EMERGENCY
+Suite,Den,Glass Door / Window,Glass Door,Not In List,STANDARD
+Suite,Den,Glass Door / Window,Glass Door,Patio door pin,EMERGENCY
+Suite,Den,Glass Door / Window,Glass Door,Will not slide,EMERGENCY
+Suite,Den,Glass Door / Window,Window,Broken glass,STANDARD
+Suite,Den,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Den,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Den,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Den,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Den,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Den,Janitorial,Clean,Not In List,STANDARD
+Suite,Den,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Den,Pest Control,Insects,Ants,STANDARD
+Suite,Den,Pest Control,Insects,Bees,STANDARD
+Suite,Den,Pest Control,Insects,Fleas,STANDARD
+Suite,Den,Pest Control,Insects,Not In List,STANDARD
+Suite,Den,Pest Control,Insects,Roaches,STANDARD
+Suite,Den,Pest Control,Insects,Scorpions,STANDARD
+Suite,Den,Pest Control,Insects,Silverfish,STANDARD
+Suite,Den,Pest Control,Insects,Spiders,STANDARD
+Suite,Den,Pest Control,Pests,Birds,STANDARD
+Suite,Den,Pest Control,Pests,Mice,STANDARD
+Suite,Den,Pest Control,Pests,Not In List,STANDARD
+Suite,Den,Pest Control,Pests,Rats,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,Alarm,Control panel repair,EMERGENCY
+Suite,Den,TV / Phone / Alarm / Internet,Alarm,Not In List,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,Internet,Cover plate missing,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,Internet,Jack or wire repair,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,Internet,Not In List,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,Phone,Cover plate missing,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,Phone,Jack repair,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,Phone,Not In List,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,Phone,Poor reception,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,TV / Cable,No service,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,TV / Cable,Not In List,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,TV / Cable,Poor reception,STANDARD
+Suite,Den,TV / Phone / Alarm / Internet,TV / Cable,Wall plate repair,STANDARD
+Suite,Den,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Den,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Den,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Den,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Den,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Den,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Den,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Den,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Den,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Den,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Den,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Den,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Den,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Den,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Den,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Air Conditioning,Fan makes noise,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Dining Room,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Dining Room,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Dining Room,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Dining Room,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Dining Room,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Dining Room,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Dining Room,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Dining Room,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Dining Room,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Dining Room,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Dining Room,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Dining Room,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Dining Room,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Dining Room,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Dining Room,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Dining Room,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Dining Room,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Dining Room,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Dining Room,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Dining Room,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Dining Room,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Dining Room,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Dining Room,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Dining Room,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Dining Room,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Dining Room,Carpentry,Shelves,Damaged,STANDARD
+Suite,Dining Room,Carpentry,Shelves,Not In List,STANDARD
+Suite,Dining Room,Carpentry,Shelves,Paint,STANDARD
+Suite,Dining Room,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Dining Room,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Dining Room,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Dining Room,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Dining Room,Carpentry,Window sill,Damaged,STANDARD
+Suite,Dining Room,Carpentry,Window sill,Not In List,STANDARD
+Suite,Dining Room,Carpentry,Window sill,Paint,STANDARD
+Suite,Dining Room,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Dining Room,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Dining Room,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Dining Room,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Dining Room,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Dining Room,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Door stop,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Not In List,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Will not close,STANDARD
+Suite,Dining Room,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Dining Room,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Dining Room,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Dining Room,Electrical,Light Switch,Does not work,STANDARD
+Suite,Dining Room,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Dining Room,Electrical,Light Switch,Not In List,STANDARD
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Dining Room,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Dining Room,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Dining Room,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Dining Room,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Dining Room,Electrical,Outlet,No power,EMERGENCY
+Suite,Dining Room,Electrical,Outlet,Not In List,STANDARD
+Suite,Dining Room,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Dining Room,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Dining Room,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Dining Room,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Dining Room,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Dining Room,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Dining Room,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Dining Room,Fire Extinguisher,Apartment fire extinguisher,Damaged,STANDARD
+Suite,Dining Room,Fire Extinguisher,Apartment fire extinguisher,Describe,STANDARD
+Suite,Dining Room,Fire Extinguisher,Apartment fire extinguisher,Missing,STANDARD
+Suite,Dining Room,Fire Extinguisher,Apartment fire extinguisher,Recharge,STANDARD
+Suite,Dining Room,Fire Extinguisher,Other fire extinguisher,Damaged,STANDARD
+Suite,Dining Room,Fire Extinguisher,Other fire extinguisher,Describe,STANDARD
+Suite,Dining Room,Fire Extinguisher,Other fire extinguisher,Missing,STANDARD
+Suite,Dining Room,Fire Extinguisher,Other fire extinguisher,Recharge,STANDARD
+Suite,Dining Room,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Dining Room,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Dining Room,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Dining Room,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Dining Room,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Dining Room,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Dining Room,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Dining Room,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Dining Room,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Dining Room,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Dining Room,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Dining Room,Flooring,Floor General,Leak,EMERGENCY
+Suite,Dining Room,Flooring,Floor General,Not In List,STANDARD
+Suite,Dining Room,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Dining Room,Flooring,Hardwood,Not In List,STANDARD
+Suite,Dining Room,Flooring,Hardwood,Warped,STANDARD
+Suite,Dining Room,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Dining Room,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Dining Room,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Dining Room,Glass Door / Window,Glass Door,Broken glass,EMERGENCY
+Suite,Dining Room,Glass Door / Window,Glass Door,Door handle,STANDARD
+Suite,Dining Room,Glass Door / Window,Glass Door,Door lock,EMERGENCY
+Suite,Dining Room,Glass Door / Window,Glass Door,Not In List,STANDARD
+Suite,Dining Room,Glass Door / Window,Glass Door,Patio door pin,EMERGENCY
+Suite,Dining Room,Glass Door / Window,Glass Door,Will not slide,EMERGENCY
+Suite,Dining Room,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Dining Room,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Dining Room,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Dining Room,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Dining Room,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Dining Room,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Dining Room,Janitorial,Clean,Not In List,STANDARD
+Suite,Dining Room,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Dining Room,Pest Control,Insects,Ants,STANDARD
+Suite,Dining Room,Pest Control,Insects,Bees,STANDARD
+Suite,Dining Room,Pest Control,Insects,Fleas,STANDARD
+Suite,Dining Room,Pest Control,Insects,Not In List,STANDARD
+Suite,Dining Room,Pest Control,Insects,Roaches,STANDARD
+Suite,Dining Room,Pest Control,Insects,Scorpions,STANDARD
+Suite,Dining Room,Pest Control,Insects,Silverfish,STANDARD
+Suite,Dining Room,Pest Control,Insects,Spiders,STANDARD
+Suite,Dining Room,Pest Control,Pests,Birds,STANDARD
+Suite,Dining Room,Pest Control,Pests,Mice,STANDARD
+Suite,Dining Room,Pest Control,Pests,Not In List,STANDARD
+Suite,Dining Room,Pest Control,Pests,Rats,STANDARD
+Suite,Dining Room,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Dining Room,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Dining Room,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Dining Room,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Dining Room,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Dining Room,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Dining Room,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Dining Room,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Dining Room,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Dining Room,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Dining Room,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Dining Room,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Dining Room,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Dining Room,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Dining Room,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Entry,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Entry,Carpentry,Handrail / Bannister,Damaged,EMERGENCY
+Suite,Entry,Carpentry,Handrail / Bannister,Not In List,STANDARD
+Suite,Entry,Carpentry,Handrail / Bannister,Paint,STANDARD
+Suite,Entry,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Entry,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Entry,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Entry,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Entry,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Entry,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Entry,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Entry,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Entry,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Entry,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Entry,Doors,Exterior Doors,Damaged,STANDARD
+Suite,Entry,Doors,Exterior Doors,Deadbolt repair,EMERGENCY
+Suite,Entry,Doors,Exterior Doors,Door stop,STANDARD
+Suite,Entry,Doors,Exterior Doors,Hard to open,EMERGENCY
+Suite,Entry,Doors,Exterior Doors,Hinge repair,STANDARD
+Suite,Entry,Doors,Exterior Doors,Locking knob repair,EMERGENCY
+Suite,Entry,Doors,Exterior Doors,Missing,EMERGENCY
+Suite,Entry,Doors,Exterior Doors,Not In List,STANDARD
+Suite,Entry,Doors,Exterior Doors,Paint,STANDARD
+Suite,Entry,Doors,Exterior Doors,Passage knob repair,STANDARD
+Suite,Entry,Doors,Exterior Doors,Threshold,STANDARD
+Suite,Entry,Doors,Exterior Doors,Weather-stripping,STANDARD
+Suite,Entry,Doors,Exterior Doors,Will not close,EMERGENCY
+Suite,Entry,Doors,Exterior Doors,Will not latch,STANDARD
+Suite,Entry,Doors,Exterior Doors,Will not lock,EMERGENCY
+Suite,Entry,Doors,Exterior Doors,Will not open,EMERGENCY
+Suite,Entry,Doors,Exterior Doors,Will not unlock,EMERGENCY
+Suite,Entry,Doors,Interior Doors,Deadbolt repair,EMERGENCY
+Suite,Entry,Doors,Interior Doors,Door stop,STANDARD
+Suite,Entry,Doors,Interior Doors,Hard to open,EMERGENCY
+Suite,Entry,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Entry,Doors,Interior Doors,Locking knob repair,EMERGENCY
+Suite,Entry,Doors,Interior Doors,Not In List,STANDARD
+Suite,Entry,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Entry,Doors,Interior Doors,Will not close,EMERGENCY
+Suite,Entry,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Entry,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Entry,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Entry,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Entry,Electrical,Door Chime,Button repair,STANDARD
+Suite,Entry,Electrical,Door Chime,Cosmetic repair,STANDARD
+Suite,Entry,Electrical,Door Chime,Not In List,STANDARD
+Suite,Entry,Electrical,Door Chime,Will not work,STANDARD
+Suite,Entry,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Entry,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Entry,Electrical,Light Switch,Does not work,STANDARD
+Suite,Entry,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Entry,Electrical,Light Switch,Not In List,STANDARD
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Entry,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Entry,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Entry,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Entry,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Entry,Electrical,Outlet,No power,EMERGENCY
+Suite,Entry,Electrical,Outlet,Not In List,STANDARD
+Suite,Entry,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Entry,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Entry,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Entry,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Entry,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Entry,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Entry,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Entry,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Entry,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Entry,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Entry,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Entry,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Entry,Flooring,Common Hall / Breezeway Carpet,Carpet bar repair,STANDARD
+Suite,Entry,Flooring,Common Hall / Breezeway Carpet,Clean carpet,STANDARD
+Suite,Entry,Flooring,Common Hall / Breezeway Carpet,Not In List,STANDARD
+Suite,Entry,Flooring,Common Hall / Breezeway Carpet,Repair carpet,STANDARD
+Suite,Entry,Flooring,Common Hall / Breezeway Carpet,Replace carpet,STANDARD
+Suite,Entry,Flooring,Common Hall / Breezeway Carpet,Stretch carpet,STANDARD
+Suite,Entry,Flooring,Common Hall / Breezeway Carpet,Wet Vac,EMERGENCY
+Suite,Entry,Flooring,Floor General,Leak,EMERGENCY
+Suite,Entry,Flooring,Floor General,Not In List,STANDARD
+Suite,Entry,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Entry,Flooring,Hardwood,Not In List,STANDARD
+Suite,Entry,Flooring,Hardwood,Warped,STANDARD
+Suite,Entry,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Entry,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Entry,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Entry,Glass Door / Window,Glass Door,Broken glass,EMERGENCY
+Suite,Entry,Glass Door / Window,Glass Door,Door handle,STANDARD
+Suite,Entry,Glass Door / Window,Glass Door,Door lock,EMERGENCY
+Suite,Entry,Glass Door / Window,Glass Door,Not In List,STANDARD
+Suite,Entry,Glass Door / Window,Glass Door,Patio door pin,EMERGENCY
+Suite,Entry,Glass Door / Window,Glass Door,Will not slide,EMERGENCY
+Suite,Entry,Janitorial,Clean,Not In List,STANDARD
+Suite,Entry,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Entry,Pest Control,Insects,Ants,STANDARD
+Suite,Entry,Pest Control,Insects,Bees,STANDARD
+Suite,Entry,Pest Control,Insects,Fleas,STANDARD
+Suite,Entry,Pest Control,Insects,Not In List,STANDARD
+Suite,Entry,Pest Control,Insects,Roaches,STANDARD
+Suite,Entry,Pest Control,Insects,Scorpions,STANDARD
+Suite,Entry,Pest Control,Insects,Silverfish,STANDARD
+Suite,Entry,Pest Control,Insects,Spiders,STANDARD
+Suite,Entry,Pest Control,Pests,Birds,STANDARD
+Suite,Entry,Pest Control,Pests,Mice,STANDARD
+Suite,Entry,Pest Control,Pests,Not In List,STANDARD
+Suite,Entry,Pest Control,Pests,Rats,STANDARD
+Suite,Entry,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Entry,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Entry,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Entry,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Entry,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Entry,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Entry,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Entry,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Entry,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Entry,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Entry,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Entry,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Entry,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Entry,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Entry,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Garage / Carports,Doors,Leaks at bottom,,EMERGENCY
+Suite,Garage / Carports,Doors,Leaks at top,,EMERGENCY
+Suite,Garage / Carports,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Garage / Carports,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Garage / Carports,Plumbing,Leak,,STANDARD
+Suite,Garage / Carports,Plumbing,Water Heater,Leak,EMERGENCY
+Suite,Hallway,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Condensing unit outside makes excessive noise,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Condensing unit outside runs when inside unit is off,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Cover panel repair,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Fan makes noise,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Replace filter,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,T-stat repair,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Air Conditioning,Water leak from condensation overflow,EMERGENCY
+Suite,Hallway,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Heat,Replace filter,STANDARD
+Suite,Hallway,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Hallway,Carpentry,Desk,Damaged,STANDARD
+Suite,Hallway,Carpentry,Desk,Not In List,STANDARD
+Suite,Hallway,Carpentry,Shelves,Damaged,STANDARD
+Suite,Hallway,Carpentry,Shelves,Not In List,STANDARD
+Suite,Hallway,Carpentry,Shelves,Paint,STANDARD
+Suite,Hallway,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Hallway,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Hallway,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Hallway,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Hallway,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Hallway,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Hallway,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Hallway,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Hallway,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Hallway,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Hallway,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Hallway,Doors,Interior Doors,Door stop,STANDARD
+Suite,Hallway,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Hallway,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Hallway,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Hallway,Doors,Interior Doors,Not In List,STANDARD
+Suite,Hallway,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Hallway,Doors,Interior Doors,Will not close,STANDARD
+Suite,Hallway,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Hallway,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Hallway,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Hallway,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Hallway,Electrical,Circuit breaker / Breaker box,Breaker trips,EMERGENCY
+Suite,Hallway,Electrical,Circuit breaker / Breaker box,Breaker will not reset,EMERGENCY
+Suite,Hallway,Electrical,Circuit breaker / Breaker box,Gaps in box between breakers,STANDARD
+Suite,Hallway,Electrical,Circuit breaker / Breaker box,Noise in breaker box,EMERGENCY
+Suite,Hallway,Electrical,Circuit breaker / Breaker box,Not In List,STANDARD
+Suite,Hallway,Electrical,Door Chime,Button repair,STANDARD
+Suite,Hallway,Electrical,Door Chime,Cosmetic repair,STANDARD
+Suite,Hallway,Electrical,Door Chime,Not In List,STANDARD
+Suite,Hallway,Electrical,Door Chime,Will not work,STANDARD
+Suite,Hallway,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Hallway,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Hallway,Electrical,Light Switch,Does not work,STANDARD
+Suite,Hallway,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Hallway,Electrical,Light Switch,Not In List,STANDARD
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Hallway,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Hallway,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Hallway,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Hallway,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Hallway,Electrical,Outlet,No power,EMERGENCY
+Suite,Hallway,Electrical,Outlet,Not In List,STANDARD
+Suite,Hallway,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Hallway,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Hallway,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Hallway,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Hallway,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Hallway,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Hallway,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Hallway,Fire Extinguisher,Apartment fire extinguisher,Damaged,STANDARD
+Suite,Hallway,Fire Extinguisher,Apartment fire extinguisher,Describe,STANDARD
+Suite,Hallway,Fire Extinguisher,Apartment fire extinguisher,Missing,STANDARD
+Suite,Hallway,Fire Extinguisher,Apartment fire extinguisher,Recharge,STANDARD
+Suite,Hallway,Fire Extinguisher,Other fire extinguisher,Damaged,STANDARD
+Suite,Hallway,Fire Extinguisher,Other fire extinguisher,Describe,STANDARD
+Suite,Hallway,Fire Extinguisher,Other fire extinguisher,Missing,STANDARD
+Suite,Hallway,Fire Extinguisher,Other fire extinguisher,Recharge,STANDARD
+Suite,Hallway,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Hallway,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Hallway,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Hallway,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Hallway,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Hallway,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Hallway,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Hallway,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Hallway,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Hallway,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Hallway,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Hallway,Flooring,Common Hall / Breezeway Carpet,Carpet bar repair,STANDARD
+Suite,Hallway,Flooring,Common Hall / Breezeway Carpet,Clean carpet,STANDARD
+Suite,Hallway,Flooring,Common Hall / Breezeway Carpet,Not In List,STANDARD
+Suite,Hallway,Flooring,Common Hall / Breezeway Carpet,Repair carpet,STANDARD
+Suite,Hallway,Flooring,Common Hall / Breezeway Carpet,Replace carpet,STANDARD
+Suite,Hallway,Flooring,Common Hall / Breezeway Carpet,Stretch carpet,STANDARD
+Suite,Hallway,Flooring,Common Hall / Breezeway Carpet,Wet Vac,EMERGENCY
+Suite,Hallway,Flooring,Floor General,Leak,EMERGENCY
+Suite,Hallway,Flooring,Floor General,Not In List,STANDARD
+Suite,Hallway,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Hallway,Flooring,Hardwood,Not In List,STANDARD
+Suite,Hallway,Flooring,Hardwood,Warped,STANDARD
+Suite,Hallway,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Hallway,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Hallway,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Hallway,Janitorial,Clean,Not In List,STANDARD
+Suite,Hallway,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Hallway,Pest Control,Insects,Ants,STANDARD
+Suite,Hallway,Pest Control,Insects,Bees,STANDARD
+Suite,Hallway,Pest Control,Insects,Fleas,STANDARD
+Suite,Hallway,Pest Control,Insects,Not In List,STANDARD
+Suite,Hallway,Pest Control,Insects,Roaches,STANDARD
+Suite,Hallway,Pest Control,Insects,Scorpions,STANDARD
+Suite,Hallway,Pest Control,Insects,Silverfish,STANDARD
+Suite,Hallway,Pest Control,Insects,Spiders,STANDARD
+Suite,Hallway,Pest Control,Pests,Birds,STANDARD
+Suite,Hallway,Pest Control,Pests,Mice,STANDARD
+Suite,Hallway,Pest Control,Pests,Not In List,STANDARD
+Suite,Hallway,Pest Control,Pests,Rats,STANDARD
+Suite,Hallway,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Hallway,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Hallway,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Hallway,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Hallway,TV / Phone / Alarm / Internet,Alarm,Control panel repair,EMERGENCY
+Suite,Hallway,TV / Phone / Alarm / Internet,Alarm,Not In List,STANDARD
+Suite,Hallway,TV / Phone / Alarm / Internet,Phone,Cover plate missing,STANDARD
+Suite,Hallway,TV / Phone / Alarm / Internet,Phone,Jack repair,STANDARD
+Suite,Hallway,TV / Phone / Alarm / Internet,Phone,Not In List,STANDARD
+Suite,Hallway,TV / Phone / Alarm / Internet,Phone,Poor reception,STANDARD
+Suite,Hallway,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Hallway,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Hallway,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Hallway,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Hallway,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Hallway,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Hallway,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Hallway,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Hallway,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Hallway,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Hallway,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Hallway,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Hallway,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Hallway,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Hallway,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Air Conditioning,Fan makes noise,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Kitchen,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Cosmetic repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Does not clean dishes,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Latch repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Leaks,EMERGENCY
+Suite,Kitchen,Appliance,Dishwasher,Leaves water spots on dishes,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Lower rack repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Not In List,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Silverware basket repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Soap dispenser repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Spray tower repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Timer knob repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Upper rack repair,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Will not drain,STANDARD
+Suite,Kitchen,Appliance,Dishwasher,Will not fill,STANDARD
+Suite,Kitchen,Appliance,Microwave,Cosmetic repair,STANDARD
+Suite,Kitchen,Appliance,Microwave,Display panel not working,STANDARD
+Suite,Kitchen,Appliance,Microwave,Handle repair,STANDARD
+Suite,Kitchen,Appliance,Microwave,Knob repair,STANDARD
+Suite,Kitchen,Appliance,Microwave,Light repair,STANDARD
+Suite,Kitchen,Appliance,Microwave,No power,STANDARD
+Suite,Kitchen,Appliance,Microwave,Not In List,STANDARD
+Suite,Kitchen,Appliance,Microwave,Sparking inside,STANDARD
+Suite,Kitchen,Appliance,Microwave,Will not heat,STANDARD
+Suite,Kitchen,Appliance,Microwave,Will not rotate,STANDARD
+Suite,Kitchen,Appliance,Range,Broil option does not work,STANDARD
+Suite,Kitchen,Appliance,Range,Cosmetic repair,STANDARD
+Suite,Kitchen,Appliance,Range,Drip pan (Give location),STANDARD
+Suite,Kitchen,Appliance,Range,Left front surface burner repair,STANDARD
+Suite,Kitchen,Appliance,Range,Left rear surface burner repair,STANDARD
+Suite,Kitchen,Appliance,Range,Not In List,STANDARD
+Suite,Kitchen,Appliance,Range,Oven does not work,EMERGENCY
+Suite,Kitchen,Appliance,Range,Oven drawer repair,STANDARD
+Suite,Kitchen,Appliance,Range,Oven handle repair,STANDARD
+Suite,Kitchen,Appliance,Range,Oven light repair,STANDARD
+Suite,Kitchen,Appliance,Range,Oven rack repair,STANDARD
+Suite,Kitchen,Appliance,Range,Oven selector switch knob repair,STANDARD
+Suite,Kitchen,Appliance,Range,Oven thermostat knob repair,STANDARD
+Suite,Kitchen,Appliance,Range,Oven too hot burns food,STANDARD
+Suite,Kitchen,Appliance,Range,Right front surface burner repair,STANDARD
+Suite,Kitchen,Appliance,Range,Right rear surface burner repair,STANDARD
+Suite,Kitchen,Appliance,Range,Self clean option does not work,STANDARD
+Suite,Kitchen,Appliance,Range,Smell gas,EMERGENCY
+Suite,Kitchen,Appliance,Range,Surface unit selector knob repair,STANDARD
+Suite,Kitchen,Appliance,Range,Timer repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Butter door repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Cosmetic repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Crisper drawer cover repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Crisper drawer repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Freezer door handle repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Freezer door seal repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Freezer icing up,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Ice maker repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Knob repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Leak,EMERGENCY
+Suite,Kitchen,Appliance,Refrigerator,Light repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Not In List,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Not cooling / freezer,EMERGENCY
+Suite,Kitchen,Appliance,Refrigerator,Not cooling / refrigerator,EMERGENCY
+Suite,Kitchen,Appliance,Refrigerator,Not cooling refrigerator or freezer,EMERGENCY
+Suite,Kitchen,Appliance,Refrigerator,Refrigerator door handle repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Refrigerator door seal repair,STANDARD
+Suite,Kitchen,Appliance,Refrigerator,Shelf repair,STANDARD
+Suite,Kitchen,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Kitchen,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Kitchen,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Kitchen,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Kitchen,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Kitchen,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Kitchen,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Kitchen,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Kitchen,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Kitchen,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Kitchen,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Kitchen,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Kitchen,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Kitchen,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Kitchen,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Kitchen,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Kitchen,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Kitchen,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Kitchen,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Kitchen,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Kitchen,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Kitchen,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Kitchen,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Kitchen,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Kitchen,Carpentry,Desk,Damaged,STANDARD
+Suite,Kitchen,Carpentry,Desk,Not In List,STANDARD
+Suite,Kitchen,Carpentry,Shelves,Damaged,STANDARD
+Suite,Kitchen,Carpentry,Shelves,Not In List,STANDARD
+Suite,Kitchen,Carpentry,Shelves,Paint,STANDARD
+Suite,Kitchen,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Kitchen,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Kitchen,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Kitchen,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Kitchen,Carpentry,Window sill,Damaged,STANDARD
+Suite,Kitchen,Carpentry,Window sill,Not In List,STANDARD
+Suite,Kitchen,Carpentry,Window sill,Paint,STANDARD
+Suite,Kitchen,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Kitchen,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Kitchen,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Kitchen,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Kitchen,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Kitchen,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Door stop,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Not In List,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Will not close,STANDARD
+Suite,Kitchen,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Kitchen,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Kitchen,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Kitchen,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Kitchen,Electrical,Circuit breaker / Breaker box,Breaker trips,STANDARD
+Suite,Kitchen,Electrical,Circuit breaker / Breaker box,Breaker will not reset,EMERGENCY
+Suite,Kitchen,Electrical,Circuit breaker / Breaker box,Gaps in box between breakers,STANDARD
+Suite,Kitchen,Electrical,Circuit breaker / Breaker box,Noise in breaker box,EMERGENCY
+Suite,Kitchen,Electrical,Circuit breaker / Breaker box,Not In List,STANDARD
+Suite,Kitchen,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Kitchen,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Kitchen,Electrical,Light Switch,Does not work,STANDARD
+Suite,Kitchen,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Kitchen,Electrical,Light Switch,Not In List,STANDARD
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Kitchen,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Kitchen,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Kitchen,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Kitchen,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Kitchen,Electrical,Outlet,No power,EMERGENCY
+Suite,Kitchen,Electrical,Outlet,Not In List,STANDARD
+Suite,Kitchen,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Kitchen,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Kitchen,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Kitchen,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Kitchen,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Kitchen,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Kitchen,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Kitchen,Fire Extinguisher,Apartment fire extinguisher,Damaged,STANDARD
+Suite,Kitchen,Fire Extinguisher,Apartment fire extinguisher,Describe,STANDARD
+Suite,Kitchen,Fire Extinguisher,Apartment fire extinguisher,Missing,STANDARD
+Suite,Kitchen,Fire Extinguisher,Apartment fire extinguisher,Recharge,STANDARD
+Suite,Kitchen,Fire Extinguisher,Other fire extinguisher,Damaged,STANDARD
+Suite,Kitchen,Fire Extinguisher,Other fire extinguisher,Describe,STANDARD
+Suite,Kitchen,Fire Extinguisher,Other fire extinguisher,Missing,STANDARD
+Suite,Kitchen,Fire Extinguisher,Other fire extinguisher,Recharge,STANDARD
+Suite,Kitchen,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Kitchen,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Kitchen,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Kitchen,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Kitchen,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Kitchen,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Kitchen,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Kitchen,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Kitchen,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Kitchen,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Kitchen,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Kitchen,Flooring,Floor General,Leak,STANDARD
+Suite,Kitchen,Flooring,Floor General,Not In List,STANDARD
+Suite,Kitchen,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Kitchen,Flooring,Hardwood,Not In List,STANDARD
+Suite,Kitchen,Flooring,Hardwood,Warped,STANDARD
+Suite,Kitchen,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Kitchen,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Kitchen,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Kitchen,Glass Door / Window,Glass Door,Broken glass,EMERGENCY
+Suite,Kitchen,Glass Door / Window,Glass Door,Door handle,STANDARD
+Suite,Kitchen,Glass Door / Window,Glass Door,Door lock,EMERGENCY
+Suite,Kitchen,Glass Door / Window,Glass Door,Not In List,STANDARD
+Suite,Kitchen,Glass Door / Window,Glass Door,Patio door pin,EMERGENCY
+Suite,Kitchen,Glass Door / Window,Glass Door,Will not slide,STANDARD
+Suite,Kitchen,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Kitchen,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Kitchen,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Kitchen,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Kitchen,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Kitchen,Glass Door / Window,Window,Will not slide / open,STANDARD
+Suite,Kitchen,Janitorial,Clean,Not In List,STANDARD
+Suite,Kitchen,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Kitchen,Pest Control,Insects,Ants,STANDARD
+Suite,Kitchen,Pest Control,Insects,Bees,STANDARD
+Suite,Kitchen,Pest Control,Insects,Fleas,STANDARD
+Suite,Kitchen,Pest Control,Insects,Not In List,STANDARD
+Suite,Kitchen,Pest Control,Insects,Roaches,STANDARD
+Suite,Kitchen,Pest Control,Insects,Scorpions,STANDARD
+Suite,Kitchen,Pest Control,Insects,Silverfish,STANDARD
+Suite,Kitchen,Pest Control,Insects,Spiders,STANDARD
+Suite,Kitchen,Pest Control,Pests,Birds,STANDARD
+Suite,Kitchen,Pest Control,Pests,Mice,STANDARD
+Suite,Kitchen,Pest Control,Pests,Not In List,STANDARD
+Suite,Kitchen,Pest Control,Pests,Rats,STANDARD
+Suite,Kitchen,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Kitchen,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Kitchen,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Kitchen,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Kitchen,Plumbing,Garbage Disposal,Bad odor,STANDARD
+Suite,Kitchen,Plumbing,Garbage Disposal,Disposal guard missing / worn,STANDARD
+Suite,Kitchen,Plumbing,Garbage Disposal,Does not grind food,STANDARD
+Suite,Kitchen,Plumbing,Garbage Disposal,Leaks,EMERGENCY
+Suite,Kitchen,Plumbing,Garbage Disposal,Makes loud noise,STANDARD
+Suite,Kitchen,Plumbing,Garbage Disposal,Not In List,STANDARD
+Suite,Kitchen,Plumbing,Garbage Disposal,Will not drain,STANDARD
+Suite,Kitchen,Plumbing,Garbage Disposal,Will not run / humming,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Faucet,Faucet drips,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Faucet,Handle broken,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Faucet,Kitchen Sprayer broken,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Faucet,Leak at faucet stem,EMERGENCY
+Suite,Kitchen,Plumbing,Kitchen Faucet,Leak at spout,EMERGENCY
+Suite,Kitchen,Plumbing,Kitchen Faucet,Low water pressure,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Faucet,No water,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Faucet,Not In List,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Faucet,Water sprays everywhere,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Sink,Clogged drain,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Sink,Disposal stopper,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Sink,Leak under sink,EMERGENCY
+Suite,Kitchen,Plumbing,Kitchen Sink,Not In List,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Sink,Sewer back-up,EMERGENCY
+Suite,Kitchen,Plumbing,Kitchen Sink,Sink Strainer basket,STANDARD
+Suite,Kitchen,Plumbing,Kitchen Sink,Sink hole cover missing,STANDARD
+Suite,Kitchen,Plumbing,Low water pressure,,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Alarm,Control panel repair,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Alarm,Not In List,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Internet,Cover plate missing,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Internet,Jack or wire repair,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Internet,Not In List,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Phone,Cover plate missing,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Phone,Jack repair,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Phone,Not In List,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,Phone,Poor reception,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,TV / Cable,No service,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,TV / Cable,Not In List,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,TV / Cable,Poor reception,STANDARD
+Suite,Kitchen,TV / Phone / Alarm / Internet,TV / Cable,Wall plate repair,STANDARD
+Suite,Kitchen,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Kitchen,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Kitchen,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Kitchen,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Kitchen,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Kitchen,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Kitchen,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Kitchen,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Kitchen,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Kitchen,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Kitchen,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Kitchen,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Kitchen,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Kitchen,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Kitchen,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Kitchen-Pantry,Carpentry,Shelves,Damaged,STANDARD
+Suite,Kitchen-Pantry,Carpentry,Shelves,Not In List,STANDARD
+Suite,Kitchen-Pantry,Carpentry,Shelves,Paint,STANDARD
+Suite,Kitchen-Pantry,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Kitchen-Pantry,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Kitchen-Pantry,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Kitchen-Pantry,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Kitchen-Pantry,Doors,Interior Doors,Door stop,STANDARD
+Suite,Kitchen-Pantry,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Kitchen-Pantry,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Kitchen-Pantry,Doors,Interior Doors,Not In List,STANDARD
+Suite,Kitchen-Pantry,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Kitchen-Pantry,Doors,Interior Doors,Will not close,STANDARD
+Suite,Kitchen-Pantry,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Kitchen-Pantry,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Kitchen-Pantry,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Kitchen-Pantry,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Kitchen-Pantry,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Kitchen-Pantry,Flooring,Floor General,Leak,EMERGENCY
+Suite,Kitchen-Pantry,Flooring,Floor General,Not In List,STANDARD
+Suite,Kitchen-Pantry,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Kitchen-Pantry,Flooring,Hardwood,Not In List,STANDARD
+Suite,Kitchen-Pantry,Flooring,Hardwood,Warped,STANDARD
+Suite,Kitchen-Pantry,Flooring,Vinyl / Tile,Needs caulked,STANDARD
+Suite,Kitchen-Pantry,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Kitchen-Pantry,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Kitchen-Pantry,Janitorial,Clean,,STANDARD
+Suite,Kitchen-Pantry,Janitorial,Deodorize,,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Insects,Ants,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Insects,Bees,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Insects,Fleas,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Insects,Not In List,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Insects,Roaches,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Insects,Scorpions,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Insects,Silverfish,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Insects,Spiders,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Pests,Birds,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Pests,Mice,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Pests,Not In List,STANDARD
+Suite,Kitchen-Pantry,Pest Control,Pests,Rats,STANDARD
+Suite,Kitchen-Pantry,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Kitchen-Pantry,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Kitchen-Pantry,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Kitchen-Pantry,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Kitchen-Pantry,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Kitchen-Pantry,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Kitchen-Pantry,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Kitchen-Pantry,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Kitchen-Pantry,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Kitchen-Pantry,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Kitchen-Pantry,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Kitchen-Pantry,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Kitchen-Pantry,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Kitchen-Pantry,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Kitchen-Pantry,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Laundry Room,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Condensing unit outside makes excessive noise,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Condensing unit outside runs when inside unit is off,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Cover panel repair,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Fan makes noise,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Replace filter,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,T-stat repair,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Air Conditioning,Water leak from condensation overflow,EMERGENCY
+Suite,Living Room,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Heat,Replace filter,STANDARD
+Suite,Living Room,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Living Room,Blinds,Mini - Blind,Falling or has fallen,STANDARD
+Suite,Living Room,Blinds,Mini - Blind,Not In List,STANDARD
+Suite,Living Room,Blinds,Mini - Blind,Replace blind,STANDARD
+Suite,Living Room,Blinds,Mini - Blind,Tilt wand repair,STANDARD
+Suite,Living Room,Blinds,Mini - Blind,Will not lower,STANDARD
+Suite,Living Room,Blinds,Mini - Blind,Will not raise,STANDARD
+Suite,Living Room,Blinds,Mini - Blind,Will not tilt,STANDARD
+Suite,Living Room,Blinds,Vertical blind,Broken or missing slat,STANDARD
+Suite,Living Room,Blinds,Vertical blind,Falling or has fallen,STANDARD
+Suite,Living Room,Blinds,Vertical blind,Not In List,STANDARD
+Suite,Living Room,Blinds,Vertical blind,Replace blind,STANDARD
+Suite,Living Room,Blinds,Vertical blind,Will not close,STANDARD
+Suite,Living Room,Blinds,Vertical blind,Will not open,STANDARD
+Suite,Living Room,Blinds,Vertical blind,Will not tilt,STANDARD
+Suite,Living Room,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Living Room,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Living Room,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Living Room,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Living Room,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Living Room,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Living Room,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Living Room,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Living Room,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Living Room,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Living Room,Carpentry,Desk,Damaged,STANDARD
+Suite,Living Room,Carpentry,Desk,Not In List,STANDARD
+Suite,Living Room,Carpentry,Shelves,Damaged,STANDARD
+Suite,Living Room,Carpentry,Shelves,Not In List,STANDARD
+Suite,Living Room,Carpentry,Shelves,Paint,STANDARD
+Suite,Living Room,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Living Room,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Living Room,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Living Room,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Living Room,Carpentry,Window sill,Damaged,STANDARD
+Suite,Living Room,Carpentry,Window sill,Not In List,STANDARD
+Suite,Living Room,Carpentry,Window sill,Paint,STANDARD
+Suite,Living Room,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Living Room,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Living Room,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Living Room,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Living Room,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Living Room,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Living Room,Doors,Interior Doors,Deadbolt repair,EMERGENCY
+Suite,Living Room,Doors,Interior Doors,Door stop,STANDARD
+Suite,Living Room,Doors,Interior Doors,Hard to open,EMERGENCY
+Suite,Living Room,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Living Room,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Living Room,Doors,Interior Doors,Not In List,STANDARD
+Suite,Living Room,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Living Room,Doors,Interior Doors,Will not close,STANDARD
+Suite,Living Room,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Living Room,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Living Room,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Living Room,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Living Room,Electrical,Circuit breaker / Breaker box,Breaker trips,EMERGENCY
+Suite,Living Room,Electrical,Circuit breaker / Breaker box,Breaker will not reset,EMERGENCY
+Suite,Living Room,Electrical,Circuit breaker / Breaker box,Gaps in box between breakers,STANDARD
+Suite,Living Room,Electrical,Circuit breaker / Breaker box,Noise in breaker box,EMERGENCY
+Suite,Living Room,Electrical,Circuit breaker / Breaker box,Not In List,STANDARD
+Suite,Living Room,Electrical,Door Chime,Button repair,STANDARD
+Suite,Living Room,Electrical,Door Chime,Cosmetic repair,STANDARD
+Suite,Living Room,Electrical,Door Chime,Not In List,STANDARD
+Suite,Living Room,Electrical,Door Chime,Will not work,STANDARD
+Suite,Living Room,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Living Room,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Living Room,Electrical,Light Switch,Does not work,STANDARD
+Suite,Living Room,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Living Room,Electrical,Light Switch,Not In List,STANDARD
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Living Room,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Living Room,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Living Room,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Living Room,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Living Room,Electrical,Outlet,No power,EMERGENCY
+Suite,Living Room,Electrical,Outlet,Not In List,STANDARD
+Suite,Living Room,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Living Room,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Living Room,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Living Room,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Living Room,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Living Room,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Living Room,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Living Room,Fire Extinguisher,Apartment fire extinguisher,Damaged,STANDARD
+Suite,Living Room,Fire Extinguisher,Apartment fire extinguisher,Describe,STANDARD
+Suite,Living Room,Fire Extinguisher,Apartment fire extinguisher,Missing,STANDARD
+Suite,Living Room,Fire Extinguisher,Apartment fire extinguisher,Recharge,STANDARD
+Suite,Living Room,Fire Extinguisher,Other fire extinguisher,Damaged,STANDARD
+Suite,Living Room,Fire Extinguisher,Other fire extinguisher,Describe,STANDARD
+Suite,Living Room,Fire Extinguisher,Other fire extinguisher,Missing,STANDARD
+Suite,Living Room,Fire Extinguisher,Other fire extinguisher,Recharge,STANDARD
+Suite,Living Room,Fireplace,Clogged,,STANDARD
+Suite,Living Room,Fireplace,Door,,STANDARD
+Suite,Living Room,Fireplace,Fireplace not staying on,,STANDARD
+Suite,Living Room,Fireplace,Pilot light out,,STANDARD
+Suite,Living Room,Fireplace,Screen,,STANDARD
+Suite,Living Room,Fireplace,Start pilot light,,STANDARD
+Suite,Living Room,Fireplace,Switch not working,,STANDARD
+Suite,Living Room,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Living Room,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Living Room,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Living Room,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Living Room,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Living Room,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Living Room,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Living Room,Flooring,Ceramic Tile,Broken tile,STANDARD
+Suite,Living Room,Flooring,Ceramic Tile,Grout repair,STANDARD
+Suite,Living Room,Flooring,Ceramic Tile,Loose tile,STANDARD
+Suite,Living Room,Flooring,Ceramic Tile,Not In List,STANDARD
+Suite,Living Room,Flooring,Common Hall / Breezeway Carpet,Carpet bar repair,STANDARD
+Suite,Living Room,Flooring,Common Hall / Breezeway Carpet,Clean carpet,STANDARD
+Suite,Living Room,Flooring,Common Hall / Breezeway Carpet,Not In List,STANDARD
+Suite,Living Room,Flooring,Common Hall / Breezeway Carpet,Repair carpet,STANDARD
+Suite,Living Room,Flooring,Common Hall / Breezeway Carpet,Replace carpet,STANDARD
+Suite,Living Room,Flooring,Common Hall / Breezeway Carpet,Stretch carpet,STANDARD
+Suite,Living Room,Flooring,Common Hall / Breezeway Carpet,Wet Vac,EMERGENCY
+Suite,Living Room,Flooring,Floor General,Leak,EMERGENCY
+Suite,Living Room,Flooring,Floor General,Not In List,STANDARD
+Suite,Living Room,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Living Room,Flooring,Hardwood,Not In List,STANDARD
+Suite,Living Room,Flooring,Hardwood,Warped,STANDARD
+Suite,Living Room,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Living Room,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Living Room,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Living Room,Glass Door / Window,Glass Door,Broken glass,EMERGENCY
+Suite,Living Room,Glass Door / Window,Glass Door,Door handle,STANDARD
+Suite,Living Room,Glass Door / Window,Glass Door,Door lock,STANDARD
+Suite,Living Room,Glass Door / Window,Glass Door,Not In List,STANDARD
+Suite,Living Room,Glass Door / Window,Glass Door,Patio door pin,EMERGENCY
+Suite,Living Room,Glass Door / Window,Glass Door,Will not slide,EMERGENCY
+Suite,Living Room,Glass Door / Window,Window,Broken glass,EMERGENCY
+Suite,Living Room,Glass Door / Window,Window,Fogged,STANDARD
+Suite,Living Room,Glass Door / Window,Window,Lock,EMERGENCY
+Suite,Living Room,Glass Door / Window,Window,Not In List,STANDARD
+Suite,Living Room,Glass Door / Window,Window,Will not close,EMERGENCY
+Suite,Living Room,Glass Door / Window,Window,Will not slide / open,EMERGENCY
+Suite,Living Room,Janitorial,Clean,Not In List,STANDARD
+Suite,Living Room,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Living Room,Pest Control,Insects,Ants,STANDARD
+Suite,Living Room,Pest Control,Insects,Bees,STANDARD
+Suite,Living Room,Pest Control,Insects,Fleas,STANDARD
+Suite,Living Room,Pest Control,Insects,Not In List,STANDARD
+Suite,Living Room,Pest Control,Insects,Roaches,STANDARD
+Suite,Living Room,Pest Control,Insects,Scorpions,STANDARD
+Suite,Living Room,Pest Control,Insects,Silverfish,STANDARD
+Suite,Living Room,Pest Control,Insects,Spiders,STANDARD
+Suite,Living Room,Pest Control,Pests,Birds,STANDARD
+Suite,Living Room,Pest Control,Pests,Mice,STANDARD
+Suite,Living Room,Pest Control,Pests,Not In List,STANDARD
+Suite,Living Room,Pest Control,Pests,Rats,STANDARD
+Suite,Living Room,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Living Room,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Living Room,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Living Room,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,Alarm,Control panel repair,EMERGENCY
+Suite,Living Room,TV / Phone / Alarm / Internet,Alarm,Not In List,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,Internet,Cover plate missing,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,Internet,Jack or wire repair,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,Internet,Not In List,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,Phone,Cover plate missing,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,Phone,Jack repair,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,Phone,Not In List,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,Phone,Poor reception,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,TV / Cable,No service,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,TV / Cable,Not In List,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,TV / Cable,Poor reception,STANDARD
+Suite,Living Room,TV / Phone / Alarm / Internet,TV / Cable,Wall plate repair,STANDARD
+Suite,Living Room,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Living Room,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Living Room,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Living Room,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Living Room,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Living Room,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Living Room,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Living Room,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Living Room,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Living Room,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Living Room,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Living Room,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Living Room,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Living Room,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Living Room,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Plumbing,Bathroom - Master,Low water pressure,,STANDARD
+Suite,Stairway,Carpentry,Handrail / Bannister,Damaged,STANDARD
+Suite,Stairway,Carpentry,Handrail / Bannister,Not In List,STANDARD
+Suite,Stairway,Carpentry,Handrail / Bannister,Paint,STANDARD
+Suite,Stairway,Carpentry,Shelves,Damaged,STANDARD
+Suite,Stairway,Carpentry,Shelves,Not In List,STANDARD
+Suite,Stairway,Carpentry,Shelves,Paint,STANDARD
+Suite,Stairway,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Stairway,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Stairway,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Stairway,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Stairway,Electrical,Door Chime,Button repair,STANDARD
+Suite,Stairway,Electrical,Door Chime,Cosmetic repair,STANDARD
+Suite,Stairway,Electrical,Door Chime,Not In List,STANDARD
+Suite,Stairway,Electrical,Door Chime,Will not work,STANDARD
+Suite,Stairway,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Stairway,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Stairway,Electrical,Light Switch,Does not work,STANDARD
+Suite,Stairway,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Stairway,Electrical,Light Switch,Not In List,STANDARD
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Stairway,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Stairway,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Stairway,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Stairway,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Stairway,Electrical,Outlet,No power,EMERGENCY
+Suite,Stairway,Electrical,Outlet,Not In List,STANDARD
+Suite,Stairway,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Stairway,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Stairway,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Stairway,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Stairway,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Stairway,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Stairway,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Stairway,Flooring,Apartment Carpet,Carpet bar repair,STANDARD
+Suite,Stairway,Flooring,Apartment Carpet,Clean carpet,STANDARD
+Suite,Stairway,Flooring,Apartment Carpet,Not In List,STANDARD
+Suite,Stairway,Flooring,Apartment Carpet,Repair carpet,STANDARD
+Suite,Stairway,Flooring,Apartment Carpet,Replace carpet,STANDARD
+Suite,Stairway,Flooring,Apartment Carpet,Stretch carpet,STANDARD
+Suite,Stairway,Flooring,Apartment Carpet,Wet Vac,EMERGENCY
+Suite,Stairway,Flooring,Floor General,Leak,EMERGENCY
+Suite,Stairway,Flooring,Floor General,Not In List,STANDARD
+Suite,Stairway,Flooring,Hardwood,Loose boards,STANDARD
+Suite,Stairway,Flooring,Hardwood,Not In List,STANDARD
+Suite,Stairway,Flooring,Hardwood,Warped,STANDARD
+Suite,Stairway,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Stairway,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Stairway,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Stairway,Janitorial,Clean,Not In List,STANDARD
+Suite,Stairway,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Stairway,Pest Control,Insects,Ants,STANDARD
+Suite,Stairway,Pest Control,Insects,Bees,STANDARD
+Suite,Stairway,Pest Control,Insects,Fleas,STANDARD
+Suite,Stairway,Pest Control,Insects,Not In List,STANDARD
+Suite,Stairway,Pest Control,Insects,Roaches,STANDARD
+Suite,Stairway,Pest Control,Insects,Scorpions,STANDARD
+Suite,Stairway,Pest Control,Insects,Silverfish,STANDARD
+Suite,Stairway,Pest Control,Insects,Spiders,STANDARD
+Suite,Stairway,Pest Control,Pests,Birds,STANDARD
+Suite,Stairway,Pest Control,Pests,Mice,STANDARD
+Suite,Stairway,Pest Control,Pests,Not In List,STANDARD
+Suite,Stairway,Pest Control,Pests,Rats,STANDARD
+Suite,Stairway,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Stairway,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Stairway,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Stairway,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Stairway,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Stairway,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Stairway,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Stairway,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Stairway,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Stairway,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Stairway,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Stairway,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Stairway,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Stairway,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Stairway,Walls / Ceiling,Walls,Stress crack repair,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Adjust Vent,,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Area of apartment does not cool,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Blowing cool air,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Condensing unit outside makes excessive noise,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Condensing unit outside runs when inside unit is off,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Cover panel repair,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Does not cool fan not running,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Does not cool fan running,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Fan makes noise,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,No air blowing from vents but unit is running,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Not In List,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Replace filter,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,T-stat repair,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Vent repair,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Air Conditioning,Water leak from condensation overflow,EMERGENCY
+Suite,Utility / Laundry,Air Conditioning / Heat,Heat,Area of apartment will not heat,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Heat,Fan blowing will not heat,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Heat,Fan not blowing will not heat,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Heat,Not In List,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Heat,Replace filter,STANDARD
+Suite,Utility / Laundry,Air Conditioning / Heat,Heat,Vent repair,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Cosmetic repair,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Dryer hose repair,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Dryer not heating,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Dryer not spinning,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Dryer takes too long to dry clothes,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Light not working,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Lint filter repair,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Move dryer,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Not In List,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Not level,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Selector knob repair,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Timer knob repair,STANDARD
+Suite,Utility / Laundry,Appliance,Dryer,Won’t turn off,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Clothes wet when removed from machine,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Cosmetic repair,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Does not drain,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Hose repair,EMERGENCY
+Suite,Utility / Laundry,Appliance,Washer,Leak,EMERGENCY
+Suite,Utility / Laundry,Appliance,Washer,Move washer,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Not In List,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Out of balance,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Selector knob repair,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Timer knob repair,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Will not cycle,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Will not fill,STANDARD
+Suite,Utility / Laundry,Appliance,Washer,Will not spin,STANDARD
+Suite,Utility / Laundry,Carpentry,Cabinets  Upper / Base,Bottom repair,STANDARD
+Suite,Utility / Laundry,Carpentry,Cabinets  Upper / Base,Door repair,STANDARD
+Suite,Utility / Laundry,Carpentry,Cabinets  Upper / Base,Drawer repair,STANDARD
+Suite,Utility / Laundry,Carpentry,Cabinets  Upper / Base,Handle repair,STANDARD
+Suite,Utility / Laundry,Carpentry,Cabinets  Upper / Base,Hinge repair,STANDARD
+Suite,Utility / Laundry,Carpentry,Cabinets  Upper / Base,Not In List,STANDARD
+Suite,Utility / Laundry,Carpentry,Cabinets  Upper / Base,Shelf repair,STANDARD
+Suite,Utility / Laundry,Carpentry,Counter Top / Vanity,Caulk needed,STANDARD
+Suite,Utility / Laundry,Carpentry,Counter Top / Vanity,Damaged,STANDARD
+Suite,Utility / Laundry,Carpentry,Counter Top / Vanity,Not In List,STANDARD
+Suite,Utility / Laundry,Carpentry,Desk,Damaged,STANDARD
+Suite,Utility / Laundry,Carpentry,Desk,Not In List,STANDARD
+Suite,Utility / Laundry,Carpentry,Shelves,Damaged,STANDARD
+Suite,Utility / Laundry,Carpentry,Shelves,Not In List,STANDARD
+Suite,Utility / Laundry,Carpentry,Shelves,Paint,STANDARD
+Suite,Utility / Laundry,Carpentry,Trim / Base boards / Crown mold,Damaged,STANDARD
+Suite,Utility / Laundry,Carpentry,Trim / Base boards / Crown mold,Missing,STANDARD
+Suite,Utility / Laundry,Carpentry,Trim / Base boards / Crown mold,Not In List,STANDARD
+Suite,Utility / Laundry,Carpentry,Trim / Base boards / Crown mold,Paint,STANDARD
+Suite,Utility / Laundry,Doors,Bi-fold Doors,Falling down,STANDARD
+Suite,Utility / Laundry,Doors,Bi-fold Doors,Knob repair,STANDARD
+Suite,Utility / Laundry,Doors,Bi-fold Doors,Not In List,STANDARD
+Suite,Utility / Laundry,Doors,Bi-fold Doors,Will not close,STANDARD
+Suite,Utility / Laundry,Doors,Bi-fold Doors,Will not open,STANDARD
+Suite,Utility / Laundry,Doors,Bi-fold Doors,Will not stay on track,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Deadbolt repair,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Door stop,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Hard to open,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Hinge repair,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Locking knob repair,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Not In List,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Passage knob repair,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Will not close,STANDARD
+Suite,Utility / Laundry,Doors,Interior Doors,Will not latch,STANDARD
+Suite,Utility / Laundry,Doors,Sliding Doors,Comes off track,STANDARD
+Suite,Utility / Laundry,Doors,Sliding Doors,Not In List,STANDARD
+Suite,Utility / Laundry,Doors,Sliding Doors,Will not slide,STANDARD
+Suite,Utility / Laundry,Electrical,Circuit breaker / Breaker box,Breaker trips,EMERGENCY
+Suite,Utility / Laundry,Electrical,Circuit breaker / Breaker box,Breaker will not reset,EMERGENCY
+Suite,Utility / Laundry,Electrical,Circuit breaker / Breaker box,Gaps in box between breakers,STANDARD
+Suite,Utility / Laundry,Electrical,Circuit breaker / Breaker box,Noise in breaker box,EMERGENCY
+Suite,Utility / Laundry,Electrical,Circuit breaker / Breaker box,Not In List,STANDARD
+Suite,Utility / Laundry,Electrical,Light Switch,Cover plate repair,STANDARD
+Suite,Utility / Laundry,Electrical,Light Switch,Dimmer does not work,STANDARD
+Suite,Utility / Laundry,Electrical,Light Switch,Does not work,STANDARD
+Suite,Utility / Laundry,Electrical,Light Switch,Loose from wall,STANDARD
+Suite,Utility / Laundry,Electrical,Light Switch,Not In List,STANDARD
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Cosmetic repair,STANDARD
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Fan does not work,STANDARD
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Flickers,EMERGENCY
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Globe / Lens repair,STANDARD
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Light is dim,EMERGENCY
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Not In List,STANDARD
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Not balanced,STANDARD
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Pull chain repair,STANDARD
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Pulling loose from ceiling / wall,EMERGENCY
+Suite,Utility / Laundry,Electrical,Light fixture / Ceiling fan,Will not come on / bulb out,STANDARD
+Suite,Utility / Laundry,Electrical,Outlet,Cover plate repair,STANDARD
+Suite,Utility / Laundry,Electrical,Outlet,GFI will not reset,EMERGENCY
+Suite,Utility / Laundry,Electrical,Outlet,Loose from wall,STANDARD
+Suite,Utility / Laundry,Electrical,Outlet,No power,EMERGENCY
+Suite,Utility / Laundry,Electrical,Outlet,Not In List,STANDARD
+Suite,Utility / Laundry,Electrical,Outlet,Sparks,EMERGENCY
+Suite,Utility / Laundry,Electrical,Smoke Detector,Chirps,STANDARD
+Suite,Utility / Laundry,Electrical,Smoke Detector,False alarms,STANDARD
+Suite,Utility / Laundry,Electrical,Smoke Detector,Loose from wall / Ceiling,STANDARD
+Suite,Utility / Laundry,Electrical,Smoke Detector,Not In List,STANDARD
+Suite,Utility / Laundry,Electrical,Smoke Detector,Replace battery,STANDARD
+Suite,Utility / Laundry,Electrical,Smoke Detector,Will not work,STANDARD
+Suite,Utility / Laundry,Fire Extinguisher,Apartment fire extinguisher,Damaged,STANDARD
+Suite,Utility / Laundry,Fire Extinguisher,Apartment fire extinguisher,Describe,STANDARD
+Suite,Utility / Laundry,Fire Extinguisher,Apartment fire extinguisher,Missing,STANDARD
+Suite,Utility / Laundry,Fire Extinguisher,Apartment fire extinguisher,Recharge,STANDARD
+Suite,Utility / Laundry,Fire Extinguisher,Other fire extinguisher,Damaged,STANDARD
+Suite,Utility / Laundry,Fire Extinguisher,Other fire extinguisher,Describe,STANDARD
+Suite,Utility / Laundry,Fire Extinguisher,Other fire extinguisher,Missing,STANDARD
+Suite,Utility / Laundry,Fire Extinguisher,Other fire extinguisher,Recharge,STANDARD
+Suite,Utility / Laundry,Flooring,Floor General,Leak,EMERGENCY
+Suite,Utility / Laundry,Flooring,Floor General,Not In List,STANDARD
+Suite,Utility / Laundry,Flooring,Vinyl / Tile,Needs caulk,STANDARD
+Suite,Utility / Laundry,Flooring,Vinyl / Tile,Not In List,STANDARD
+Suite,Utility / Laundry,Flooring,Vinyl / Tile,Tile loose,STANDARD
+Suite,Utility / Laundry,Janitorial,Clean,Not In List,STANDARD
+Suite,Utility / Laundry,Janitorial,Deodorize,Not In List,STANDARD
+Suite,Utility / Laundry,Pest Control,Insects,Ants,STANDARD
+Suite,Utility / Laundry,Pest Control,Insects,Bees,STANDARD
+Suite,Utility / Laundry,Pest Control,Insects,Fleas,STANDARD
+Suite,Utility / Laundry,Pest Control,Insects,Not In List,STANDARD
+Suite,Utility / Laundry,Pest Control,Insects,Roaches,STANDARD
+Suite,Utility / Laundry,Pest Control,Insects,Scorpions,STANDARD
+Suite,Utility / Laundry,Pest Control,Insects,Silverfish,STANDARD
+Suite,Utility / Laundry,Pest Control,Insects,Spiders,STANDARD
+Suite,Utility / Laundry,Pest Control,Pests,Birds,STANDARD
+Suite,Utility / Laundry,Pest Control,Pests,Mice,STANDARD
+Suite,Utility / Laundry,Pest Control,Pests,Not In List,STANDARD
+Suite,Utility / Laundry,Pest Control,Pests,Rats,STANDARD
+Suite,Utility / Laundry,Plumbing,Fire Sprinkler Head,Beauty ring repair,STANDARD
+Suite,Utility / Laundry,Plumbing,Fire Sprinkler Head,Head leaks,EMERGENCY
+Suite,Utility / Laundry,Plumbing,Fire Sprinkler Head,Not In List,STANDARD
+Suite,Utility / Laundry,Plumbing,Fire Sprinkler Head,Paint on head,STANDARD
+Suite,Utility / Laundry,Plumbing,Water Heater,Leak,EMERGENCY
+Suite,Utility / Laundry,Plumbing,Water Heater,No hot water,STANDARD
+Suite,Utility / Laundry,Plumbing,Water Heater,Not In List,STANDARD
+Suite,Utility / Laundry,Plumbing,Water Heater,Water heater leaking,EMERGENCY
+Suite,Utility / Laundry,Plumbing,Water Heater,Water too hot,EMERGENCY
+Suite,Utility / Laundry,Walls / Ceiling,Ceiling,Leak,EMERGENCY
+Suite,Utility / Laundry,Walls / Ceiling,Ceiling,Leaks from apartment above,EMERGENCY
+Suite,Utility / Laundry,Walls / Ceiling,Ceiling,Leaks when it rains,EMERGENCY
+Suite,Utility / Laundry,Walls / Ceiling,Ceiling,Not In List,STANDARD
+Suite,Utility / Laundry,Walls / Ceiling,Ceiling,Paint,STANDARD
+Suite,Utility / Laundry,Walls / Ceiling,Ceiling,Roof leak,EMERGENCY
+Suite,Utility / Laundry,Walls / Ceiling,Ceiling,Sheetrock repair,STANDARD
+Suite,Utility / Laundry,Walls / Ceiling,Ceiling,Stress crack repair,STANDARD
+Suite,Utility / Laundry,Walls / Ceiling,Walls,Leak,EMERGENCY
+Suite,Utility / Laundry,Walls / Ceiling,Walls,Leaks from apartment above,EMERGENCY
+Suite,Utility / Laundry,Walls / Ceiling,Walls,Leaks when it rains,EMERGENCY
+Suite,Utility / Laundry,Walls / Ceiling,Walls,Not In List,STANDARD
+Suite,Utility / Laundry,Walls / Ceiling,Walls,Paint,STANDARD
+Suite,Utility / Laundry,Walls / Ceiling,Walls,Sheetrock repair,STANDARD
+Suite,Utility / Laundry,Walls / Ceiling,Walls,Stress crack repair,STANDARD

@@ -13,14 +13,17 @@
  */
 package com.propertyvista.common.client.ui.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.validators.ValidationResults;
 
+import com.propertyvista.domain.maintenance.IssueElementType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 
@@ -37,6 +40,8 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     private MaintenanceRequestCategoryChoice parent;
 
     private MaintenanceRequestMetadata meta;
+
+    private boolean isForUnit = true;
 
     private LoadOptionsMode optionsMode = LoadOptionsMode.EMPTY_SET;
 
@@ -133,9 +138,9 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         return !opt.isEmpty() && opt.name().isNull();
     }
 
-    // must be called only once
-    public void setOptionsMeta(MaintenanceRequestMetadata meta) {
+    public void setOptionsMeta(MaintenanceRequestMetadata meta, boolean isForUnit) {
         this.meta = meta;
+        this.isForUnit = isForUnit;
         if (isEditable()) {
             // refresh options in case this call comes after setValue()
             optionsMode = LoadOptionsMode.REFRESH;
@@ -144,7 +149,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
             setVisible(parent == null);
         }
         if (parent != null) {
-            parent.setOptionsMeta(meta);
+            parent.setOptionsMeta(meta, isForUnit);
         }
     }
 
@@ -197,7 +202,8 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
             if (parent != null && parent.getValue() != null) {
                 MaintenanceRequestCategory metaValue = findMetaEntry(parent.getValue(), null);
                 if (metaValue != null) {
-                    setOptions(metaValue.subCategories());
+                    setOptions(filterCategories(metaValue.subCategories()));
+
                 }
             }
             break;
@@ -210,14 +216,27 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
                 if (value != null && !value.isNull() && value.parent() != null) {
                     MaintenanceRequestCategory metaValue = findMetaEntry(value.parent(), null);
                     if (metaValue != null) {
-                        setOptions(metaValue.subCategories());
+                        setOptions(filterCategories(metaValue.subCategories()));
                     }
                 }
             } else {
-                setOptions(meta != null ? meta.rootCategory().subCategories() : null);
+                setOptions(meta != null ? filterCategories(meta.rootCategory().subCategories()) : null);
             }
             break;
         }
+    }
+
+    private List<MaintenanceRequestCategory> filterCategories(IList<MaintenanceRequestCategory> subCategories) {
+        if (subCategories == null) {
+            return null;
+        }
+        List<MaintenanceRequestCategory> categories = new ArrayList<MaintenanceRequestCategory>();
+        for (MaintenanceRequestCategory c : subCategories) {
+            if ((c.type() == null || c.type().isNull() || (c.type().getValue().equals(IssueElementType.ApartmentUnit) && isForUnit) || (!isForUnit && !c.type()
+                    .getValue().equals(IssueElementType.ApartmentUnit))))
+                categories.add(c);
+        }
+        return categories;
     }
 
     protected void onParentChange() {
