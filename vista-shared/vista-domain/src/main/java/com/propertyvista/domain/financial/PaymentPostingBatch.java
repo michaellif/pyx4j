@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 
+@DiscriminatorValue("PaymentPostingBatch")
 public interface PaymentPostingBatch extends IEntity, HasNotesAndAttachments {
 
     @I18n
