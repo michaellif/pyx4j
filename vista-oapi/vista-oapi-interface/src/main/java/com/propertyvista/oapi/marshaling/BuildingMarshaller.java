@@ -47,7 +47,7 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
         Persistence.service().retrieve(building.contacts().propertyContacts());
         buildingIO.contacts = ContactMarshaller.getInstance().marshal(building.contacts().propertyContacts());
 
-        Persistence.ensureRetrieveMember(building.media(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.media(), AttachLevel.Attached);
         buildingIO.medias = MediaMarshaller.getInstance().marshal(building.media());
 
         Persistence.service().retrieveMember(building.amenities());

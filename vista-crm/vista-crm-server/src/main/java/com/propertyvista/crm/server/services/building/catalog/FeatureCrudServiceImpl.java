@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.building.catalog;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
@@ -51,11 +52,11 @@ public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> imp
         /*
          * catalog retrieving is necessary for building element filtering by catalog().building() in @link FeatureItemEditor
          */
-        Persistence.service().retrieve(to.catalog());
-        Persistence.service().retrieve(to.version().items());
+        Persistence.service().retrieveMember(to.catalog());
+        Persistence.service().retrieveMember(to.version().items());
         // next level:
         for (ProductItem item : to.version().items()) {
-            Persistence.service().retrieve(item.element());
+            Persistence.ensureRetrieve(item.element(), AttachLevel.Attached);
         }
     }
 

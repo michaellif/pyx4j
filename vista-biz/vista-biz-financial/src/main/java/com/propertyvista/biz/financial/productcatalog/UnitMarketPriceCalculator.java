@@ -47,7 +47,7 @@ public class UnitMarketPriceCalculator {
             Persistence.service().retrieveMember(productCatalog.services());
             for (Service service : productCatalog.services()) {
                 if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
-                    Persistence.ensureRetrieveMember(service.version().items(), AttachLevel.Attached);
+                    Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
                 }
             }
         }

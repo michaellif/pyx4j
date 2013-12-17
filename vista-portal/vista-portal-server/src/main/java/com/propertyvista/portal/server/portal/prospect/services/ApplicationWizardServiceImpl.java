@@ -69,10 +69,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     public void init(AsyncCallback<OnlineApplicationDTO> callback) {
         OnlineApplication bo = ProspectPortalContext.getOnlineApplication();
 
-        Persistence.ensureRetrieveMember(bo.masterOnlineApplication(), AttachLevel.Attached);
-        Persistence.ensureRetrieveMember(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieveMember(bo.masterOnlineApplication().leaseApplication().lease().unit().building(), AttachLevel.Attached);
-        Persistence.ensureRetrieveMember(bo.masterOnlineApplication().leaseApplication().lease().unit().floorplan(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.masterOnlineApplication(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease().unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease().unit().floorplan(), AttachLevel.Attached);
 
         OnlineApplicationDTO to = EntityFactory.create(OnlineApplicationDTO.class);
 
@@ -283,7 +283,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private String retrieveUtilities(AptUnit unit) {
         assert (!unit.building().isValueDetached());
 
-        Persistence.ensureRetrieveMember(unit.building().utilities(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(unit.building().utilities(), AttachLevel.ToStringMembers);
 
         String res = new String();
         for (BuildingUtility utility : unit.building().utilities()) {

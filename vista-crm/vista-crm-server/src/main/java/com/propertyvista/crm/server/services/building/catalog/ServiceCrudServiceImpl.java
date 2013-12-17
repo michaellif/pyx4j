@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
@@ -60,21 +61,21 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
          * (lister filtering by catalog().building() in @link ServiceItemFolder.AddItem())
          * and building element filtering in ServiceItemEditor
          */
-        Persistence.service().retrieve(to.catalog());
+        Persistence.service().retrieveMember(to.catalog());
 
-        Persistence.service().retrieve(to.version().items());
-        Persistence.service().retrieve(to.version().features());
-        Persistence.service().retrieve(to.version().concessions());
+        Persistence.service().retrieveMember(to.version().items());
+        Persistence.service().retrieveMember(to.version().features());
+        Persistence.service().retrieveMember(to.version().concessions());
 
         // next level:
         for (ProductItem item : to.version().items()) {
-            Persistence.service().retrieve(item.element());
+            Persistence.ensureRetrieve(item.element(), AttachLevel.Attached);
         }
         for (Feature feature : to.version().features()) {
-            Persistence.service().retrieve(feature.version().items());
+            Persistence.service().retrieveMember(feature.version().items());
             // next level:
             for (ProductItem item : feature.version().items()) {
-                Persistence.service().retrieve(item.element());
+                Persistence.ensureRetrieve(item.element(), AttachLevel.Attached);
             }
         }
     }

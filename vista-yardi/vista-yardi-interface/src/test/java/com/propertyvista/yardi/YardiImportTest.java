@@ -428,7 +428,7 @@ public class YardiImportTest extends YardiTestBase {
             Service service = Persistence.service().retrieve(criteria);
 
             assertNotNull("Unit Rent Service", service);
-            Persistence.ensureRetrieveMember(service.version().items(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
             assertTrue("Unit Rent Service items", !service.version().items().isEmpty());
         }
 
@@ -439,7 +439,7 @@ public class YardiImportTest extends YardiTestBase {
             Feature feature = Persistence.service().retrieve(criteria);
 
             assertNotNull("Indoor Parking Feature", feature);
-            Persistence.ensureRetrieveMember(feature.version().items(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
             assertTrue("Indoor Parking Feature items", !feature.version().items().isEmpty());
         }
 
@@ -450,7 +450,7 @@ public class YardiImportTest extends YardiTestBase {
             Feature feature = Persistence.service().retrieve(criteria);
 
             assertNotNull("Outdoor Parking Feature", feature);
-            Persistence.ensureRetrieveMember(feature.version().items(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
             assertTrue("Outdoor Parking Feature items", !feature.version().items().isEmpty());
         }
 
@@ -461,7 +461,7 @@ public class YardiImportTest extends YardiTestBase {
             Feature feature = Persistence.service().retrieve(criteria);
 
             assertNotNull("Samll Locker Feature", feature);
-            Persistence.ensureRetrieveMember(feature.version().items(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
             assertTrue("Samll Locker Feature items", !feature.version().items().isEmpty());
         }
 
@@ -472,7 +472,7 @@ public class YardiImportTest extends YardiTestBase {
             Feature feature = Persistence.service().retrieve(criteria);
 
             assertNotNull("Medium Locker Feature", feature);
-            Persistence.ensureRetrieveMember(feature.version().items(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
             assertTrue("Medium Locker Feature items", !feature.version().items().isEmpty());
         }
     }

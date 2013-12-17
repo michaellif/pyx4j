@@ -188,7 +188,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         ProductItem serviceItem = lease.currentTerm().version().leaseProducts().serviceItem().item();
         Persistence.service().retrieve(serviceItem.product());
         Service.ServiceV service = serviceItem.product().cast();
-        Persistence.service().retrieve(service.features());
+        Persistence.ensureRetrieve(service.features(), AttachLevel.Attached);
 
         ARCode arCode = getDataModel(ARCodeDataModel.class).getARCode(code);
 
@@ -196,7 +196,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
             if (arCode.equals(feature.code())) {
 
-                Persistence.ensureRetrieveMember(feature.version().items(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                 for (ProductItem item : feature.version().items()) {
 
                     LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);

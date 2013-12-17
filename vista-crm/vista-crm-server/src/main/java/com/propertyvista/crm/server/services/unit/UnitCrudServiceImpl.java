@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.unit;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -120,7 +121,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
         for (Service service : Persistence.secureQuery(criteria)) {
             if (!service.isDefaultCatalogItem().isBooleanTrue()) {
-                Persistence.service().retrieve(service.version().items());
+                Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
                 for (ProductItem item : service.version().items()) {
                     if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
                         AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);

@@ -144,12 +144,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(in, to, retrieveTarget);
 
-        Persistence.service().retrieve(to.lease());
-        Persistence.service().retrieve(to.version().utilities());
+        Persistence.service().retrieveMember(to.lease());
+        Persistence.service().retrieveMember(to.version().utilities());
 
         to.carryforwardBalance().setValue(to.lease().billingAccount().carryforwardBalance().getValue());
         if (in.getPrimaryKey() != null) {
-            Persistence.service().retrieve(to.version().tenants());
+            Persistence.service().retrieveMember(to.version().tenants());
         }
         for (LeaseTermTenant item : to.version().tenants()) {
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(to.lease(), item, AttachLevel.ToStringMembers);
@@ -157,7 +157,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
 
         if (in.getPrimaryKey() != null) {
-            Persistence.service().retrieve(to.version().guarantors());
+            Persistence.service().retrieveMember(to.version().guarantors());
         }
         for (LeaseTermGuarantor item : to.version().guarantors()) {
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(to.lease(), item, AttachLevel.ToStringMembers);
@@ -239,10 +239,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     // Internals:
     private void loadDetachedProducts(LeaseTermDTO dto) {
-        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
+        Persistence.ensureRetrieve(dto.version().leaseProducts().serviceItem().item().product(), AttachLevel.Attached);
 
         for (BillableItem item : dto.version().leaseProducts().featureItems()) {
-            Persistence.service().retrieve(item.item().product());
+            Persistence.ensureRetrieve(item.item().product(), AttachLevel.Attached);
         }
     }
 
@@ -267,7 +267,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // find the service by Service item:
         Service.ServiceV selectedService = null;
-        Persistence.service().retrieve(serviceItem.product());
+        Persistence.ensureRetrieve(serviceItem.product(), AttachLevel.Attached);
         if (serviceItem.product().getInstanceValueClass().equals(Service.ServiceV.class)) {
             selectedService = serviceItem.product().cast();
         }
@@ -277,19 +277,19 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             LogicalDate termFrom = (currentValue.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : currentValue.termFrom().getValue());
 
             // features:
-            Persistence.service().retrieve(selectedService.features());
+            Persistence.ensureRetrieve(selectedService.features(), AttachLevel.Attached);
             for (Feature feature : selectedService.features()) {
                 if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
-                    Persistence.service().retrieveMember(feature.version().items());
+                    Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                     for (ProductItem item : feature.version().items()) {
-                        Persistence.service().retrieve(item.product());
+                        Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
                         currentValue.selectedFeatureItems().add(item);
                     }
                 }
             }
 
             // concessions:
-            Persistence.service().retrieve(selectedService.concessions());
+            Persistence.ensureRetrieve(selectedService.concessions(), AttachLevel.Attached);
             currentValue.selectedConcessions().addAll(selectedService.concessions());
         }
 
@@ -323,7 +323,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // load products for UI presentation:
         for (ProductItem item : currentValue.selectedServiceItems()) {
-            Persistence.service().retrieve(item, AttachLevel.ToStringMembers, false);
+            Persistence.ensureRetrieve(item, AttachLevel.ToStringMembers);
         }
     }
 

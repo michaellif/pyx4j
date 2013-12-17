@@ -26,7 +26,6 @@ import junit.framework.Assert;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
@@ -350,7 +349,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         ProductItem serviceItem = lease.currentTerm().version().leaseProducts().serviceItem().item();
         Persistence.service().retrieve(serviceItem.product());
         Service.ServiceV service = serviceItem.product().cast();
-        Persistence.service().retrieve(service.features());
+        Persistence.service().retrieveMember(service.features());
 
         ARCode arCode = getDataModel(ARCodeDataModel.class).getARCode(code);
 
@@ -358,7 +357,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
 
             if (arCode.equals(feature.code())) {
 
-                Persistence.ensureRetrieveMember(feature.version().items(), AttachLevel.Attached);
+                Persistence.service().retrieveMember(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
 
                     LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);

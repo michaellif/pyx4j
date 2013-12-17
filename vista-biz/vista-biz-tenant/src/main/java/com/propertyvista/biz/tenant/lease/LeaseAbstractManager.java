@@ -183,9 +183,9 @@ public abstract class LeaseAbstractManager {
             lease.currentTerm().set(Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey()));
         }
 
-        // Load participants:
-//        Persistence.service().retrieve(lease.currentTerm().version().tenants());
-//        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
+//        // Load participants:
+//        Persistence.service().retrieveMember(lease.currentTerm().version().tenants());
+//        Persistence.service().retrieveMember(lease.currentTerm().version().guarantors());
 
         return lease;
     }
@@ -795,16 +795,16 @@ public abstract class LeaseAbstractManager {
             if (!Lease.Status.draft().contains(lease.status().getValue())) {
                 throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
-            if (false) {
-                // TODO This code never worked propely because deposits() are @Owned(cascade = {})
-                Persistence.service().retrieve(lease.billingAccount().deposits());
-                lease.billingAccount().deposits().clear();
-            }
+            // TODO - review deposts lifecicle management!
+//            // clear current deposits: 
+//            EntityQueryCriteria<DepositLifecycle> criteria = EntityQueryCriteria.create(DepositLifecycle.class);
+//            criteria.eq(criteria.proto().billingAccount(), lease.billingAccount());
+//            Persistence.service().delete(criteria);
         }
 
         // Service by Service item:
         Service.ServiceV service = null;
-        Persistence.service().retrieve(serviceItem.product());
+        Persistence.ensureRetrieve(serviceItem.product(), AttachLevel.Attached);
         if (serviceItem.product().getInstanceValueClass().equals(Service.ServiceV.class)) {
             service = serviceItem.product().cast();
         }
@@ -1130,7 +1130,7 @@ public abstract class LeaseAbstractManager {
     }
 
     private void updateUnitRentPrice(Lease lease) {
-        Persistence.service().retrieve(lease.unit());
+        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
 
         BigDecimal origPrice = lease.unit().financial()._unitRent().getValue();
         BigDecimal currentPrice = null;

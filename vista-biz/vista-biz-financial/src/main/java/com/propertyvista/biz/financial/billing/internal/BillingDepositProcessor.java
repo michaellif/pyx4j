@@ -20,6 +20,7 @@ import java.util.Map;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -97,7 +98,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor<InternalBi
         Bill nextBill = getBillProducer().getNextPeriodBill();
         if (nextBill.billType().getValue().equals(BillType.Final)
                 || !nextBill.billingCycle().billingCycleEndDate().getValue().before(nextBill.billingAccount().lease().currentTerm().termTo().getValue())) {
-            Persistence.service().retrieve(nextBill.billingAccount().deposits());
+            Persistence.ensureRetrieve(nextBill.billingAccount().deposits(), AttachLevel.Attached);
 
             Map<Deposit, ProductTerm> deposits = ServerSideFactory.create(DepositFacade.class).getCurrentDeposits(nextBill.billingAccount().lease());
             for (Deposit deposit : deposits.keySet()) {
