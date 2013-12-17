@@ -67,13 +67,18 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
             public void onSuccess(E result) {
                 // If draft do not exists, we return clone of the data from current version
                 if ((retrieveTarget == RetrieveTarget.Edit) && (result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)) {
-                    result.version().set(EntityGraph.businessDuplicate(result.version()));
-                    VersionedEntityUtils.setAsDraft(result.version());
-                    result.setPrimaryKey(entityId.asDraftKey());
+                    result = duplicateForDraftEdit(result);
                 }
                 callback.onSuccess(result);
             }
         }, entityId, retrieveTarget);
+    }
+
+    protected E duplicateForDraftEdit(E bo) {
+        bo.version().set(EntityGraph.businessDuplicate(bo.version()));
+        VersionedEntityUtils.setAsDraft(bo.version());
+        bo.setPrimaryKey(bo.getPrimaryKey().asDraftKey());
+        return bo;
     }
 
     @Override
