@@ -213,7 +213,7 @@ public class Persistence {
             @Override
             public boolean apply(ICollection<IEntity, ?> memberCollection) {
                 if (memberCollection.getMeta().isOwnedRelationships()) {
-                    ensureRetrieveMember(memberCollection, AttachLevel.Attached);
+                    ensureRetrieve(memberCollection, AttachLevel.Attached);
                     return true;
                 } else {
                     return false;
@@ -244,15 +244,4 @@ public class Persistence {
             }
         }
     }
-
-    @Deprecated
-    public static <T extends IEntity> void ensureRetrieveMember(T entityMember, AttachLevel attachLevel) {
-        ensureRetrieve(entityMember, attachLevel);
-    }
-
-    @Deprecated
-    public static <T extends IEntity> void ensureRetrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
-        ensureRetrieve(collectionMember, attachLevel);
-    }
-
 }
