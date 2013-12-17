@@ -94,6 +94,7 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> 
         IList<CustomerScreeningPersonalAsset> assets();
 
         @Owned
+        @Detached
         @OrderBy(PrimaryKey.class)
         IList<IdentificationDocumentFolder> documents();
     }

@@ -47,6 +47,7 @@ public class LeaseParticipantUtils {
         if ((!leaseParticipant.effectiveScreening().isNull()) && (attachLevel == AttachLevel.Attached)) {
             Persistence.service().retrieve(leaseParticipant.effectiveScreening().version().incomes());
             Persistence.service().retrieve(leaseParticipant.effectiveScreening().version().assets());
+            Persistence.service().retrieve(leaseParticipant.effectiveScreening().version().documents());
         }
     }
 
