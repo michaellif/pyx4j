@@ -53,24 +53,4 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
         this(component, false);
     }
 
-    @Override
-    public WidgetDecorator build() {
-        return new WidgetDecorator(this) {
-            @Override
-            protected void updateViewable() {
-                if (getLabelPosition() != LabelPosition.top) {
-                    if (getComnponent().isViewable()) {
-                        labelAlignment(Alignment.left);
-                        useLabelSemicolon(false);
-                    } else {
-                        labelAlignment(Alignment.right);
-                        useLabelSemicolon(true);
-                    }
-                }
-                updateCaption();
-                updateLabelAlignment();
-                super.updateViewable();
-            }
-        };
-    }
 }
