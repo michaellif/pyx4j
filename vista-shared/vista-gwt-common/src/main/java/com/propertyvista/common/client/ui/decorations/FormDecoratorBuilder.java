@@ -30,7 +30,8 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
         labelWidth(labelWidth);
         contentWidth(contentWidth);
         componentWidth(componentWidth);
-
+        labelAlignment(Alignment.left);
+        useLabelSemicolon(false);
     }
 
     public FormDecoratorBuilder(CComponent<?> component, double labelWidth, double componentWidth, double contentWidth) {
