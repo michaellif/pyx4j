@@ -50,6 +50,9 @@ public abstract class ApplicationWizardStep extends WizardStep {
     public void onValueSet() {
     }
 
+    public void onStepSelected(WizardStep selectedStep) {
+    }
+
     // helpers:
 
     public ApplicationWizardView getView() {

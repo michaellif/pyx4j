@@ -19,6 +19,7 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -116,6 +117,15 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
         for (ApplicationWizardStep step : steps.values()) {
             step.onValueSet();
+        }
+    }
+
+    @Override
+    protected void onStepSelected(WizardStep selectedStep) {
+        super.onStepSelected(selectedStep);
+
+        for (ApplicationWizardStep step : steps.values()) {
+            step.onStepSelected(selectedStep);
         }
     }
 

@@ -18,13 +18,17 @@ import java.util.Vector;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -52,6 +56,19 @@ public class UnitStep extends ApplicationWizardStep {
         };
     };
 
+    private final Button update = new Button(i18n.tr("Change Selection"), new Command() {
+        @Override
+        public void execute() {
+            MessageDialog.confirm(i18n.tr("Warning"), i18n.tr("You will lost already selected Unit Options. Do you really want to change current selection?"),
+                    new Command() {
+                        @Override
+                        public void execute() {
+                            setEditableState(true);
+                        }
+                    });
+        }
+    });
+
     @Override
     public BasicFlexFormPanel createStepContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Selection"));
@@ -62,6 +79,11 @@ public class UnitStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().building(), new CEntityLabel<Building>())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().floorplan(), floorplanSelector)).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().unit(), unitSelector)).build());
+
+//        panel.setBR(++row, 0, 1);
+
+        panel.setWidget(++row, 0, update);
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
 
         return panel;
     }
@@ -75,50 +97,74 @@ public class UnitStep extends ApplicationWizardStep {
     }
 
     @Override
+    public void onStepSelected(WizardStep selectedStep) {
+        super.onStepSelected(selectedStep);
+
+        if (selectedStep.equals(this)) {
+            setEditableState(unitSelector.isValueEmpty());
+        }
+    }
+
+    void setEditableState(Boolean editable) {
+        get(proto().unitSelection().moveIn()).setEditable(editable);
+        get(proto().unitSelection().building()).setEditable(editable);
+        get(proto().unitSelection().floorplan()).setEditable(editable);
+        get(proto().unitSelection().unit()).setEditable(editable);
+
+        update.setVisible(!editable);
+    }
+
+    @Override
     public void addValidations() {
         super.addValidations();
 
         get(proto().unitSelection().moveIn()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                Floorplan floorplanSelected = get(proto().unitSelection().floorplan()).getValue();
-                if (floorplanSelected != null) {
-                    getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<Vector<AptUnit>>() {
-                        @Override
-                        public void onSuccess(Vector<AptUnit> result) {
-                            setAvailableUnits(result);
-                        }
-                    }, floorplanSelected, event.getValue());
-                }
+            public void onValueChange(final ValueChangeEvent<LogicalDate> event) {
+                updateAvailableUnits(event.getValue());
             }
         });
 
         floorplanSelector.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
             @Override
-            public void onValueChange(ValueChangeEvent<Floorplan> event) {
-                getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<Vector<AptUnit>>() {
-                    @Override
-                    public void onSuccess(Vector<AptUnit> result) {
-                        setAvailableUnits(result);
-                    }
-                }, event.getValue(), get(proto().unitSelection().moveIn()).getValue());
+            public void onValueChange(final ValueChangeEvent<Floorplan> event) {
+                updateAvailableUnits(null);
             }
         });
 
         unitSelector.addValueChangeHandler(new ValueChangeHandler<AptUnit>() {
             @Override
-            public void onValueChange(ValueChangeEvent<AptUnit> event) {
-                getWizard().getPresenter().getAvailableUnitOptions(new DefaultAsyncCallback<UnitOptionsSelectionDTO>() {
-                    @Override
-                    public void onSuccess(UnitOptionsSelectionDTO result) {
-                        ((OptionsStep) getWizard().getStep(OptionsStep.class)).setStepValue(result);
-                    }
-                }, event.getValue());
+            public void onValueChange(final ValueChangeEvent<AptUnit> event) {
+                updateUnitOptions(event.getValue());
             }
         });
     }
 
-    public void setAvailableUnits(Collection<AptUnit> result) {
+    private void updateAvailableUnits(LogicalDate moveIn) {
+        if (moveIn == null) {
+            moveIn = get(proto().unitSelection().moveIn()).getValue();
+        }
+
+        if (!get(proto().unitSelection().floorplan()).isValueEmpty()) {
+            getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<Vector<AptUnit>>() {
+                @Override
+                public void onSuccess(Vector<AptUnit> result) {
+                    setAvailableUnits(result);
+                }
+            }, get(proto().unitSelection().floorplan()).getValue(), moveIn);
+        }
+    }
+
+    private void updateUnitOptions(AptUnit unit) {
+        getWizard().getPresenter().getAvailableUnitOptions(new DefaultAsyncCallback<UnitOptionsSelectionDTO>() {
+            @Override
+            public void onSuccess(UnitOptionsSelectionDTO result) {
+                ((OptionsStep) getWizard().getStep(OptionsStep.class)).setStepValue(result);
+            }
+        }, unit);
+    }
+
+    private void setAvailableUnits(Collection<AptUnit> result) {
         unitSelector.reset();
         unitSelector.setOptions(result);
 
