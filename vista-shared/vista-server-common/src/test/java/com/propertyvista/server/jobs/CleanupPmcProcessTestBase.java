@@ -24,9 +24,11 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
+import com.propertyvista.domain.blob.IdentificationDocumentBlob;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
+import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.server.jobs.CleanupPmcProcess.CleanupPmcProcessConfig;
 
 public class CleanupPmcProcessTestBase extends VistaDBTestBase {
@@ -49,23 +51,32 @@ public class CleanupPmcProcessTestBase extends VistaDBTestBase {
         super.tearDown();
     }
 
-    protected static ProofOfEmploymentDocumentBlob createTestBlob(String date, String id) {
-        ProofOfEmploymentDocumentBlob blob = EntityFactory.create(ProofOfEmploymentDocumentBlob.class);
+    protected static IdentificationDocumentBlob createTestBlob(String date, String id) {
+        IdentificationDocumentBlob blob = EntityFactory.create(IdentificationDocumentBlob.class);
         blob.created().setValue(detectDateformat(date));
         blob.data().setValue(id.getBytes());
         Persistence.service().persist(blob);
         return blob;
     }
 
-    protected static ProofOfEmploymentDocumentFolder createApplicationDocument(String desc, Key... blobs) {
-        ProofOfEmploymentDocumentFolder doc = EntityFactory.create(ProofOfEmploymentDocumentFolder.class);
-        doc.description().setValue(desc);
+    protected static IdentificationDocumentFolder createApplicationDocument(String desc, Key... blobs) {
+        Customer c = EntityFactory.create(Customer.class);
+        Persistence.service().persist(c);
+
+        CustomerScreening cs = EntityFactory.create(CustomerScreening.class);
+        cs.screene().set(c);
+        Persistence.service().persist(cs);
+
+        IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
+        doc.notes().setValue(desc);
 
         for (Key blobKey : blobs) {
-            ProofOfEmploymentDocumentFile file = doc.files().$();
+            IdentificationDocumentFile file = doc.files().$();
             file.file().blobKey().setValue(blobKey);
             doc.files().add(file);
         }
+        doc.owner().set(cs.version());
+
         Persistence.service().persist(doc);
         return doc;
     }
