@@ -62,7 +62,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().picture(), imageHolder)).customLabel("").build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().picture().file(), imageHolder)).customLabel("").build());
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
 

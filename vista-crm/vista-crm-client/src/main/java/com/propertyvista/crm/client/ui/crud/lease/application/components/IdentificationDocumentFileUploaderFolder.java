@@ -28,7 +28,6 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.rpc.services.lease.IdentificationDocumentCrmUploadService;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 
 public class IdentificationDocumentFileUploaderFolder extends VistaBoxFolder<IdentificationDocumentFile> {
 
@@ -58,7 +57,7 @@ public class IdentificationDocumentFileUploaderFolder extends VistaBoxFolder<Ide
             int row = -1;
 
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentCrmUploadService.class), new VistaFileURLBuilder(
-                    ProofOfEmploymentDocumentFile.class));
+                    IdentificationDocumentFile.class));
 
             main.setWidget(++row, 0, 1, inject(proto().file(), cfile));
 
