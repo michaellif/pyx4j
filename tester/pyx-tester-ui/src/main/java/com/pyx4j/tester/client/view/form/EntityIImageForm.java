@@ -63,7 +63,7 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
             @Override
             public Widget getImageEntryView(CEntityForm<TFile> entryForm) {
                 VerticalPanel infoPanel = new VerticalPanel();
-                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
+                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>())).build());
                 infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
                 infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description())).build());
                 return infoPanel;

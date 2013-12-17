@@ -21,16 +21,19 @@
 package com.pyx4j.entity.shared;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.adapters.FileUploadBlobSecurityAdapter;
 import com.pyx4j.i18n.annotations.I18n;
 
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @EmbeddedEntity
-public interface IFile extends IEntity {
+public interface IFile<E extends AbstractIFileBlob> extends IEntity {
 
     @ToString(index = 0)
     IPrimitive<String> fileName();
@@ -38,16 +41,11 @@ public interface IFile extends IEntity {
     @MemberColumn(name = "updated_timestamp")
     IPrimitive<Long> timestamp();
 
-    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<Integer> cacheVersion();
 
     IPrimitive<Integer> fileSize();
 
     IPrimitive<String> contentMimeType();
-
-    IPrimitive<String> caption();
-
-    IPrimitive<String> description();
 
     /**
      * Used to access just upload files
@@ -59,4 +57,14 @@ public interface IFile extends IEntity {
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     @MemberColumn(modificationAdapters = { FileUploadBlobSecurityAdapter.class })
     IPrimitive<Key> blobKey();
+
+    interface BlobColumnId extends ColumnId {
+
+    }
+
+    //TODO generic entity
+    @Transient
+    @Detached
+    @JoinColumn(BlobColumnId.class)
+    E blob();
 }

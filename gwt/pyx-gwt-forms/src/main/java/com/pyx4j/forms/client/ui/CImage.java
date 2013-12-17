@@ -11,21 +11,21 @@ import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 /*
  * CImage allows to display and edit a single image or a set of images (using sequential navigation)  
  */
-public class CImage<E extends IFile> extends CField<E, NImage<E>> {
+public class CImage extends CField<IFile<?>, NImage> {
 
     private Image placeholder;
 
     private Dimension imageSize;
 
-    private final UploadService<?, E> service;
+    private final UploadService<?, ?> service;
 
-    private final IFileURLBuilder<E> fileUrlBuilder;
+    private final IFileURLBuilder fileUrlBuilder;
 
-    public CImage(UploadService<?, E> service, IFileURLBuilder<E> fileURLBuilder) {
+    public CImage(UploadService<?, ?> service, IFileURLBuilder fileURLBuilder) {
         this.service = service;
         this.fileUrlBuilder = fileURLBuilder;
         this.imageSize = new Dimension(250, 250);
-        setNativeWidget(new NImage<E>(this));
+        setNativeWidget(new NImage(this));
     }
 
     public void setThumbnailPlaceholder(Image placeholder) {
@@ -50,7 +50,7 @@ public class CImage<E extends IFile> extends CField<E, NImage<E>> {
         return imageSize;
     }
 
-    public String getImageUrl(E file) {
+    public String getImageUrl(IFile<?> file) {
         if (file == null || file.isNull() || fileUrlBuilder == null) {
             return null;
         } else {
@@ -58,7 +58,7 @@ public class CImage<E extends IFile> extends CField<E, NImage<E>> {
         }
     }
 
-    UploadService<?, E> getUploadService() {
+    UploadService<?, ?> getUploadService() {
         return service;
     }
 

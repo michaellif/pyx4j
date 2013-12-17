@@ -22,8 +22,8 @@ package com.pyx4j.gwt.client.upload;
 
 import com.pyx4j.entity.shared.IFile;
 
-public interface UploadReceiver<T extends IFile> {
+public interface UploadReceiver {
 
-    void onUploadComplete(T uploadResponse);
+    void onUploadComplete(IFile<?> uploadResponse);
 
 }

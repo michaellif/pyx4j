@@ -26,7 +26,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
@@ -37,7 +36,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IWidget;
 
-public class NFile<E extends IFile> extends NField<E, NFile<E>.ContentPanel, CFile<E>, NFile<E>.ContentPanel> {
+public class NFile extends NField<IFile<?>, NFile.ContentPanel, CFile, NFile.ContentPanel> {
 
     private static final I18n i18n = I18n.get(NFile.class);
 
@@ -47,7 +46,7 @@ public class NFile<E extends IFile> extends NField<E, NFile<E>.ContentPanel, CFi
 
     private final Button clearButton;
 
-    public NFile(final CFile<E> file) {
+    public NFile(final CFile file) {
         super(file);
 
         contentPanel = new ContentPanel();
@@ -72,25 +71,25 @@ public class NFile<E extends IFile> extends NField<E, NFile<E>.ContentPanel, CFi
 
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void showUploadFileDialog() {
-        @SuppressWarnings("unchecked")
-        UploadService<IEntity, E> service = (UploadService<IEntity, E>) getCComponent().getUploadService();
-        new FileUploadDialog<IEntity, E>(i18n.tr("Upload Image File"), null, service, new UploadReceiver<E>() {
+        UploadService<?, ?> service = getCComponent().getUploadService();
+        new FileUploadDialog(i18n.tr("Upload Image File"), null, service, new UploadReceiver() {
             @Override
-            public void onUploadComplete(E uploadResponse) {
+            public void onUploadComplete(IFile<?> uploadResponse) {
                 getCComponent().setValue(uploadResponse);
             }
         }).show();
     }
 
     @Override
-    public void setNativeValue(E value) {
+    public void setNativeValue(IFile<?> value) {
         contentPanel.setNativeValue(value);
 
     }
 
     @Override
-    public E getNativeValue() throws ParseException {
+    public IFile<?> getNativeValue() throws ParseException {
         assert false : "getNativeValue() shouldn't be called on Hyperlink";
         return null;
     }
@@ -132,7 +131,7 @@ public class NFile<E extends IFile> extends NField<E, NFile<E>.ContentPanel, CFi
 
         }
 
-        public void setNativeValue(E value) {
+        public void setNativeValue(IFile<?> value) {
 
             if (value == null || value.isNull()) {
                 clearButton.setVisible(false);
@@ -145,7 +144,7 @@ public class NFile<E extends IFile> extends NField<E, NFile<E>.ContentPanel, CFi
                 fileNameAnchor.setVisible(true);
 
                 String text = "";
-                CFile<E> comp = getCComponent();
+                CFile comp = getCComponent();
                 if (value != null) {
                     if (comp.getFormat() != null) {
                         text = comp.getFormat().format(value);

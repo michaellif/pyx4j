@@ -22,6 +22,7 @@ package com.pyx4j.essentials.server.upload;
 
 import java.util.Collection;
 
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 
@@ -31,7 +32,7 @@ import com.pyx4j.entity.shared.IFile;
  * @param <U>
  * @param <R>
  */
-public interface UploadReciver<U extends IEntity, R extends IFile> {
+public interface UploadReciver<U extends IEntity, B extends AbstractIFileBlob> {
 
     /**
      * @return Maximum size of a single uploaded file.
@@ -65,6 +66,6 @@ public interface UploadReciver<U extends IEntity, R extends IFile> {
      * 
      * @return created IFile response
      */
-    public R onUploadReceived(U uploadInitiationData, UploadedData uploadedData);
+    public IFile<B> onUploadReceived(U uploadInitiationData, UploadedData uploadedData);
 
 }

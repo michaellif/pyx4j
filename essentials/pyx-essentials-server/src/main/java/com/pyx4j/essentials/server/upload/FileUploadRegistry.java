@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.server.contexts.Context;
 
@@ -34,11 +35,11 @@ public class FileUploadRegistry {
 
     private static final String SESSION_ATTRIBUTE = FileUploadRegistry.class.getName();
 
-    public static void register(IFile file) {
+    public static void register(IFile<?> file) {
         @SuppressWarnings("unchecked")
-        Map<String, IFile> userUploadedFiles = (Map<String, IFile>) Context.getVisit().getAttribute(SESSION_ATTRIBUTE);
+        Map<String, IFile<?>> userUploadedFiles = (Map<String, IFile<?>>) Context.getVisit().getAttribute(SESSION_ATTRIBUTE);
         if (userUploadedFiles == null) {
-            userUploadedFiles = new HashMap<String, IFile>();
+            userUploadedFiles = new HashMap<String, IFile<?>>();
             Context.getVisit().setAttribute(SESSION_ATTRIBUTE, (Serializable) userUploadedFiles);
         }
         file.accessKey().setValue(UUID.randomUUID().toString());
@@ -46,8 +47,8 @@ public class FileUploadRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends IFile> T get(String accessKey) {
-        Map<String, IFile> userUploadedFiles = (Map<String, IFile>) Context.getVisit().getAttribute(SESSION_ATTRIBUTE);
+    public static <T extends IFile<?>> T get(String accessKey) {
+        Map<String, IFile<?>> userUploadedFiles = (Map<String, IFile<?>>) Context.getVisit().getAttribute(SESSION_ATTRIBUTE);
         if (userUploadedFiles == null) {
             return null;
         } else {
@@ -55,11 +56,11 @@ public class FileUploadRegistry {
         }
     }
 
-    public static boolean allowModifications(IFile entity, MemberMeta meta, Object valueOrig, Object valueNew) {
-        if (entity.accessKey().isNull()) {
+    public static boolean allowModifications(IHasFile<?> entity, MemberMeta meta, Object valueOrig, Object valueNew) {
+        if (entity.file().accessKey().isNull()) {
             return false;
         }
-        IFile userUploadedFile = get(entity.accessKey().getValue());
+        IFile<?> userUploadedFile = get(entity.file().accessKey().getValue());
         if (userUploadedFile == null) {
             return false;
         } else {

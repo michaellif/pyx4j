@@ -20,11 +20,11 @@
  */
 package com.pyx4j.tester.shared.file;
 
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.IFileURLBuilder;
-import com.pyx4j.tester.domain.TFile;
 
-public abstract class TFileURLBuilder implements IFileURLBuilder<TFile> {
+public abstract class TFileURLBuilder implements IFileURLBuilder {
 
     public static final Dimension THUMBNAIL_SMALL = new Dimension(70, 50);
 
@@ -38,7 +38,7 @@ public abstract class TFileURLBuilder implements IFileURLBuilder<TFile> {
     }
 
     @Override
-    public String getUrl(TFile image) {
+    public String getUrl(IFile<?> image) {
         if (image.id().isNull()) {
             return servletMapping + (thumbnail ? "t" : "") + "u" + image.accessKey().getStringView() + "/" + image.fileName().getStringView();
         } else {

@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.server.adapters;
 
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.entity.shared.adapters.FileUploadBlobSecurityAdapter;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
@@ -28,7 +28,7 @@ import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 public class FileUploadBlobSecurityAdapterImpl implements FileUploadBlobSecurityAdapter {
 
     @Override
-    public boolean allowModifications(IFile entity, MemberMeta meta, Object valueOrig, Object valueNew) {
+    public boolean allowModifications(IHasFile<?> entity, MemberMeta meta, Object valueOrig, Object valueNew) {
         return FileUploadRegistry.allowModifications(entity, meta, valueOrig, valueNew);
     }
 

@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.rpc.shared.IService;
@@ -40,7 +41,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
  *            The IFile Response
  * 
  */
-public interface UploadService<U extends IEntity, R extends IFile> extends IService {
+public interface UploadService<U extends IEntity, B extends AbstractIFileBlob> extends IService {
 
     public static final String PostCorrelationID = "correlationID";
 
@@ -58,6 +59,6 @@ public interface UploadService<U extends IEntity, R extends IFile> extends IServ
 
     public void cancelUpload(AsyncCallback<VoidSerializable> callback, UploadId uploadId);
 
-    public void getUploadResponse(AsyncCallback<R> callback, UploadId uploadId);
+    public void getUploadResponse(AsyncCallback<IFile<B>> callback, UploadId uploadId);
 
 }

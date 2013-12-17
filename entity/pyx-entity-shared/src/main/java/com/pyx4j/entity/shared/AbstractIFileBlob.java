@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2012-12-27
+ * Created on Dec 16, 2013
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.gwt.shared;
+package com.pyx4j.entity.shared;
 
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
-public interface ImageFileURLBuilder<E extends IFile> extends IFileURLBuilder<E> {
+@AbstractEntity
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface AbstractIFileBlob extends IEntity {
 
-    public enum ResizeType {
-        cover, contain, none
-    }
-
-    public String getUrl(E image, Dimension dimensions, ResizeType resizeType);
+    /**
+     * in implementation add
+     * 
+     * @JoinTable(mappedBy = IFile.BlobColumnId.class, value = TBD)
+     * @Detached(level = AttachLevel.Detached)
+     * @Owner
+     *        IFile<TBD> owner();
+     */
 
 }

@@ -33,8 +33,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -59,7 +60,7 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider, CImageSlider<T>, ImageSlider> {
+public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageSlider, CImageSlider<T>, ImageSlider> {
 
     private static final I18n i18n = I18n.get(NImageSlider.class);
 
@@ -229,14 +230,16 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
             }
         }
 
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         protected void createNewEntity(final AsyncCallback<T> callback) {
-            @SuppressWarnings("unchecked")
-            UploadService<IEntity, T> service = (UploadService<IEntity, T>) getCComponent().getUploadService();
-            new FileUploadDialog<IEntity, T>(i18n.tr("Upload Image File"), null, service, new UploadReceiver<T>() {
+            UploadService<?, ?> service = getCComponent().getUploadService();
+            new FileUploadDialog(i18n.tr("Upload Image File"), null, service, new UploadReceiver() {
                 @Override
-                public void onUploadComplete(T uploadResponse) {
-                    callback.onSuccess(uploadResponse);
+                public void onUploadComplete(IFile<?> uploadResponse) {
+                    T t = EntityFactory.create(imgClass);
+                    t.file().set(uploadResponse);
+                    callback.onSuccess(t);
                 }
             }).show();
         }

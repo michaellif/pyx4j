@@ -60,7 +60,7 @@ public class TFileResourceServlet extends HttpServlet {
 
             if (id.startsWith("u")) {
                 TFile file = FileUploadRegistry.get(id.substring(1));
-                key = file.blobKey().getValue();
+                key = file.file().blobKey().getValue();
             } else {
                 key = new Key(id);
             }

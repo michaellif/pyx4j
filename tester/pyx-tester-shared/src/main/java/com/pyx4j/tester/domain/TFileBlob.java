@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,19 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2012-12-28
+ * Created on Dec 16, 2013
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.tester.domain;
 
-import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 
-public interface TFile extends IHasFile<TFileBlob> {
-
-    IPrimitive<String> caption();
-
-    IPrimitive<String> description();
+@Transient
+public interface TFileBlob extends AbstractIFileBlob {
 
 }

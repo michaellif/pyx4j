@@ -24,45 +24,45 @@ import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.IFileURLBuilder;
 
-public class CFile<E extends IFile> extends CField<E, NFile<E>> {
+public class CFile extends CField<IFile<?>, NFile> {
 
-    private IFormat<E> format;
+    private IFormat<IFile<?>> format;
 
-    private final UploadService<?, E> service;
+    private final UploadService<?, ?> service;
 
-    private IFileURLBuilder<E> fileUrlBuilder;
+    private IFileURLBuilder fileUrlBuilder;
 
-    public CFile(UploadService<?, E> service, IFileURLBuilder<E> fileURLBuilder) {
+    public CFile(UploadService<?, ?> service, IFileURLBuilder fileURLBuilder) {
         super();
         this.service = service;
         this.fileUrlBuilder = fileURLBuilder;
 
-        setNativeWidget(new NFile<E>(this));
+        setNativeWidget(new NFile(this));
 
-        setFormat(new IFormat<E>() {
+        setFormat(new IFormat<IFile<?>>() {
             @Override
-            public String format(E value) {
+            public String format(IFile<?> value) {
                 return value.fileName().getStringView();
             }
 
             @Override
-            public E parse(String string) {
+            public IFile<?> parse(String string) {
                 return getValue();
             }
         });
 
     }
 
-    public void setFormat(IFormat<E> format) {
+    public void setFormat(IFormat<IFile<?>> format) {
         this.format = format;
     }
 
-    public IFormat<E> getFormat() {
+    public IFormat<IFile<?>> getFormat() {
         return format;
     }
 
     public String getImageUrl() {
-        E file = getValue();
+        IFile<?> file = getValue();
         if (file == null || file.isNull() || fileUrlBuilder == null) {
             return null;
         } else {
@@ -70,7 +70,7 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
         }
     }
 
-    UploadService<?, E> getUploadService() {
+    UploadService<?, ?> getUploadService() {
         return service;
     }
 

@@ -24,18 +24,18 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
-import com.pyx4j.tester.domain.TFile;
+import com.pyx4j.tester.domain.TFileBlob;
 import com.pyx4j.tester.shared.file.TFileUploadService;
 
-public class TFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, TFile> implements TFileUploadService {
+public class TFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, TFileBlob> implements TFileUploadService {
 
     private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG);
 
     public TFileUploadServiceImpl() {
-        super(TFile.class);
     }
 
     @Override
@@ -54,9 +54,8 @@ public class TFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, T
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, TFile response) {
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<TFileBlob> response) {
         response.blobKey()
                 .setValue(TFileTestStorage.persist(uploadedData.binaryContent, response.fileName().getValue(), response.contentMimeType().getValue()));
     }
-
 }

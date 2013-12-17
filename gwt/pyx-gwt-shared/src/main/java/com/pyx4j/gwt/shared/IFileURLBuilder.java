@@ -22,8 +22,8 @@ package com.pyx4j.gwt.shared;
 
 import com.pyx4j.entity.shared.IFile;
 
-public interface IFileURLBuilder<E extends IFile> {
+public interface IFileURLBuilder {
 
-    public String getUrl(E file);
+    public String getUrl(IFile<?> file);
 
 }

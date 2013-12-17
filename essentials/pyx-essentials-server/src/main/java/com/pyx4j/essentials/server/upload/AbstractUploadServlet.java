@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -99,7 +100,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             out.println(i18n.tr("No Session"));
             return;
         }
-        DeferredUploadProcess<IEntity, IFile> process = null;
+        DeferredUploadProcess<IEntity, AbstractIFileBlob> process = null;
         try {
             if (!ServletFileUpload.isMultipartContent(request)) {
                 out.println(i18n.tr("Invalid Request Type"));
@@ -136,7 +137,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 return;
             }
             @SuppressWarnings("unchecked")
-            UploadReciver<IEntity, IFile> reciver = (UploadReciver<IEntity, IFile>) reciverClass.newInstance();
+            UploadReciver<IEntity, AbstractIFileBlob> reciver = (UploadReciver<IEntity, AbstractIFileBlob>) reciverClass.newInstance();
 
             ServletFileUpload fileUpload = new ServletFileUpload();
             long maxSize = reciver.getMaxSize();
@@ -156,7 +157,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                             // Attache to already created process
                             uploadedData.deferredCorrelationId = Streams.asString(item.openStream());
                             @SuppressWarnings("unchecked")
-                            DeferredUploadProcess<IEntity, IFile> processCast = (DeferredUploadProcess<IEntity, IFile>) DeferredProcessRegistry
+                            DeferredUploadProcess<IEntity, AbstractIFileBlob> processCast = (DeferredUploadProcess<IEntity, AbstractIFileBlob>) DeferredProcessRegistry
                                     .get(uploadedData.deferredCorrelationId);
                             process = processCast;
                             if (process == null) {
@@ -224,7 +225,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             uploadedData.timestamp = System.currentTimeMillis();
             log.debug("Got uploaded file {}", uploadedData.fileName);
 
-            IFile response2 = reciver.onUploadReceived(process.getUploadInitiationData(), uploadedData);
+            IFile<AbstractIFileBlob> response2 = reciver.onUploadReceived(process.getUploadInitiationData(), uploadedData);
             process.uploadProcessed(uploadedData, response2);
             log.debug("Upload processing completed");
             out.println(UploadService.ResponseOk);

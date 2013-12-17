@@ -22,8 +22,8 @@ package com.pyx4j.tester.shared.file;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.tester.domain.TFile;
+import com.pyx4j.tester.domain.TFileBlob;
 
-public interface TFileUploadService extends UploadService<IEntity, TFile> {
+public interface TFileUploadService extends UploadService<IEntity, TFileBlob> {
 
 }

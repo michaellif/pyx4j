@@ -20,7 +20,9 @@
  */
 package com.pyx4j.essentials.server.upload;
 
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 
@@ -32,24 +34,24 @@ import com.pyx4j.gwt.server.deferred.IDeferredProcess;
  */
 
 @SuppressWarnings("serial")
-public class DeferredUploadProcess<U extends IEntity, R extends IEntity> implements IDeferredProcess {
+public class DeferredUploadProcess<U extends IEntity, B extends AbstractIFileBlob> implements IDeferredProcess {
 
     private final DeferredProcessProgressResponse status;
 
     private final U uploadInitiationData;
 
-    private R response;
+    private IFile<B> response;
 
     public DeferredUploadProcess(U uploadInitiationData) {
         this.status = new DeferredProcessProgressResponse();
         this.uploadInitiationData = uploadInitiationData;
     }
 
-    protected void onUploadProcessed(final UploadedData data, final R response) {
+    protected void onUploadProcessed(final UploadedData data, final IFile<B> response) {
         this.status().setCompleted();
     }
 
-    public final void uploadProcessed(final UploadedData data, final R response) {
+    public final void uploadProcessed(final UploadedData data, final IFile<B> response) {
         this.response = response;
         onUploadProcessed(data, response);
     }
@@ -72,7 +74,7 @@ public class DeferredUploadProcess<U extends IEntity, R extends IEntity> impleme
         return uploadInitiationData;
     }
 
-    public R getResponse() {
+    public IFile<B> getResponse() {
         return response;
     }
 

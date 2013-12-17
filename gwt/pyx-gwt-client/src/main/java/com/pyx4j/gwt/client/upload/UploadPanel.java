@@ -20,7 +20,6 @@
  */
 package com.pyx4j.gwt.client.upload;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -42,6 +41,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.client.ClientDeploymentConfig;
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
@@ -49,21 +49,20 @@ import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadId;
 import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler,
-        DeferredProgressListener {
+public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends SimplePanel implements FormPanel.SubmitCompleteHandler,
+        FormPanel.SubmitHandler, DeferredProgressListener {
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
 
     private static final I18n i18n = I18n.get(UploadPanel.class);
 
-    private final UploadService<U, R> service;
+    private final UploadService<U, B> service;
 
     private final FormPanel uploadForm;
 
@@ -77,7 +76,7 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
 
     private final DeferredProgressPanel deferredProgressPanel;
 
-    private final UploadReceiver<R> uploadReceiver;
+    private final UploadReceiver uploadReceiver;
 
     public static enum UploadError {
 
@@ -89,7 +88,7 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
 
     }
 
-    public UploadPanel(UploadService<U, R> service, UploadReceiver<R> uploadReceiver) {
+    public UploadPanel(UploadService<U, B> service, UploadReceiver uploadReceiver) {
         this.service = service;
         this.uploadReceiver = uploadReceiver;
         uploadForm = new FormPanel();
@@ -141,12 +140,6 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
             }
             uploadForm.setAction(path + GWT.getModuleName() + "/" + ((IServiceBase) service).getServiceClassId());
         }
-    }
-
-    // TODO remove, Service call obtainSupportedExtensions(..) is made to obtain formats
-    @Deprecated
-    public void setSupportedExtensions(Collection<DownloadFormat> formats) {
-        supportedExtensions.addAll(DownloadFormat.getExtensions(formats));
     }
 
     protected U getUploadData() {
@@ -270,9 +263,9 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
     @Override
     public final void onDeferredSuccess(DeferredProcessProgressResponse result) {
         if (uploadId != null) {
-            service.getUploadResponse(new DefaultAsyncCallback<R>() {
+            service.getUploadResponse(new DefaultAsyncCallback<IFile<B>>() {
                 @Override
-                public void onSuccess(R result) {
+                public void onSuccess(IFile<B> result) {
                     uploadReceiver.onUploadComplete(result);
                 }
             }, uploadId);

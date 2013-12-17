@@ -21,8 +21,8 @@
 package com.pyx4j.entity.shared.adapters;
 
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 
-public interface FileUploadBlobSecurityAdapter extends MemberModificationAdapter<IFile> {
+public interface FileUploadBlobSecurityAdapter extends MemberModificationAdapter<IHasFile<?>> {
 
 }

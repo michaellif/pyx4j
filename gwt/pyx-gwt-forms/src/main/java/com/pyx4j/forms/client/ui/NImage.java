@@ -28,7 +28,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
@@ -41,7 +40,7 @@ import com.pyx4j.widgets.client.ImageSlider.ImageSliderDataProvider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
-public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, ImageSlider> {
+public class NImage extends NField<IFile<?>, ImageSlider, CImage, ImageSlider> {
 
     private static final I18n i18n = I18n.get(NImage.class);
 
@@ -51,7 +50,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
 
     protected IEditableComponentFactory factory = new EntityFormComponentFactory();
 
-    public NImage(CImage<T> cComponent) {
+    public NImage(CImage cComponent) {
         super(cComponent);
         setStyleName(CComponentTheme.StyleName.ImageHolder.name());
 
@@ -77,10 +76,10 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
             }
         });
 
-        getCComponent().addValueChangeHandler(new ValueChangeHandler<T>() {
+        getCComponent().addValueChangeHandler(new ValueChangeHandler<IFile<?>>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<T> event) {
+            public void onValueChange(ValueChangeEvent<IFile<?>> event) {
                 activateEditButton();
             }
 
@@ -96,7 +95,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
             return;
         }
 
-        T value = getCComponent().getValue();
+        IFile<?> value = getCComponent().getValue();
         if (value == null || value.isNull()) {
             imageSlider.getEditButton().setMenu(null);
             imageSlider.getEditButton().setCommand(new Command() {
@@ -126,7 +125,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
     }
 
     @Override
-    public void setNativeValue(T value) {
+    public void setNativeValue(IFile<?> value) {
         imageUrl = getCComponent().getImageUrl(value);
         reset();
     }
@@ -137,7 +136,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
     }
 
     @Override
-    public T getNativeValue() {
+    public IFile<?> getNativeValue() {
         return null;
     }
 
@@ -175,12 +174,12 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
         imageSlider.setImageSize(imageSize.width, imageSize.height);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private void showUploadFileDialog() {
-        @SuppressWarnings("unchecked")
-        UploadService<IEntity, T> service = (UploadService<IEntity, T>) getCComponent().getUploadService();
-        new FileUploadDialog<IEntity, T>(i18n.tr("Upload Image File"), null, service, new UploadReceiver<T>() {
+        UploadService<?, ?> service = getCComponent().getUploadService();
+        new FileUploadDialog(i18n.tr("Upload Image File"), null, service, new UploadReceiver() {
             @Override
-            public void onUploadComplete(T uploadResponse) {
+            public void onUploadComplete(IFile<?> uploadResponse) {
                 getCComponent().setValue(uploadResponse);
             }
         }).show();

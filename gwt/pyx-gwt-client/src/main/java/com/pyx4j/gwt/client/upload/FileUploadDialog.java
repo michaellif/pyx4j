@@ -24,6 +24,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -32,34 +33,36 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
-public class FileUploadDialog<U extends IEntity, E extends IFile> extends VerticalPanel implements OkCancelOption, OkOptionText {
+public class FileUploadDialog<U extends IEntity, B extends AbstractIFileBlob> extends VerticalPanel implements OkCancelOption, OkOptionText {
 
     private static final I18n i18n = I18n.get(FileUploadDialog.class);
 
-    private final UploadPanel<U, E> uploadPanel;
+    private final UploadPanel<U, B> uploadPanel;
 
     protected final Dialog dialog;
 
     protected U uploadData;
 
-    public FileUploadDialog(String dialogTitle, U uploadData, UploadService<U, E> service, final UploadReceiver<E> uploadReceiver) {
+    public FileUploadDialog(String dialogTitle, U uploadData, UploadService<U, B> service, final UploadReceiver uploadReceiver) {
 
         dialog = new Dialog(dialogTitle, this, null);
         dialog.setDialogPixelWidth(500);
 
         this.uploadData = uploadData;
 
-        UploadReceiver<E> receiver = new UploadReceiver<E>() {
+        UploadReceiver receiver = new UploadReceiver() {
 
             @Override
-            public void onUploadComplete(E uploadResponse) {
+            public void onUploadComplete(IFile<?> uploadResponse) {
                 dialog.hide(false);
-                uploadReceiver.onUploadComplete(uploadResponse);
+                if (uploadReceiver != null) {
+                    uploadReceiver.onUploadComplete(uploadResponse);
+                }
             }
 
         };
 
-        uploadPanel = new UploadPanel<U, E>(service, receiver) {
+        uploadPanel = new UploadPanel<U, B>(service, receiver) {
 
             @Override
             protected void onUploadSubmit() {
@@ -89,7 +92,7 @@ public class FileUploadDialog<U extends IEntity, E extends IFile> extends Vertic
         return uploadData;
     }
 
-    protected IsWidget createContent(UploadPanel<U, E> uploadPanel) {
+    protected IsWidget createContent(UploadPanel<U, B> uploadPanel) {
         return uploadPanel;
     }
 

@@ -29,6 +29,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
@@ -39,14 +40,11 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFile> implements UploadService<U, R>, UploadReciver<U, R> {
+public abstract class AbstractUploadServiceImpl<U extends IEntity, B extends AbstractIFileBlob> implements UploadService<U, B>, UploadReciver<U, B> {
 
     private static final I18n i18n = I18n.get(AbstractUploadServiceImpl.class);
 
-    protected final Class<R> fileEntityClass;
-
-    public AbstractUploadServiceImpl(Class<R> fileEntityClass) {
-        this.fileEntityClass = fileEntityClass;
+    protected AbstractUploadServiceImpl() {
     }
 
     protected void onPepareUpload(U data, UploadId id) {
@@ -75,8 +73,8 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFi
         }
     }
 
-    protected DeferredUploadProcess<U, R> createUploadDeferredProcess(U data) {
-        return new DeferredUploadProcess<U, R>(data);
+    protected DeferredUploadProcess<U, B> createUploadDeferredProcess(U data) {
+        return new DeferredUploadProcess<U, B>(data);
     }
 
     @Override
@@ -101,11 +99,12 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFi
         }
     }
 
-    protected abstract void processUploadedData(U uploadInitiationData, UploadedData uploadedData, R response);
+    protected abstract void processUploadedData(U uploadInitiationData, UploadedData uploadedData, IFile<B> response);
 
     @Override
-    public final R onUploadReceived(U uploadInitiationData, UploadedData uploadedData) {
-        R fileInstance = EntityFactory.create(fileEntityClass);
+    public final IFile<B> onUploadReceived(U uploadInitiationData, UploadedData uploadedData) {
+        @SuppressWarnings("unchecked")
+        IFile<B> fileInstance = EntityFactory.create(IFile.class);
         fileInstance.fileName().setValue(uploadedData.fileName);
         fileInstance.fileSize().setValue(uploadedData.binaryContentSize);
         fileInstance.timestamp().setValue(uploadedData.timestamp);
@@ -126,9 +125,9 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFi
     }
 
     @Override
-    public final void getUploadResponse(AsyncCallback<R> callback, UploadId uploadId) {
+    public final void getUploadResponse(AsyncCallback<IFile<B>> callback, UploadId uploadId) {
         @SuppressWarnings("unchecked")
-        DeferredUploadProcess<U, R> process = (DeferredUploadProcess<U, R>) DeferredProcessRegistry.get(uploadId.getDeferredCorrelationId());
+        DeferredUploadProcess<U, B> process = (DeferredUploadProcess<U, B>) DeferredProcessRegistry.get(uploadId.getDeferredCorrelationId());
         if (process != null) {
             DeferredProcessProgressResponse response = process.status();
             if (response.isCompleted()) {
