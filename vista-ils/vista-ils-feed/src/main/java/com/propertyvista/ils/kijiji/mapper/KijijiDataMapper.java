@@ -52,7 +52,7 @@ public class KijijiDataMapper {
         // map unit data
         new KijijiUnitMapper().convert(fpDto, ilsUnit);
         // add media urls
-        Persistence.ensureRetrieve(fpDto.floorplan().media(), AttachLevel.Attached);
+        Persistence.service().retrieveMember(fpDto.floorplan().media(), AttachLevel.Attached);
         ilsUnit.setImages(createImages(fpDto.floorplan().media()));
 
         return ilsUnit;

@@ -56,7 +56,7 @@ public class KijijiMapperUtils {
     }
 
     public static String getMediaImgUrl(MediaFile media, ThumbnailSize size) {
-        return getPortalHomeUrl() + DeploymentConsts.mediaImagesServletMapping + media.file().blobKey().getStringView() + "/" + size.name() + "."
+        return getPortalHomeUrl() + DeploymentConsts.mediaImagesServletMapping + media.id().getStringView() + "/" + size.name() + "."
                 + ImageConsts.THUMBNAIL_TYPE;
     }
 
