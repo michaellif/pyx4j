@@ -18,10 +18,12 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.gwt.commons.Print;
+import com.pyx4j.gwt.commons.print.PrintManager;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionService;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -54,8 +56,7 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
             addHeaderToolbarItem(new Button(i18n.tr("Print"), new Command() {
                 @Override
                 public void execute() {
-//              Print.it(getForm().toStringForPrint());
-                    Print.preview(getForm().toStringForPrint());
+                    PrintUtils.print(getForm().getPrintableElement());
                 }
             }));
         }

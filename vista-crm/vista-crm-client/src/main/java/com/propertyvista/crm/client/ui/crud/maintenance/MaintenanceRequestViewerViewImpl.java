@@ -29,10 +29,12 @@ import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.gwt.commons.print.PrintManager;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -51,6 +53,14 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     public MaintenanceRequestViewerViewImpl() {
         setForm(new MaintenanceRequestForm(this));
+
+        MenuItem btnPrint = new MenuItem(i18n.tr("Print"), new Command() {
+            @Override
+            public void execute() {
+                PrintUtils.print(MaintenanceRequestViewerViewImpl.this.getForm().getPrintableElement());
+            }
+        });
+        addAction(btnPrint);
 
         rateAction = new MenuItem(i18n.tr("Rate..."), new Command() {
             @Override

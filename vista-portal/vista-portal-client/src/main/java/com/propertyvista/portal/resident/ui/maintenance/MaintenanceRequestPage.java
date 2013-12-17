@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
@@ -62,7 +63,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         btnPrint = new Button(i18n.tr("Print"), new Command() {
             @Override
             public void execute() {
-                PrintManager.print(MaintenanceRequestPage.this.asWidget().getElement());
+                PrintUtils.print(MaintenanceRequestPage.this.asWidget().getElement());
             }
         });
 

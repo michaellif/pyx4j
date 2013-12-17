@@ -18,9 +18,11 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.gwt.commons.Print;
+import com.pyx4j.gwt.commons.print.PrintManager;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
@@ -97,7 +99,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         addHeaderToolbarItem(new Button(i18n.tr("Print"), new Command() {
             @Override
             public void execute() {
-                print();
+                PrintUtils.print(getForm().getPrintableElement());
             }
         }));
     }
@@ -143,13 +145,4 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
 
     }
 
-    private void print() {
-        String html = getForm().toStringForPrint();
-        html = html.replace("<body>", "").replace("</body>", "");
-        String logo = "<div style=\"text-align: center;\"><img src=\"" + MediaUtils.createCrmLogoUrl() + "\"></div>";
-        String header = "<div style=\"text-align: center;\"><h1>" + SafeHtmlUtils.htmlEscape(i18n.tr("Payment {0}", getForm().getValue().id().getValue()))
-                + "</h1></div>";
-        html = logo + header + "<body>" + html + "</body>";
-        Print.preview(html);
-    }
 }

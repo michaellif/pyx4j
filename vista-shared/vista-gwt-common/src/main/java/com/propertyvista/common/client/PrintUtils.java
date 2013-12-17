@@ -11,20 +11,21 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui;
+package com.propertyvista.common.client;
 
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.gwt.commons.Print;
+import com.pyx4j.gwt.commons.print.PrintManager;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 
 public class PrintUtils {
 
-    public static void print(Widget widget) {
+    public static void print(Element element) {
         String logo = "<div style=\"text-align: center;\"><img src=\"" + MediaUtils.createSiteLargeLogoUrl() + "\"></div>";
-        String html = logo + "<body>" + widget.getElement().getInnerHTML() + "</body>";
-        Print.preview(html);
+        String html = logo + "<body>" + element.getInnerHTML() + "</body>";
+        PrintManager.print(new HTML(html).getElement());
     }
 
 }
