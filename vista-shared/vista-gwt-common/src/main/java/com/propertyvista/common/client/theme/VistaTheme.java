@@ -45,6 +45,11 @@ public class VistaTheme extends Theme {
         Style style = new Style("html");
         addStyle(style);
 
+        style = new Style("input, select, textarea");
+        style.addProperty("font-family", "inherit");
+        style.addProperty("font-size", "100%");
+        addStyle(style);
+
         style = new Style("table");
         style.addProperty("border-collapse", "collapse");
         addStyle(style);

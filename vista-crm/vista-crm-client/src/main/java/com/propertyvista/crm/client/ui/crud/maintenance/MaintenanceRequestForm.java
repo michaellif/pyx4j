@@ -213,9 +213,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         statusPanel.setH1(0, 0, 3, i18n.tr("Status"));
 
         int innerRow = 0;
-        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10).build());
-        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, 2,
+                new FormDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10, true).build());
+        statusPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10, true).build());
+        statusPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10, true).build());
 
         scheduledPanel = new TwoColumnFlexFormPanel();
         innerRow = -1;
