@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -43,6 +44,12 @@ public class ProspectPortalContext extends PortalVistaContext {
     public static MasterOnlineApplication getMasterOnlineApplication() {
         EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
         criteria.eq(criteria.proto().applications(), getOnlineApplicationIdStub());
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public static Lease getLease() {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.eq(criteria.proto().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
         return Persistence.service().retrieve(criteria);
     }
 

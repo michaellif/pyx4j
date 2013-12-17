@@ -94,6 +94,8 @@ public class UnitStep extends ApplicationWizardStep {
 
         floorplanSelector.setOptions(getValue().unitSelection().availableFloorplans());
         unitSelector.setOptions(getValue().unitSelection().availableUnits());
+
+        setEditableState(unitSelector.isValueEmpty());
     }
 
     @Override

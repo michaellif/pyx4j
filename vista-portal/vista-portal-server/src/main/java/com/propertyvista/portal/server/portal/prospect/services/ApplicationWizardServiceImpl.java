@@ -42,6 +42,7 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -260,10 +261,18 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         MasterOnlineApplication moa = ProspectPortalContext.getMasterOnlineApplication();
         if (!moa.building().isNull() || !moa.floorplan().isNull()) {
             UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
+            Lease lease = ProspectPortalContext.getLease();
 
-            unitSelection.building().set(moa.building());
-            unitSelection.floorplan().set(moa.floorplan());
-            unitSelection.moveIn().setValue(new LogicalDate(SystemDateManager.getDate()));
+            if (lease != null && !lease.unit().isNull()) {
+                unitSelection.unit().set(lease.unit());
+                unitSelection.building().set(lease.unit().building());
+                unitSelection.floorplan().set(lease.unit().floorplan());
+                unitSelection.moveIn().setValue(lease.expectedMoveIn().getValue());
+            } else {
+                unitSelection.building().set(moa.building());
+                unitSelection.floorplan().set(moa.floorplan());
+                unitSelection.moveIn().setValue(new LogicalDate(SystemDateManager.getDate()));
+            }
 
             {
                 EntityQueryCriteria<Floorplan> criteria = new EntityQueryCriteria<Floorplan>(Floorplan.class);
@@ -271,9 +280,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 unitSelection.availableFloorplans().addAll(Persistence.service().query(criteria));
             }
 
-            if (!moa.floorplan().isNull()) {
+            if (!unitSelection.floorplan().isNull()) {
                 EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-                criteria.eq(criteria.proto().floorplan(), moa.floorplan());
+                criteria.eq(criteria.proto().floorplan(), unitSelection.floorplan());
                 criteria.ge(criteria.proto()._availableForRent(), unitSelection.moveIn());
                 unitSelection.availableUnits().addAll(Persistence.service().query(criteria));
             }
