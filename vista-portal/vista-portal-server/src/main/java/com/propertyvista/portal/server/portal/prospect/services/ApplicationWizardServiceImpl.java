@@ -139,22 +139,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         return to;
     }
 
-    private String retrieveUtilities(AptUnit unit) {
-        assert (!unit.building().isValueDetached());
-
-        Persistence.ensureRetrieveMember(unit.building().utilities(), AttachLevel.ToStringMembers);
-
-        String res = new String();
-        for (BuildingUtility utility : unit.building().utilities()) {
-            if (!res.isEmpty()) {
-                res += ";";
-            }
-            res += utility.getStringView();
-        }
-
-        return res;
-    }
-
     private void fillLeaseData(OnlineApplication bo, OnlineApplicationDTO to) {
         assert (!bo.masterOnlineApplication().leaseApplication().lease().isValueDetached());
 
@@ -268,6 +252,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 unitSelection.building().set(lease.unit().building());
                 unitSelection.floorplan().set(lease.unit().floorplan());
                 unitSelection.moveIn().setValue(lease.expectedMoveIn().getValue());
+
+                to.unitOptionsSelection().set(retriveCurrentUnitOptions(lease));
             } else {
                 unitSelection.building().set(moa.building());
                 unitSelection.floorplan().set(moa.floorplan());
@@ -294,45 +280,74 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
     }
 
-    private UnitOptionsSelectionDTO retriveAvailableUnitOptions(AptUnit unit) {
-        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
+    private String retrieveUtilities(AptUnit unit) {
+        assert (!unit.building().isValueDetached());
 
-        options.unit().set(unit);
-        options.restrictions().set(retriveUnitOptionRestrictions(unit));
-        retrieveAvailableCatalogItems(options);
+        Persistence.ensureRetrieveMember(unit.building().utilities(), AttachLevel.ToStringMembers);
+
+        String res = new String();
+        for (BuildingUtility utility : unit.building().utilities()) {
+            if (!res.isEmpty()) {
+                res += ";";
+            }
+            res += utility.getStringView();
+        }
+
+        return res;
+    }
+
+    private UnitOptionsSelectionDTO retriveCurrentUnitOptions(Lease lease) {
+        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
+        assert (!lease.unit().isNull());
+
+        options.unit().set(lease.unit());
+        options.restrictions().set(retriveUnitOptionRestrictions(lease.unit()));
+        fillCurrentProductItems(options, lease.currentTerm());
         loadDetachedProducts(options);
 
         return options;
     }
 
-    private void loadDetachedProducts(UnitOptionsSelectionDTO options) {
-        Persistence.service().retrieve(options.selectedService().item().product());
+    private void fillCurrentProductItems(UnitOptionsSelectionDTO options, LeaseTerm leaseTerm) {
+        leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, leaseTerm.getPrimaryKey());
 
-        loadDetachedProducts(options.selectedPets());
-        loadDetachedProducts(options.selectedParking());
-        loadDetachedProducts(options.selectedStorage());
-        loadDetachedProducts(options.selectedUtilities());
-        loadDetachedProducts(options.selectedOther());
-    }
+        options.selectedService().set(leaseTerm.version().leaseProducts().serviceItem());
 
-    private void loadDetachedProducts(List<BillableItem> items) {
-        for (BillableItem item : items) {
-            Persistence.service().retrieve(item.item().product());
+        for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
+            switch (feature.item().product().holder().code().type().getValue()) {
+            case AddOn:
+            case Utility:
+                options.selectedUtilities().add(feature);
+                break;
+            case Pet:
+                options.selectedPets().add(feature);
+                break;
+            case Parking:
+                options.selectedParking().add(feature);
+                break;
+            case Locker:
+                options.selectedStorage().add(feature);
+                break;
+            default:
+                options.selectedOther().add(feature);
+            }
         }
+
+        fillCatalogItems(options, (Service.ServiceV) options.selectedService().item().product().cast(), false);
     }
 
-    private UnitOptionsSelectionDTO.Restrictions retriveUnitOptionRestrictions(AptUnit unit) {
-        UnitOptionsSelectionDTO.Restrictions restrictions = EntityFactory.create(UnitOptionsSelectionDTO.Restrictions.class);
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit, RestrictionsPolicy.class);
+    private UnitOptionsSelectionDTO retriveAvailableUnitOptions(AptUnit unit) {
+        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
 
-        restrictions.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
-        restrictions.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
-        restrictions.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
+        options.unit().set(unit);
+        options.restrictions().set(retriveUnitOptionRestrictions(unit));
+        fillAvailableCatalogItems(options);
+        loadDetachedProducts(options);
 
-        return restrictions;
+        return options;
     }
 
-    private void retrieveAvailableCatalogItems(UnitOptionsSelectionDTO options) {
+    private void fillAvailableCatalogItems(UnitOptionsSelectionDTO options) {
         assert (!options.unit().isNull());
         Persistence.ensureRetrieve(options.unit().building(), AttachLevel.Attached);
 
@@ -353,48 +368,81 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             options.selectedService().set(createBillableItem(Persistence.service().retrieve(criteria)));
 
-            Persistence.service().retrieveMember(service.version().features());
-            for (Feature feature : service.version().features()) {
-                Persistence.service().retrieveMember(feature.version().items());
-                for (ProductItem item : feature.version().items()) {
-                    switch (feature.code().type().getValue()) {
-                    case AddOn:
-                    case Utility:
-                        options.availableUtilities().add(item);
-                        if (feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedUtilities().add(createBillableItem(item));
-                        }
-                        break;
-                    case Pet:
-                        options.availablePets().add(item);
-                        if (feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedPets().add(createBillableItem(item));
-                        }
-                        break;
-                    case Parking:
-                        options.availableParking().add(item);
-                        if (feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedParking().add(createBillableItem(item));
-                        }
-                        break;
-                    case Locker:
-                        options.availableStorage().add(item);
-                        if (feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedStorage().add(createBillableItem(item));
-                        }
-                        break;
-                    default:
-                        options.availableOther().add(item);
-                        if (feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedOther().add(createBillableItem(item));
-                        }
+            fillCatalogItems(options, service.version(), true);
+        }
+    }
+
+    private void fillCatalogItems(UnitOptionsSelectionDTO options, Service.ServiceV service, Boolean fillMandatory) {
+        Persistence.service().retrieveMember(service.features());
+
+        for (Feature feature : service.features()) {
+            Persistence.service().retrieveMember(feature.version().items());
+
+            for (ProductItem item : feature.version().items()) {
+                switch (feature.code().type().getValue()) {
+                case AddOn:
+                case Utility:
+                    options.availableUtilities().add(item);
+                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                        options.selectedUtilities().add(createBillableItem(item));
+                    }
+                    break;
+                case Pet:
+                    options.availablePets().add(item);
+                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                        options.selectedPets().add(createBillableItem(item));
+                    }
+                    break;
+                case Parking:
+                    options.availableParking().add(item);
+                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                        options.selectedParking().add(createBillableItem(item));
+                    }
+                    break;
+                case Locker:
+                    options.availableStorage().add(item);
+                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                        options.selectedStorage().add(createBillableItem(item));
+                    }
+                    break;
+                default:
+                    options.availableOther().add(item);
+                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                        options.selectedOther().add(createBillableItem(item));
                     }
                 }
             }
         }
     }
 
-    public BillableItem createBillableItem(ProductItem productItem) {
+    private UnitOptionsSelectionDTO.Restrictions retriveUnitOptionRestrictions(AptUnit unit) {
+        UnitOptionsSelectionDTO.Restrictions restrictions = EntityFactory.create(UnitOptionsSelectionDTO.Restrictions.class);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit, RestrictionsPolicy.class);
+
+        restrictions.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
+        restrictions.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
+        restrictions.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
+
+        return restrictions;
+    }
+
+    private void loadDetachedProducts(UnitOptionsSelectionDTO options) {
+        Persistence.service().retrieve(options.selectedService().item().product());
+
+        loadDetachedProducts(options.selectedPets());
+        loadDetachedProducts(options.selectedParking());
+        loadDetachedProducts(options.selectedStorage());
+        loadDetachedProducts(options.selectedUtilities());
+        loadDetachedProducts(options.selectedOther());
+    }
+
+    private void loadDetachedProducts(List<BillableItem> items) {
+        for (BillableItem item : items) {
+            Persistence.service().retrieve(item.item().product());
+        }
+    }
+
+    private BillableItem createBillableItem(ProductItem productItem) {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
 
         newItem.item().set(productItem);
