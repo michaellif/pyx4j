@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc;
 
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
@@ -305,7 +306,7 @@ public class CrmSiteMap implements SiteMap {
         public static class MoneyIn extends AppPlace {
 
             @PlaceProperties(navigLabel = "Bank Deposit Slip / Batch")
-            public static class Batches extends AppPlace {
+            public static class Batches extends CrudAppPlace {
 
                 public static class Batch extends AppPlace {
 

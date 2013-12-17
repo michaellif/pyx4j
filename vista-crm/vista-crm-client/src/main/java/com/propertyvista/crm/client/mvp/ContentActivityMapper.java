@@ -243,7 +243,7 @@ import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.client.activity.tools.financial.autopayreview.AutoPayReviewActivity;
-import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInBatchesActivity;
+import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInBatchListerActivity;
 import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInCreateBatchActivity;
 import com.propertyvista.crm.client.activity.tools.legal.l1.L1DelinquentLeaseSearchActivity;
 import com.propertyvista.crm.client.activity.tools.legal.n4.N4CreateBatchActivity;
@@ -778,6 +778,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         default:
                             break;
+                        }
+
+                    } else if (crudPlace instanceof Finance.MoneyIn.Batches) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new MoneyInBatchListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                        case editor:
+                        default:
+                            break;
+
                         }
 
 // - Organization-related:
@@ -1349,9 +1361,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new AutoPayReviewActivity((AppPlace) place);
                 } else if (place instanceof Finance.MoneyIn) {
                     activity = new MoneyInCreateBatchActivity();
-                } else if (place instanceof Finance.MoneyIn.Batches) {
-                    activity = new MoneyInBatchesActivity();
-                    // END: Bulk Operations Tools
 
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();

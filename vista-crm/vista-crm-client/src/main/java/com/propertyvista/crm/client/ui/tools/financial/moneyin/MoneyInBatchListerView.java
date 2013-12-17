@@ -7,35 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-12-13
+ * Created on 2013-12-17
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
-import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.ProvidesKey;
-
-import com.pyx4j.site.client.ui.prime.IPrimePane;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
-public interface MoneyInBatchesView extends IPrimePane {
+public interface MoneyInBatchListerView extends ILister<MoneyInBatchDTO> {
 
-    interface Presenter extends IPrimePane.Presenter, ProvidesKey<MoneyInBatchDTO> {
-
-        void search();
-
-        void openBatch(MoneyInBatchDTO batch);
-
-        void delete(MoneyInBatchDTO batch);
-
-        void sort(String memberPath, boolean isAscending);
+    interface MoneyInBatchListerPresenter extends Presenter<MoneyInBatchDTO> {
 
     }
-
-    void setPresenter(Presenter presenter);
-
-    HasData<MoneyInBatchDTO> batches();
 
 }
