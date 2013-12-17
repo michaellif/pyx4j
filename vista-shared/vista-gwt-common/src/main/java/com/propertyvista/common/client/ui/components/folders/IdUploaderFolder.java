@@ -28,10 +28,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.util.ValidationUtils;
@@ -121,10 +120,10 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idNumber())).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes())).build());
 
-            ApplicationDocumentFileUploaderFolder docPagesFolder = new ApplicationDocumentFileUploaderFolder();
-            docPagesFolder.addValueValidator(new EditableValueValidator<IList<ApplicationDocumentFile>>() {
+            IdentificationDocumentFileUploaderFolder docPagesFolder = new IdentificationDocumentFileUploaderFolder();
+            docPagesFolder.addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFile>>() {
                 @Override
-                public ValidationError isValid(CComponent<IList<ApplicationDocumentFile>> component, IList<ApplicationDocumentFile> value) {
+                public ValidationError isValid(CComponent<IList<IdentificationDocumentFile>> component, IList<IdentificationDocumentFile> value) {
                     if (value != null && value.size() < 1) {
                         return new ValidationError(component, i18n.tr("at least one document file is required"));
                     } else {
@@ -137,7 +136,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             get(proto().idType()).setViewable(true);
 
             content.setH3(++row, 0, 2, i18n.tr("Files"));
-            content.setWidget(++row, 0, 2, inject(proto().documentPages(), docPagesFolder));
+            content.setWidget(++row, 0, 2, inject(proto().files(), docPagesFolder));
             return content;
         }
 

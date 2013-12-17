@@ -7,40 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-28
+ * Created on 2013-10-24
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.domain;
-
-import java.util.Date;
+package com.propertyvista.domain.blob;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.VistaNamespace;
-
-@RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-/** Blob of the documents PMCs upload via during Credit Check Setup Wizard */
-@Table(namespace = VistaNamespace.operationsNamespace)
-public interface PmcDocumentBlob extends IEntity {
-
-    IPrimitive<String> contentType();
+public interface EmployeeSignatureBlob extends IFileBlob {
 
     /**
      * This is actual BLOB of the Image or PDF stored on server
      */
+    @Override
     @RpcTransient
-    @Length(15 * 1024 * 1024)
+    @Length(1 * 1024 * 1024)
     IPrimitive<byte[]> data();
-
-    @Timestamp(Timestamp.Update.Created)
-    IPrimitive<Date> created();
 
 }

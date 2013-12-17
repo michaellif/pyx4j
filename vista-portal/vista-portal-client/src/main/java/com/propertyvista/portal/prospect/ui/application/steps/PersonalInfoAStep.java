@@ -41,12 +41,11 @@ public class PersonalInfoAStep extends ApplicationWizardStep {
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(
-                GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder<CustomerPicture>(
-                        CustomerPicture.class));
+        CImage imageHolder = new CImage(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder(
+                CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().picture(), imageHolder)).customLabel("").build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().picture().file(), imageHolder)).customLabel("").build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Personal Information"));
         panel.setWidget(++row, 0, inject(proto().applicant().person().name(), new NameEditor(i18n.tr("Full Name"))));

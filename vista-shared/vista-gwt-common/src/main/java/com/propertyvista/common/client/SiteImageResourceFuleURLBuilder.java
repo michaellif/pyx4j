@@ -7,15 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 6, 2013
+ * Created on Dec 17, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease;
+package com.propertyvista.common.client;
 
-import com.propertyvista.crm.rpc.services.lease.ProofOfEmploymentDocumentCrmUploadService;
-import com.propertyvista.server.common.upload.AbstractApplicationDocumentUploadServiceImpl;
+import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 
-public class ApplicationDocumentCrmUploadServiceImpl extends AbstractApplicationDocumentUploadServiceImpl implements ProofOfEmploymentDocumentCrmUploadService {
+import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.domain.site.SiteImageResource;
+
+public class SiteImageResourceFuleURLBuilder implements IFileURLBuilder {
+
+    @Override
+    public String getUrl(IFile<?> file) {
+        return MediaUtils.createSiteImageResourceUrl((SiteImageResource) file.getOwner());
+    }
 
 }

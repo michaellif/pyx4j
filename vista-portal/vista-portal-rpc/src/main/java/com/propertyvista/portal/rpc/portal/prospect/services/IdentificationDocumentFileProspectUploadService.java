@@ -16,8 +16,8 @@ package com.propertyvista.portal.rpc.portal.prospect.services;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 
-public interface ApplicationDocumentProspectUploadService extends UploadService<IEntity, ApplicationDocumentFile> {
+public interface IdentificationDocumentFileProspectUploadService extends UploadService<IEntity, IdentificationDocumentBlob> {
 
 }

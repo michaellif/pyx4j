@@ -17,14 +17,21 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("{0} {1,size}")
-public interface MediaFile extends IFile {
+import com.propertyvista.domain.blob.MediaFileBlob;
+
+@ToStringFormat("{0}")
+public interface MediaFile extends IHasFile<MediaFileBlob> {
 
     @Override
-    @ToString(index = 1)
-    IPrimitive<Integer> fileSize();
+    @ToString(index = 0)
+    IFile<MediaFileBlob> file();
+
+    IPrimitive<String> caption();
+
+    IPrimitive<String> description();
 
     @NotNull
     IPrimitive<PublicVisibilityType> visibility();

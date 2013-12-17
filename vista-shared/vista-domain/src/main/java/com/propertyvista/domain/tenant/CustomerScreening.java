@@ -36,7 +36,6 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.ApplicationDocumentOwner;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
@@ -57,7 +56,7 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> 
     @Detached(level = AttachLevel.Detached)
     ISet<CustomerCreditCheck> creditChecks();
 
-    public interface CustomerScreeningV extends IVersionData<CustomerScreening>, ApplicationDocumentOwner<IdentificationDocumentFolder> {
+    public interface CustomerScreeningV extends IVersionData<CustomerScreening> {
 
         @Timestamp(Update.Created)
         IPrimitive<LogicalDate> createDate();
@@ -92,5 +91,8 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV> 
         @Detached
         @Length(3)
         IList<CustomerScreeningPersonalAsset> assets();
+
+        @Owned
+        IList<IdentificationDocumentFolder> documents();
     }
 }

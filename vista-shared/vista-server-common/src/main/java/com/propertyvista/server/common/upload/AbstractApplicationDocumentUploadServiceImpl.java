@@ -19,15 +19,15 @@ import java.util.EnumSet;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.server.domain.ApplicationDocumentBlob;
+import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
 
-public abstract class AbstractApplicationDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, ApplicationDocumentFile> {
+public abstract class AbstractApplicationDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, ProofOfEmploymentDocumentBlob> {
 
     private static final I18n i18n = I18n.get(AbstractApplicationDocumentUploadServiceImpl.class);
 
@@ -35,7 +35,6 @@ public abstract class AbstractApplicationDocumentUploadServiceImpl extends Abstr
             DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF);
 
     public AbstractApplicationDocumentUploadServiceImpl() {
-        super(ApplicationDocumentFile.class);
     }
 
     @Override
@@ -45,7 +44,7 @@ public abstract class AbstractApplicationDocumentUploadServiceImpl extends Abstr
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(ApplicationDocumentBlob.class).data().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(ProofOfEmploymentDocumentBlob.class).data().getMeta().getLength();
     }
 
     @Override
@@ -54,8 +53,8 @@ public abstract class AbstractApplicationDocumentUploadServiceImpl extends Abstr
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, ApplicationDocumentFile response) {
-        ApplicationDocumentBlob blob = EntityFactory.create(ApplicationDocumentBlob.class);
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<ProofOfEmploymentDocumentBlob> response) {
+        ProofOfEmploymentDocumentBlob blob = EntityFactory.create(ProofOfEmploymentDocumentBlob.class);
         blob.data().setValue(uploadedData.binaryContent);
         blob.contentType().setValue(uploadedData.contentMimeType);
 

@@ -16,14 +16,20 @@ package com.propertyvista.domain.tenant.insurance;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IHasFile;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface InsuranceCertificateScan extends IFile {
+import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
+
+public interface InsuranceCertificateScan extends IHasFile<InsuranceCertificateScanBlob> {
 
     @Owner
     @Detached
     @JoinColumn
-    @NotNull
-    InsuranceCertificateDoc certificateDoc();
+    @ReadOnly
+    InsuranceCertificate<?> certificate();
+
+    IPrimitive<String> description();
+
 }

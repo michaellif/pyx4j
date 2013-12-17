@@ -138,8 +138,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }
 
         int row = -1;
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPictureCrmUploadService> create(CustomerPictureCrmUploadService.class),
-                new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class));
+        CImage imageHolder = new CImage(GWT.<CustomerPictureCrmUploadService> create(CustomerPictureCrmUploadService.class), new VistaFileURLBuilder(
+                CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 

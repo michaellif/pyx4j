@@ -163,10 +163,10 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
     }
 
     private void upload() {
-        UploadReceiver<IFile> uploadReciver = new UploadReceiver<IFile>() {
+        UploadReceiver uploadReciver = new UploadReceiver() {
 
             @Override
-            public void onUploadComplete(IFile uploadResponse) {
+            public void onUploadComplete(IFile<?> uploadResponse) {
                 presenter.refresh();
             }
         };

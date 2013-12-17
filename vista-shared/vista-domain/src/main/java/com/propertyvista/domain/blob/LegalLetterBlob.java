@@ -7,27 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-24
+ * Created on 2013-10-02
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.domain;
+package com.propertyvista.domain.blob;
 
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-@RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface EmployeeSignatureBlob extends IFileBlob {
-
-    /**
-     * This is actual BLOB of the Image or PDF stored on server
-     */
-    @Override
-    @RpcTransient
-    @Length(1 * 1024 * 1024)
-    IPrimitive<byte[]> data();
+public interface LegalLetterBlob extends IFileBlob {
 
 }

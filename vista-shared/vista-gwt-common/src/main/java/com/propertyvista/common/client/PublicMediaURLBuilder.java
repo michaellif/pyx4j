@@ -20,7 +20,7 @@ import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 
-public class PublicMediaURLBuilder extends VistaFileURLBuilder<MediaFile> {
+public class PublicMediaURLBuilder extends VistaFileURLBuilder {
 
     public PublicMediaURLBuilder() {
         super(MediaFile.class);

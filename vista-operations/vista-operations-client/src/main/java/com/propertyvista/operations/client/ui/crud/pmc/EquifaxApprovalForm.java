@@ -36,7 +36,7 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().perApplicantFeee())).build());
 
         panel.setH1(++row, 0, 1, "Business Information");
-        panel.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm(null, null)));
+        panel.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
 
         panel.setH1(++row, 0, 1, "Personal Information");
         panel.setWidget(++row, 0, inject(proto().personalInformation(), new PersonalInformationForm()));

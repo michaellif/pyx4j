@@ -13,7 +13,11 @@
  */
 package com.propertyvista.operations.server.services;
 
+import java.util.Collection;
+import java.util.EnumSet;
+
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
@@ -25,9 +29,16 @@ public class MerchantAccountFileUploadServiceImpl extends AbstractUploadWithDown
 
     private static final I18n i18n = I18n.get(MerchantAccountFileUploadServiceImpl.class);
 
+    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XLS, DownloadFormat.XLSX);
+
     @Override
     public long getMaxSize() {
         return 25 * 1024 * 1024;
+    }
+
+    @Override
+    public Collection<String> getSupportedExtensions() {
+        return DownloadFormat.getExtensions(supportedFormats);
     }
 
     @Override

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.server.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationDocumentProspectUploadService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentFileProspectUploadService;
 import com.propertyvista.server.common.upload.AbstractApplicationDocumentUploadServiceImpl;
 
-public class ApplicationDocumentProspectUploadServiceImpl extends AbstractApplicationDocumentUploadServiceImpl implements ApplicationDocumentProspectUploadService {
+public class ApplicationDocumentProspectUploadServiceImpl extends AbstractApplicationDocumentUploadServiceImpl implements ProofOfEmploymentFileProspectUploadService {
 
 }

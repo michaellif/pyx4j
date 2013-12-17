@@ -120,7 +120,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         Label collectionOfBusinessInformation = new Label();
         collectionOfBusinessInformation.setHTML(OnlinePaymentWizardResources.INSTANCE.collectionOfBusinessInformationExplanation().getText());
         main.setWidget(++row, 0, collectionOfBusinessInformation);
-        main.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm(null, null)));
+        main.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
         return main;
     }
 

@@ -14,12 +14,13 @@
 package com.propertyvista.domain.pmc.info;
 
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.blob.operations.PmcDocumentBlob;
 
 /** Holds the metadata of a file and the key of Blob */
 @Table(namespace = VistaNamespace.operationsNamespace)
-public interface PmcDocumentFile extends IFile {
+public interface PmcDocumentFile extends IHasFile<PmcDocumentBlob> {
 
 }

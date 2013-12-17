@@ -7,26 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 17, 2012
+ * Created on Apr 4, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.media;
+package com.propertyvista.domain.blob;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
-@AbstractEntity
-@Inheritance
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface ApplicationDocumentOwner<E extends ApplicationDocumentFolder<?>> extends IEntity {
-
-    //TODO make detached
-    @Owned
-    IList<E> documents();
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface NoteAttachmentBlob extends IFileBlob {
 
 }

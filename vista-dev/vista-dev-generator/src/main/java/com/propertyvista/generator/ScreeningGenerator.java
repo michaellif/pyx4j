@@ -26,6 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -34,9 +35,10 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.domain.media.ApplicationDocumentFolder;
+import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
@@ -52,7 +54,6 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
-import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class ScreeningGenerator {
 
@@ -254,45 +255,45 @@ public class ScreeningGenerator {
             identificationDocumentTypes = Persistence.service().query(EntityQueryCriteria.create(IdentificationDocumentType.class));
         }
         document.idType().set(RandomUtil.random(identificationDocumentTypes));
-        document.documentPages().add(createDocumentPage("doc-security" + RandomUtil.randomInt(3) + ".jpg"));
+        document.files().add(createDocumentPage(IdentificationDocumentFile.class, "doc-security" + RandomUtil.randomInt(3) + ".jpg"));
         return document;
     }
 
     private ProofOfEmploymentDocumentFolder createProofOfEmploymentDocument() {
         ProofOfEmploymentDocumentFolder document = EntityFactory.create(ProofOfEmploymentDocumentFolder.class);
         document.description().setValue("proof of employment document " + RandomUtil.randomLetters(10));
-        document.documentPages().add(createDocumentPage("doc-income" + RandomUtil.randomInt(3) + ".jpg"));
+        document.files().add(createDocumentPage(ProofOfEmploymentDocumentFile.class, "doc-income" + RandomUtil.randomInt(3) + ".jpg"));
         return document;
     }
 
-    public ApplicationDocumentFile<?> createDocumentPage(String fileName) {
-        ApplicationDocumentFile<?> applicationDocument = EntityFactory.create(ApplicationDocumentFile.class);
-        applicationDocument.fileName().setValue(fileName);
+    public <T extends IHasFile<?>> T createDocumentPage(Class<T> fileClass, String fileName) {
+        T applicationDocument = EntityFactory.create(fileClass);
+        applicationDocument.file().fileName().setValue(fileName);
         return applicationDocument;
     }
 
     public static void attachDocumentData(CustomerScreening screening) {
-        for (ApplicationDocumentFolder<?> document : screening.version().documents()) {
+        for (IdentificationDocumentFolder document : screening.version().documents()) {
             attachDocumentData(document);
         }
         for (CustomerScreeningIncome income : screening.version().incomes()) {
-            for (ApplicationDocumentFolder<?> document : income.documents()) {
+            for (ProofOfEmploymentDocumentFolder document : income.documents()) {
                 attachDocumentData(document);
             }
         }
     }
 
-    private static void attachDocumentData(ApplicationDocumentFolder<?> document) {
-        for (ApplicationDocumentFile<?> applicationDocument : document.documentPages()) {
-            String fileName = applicationDocument.fileName().getValue();
-            ApplicationDocumentBlob applicationDocumentData;
+    private static void attachDocumentData(IdentificationDocumentFolder document) {
+        for (IdentificationDocumentFile applicationDocument : document.files()) {
+            String fileName = applicationDocument.file().fileName().getValue();
+            ProofOfEmploymentDocumentBlob applicationDocumentData;
             try {
                 byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, ScreeningGenerator.class);
                 if (data == null) {
                     throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
                 }
                 String contentType = MimeMap.getContentType(FilenameUtils.getExtension(fileName));
-                applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);
+                applicationDocumentData = EntityFactory.create(ProofOfEmploymentDocumentBlob.class);
                 applicationDocumentData.data().setValue(data);
                 applicationDocumentData.contentType().setValue(contentType);
 
@@ -301,9 +302,34 @@ public class ScreeningGenerator {
             }
 
             Persistence.service().persist(applicationDocumentData);
-            applicationDocument.fileSize().setValue(applicationDocumentData.data().getValue().length);
-            applicationDocument.blobKey().set(applicationDocumentData.id());
-            FileUploadRegistry.register(applicationDocument);
+            applicationDocument.file().fileSize().setValue(applicationDocumentData.data().getValue().length);
+            applicationDocument.file().blobKey().set(applicationDocumentData.id());
+            FileUploadRegistry.register(applicationDocument.file());
+        }
+    }
+
+    private static void attachDocumentData(ProofOfEmploymentDocumentFolder document) {
+        for (ProofOfEmploymentDocumentFile applicationDocument : document.files()) {
+            String fileName = applicationDocument.file().fileName().getValue();
+            ProofOfEmploymentDocumentBlob applicationDocumentData;
+            try {
+                byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, ScreeningGenerator.class);
+                if (data == null) {
+                    throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
+                }
+                String contentType = MimeMap.getContentType(FilenameUtils.getExtension(fileName));
+                applicationDocumentData = EntityFactory.create(ProofOfEmploymentDocumentBlob.class);
+                applicationDocumentData.data().setValue(data);
+                applicationDocumentData.contentType().setValue(contentType);
+
+            } catch (IOException e) {
+                throw new Error("Failed to read the file [" + fileName + "]", e);
+            }
+
+            Persistence.service().persist(applicationDocumentData);
+            applicationDocument.file().fileSize().setValue(applicationDocumentData.data().getValue().length);
+            applicationDocument.file().blobKey().set(applicationDocumentData.id());
+            FileUploadRegistry.register(applicationDocument.file());
         }
     }
 

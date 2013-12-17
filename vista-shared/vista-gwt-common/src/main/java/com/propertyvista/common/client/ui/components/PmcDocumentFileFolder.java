@@ -15,14 +15,12 @@ package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -30,8 +28,6 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -46,7 +42,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
 
     static {
         PmcDocumentFile proto = EntityFactory.getEntityPrototype(PmcDocumentFile.class);
-        COLUMNS = Arrays.asList((new EntityFolderColumnDescriptor(proto.fileName(), "30em")));
+        COLUMNS = Arrays.asList((new EntityFolderColumnDescriptor(proto.file().fileName(), "30em")));
     }
 
     private static class PmcDocumentFileForm extends CEntityFolderRowEditor<PmcDocumentFile> {
@@ -58,7 +54,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
 
         @Override
         protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().fileName()) {
+            if (column.getObject() == proto().file().fileName()) {
                 CTextField cmp = new CTextField();
                 cmp.setNavigationCommand(new Command() {
                     @Override
@@ -89,27 +85,14 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
         }
     }
 
-    private final Collection<DownloadFormat> supportedFormats;
-
-    private final UploadService<IEntity, PmcDocumentFile> uploadService;
-
-    public PmcDocumentFileFolder(UploadService<IEntity, PmcDocumentFile> uploadService, Collection<DownloadFormat> supportedFormats) {
+    public PmcDocumentFileFolder() {
         super(PmcDocumentFile.class);
         setOrderable(false);
-        this.uploadService = uploadService;
-        this.supportedFormats = supportedFormats;
     }
 
     @Override
     protected void addItem() {
-        new PmcDocumentFileUploaderDialog(uploadService, supportedFormats) {
-
-            @Override
-            protected void onUploadComplete(PmcDocumentFile serverUploadResponse) {
-                addItem(serverUploadResponse);
-            }
-        }.show();
-
+        throw new Error("TODO implement me");
     }
 
     @Override

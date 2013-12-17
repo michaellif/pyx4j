@@ -16,8 +16,8 @@ package com.propertyvista.crm.rpc.services.customer;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.domain.blob.CustomerPictureBlob;
 
-public interface CustomerPictureCrmUploadService extends UploadService<IEntity, CustomerPicture> {
+public interface CustomerPictureCrmUploadService extends UploadService<IEntity, CustomerPictureBlob> {
 
 }

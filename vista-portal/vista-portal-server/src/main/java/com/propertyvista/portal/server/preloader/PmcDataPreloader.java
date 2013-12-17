@@ -34,6 +34,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -61,7 +62,6 @@ import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
-import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.FileImageThumbnailBlob;
 
 public class PmcDataPreloader extends BaseVistaDevDataPreloader {
@@ -84,7 +84,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Vendor.class, Elevator.class, Boiler.class,
                     Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, MediaFile.class, FileImageThumbnailBlob.class,
-                    FileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
+                    MediaFileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
         } else {
             return "This is production";
         }

@@ -26,9 +26,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
-import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class CleanupPmcProcess implements PmcProcess {
 
@@ -77,7 +77,7 @@ public class CleanupPmcProcess implements PmcProcess {
     public void executePmcJob(PmcProcessContext context) {
         log.info("Cleaunup orphan application documents started");
 
-        EntityQueryCriteria<ApplicationDocumentBlob> allDataCriteria = EntityQueryCriteria.create(ApplicationDocumentBlob.class);
+        EntityQueryCriteria<ProofOfEmploymentDocumentBlob> allDataCriteria = EntityQueryCriteria.create(ProofOfEmploymentDocumentBlob.class);
         Date minDate = config.cleanupOrphanApplicationDocumentsDateRangeMin();
         log.debug("minDate={}", minDate);
         allDataCriteria.add(PropertyCriterion.ge(allDataCriteria.proto().created(), minDate));
@@ -92,12 +92,12 @@ public class CleanupPmcProcess implements PmcProcess {
         log.trace("dataKeys={}", dataKeys);
 
         for (Key dataKey : dataKeys) {
-            EntityQueryCriteria<ApplicationDocumentFile> criteria = EntityQueryCriteria.create(ApplicationDocumentFile.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().blobKey(), dataKey));
-            ApplicationDocumentFile doc = Persistence.service().retrieve(criteria);
+            EntityQueryCriteria<ProofOfEmploymentDocumentFile> criteria = EntityQueryCriteria.create(ProofOfEmploymentDocumentFile.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().file().blobKey(), dataKey));
+            ProofOfEmploymentDocumentFile doc = Persistence.service().retrieve(criteria);
             if (doc == null) {
                 log.debug("CleanOrphanApplicationDocumentDataRecordsJob: Found orphan ApplicationDocumentData record - deleting. id={}", dataKey);
-                Persistence.service().delete(ApplicationDocumentBlob.class, dataKey);
+                Persistence.service().delete(ProofOfEmploymentDocumentBlob.class, dataKey);
                 context.getExecutionMonitor().addProcessedEvent("Orphans Cleaned");
             }
         }

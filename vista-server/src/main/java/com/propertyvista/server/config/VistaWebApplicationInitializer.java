@@ -54,8 +54,6 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteFilter;
 import com.propertyvista.pmsite.server.PMSiteRobotsTxtFilter;
 import com.propertyvista.portal.server.portal.PublicMediaServlet;
-import com.propertyvista.portal.server.upload.LegalLetterDocumentServlet;
-import com.propertyvista.portal.server.upload.PmcDocumentServlet;
 import com.propertyvista.portal.server.upload.SiteImageResourceServlet;
 import com.propertyvista.portal.server.upload.VistaFileAccessServlet;
 import com.propertyvista.server.VistaUploadServlet;
@@ -213,23 +211,11 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             sc.addMapping(allApplicationsUrlPatterns("/media/*"));
         }
 
-        // Special downloads; TODO unify
+        // Special downloads
         {
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("PmcDocumentServlet", PmcDocumentServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.crm, "/pmc_document/*"));
-                sc.addMapping(urlPattern(VistaApplication.operations, "/pmc_document/*"));
-            }
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("VistaFileAccessServlet", VistaFileAccessServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.crm, "/file/*"));
-                sc.addMapping(urlPattern(VistaApplication.resident, "/file/*"));
-            }
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("LegalLetterDocumentServlet", LegalLetterDocumentServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.crm, "/legal_letter/*"));
-            }
-
+            ServletRegistration.Dynamic sc = ctx.addServlet("VistaFileAccessServlet", VistaFileAccessServlet.class);
+            sc.addMapping(urlPattern(VistaApplication.crm, "/file/*"));
+            sc.addMapping(urlPattern(VistaApplication.resident, "/file/*"));
         }
 
         // Development environment

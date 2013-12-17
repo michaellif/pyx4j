@@ -21,14 +21,15 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @AbstractEntity
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
-public interface LegalLetter extends IFile {
+public interface LegalLetter extends IHasFile<LegalLetterBlob> {
 
     @Detached
     @MemberColumn(notNull = true)

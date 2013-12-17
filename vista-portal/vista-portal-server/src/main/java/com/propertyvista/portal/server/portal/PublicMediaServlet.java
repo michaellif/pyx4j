@@ -96,7 +96,7 @@ public class PublicMediaServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             serveNotFound(thumbnailSize, response);
             return;
-        } else if (file.blobKey().isNull()) {
+        } else if (file.file().blobKey().isNull()) {
             log.debug("no media {} {} is not file", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             serveNotFound(thumbnailSize, response);
@@ -109,16 +109,16 @@ public class PublicMediaServlet extends HttpServlet {
             }
         }
 
-        String token = ETag.getEntityTag(file, thumbnailSize);
+        String token = ETag.getEntityTag(file.file(), thumbnailSize);
         response.setHeader("Etag", token);
 
-        if (!file.timestamp().isNull()) {
+        if (!file.file().timestamp().isNull()) {
             long since = request.getDateHeader("If-Modified-Since");
-            if ((since != -1) && (file.timestamp().getValue() < since)) {
+            if ((since != -1) && (file.file().timestamp().getValue() < since)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
-            response.setDateHeader("Last-Modified", file.timestamp().getValue());
+            response.setDateHeader("Last-Modified", file.file().timestamp().getValue());
             // HTTP 1.0
             response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
             // HTTP 1.1
@@ -131,13 +131,13 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         if (thumbnailSize == null) {
-            if (!file.contentMimeType().isNull()) {
-                response.setContentType(file.contentMimeType().getValue());
+            if (!file.file().contentMimeType().isNull()) {
+                response.setContentType(file.file().contentMimeType().getValue());
             }
-            BlobService.serve(file.blobKey().getValue(), response);
+            BlobService.serve(file.file().blobKey().getValue(), response);
         } else {
-            if (!ThumbnailService.serve(file.blobKey().getValue(), thumbnailSize, response)) {
-                log.debug("no blob {} for media {}", file.blobKey().getValue(), id);
+            if (!ThumbnailService.serve(file.file().blobKey().getValue(), thumbnailSize, response)) {
+                log.debug("no blob {} for media {}", file.file().blobKey().getValue(), id);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 serveNotFound(thumbnailSize, response);
             }

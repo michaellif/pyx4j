@@ -7,35 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 4, 2011
+ * Created on 2011-06-04
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain;
-
-import java.util.Date;
+package com.propertyvista.domain.blob;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface NoteAttachmentBlob extends IEntity {
-
-    IPrimitive<String> contentType();
+public interface InsuranceCertificateScanBlob extends IFileBlob {
 
     /**
      * This is actual BLOB of the Image or PDF stored on server
      */
+    @Override
     @RpcTransient
     @Length(15 * 1024 * 1024)
     IPrimitive<byte[]> data();
-
-    @Timestamp(Timestamp.Update.Created)
-    IPrimitive<Date> created();
 
 }

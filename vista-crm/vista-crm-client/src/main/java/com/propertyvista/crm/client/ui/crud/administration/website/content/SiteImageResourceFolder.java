@@ -29,20 +29,19 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
-import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.common.client.SiteImageResourceFuleURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteLogoImageResource;
-import com.propertyvista.domain.site.SiteImageResource;
 
 public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResource> {
+
     private static final I18n i18n = I18n.get(SiteImageResourceFolder.class);
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
@@ -97,20 +96,18 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
 
     class PortalImageResourceEditor extends CEntityForm<SiteLogoImageResource> {
 
-        private final CImage<SiteImageResource> smallLogo;
+        private final CImage smallLogo;
 
-        private final CImage<SiteImageResource> largeLogo;
+        private final CImage largeLogo;
 
         public PortalImageResourceEditor() {
             super(SiteLogoImageResource.class);
 
-            smallLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
-                    new SiteImageResourceUrlBuilder());
+            smallLogo = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFuleURLBuilder());
             smallLogo.setImageSize(150, 100);
             smallLogo.setScaleMode(ScaleMode.Contain);
 
-            largeLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
-                    new SiteImageResourceUrlBuilder());
+            largeLogo = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFuleURLBuilder());
             largeLogo.setImageSize(300, 150);
             largeLogo.setScaleMode(ScaleMode.Contain);
         }
@@ -130,11 +127,5 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
             return main;
         }
 
-        class SiteImageResourceUrlBuilder implements IFileURLBuilder<SiteImageResource> {
-            @Override
-            public String getUrl(SiteImageResource file) {
-                return MediaUtils.createSiteImageResourceUrl(file);
-            }
-        }
     }
 }

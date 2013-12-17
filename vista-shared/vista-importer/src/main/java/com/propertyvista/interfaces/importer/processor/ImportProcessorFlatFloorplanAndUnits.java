@@ -35,6 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -52,7 +53,6 @@ import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
-import com.propertyvista.server.domain.FileBlob;
 
 public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
@@ -231,16 +231,16 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
             Persistence.ensureRetrieve(floorplan.media(), AttachLevel.Attached);
             mediaCrc = new HashMap<Long, MediaFile>();
             for (MediaFile media : floorplan.media()) {
-                if (!media.blobKey().isNull()) {
-                    FileBlob blob = Persistence.service().retrieve(FileBlob.class, media.blobKey().getValue());
+                if (!media.file().blobKey().isNull()) {
+                    MediaFileBlob blob = Persistence.service().retrieve(MediaFileBlob.class, media.file().blobKey().getValue());
                     mediaCrc.put(getCrc(blob), media);
                 }
             }
         }
 
-        private Long getCrc(FileBlob blob) {
+        private Long getCrc(MediaFileBlob blob) {
             CRC32 crc = new CRC32();
-            crc.update(blob.content().getValue(), 0, blob.content().getValue().length);
+            crc.update(blob.data().getValue(), 0, blob.data().getValue().length);
             return crc.getValue();
         }
     }
@@ -263,10 +263,10 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
     private MediaFile copyMedia(MediaFile origValue, Floorplan newFloorplan) {
         MediaFile newValue = EntityGraph.businessDuplicate(origValue);
 
-        FileBlob origBlob = Persistence.service().retrieve(FileBlob.class, origValue.blobKey().getValue());
-        newValue.blobKey().setValue(BlobService.persist(origBlob.content().getValue(), origBlob.name().getValue(), origBlob.contentType().getValue()));
+        MediaFileBlob origBlob = Persistence.service().retrieve(MediaFileBlob.class, origValue.file().blobKey().getValue());
+        newValue.file().blobKey().setValue(BlobService.persist(origBlob.data().getValue(), origBlob.name().getValue(), origBlob.contentType().getValue()));
 
-        ThumbnailService.persist(newValue.blobKey().getValue(), origBlob.name().getValue(), origBlob.content().getValue(), ImageTarget.Floorplan);
+        ThumbnailService.persist(newValue.file().blobKey().getValue(), origBlob.name().getValue(), origBlob.data().getValue(), ImageTarget.Floorplan);
 
         newFloorplan.media().add(newValue);
         Persistence.service().persist(newFloorplan);

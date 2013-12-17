@@ -13,15 +13,19 @@
  */
 package com.propertyvista.domain.note;
 
-import com.pyx4j.entity.annotations.RequireFeature;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IHasFile;
 
-import com.propertyvista.misc.ApplicationFeaturesAttachment;
+import com.propertyvista.domain.blob.NoteAttachmentBlob;
 
-//TODO implement Attachments
-@RequireFeature(ApplicationFeaturesAttachment.class)
-@Transient
-public interface NoteAttachment extends IFile {
+public interface NoteAttachment extends IHasFile<NoteAttachmentBlob> {
 
+    @Owner
+    @JoinColumn
+    @Detached
+    @ReadOnly
+    NotesAndAttachments owner();
 }

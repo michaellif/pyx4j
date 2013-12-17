@@ -61,16 +61,16 @@ public class MediaGenerator {
         }
         for (Map.Entry<MediaFile, byte[]> me : data.entrySet()) {
             MediaFile m = me.getKey();
-            if (m.blobKey().isNull()) {
-                m.blobKey().setValue(BlobService.persist(me.getValue(), m.fileName().getValue(), m.contentMimeType().getValue()));
+            if (m.file().blobKey().isNull()) {
+                m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().fileName().getValue(), m.file().contentMimeType().getValue()));
 
-                FileImageThumbnailBlobDTO thumbnailBlob = resized.get(m.fileName().getValue());
+                FileImageThumbnailBlobDTO thumbnailBlob = resized.get(m.file().fileName().getValue());
                 if (thumbnailBlob == null) {
-                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.fileName().getStringView(), me.getValue(), ImageTarget.Building);
-                    resized.put(m.fileName().getValue(), thumbnailBlob);
+                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().fileName().getStringView(), me.getValue(), ImageTarget.Building);
+                    resized.put(m.file().fileName().getValue(), thumbnailBlob);
                 }
                 thumbnailBlob = (FileImageThumbnailBlobDTO) thumbnailBlob.duplicate();
-                thumbnailBlob.setPrimaryKey(m.blobKey().getValue());
+                thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
                 ThumbnailService.persist(thumbnailBlob);
                 newData = true;
             }
@@ -98,16 +98,16 @@ public class MediaGenerator {
         }
         for (Map.Entry<MediaFile, byte[]> me : data.entrySet()) {
             MediaFile m = me.getKey();
-            if (m.blobKey().isNull()) {
-                m.blobKey().setValue(BlobService.persist(me.getValue(), m.fileName().getValue(), m.contentMimeType().getValue()));
+            if (m.file().blobKey().isNull()) {
+                m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().fileName().getValue(), m.file().contentMimeType().getValue()));
 
-                FileImageThumbnailBlobDTO thumbnailBlob = resized.get(m.fileName().getValue());
+                FileImageThumbnailBlobDTO thumbnailBlob = resized.get(m.file().fileName().getValue());
                 if (thumbnailBlob == null) {
-                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.fileName().getStringView(), me.getValue(), ImageTarget.Floorplan);
-                    resized.put(m.fileName().getValue(), thumbnailBlob);
+                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().fileName().getStringView(), me.getValue(), ImageTarget.Floorplan);
+                    resized.put(m.file().fileName().getValue(), thumbnailBlob);
                 }
                 thumbnailBlob = (FileImageThumbnailBlobDTO) thumbnailBlob.duplicate();
-                thumbnailBlob.setPrimaryKey(m.blobKey().getValue());
+                thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
                 ThumbnailService.persist(thumbnailBlob);
 
                 newData = true;

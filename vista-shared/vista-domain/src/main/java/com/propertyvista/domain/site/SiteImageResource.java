@@ -13,8 +13,15 @@
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface SiteImageResource extends IFile {
+import com.propertyvista.domain.blob.MediaFileBlob;
+
+public interface SiteImageResource extends IHasFile<MediaFileBlob> {
+
+    IPrimitive<String> caption();
+
+    IPrimitive<String> description();
 
 }

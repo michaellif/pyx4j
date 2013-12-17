@@ -14,11 +14,12 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface DownloadableUploadResponseDTO extends IFile {
+public interface DownloadableUploadResponseDTO extends IFile<AbstractIFileBlob> {
 
     IPrimitive<String> message();
 

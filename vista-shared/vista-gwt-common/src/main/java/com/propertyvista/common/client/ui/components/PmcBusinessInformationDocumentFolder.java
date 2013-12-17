@@ -13,17 +13,12 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import java.util.Collection;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -31,7 +26,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
-import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 
 public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusinessInfoDocument> {
 
@@ -51,23 +45,17 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
             if (isEditable()) {
                 content.setH4(++row, 0, 1, i18n.tr("Click 'Add' to upload document pages"));
             }
-            content.setWidget(++row, 0, inject(proto().documentPages(), new PmcDocumentFileFolder(service, supportedFormats)));
+            content.setWidget(++row, 0, inject(proto().documentPages(), new PmcDocumentFileFolder()));
             return content;
         }
 
     }
 
-    private final UploadService<IEntity, PmcDocumentFile> service;
-
-    private final Collection<DownloadFormat> supportedFormats;
-
-    public PmcBusinessInformationDocumentFolder(UploadService<IEntity, PmcDocumentFile> service, Collection<DownloadFormat> supportedFormats) {
+    public PmcBusinessInformationDocumentFolder() {
         super(PmcBusinessInfoDocument.class);
         setAddable(false);
         setRemovable(false);
         setOrderable(false);
-        this.service = service;
-        this.supportedFormats = supportedFormats;
     }
 
     @Override

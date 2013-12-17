@@ -7,15 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 6, 2013
- * @author vlads
+ * Created on 2012-12-28
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease;
+package com.propertyvista.domain.blob.operations;
 
-import com.propertyvista.crm.rpc.services.lease.ProofOfEmploymentDocumentCrmUploadService;
-import com.propertyvista.server.common.upload.AbstractApplicationDocumentUploadServiceImpl;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.i18n.annotations.I18n;
 
-public class ApplicationDocumentCrmUploadServiceImpl extends AbstractApplicationDocumentUploadServiceImpl implements ProofOfEmploymentDocumentCrmUploadService {
+import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.blob.IFileBlob;
+
+/** Blob of the documents PMCs upload via during Credit Check Setup Wizard */
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@Table(namespace = VistaNamespace.operationsNamespace)
+public interface PmcDocumentBlob extends IFileBlob {
 
 }

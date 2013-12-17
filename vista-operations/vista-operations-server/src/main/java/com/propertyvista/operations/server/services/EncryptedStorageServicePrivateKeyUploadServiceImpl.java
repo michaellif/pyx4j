@@ -16,6 +16,7 @@ package com.propertyvista.operations.server.services;
 import com.sun.jersey.core.util.Base64;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;
@@ -24,11 +25,10 @@ import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
 import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.services.EncryptedStorageServicePrivateKeyUploadService;
 
-public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends AbstractUploadServiceImpl<PrivateKeyDTO, IFile> implements
+public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends AbstractUploadServiceImpl<PrivateKeyDTO, AbstractIFileBlob> implements
         EncryptedStorageServicePrivateKeyUploadService {
 
     public EncryptedStorageServicePrivateKeyUploadServiceImpl() {
-        super(IFile.class);
     }
 
     @Override
@@ -42,9 +42,8 @@ public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends Abstract
     }
 
     @Override
-    protected void processUploadedData(PrivateKeyDTO uploadInitiationData, UploadedData uploadedData, IFile response) {
+    protected void processUploadedData(PrivateKeyDTO uploadInitiationData, UploadedData uploadedData, IFile<AbstractIFileBlob> response) {
         byte[] keyData = Base64.decode(uploadedData.binaryContent);
-
         ServerSideFactory.create(EncryptedStorageFacade.class).uploadPrivateKey(uploadInitiationData.publicKeyKey().getValue(), keyData,
                 uploadInitiationData.password().getValue().getValue());
     }

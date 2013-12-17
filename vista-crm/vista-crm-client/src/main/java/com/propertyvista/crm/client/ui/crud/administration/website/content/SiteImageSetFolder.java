@@ -34,11 +34,10 @@ import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
-import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.SiteImageResourceFuleURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
@@ -48,6 +47,7 @@ import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.SiteImageSet;
 
 public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
+
     private static final I18n i18n = I18n.get(SiteImageSetFolder.class);
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
@@ -125,12 +125,13 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
     }
 
     class PortalImageSetEditor extends CEntityForm<SiteImageSet> {
+
         private final CImageSlider<SiteImageResource> imageHolder;
 
         public PortalImageSetEditor() {
             super(SiteImageSet.class);
             imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class,
-                    GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new ImageFileURLBuilder()) {
+                    GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFuleURLBuilder()) {
                 @Override
                 protected EntityFolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;
@@ -139,7 +140,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
                 @Override
                 public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
                     VerticalPanel infoPanel = new VerticalPanel();
-                    infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
+                    infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>())).build());
                     infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
                     infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description())).build());
                     return infoPanel;
@@ -171,10 +172,4 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
         }
     }
 
-    class ImageFileURLBuilder implements IFileURLBuilder<SiteImageResource> {
-        @Override
-        public String getUrl(SiteImageResource file) {
-            return MediaUtils.createSiteImageResourceUrl(file);
-        }
-    }
 }

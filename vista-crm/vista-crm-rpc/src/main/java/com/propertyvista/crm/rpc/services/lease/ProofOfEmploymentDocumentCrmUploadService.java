@@ -7,19 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 22, 2013
+ * Created on Dec 6, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.misc;
+package com.propertyvista.crm.rpc.services.lease;
 
-import com.pyx4j.config.shared.ApplicationFeature;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 
-public class ApplicationFeaturesAttachment implements ApplicationFeature {
+import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
 
-    @Override
-    public boolean enabled() {
-        return !VistaTODO.VISTA_2127_Attachments_For_Notes;
-    }
+public interface ProofOfEmploymentDocumentCrmUploadService extends UploadService<IEntity, ProofOfEmploymentDocumentBlob> {
 
 }

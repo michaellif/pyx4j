@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.visor.notes;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
@@ -33,6 +34,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -40,6 +42,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -51,16 +54,17 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.misc.VistaTODO;
 
 public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
@@ -213,10 +217,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                     content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().user(), new CEntityLabel<CrmUser>()), 25).build());
 
-                    if (!VistaTODO.VISTA_2127_Attachments_For_Notes) {
-                        content.setH3(++row, 0, 2, i18n.tr("Attachments"));
-                        content.setWidget(++row, 0, 2, inject(proto().attachments(), new AttachmentsEditorFolder()));
-                    }
+                    content.setH3(++row, 0, 2, i18n.tr("Attachments"));
+                    content.setWidget(++row, 0, 2, inject(proto().attachments(), new AttachmentsEditorFolder()));
 
                     content.setWidget(++row, 0, createLowerToolbar());
                     content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
@@ -338,23 +340,13 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                protected void addItem() {
-                    new NotesAttachmentUploadDialog() {
-                        @Override
-                        protected void onUploadComplete(NoteAttachment serverUploadResponse) {
-                            AttachmentsEditorFolder.this.addItem(serverUploadResponse);
-                        }
-                    }.show();
-                }
-
-                @Override
                 protected IFolderDecorator<NoteAttachment> createFolderDecorator() {
                     BoxFolderDecorator<NoteAttachment> decorator = (BoxFolderDecorator<NoteAttachment>) super.createFolderDecorator();
                     decorator.setTitle(i18n.tr("Add Attachment"));
                     return decorator;
                 }
 
-                private class AttachmentEditor extends CEntityDecoratableForm<NoteAttachment> {
+                private class AttachmentEditor extends CEntityForm<NoteAttachment> {
 
                     public AttachmentEditor() {
                         super(NoteAttachment.class);
@@ -362,14 +354,12 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                     @Override
                     public IsWidget createContent() {
-
                         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                         int row = -1;
 
-                        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
-
-                        // TODO Binding this this ...
-                        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto()), 40, true).build());
+                        CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(NoteAttachmentUploadService.class), new VistaFileURLBuilder(
+                                NoteAttachment.class));
+                        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().file(), cfile), 40, true).build());
 
                         return content;
                     }

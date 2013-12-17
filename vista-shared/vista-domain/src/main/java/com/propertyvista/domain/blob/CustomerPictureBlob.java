@@ -7,39 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-04
+ * Created on Apr 4, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain;
-
-import java.util.Date;
+package com.propertyvista.domain.blob;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-/**
- * This file would be stored in file system or in database.
- * 
- * DO Not use directly! @see com.propertyvista.server.common.blob.BlobService
- * 
- */
-@RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface FileBlob extends IEntity {
+public interface CustomerPictureBlob extends IFileBlob {
 
-    IPrimitive<String> name();
-
-    @Length(15 * 1024 * 1024)
-    IPrimitive<byte[]> content();
-
-    IPrimitive<String> contentType();
-
-    @Timestamp(Timestamp.Update.Updated)
-    IPrimitive<Date> updated();
-
+    /**
+     * This is actual BLOB of the Image or PDF stored on server
+     */
+    @Override
+    @RpcTransient
+    @Length(1 * 1024 * 1024)
+    IPrimitive<byte[]> data();
 }

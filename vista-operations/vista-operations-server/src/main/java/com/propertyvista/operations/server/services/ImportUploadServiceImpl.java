@@ -14,6 +14,7 @@
 package com.propertyvista.operations.server.services;
 
 import java.util.Collection;
+import java.util.EnumSet;
 
 import com.pyx4j.gwt.shared.DownloadFormat;
 
@@ -24,6 +25,9 @@ import com.propertyvista.server.common.upload.AbstractUploadWithDownloadableResp
 import com.propertyvista.server.common.upload.AbstractUploadWithDownloadableResponceServiceImpl;
 
 public class ImportUploadServiceImpl extends AbstractUploadWithDownloadableResponceServiceImpl<ImportUploadDTO> implements ImportUploadService {
+
+    private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XML, DownloadFormat.CSV, DownloadFormat.XLS,
+            DownloadFormat.XLSX);
 
     @Override
     public long getMaxSize() {

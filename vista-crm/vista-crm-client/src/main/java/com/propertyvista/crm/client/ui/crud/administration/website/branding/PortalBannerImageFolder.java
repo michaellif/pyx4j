@@ -30,17 +30,15 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
-import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.common.client.SiteImageResourceFuleURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalBannerImage;
-import com.propertyvista.domain.site.SiteImageResource;
 
 public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
     private static final I18n i18n = I18n.get(PortalBannerImageFolder.class);
@@ -111,12 +109,11 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
     }
 
     class PortalBannerImageEditor extends CEntityForm<PortalBannerImage> {
-        private final CImage<SiteImageResource> imageHolder;
+        private final CImage imageHolder;
 
         public PortalBannerImageEditor() {
             super(PortalBannerImage.class);
-            imageHolder = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
-                    new ImageFileURLBuilder());
+            imageHolder = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFuleURLBuilder());
             imageHolder.setNote(i18n.tr("Recommended banner size is {0}", "1200x200"));
         }
 
@@ -138,10 +135,4 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
         }
     }
 
-    class ImageFileURLBuilder implements IFileURLBuilder<SiteImageResource> {
-        @Override
-        public String getUrl(SiteImageResource file) {
-            return MediaUtils.createSiteImageResourceUrl(file);
-        }
-    }
 }

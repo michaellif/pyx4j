@@ -14,14 +14,22 @@
 package com.propertyvista.domain.media;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
 @DiscriminatorValue("ProofOfEmploymentDocument")
-public interface ProofOfEmploymentDocumentFolder extends ApplicationDocumentFolder<CustomerScreeningIncome> {
+public interface ProofOfEmploymentDocumentFolder extends IEntity {
+
+    CustomerScreeningIncome owner();
 
     @NotNull
     IPrimitive<String> description();
+
+    @Owned
+    IList<ProofOfEmploymentDocumentFile> files();
 }

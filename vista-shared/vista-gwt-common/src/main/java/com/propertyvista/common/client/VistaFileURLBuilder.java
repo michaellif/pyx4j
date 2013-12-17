@@ -24,26 +24,27 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.gwt.shared.IFileURLBuilder;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class VistaFileURLBuilder<FILE extends IFile> implements IFileURLBuilder<FILE> {
+public class VistaFileURLBuilder implements IFileURLBuilder {
 
     private final String fileClassName;
 
-    public VistaFileURLBuilder(Class<FILE> fileClass) {
+    public VistaFileURLBuilder(Class<? extends IHasFile<?>> fileClass) {
         fileClassName = GWTJava5Helper.getSimpleName(fileClass);
     }
 
     @Override
-    public String getUrl(FILE file) {
+    public String getUrl(IFile<?> file) {
         if (!file.accessKey().isNull()) {
             return getUrl(DeploymentConsts.TRANSIENT_FILE_PREF + file.accessKey().getStringView(), file.fileName().getValue());
-        } else if (file.id().isNull() || file.blobKey().isNull()) {
+        } else if (file.getOwner().id().isNull() || file.blobKey().isNull()) {
             return null;
         } else {
-            return getUrl(file.id().getStringView(), file.fileName().getValue());
+            return getUrl(file.getOwner().id().getStringView(), file.fileName().getValue());
         }
     }
 

@@ -55,7 +55,7 @@ public class ProofOfEmploymentUploaderFolder extends PortalBoxFolder<ProofOfEmpl
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 250).build());
 
             content.setH3(++row, 0, 1, i18n.tr("Files"));
-            content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
+            content.setWidget(++row, 0, inject(proto().files(), new ProofOfEmploymentDocumentFileFolder()));
 
             return content;
         }

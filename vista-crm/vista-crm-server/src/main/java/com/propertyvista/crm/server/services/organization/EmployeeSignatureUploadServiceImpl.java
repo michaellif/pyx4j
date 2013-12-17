@@ -19,33 +19,33 @@ import java.util.EnumSet;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.organization.EmployeeSignatureUploadService;
-import com.propertyvista.domain.company.EmployeeSignature;
-import com.propertyvista.server.domain.EmployeeSignatureBlob;
-import com.propertyvista.server.domain.FileBlob;
+import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 
-public class EmployeeSignatureUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, EmployeeSignature> implements EmployeeSignatureUploadService {
+public class EmployeeSignatureUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, EmployeeSignatureBlob> implements EmployeeSignatureUploadService {
 
-    //    private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
-//            DownloadFormat.BMP);
     private static final I18n i18n = I18n.get(EmployeeSignatureUploadServiceImpl.class);
 
     private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.PNG, DownloadFormat.JPEG);
 
     public EmployeeSignatureUploadServiceImpl() {
-        super(EmployeeSignature.class);
-
     }
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(FileBlob.class).content().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(EmployeeSignatureBlob.class).data().getMeta().getLength();
 
+    }
+
+    @Override
+    public Collection<String> getSupportedExtensions() {
+        return DownloadFormat.getExtensions(supportedFormats);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class EmployeeSignatureUploadServiceImpl extends AbstractUploadServiceImp
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, EmployeeSignature response) {
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<EmployeeSignatureBlob> response) {
         EmployeeSignatureBlob blob = EntityFactory.create(EmployeeSignatureBlob.class);
         blob.contentType().setValue(uploadedData.contentMimeType);
         blob.data().setValue(uploadedData.binaryContent);

@@ -25,32 +25,31 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificateDoc;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateDoc> {
+public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateScan> {
 
     private final static I18n i18n = I18n.get(CertificateScanFolder.class);
 
     public CertificateScanFolder() {
-        super(InsuranceCertificateDoc.class, i18n.tr("Certificate Scan"));
+        super(InsuranceCertificateScan.class, i18n.tr("Certificate Scan"));
         setOrderable(false);
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof InsuranceCertificateDoc) {
+        if (member instanceof InsuranceCertificateScan) {
             return new CertificateScanViewer();
         }
         return super.create(member);
     }
 
-    private class CertificateScanViewer extends CEntityForm<InsuranceCertificateDoc> {
+    private class CertificateScanViewer extends CEntityForm<InsuranceCertificateScan> {
 
         public CertificateScanViewer() {
-            super(InsuranceCertificateDoc.class);
+            super(InsuranceCertificateScan.class);
         }
 
         @Override
@@ -61,10 +60,9 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateDo
             content.setWidget(
                     ++row,
                     0,
-                    new FormWidgetDecoratorBuilder(inject(proto().scan(),
-                            new CFile<InsuranceCertificateScan>(
-                                    GWT.<InsuranceCertificateScanResidentUploadService> create(InsuranceCertificateScanResidentUploadService.class),
-                                    new VistaFileURLBuilder<InsuranceCertificateScan>(InsuranceCertificateScan.class))), 250).build());
+                    new FormWidgetDecoratorBuilder(inject(proto().file(),
+                            new CFile(GWT.<InsuranceCertificateScanResidentUploadService> create(InsuranceCertificateScanResidentUploadService.class),
+                                    new VistaFileURLBuilder(InsuranceCertificateScan.class))), 250).build());
 
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).mockValue("Description").build());
 

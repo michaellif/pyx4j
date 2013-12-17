@@ -28,7 +28,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
@@ -43,6 +45,7 @@ import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
+import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.site.SiteImageResource;
 
 public class SiteImageResourceProvider extends Dialog implements CloseOption, RichTextImageProvider {
@@ -55,7 +58,7 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
 
     private AsyncCallback<SiteImageResource> resourceSelectionHandler;
 
-    private final UploadPanel<IEntity, SiteImageResource> uploadPanel;
+    private final UploadPanel<IEntity, MediaFileBlob> uploadPanel;
 
     private final Button submitButton;
 
@@ -106,13 +109,15 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
             }
         };
 
-        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class),
-                new UploadReceiver<SiteImageResource>() {
+        uploadPanel = new UploadPanel<IEntity, MediaFileBlob>((UploadService<IEntity, MediaFileBlob>) GWT.create(SiteImageResourceUploadService.class),
+                new UploadReceiver() {
 
                     @Override
-                    public void onUploadComplete(SiteImageResource result) {
-                        String url = MediaUtils.createSiteImageResourceUrl(result);
-                        imageResourceMap.put(url, result);
+                    public void onUploadComplete(IFile<?> result) {
+                        SiteImageResource x = EntityFactory.create(SiteImageResource.class);
+                        x.file().set(result);
+                        String url = MediaUtils.createSiteImageResourceUrl(x);
+                        imageResourceMap.put(url, x);
                         gallery.addImage(url, result.fileName().getStringView());
 
                         SiteImageResourceProvider.this.getCloseButton().setEnabled(true);
@@ -170,7 +175,7 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
                 for (SiteImageResource rc : result.getData()) {
                     String url = MediaUtils.createSiteImageResourceUrl(rc);
                     imageResourceMap.put(url, rc);
-                    gallery.addImage(url, rc.fileName().getStringView());
+                    gallery.addImage(url, rc.file().fileName().getStringView());
                 }
             }
 

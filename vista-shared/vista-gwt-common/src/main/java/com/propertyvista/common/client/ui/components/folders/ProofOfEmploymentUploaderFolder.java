@@ -21,7 +21,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 
@@ -54,7 +53,7 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
             int row = -1;
             content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 50, true).build());
             content.setH3(++row, 0, 2, i18n.tr("Files"));
-            content.setWidget(++row, 0, 2, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
+            content.setWidget(++row, 0, 2, inject(proto().files(), new ProofOfEmploymentDocumentFileFolder()));
 
             return content;
         }

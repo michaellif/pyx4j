@@ -13,17 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.customer;
 
-import java.util.Collection;
-import java.util.EnumSet;
-
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 
-import com.propertyvista.dto.DownloadableUploadResponseDTO;
-
-public interface TenantPadFileUploadService extends UploadService<IEntity, DownloadableUploadResponseDTO> {
-
-    public static final Collection<DownloadFormat> SUPPORTED_FORMATS = EnumSet.of(DownloadFormat.XLS, DownloadFormat.XLSX, DownloadFormat.CSV);
+public interface TenantPadFileUploadService extends UploadService<IEntity, AbstractIFileBlob> {
 
 }

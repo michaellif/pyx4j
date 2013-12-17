@@ -76,14 +76,14 @@ public class MediaConverter extends EntityBinder<MediaFile, MediaIO> {
         super.copyBOtoTO(dbo, dto);
         dto.mediaType().setValue(MediaIO.MediaType.file);
         if (mediaConfig.baseFolder != null) {
-            dto.uri().setValue(mediaConfig.directory + dbo.blobKey().getStringView() + "-" + dbo.fileName().getStringView());
+            dto.uri().setValue(mediaConfig.directory + dbo.file().blobKey().getStringView() + "-" + dbo.file().fileName().getStringView());
             try {
-                BlobService.save(dbo.blobKey().getValue(), new File(mediaConfig.baseFolder + dto.uri().getValue()));
+                BlobService.save(dbo.file().blobKey().getValue(), new File(mediaConfig.baseFolder + dto.uri().getValue()));
             } catch (IOException e) {
                 throw new Error(e);
             }
         } else {
-            dto.uri().setValue(dbo.id().getStringView() + dbo.fileName().getStringView());
+            dto.uri().setValue(dbo.id().getStringView() + dbo.file().fileName().getStringView());
         }
     }
 
@@ -150,35 +150,35 @@ public class MediaConverter extends EntityBinder<MediaFile, MediaIO> {
                     throw new UserRuntimeException(i18n.tr("Unsupported Media File Type ''{0}'' Extension ''{1}''", dto.uri().getValue(), extension));
                 }
             }
-            dbo.fileName().setValue(file.getName());
-            dbo.fileSize().setValue(Long.valueOf(file.length()).intValue());
-            dbo.contentMimeType().setValue(MimeMap.getContentType(extension));
-            dbo.timestamp().setValue(System.currentTimeMillis());
+            dbo.file().fileName().setValue(file.getName());
+            dbo.file().fileSize().setValue(Long.valueOf(file.length()).intValue());
+            dbo.file().contentMimeType().setValue(MimeMap.getContentType(extension));
+            dbo.file().timestamp().setValue(System.currentTimeMillis());
 
             if (!mediaConfig.mimizePreloadDataSize) {
                 byte raw[] = getBinary(file);
-                dbo.blobKey().setValue(BlobService.persist(raw, dbo.fileName().getValue(), dbo.contentMimeType().getValue()));
-                ThumbnailService.persist(dbo.blobKey().getValue(), file.getName(), raw, imageTarget);
+                dbo.file().blobKey().setValue(BlobService.persist(raw, dbo.file().fileName().getValue(), dbo.file().contentMimeType().getValue()));
+                ThumbnailService.persist(dbo.file().blobKey().getValue(), file.getName(), raw, imageTarget);
             } else {
                 String uniqueName = MediaConverter.class.getName() + imageTarget + file.getAbsolutePath().toLowerCase(Locale.ENGLISH);
                 Key blobKey = CacheService.get(uniqueName);
                 if (blobKey == null) {
                     byte raw[] = getBinary(file);
-                    blobKey = BlobService.persist(raw, dbo.fileName().getValue(), dbo.contentMimeType().getValue());
+                    blobKey = BlobService.persist(raw, dbo.file().fileName().getValue(), dbo.file().contentMimeType().getValue());
                     CacheService.put(uniqueName, blobKey);
                     FileImageThumbnailBlobDTO thumbnailBlob = resized.get(uniqueName);
                     if (thumbnailBlob == null) {
-                        thumbnailBlob = ThumbnailService.createThumbnailBlob(dbo.fileName().getValue(), raw, imageTarget);
+                        thumbnailBlob = ThumbnailService.createThumbnailBlob(dbo.file().fileName().getValue(), raw, imageTarget);
                         if (ApplicationMode.isDevelopment()) {
                             resized.put(uniqueName, thumbnailBlob);
-                            log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.fileName().getValue(), resized.size());
+                            log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.file().fileName().getValue(), resized.size());
                         }
                     }
                     thumbnailBlob = (FileImageThumbnailBlobDTO) thumbnailBlob.duplicate();
                     thumbnailBlob.setPrimaryKey(blobKey);
                     ThumbnailService.persist(thumbnailBlob);
                 }
-                dbo.blobKey().setValue(blobKey);
+                dbo.file().blobKey().setValue(blobKey);
             }
 
             break;

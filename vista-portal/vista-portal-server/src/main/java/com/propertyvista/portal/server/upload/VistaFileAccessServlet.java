@@ -13,22 +13,32 @@
  */
 package com.propertyvista.portal.server.upload;
 
+import com.propertyvista.domain.blob.CustomerPictureBlob;
+import com.propertyvista.domain.blob.EmployeeSignatureBlob;
+import com.propertyvista.domain.blob.IdentificationDocumentBlob;
+import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
+import com.propertyvista.domain.blob.LegalLetterBlob;
+import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
+import com.propertyvista.domain.blob.operations.PmcDocumentBlob;
 import com.propertyvista.domain.company.EmployeeSignature;
-import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.server.domain.ApplicationDocumentBlob;
-import com.propertyvista.server.domain.CustomerPictureBlob;
-import com.propertyvista.server.domain.EmployeeSignatureBlob;
-import com.propertyvista.server.domain.GeneralInsurancePolicyBlob;
 
 @SuppressWarnings("serial")
 public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
 
     public VistaFileAccessServlet() {
         register(CustomerPicture.class, CustomerPictureBlob.class);
-        register(InsuranceCertificateScan.class, GeneralInsurancePolicyBlob.class);
+        register(InsuranceCertificateScan.class, InsuranceCertificateScanBlob.class);
         register(EmployeeSignature.class, EmployeeSignatureBlob.class);
-        register(ApplicationDocumentFile.class, ApplicationDocumentBlob.class);
+        register(ProofOfEmploymentDocumentFile.class, ProofOfEmploymentDocumentBlob.class);
+        register(IdentificationDocumentFile.class, IdentificationDocumentBlob.class);
+        register(LegalLetter.class, LegalLetterBlob.class);
+
+        register(PmcDocumentFile.class, PmcDocumentBlob.class);
     }
 }

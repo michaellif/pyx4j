@@ -13,18 +13,16 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import java.util.Collection;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.gwt.client.upload.UploadReceiver;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
-import com.pyx4j.gwt.client.upload.UploadResponseReciver;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -32,27 +30,27 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class UploadDialogBase<U extends IEntity, R extends DownloadableUploadResponseDTO> extends OkCancelDialog {
+public class UploadDialogBase<U extends IEntity> extends OkCancelDialog {
 
     private static final I18n i18n = I18n.get(UploadDialogBase.class);
 
-    private UploadPanel<U, R> uploadPanel;
+    private UploadPanel<U, AbstractIFileBlob> uploadPanel;
 
-    private UploadResponseReciver<R> uploadReciver;
+    private UploadReceiver uploadReciver;
 
-    public UploadDialogBase(String caption, UploadService<U, R> uploadService, Collection<DownloadFormat> supportedFormats) {
+    public UploadDialogBase(String caption, UploadService<U, AbstractIFileBlob> uploadService) {
         super(caption);
 
-        uploadPanel = new UploadPanel<U, R>(uploadService, new UploadReceiver<R>() {
+        uploadPanel = new UploadPanel<U, AbstractIFileBlob>(uploadService, new UploadReceiver() {
 
             @Override
-            public void onUploadComplete(R result) {
+            public void onUploadComplete(IFile<?> result) {
                 UploadDialogBase.this.hide(false);
                 if (UploadDialogBase.this.uploadReciver != null) {
                     UploadDialogBase.this.uploadReciver.onUploadComplete(result);
                 } else {
-                    if (CommonsStringUtils.isStringSet(result.message().getStringView())) {
-                        MessageDialog.info(i18n.tr("Upload Complete"), result.message().getStringView());
+                    if (CommonsStringUtils.isStringSet(((DownloadableUploadResponseDTO) result).message().getStringView())) {
+                        MessageDialog.info(i18n.tr("Upload Complete"), ((DownloadableUploadResponseDTO) result).message().getStringView());
                     }
                 }
             }
@@ -76,7 +74,6 @@ public class UploadDialogBase<U extends IEntity, R extends DownloadableUploadRes
             }
 
         };
-        uploadPanel.setSupportedExtensions(supportedFormats);
         uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping);
         uploadPanel.setSize("400px", "100%");
 
@@ -84,11 +81,11 @@ public class UploadDialogBase<U extends IEntity, R extends DownloadableUploadRes
 
     }
 
-    protected IsWidget createContent(UploadPanel<U, R> uploadPanel) {
+    protected IsWidget createContent(UploadPanel<U, AbstractIFileBlob> uploadPanel) {
         return uploadPanel;
     }
 
-    public void setUploadReciver(UploadResponseReciver<R> uploadReciver) {
+    public void setUploadReciver(UploadReceiver uploadReciver) {
         this.uploadReciver = uploadReciver;
     }
 

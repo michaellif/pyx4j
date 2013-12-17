@@ -13,13 +13,14 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import com.pyx4j.gwt.client.upload.UploadResponseReciver;
+import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
 
-public class UploadResponseDownloadableReciver<R extends DownloadableUploadResponseDTO> implements UploadResponseReciver<R> {
+public class UploadResponseDownloadableReciver implements UploadReceiver {
 
     private static final I18n i18n = I18n.get(UploadResponseDownloadableReciver.class);
 
@@ -36,7 +37,8 @@ public class UploadResponseDownloadableReciver<R extends DownloadableUploadRespo
     }
 
     @Override
-    public void onUploadComplete(R serverUploadResponse) {
+    public void onUploadComplete(IFile<?> uploadResponse) {
+        DownloadableUploadResponseDTO serverUploadResponse = (DownloadableUploadResponseDTO) uploadResponse;
         if (serverUploadResponse.resultUrl().isNull()) {
             if (serverUploadResponse.success().getValue()) {
                 MessageDialog.info(i18n.tr("{0} Complete", processNameCaption), serverUploadResponse.message().getValue());

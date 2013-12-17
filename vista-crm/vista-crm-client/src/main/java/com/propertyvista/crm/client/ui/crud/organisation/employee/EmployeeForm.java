@@ -31,16 +31,15 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -160,13 +159,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
         main.setBR(++row, 0, 2);
-        CImage<EmployeeSignature> signature = new CImage<EmployeeSignature>(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class),
-                new IFileURLBuilder<EmployeeSignature>() {
-                    @Override
-                    public String getUrl(EmployeeSignature employeeSignature) {
-                        return MediaUtils.createEmployeeSignatureUrl(employeeSignature);
-                    }
-                });
+        CImage signature = new CImage(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class), new VistaFileURLBuilder(
+                EmployeeSignature.class));
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));

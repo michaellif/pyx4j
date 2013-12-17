@@ -13,8 +13,6 @@
  */
 package com.propertyvista.common.client.ui.components.editors.dto.wizards;
 
-import java.util.Collection;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -22,11 +20,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -34,7 +29,6 @@ import com.propertyvista.common.client.ui.components.PmcBusinessInformationDocum
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 
 // TODO add document requirements label and validator
@@ -42,14 +36,8 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
 
     private static final I18n i18n = I18n.get(BusinessInformationForm.class);
 
-    private final UploadService<IEntity, PmcDocumentFile> service;
-
-    private final Collection<DownloadFormat> supportedFormats;
-
-    public BusinessInformationForm(UploadService<IEntity, PmcDocumentFile> service, Collection<DownloadFormat> supportedFormats) {
+    public BusinessInformationForm() {
         super(BusinessInformationDTO.class);
-        this.service = service;
-        this.supportedFormats = supportedFormats;
     }
 
     @Override
@@ -92,7 +80,7 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
             documentsPanel.setWidget(++drow, 0, equifaxReuirements);
         }
 
-        documentsPanel.setWidget(++drow, 0, inject(proto().documents(), new PmcBusinessInformationDocumentFolder(service, supportedFormats)));
+        documentsPanel.setWidget(++drow, 0, inject(proto().documents(), new PmcBusinessInformationDocumentFolder()));
         contentPanel.setWidget(0, 1, documentsPanel);
 
         return contentPanel;

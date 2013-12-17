@@ -13,23 +13,22 @@
  */
 package com.propertyvista.server.common.upload;
 
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;
 
-import com.propertyvista.dto.DownloadableUploadResponseDTO;
-
-public abstract class AbstractUploadWithDownloadableResponceServiceImpl<U extends IEntity> extends AbstractUploadServiceImpl<U, DownloadableUploadResponseDTO> {
+public abstract class AbstractUploadWithDownloadableResponceServiceImpl<U extends IEntity> extends AbstractUploadServiceImpl<U, AbstractIFileBlob> {
 
     protected AbstractUploadWithDownloadableResponceServiceImpl() {
-        super(DownloadableUploadResponseDTO.class);
     }
 
     @Override
     protected abstract AbstractUploadWithDownloadableResponceDeferredProcess<U> createUploadDeferredProcess(U data);
 
     @Override
-    protected void processUploadedData(U uploadInitiationData, UploadedData uploadedData, DownloadableUploadResponseDTO response) {
+    protected void processUploadedData(U uploadInitiationData, UploadedData uploadedData, IFile<AbstractIFileBlob> response) {
     }
 
 }

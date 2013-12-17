@@ -16,23 +16,22 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.UploadPanel;
-import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
-import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.dto.ImportDataFormatType;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.ImportUploadService;
 
-public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO, DownloadableUploadResponseDTO> {
+public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO> {
 
     private static final I18n i18n = I18n.get(ImportUploadDialog.class);
 
@@ -41,14 +40,13 @@ public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO, Downlo
     private CEntityForm<ImportUploadDTO> form;
 
     public ImportUploadDialog(PmcDTO pmc) {
-        super(i18n.tr("Upload Import"), GWT.<UploadService<ImportUploadDTO, DownloadableUploadResponseDTO>> create(ImportUploadService.class),
-                ImportUploadService.supportedFormats);
+        super(i18n.tr("Upload Import"), GWT.<ImportUploadService> create(ImportUploadService.class));
         this.pmc = pmc;
-        super.setUploadReciver(new UploadResponseDownloadableReciver<DownloadableUploadResponseDTO>(i18n.tr("Import Upload")));
+        super.setUploadReciver(new UploadResponseDownloadableReciver(i18n.tr("Import Upload")));
     }
 
     @Override
-    protected IsWidget createContent(final UploadPanel<ImportUploadDTO, DownloadableUploadResponseDTO> uploadPanel) {
+    protected IsWidget createContent(final UploadPanel<ImportUploadDTO, AbstractIFileBlob> uploadPanel) {
         form = new CEntityForm<ImportUploadDTO>(ImportUploadDTO.class) {
             @Override
             public IsWidget createContent() {

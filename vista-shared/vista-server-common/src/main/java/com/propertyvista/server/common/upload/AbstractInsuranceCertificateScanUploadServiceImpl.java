@@ -19,15 +19,15 @@ import java.util.EnumSet;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.server.domain.GeneralInsurancePolicyBlob;
+import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
 
-public class AbstractInsuranceCertificateScanUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, InsuranceCertificateScan> {
+public class AbstractInsuranceCertificateScanUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, InsuranceCertificateScanBlob> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.PDF, DownloadFormat.ARCHIVE);
@@ -35,12 +35,11 @@ public class AbstractInsuranceCertificateScanUploadServiceImpl extends AbstractU
     private static final I18n i18n = I18n.get(AbstractInsuranceCertificateScanUploadServiceImpl.class);
 
     public AbstractInsuranceCertificateScanUploadServiceImpl() {
-        super(InsuranceCertificateScan.class);
     }
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(GeneralInsurancePolicyBlob.class).data().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(InsuranceCertificateScanBlob.class).data().getMeta().getLength();
     }
 
     @Override
@@ -54,8 +53,8 @@ public class AbstractInsuranceCertificateScanUploadServiceImpl extends AbstractU
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, InsuranceCertificateScan response) {
-        GeneralInsurancePolicyBlob blob = EntityFactory.create(GeneralInsurancePolicyBlob.class);
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<InsuranceCertificateScanBlob> response) {
+        InsuranceCertificateScanBlob blob = EntityFactory.create(InsuranceCertificateScanBlob.class);
         blob.contentType().setValue(uploadedData.contentMimeType);
         blob.data().setValue(uploadedData.binaryContent);
         Persistence.service().persist(blob);

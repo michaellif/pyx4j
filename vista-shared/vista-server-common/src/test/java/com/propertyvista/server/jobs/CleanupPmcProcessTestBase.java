@@ -24,10 +24,9 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.media.ApplicationDocumentFolder;
-import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
-import com.propertyvista.server.domain.ApplicationDocumentBlob;
 import com.propertyvista.server.jobs.CleanupPmcProcess.CleanupPmcProcessConfig;
 
 public class CleanupPmcProcessTestBase extends VistaDBTestBase {
@@ -50,22 +49,22 @@ public class CleanupPmcProcessTestBase extends VistaDBTestBase {
         super.tearDown();
     }
 
-    protected static ApplicationDocumentBlob createTestBlob(String date, String id) {
-        ApplicationDocumentBlob blob = EntityFactory.create(ApplicationDocumentBlob.class);
+    protected static ProofOfEmploymentDocumentBlob createTestBlob(String date, String id) {
+        ProofOfEmploymentDocumentBlob blob = EntityFactory.create(ProofOfEmploymentDocumentBlob.class);
         blob.created().setValue(detectDateformat(date));
         blob.data().setValue(id.getBytes());
         Persistence.service().persist(blob);
         return blob;
     }
 
-    protected static ApplicationDocumentFolder createApplicationDocument(String desc, Key... blobs) {
+    protected static ProofOfEmploymentDocumentFolder createApplicationDocument(String desc, Key... blobs) {
         ProofOfEmploymentDocumentFolder doc = EntityFactory.create(ProofOfEmploymentDocumentFolder.class);
         doc.description().setValue(desc);
 
         for (Key blobKey : blobs) {
-            ApplicationDocumentFile file = doc.documentPages().$();
-            file.blobKey().setValue(blobKey);
-            doc.documentPages().add(file);
+            ProofOfEmploymentDocumentFile file = doc.files().$();
+            file.file().blobKey().setValue(blobKey);
+            doc.files().add(file);
         }
         Persistence.service().persist(doc);
         return doc;

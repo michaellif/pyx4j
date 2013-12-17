@@ -16,8 +16,8 @@ package com.propertyvista.crm.rpc.services.organization;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.domain.company.EmployeeSignature;
+import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 
-public interface EmployeeSignatureUploadService extends UploadService<IEntity, EmployeeSignature> {
+public interface EmployeeSignatureUploadService extends UploadService<IEntity, EmployeeSignatureBlob> {
 
 }

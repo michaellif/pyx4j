@@ -42,6 +42,8 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
+import com.propertyvista.domain.blob.EmployeeSignatureBlob;
+import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.financial.ARCode;
@@ -57,8 +59,6 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.domain.EmployeeSignatureBlob;
-import com.propertyvista.server.domain.LegalLetterBlob;
 
 public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
@@ -156,7 +156,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
 
         LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
-        blob.content().setValue(n4LetterBinary);
+        blob.data().setValue(n4LetterBinary);
         blob.contentType().setValue("application/pdf");
         Persistence.service().persist(blob);
 
@@ -164,9 +164,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         n4Letter.lease().set(leaseId);
         n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
         n4Letter.generatedOn().setValue(generationTime);
-        n4Letter.blobKey().setValue(blob.getPrimaryKey());
-        n4Letter.fileSize().setValue(n4LetterBinary.length);
-        n4Letter.fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
+        n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
+        n4Letter.file().fileSize().setValue(n4LetterBinary.length);
+        n4Letter.file().fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
         Persistence.service().persist(n4Letter);
     }
 
@@ -187,7 +187,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     private byte[] retrieveSignature(Employee signingEmployee) {
         if (!signingEmployee.signature().isNull()) {
             EmployeeSignature signature = Persistence.service().retrieve(EmployeeSignature.class, signingEmployee.signature().getPrimaryKey());
-            EmployeeSignatureBlob signatureBlob = Persistence.service().retrieve(EmployeeSignatureBlob.class, signature.blobKey().getValue());
+            EmployeeSignatureBlob signatureBlob = Persistence.service().retrieve(EmployeeSignatureBlob.class, signature.file().blobKey().getValue());
             return signatureBlob.data().getValue();
         } else {
             return null;

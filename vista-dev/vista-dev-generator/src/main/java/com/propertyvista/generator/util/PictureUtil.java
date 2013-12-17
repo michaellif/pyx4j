@@ -59,13 +59,13 @@ public class PictureUtil {
                 return;
             }
             MediaFile m = EntityFactory.create(MediaFile.class);
-            m.fileName().setValue(filename);
+            m.file().fileName().setValue(filename);
             m.visibility().setValue(PublicVisibilityType.global);
             m.caption().setValue(FilenameUtils.getBaseName(filename));
             String mime = MimeMap.getContentType(FilenameUtils.getExtension(filename));
-            m.contentMimeType().setValue(mime);
+            m.file().contentMimeType().setValue(mime);
 
-            m.fileSize().setValue(raw.length);
+            m.file().fileSize().setValue(raw.length);
 
             data.put(m, raw);
         } catch (IOException e) {
@@ -106,15 +106,15 @@ public class PictureUtil {
                 MediaFile m = EntityFactory.create(MediaFile.class);
                 m.visibility().setValue(PublicVisibilityType.global);
 
-                m.fileName().setValue(file.getName());
+                m.file().fileName().setValue(file.getName());
                 m.caption().setValue(FilenameUtils.getBaseName(file.getName()));
-                m.contentMimeType().setValue(mime);
+                m.file().contentMimeType().setValue(mime);
 
                 in = new FileInputStream(file);
                 IOUtils.copyStream(in, b, 1024);
 
                 byte raw[] = b.toByteArray();
-                m.fileSize().setValue(raw.length);
+                m.file().fileSize().setValue(raw.length);
 
                 data.put(m, raw);
             } catch (IOException e) {

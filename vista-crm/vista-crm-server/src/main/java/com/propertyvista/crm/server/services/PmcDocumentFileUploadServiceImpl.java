@@ -20,17 +20,17 @@ import java.util.concurrent.Callable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
-import com.propertyvista.domain.pmc.info.PmcDocumentFile;
-import com.propertyvista.server.domain.PmcDocumentBlob;
+import com.propertyvista.domain.blob.operations.PmcDocumentBlob;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, PmcDocumentFile> implements PmcDocumentFileUploadService {
+public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, PmcDocumentBlob> implements PmcDocumentFileUploadService {
 
     private static final I18n i18n = I18n.get(I18n.class);
 
@@ -38,7 +38,6 @@ public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<
             DownloadFormat.BMP);
 
     public PmcDocumentFileUploadServiceImpl() {
-        super(PmcDocumentFile.class);
     }
 
     @Override
@@ -57,7 +56,7 @@ public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, final UploadedData uploadedData, final PmcDocumentFile response) {
+    protected void processUploadedData(IEntity uploadInitiationData, final UploadedData uploadedData, final IFile<PmcDocumentBlob> response) {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
 
             @Override

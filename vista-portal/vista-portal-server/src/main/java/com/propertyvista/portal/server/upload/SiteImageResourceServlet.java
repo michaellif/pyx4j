@@ -31,13 +31,13 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.site.SiteLogoImageResource;
+import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.portal.shared.services.SiteThemeServicesImpl;
 import com.propertyvista.server.common.blob.ETag;
-import com.propertyvista.server.domain.FileBlob;
 
 @SuppressWarnings("serial")
 public class SiteImageResourceServlet extends HttpServlet {
@@ -140,22 +140,22 @@ public class SiteImageResourceServlet extends HttpServlet {
             return;
         }
 
-        if (file.blobKey().isNull()) {
+        if (file.file().blobKey().isNull()) {
             log.debug("resources {} {} is not file", key, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        String token = ETag.getEntityTag(file, "");
+        String token = ETag.getEntityTag(file.file(), "");
         response.setHeader("Etag", token);
 
-        if (!file.timestamp().isNull()) {
+        if (!file.file().timestamp().isNull()) {
             long since = request.getDateHeader("If-Modified-Since");
-            if ((since != -1) && (file.timestamp().getValue() < since)) {
+            if ((since != -1) && (file.file().timestamp().getValue() < since)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
-            response.setDateHeader("Last-Modified", file.timestamp().getValue());
+            response.setDateHeader("Last-Modified", file.file().timestamp().getValue());
             // HTTP 1.0
             response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
             // HTTP 1.1
@@ -167,11 +167,11 @@ public class SiteImageResourceServlet extends HttpServlet {
             return;
         }
 
-        if (!file.contentMimeType().isNull()) {
-            response.setContentType(file.contentMimeType().getValue());
+        if (!file.file().contentMimeType().isNull()) {
+            response.setContentType(file.file().contentMimeType().getValue());
         }
 
-        FileBlob blob = Persistence.service().retrieve(FileBlob.class, file.blobKey().getValue());
+        MediaFileBlob blob = Persistence.service().retrieve(MediaFileBlob.class, file.file().blobKey().getValue());
         if (blob == null) {
             log.debug("no such blob {} {}", key, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -179,7 +179,7 @@ public class SiteImageResourceServlet extends HttpServlet {
         }
 
         response.setContentType(blob.contentType().getValue());
-        response.getOutputStream().write(blob.content().getValue());
+        response.getOutputStream().write(blob.data().getValue());
     }
 
 }

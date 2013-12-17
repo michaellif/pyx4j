@@ -27,34 +27,33 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.server.domain.FileBlob;
+import com.propertyvista.domain.blob.MediaFileBlob;
 
 /**
  * Simple DB base Blob storage abstraction for future refactoring.
  */
-@SuppressWarnings("deprecation")
 public class BlobService {
 
     public static Key persist(byte[] content, String name, String contentType) {
-        FileBlob entity = EntityFactory.create(FileBlob.class);
+        MediaFileBlob entity = EntityFactory.create(MediaFileBlob.class);
         entity.name().setValue(name);
-        entity.content().setValue(content);
+        entity.data().setValue(content);
         entity.contentType().setValue(contentType);
         Persistence.service().persist(entity);
         return entity.getPrimaryKey();
     }
 
     public static void delete(Key key) {
-        Persistence.service().delete(FileBlob.class, key);
+        Persistence.service().delete(MediaFileBlob.class, key);
     }
 
     public static void serve(Key key, HttpServletResponse response) throws IOException {
-        FileBlob blob = Persistence.service().retrieve(FileBlob.class, key);
+        MediaFileBlob blob = Persistence.service().retrieve(MediaFileBlob.class, key);
         if (blob != null) {
-            response.setContentLength(blob.content().getValue().length);
+            response.setContentLength(blob.data().getValue().length);
             OutputStream out = response.getOutputStream();
             try {
-                out.write(blob.content().getValue());
+                out.write(blob.data().getValue());
             } finally {
                 IOUtils.closeQuietly(out);
             }
@@ -62,12 +61,12 @@ public class BlobService {
     }
 
     public static void save(Key key, File destination) throws IOException {
-        FileBlob blob = Persistence.service().retrieve(FileBlob.class, key);
+        MediaFileBlob blob = Persistence.service().retrieve(MediaFileBlob.class, key);
         if (blob != null) {
             FileUtils.forceMkdir(destination.getParentFile());
             OutputStream out = new FileOutputStream(destination);
             try {
-                out.write(blob.content().getValue());
+                out.write(blob.data().getValue());
             } finally {
                 IOUtils.closeQuietly(out);
             }

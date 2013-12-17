@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -37,7 +36,6 @@ import com.propertyvista.common.client.ui.components.editors.dto.wizards.Persona
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
 import com.propertyvista.crm.client.ui.components.WidgetDecoratorRightLabel;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CCreditCheckReportTypeSelector;
-import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
@@ -133,11 +131,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         collectionOfbusinessInformationExplanation.setHTML(CreditCheckWizardResources.INSTANCE.collectionOfBusinessInformationExplanation().getText());
         main.setWidget(row++, 0, collectionOfbusinessInformationExplanation);
 
-        main.setWidget(
-                row++,
-                0,
-                inject(proto().businessInformation(), new BusinessInformationForm(
-                        GWT.<PmcDocumentFileUploadService> create(PmcDocumentFileUploadService.class), PmcDocumentFileUploadService.SUPPORTED_FORMATS)));
+        main.setWidget(row++, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
 
         return main;
     }

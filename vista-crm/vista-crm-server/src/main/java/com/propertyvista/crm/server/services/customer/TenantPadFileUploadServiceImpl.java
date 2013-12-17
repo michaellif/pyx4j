@@ -13,7 +13,11 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.util.Collection;
+import java.util.EnumSet;
+
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
@@ -24,9 +28,16 @@ public class TenantPadFileUploadServiceImpl extends AbstractUploadWithDownloadab
 
     private static final I18n i18n = I18n.get(TenantPadFileUploadServiceImpl.class);
 
+    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XLS, DownloadFormat.XLSX, DownloadFormat.CSV);
+
     @Override
     public long getMaxSize() {
         return 25 * 1024 * 1024;
+    }
+
+    @Override
+    public Collection<String> getSupportedExtensions() {
+        return DownloadFormat.getExtensions(supportedFormats);
     }
 
     @Override

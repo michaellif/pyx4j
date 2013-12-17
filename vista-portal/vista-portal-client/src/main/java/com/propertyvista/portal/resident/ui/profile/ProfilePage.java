@@ -57,8 +57,8 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class),
-                new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class));
+        CImage imageHolder = new CImage(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder(
+                CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 

@@ -603,11 +603,11 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             if (raw != null) {
                 Key blobKey = BlobService.persist(raw, fileName, mime);
                 siteImage = EntityFactory.create(SiteImageResource.class);
-                siteImage.blobKey().setValue(blobKey);
-                siteImage.fileName().setValue(fileName);
-                siteImage.fileSize().setValue(raw.length);
-                siteImage.contentMimeType().setValue(mime);
-                siteImage.timestamp().setValue(System.currentTimeMillis());
+                siteImage.file().blobKey().setValue(blobKey);
+                siteImage.file().fileName().setValue(fileName);
+                siteImage.file().fileSize().setValue(raw.length);
+                siteImage.file().contentMimeType().setValue(mime);
+                siteImage.file().timestamp().setValue(System.currentTimeMillis());
                 Persistence.service().persist(siteImage);
             }
         } catch (IOException e) {

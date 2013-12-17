@@ -77,6 +77,6 @@ public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?
 
     @Owned
     @OrderBy(PrimaryKey.class)
-    IList<InsuranceCertificateDoc> certificateDocs();
+    IList<InsuranceCertificateScan> certificateDocs();
 
 }

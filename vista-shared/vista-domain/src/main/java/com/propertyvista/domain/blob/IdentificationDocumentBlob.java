@@ -7,23 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 13, 2011
+ * Created on Apr 4, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services;
+package com.propertyvista.domain.blob;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.rpc.PasswordChangeRequest;
-
-/**
- * This is secure services, user need to be lodged in to do this actions.
- */
-public interface UserService extends IService {
-
-    public void passwordReset(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request);
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface IdentificationDocumentBlob extends IFileBlob {
 
 }

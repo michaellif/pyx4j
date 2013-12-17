@@ -419,7 +419,7 @@ public class PMSiteContentManager implements Serializable {
         if (resource == null) {
             throw new Error("SiteImageResource cannot be null.");
         }
-        return getPortalContextPath() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
+        return getPortalContextPath() + resource.id().getStringView() + "/" + resource.file().fileName().getStringView()
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 

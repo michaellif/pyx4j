@@ -30,12 +30,12 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
+import com.propertyvista.domain.blob.IFileBlob;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.blob.ETag;
-import com.propertyvista.server.domain.IFileBlob;
 
 public class VistaAbstractFileAccessServlet extends HttpServlet {
 
@@ -47,7 +47,7 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
 
     private final HashMap<String, BlobEntry> blobRegistry = new HashMap<String, BlobEntry>();
 
-    public void register(Class<? extends IFile> fileClass, Class<? extends IFileBlob> blobClass) {
+    public <B extends IFileBlob> void register(Class<? extends IHasFile<B>> fileClass, Class<B> blobClass) {
         blobRegistry.put(fileClass.getSimpleName(), new BlobEntry(fileClass, blobClass));
     }
 
@@ -82,7 +82,7 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
             return;
         }
 
-        IFile file = null;
+        IHasFile<?> file = null;
         if (id.startsWith(DeploymentConsts.TRANSIENT_FILE_PREF)) {
             // treat id as accessKey
             file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
@@ -91,23 +91,23 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
             file = Persistence.secureRetrieve(blobEntry.fileClass, new Key(id));
         }
 
-        IFileBlob blob = Persistence.service().retrieve(blobClass, file.blobKey().getValue());
+        IFileBlob blob = Persistence.service().retrieve(blobClass, file.file().blobKey().getValue());
         if (file == null || blob == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        String token = ETag.getEntityTag(file, "");
+        String token = ETag.getEntityTag(file.file(), "");
         response.setHeader("Etag", token);
 
-        if (!file.timestamp().isNull()) {
+        if (!file.file().timestamp().isNull()) {
             long since = request.getDateHeader("If-Modified-Since");
-            if ((since != -1) && (file.timestamp().getValue() < since)) {
+            if ((since != -1) && (file.file().timestamp().getValue() < since)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
-            response.setDateHeader("Last-Modified", file.timestamp().getValue());
+            response.setDateHeader("Last-Modified", file.file().timestamp().getValue());
             // HTTP 1.0
             response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
             // HTTP 1.1
@@ -118,8 +118,8 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
         }
 
-        if (!file.contentMimeType().isNull()) {
-            response.setContentType(file.contentMimeType().getValue());
+        if (!file.file().contentMimeType().isNull()) {
+            response.setContentType(file.file().contentMimeType().getValue());
         }
 
         response.setContentType(blob.contentType().getValue());
@@ -128,11 +128,11 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
 
     static class BlobEntry {
 
-        public final Class<? extends IFile> fileClass;
+        public final Class<? extends IHasFile<?>> fileClass;
 
         public final Class<? extends IFileBlob> blobClass;
 
-        BlobEntry(Class<? extends IFile> fileClass, Class<? extends IFileBlob> blobClass) {
+        BlobEntry(Class<? extends IHasFile<?>> fileClass, Class<? extends IFileBlob> blobClass) {
             this.fileClass = fileClass;
             this.blobClass = blobClass;
         }

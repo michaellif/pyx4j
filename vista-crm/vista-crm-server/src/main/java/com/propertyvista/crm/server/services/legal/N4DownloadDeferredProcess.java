@@ -32,8 +32,8 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
+import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
-import com.propertyvista.server.domain.LegalLetterBlob;
 
 public class N4DownloadDeferredProcess extends AbstractDeferredProcess {
 
@@ -71,9 +71,9 @@ public class N4DownloadDeferredProcess extends AbstractDeferredProcess {
             for (N4LegalLetter n4LegalLetterIdStub : accepted) {
                 progress.set(progress.get() + 1);
                 N4LegalLetter n4LegalLetter = Persistence.service().retrieve(N4LegalLetter.class, n4LegalLetterIdStub.getPrimaryKey());
-                LegalLetterBlob blob = Persistence.service().retrieve(LegalLetterBlob.class, n4LegalLetter.blobKey().getValue());
+                LegalLetterBlob blob = Persistence.service().retrieve(LegalLetterBlob.class, n4LegalLetter.file().blobKey().getValue());
 
-                ByteArrayInputStream blobStream = new ByteArrayInputStream(blob.content().getValue());
+                ByteArrayInputStream blobStream = new ByteArrayInputStream(blob.data().getValue());
 
                 reader = new PdfReader(blobStream);
                 numOfPages = reader.getNumberOfPages();

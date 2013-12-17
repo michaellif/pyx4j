@@ -26,10 +26,8 @@ public class InsuranceCertificateScanDatasetAccessRule implements DatasetAccessR
 
     @Override
     public void applyRule(EntityQueryCriteria<InsuranceCertificateScan> criteria) {
-        criteria.or(
-                PropertyCriterion.eq(criteria.proto().certificateDoc().certificate().insurancePolicy().tenant(), ResidentPortalContext.getTenant()), // 
-                PropertyCriterion.eq(criteria.proto().certificateDoc().certificate().insurancePolicy().tenant().lease().leaseParticipants(),
-                        ResidentPortalContext.getTenant()));
+        criteria.or(PropertyCriterion.eq(criteria.proto().certificate().insurancePolicy().tenant(), ResidentPortalContext.getTenant()), // 
+                PropertyCriterion.eq(criteria.proto().certificate().insurancePolicy().tenant().lease().leaseParticipants(), ResidentPortalContext.getTenant()));
     }
 
 }

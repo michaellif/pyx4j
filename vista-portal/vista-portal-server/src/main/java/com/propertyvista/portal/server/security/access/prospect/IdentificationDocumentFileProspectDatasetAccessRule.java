@@ -17,18 +17,16 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
-public class ApplicationDocumentFileProofOfEmploymentProspectDatasetAccessRule implements
-        DatasetAccessRule<ApplicationDocumentFile<ProofOfEmploymentDocumentFolder>> {
+public class IdentificationDocumentFileProspectDatasetAccessRule implements DatasetAccessRule<IdentificationDocumentFile> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<ApplicationDocumentFile<ProofOfEmploymentDocumentFolder>> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().owner().owner().owner().holder().screene().user(), PortalVistaContext.getCustomerUserIdStub()));
+    public void applyRule(EntityQueryCriteria<IdentificationDocumentFile> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().owner().owner().holder().screene().user(), PortalVistaContext.getCustomerUserIdStub()));
     }
 
 }

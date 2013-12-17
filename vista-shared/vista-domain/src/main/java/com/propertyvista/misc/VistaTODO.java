@@ -51,8 +51,6 @@ public class VistaTODO {
 
     public static final boolean ApplicationDocumentationPolicyRefacotring = true;
 
-    public static final boolean VISTA_2127_Attachments_For_Notes = true;
-
     public static final boolean VISTA_1789_Renew_Lease = false;
 
     public static final boolean VISTA_1756_Concessions_Should_Be_Hidden = true;

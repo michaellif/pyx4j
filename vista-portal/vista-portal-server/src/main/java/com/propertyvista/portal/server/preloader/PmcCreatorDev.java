@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.domain.blob.operations.PmcDocumentBlob;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.Pmc;
@@ -30,7 +31,6 @@ import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument.Type;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.server.config.DevYardiCredentials;
-import com.propertyvista.server.domain.PmcDocumentBlob;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreatorDev {
@@ -79,10 +79,10 @@ public class PmcCreatorDev {
         String licenseText = "This mockup business is licensed to operate in Property Vista development environment (Issued by Property Vista Dev Team)\n";
         docPageBlob.data().setValue(licenseText.getBytes());
         Persistence.service().persist(docPageBlob);
-        docPage.blobKey().setValue(docPageBlob.getPrimaryKey());
-        docPage.fileSize().setValue(licenseText.getBytes().length);
-        docPage.fileName().setValue("dev-business-license.txt");
-        docPage.contentMimeType().setValue(docPageBlob.contentType().getValue());
+        docPage.file().blobKey().setValue(docPageBlob.getPrimaryKey());
+        docPage.file().fileSize().setValue(licenseText.getBytes().length);
+        docPage.file().fileName().setValue("dev-business-license.txt");
+        docPage.file().contentMimeType().setValue(docPageBlob.contentType().getValue());
         doc.documentPages().add(docPage);
         pmc.equifaxInfo().businessInformation().documents().add(doc);
 

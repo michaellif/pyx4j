@@ -20,20 +20,20 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
-import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.server.common.blob.BlobService;
-import com.propertyvista.server.domain.FileBlob;
 
 /**
  * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
  */
-public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, SiteImageResource> implements SiteImageResourceUploadService {
+public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, MediaFileBlob> implements SiteImageResourceUploadService {
 
     private static final I18n i18n = I18n.get(SiteImageResourceUploadServiceImpl.class);
 
@@ -41,12 +41,11 @@ public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImp
             DownloadFormat.BMP);
 
     public SiteImageResourceUploadServiceImpl() {
-        super(SiteImageResource.class);
     }
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(FileBlob.class).content().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(MediaFileBlob.class).data().getMeta().getLength();
     }
 
     @Override
@@ -60,7 +59,7 @@ public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImp
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, SiteImageResource response) {
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<MediaFileBlob> response) {
         Key blobKey = BlobService.persist(uploadedData.binaryContent, uploadedData.fileName, uploadedData.contentMimeType);
 
         response.blobKey().setValue(blobKey);

@@ -18,7 +18,6 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportService;
-import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ReportDialog;
@@ -32,7 +31,6 @@ import com.propertyvista.crm.rpc.services.customer.TenantPadFileDownloadService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -47,10 +45,9 @@ public class LeaseListerActivity extends LeaseListerActivityBase<LeaseDTO> imple
 
     @Override
     public void uploadPadFile() {
-        UploadDialogBase<IEntity, DownloadableUploadResponseDTO> dialog = new UploadDialogBase<IEntity, DownloadableUploadResponseDTO>(
-                i18n.tr("Upload PAD File"), GWT.<UploadService<IEntity, DownloadableUploadResponseDTO>> create(TenantPadFileUploadService.class),
-                TenantPadFileUploadService.SUPPORTED_FORMATS);
-        dialog.setUploadReciver(new UploadResponseDownloadableReciver<DownloadableUploadResponseDTO>(i18n.tr("PAD Upload")));
+        UploadDialogBase<IEntity> dialog = new UploadDialogBase<IEntity>(i18n.tr("Upload PAD File"),
+                GWT.<TenantPadFileUploadService> create(TenantPadFileUploadService.class));
+        dialog.setUploadReciver(new UploadResponseDownloadableReciver(i18n.tr("PAD Upload")));
         dialog.show();
     }
 

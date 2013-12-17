@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.server.domain.ApplicationDocumentBlob;
+import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
 
 public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
 
@@ -53,14 +53,14 @@ public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
 
         // TEST
         {
-            EntityQueryCriteria<ApplicationDocumentBlob> criteria = EntityQueryCriteria.create(ApplicationDocumentBlob.class);
+            EntityQueryCriteria<ProofOfEmploymentDocumentBlob> criteria = EntityQueryCriteria.create(ProofOfEmploymentDocumentBlob.class);
             criteria.add(PropertyCriterion.ge(criteria.proto().created(), mockupConfig.cleanupOrphanApplicationDocumentsDateRangeMin()));
             criteria.add(PropertyCriterion.le(criteria.proto().created(), mockupConfig.cleanupOrphanApplicationDocumentsDateRangeMax()));
 
-            List<ApplicationDocumentBlob> blobs = Persistence.service().query(criteria);
+            List<ProofOfEmploymentDocumentBlob> blobs = Persistence.service().query(criteria);
 
             // assert no orphan blobs in the cleanup range
-            for (ApplicationDocumentBlob blob : blobs) {
+            for (ProofOfEmploymentDocumentBlob blob : blobs) {
                 assertFalse("unexpected orphan document blob in the target cleanup range " + blob.toString(),
                         new String(blob.data().getValue()).startsWith("orphan"));
             }
@@ -68,7 +68,7 @@ public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
             // assert all the required not orphan blobs are still in the cleanup range
             boolean child1Found = false;
             boolean child2Found = false;
-            for (ApplicationDocumentBlob blob : blobs) {
+            for (ProofOfEmploymentDocumentBlob blob : blobs) {
                 if (new String(blob.data().getValue()).equals("child 1")) {
                     child1Found = true;
                 }
@@ -80,13 +80,13 @@ public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
         }
 
         {
-            EntityQueryCriteria<ApplicationDocumentBlob> criteria = EntityQueryCriteria.create(ApplicationDocumentBlob.class);
+            EntityQueryCriteria<ProofOfEmploymentDocumentBlob> criteria = EntityQueryCriteria.create(ProofOfEmploymentDocumentBlob.class);
             criteria.or() //@formatter:off
                 .left(PropertyCriterion.lt(criteria.proto().created(), mockupConfig.cleanupOrphanApplicationDocumentsDateRangeMin()))
                 .right(PropertyCriterion.gt(criteria.proto().created(), mockupConfig.cleanupOrphanApplicationDocumentsDateRangeMax()));
             //@formatter:on
 
-            List<ApplicationDocumentBlob> blobs = Persistence.service().query(criteria);
+            List<ProofOfEmploymentDocumentBlob> blobs = Persistence.service().query(criteria);
 
             // assert orphans that should have been deleted are still alive
             assertEquals("number of expected orphan documents does not match", 3, blobs.size());

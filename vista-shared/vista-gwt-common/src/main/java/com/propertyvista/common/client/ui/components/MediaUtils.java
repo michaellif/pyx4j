@@ -13,26 +13,19 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.MediaFile;
-import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.legal.LegalLetter;
-import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
-import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.tenant.CustomerPicture;
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 
@@ -48,28 +41,8 @@ public class MediaUtils {
         }
     }
 
-    public static String createPmcDocumentUrl(PmcDocumentFile file) {
-        String baseURL = ClientNavigUtils.getDeploymentBaseURL();
-        if (SecurityController.checkBehavior(VistaBasicBehavior.Operations)) {
-            // Admin is exception, TODO use FileURLBuilder
-            baseURL += VistaApplication.operations + "/";
-        }
-        return baseURL + DeploymentConsts.pmcDocumentServletMapping + file.id().getStringView() + "/" + file.fileName().getStringView();
-    }
-
-    //TODO REMOVE
-    @Deprecated
-    public static String createApplicationDocumentUrl(ApplicationDocumentFile file) {
-        return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + file.id().getStringView() + "/"
-                + file.fileName().getStringView();
-    }
-
-    public static String createLegalLetterDocumentUrl(LegalLetter file) {
-        return GWT.getModuleBaseURL() + DeploymentConsts.legalLetterServletMappning + file.id().getStringView() + "/" + file.fileName().getStringView();
-    }
-
     public static String createSiteImageResourceUrl(SiteImageResource resource) {
-        return ClientNavigUtils.getDeploymentBaseURL() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
+        return ClientNavigUtils.getDeploymentBaseURL() + resource.id().getStringView() + "/" + resource.file().fileName().getStringView()
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 
@@ -86,18 +59,19 @@ public class MediaUtils {
     }
 
     public static String createMediaImageUrl(MediaFile mediaFile) {
-        return new PublicMediaURLBuilder().getUrl(mediaFile);
+        return new PublicMediaURLBuilder().getUrl(mediaFile.file());
     }
 
     public static String createCustomerPictureUrl(CustomerPicture picture) {
-        return new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class).getUrl(picture);
+        return new VistaFileURLBuilder(CustomerPicture.class).getUrl(picture.file());
     }
 
-    public static String createInsuranceCertificateScanUrl(InsuranceCertificateScan certificateScan) {
-        return new VistaFileURLBuilder<InsuranceCertificateScan>(InsuranceCertificateScan.class).getUrl(certificateScan);
+    public static String createLegalLetterDocumentUrl(LegalLetter legalLetter) {
+        return new VistaFileURLBuilder(LegalLetter.class).getUrl(legalLetter.file());
     }
 
-    public static String createEmployeeSignatureUrl(EmployeeSignature employeeSignature) {
-        return new VistaFileURLBuilder<EmployeeSignature>(EmployeeSignature.class).getUrl(employeeSignature);
+    public static String createPmcDocumentUrl(PmcDocumentFile file) {
+        return new VistaFileURLBuilder(PmcDocumentFile.class).getUrl(file.file());
     }
+
 }
