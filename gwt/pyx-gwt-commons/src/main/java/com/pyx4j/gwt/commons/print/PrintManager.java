@@ -41,6 +41,9 @@ public class PrintManager {
 
     private PrintManager() {
         iframe = Document.get().createIFrameElement();
+        iframe.setAttribute("tabIndex", "-1");
+        iframe.setAttribute("style", "position: absolute; width: 0; height: 0; border: 0");
+        iframe.setAttribute("src", "javascript:''");
         RootPanel.get().getElement().appendChild(iframe);
 
         Element headElement = Document.get().getElementsByTagName("head").getItem(0);

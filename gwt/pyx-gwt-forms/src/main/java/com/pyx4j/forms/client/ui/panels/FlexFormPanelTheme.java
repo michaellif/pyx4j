@@ -33,7 +33,7 @@ public abstract class FlexFormPanelTheme extends Theme {
     public static enum StyleName implements IStyleName {
         FormFlexPanel, FormFlexPanelLeftColumn, FormFlexPanelRightColumn, FormFlexPanelLeftCell, FormFlexPanelRightCell,
 
-        FormFlexPanelTwoRows, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Image, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelH4, FormFlexPanelH4Label, FormFlexPanelActionWidget
+        FormFlexPanelTwoRows, FormFlexPanelCaptionLabel, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Image, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelH4, FormFlexPanelH4Label, FormFlexPanelActionWidget
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -86,6 +86,11 @@ public abstract class FlexFormPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FormFlexPanel, " td");
         style.addProperty("padding", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormFlexPanelCaptionLabel);
+        style.addProperty("font-size", "1.5em");
+        style.addProperty("padding", "10px 5px 5px 5px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelHR);

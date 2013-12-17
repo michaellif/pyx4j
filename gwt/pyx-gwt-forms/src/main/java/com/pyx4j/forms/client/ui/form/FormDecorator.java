@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
@@ -56,6 +57,7 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
         captionLabel.setStyleName(FormDecoratorTheme.StyleName.FormDecoratorCaption.name());
 
         headerToolbar = new Toolbar();
+        headerToolbar.addStyleName(StyleManager.DO_NOT_PRINT_CLASS_NAME);
         headerPanel = new FlowPanel();
         headerPanel.add(captionLabel);
         headerPanel.add(headerToolbar);
@@ -66,6 +68,7 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
         mainPanel.setStyleName(FormDecoratorTheme.StyleName.FormDecoratorMain.name());
 
         footerToolbar = new Toolbar();
+        footerToolbar.addStyleName(StyleManager.DO_NOT_PRINT_CLASS_NAME);
         footerPanel = new SimplePanel();
         footerPanel.setStyleName(FormDecoratorTheme.StyleName.FormDecoratorFooter.name());
         footerPanel.setWidget(footerToolbar);

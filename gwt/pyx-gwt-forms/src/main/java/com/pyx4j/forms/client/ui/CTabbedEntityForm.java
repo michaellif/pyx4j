@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -36,6 +37,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -140,11 +142,10 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
         return tabPanel.getSelectedIndex();
     }
 
-    public String toStringForPrint() {
+    public Element getPrintableElement() {
         //Traverse tabs of TabPanel
         //for enabled - create Caption + body
         //Expand all collapsed containers and folder items
-        //add html+body tags
         VerticalPanel printWidget = new VerticalPanel();
         printWidget.setWidth("100%");
         for (final Tab tab : tabPanel.getTabs()) {
@@ -152,14 +153,12 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
                 continue;
             }
             tab.setTabVisible(true);
-            printWidget.add(new Label(tab.getTabTitle()));
+            Label tabLabel = new Label(tab.getTabTitle());
+            tabLabel.setStyleName(FlexFormPanelTheme.StyleName.FormFlexPanelCaptionLabel.name());
+            printWidget.add(tabLabel);
             printWidget.add(new HTML(tab.getWidget(0).getElement().getInnerHTML()));
         }
-        StringBuilder html = new StringBuilder();
-        //generate styles
-        html.append("<style>" + StyleManager.getThemeString() + "</style>");
-        html.append("<body>" + printWidget.toString() + "</body>");
-        return html.toString();
+        return printWidget.getElement();
     }
 
     public void setTabBarVisible(boolean visible) {

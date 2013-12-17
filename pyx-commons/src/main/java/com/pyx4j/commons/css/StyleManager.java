@@ -129,7 +129,7 @@ public class StyleManager {
 
         // Add do-not-print css: 
         stylesString.append("@media print {");
-        stylesString.append("." + DO_NOT_PRINT_CLASS_NAME + "{display: none;}");
+        stylesString.append("." + DO_NOT_PRINT_CLASS_NAME + ", ." + DO_NOT_PRINT_CLASS_NAME + " * {display: none !important;}");
         stylesString.append("}");
 
         for (Style style : instance().theme.getAllStyles()) {
