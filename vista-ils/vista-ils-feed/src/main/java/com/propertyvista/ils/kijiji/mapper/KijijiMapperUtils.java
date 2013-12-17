@@ -51,12 +51,12 @@ public class KijijiMapperUtils {
     }
 
     public static String getSiteImageResourceUrl(SiteImageResource resource) {
-        return getPortalHomeUrl() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
+        return getPortalHomeUrl() + resource.id().getStringView() + "/" + resource.file().fileName().getStringView()
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String getMediaImgUrl(MediaFile media, ThumbnailSize size) {
-        return getPortalHomeUrl() + DeploymentConsts.mediaImagesServletMapping + media.blobKey().getStringView() + "/" + size.name() + "."
+        return getPortalHomeUrl() + DeploymentConsts.mediaImagesServletMapping + media.file().blobKey().getStringView() + "/" + size.name() + "."
                 + ImageConsts.THUMBNAIL_TYPE;
     }
 
