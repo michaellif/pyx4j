@@ -26,8 +26,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.rpc.services.lease.ProofOfEmploymentDocumentCrmUploadService;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
-import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentFileProspectUploadService;
 
 public class ProofOfEmploymentDocumentFileFolder extends VistaBoxFolder<ProofOfEmploymentDocumentFile> {
 
@@ -56,7 +56,7 @@ public class ProofOfEmploymentDocumentFileFolder extends VistaBoxFolder<ProofOfE
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfEmploymentFileProspectUploadService.class), new VistaFileURLBuilder(
+            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfEmploymentDocumentCrmUploadService.class), new VistaFileURLBuilder(
                     ProofOfEmploymentDocumentFile.class));
 
             main.setWidget(++row, 0, 1, inject(proto().file(), cfile));

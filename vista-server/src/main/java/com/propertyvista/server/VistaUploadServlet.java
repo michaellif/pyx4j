@@ -24,12 +24,14 @@ import com.propertyvista.crm.server.services.admin.SiteImageResourceUploadServic
 import com.propertyvista.crm.server.services.customer.CustomerPictureCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.InsuranceCertificateScanCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.TenantPadFileUploadServiceImpl;
-import com.propertyvista.crm.server.services.lease.ApplicationDocumentCrmUploadServiceImpl;
+import com.propertyvista.crm.server.services.lease.IdentificationDocumentCrmUploadServiceImpl;
+import com.propertyvista.crm.server.services.lease.ProofOfEmploymentDocumentCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.organization.EmployeeSignatureUploadServiceImpl;
 import com.propertyvista.operations.server.services.EncryptedStorageServicePrivateKeyUploadServiceImpl;
 import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.operations.server.services.MerchantAccountFileUploadServiceImpl;
-import com.propertyvista.portal.server.portal.prospect.services.ApplicationDocumentProspectUploadServiceImpl;
+import com.propertyvista.portal.server.portal.prospect.services.IdentificationDocumentProspectUploadServiceImpl;
+import com.propertyvista.portal.server.portal.prospect.services.ProofOfEmploymentDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.services.InsuranceCertificateScanResidentUploadServiceImpl;
 import com.propertyvista.portal.server.portal.shared.services.CustomerPicturePortalUploadServiceImpl;
 
@@ -52,8 +54,11 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(TenantPadFileUploadServiceImpl.class);
         register(MerchantAccountFileUploadServiceImpl.class);
         register(EmployeeSignatureUploadServiceImpl.class);
-        register(ApplicationDocumentCrmUploadServiceImpl.class);
-        register(ApplicationDocumentProspectUploadServiceImpl.class);
+
+        register(ProofOfEmploymentDocumentCrmUploadServiceImpl.class);
+        register(IdentificationDocumentCrmUploadServiceImpl.class);
+        register(ProofOfEmploymentDocumentProspectUploadServiceImpl.class);
+        register(IdentificationDocumentProspectUploadServiceImpl.class);
     }
 
 }

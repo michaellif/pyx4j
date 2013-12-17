@@ -7,15 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 6, 2013
+ * Created on Dec 17, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease;
+package com.propertyvista.portal.server.portal.prospect.services;
 
-import com.propertyvista.crm.rpc.services.lease.ProofOfEmploymentDocumentCrmUploadService;
-import com.propertyvista.server.common.upload.AbstractApplicationDocumentUploadServiceImpl;
+import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
+import com.propertyvista.server.common.upload.AbstractIdentificationDocumentUploadServiceImpl;
 
-public class ApplicationDocumentCrmUploadServiceImpl extends AbstractApplicationDocumentUploadServiceImpl implements ProofOfEmploymentDocumentCrmUploadService {
+public class IdentificationDocumentProspectUploadServiceImpl extends AbstractIdentificationDocumentUploadServiceImpl implements
+        IdentificationDocumentProspectUploadService {
 
 }

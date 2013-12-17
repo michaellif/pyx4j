@@ -30,6 +30,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
@@ -82,32 +83,37 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
             return;
         }
 
-        IHasFile<?> file = null;
+        IFile<?> file = null;
         if (id.startsWith(DeploymentConsts.TRANSIENT_FILE_PREF)) {
             // treat id as accessKey
             file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
         } else {
             // ensure access allowed
-            file = Persistence.secureRetrieve(blobEntry.fileClass, new Key(id));
+            IHasFile<?> holder = Persistence.secureRetrieve(blobEntry.hasFileClass, new Key(id));
+            if (holder != null) {
+                file = holder.file();
+            }
         }
-
-        IFileBlob blob = Persistence.service().retrieve(blobClass, file.file().blobKey().getValue());
+        IFileBlob blob = null;
+        if (file != null) {
+            blob = Persistence.service().retrieve(blobClass, file.blobKey().getValue());
+        }
         if (file == null || blob == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        String token = ETag.getEntityTag(file.file(), "");
+        String token = ETag.getEntityTag(file, "");
         response.setHeader("Etag", token);
 
-        if (!file.file().timestamp().isNull()) {
+        if (!file.timestamp().isNull()) {
             long since = request.getDateHeader("If-Modified-Since");
-            if ((since != -1) && (file.file().timestamp().getValue() < since)) {
+            if ((since != -1) && (file.timestamp().getValue() < since)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
-            response.setDateHeader("Last-Modified", file.file().timestamp().getValue());
+            response.setDateHeader("Last-Modified", file.timestamp().getValue());
             // HTTP 1.0
             response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
             // HTTP 1.1
@@ -118,8 +124,8 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
         }
 
-        if (!file.file().contentMimeType().isNull()) {
-            response.setContentType(file.file().contentMimeType().getValue());
+        if (!file.contentMimeType().isNull()) {
+            response.setContentType(file.contentMimeType().getValue());
         }
 
         response.setContentType(blob.contentType().getValue());
@@ -128,12 +134,12 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
 
     static class BlobEntry {
 
-        public final Class<? extends IHasFile<?>> fileClass;
+        public final Class<? extends IHasFile<?>> hasFileClass;
 
         public final Class<? extends IFileBlob> blobClass;
 
         BlobEntry(Class<? extends IHasFile<?>> fileClass, Class<? extends IFileBlob> blobClass) {
-            this.fileClass = fileClass;
+            this.hasFileClass = fileClass;
             this.blobClass = blobClass;
         }
 
@@ -143,7 +149,7 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
                 return true;
             } else if (other instanceof BlobEntry) {
                 BlobEntry otherEntry = (BlobEntry) other;
-                return fileClass == otherEntry.fileClass && blobClass == otherEntry.blobClass;
+                return hasFileClass == otherEntry.hasFileClass && blobClass == otherEntry.blobClass;
             } else {
                 return super.equals(other);
             }
@@ -151,7 +157,7 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
 
         @Override
         public int hashCode() {
-            return 31 * fileClass.hashCode() + blobClass.hashCode();
+            return 31 * hasFileClass.hashCode() + blobClass.hashCode();
         }
     }
 

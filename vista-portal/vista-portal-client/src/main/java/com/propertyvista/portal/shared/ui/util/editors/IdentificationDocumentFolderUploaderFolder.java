@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
-import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentFileProspectUploadService;
+import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<IdentificationDocumentFile> {
@@ -57,7 +57,7 @@ public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentFileProspectUploadService.class), new VistaFileURLBuilder(
+            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     ProofOfEmploymentDocumentFile.class));
 
             main.setWidget(++row, 0, 1, inject(proto().file(), cfile));

@@ -18,6 +18,6 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 
-public interface IdentificationDocumentFileProspectUploadService extends UploadService<IEntity, IdentificationDocumentBlob> {
+public interface IdentificationDocumentProspectUploadService extends UploadService<IEntity, IdentificationDocumentBlob> {
 
 }

@@ -27,14 +27,14 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
 
-public abstract class AbstractApplicationDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, ProofOfEmploymentDocumentBlob> {
+public abstract class AbstractProofOfEmploymentDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, ProofOfEmploymentDocumentBlob> {
 
-    private static final I18n i18n = I18n.get(AbstractApplicationDocumentUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(AbstractProofOfEmploymentDocumentUploadServiceImpl.class);
 
     private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF);
 
-    public AbstractApplicationDocumentUploadServiceImpl() {
+    public AbstractProofOfEmploymentDocumentUploadServiceImpl() {
     }
 
     @Override

@@ -144,7 +144,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 7).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().picture(), imageHolder)).customLabel("").build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().picture().file(), imageHolder)).customLabel("").build());
         main.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_BOTTOM);
 
         main.setWidget(++row, 0, 2, inject(proto().customer().person().name(), new NameEditor(participant)));
