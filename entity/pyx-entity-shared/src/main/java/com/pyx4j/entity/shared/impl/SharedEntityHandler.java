@@ -243,7 +243,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         } else {
             if (assertDetached && (data != null) && data.containsKey(DETACHED_ATTR)) {
                 //log.error("Access to detached entity {}", exceptionInfo(data), new Throwable());
-                throw new RuntimeException("Access to detached entity " + exceptionInfo(data));
+                throw new RuntimeException("Access to detached " + data.get(DETACHED_ATTR) + " entity " + exceptionInfo(data));
             }
             return data;
         }
