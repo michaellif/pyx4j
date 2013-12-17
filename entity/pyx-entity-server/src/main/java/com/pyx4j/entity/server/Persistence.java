@@ -222,31 +222,37 @@ public class Persistence {
         });
     }
 
-    public static <T extends IEntity> void ensureRetrieve(T entity, AttachLevel attachLevel) {
-        if (entity.getAttachLevel().ordinal() < attachLevel.ordinal()) {
-            service().retrieve(entity, attachLevel, false);
-        }
-    }
-
-    public static <T extends IEntity> void ensureRetrieve(ICollection<T, ?> entityIterable, AttachLevel attachLevel) {
-        if (entityIterable.getAttachLevel().ordinal() < attachLevel.ordinal()) {
-            service().retrieve(entityIterable, attachLevel);
-        }
-        for (T entity : entityIterable) {
-            ensureRetrieve(entity, attachLevel);
-        }
-    }
-
-    public static <T extends IEntity> void ensureRetrieveMember(T entityMember, AttachLevel attachLevel) {
-        if (entityMember.getAttachLevel().ordinal() < attachLevel.ordinal()) {
+    public static <T extends IEntity> void ensureRetrieve(T entityMember, AttachLevel attachLevel) {
+        if (entityMember.getAttachLevel() == AttachLevel.Detached) {
             service().retrieveMember(entityMember, attachLevel);
+        } else {
+            if (entityMember.getAttachLevel().ordinal() < attachLevel.ordinal()) {
+                service().retrieve(entityMember, attachLevel, false);
+            }
         }
     }
 
-    public static <T extends IEntity> void ensureRetrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
-        if (collectionMember.getAttachLevel().ordinal() < attachLevel.ordinal()) {
+    public static <T extends IEntity> void ensureRetrieve(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
+        if (collectionMember.getAttachLevel() == AttachLevel.Detached) {
             service().retrieveMember(collectionMember, attachLevel);
+        } else {
+            if (collectionMember.getAttachLevel().ordinal() < attachLevel.ordinal()) {
+                service().retrieve(collectionMember, attachLevel);
+            }
+            for (T entity : collectionMember) {
+                ensureRetrieve(entity, attachLevel);
+            }
         }
+    }
+
+    @Deprecated
+    public static <T extends IEntity> void ensureRetrieveMember(T entityMember, AttachLevel attachLevel) {
+        ensureRetrieve(entityMember, attachLevel);
+    }
+
+    @Deprecated
+    public static <T extends IEntity> void ensureRetrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
+        ensureRetrieve(collectionMember, attachLevel);
     }
 
 }
