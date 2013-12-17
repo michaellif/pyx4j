@@ -53,6 +53,7 @@ import com.propertyvista.operations.server.services.simulator.CardServiceSimulat
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteFilter;
 import com.propertyvista.pmsite.server.PMSiteRobotsTxtFilter;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.portal.PublicMediaServlet;
 import com.propertyvista.portal.server.upload.SiteImageResourceServlet;
 import com.propertyvista.portal.server.upload.VistaFileAccessServlet;
@@ -199,23 +200,24 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         }
         {
             ServletRegistration.Dynamic sc = ctx.addServlet("DownloadServlet", DownloadServlet.class);
-            sc.addMapping(allApplicationsUrlPatterns("/download/*"));
+            sc.addMapping(allApplicationsUrlPatterns(DeploymentConsts.downloadServletMapping + "*"));
         }
         {
             ServletRegistration.Dynamic sc = ctx.addServlet("VistaUploadServlet", VistaUploadServlet.class);
-            sc.addMapping(allApplicationsUrlPatterns("/upload/*"));
+            sc.addMapping(allApplicationsUrlPatterns(DeploymentConsts.uploadServletMapping + "*"));
         }
 
         {
             ServletRegistration.Dynamic sc = ctx.addServlet("PublicMediaServlet", PublicMediaServlet.class);
-            sc.addMapping(allApplicationsUrlPatterns("/media/*"));
+            sc.addMapping(allApplicationsUrlPatterns(DeploymentConsts.mediaImagesServletMapping + "*"));
         }
 
         // Special downloads
         {
             ServletRegistration.Dynamic sc = ctx.addServlet("VistaFileAccessServlet", VistaFileAccessServlet.class);
-            sc.addMapping(urlPattern(VistaApplication.crm, "/file/*"));
-            sc.addMapping(urlPattern(VistaApplication.resident, "/file/*"));
+            sc.addMapping(urlPattern(VistaApplication.crm, DeploymentConsts.FILE_SERVLET_MAPPING + "*"));
+            sc.addMapping(urlPattern(VistaApplication.resident, DeploymentConsts.FILE_SERVLET_MAPPING + "*"));
+            sc.addMapping(urlPattern(VistaApplication.prospect, DeploymentConsts.FILE_SERVLET_MAPPING + "*"));
         }
 
         // Development environment
@@ -289,13 +291,13 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
     }
 
     private String urlPattern(VistaApplication application, String urlPattern) {
-        return "/" + application.name() + urlPattern;
+        return "/" + application.name() + (urlPattern.startsWith("/") ? "" : "/") + urlPattern;
     }
 
     private String[] allApplicationsUrlPatterns(String urlPattern) {
         ArrayList<String> arlPatterns = new ArrayList<String>();
         for (VistaApplication application : VistaApplication.values()) {
-            arlPatterns.add("/" + application.name() + urlPattern);
+            arlPatterns.add(urlPattern(application, urlPattern));
         }
         return arlPatterns.toArray(new String[arlPatterns.size()]);
     }

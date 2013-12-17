@@ -14,9 +14,9 @@
 package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -32,7 +32,6 @@ import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
 @ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
-@DiscriminatorValue("CustomerScreeningIncome")
 public interface CustomerScreeningIncome extends IEntity {
 
     @Owner
@@ -57,5 +56,6 @@ public interface CustomerScreeningIncome extends IEntity {
     IPrimitive<Integer> orderInOwner();
 
     @Owned
+    @OrderBy(PrimaryKey.class)
     IList<ProofOfEmploymentDocumentFolder> documents();
 }

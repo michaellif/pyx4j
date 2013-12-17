@@ -35,6 +35,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
@@ -286,14 +287,14 @@ public class ScreeningGenerator {
     private static void attachDocumentData(IdentificationDocumentFolder document) {
         for (IdentificationDocumentFile applicationDocument : document.files()) {
             String fileName = applicationDocument.file().fileName().getValue();
-            ProofOfEmploymentDocumentBlob applicationDocumentData;
+            IdentificationDocumentBlob applicationDocumentData;
             try {
                 byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, ScreeningGenerator.class);
                 if (data == null) {
                     throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
                 }
                 String contentType = MimeMap.getContentType(FilenameUtils.getExtension(fileName));
-                applicationDocumentData = EntityFactory.create(ProofOfEmploymentDocumentBlob.class);
+                applicationDocumentData = EntityFactory.create(IdentificationDocumentBlob.class);
                 applicationDocumentData.data().setValue(data);
                 applicationDocumentData.contentType().setValue(contentType);
 

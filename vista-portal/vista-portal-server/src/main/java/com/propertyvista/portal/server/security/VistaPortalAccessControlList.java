@@ -26,6 +26,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.YardiServiceRequest;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
@@ -46,9 +47,10 @@ import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
-import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
+import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
@@ -72,9 +74,9 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveS
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.IdentificationDocumentFileProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.ProofOfEmploymentDocumentFileProspectDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.CustomerPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
@@ -176,9 +178,13 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationWizardService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
-        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ProofOfEmploymentDocumentProspectUploadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
+
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(IdentificationDocumentProspectUploadService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ProofOfEmploymentDocumentProspectUploadService.class));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(IdentificationDocumentFile.class, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(ProofOfEmploymentDocumentFile.class, CRUD));
 
         //=======================================
 
@@ -206,8 +212,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequest.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestCategory.class, EntityPermission.READ));
 
-        grant(PortalResidentBehavior.Resident, new EntityPermission(ProofOfEmploymentDocumentFile.class, CRUD));
-
         grant(PortalResidentBehavior.ResidentPrimary, PortalResidentBehavior.Resident);
         grant(PortalResidentBehavior.ResidentSecondary, PortalResidentBehavior.Resident);
 
@@ -221,11 +225,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);
         grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerPictureProspectDatasetAccessRule(), CustomerPicture.class);
-        if (false) {
-            grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfEmploymentDocumentFileProspectDatasetAccessRule(),
-                    ProofOfEmploymentDocumentFile.class);
-            grant(VistaDataAccessBehavior.ProspectInPortal, new IdentificationDocumentFileProspectDatasetAccessRule(), ProofOfEmploymentDocumentFile.class);
-        }
+        grant(VistaDataAccessBehavior.ProspectInPortal, new IdentificationDocumentFileProspectDatasetAccessRule(), IdentificationDocumentFile.class);
+        grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfEmploymentDocumentFileProspectDatasetAccessRule(), ProofOfEmploymentDocumentFile.class);
 
         grant(new IServiceExecutePermission(PortalContentService.class));
         freeze();

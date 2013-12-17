@@ -13,9 +13,14 @@
  */
 package com.propertyvista.domain.media;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,6 +32,12 @@ import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
 
 public interface IdentificationDocumentFolder extends IEntity {
 
+    @Owner
+    @NotNull
+    @MemberColumn(notNull = true)
+    @ReadOnly
+    @Detached
+    @JoinColumn
     CustomerScreeningV owner();
 
     @NotNull
