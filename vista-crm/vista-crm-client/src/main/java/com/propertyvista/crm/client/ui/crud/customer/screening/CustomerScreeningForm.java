@@ -31,14 +31,14 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
-import com.propertyvista.common.client.ui.components.folders.IdUploaderFolder;
-import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
-import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.lease.application.components.IdUploaderFolder;
+import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalAssetFolder;
+import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalIncomeFolder;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.misc.BusinessRules;

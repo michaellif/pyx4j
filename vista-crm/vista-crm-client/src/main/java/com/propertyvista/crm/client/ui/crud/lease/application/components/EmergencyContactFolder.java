@@ -11,14 +11,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.folders;
+package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
-import com.propertyvista.common.client.ui.components.editors.EmergencyContactEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.EmergencyContact;
 
 public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {

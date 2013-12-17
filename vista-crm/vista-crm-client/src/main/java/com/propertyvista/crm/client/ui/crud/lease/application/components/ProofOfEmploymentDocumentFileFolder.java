@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-04-04
- * @author Vlad
+ * Created on Dec 17, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.folders;
+package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -25,30 +25,30 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.domain.media.IdentificationDocumentFile;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
-import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentFileProspectUploadService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentFileProspectUploadService;
 
-public class IdentificationDocumentFileUploaderFolder extends VistaBoxFolder<IdentificationDocumentFile> {
+public class ProofOfEmploymentDocumentFileFolder extends VistaBoxFolder<ProofOfEmploymentDocumentFile> {
 
-    private static final I18n i18n = I18n.get(IdentificationDocumentFileUploaderFolder.class);
+    private static final I18n i18n = I18n.get(ProofOfEmploymentDocumentFileFolder.class);
 
-    public IdentificationDocumentFileUploaderFolder() {
-        super(IdentificationDocumentFile.class, i18n.tr("File"));
+    public ProofOfEmploymentDocumentFileFolder() {
+        super(ProofOfEmploymentDocumentFile.class, i18n.tr("Document"));
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof IdentificationDocumentFile) {
+        if (member instanceof ProofOfEmploymentDocumentFile) {
             return new DocumentEditor();
         }
         return super.create(member);
     }
 
-    private class DocumentEditor extends CEntityForm<IdentificationDocumentFile> {
+    private class DocumentEditor extends CEntityForm<ProofOfEmploymentDocumentFile> {
 
         public DocumentEditor() {
-            super(IdentificationDocumentFile.class);
+            super(ProofOfEmploymentDocumentFile.class);
         }
 
         @Override
@@ -56,7 +56,7 @@ public class IdentificationDocumentFileUploaderFolder extends VistaBoxFolder<Ide
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentFileProspectUploadService.class), new VistaFileURLBuilder(
+            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfEmploymentFileProspectUploadService.class), new VistaFileURLBuilder(
                     ProofOfEmploymentDocumentFile.class));
 
             main.setWidget(++row, 0, 1, inject(proto().file(), cfile));
