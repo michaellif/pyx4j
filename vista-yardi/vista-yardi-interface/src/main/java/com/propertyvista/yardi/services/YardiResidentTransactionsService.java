@@ -464,8 +464,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                                     state.addCharge(charge.amount().getValue());
                                     // for a partially paid charge add fully consumed credit for the amount paid
                                     if (amount.compareTo(BigDecimal.ZERO) > 0 && amountPaid.compareTo(BigDecimal.ZERO) > 0) {
+                                        // negate amount
                                         detail.setAmount("-" + detail.getAmountPaid());
                                         detail.setBalanceDue("0.00"); // translates to fully consumed credit
+                                        detail.setAmountPaid(detail.getAmount()); // ensure balance
                                         detail.setDescription(i18n.tr("{0} amount paid", detail.getDescription()));
                                         charge = YardiARIntegrationAgent.createCharge(account, detail);
                                         Persistence.service().persist(charge);
