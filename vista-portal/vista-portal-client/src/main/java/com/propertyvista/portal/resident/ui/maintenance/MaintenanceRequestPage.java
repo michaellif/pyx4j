@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.gwt.commons.print.PrintManager;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -33,7 +34,6 @@ import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageVi
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PrintUtils;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequestDTO> {
@@ -62,7 +62,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         btnPrint = new Button(i18n.tr("Print"), new Command() {
             @Override
             public void execute() {
-                PrintUtils.print(MaintenanceRequestPage.this.asWidget());
+                PrintManager.print(MaintenanceRequestPage.this.asWidget().getElement());
             }
         });
 
