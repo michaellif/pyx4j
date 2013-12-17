@@ -20,14 +20,6 @@
  */
 package com.pyx4j.gwt.commons;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Frame;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.UIObject;
-
 /**
  * <> Generic printing class can be used to print the Window it self, DOM.Elements,
  * UIObjects (Widgets) and plain HTML
@@ -49,21 +41,6 @@ import com.google.gwt.user.client.ui.UIObject;
  */
 
 public class Print {
-
-    private static Frame frame;
-
-    static {
-        frame = new Frame();
-        frame.getElement().setPropertyString("id", "__printingFrame");
-        frame.getElement().getStyle().setWidth(0, Unit.PX);
-        frame.getElement().getStyle().setHeight(0, Unit.PX);
-        frame.getElement().getStyle().setBorderWidth(0, Unit.PX);
-        RootPanel.get().add(frame);
-    }
-
-    public static native void it() /*-{
-                                   $wnd.print();
-                                   }-*/;
 
     public static native void preview(String html) /*-{
                                                    var child = $wnd.open();
