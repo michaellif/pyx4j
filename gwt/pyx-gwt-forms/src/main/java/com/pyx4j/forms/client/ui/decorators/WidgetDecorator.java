@@ -102,7 +102,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         this(new Builder(component));
     }
 
-    protected WidgetDecorator(final Builder builder) {
+    public WidgetDecorator(final Builder builder) {
         this.builder = builder;
 
         setStyleName(WidgetDecorator.name());
