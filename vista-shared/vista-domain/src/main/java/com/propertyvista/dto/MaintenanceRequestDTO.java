@@ -30,7 +30,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 @ExtendsBO
 public interface MaintenanceRequestDTO extends MaintenanceRequest {
 
-    @Caption(name = "Problem in my Unit")
+    @Caption(name = "Problem in Unit")
     @Editor(type = EditorType.radiogroup)
     IPrimitive<Boolean> reportedForOwnUnit();
 

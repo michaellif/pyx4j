@@ -57,6 +57,7 @@ public interface MaintenanceRequest extends IEntity, HasNotesAndAttachments {
     @JoinColumn
     Building building();
 
+    @NotNull
     AptUnit unit();
 
     AbstractPmcUser originator();
