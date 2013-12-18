@@ -103,6 +103,7 @@ class CaledonReport {
         }
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().building().suspended(), false);
             criteria.eq(criteria.proto().building().merchantAccounts().$().merchantAccount(), merchantAccount);
             model.units().setValue(Persistence.service().count(criteria));
         }
@@ -118,6 +119,7 @@ class CaledonReport {
         {
             ICursorIterator<Lease> leaseIterator;
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().unit().building().suspended(), false);
             criteria.eq(criteria.proto().unit().building().merchantAccounts().$().merchantAccount(), merchantAccount);
             criteria.eq(criteria.proto().status(), Lease.Status.Active);
             leaseIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
