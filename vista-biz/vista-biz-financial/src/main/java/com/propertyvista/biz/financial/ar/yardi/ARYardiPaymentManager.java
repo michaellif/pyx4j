@@ -35,6 +35,7 @@ import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.biz.system.UnableToPostTerminalYardiServiceException;
 import com.propertyvista.biz.system.YardiARFacade;
+import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -136,6 +137,17 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
             paymentRecord.notice().setValue(e.getMessage());
             Persistence.service().merge(paymentRecord);
             ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF, e.getMessage());
+        } catch (YardiPropertyNoAccessException e) {
+            // Handle Sold buildings
+            Persistence.service().retrieve(billingCycle.building());
+            if (billingCycle.building().suspended().getValue()) {
+                paymentRecord.notice().setValue(e.getMessage());
+                Persistence.service().merge(paymentRecord);
+                ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF, e.getMessage());
+            } else {
+                throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed; Lease Id {1}", //
+                        paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
+            }
         } catch (YardiServiceException e) {
             throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed; Lease Id {1}", //
                     paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);

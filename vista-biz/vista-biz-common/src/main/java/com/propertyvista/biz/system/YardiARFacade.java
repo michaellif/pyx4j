@@ -37,7 +37,8 @@ public interface YardiARFacade {
 
     void postReceipt(YardiReceipt receipt, PaymentBatchContext paymentBatchContext) throws ARException, YardiServiceException, RemoteException;
 
-    void postReceiptReversal(YardiReceiptReversal reversal) throws UnableToPostTerminalYardiServiceException, YardiServiceException, RemoteException;
+    void postReceiptReversal(YardiReceiptReversal reversal) throws UnableToPostTerminalYardiServiceException, YardiPropertyNoAccessException,
+            YardiServiceException, RemoteException;
 
     List<YardiPropertyConfiguration> getPropertyConfigurations() throws YardiServiceException, RemoteException;
 }

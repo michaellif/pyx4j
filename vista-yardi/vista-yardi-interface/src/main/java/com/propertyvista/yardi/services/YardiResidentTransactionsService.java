@@ -59,6 +59,7 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -85,7 +86,6 @@ import com.propertyvista.yardi.processors.YardiProductCatalogProcessor;
 import com.propertyvista.yardi.stubs.ExternalInterfaceLoggingStub;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
-import com.propertyvista.yardi.stubs.YardiPropertyNoAccessException;
 import com.propertyvista.yardi.stubs.YardiResidentNoTenantsExistException;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 

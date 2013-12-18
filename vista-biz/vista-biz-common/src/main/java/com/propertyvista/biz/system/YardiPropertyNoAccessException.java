@@ -11,9 +11,9 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.yardi.stubs;
+package com.propertyvista.biz.system;
 
-public class YardiPropertyNoAccessException extends Exception {
+public class YardiPropertyNoAccessException extends YardiServiceException {
 
     private static final long serialVersionUID = 1L;
 

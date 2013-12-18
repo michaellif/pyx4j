@@ -14,7 +14,7 @@
 package com.propertyvista.biz.system;
 
 /**
- * We can't post Receipt again, The error will not be corrected automaticaly.
+ * We can't post Receipt again, The error will not be corrected automatically.
  */
 public class UnableToPostTerminalYardiServiceException extends YardiServiceException {
 

@@ -19,6 +19,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Properties;

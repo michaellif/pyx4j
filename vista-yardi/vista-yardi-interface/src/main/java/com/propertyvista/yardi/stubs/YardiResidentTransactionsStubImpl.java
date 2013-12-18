@@ -53,6 +53,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.UnableToPostTerminalYardiServiceException;
+import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -377,6 +378,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
                     if (messages.hasErrorMessage(errorMessage_NoAccess)) {
+                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    } else if (messages.hasErrorMessage(errorMessage_NoAccess)) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
                     } else {
                         YardiLicense.handleVendorLicenseError(messages);
