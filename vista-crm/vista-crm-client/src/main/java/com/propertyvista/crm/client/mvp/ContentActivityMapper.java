@@ -200,6 +200,9 @@ import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjus
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseSigningPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseSigningPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseSigningPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyViewerActivity;
@@ -1046,6 +1049,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new OnlineApplicationPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Administration.Policies.LeaseLegalTerms) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new LeaseSigningPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new LeaseSigningPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new LeaseSigningPolicyViewerActivity(crudPlace);
                             break;
                         }
 

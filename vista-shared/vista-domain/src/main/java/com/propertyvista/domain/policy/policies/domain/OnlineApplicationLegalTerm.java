@@ -26,11 +26,27 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 public interface OnlineApplicationLegalTerm extends IEntity {
 
-    enum ApplicableForRole {
-        Applicant, Guarantor, Any
+    enum TargetRole {
+        Applicant, Guarantor, Any;
+
+        public boolean matchesApplicationRole(OnlineApplication.Role appRole) {
+            if (this == TargetRole.Any) {
+                return true;
+            }
+
+            switch (appRole) {
+            case Applicant:
+            case CoApplicant:
+                return this == TargetRole.Applicant;
+            case Guarantor:
+                return this == TargetRole.Guarantor;
+            }
+            return false;
+        }
     }
 
     @Detached
@@ -48,8 +64,8 @@ public interface OnlineApplicationLegalTerm extends IEntity {
 
     IPrimitive<SignatureType> signatureType();
 
+    IPrimitive<TargetRole> applyToRole();
+
     @OrderColumn
     IPrimitive<Integer> orderId();
-
-    IPrimitive<ApplicableForRole> applyedToRole();
 }

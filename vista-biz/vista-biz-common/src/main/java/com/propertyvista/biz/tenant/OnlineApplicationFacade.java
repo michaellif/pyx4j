@@ -25,6 +25,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.SignedLegalTerm;
 
 public interface OnlineApplicationFacade {
 
@@ -37,6 +38,8 @@ public interface OnlineApplicationFacade {
     List<OnlineApplication> getOnlineApplications(CustomerUser customerUser);
 
     EnumSet<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication application);
+
+    List<SignedLegalTerm> getOnlineApplicationTerms(OnlineApplication application);
 
     void submitOnlineApplication(OnlineApplication application);
 

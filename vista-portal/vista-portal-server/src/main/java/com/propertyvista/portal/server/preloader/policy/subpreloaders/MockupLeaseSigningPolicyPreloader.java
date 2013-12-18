@@ -13,34 +13,30 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
-import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
+import com.propertyvista.domain.policy.policies.LeaseSigningPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
-import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<OnlineApplicationPolicy> {
+public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<LeaseSigningPolicy> {
 
-    private final static I18n i18n = I18n.get(MockupOnlineApplicationPolicyPreloader.class);
+    private final static I18n i18n = I18n.get(MockupLeaseSigningPolicyPreloader.class);
 
     private AvailableLocale defaultLocale;
 
-    public MockupOnlineApplicationPolicyPreloader() {
-        super(OnlineApplicationPolicy.class);
+    public MockupLeaseSigningPolicyPreloader() {
+        super(LeaseSigningPolicy.class);
     }
 
     @Override
-    protected OnlineApplicationPolicy createPolicy(StringBuilder log) {
-        OnlineApplicationPolicy policy = EntityFactory.create(OnlineApplicationPolicy.class);
+    protected LeaseSigningPolicy createPolicy(StringBuilder log) {
+        LeaseSigningPolicy policy = EntityFactory.create(LeaseSigningPolicy.class);
 
         // add legal terms
         policy.terms().add(randomTerm());
@@ -49,22 +45,13 @@ public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloa
         return policy;
     }
 
-    private OnlineApplicationLegalTerm randomTerm() {
-        OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
+    private LeaseLegalTerm randomTerm() {
+        LeaseLegalTerm term = EntityFactory.create(LeaseLegalTerm.class);
         term.signatureType().setValue(RandomUtil.randomEnum(SignatureType.class));
 
         term.title().setValue(CommonsGenerator.lipsumShort());
         term.body().setValue(CommonsGenerator.lipsum());
 
         return term;
-    }
-
-    private AvailableLocale getDefaultLocale() {
-        if (defaultLocale == null) {
-            EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lang(), CompiledLocale.en));
-            defaultLocale = Persistence.service().retrieve(criteria);
-        }
-        return defaultLocale;
     }
 }

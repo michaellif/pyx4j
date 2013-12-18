@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.onlineapplication;
+package com.propertyvista.crm.client.ui.crud.policies.leasesigning;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,15 +28,15 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
-import com.propertyvista.domain.policy.dto.OnlineApplicationPolicyDTO;
-import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
+import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
+import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
 
-public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<OnlineApplicationPolicyDTO> {
+public class LeaseSigningPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseSigningPolicyDTO> {
 
-    private static final I18n i18n = I18n.get(OnlineApplicationPolicyForm.class);
+    private static final I18n i18n = I18n.get(LeaseSigningPolicyForm.class);
 
-    public OnlineApplicationPolicyForm(IForm<OnlineApplicationPolicyDTO> view) {
-        super(OnlineApplicationPolicyDTO.class, view);
+    public LeaseSigningPolicyForm(IForm<LeaseSigningPolicyDTO> view) {
+        super(LeaseSigningPolicyDTO.class, view);
     }
 
     @Override
@@ -54,24 +54,24 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
         return container;
     }
 
-    private static class LegalTermFolder extends VistaBoxFolder<OnlineApplicationLegalTerm> {
+    private static class LegalTermFolder extends VistaBoxFolder<LeaseLegalTerm> {
 
         public LegalTermFolder(boolean isEditable) {
-            super(OnlineApplicationLegalTerm.class, isEditable);
+            super(LeaseLegalTerm.class, isEditable);
         }
 
         @Override
         public CComponent<?> create(IObject<?> member) {
-            if ((member instanceof OnlineApplicationLegalTerm)) {
+            if ((member instanceof LeaseLegalTerm)) {
                 return new LegalTermEditor();
             }
             return super.create(member);
         }
 
-        class LegalTermEditor extends CEntityForm<OnlineApplicationLegalTerm> {
+        class LegalTermEditor extends CEntityForm<LeaseLegalTerm> {
 
             public LegalTermEditor() {
-                super(OnlineApplicationLegalTerm.class);
+                super(LeaseLegalTerm.class);
             }
 
             @Override
@@ -82,7 +82,6 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().body()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureType()), 35).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().applyToRole()), 35).build());
                 return main;
             }
         }

@@ -29,12 +29,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
-import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -89,10 +89,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillUnitSelectionData(bo, to);
 
-        OnlineApplicationPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                bo.masterOnlineApplication().leaseApplication().lease().unit().building(), OnlineApplicationPolicy.class);
-
-        //TODO retrieve corresponding OnlineApplicationLegalTerms and populate SignedLegalTerm list with empty ISignature
+        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
 
         callback.onSuccess(to);
     }
