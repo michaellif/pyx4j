@@ -49,8 +49,6 @@ public class VistaTODO {
 
     public static final boolean Equifax_Off_VISTA_478 = false;
 
-    public static final boolean ApplicationDocumentationPolicyRefacotring = true;
-
     public static final boolean VISTA_1789_Renew_Lease = false;
 
     public static final boolean VISTA_1756_Concessions_Should_Be_Hidden = true;

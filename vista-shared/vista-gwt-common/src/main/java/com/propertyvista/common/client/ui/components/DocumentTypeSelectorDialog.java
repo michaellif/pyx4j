@@ -13,38 +13,28 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 
 public abstract class DocumentTypeSelectorDialog extends EntitySelectorListDialog<IdentificationDocumentType> {
 
     private static final I18n i18n = I18n.get(DocumentTypeSelectorDialog.class);
 
-    public DocumentTypeSelectorDialog() {
-        super(i18n.tr("Select Document Type"), Arrays.<IdentificationDocumentType> asList());
+    public DocumentTypeSelectorDialog(ApplicationDocumentationPolicy documentationPolicy) {
+//        super(i18n.tr("Select Document Type"), Arrays.<IdentificationDocumentType> asList());
+        super(i18n.tr("Select Document Type"), Collections.<IdentificationDocumentType> emptyList());
+        if (documentationPolicy != null) {
+            setData(documentationPolicy.allowedIDs());
+        }
     }
 
     @Override
     public int defineWidth() {
-        return 600;
-    }
-
-    @Override
-    public void show() {
-        ReferenceDataManager.obtain(EntityListCriteria.create(IdentificationDocumentType.class), new DefaultAsyncCallback<List<IdentificationDocumentType>>() {
-            @Override
-            public void onSuccess(List<IdentificationDocumentType> result) {
-                DocumentTypeSelectorDialog.super.setData(result);
-                DocumentTypeSelectorDialog.super.show();
-            }
-        }, false);
+        return 400;
     }
 }

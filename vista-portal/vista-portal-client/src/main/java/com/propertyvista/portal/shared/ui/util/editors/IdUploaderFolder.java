@@ -21,11 +21,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -33,73 +28,53 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class IdUploaderFolder extends CEntityFolder<IdentificationDocumentFolder> {
+public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFolder> {
 
     final static I18n i18n = I18n.get(IdUploaderFolder.class);
 
     protected ApplicationDocumentationPolicy documentationPolicy = null;
 
     public IdUploaderFolder() {
-        super(IdentificationDocumentFolder.class);
+        super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
 
-        if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
-            addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
-                @Override
-                public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
-                    if (value != null) {
-// TODO it should be enough, but now validate is called on populate!?                    
-//                    assert (documentationPolicy != null);
-                        if (documentationPolicy != null) {
-                            int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
-                            if (numOfRemainingDocs > 0) {
-                                return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
-                            }
-                        }
+        addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
+            @Override
+            public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
+                if (value != null) {
+                    assert (documentationPolicy != null);
+                    int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                    if (numOfRemainingDocs > 0) {
+                        return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
                     }
-                    return null;
                 }
-            });
-        }
+                return null;
+            }
+        });
 
         asWidget().setSize("100%", "100%");
     }
 
     public void setParentEntity(IEntity parentEntity) {
-        if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
-
-            ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
-                    new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
-                        @Override
-                        public void onSuccess(ApplicationDocumentationPolicy result) {
-                            documentationPolicy = result;
-                        }
-                    });
-        }
-    }
-
-    @Override
-    public IFolderItemDecorator<IdentificationDocumentFolder> createItemDecorator() {
-        BoxFolderItemDecorator<IdentificationDocumentFolder> decor = new BoxFolderItemDecorator<IdentificationDocumentFolder>(VistaImages.INSTANCE);
-        return decor;
-    }
-
-    @Override
-    protected IFolderDecorator<IdentificationDocumentFolder> createFolderDecorator() {
-        return new BoxFolderDecorator<IdentificationDocumentFolder>(VistaImages.INSTANCE, "Add Identification Document");
+        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
+                new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
+                    @Override
+                    public void onSuccess(ApplicationDocumentationPolicy result) {
+                        documentationPolicy = result;
+                    }
+                });
     }
 
     @Override
     protected void addItem() {
-        new DocumentTypeSelectorDialog() {
+        new DocumentTypeSelectorDialog(documentationPolicy) {
             @Override
             public boolean onClickOk() {
                 IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);

@@ -35,7 +35,6 @@ import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.misc.VistaTODO;
 
 public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolder> {
 
@@ -45,48 +44,22 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
 
     public IdUploaderFolder() {
         super(IdentificationDocumentFolder.class);
-
-        if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
-
-            addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
-                @Override
-                public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
-                    if (value != null) {
-// TODO it should be enough, but now validate is called on populate!?                    
-//                    assert (documentationPolicy != null);
-                        if (documentationPolicy != null) {
-                            int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
-                            if (numOfRemainingDocs > 0) {
-                                return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
-                            }
-                        }
-                    }
-                    return null;
-                }
-            });
-
-        }
-
         asWidget().setSize("100%", "100%");
     }
 
     public void setParentEntity(IEntity parentEntity) {
-        if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
-
-            ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
-                    new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
-                        @Override
-                        public void onSuccess(ApplicationDocumentationPolicy result) {
-                            documentationPolicy = result;
-                        }
-                    });
-
-        }
+        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
+                new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
+                    @Override
+                    public void onSuccess(ApplicationDocumentationPolicy result) {
+                        documentationPolicy = result;
+                    }
+                });
     }
 
     @Override
     protected void addItem() {
-        new DocumentTypeSelectorDialog() {
+        new DocumentTypeSelectorDialog(documentationPolicy) {
             @Override
             public boolean onClickOk() {
                 IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
