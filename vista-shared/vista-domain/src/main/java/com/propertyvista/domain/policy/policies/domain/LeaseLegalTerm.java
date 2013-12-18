@@ -25,20 +25,16 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
 
-import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
+import com.propertyvista.domain.policy.policies.LeaseSigningPolicy;
 
-public interface OnlineApplicationLegalTerm extends IEntity {
-
-    enum ApplicableForRole {
-        Applicant, Guarantor, Any
-    }
+public interface LeaseLegalTerm extends IEntity {
 
     @Detached
     @ReadOnly
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
-    OnlineApplicationPolicy policy();
+    LeaseSigningPolicy policy();
 
     IPrimitive<String> title();
 
@@ -51,5 +47,4 @@ public interface OnlineApplicationLegalTerm extends IEntity {
     @OrderColumn
     IPrimitive<Integer> orderId();
 
-    IPrimitive<ApplicableForRole> applyedToRole();
 }

@@ -14,26 +14,18 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTabTitle;
-import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
+import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("OnlineAppPolicy")
 @LowestApplicableNode(value = Building.class)
-public interface OnlineApplicationPolicy extends Policy {
-
-    // per locale
-    @Deprecated
-    @Owned
-    @OrderBy(value = PrimaryKey.class)
-    IList<OnlineApplicationLegalTabTitle> customLegalTabTitle();
+public interface LeaseSigningPolicy extends Policy {
 
     @Owned
-    IList<OnlineApplicationLegalTerm> terms();
+    IList<LeaseLegalTerm> terms();
 }
