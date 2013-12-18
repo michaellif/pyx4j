@@ -268,7 +268,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
                     case New:
-                        paymentMethodEditor.setViewable(false);
+                        paymentMethodEditor.setEditable(true);
 
                         if (getValue().allowedPaymentTypes().isEmpty()) {
                             paymentMethodEditor.initNew(null);
@@ -293,7 +293,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         break;
 
                     case Profiled:
-                        paymentMethodEditor.setViewable(true);
+                        paymentMethodEditor.setEditable(false);
                         paymentMethodEditor.setVisible(false);
                         paymentMethodEditorHeader.setVisible(false);
 
@@ -314,7 +314,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 paymentMethodEditor.setVisible(event.getValue() != null);
                 paymentMethodEditorHeader.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
-                    paymentMethodEditor.setViewable(true);
+                    paymentMethodEditor.setEditable(false);
                     paymentMethodEditor.populate(event.getValue());
                 }
             }
@@ -339,7 +339,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         profiledPaymentMethodsCombo.reset();
 
         paymentMethodEditor.reset();
-        paymentMethodEditor.setViewable(true);
+        paymentMethodEditor.setEditable(false);
 
 // TODO : investigate why invisible paymentMethodEditor is not populated!?          
 //        paymentMethodEditor.setVisible(false);
@@ -402,9 +402,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
                 if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
                     profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false, populate);
-                    paymentMethodEditor.setViewable(true);
+                    paymentMethodEditor.setEditable(false);
                 } else {
-                    paymentMethodEditor.setViewable(false);
+                    paymentMethodEditor.setEditable(true);
                     get(proto().storeInProfile()).setVisible(true);
                     setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
                 }

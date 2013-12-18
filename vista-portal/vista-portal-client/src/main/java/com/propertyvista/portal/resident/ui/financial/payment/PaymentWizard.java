@@ -203,7 +203,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
                     case New:
-                        paymentMethodEditor.setViewable(false);
+                        paymentMethodEditor.setEditable(true);
 
                         if (getValue().allowedPaymentTypes().isEmpty()) {
                             paymentMethodEditor.initNew(null);
@@ -224,7 +224,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                         break;
 
                     case Profiled:
-                        paymentMethodEditor.setViewable(true);
+                        paymentMethodEditor.setEditable(false);
 
                         profiledPaymentMethodsCombo.reset();
                         setProfiledPaymentMethodsVisible(true);
