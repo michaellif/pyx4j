@@ -93,7 +93,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         file.setImageSize(150, 100);
         file.setScaleMode(ScaleMode.Contain);
 
-        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), file), 20).build());
+        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo().file(), file), 20).build());
 
         return content;
     }

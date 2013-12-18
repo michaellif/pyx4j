@@ -42,8 +42,18 @@ public class MediaUtils {
     }
 
     public static String createSiteImageResourceUrl(SiteImageResource resource) {
-        return ClientNavigUtils.getDeploymentBaseURL() + resource.id().getStringView() + "/" + resource.file().fileName().getStringView()
-                + DeploymentConsts.siteImageResourceServletMapping;
+        if (resource == null) {
+            return null;
+        } else {
+            String id;
+            if (resource.file().accessKey().isNull()) {
+                id = resource.file().accessKey().getStringView();
+            } else {
+                id = resource.id().getStringView();
+            }
+            return ClientNavigUtils.getDeploymentBaseURL() + id + "/" + resource.file().fileName().getStringView()
+                    + DeploymentConsts.siteImageResourceServletMapping;
+        }
     }
 
     public static String createSiteSmallLogoUrl() {

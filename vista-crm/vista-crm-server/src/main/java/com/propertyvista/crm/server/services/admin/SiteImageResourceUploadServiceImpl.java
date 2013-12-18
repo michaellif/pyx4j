@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.blob.MediaFileBlob;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.server.common.blob.BlobService;
 
 /**
@@ -64,8 +65,10 @@ public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImp
 
         response.blobKey().setValue(blobKey);
 
-        Persistence.service().persist(response);
-
+        SiteImageResource resource = EntityFactory.create(SiteImageResource.class);
+        resource.file().set(response);
+        Persistence.service().persist(resource);
+        response.accessKey().setValue(resource.id().getStringView());
         Persistence.service().commit();
 
     }
