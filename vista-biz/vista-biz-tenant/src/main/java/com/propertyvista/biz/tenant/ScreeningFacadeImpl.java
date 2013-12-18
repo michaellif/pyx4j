@@ -179,6 +179,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
         Persistence.service().retrieve(screening.version().incomes());
         Persistence.service().retrieve(screening.version().assets());
+        Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
 
         pcc.transactionId().setValue(ScreeningPayments.preAuthorization(equifaxInfo));
 
