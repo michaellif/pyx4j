@@ -229,7 +229,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
                 if (event.getValue() != null) {
-                    paymentMethodEditor.setValue(event.getValue());
+                    paymentMethodEditor.populate(event.getValue());
                 }
             }
         });
