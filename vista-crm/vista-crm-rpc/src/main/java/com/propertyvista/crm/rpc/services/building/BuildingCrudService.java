@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
@@ -28,6 +29,8 @@ import com.propertyvista.dto.BuildingDTO;
 public interface BuildingCrudService extends AbstractCrudService<BuildingDTO> {
 
     void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub);
+
+    void retrieveEmployee(AsyncCallback<Employee> callback, Employee employeeId);
 
     void updateFromYardi(AsyncCallback<VoidSerializable> callback, Building buildingId);
 

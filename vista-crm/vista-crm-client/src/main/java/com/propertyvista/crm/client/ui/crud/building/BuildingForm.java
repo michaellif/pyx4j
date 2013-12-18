@@ -398,7 +398,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         int row = -1;
 
         flexPanel.setH1(++row, 0, 2, proto().contacts().organizationContacts().getMeta().getCaption());
-        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable(), this)));
 
         flexPanel.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
         flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));

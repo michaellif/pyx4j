@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.BuildingDTO;
@@ -27,6 +28,8 @@ public interface BuildingEditorView extends IEditor<BuildingDTO> {
 
     interface Presenter extends BuildingPresenterCommon, IEditor.Presenter {
 
-        void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building building);
+        void retrieveEmployee(AsyncCallback<Employee> callback, Employee employeeId);
+
+        void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building buildingId);
     }
 }

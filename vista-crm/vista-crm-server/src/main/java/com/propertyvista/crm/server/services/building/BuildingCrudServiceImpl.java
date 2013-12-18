@@ -41,6 +41,7 @@ import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.PublicVisibilityType;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -259,6 +260,11 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         MerchantAccount entity = Persistence.service().retrieve(MerchantAccount.class, merchantAccountStub.getPrimaryKey());
         ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(entity);
         callback.onSuccess(entity);
+    }
+
+    @Override
+    public void retrieveEmployee(AsyncCallback<Employee> callback, Employee employeeId) {
+        callback.onSuccess(Persistence.service().retrieve(Employee.class, employeeId.getPrimaryKey()));
     }
 
     @Override

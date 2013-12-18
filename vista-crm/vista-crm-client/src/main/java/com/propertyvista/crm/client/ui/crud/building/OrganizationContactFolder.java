@@ -19,17 +19,23 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.crm.client.ui.crud.building.BuildingEditorView.Presenter;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 
 class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
-    public OrganizationContactFolder(boolean modifyable) {
+
+    private final BuildingForm parent;
+
+    public OrganizationContactFolder(boolean modifyable, BuildingForm parent) {
         super(OrganizationContact.class, modifyable);
+        this.parent = parent;
     }
 
     @Override
@@ -41,7 +47,11 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         }
     }
 
-    static public class OrganizationContactEditor extends CEntityDecoratableForm<OrganizationContact> {
+    private BuildingEditorView.Presenter getPresenter() {
+        return (Presenter) parent.getParentView().getPresenter();
+    }
+
+    private class OrganizationContactEditor extends CEntityForm<OrganizationContact> {
 
         public OrganizationContactEditor() {
             super(OrganizationContact.class);
@@ -66,9 +76,14 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Employee> event) {
-                    OrganizationContact value = getValue();
-                    value.person().set(event.getValue());
-                    OrganizationContactEditor.this.setValue(value, false);
+                    getPresenter().retrieveEmployee(new DefaultAsyncCallback<Employee>() {
+                        @Override
+                        public void onSuccess(Employee result) {
+                            OrganizationContact value = getValue();
+                            value.set(value.person(), result);
+                            setValue(value, false);
+                        }
+                    }, event.getValue());
                 }
             });
 
