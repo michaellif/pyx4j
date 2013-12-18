@@ -22,7 +22,7 @@ import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@DiscriminatorValue("OnlineAppPolicy")
+@DiscriminatorValue("LeaseSigningPolicy")
 @LowestApplicableNode(value = Building.class)
 public interface LeaseSigningPolicy extends Policy {
 
