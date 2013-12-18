@@ -32,10 +32,10 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEntity<?>, DTO extends IVersionedEntity<?>> extends
-        AbstractCrudServiceDtoImpl<E, DTO> implements AbstractVersionedCrudService<DTO> {
+public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEntity<?>, TO extends IVersionedEntity<?>> extends
+        AbstractCrudServiceDtoImpl<E, TO> implements AbstractVersionedCrudService<TO> {
 
-    protected AbstractVersionedCrudServiceDtoImpl(Class<E> entityClass, Class<DTO> dtoClass) {
+    protected AbstractVersionedCrudServiceDtoImpl(Class<E> entityClass, Class<TO> dtoClass) {
         super(entityClass, dtoClass);
     }
 
@@ -48,7 +48,7 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
         } else {
             primaryKey = entityId;
         }
-        E entity = Persistence.secureRetrieve(boClass, entityId);
+        E entity = Persistence.secureRetrieve(boClass, primaryKey);
         if (primaryKey.isDraft() && (entity == null)) {
             entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTarget);
         } else if (primaryKey.getVersion() == Key.VERSION_CURRENT && entity.version().isNull()) {
@@ -58,7 +58,7 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
-    protected E retrieveForSave(DTO dt) {
+    protected E retrieveForSave(TO dt) {
         Validate.isTrue(dt.getPrimaryKey().getVersion() == Key.VERSION_DRAFT);
         E entity = super.retrieveForSave(dt);
         if (entity.version().isNull()) {
@@ -71,24 +71,29 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
-    public void retrieve(final AsyncCallback<DTO> callback, final Key entityId, final RetrieveTarget retrieveTarget) {
-        super.retrieve(new AsyncCallback<DTO>() {
+    public void retrieve(final AsyncCallback<TO> callback, final Key entityId, final RetrieveTarget retrieveTarget) {
+        super.retrieve(new AsyncCallback<TO>() {
             @Override
             public void onFailure(Throwable caught) {
                 callback.onFailure(caught);
             }
 
             @Override
-            public void onSuccess(DTO result) {
+            public void onSuccess(TO result) {
                 // If draft do not exists, we return clone of the data from current version
                 if ((retrieveTarget == RetrieveTarget.Edit) && (result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)) {
-                    result.version().set(EntityGraph.businessDuplicate(result.version()));
-                    VersionedEntityUtils.setAsDraft(result.version());
-                    result.setPrimaryKey(entityId.asDraftKey());
+                    result = duplicateForDraftEdit(result);
                 }
                 callback.onSuccess(result);
             }
         }, entityId, retrieveTarget);
+    }
+
+    protected TO duplicateForDraftEdit(TO to) {
+        to.version().set(EntityGraph.businessDuplicate(to.version()));
+        VersionedEntityUtils.setAsDraft(to.version());
+        to.setPrimaryKey(to.getPrimaryKey().asDraftKey());
+        return to;
     }
 
     protected void saveAsFinal(E entity) {
