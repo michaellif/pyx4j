@@ -57,7 +57,7 @@ public class DefaultWidgetsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, disabled, active, semitransparent, singleLine
+        watermark, hover, readonly, disabled, active, semitransparent, singleLine
     }
 
     public DefaultWidgetsTheme() {
@@ -110,6 +110,18 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("-webkit-box-sizing", "border-box");
         addStyle(style);
 
+        style = new Style(".", StyleName.TextBox, "-", StyleDependent.disabled);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.6);
+        addStyle(style);
+
+        style = new Style(".", StyleName.TextBox, "-", StyleDependent.readonly);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0);
+        addStyle(style);
+
         style = new Style(".", StyleName.TextBox, "-", StyleDependent.singleLine);
         style.addProperty("height", "2em");
         addStyle(style);
@@ -135,6 +147,17 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ListBox, "-", StyleDependent.readonly);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ListBox, "-", StyleDependent.disabled);
+        style.addProperty("background-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
         style = new Style(".", StyleName.ListBox, "-", StyleDependent.singleLine);

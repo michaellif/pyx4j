@@ -189,9 +189,9 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             editor.setEnabled(enabled);
             editorPanel.setEnabled(isEditable() && enabled);
             if (enabled) {
-                editor.removeStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
+                editor.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
             } else {
-                editor.addStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
+                editor.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
             }
         }
     }
@@ -211,9 +211,9 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             editor.setEditable(editable);
             editorPanel.setEnabled(isEnabled() && editable);
             if (editable) {
-                editor.removeStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
+                editor.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.readonly.name());
             } else {
-                editor.addStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
+                editor.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.readonly.name());
             }
         }
     }

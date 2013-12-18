@@ -40,7 +40,7 @@ public class CComponentTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, readonly, info, warning
+        info, warning
     }
 
     public CComponentTheme() {
@@ -53,44 +53,11 @@ public class CComponentTheme extends Theme {
     }
 
     protected void initStyles() {
-        initTextBoxStyle();
-        initListBoxStyle();
         initTriggerButtonStyle();
         initValidationLabelStyle();
         initNoteStyle();
         initTabbedFormStyle();
         initImageHolderStyle();
-    }
-
-    protected void initTextBoxStyle() {
-
-        Style style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.disabled);
-        style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        style.addProperty("color", ThemeColor.foreground, 0.6);
-        addStyle(style);
-
-        style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.readonly);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.1);
-        style.addProperty("background-color", ThemeColor.foreground, 0);
-        addStyle(style);
-
-    }
-
-    protected void initListBoxStyle() {
-
-        Style style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.readonly);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.1);
-        style.addProperty("background-color", ThemeColor.foreground, 0);
-        addStyle(style);
-
-        style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.disabled);
-        style.addProperty("background-color", ThemeColor.foreground, 0.3);
-        addStyle(style);
-
     }
 
     protected void initTriggerButtonStyle() {
