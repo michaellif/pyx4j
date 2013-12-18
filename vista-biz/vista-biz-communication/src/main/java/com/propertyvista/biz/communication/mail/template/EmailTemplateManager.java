@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,7 +146,10 @@ public class EmailTemplateManager {
 
     public static String parseTemplate(String htmlTemplate, Collection<IEntity> data) {
         // Simple two pass parsing to support header and footer
-        return parseTemplateImpl(parseTemplateImpl(htmlTemplate, data), data);
+        String result = parseTemplateImpl(parseTemplateImpl(htmlTemplate, data), data);
+        result = parseLinks(result);
+
+        return result;
     }
 
     private static String parseTemplateImpl(String htmlTemplate, Collection<IEntity> data) {
@@ -171,6 +175,48 @@ public class EmailTemplateManager {
                     buffer.append(value);
                 }
                 pos = varEnd + 1;
+            } else {
+                break;
+            }
+        }
+
+        if (pos < htmlTemplate.length()) {
+            buffer.append(htmlTemplate.substring(pos));
+        }
+
+        return buffer.toString();
+    }
+
+    private static String parseLinks(String htmlTemplate) {
+        final StringBuilder buffer = new StringBuilder();
+
+        int start, pos = 0;
+        while ((start = htmlTemplate.indexOf("[[", pos)) != -1) {
+            buffer.append(htmlTemplate.substring(pos, start));
+
+            pos = start;
+            final int urlStart = start + 2;
+            final int urlEnd = htmlTemplate.indexOf('|', urlStart);
+            if (urlEnd != -1) {
+                pos = urlEnd + 1;
+                final String linkUrl = htmlTemplate.substring(urlStart, urlEnd);
+                if (!StringUtils.isEmpty(linkUrl)) {
+                    buffer.append("<a href=\"" + linkUrl + "\">");
+                    final int bodyStart = urlEnd + 1;
+                    final int bodyEnd = htmlTemplate.indexOf("]]", bodyStart);
+                    String linkBody = htmlTemplate.substring(bodyStart, bodyEnd);
+                    if (StringUtils.isEmpty(linkBody)) {
+                        // if no body given use url with stripped off protocol
+                        int protocolIdx = linkUrl.indexOf("//");
+                        linkBody = linkUrl.substring(protocolIdx + 2);
+                    } else {
+                        pos = bodyEnd;
+                    }
+                    buffer.append(linkBody);
+                    buffer.append("</a>");
+
+                    pos += 2;
+                }
             } else {
                 break;
             }
