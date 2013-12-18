@@ -75,7 +75,6 @@ import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
-import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -404,26 +403,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
 
         return flexPanel;
-    }
-
-    private class PropertyPhoneFolder extends VistaTableFolder<PropertyPhone> {
-
-        public PropertyPhoneFolder() {
-            super(PropertyPhone.class, BuildingForm.this.isEditable());
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "7em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().designation(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().provider(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
-            return columns;
-        }
     }
 
     private class PropertyContactFolder extends VistaTableFolder<PropertyContact> {

@@ -32,7 +32,6 @@ import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyContact;
-import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.generator.PreloadData;
 
 public class CommonsGenerator {
@@ -142,18 +141,6 @@ public class CommonsGenerator {
             phone += " x" + ext;
         }
 
-        return phone;
-    }
-
-    public static PropertyPhone createPropertyPhone() {
-        PropertyPhone phone = EntityFactory.create(PropertyPhone.class);
-        phone.number().setValue(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "905"));
-        if (RandomUtil.randomBoolean()) {
-            phone.extension().setValue(RandomUtil.randomInt(100));
-        }
-        phone.type().setValue(RandomUtil.randomEnum(PropertyPhone.Type.class));
-        phone.visibility().setValue(RandomUtil.randomEnum(PublicVisibilityType.class));
-        phone.description().setValue(lipsumShort());
         return phone;
     }
 

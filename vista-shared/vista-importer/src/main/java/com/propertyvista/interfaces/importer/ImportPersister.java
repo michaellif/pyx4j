@@ -33,7 +33,6 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
-import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Parking;
@@ -126,7 +125,7 @@ class ImportPersister {
             // building phones are added to PropertyContacts, so there must be at least as many PropertyContacts as phones
             PropertyPhoneIO phone = buildingIO.phones().get(i);
             PropertyContact contact = building.contacts().propertyContacts().get(i);
-            if (contact.type().isNull() && (phone.designation().isNull() || phone.designation().getValue().equals(PropertyPhone.DesignationType.office.name()))) {
+            if (contact.type().isNull() && (phone.designation().isNull() || phone.designation().getValue().equals("office"))) {
                 contact.type().setValue(PropertyContactType.mainOffice);
             }
             if (contact.visibility().isNull()) {
