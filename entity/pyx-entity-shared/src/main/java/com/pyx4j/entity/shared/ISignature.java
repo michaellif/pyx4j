@@ -34,7 +34,7 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface ISignature extends IEntity {
 
     public static enum SignatureType {
-        FullName, Initials, AgreeBox, AgreeBoxAndFullName
+        FullName, Initials, AgreeBox, AgreeBoxAndFullName, None
     }
 
     IEntity signingUser();
