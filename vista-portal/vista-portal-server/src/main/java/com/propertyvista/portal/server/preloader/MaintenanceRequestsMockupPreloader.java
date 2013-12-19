@@ -24,53 +24,69 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
+import com.propertyvista.domain.maintenance.IssueElementType;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
-public class MaintenanceRequestsDevPreloader extends BaseVistaDevDataPreloader {
+public class MaintenanceRequestsMockupPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-        if (!config().mockupData) {
-            return null;
-        }
+        final int NUM_OF_DAYS_AGO = config().mockupData ? config().maintenanceRequestsMaxDaysBack : config().maintenanceRequestsMinDaysBack;
 
-        EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
-        crit.add(PropertyCriterion.isNull(crit.proto().subCategories()));
-        List<MaintenanceRequestCategory> issueClassifications = Persistence.service().query(crit);
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().status(), Lease.Status.Active));
         List<Lease> leases = Persistence.service().query(leaseCriteria);
         if (leases.size() > 0) {
-            final int NUM_OF_DAYS_AGO = config().maintenanceRequestsDaysBack;
             final long TODAY = new LogicalDate().getTime();
             GregorianCalendar cal = new GregorianCalendar();
             for (cal.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_AGO); cal.getTimeInMillis() < TODAY; cal.add(GregorianCalendar.DAY_OF_YEAR, 1)) {
-                makeMaintenanceRequest(issueClassifications, leases.get(RandomUtil.randomInt(leases.size())), cal.getTime());
+                makeMaintenanceRequest(leases.get(RandomUtil.randomInt(leases.size())), cal.getTime());
             }
         }
 
         return null;
     }
 
-    private void makeMaintenanceRequest(List<MaintenanceRequestCategory> issueClassifications, Lease lease, Date when) {
-        if (issueClassifications.isEmpty()) {
-            return;
-        }
+    private void makeMaintenanceRequest(Lease lease, Date when) {
         Persistence.service().retrieveMember(lease.leaseParticipants());
-        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit());
-        maintenanceRequest.reporter().set(lease.leaseParticipants().iterator().next().<Tenant> cast());
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(
+                lease.leaseParticipants().iterator().next().<Tenant> cast());
+        setRandomMetadata(maintenanceRequest);
+
         maintenanceRequest.submitted().setValue(when);
         maintenanceRequest.updated().setValue(when);
-        maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
+        maintenanceRequest.summary().setValue(CommonsGenerator.lipsumShort());
+        maintenanceRequest.description().setValue(CommonsGenerator.lipsum());
         maintenanceRequest.permissionToEnter().setValue(RandomUtil.randomBoolean());
-        maintenanceRequest.petInstructions().setValue(RandomUtil.randomLetters(50));
-        maintenanceRequest.category().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
-        Persistence.service().persist(maintenanceRequest);
+        if (maintenanceRequest.permissionToEnter().isBooleanTrue()) {
+            maintenanceRequest.petInstructions().setValue(CommonsGenerator.lipsum());
+        }
+
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(maintenanceRequest);
+    }
+
+    private void setRandomMetadata(MaintenanceRequest mr) {
+        MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(mr.building());
+        // set category
+        MaintenanceRequestCategory category = meta.rootCategory();
+        while (category.subCategories().size() > 0) {
+            MaintenanceRequestCategory tmp;
+            do {
+                // get unit-related category 
+                tmp = category.subCategories().get(RandomUtil.randomInt(category.subCategories().size()));
+            } while (!tmp.type().isNull() && tmp.type().getValue() != IssueElementType.ApartmentUnit);
+            category = tmp;
+        }
+        mr.category().set(category);
+        // set priority
+        mr.priority().set(meta.priorities().get(RandomUtil.randomInt(meta.priorities().size())));
     }
 
     @Override

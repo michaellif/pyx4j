@@ -32,7 +32,9 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public int updateArrearsHistorNumOfYearsBack = 4;
 
-    public int maintenanceRequestsDaysBack = 60;
+    public int maintenanceRequestsMinDaysBack = 5;
+
+    public int maintenanceRequestsMaxDaysBack = 60;
 
     public int maxPropertyManagers = DemoData.UserType.PM.getDefaultMax();
 

@@ -324,7 +324,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             mrCategory.setOptionsMeta(meta, getValue().reportedForOwnUnit().isNull() ? true : getValue().reportedForOwnUnit().isBooleanTrue());
         }
         // re-populate after parent categories have been added
-        mrCategory.populate(getValue().category());
+        if (getValue() != null) {
+            mrCategory.populate(getValue().category());
+        }
 
         // attach selectors to the panel - bottom up
         categoryPanel.clear();
