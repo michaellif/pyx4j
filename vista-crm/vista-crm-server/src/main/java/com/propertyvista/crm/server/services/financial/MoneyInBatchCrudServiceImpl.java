@@ -15,8 +15,8 @@ package com.propertyvista.crm.server.services.financial;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Random;
 
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -53,14 +53,19 @@ public class MoneyInBatchCrudServiceImpl implements MoneyInBatchCrudService {
         mockupBatch.bankAccount().setValue("12324533");
         mockupBatch.bankDepositDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
         mockupBatch.isPosted().setValue(false);
+        mockupBatch.totalReceivedAmount().setValue(new BigDecimal("1000"));
         for (int i = 1; i < 100; ++i) {
-            DepositSlipPaymentRecordDTO payments = mockupBatch.payments().$();
-            payments.unit().setValue("" + (100 + i));
-            payments.tenantId().setValue("t01204" + (100 + i));
-            payments.tenantName().setValue("Tenant Tenantovic #" + i);
-            payments.checkNumber().setValue("" + Random.nextInt(200));
-            payments.amount().setValue(new BigDecimal(1000 + Random.nextInt()));
+            DepositSlipPaymentRecordDTO payment = mockupBatch.payments().$();
+            payment.unit().setValue("" + (100 + i));
+            payment.tenantId().setValue("t01204" + (100 + i));
+            payment.tenantName().setValue("Tenant Tenantovic #" + i);
+            payment.checkNumber().setValue("" + new Random().nextInt(200));
+            payment.amount().setValue(new BigDecimal(1000 + new Random().nextInt(200)));
+            mockupBatch.totalReceivedAmount().setValue(mockupBatch.totalReceivedAmount().getValue().add(payment.amount().getValue()));
+            mockupBatch.payments().add(payment);
         }
+        mockupBatch.numberOfReceipts().setValue(mockupBatch.payments().size());
+
         callback.onSuccess(mockupBatch);
     }
 

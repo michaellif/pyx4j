@@ -15,6 +15,8 @@ package com.propertyvista.crm.rpc.dto.financial.moneyin.batch;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,6 +32,7 @@ public interface DepositSlipPaymentRecordDTO extends IEntity {
 
     IPrimitive<String> checkNumber();
 
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
 }

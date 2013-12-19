@@ -20,6 +20,12 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 public class MoneyInBatchViewImpl extends CrmViewerViewImplBase<MoneyInBatchDTO> implements MoneyInBatchView {
 
     public MoneyInBatchViewImpl() {
+        setBreadcrumbsBar(null);
         setForm(new MoneyInBatchForm(this));
+    }
+
+    @Override
+    protected void populateBreadcrumbs(MoneyInBatchDTO value) {
+
     }
 }

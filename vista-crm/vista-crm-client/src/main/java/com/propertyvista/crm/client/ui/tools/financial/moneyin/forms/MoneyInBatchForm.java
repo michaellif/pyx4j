@@ -41,9 +41,10 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
             super(DepositSlipPaymentRecordDTO.class);
             columns = Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().unit(), "50px"),
-                    new EntityFolderColumnDescriptor(proto().tenantId(), "50px"),
-                    new EntityFolderColumnDescriptor(proto().tenantName(), "150px"),
-                    new EntityFolderColumnDescriptor(proto().checkNumber(), "150px")
+                    new EntityFolderColumnDescriptor(proto().tenantId(), "100px"),
+                    new EntityFolderColumnDescriptor(proto().tenantName(), "250px"),
+                    new EntityFolderColumnDescriptor(proto().checkNumber(), "150px"),
+                    new EntityFolderColumnDescriptor(proto().amount(), "150px")
             );//@formatter:on
 
         }
@@ -63,15 +64,15 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
     private Widget createGeneralTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().building())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankAccount())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankDepositDate())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositSlipNumber())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalReceivedAmount())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfReceipts())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isPosted())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().building())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().bankAccount())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().bankDepositDate())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().depositSlipNumber())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().totalReceivedAmount())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().numberOfReceipts())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().isPosted())).build());
         panel.setH2(++row, 0, 2, i18n.tr("Payments"));
-        panel.setWidget(++row, 0, inject(proto().payments(), new DepositSlipPaymentRecordFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().payments(), new DepositSlipPaymentRecordFolder()));
         return panel;
     }
 
