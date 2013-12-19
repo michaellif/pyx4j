@@ -49,6 +49,11 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
     }
 
     @Override
+    public void getResidentPortalConvenienceFeeTerms(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantPaymentConvenienceFee);
+    }
+
+    @Override
     public void getProspectPortalTerms(AsyncCallback<String> callback) {
         //TODO implement Prospect Terms
         getVistaTerms(callback, VistaTerms.Target.Prospect);

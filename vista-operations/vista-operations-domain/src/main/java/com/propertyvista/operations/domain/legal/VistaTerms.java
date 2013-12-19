@@ -44,6 +44,8 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         TenantPaymentCreditCard,
 
+        TenantPaymentConvenienceFee,
+
         TenantPreAuthorizedPaymentsAgreement,
 
         TenantSurePreAuthorizedPaymentsAgreement,

@@ -25,6 +25,8 @@ public interface PortalVistaTermsService extends IService {
 
     void getResidentPortalCcPolicy(AsyncCallback<String> callback);
 
+    void getResidentPortalConvenienceFeeTerms(AsyncCallback<String> callback);
+
     void getResidentPortalPadPolicy(AsyncCallback<String> callback);
 
     void getProspectPortalTerms(AsyncCallback<String> callback);
