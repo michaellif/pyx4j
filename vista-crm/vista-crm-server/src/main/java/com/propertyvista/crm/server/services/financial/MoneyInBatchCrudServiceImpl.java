@@ -27,7 +27,7 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 
-public class MoneyInBatchListServiceImpl implements MoneyInBatchCrudService {
+public class MoneyInBatchCrudServiceImpl implements MoneyInBatchCrudService {
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<MoneyInBatchDTO>> callback, EntityListCriteria<MoneyInBatchDTO> criteria) {
