@@ -33,6 +33,8 @@ SET search_path = '_admin_';
         ***     ======================================================================================================
         **/
         
+        ALTER TABLE vista_terms DROP CONSTRAINT vista_terms_target_e_ck;
+        
         
         /**
         ***     ======================================================================================================
@@ -116,6 +118,11 @@ SET search_path = '_admin_';
         
         ALTER TABLE card_transaction_record ADD CONSTRAINT card_transaction_record_card_type_e_ck 
                 CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));
+        ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
+                CHECK ((target) IN ('PMC', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'Tenant', 
+                'TenantBilling', 'TenantPaymentConvenienceFee', 'TenantPaymentCreditCard', 'TenantPaymentPad', 
+                'TenantPreAuthorizedPaymentsAgreement', 'TenantSurePreAuthorizedPaymentsAgreement'));
+
                 
         /**
         ***     ============================================================================================================
