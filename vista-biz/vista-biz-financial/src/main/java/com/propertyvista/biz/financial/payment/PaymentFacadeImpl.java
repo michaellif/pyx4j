@@ -180,6 +180,15 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.createdBy().set(VistaContext.getCurrentUserIfAvalable());
         }
 
+        //  receivedDate should be editable by CRM user for Cash and Check.
+        if (EnumSet.of(PaymentType.Cash, PaymentType.Check).contains((paymentRecord.paymentMethod().type().getValue()))) {
+            if (paymentRecord.receivedDate().isNull()) {
+                paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            }
+        } else {
+            paymentRecord.receivedDate().setValue(null);
+        }
+
         Persistence.service().merge(paymentRecord);
         if (paymentRecord.yardiDocumentNumber().isNull()) {
             StringBuilder b = new StringBuilder();
@@ -246,7 +255,15 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
 
-        paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        //  receivedDate should be editable by CRM user for Cash and Check.
+        if (EnumSet.of(PaymentType.Cash, PaymentType.Check).contains((paymentRecord.paymentMethod().type().getValue()))) {
+            if (paymentRecord.receivedDate().isNull()) {
+                paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            }
+        } else {
+            paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        }
+
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
         if (paymentRecord.merchantAccount().isNull()
