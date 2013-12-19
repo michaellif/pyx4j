@@ -175,7 +175,7 @@ public class TenantSureTheme extends Theme {
 
         {
             Style style = new Style("." + TenantSureTheme.StyleName.TenantSurePapAgreementPanel.name(), " a");
-            style.addProperty("color", ThemeColor.contrast1);
+            style.addProperty("color", ThemeColor.contrast2);
             addStyle(style);
         }
 
