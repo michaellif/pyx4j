@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
@@ -58,12 +59,15 @@ public interface OnlineApplicationLegalTerm extends IEntity {
 
     IPrimitive<String> title();
 
+    @NotNull
     @Editor(type = Editor.EditorType.richtextarea)
     @Length(48000)
     IPrimitive<String> body();
 
+    @NotNull
     IPrimitive<SignatureType> signatureType();
 
+    @NotNull
     IPrimitive<TargetRole> applyToRole();
 
     @OrderColumn
