@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.ar.yardi;
 
 import java.math.BigDecimal;
+import java.util.EnumSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,7 @@ import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.financial.yardi.YardiService;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.services.ARCodeAdapter;
 
@@ -246,7 +248,15 @@ public class YardiARIntegrationAgent {
         detail.setCustomerID(lease.leaseId().getValue());
         detail.setPropertyPrimaryID(lease.unit().building().propertyCode().getValue());
         detail.setDocumentNumber(pr.yardiDocumentNumber().getValue());
+
         detail.setTransactionDate(pr.receivedDate().getValue());
+        //  Payment record targetDate should be used as yardi TransactionDate when it is after receivedDate
+        if (EnumSet.of(PaymentType.Cash, PaymentType.Check).contains((pr.paymentMethod().type().getValue()))) {
+            if (!pr.targetDate().isNull() && pr.targetDate().getValue().after(pr.receivedDate().getValue())) {
+                detail.setTransactionDate(pr.targetDate().getValue());
+            }
+        }
+
         detail.setAmount(pr.amount().getValue().toString());
     }
 }
