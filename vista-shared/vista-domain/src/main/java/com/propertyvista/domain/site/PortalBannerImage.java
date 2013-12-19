@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface PortalBannerImage extends IEntity {
+
     @NotNull
     AvailableLocale locale();
 

@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.SiteImageResourceFuleURLBuilder;
+import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
@@ -113,7 +113,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
 
         public PortalBannerImageEditor() {
             super(PortalBannerImage.class);
-            imageHolder = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFuleURLBuilder());
+            imageHolder = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
             imageHolder.setNote(i18n.tr("Recommended banner size is {0}", "1200x200"));
         }
 
@@ -129,7 +129,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
             main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), true).build());
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().image(), imageHolder), true).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().image().file(), imageHolder), true).build());
 
             return main;
         }

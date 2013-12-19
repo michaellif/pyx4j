@@ -37,8 +37,8 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageMetaTags;
-import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
@@ -94,6 +94,8 @@ public class SiteGeneralCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
                 return false;
             }
         });
+
+        SiteImageResourcePersister.persist(dbo.crmLogo());
 
         dbo._updateFlag().updated().setValue(new Date());
         super.persist(dbo, in);

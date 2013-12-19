@@ -27,6 +27,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteImageSet;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteContentCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteContentCrudService {
@@ -65,6 +67,15 @@ public class SiteContentCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
     @Override
     protected void persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
         dbo._updateFlag().updated().setValue(new Date());
+
+        for (SiteImageSet images : dbo.banner()) {
+            SiteImageResourcePersister.persist(images.imageSet());
+        }
+        for (SiteLogoImageResource images : dbo.logo()) {
+            SiteImageResourcePersister.persist(images.large());
+            SiteImageResourcePersister.persist(images.small());
+        }
+
         super.persist(dbo, in);
     }
 }

@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
-import com.propertyvista.common.client.SiteImageResourceFuleURLBuilder;
+import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
@@ -103,11 +103,11 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
         public PortalImageResourceEditor() {
             super(SiteLogoImageResource.class);
 
-            smallLogo = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFuleURLBuilder());
+            smallLogo = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
             smallLogo.setImageSize(150, 100);
             smallLogo.setScaleMode(ScaleMode.Contain);
 
-            largeLogo = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFuleURLBuilder());
+            largeLogo = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
             largeLogo.setImageSize(300, 150);
             largeLogo.setScaleMode(ScaleMode.Contain);
         }

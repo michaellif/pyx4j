@@ -16,14 +16,23 @@ package com.propertyvista.common.client;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.shared.IFileURLBuilder;
 
-import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class SiteImageResourceFuleURLBuilder implements IFileURLBuilder {
+public class SiteImageResourceFileURLBuilder implements IFileURLBuilder {
 
     @Override
     public String getUrl(IFile<?> file) {
-        return MediaUtils.createSiteImageResourceUrl((SiteImageResource) file.getOwner());
+        if (!file.accessKey().isNull()) {
+            return getUrl(DeploymentConsts.TRANSIENT_FILE_PREF + file.accessKey().getStringView(), file.fileName().getValue());
+        } else if (file.getOwner().id().isNull() || file.blobKey().isNull()) {
+            return null;
+        } else {
+            return getUrl(file.getOwner().id().getStringView(), file.fileName().getValue());
+        }
+    }
+
+    private String getUrl(String id, String fileName) {
+        return ClientNavigUtils.getDeploymentBaseURL() + id + "/" + fileName + DeploymentConsts.siteImageResourceServletMapping;
     }
 
 }

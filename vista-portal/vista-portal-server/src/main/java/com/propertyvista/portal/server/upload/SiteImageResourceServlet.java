@@ -30,6 +30,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
 import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.site.SiteDescriptor;
@@ -66,7 +68,7 @@ public class SiteImageResourceServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_GONE);
             return;
         }
-        Key key = null;
+        IFile<?> file = null;
         // check if logo was requested
         if (segments[1].startsWith(DeploymentConsts.portalLogoSmall)) {
             // portal logo
@@ -81,15 +83,15 @@ public class SiteImageResourceServlet extends HttpServlet {
             if (locale != null && locale.length() > 0) {
                 for (SiteLogoImageResource logo : descriptor.logo()) {
                     if (logo.locale().lang().getValue().name().equals(locale)) {
-                        key = logo.small().getPrimaryKey();
+                        file = logo.small().file();
                         break;
                     }
                 }
             }
             // if still no logo found, get default
-            if (key == null) {
+            if (file == null) {
                 // TODO define default locale per PMC; use first one for now
-                key = descriptor.logo().get(0).small().getPrimaryKey();
+                file = descriptor.logo().get(0).small().file();
             }
         } else if (segments[1].startsWith(DeploymentConsts.portalLogo)) {
             // portal logo
@@ -104,15 +106,15 @@ public class SiteImageResourceServlet extends HttpServlet {
             if (locale != null && locale.length() > 0) {
                 for (SiteLogoImageResource logo : descriptor.logo()) {
                     if (logo.locale().lang().getValue().name().equals(locale)) {
-                        key = logo.large().getPrimaryKey();
+                        file = logo.large().file();
                         break;
                     }
                 }
             }
             // if still no logo found, get default
-            if (key == null) {
+            if (file == null) {
                 // TODO define default locale per PMC; use first one for now
-                key = descriptor.logo().get(0).large().getPrimaryKey();
+                file = descriptor.logo().get(0).large().file();
             }
         } else if (segments[1].startsWith(DeploymentConsts.crmLogo)) {
             // crm logo
@@ -122,40 +124,45 @@ public class SiteImageResourceServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_GONE);
                 return;
             }
-            key = descriptor.crmLogo().getPrimaryKey();
+            file = descriptor.crmLogo().file();
         } else {
             String id = segments[2];
             if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
                 response.setStatus(HttpServletResponse.SC_GONE);
                 return;
             }
-            key = new Key(id);
+            if (id.startsWith(DeploymentConsts.TRANSIENT_FILE_PREF)) {
+                // treat id as accessKey
+                file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
+            } else {
+                SiteImageResource resource = Persistence.service().retrieve(SiteImageResource.class, new Key(id));
+                if (resource != null) {
+                    file = resource.file();
+                }
+            }
         }
-
-        //TODO deserialize key
-        SiteImageResource file = Persistence.service().retrieve(SiteImageResource.class, key);
         if (file == null) {
-            log.debug("no such document {} {}", key, filename);
+            log.debug("no such document {}", filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        if (file.file().blobKey().isNull()) {
-            log.debug("resources {} {} is not file", key, filename);
+        if (file.blobKey().isNull()) {
+            log.debug("resources {} is not file", filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        String token = ETag.getEntityTag(file.file(), "");
+        String token = ETag.getEntityTag(file, "");
         response.setHeader("Etag", token);
 
-        if (!file.file().timestamp().isNull()) {
+        if (!file.timestamp().isNull()) {
             long since = request.getDateHeader("If-Modified-Since");
-            if ((since != -1) && (file.file().timestamp().getValue() < since)) {
+            if ((since != -1) && (file.timestamp().getValue() < since)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
-            response.setDateHeader("Last-Modified", file.file().timestamp().getValue());
+            response.setDateHeader("Last-Modified", file.timestamp().getValue());
             // HTTP 1.0
             response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
             // HTTP 1.1
@@ -167,13 +174,13 @@ public class SiteImageResourceServlet extends HttpServlet {
             return;
         }
 
-        if (!file.file().contentMimeType().isNull()) {
-            response.setContentType(file.file().contentMimeType().getValue());
+        if (!file.contentMimeType().isNull()) {
+            response.setContentType(file.contentMimeType().getValue());
         }
 
-        MediaFileBlob blob = Persistence.service().retrieve(MediaFileBlob.class, file.file().blobKey().getValue());
+        MediaFileBlob blob = Persistence.service().retrieve(MediaFileBlob.class, file.blobKey().getValue());
         if (blob == null) {
-            log.debug("no such blob {} {}", key, filename);
+            log.debug("no such blob {}", filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }

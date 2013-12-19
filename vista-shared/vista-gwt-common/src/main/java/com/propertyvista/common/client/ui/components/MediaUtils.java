@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.PublicMediaURLBuilder;
+import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.legal.LegalLetter;
@@ -45,14 +46,7 @@ public class MediaUtils {
         if (resource == null) {
             return null;
         } else {
-            String id;
-            if (resource.file().accessKey().isNull()) {
-                id = resource.file().accessKey().getStringView();
-            } else {
-                id = resource.id().getStringView();
-            }
-            return ClientNavigUtils.getDeploymentBaseURL() + id + "/" + resource.file().fileName().getStringView()
-                    + DeploymentConsts.siteImageResourceServletMapping;
+            return new SiteImageResourceFileURLBuilder().getUrl(resource.file());
         }
     }
 

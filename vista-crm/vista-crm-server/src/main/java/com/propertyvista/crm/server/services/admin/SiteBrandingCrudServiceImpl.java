@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.domain.site.PortalBannerImage;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -65,6 +66,11 @@ public class SiteBrandingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Site
     @Override
     protected void persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
         dbo._updateFlag().updated().setValue(new Date());
+
+        for (PortalBannerImage images : dbo.portalBanner()) {
+            SiteImageResourcePersister.persist(images.image());
+        }
+
         super.persist(dbo, in);
     }
 }
