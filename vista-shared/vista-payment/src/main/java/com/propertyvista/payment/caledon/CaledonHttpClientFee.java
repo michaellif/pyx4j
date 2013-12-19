@@ -51,7 +51,7 @@ public class CaledonHttpClientFee {
 
     private final boolean debug = true;
 
-    private final String urlProd = "https://portal.caledoncard.com/convfee_testing/";
+    private final String urlProd = "https://portal.caledoncard.com/convfee/";
 
     public CaledonFeeCalulationResponse transaction(CaledonFeeCalulationRequest request) {
         return transaction(request, new CaledonFeeCalulationResponse());
@@ -140,7 +140,6 @@ public class CaledonHttpClientFee {
             }
         }
 
-        pairs.add(0, new NameValuePair("TESTING", "1"));
         if (debug) {
             log.debug("Request {}", pairs);
         }
