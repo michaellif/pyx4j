@@ -30,8 +30,6 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
         labelWidth(labelWidth);
         contentWidth(contentWidth);
         componentWidth(componentWidth);
-        labelAlignment(Alignment.left);
-        useLabelSemicolon(false);
     }
 
     public FormDecoratorBuilder(CComponent<?> component, double labelWidth, double componentWidth, double contentWidth) {
@@ -52,6 +50,27 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
     public FormDecoratorBuilder(CComponent<?> component) {
         this(component, false);
+    }
+
+    @Override
+    public WidgetDecorator build() {
+        return new WidgetDecorator(this) {
+            @Override
+            protected void updateViewable() {
+                if (getLabelPosition() != LabelPosition.top) {
+                    if (getComnponent().isViewable()) {
+                        labelAlignment(Alignment.left);
+                        useLabelSemicolon(false);
+                    } else {
+                        labelAlignment(Alignment.right);
+                        useLabelSemicolon(true);
+                    }
+                }
+                updateCaption();
+                updateLabelAlignment();
+                super.updateViewable();
+            }
+        };
     }
 
 }

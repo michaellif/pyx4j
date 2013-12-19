@@ -14,7 +14,6 @@
 package com.propertyvista.portal.shared.ui.util.decorators;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 
@@ -31,8 +30,6 @@ public class FormWidgetDecoratorBuilder extends PortalWidgetDecorator.Builder {
         contentWidth(contentWidth);
         componentWidth(componentWidth);
         labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
-        labelAlignment(Alignment.left);
-        useLabelSemicolon(false);
     }
 
     public FormWidgetDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
@@ -53,6 +50,23 @@ public class FormWidgetDecoratorBuilder extends PortalWidgetDecorator.Builder {
 
     @Override
     public PortalWidgetDecorator build() {
-        return new PortalWidgetDecorator(this);
+        return new PortalWidgetDecorator(this) {
+            @Override
+            protected void updateViewable() {
+                if (getLabelPosition() != LabelPosition.top) {
+                    if (getComnponent().isViewable()) {
+                        labelAlignment(Alignment.left);
+                        useLabelSemicolon(false);
+                    } else {
+                        labelAlignment(Alignment.right);
+                        useLabelSemicolon(true);
+                    }
+                }
+                updateCaption();
+                updateLabelAlignment();
+                super.updateViewable();
+            }
+        };
     }
+
 }
