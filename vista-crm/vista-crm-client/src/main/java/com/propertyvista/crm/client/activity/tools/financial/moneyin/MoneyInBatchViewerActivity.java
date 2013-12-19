@@ -7,27 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-12-17
+ * Created on 2013-12-19
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.activity.tools.financial.moneyin;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInBatchListerView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInBatchView;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 
-public class MoneyInBatchListerActivity extends AbstractListerActivity<MoneyInBatchDTO> {
+public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDTO> implements MoneyInBatchView.Presenter {
 
-    public MoneyInBatchListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(MoneyInBatchListerView.class), GWT.<MoneyInBatchCrudService> create(MoneyInBatchCrudService.class),
-                MoneyInBatchDTO.class);
+    public MoneyInBatchViewerActivity(CrudAppPlace place) {
+        super(place, CrmSite.getViewFactory().getView(MoneyInBatchView.class), GWT.<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
     }
 
 }

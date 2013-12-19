@@ -247,6 +247,7 @@ import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.client.activity.tools.financial.autopayreview.AutoPayReviewActivity;
 import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInBatchListerActivity;
+import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInBatchViewerActivity;
 import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInCreateBatchActivity;
 import com.propertyvista.crm.client.activity.tools.legal.l1.L1DelinquentLeaseSearchActivity;
 import com.propertyvista.crm.client.activity.tools.legal.n4.N4CreateBatchActivity;
@@ -789,6 +790,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new MoneyInBatchListerActivity(crudPlace);
                             break;
                         case viewer:
+                            activity = new MoneyInBatchViewerActivity(crudPlace);
+                            break;
                         case editor:
                         default:
                             break;

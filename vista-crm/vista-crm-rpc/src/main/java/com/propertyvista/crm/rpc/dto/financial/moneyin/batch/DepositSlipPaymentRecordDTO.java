@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-12-13
+ * Created on 2013-12-19
  * @author ArtyomB
  * @version $Id$
  */
@@ -15,30 +15,23 @@ package com.propertyvista.crm.rpc.dto.financial.moneyin.batch;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient()
-public interface MoneyInBatchDTO extends IEntity {
+@Transient
+public interface DepositSlipPaymentRecordDTO extends IEntity {
 
     IPrimitive<String> building();
 
-    IPrimitive<String> bankAccount();
+    IPrimitive<String> unit();
 
-    IPrimitive<LogicalDate> bankDepositDate();
+    IPrimitive<String> tenantId();
 
-    IPrimitive<Integer> depositSlipNumber();
+    IPrimitive<String> tenantName();
 
-    IPrimitive<BigDecimal> totalReceivedAmount();
+    IPrimitive<String> checkNumber();
 
-    IPrimitive<Integer> numberOfReceipts();
-
-    // TODO may be an entity
-    IPrimitive<String> postingStatus();
-
-    IList<DepositSlipPaymentRecordDTO> payments();
+    IPrimitive<BigDecimal> amount();
 
 }

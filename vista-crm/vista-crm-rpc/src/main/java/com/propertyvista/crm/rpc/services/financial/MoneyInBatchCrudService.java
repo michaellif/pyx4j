@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.financial;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
-public interface MoneyInBatchListService extends AbstractListService<MoneyInBatchDTO>{
+public interface MoneyInBatchCrudService extends AbstractCrudService<MoneyInBatchDTO> {
 
 }

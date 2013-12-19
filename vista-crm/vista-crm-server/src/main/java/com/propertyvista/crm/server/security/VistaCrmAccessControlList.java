@@ -108,7 +108,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysis
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
-import com.propertyvista.crm.rpc.services.financial.MoneyInBatchListService;
+import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
@@ -285,7 +285,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AutoPayReviewService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MoneyInToolService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MoneyInBatchListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MoneyInBatchCrudService.class));
 
 // - Dashboard:
         // we want owners (dashboard creator) to have full access to dashboards they own, and other users only read-only access and only for shared.

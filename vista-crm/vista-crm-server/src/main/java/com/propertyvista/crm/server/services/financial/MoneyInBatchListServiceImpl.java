@@ -20,12 +20,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.InMemeoryListService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
-import com.propertyvista.crm.rpc.services.financial.MoneyInBatchListService;
+import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 
-public class MoneyInBatchListServiceImpl implements MoneyInBatchListService {
+public class MoneyInBatchListServiceImpl implements MoneyInBatchCrudService {
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<MoneyInBatchDTO>> callback, EntityListCriteria<MoneyInBatchDTO> criteria) {
@@ -35,5 +37,30 @@ public class MoneyInBatchListServiceImpl implements MoneyInBatchListService {
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new RuntimeException("Not Implemented"); // TODO implement remove batch for not yet posted batches
+    }
+
+    @Override
+    public void init(AsyncCallback<MoneyInBatchDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<MoneyInBatchDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        // TODO Auto-generated method stub
+        callback.onSuccess(EntityFactory.create(MoneyInBatchDTO.class));
+    }
+
+    @Override
+    public void create(AsyncCallback<Key> callback, MoneyInBatchDTO editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    @ServiceExecution(waitCaption = "Saving...")
+    public void save(AsyncCallback<Key> callback, MoneyInBatchDTO editableEntity) {
+        // TODO Auto-generated method stub
+
     }
 }
