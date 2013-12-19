@@ -44,10 +44,10 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
     }
 
     @Override
-    protected void preloadData() {
+    protected MockConfig createMockConfig() {
         MockConfig config = new MockConfig();
         config.billConfirmationMethod = LeaseBillingPolicy.BillConfirmationMethod.automatic;
-        preloadData(config);
+        return config;
     }
 
     public void testMethodsRemoval() throws Exception {

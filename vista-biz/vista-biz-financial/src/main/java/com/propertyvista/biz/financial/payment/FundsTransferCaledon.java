@@ -68,12 +68,14 @@ public class FundsTransferCaledon {
                 if (padFile == null) {
                     padFile = EntityFactory.create(PadFile.class);
                     padFile.status().setValue(PadFile.PadFileStatus.Creating);
-                    padFile.fileCreationNumber().setValue(getNextFileCreationNumber(fundsTransferType, false));
+                    padFile.fileCreationNumber().setValue(getNextFileCreationNumber(fundsTransferType, false, null));
                     padFile.companyId().setValue(companyId);
                     padFile.fundsTransferType().setValue(fundsTransferType);
 
                     Persistence.service().persist(padFile);
                     log.info("created FundsTransferFile # {} for {} {}", padFile.fileCreationNumber().getValue(), companyId, fundsTransferType);
+                } else {
+                    log.info("continue with FundsTransferFile # {} for {} {}", padFile.fileCreationNumber().getValue(), companyId, fundsTransferType);
                 }
                 return padFile;
             }
@@ -116,7 +118,7 @@ public class FundsTransferCaledon {
             @Override
             public Void execute() {
                 padFile.status().setValue(PadFile.PadFileStatus.Sending);
-                padFile.fileCreationNumber().setValue(getNextFileCreationNumber(padFile.fundsTransferType().getValue(), true));
+                padFile.fileCreationNumber().setValue(getNextFileCreationNumber(padFile.fundsTransferType().getValue(), true, padFile));
                 padFile.sent().setValue(new Date());
                 Persistence.service().merge(padFile);
                 return null;
@@ -167,10 +169,12 @@ public class FundsTransferCaledon {
             // Allow to recover the process automatically
             sendError = e;
             padFile.status().setValue(PadFile.PadFileStatus.Creating);
+            log.info("file was no sent due to connection error, set status to {} for next resned", padFile.status());
         } catch (FileCreationException e) {
             // Allow to recover the process automatically
             sendError = e;
             padFile.status().setValue(PadFile.PadFileStatus.Creating);
+            log.info("file was no sent due file system error, set status to {} for next resned", padFile.status());
         } catch (Throwable e) {
             sendError = e;
             padFile.status().setValue(PadFile.PadFileStatus.SendError);
@@ -189,7 +193,7 @@ public class FundsTransferCaledon {
         });
 
         if (sendError != null) {
-            throw new Error(sendError.getMessage(), sendError);
+            throw new RuntimeException(sendError.getMessage(), sendError);
         }
 
         return true;
@@ -205,7 +209,7 @@ public class FundsTransferCaledon {
      *            the file is sent or attempt to send is made, the sequence is changed
      * @return
      */
-    private String getNextFileCreationNumber(FundsTransferType fundsTransferType, boolean consumeNumber) {
+    private String getNextFileCreationNumber(FundsTransferType fundsTransferType, boolean consumeNumber, PadFile consumerFile) {
         boolean useSimulator = VistaSystemsSimulationConfig.getConfiguration().useFundsTransferSimulator().getValue(Boolean.FALSE);
         boolean useFileBaseSequence = !VistaDeployment.isVistaProduction();
         if (useSimulator) {
@@ -239,7 +243,7 @@ public class FundsTransferCaledon {
             criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
             criteria.eq(criteria.proto().fileCreationNumber(), previousValue);
             PadFile padFile = Persistence.service().retrieve(criteria);
-            if (padFile != null) {
+            if ((padFile != null) && ((consumerFile == null || (!consumerFile.equals(padFile))))) {
                 if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
                     throw new Error(SimpleMessageFormat.format("Can''t send FundsTransfer {0} File until previous file {1} is Acknowledged or Canceled",
                             fundsTransferType, previousValue));

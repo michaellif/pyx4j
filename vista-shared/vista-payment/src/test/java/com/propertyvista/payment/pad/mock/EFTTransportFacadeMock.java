@@ -18,6 +18,7 @@ import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.EFTTransportFacade;
+import com.propertyvista.payment.pad.FileCreationException;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
@@ -29,17 +30,17 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
     }
 
     @Override
-    public void sendPadFile(PadFile padFile) {
+    public void sendPadFile(PadFile padFile) throws SftpTransportConnectionException, FileCreationException {
         EFTBankMock.instance().receivedPadFile(padFile);
     }
 
     @Override
-    public PadAckFile receivePadAcknowledgementFile(String companyId) {
+    public PadAckFile receivePadAcknowledgementFile(String companyId) throws SftpTransportConnectionException {
         return EFTBankMock.instance().acknowledgeFile(companyId);
     }
 
     @Override
-    public PadReconciliationFile receivePadReconciliation(String companyId) {
+    public PadReconciliationFile receivePadReconciliation(String companyId) throws SftpTransportConnectionException {
         return EFTBankMock.instance().reconciliationFile(companyId);
     }
 

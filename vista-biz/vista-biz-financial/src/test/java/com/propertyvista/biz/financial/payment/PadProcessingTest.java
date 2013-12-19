@@ -68,10 +68,10 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
     }
 
     @Override
-    protected void preloadData() {
+    protected MockConfig createMockConfig() {
         MockConfig config = new MockConfig();
         config.billConfirmationMethod = LeaseBillingPolicy.BillConfirmationMethod.automatic;
-        preloadData(config);
+        return config;
     }
 
     public void testPadSuccessful() throws Exception {

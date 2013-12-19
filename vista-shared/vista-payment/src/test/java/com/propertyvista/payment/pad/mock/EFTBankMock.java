@@ -27,15 +27,26 @@ import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.payment.pad.FileCreationException;
 import com.propertyvista.payment.pad.data.PadAckFile;
+import com.propertyvista.server.sftp.SftpTransportConnectionException;
 import com.propertyvista.test.mock.MockEventBus;
 
 class EFTBankMock implements ScheduledBmoPayment.Handler {
 
     private static final Logger log = LoggerFactory.getLogger(EFTBankMockReconciliation.class);
 
+    private boolean connectionErrorEnabled;
+
     private EFTBankMock() {
         MockEventBus.addHandler(ScheduledBmoPayment.class, this);
+
+        MockEventBus.addHandler(ScheduleTransportConnectionError.class, new ScheduleTransportConnectionError.Handler() {
+            @Override
+            public void scheduleTransportConnectionError(ScheduleTransportConnectionError event) {
+                connectionErrorEnabled = event.connectionErrorEnabled;
+            }
+        });
     }
 
     private static class SingletonHolder {
@@ -58,7 +69,11 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
 
     private final List<DirectDebitRecord> scheduledBmoRecords = new ArrayList<DirectDebitRecord>();
 
-    void receivedPadFile(PadFile padFile) {
+    void receivedPadFile(PadFile padFile) throws SftpTransportConnectionException, FileCreationException {
+        if (connectionErrorEnabled) {
+            throw new SftpTransportConnectionException("Connection error Mock", null);
+        }
+
         log.debug("receivedPadFile {}, records {}", padFile.fileCreationNumber().getValue(), padFile.recordsCount().getValue());
         receivedPadFile.add(padFile.<PadFile> duplicate());
         DataDump.dumpToDirectory("eft", "pad", padFile);
@@ -69,7 +84,11 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
         unprocessedRecords.add(padDebitRecord);
     }
 
-    PadAckFile acknowledgeFile(String companyId) {
+    PadAckFile acknowledgeFile(String companyId) throws SftpTransportConnectionException {
+        if (connectionErrorEnabled) {
+            throw new SftpTransportConnectionException("Connection error Mock", null);
+        }
+
         // Find unacknowledged file
         PadFile unacknowledgedFile = null;
         for (PadFile padFile : receivedPadFile) {
@@ -90,7 +109,11 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
         }
     }
 
-    public PadReconciliationFile reconciliationFile(String companyId) {
+    public PadReconciliationFile reconciliationFile(String companyId) throws SftpTransportConnectionException {
+        if (connectionErrorEnabled) {
+            throw new SftpTransportConnectionException("Connection error Mock", null);
+        }
+
         List<PadDebitRecord> records = new ArrayList<PadDebitRecord>();
         Iterator<PadDebitRecord> it = unprocessedRecords.iterator();
         while (it.hasNext()) {

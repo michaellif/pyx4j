@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import com.propertyvista.biz.financial.payment.CreditCardPaymentTest;
+import com.propertyvista.biz.financial.payment.FundsTransferProcessErrorRecoveryTest;
 import com.propertyvista.biz.financial.payment.PadPaymentChargeBaseSunnyDayScenarioTest;
 import com.propertyvista.biz.financial.payment.PadPaymentFixedAmountValidationTest;
 import com.propertyvista.biz.financial.payment.PadPaymentMethodCancellationTest;
@@ -40,6 +41,7 @@ import com.propertyvista.biz.financial.payment.PreauthorizedPaymentCyclesTest;
         PadPaymentPercentAmountValidationTest.class, //
         PadPaymentFixedAmountValidationTest.class, //
         PadProcessingTest.class, //
+        FundsTransferProcessErrorRecoveryTest.class, //
         PadTransactionUtilsTest.class, //
         PreauthorizedPaymentChangeReviewInternalTest.class, //
         PreauthorizedPaymentCyclesTest.class })
