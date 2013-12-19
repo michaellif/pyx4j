@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -80,6 +81,22 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
             }
         }, getView().getValue());
 
+    }
+
+    @Override
+    public void onStepSelected(WizardStep selectedStep) {
+        super.onStepSelected(selectedStep);
+
+        OnlineApplicationDTO currentValue = getView().getValue();
+        if (currentValue != null) {
+            // save current value state:
+            service.save(new DefaultAsyncCallback<Key>() {
+                @Override
+                public void onSuccess(Key result) {
+                    // TODO Auto-generated method stub
+                }
+            }, currentValue);
+        }
     }
 
     @Override

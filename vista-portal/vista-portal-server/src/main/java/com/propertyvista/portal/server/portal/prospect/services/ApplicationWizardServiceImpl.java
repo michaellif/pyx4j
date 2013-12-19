@@ -105,6 +105,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         saveApplicantData(bo, editableEntity);
 
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 
@@ -241,7 +242,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             customer.emergencyContacts().clear();
             customer.emergencyContacts().addAll(to.applicant().emergencyContacts());
 
-            Persistence.secureSave(customer);
+            Persistence.service().merge(customer);
 
             // screening:
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), tenant, AttachLevel.Attached);
@@ -260,7 +261,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             screening.assets().clear();
             screening.assets().addAll(to.applicant().assets());
 
-            Persistence.secureSave(screening);
+            Persistence.service().merge(screening);
 
             break;
 

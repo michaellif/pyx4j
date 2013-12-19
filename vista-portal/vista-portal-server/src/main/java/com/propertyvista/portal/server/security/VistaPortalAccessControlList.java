@@ -143,7 +143,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentProfileCrudService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentAccountCrudService.class));
 
-        //========================= My Community
+        //========================= Resident Portal
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(BillingService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
@@ -173,10 +173,10 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
 
-        //========================= My Community Prospect Portal
+        //========================= Prospect Portal
 
-        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationWizardService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
