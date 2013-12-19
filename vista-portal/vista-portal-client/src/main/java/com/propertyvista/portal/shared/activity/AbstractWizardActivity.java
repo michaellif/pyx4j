@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 
@@ -73,7 +74,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
     }
 
     @Override
-    public void submit() {
+    public void finish() {
         view.reset();
         onFinish();
     }
@@ -107,5 +108,10 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
      */
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void onStepSelected(WizardStep selectedStep) {
+
     }
 }

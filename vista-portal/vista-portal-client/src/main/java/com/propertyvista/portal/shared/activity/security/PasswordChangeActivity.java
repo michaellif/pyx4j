@@ -54,11 +54,11 @@ public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChang
     }
 
     @Override
-    public void submit() {
+    public void finish() {
         GWT.<PasswordChangeUserService> create(PasswordChangeUserService.class).changePassword(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                PasswordChangeActivity.super.submit();
+                PasswordChangeActivity.super.finish();
             }
 
             @Override

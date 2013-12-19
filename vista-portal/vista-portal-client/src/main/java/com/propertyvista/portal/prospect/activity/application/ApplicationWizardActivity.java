@@ -63,12 +63,12 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     }
 
     @Override
-    public void submit() {
+    public void finish() {
         assert service != null : "Service shouldn't be null or method finish() has to be implemented in subclass.";
         service.submit(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                ApplicationWizardActivity.super.submit();
+                ApplicationWizardActivity.super.finish();
                 AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.ApplicationConfirmation());
             }
 

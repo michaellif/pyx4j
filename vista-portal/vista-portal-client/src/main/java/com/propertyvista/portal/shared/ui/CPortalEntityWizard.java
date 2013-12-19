@@ -46,8 +46,9 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
     @Override
     protected void onStepSelected(WizardStep selectedStep) {
         super.onStepSelected(selectedStep);
-        view.onStepChange();
+        calculateButtonsState();
         PortalSite.scrollToTop();
+        view.getPresenter().onStepSelected(selectedStep);
     }
 
     public IWizardView<? extends IEntity> getView() {
@@ -56,7 +57,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     @Override
     protected void onFinish() {
-        view.getPresenter().submit();
+        view.getPresenter().finish();
     }
 
     @Override

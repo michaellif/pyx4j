@@ -74,9 +74,9 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
     }
 
     @Override
-    public void submit() {
+    public void finish() {
         if (!getView().getValue().coveredItems().isEmpty()) {
-            super.submit();
+            super.finish();
         } else {
             getView().reset();
             AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());

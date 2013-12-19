@@ -70,13 +70,13 @@ public abstract class AbstractWizardCrudActivity<E extends IEntity> extends Abst
     }
 
     @Override
-    public void submit() {
+    public void finish() {
         assert service != null : "Service shouldn't be null or method finish() has to be implemented in subclass.";
         service.create(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 ReferenceDataManager.invalidate(entityClass);
-                AbstractWizardCrudActivity.super.submit();
+                AbstractWizardCrudActivity.super.finish();
                 onFinish(result);
             }
 

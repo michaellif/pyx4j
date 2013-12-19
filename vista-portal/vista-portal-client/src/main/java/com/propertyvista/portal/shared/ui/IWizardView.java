@@ -14,15 +14,18 @@
 package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.site.client.IsView;
 
 public interface IWizardView<E extends IEntity> extends IsView {
 
     public interface IWizardFormPresenter<E extends IEntity> {
 
-        void submit();
+        void finish();
 
         void cancel();
+
+        void onStepSelected(WizardStep selectedStep);
 
     }
 
@@ -42,7 +45,5 @@ public interface IWizardView<E extends IEntity> extends IsView {
      * return true if error is handled by wizard itself
      */
     boolean manageSubmissionFailure(Throwable caught);
-
-    void onStepChange();
 
 }

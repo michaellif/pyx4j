@@ -80,11 +80,6 @@ public abstract class AbstractWizardFormView<E extends IEntity> extends Abstract
     }
 
     @Override
-    public void onStepChange() {
-        wizardForm.calculateButtonsState();
-    }
-
-    @Override
     public boolean isDirty() {
         return wizardForm.isDirty();
     }
