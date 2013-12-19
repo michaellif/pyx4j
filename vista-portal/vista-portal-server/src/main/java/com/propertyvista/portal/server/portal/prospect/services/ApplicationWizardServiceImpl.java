@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -90,7 +91,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillUnitSelectionData(bo, to);
 
-//        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
+        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
 
         callback.onSuccess(to);
     }

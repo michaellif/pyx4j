@@ -30,7 +30,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 public interface OnlineApplicationLegalTerm extends IEntity {
 
-    enum TargetRole {
+    public enum TargetRole {
         Applicant, Guarantor, Any;
 
         public boolean matchesApplicationRole(OnlineApplication.Role appRole) {
