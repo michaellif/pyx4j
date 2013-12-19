@@ -29,7 +29,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -39,6 +38,8 @@ import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
@@ -89,13 +90,20 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillUnitSelectionData(bo, to);
 
-        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
+//        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
 
         callback.onSuccess(to);
     }
 
     @Override
     public void save(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
+        OnlineApplication bo = ProspectPortalContext.getOnlineApplication();
+
+        Persistence.ensureRetrieve(bo.masterOnlineApplication(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
+
+        saveApplicantData(bo, editableEntity);
+
         callback.onSuccess(null);
     }
 
@@ -170,21 +178,28 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         case Applicant:
         case CoApplicant:
             LeaseTermTenant tenant = ProspectPortalContext.getLeaseTermTenant();
-            Persistence.service().retrieve(tenant.leaseParticipant().customer().emergencyContacts());
+
+            // customer:
+            Customer customer = tenant.leaseParticipant().customer();
+            Persistence.service().retrieve(customer.picture());
+            Persistence.service().retrieve(customer.emergencyContacts());
+            //
+            to.applicant().set(to.applicant().person(), customer.person());
+            to.applicant().set(to.applicant().picture(), customer.picture());
+            to.applicant().set(to.applicant().emergencyContacts(), customer.emergencyContacts());
+
+            // screening:
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), tenant, AttachLevel.Attached);
+            CustomerScreening.CustomerScreeningV screening = tenant.effectiveScreening().version();
+            //
+            to.applicant().set(to.applicant().currentAddress(), screening.currentAddress());
+            to.applicant().set(to.applicant().previousAddress(), screening.previousAddress());
 
-            to.applicant().person().set(tenant.leaseParticipant().customer().person());
-            to.applicant().picture().set(tenant.leaseParticipant().customer().picture());
-            to.applicant().documents().set(tenant.effectiveScreening().version().documents());
+            to.applicant().set(to.applicant().documents(), screening.documents());
+            to.applicant().set(to.applicant().legalQuestions(), screening.legalQuestions());
 
-            to.applicant().currentAddress().set(tenant.effectiveScreening().version().currentAddress());
-            to.applicant().previousAddress().set(tenant.effectiveScreening().version().previousAddress());
-
-            to.applicant().emergencyContacts().set(tenant.leaseParticipant().customer().emergencyContacts());
-            to.applicant().legalQuestions().set(tenant.effectiveScreening().version().legalQuestions());
-
-            to.applicant().incomes().set(tenant.effectiveScreening().version().incomes());
-            to.applicant().assets().set(tenant.effectiveScreening().version().assets());
+            to.applicant().set(to.applicant().incomes(), screening.incomes());
+            to.applicant().set(to.applicant().assets(), screening.assets());
             break;
 
         case Guarantor:
@@ -205,6 +220,52 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
         for (CustomerScreeningPersonalAsset i : to.applicant().assets()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
+        }
+    }
+
+    private void saveApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
+        switch (bo.role().getValue()) {
+        case Applicant:
+        case CoApplicant:
+            LeaseTermTenant tenant = ProspectPortalContext.getLeaseTermTenant();
+
+            // customer:
+            Customer customer = tenant.leaseParticipant().customer();
+            Persistence.service().retrieve(customer.picture());
+            Persistence.service().retrieve(customer.emergencyContacts());
+            //
+            customer.set(customer.person(), to.applicant().person());
+            customer.set(customer.picture(), to.applicant().picture());
+
+            customer.emergencyContacts().clear();
+            customer.emergencyContacts().addAll(to.applicant().emergencyContacts());
+
+            Persistence.secureSave(customer);
+
+            // screening:
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), tenant, AttachLevel.Attached);
+            CustomerScreening.CustomerScreeningV screening = tenant.effectiveScreening().version();
+            //
+            screening.set(screening.currentAddress(), to.applicant().currentAddress());
+            screening.set(screening.previousAddress(), to.applicant().previousAddress());
+            screening.set(screening.legalQuestions(), to.applicant().legalQuestions());
+
+            screening.documents().clear();
+            screening.documents().addAll(to.applicant().documents());
+
+            screening.incomes().clear();
+            screening.incomes().addAll(to.applicant().incomes());
+
+            screening.assets().clear();
+            screening.assets().addAll(to.applicant().assets());
+
+            Persistence.secureSave(screening);
+
+            break;
+
+        case Guarantor:
+            // TODO process guarantor case here...
+            break;
         }
     }
 

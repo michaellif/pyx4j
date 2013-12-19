@@ -58,7 +58,7 @@ public class PortalBoxFolder<E extends IEntity> extends CEntityFolder<E> {
 
     @Override
     protected IFolderDecorator<E> createFolderDecorator() {
-        return new BoxFolderDecorator<E>(VistaImages.INSTANCE, "Add" + getItemName());
+        return new BoxFolderDecorator<E>(VistaImages.INSTANCE, "Add " + getItemName());
     }
 
     public String getItemName() {

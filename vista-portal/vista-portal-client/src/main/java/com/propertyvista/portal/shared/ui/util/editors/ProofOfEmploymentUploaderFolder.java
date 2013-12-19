@@ -30,7 +30,7 @@ public class ProofOfEmploymentUploaderFolder extends PortalBoxFolder<ProofOfEmpl
     private final static I18n i18n = I18n.get(ProofOfEmploymentUploaderFolder.class);
 
     public ProofOfEmploymentUploaderFolder() {
-        super(ProofOfEmploymentDocumentFolder.class, i18n.tr(" Proof Of Employment"));
+        super(ProofOfEmploymentDocumentFolder.class, i18n.tr("Proof Of Employment"));
     }
 
     @Override

@@ -68,9 +68,9 @@ public class PersonalInfoAStep extends ApplicationWizardStep {
     public void onValueSet() {
         super.onValueSet();
 
-        if (getWizard().isEditable()) {
-            fileUpload.setParentEntity(getValue());
-        }
+//        if (getWizard().isEditable()) {
+//            fileUpload.setParentEntity(getValue());
+//        }
     }
 
 }
