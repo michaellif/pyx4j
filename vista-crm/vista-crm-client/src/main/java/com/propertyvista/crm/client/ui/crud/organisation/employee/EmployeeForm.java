@@ -131,7 +131,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().birthDate()).setVisible(isManager || isSelfEditor);
         get(proto().homePhone()).setVisible(isManager || isSelfEditor);
         get(proto().mobilePhone()).setVisible(isManager || isSelfEditor);
-        get(proto().signature()).setVisible(isManager || isSelfEditor);
+        get(proto().signature().file()).setVisible(isManager || isSelfEditor);
         privilegesTab.setTabVisible(isSelfEditor || isManager);
         auditingTab.setTabVisible(isSelfEditor || isManager);
         alertsTab.setTabVisible(isSelfEditor || isManager);
@@ -164,7 +164,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().signature(), signature), true).customLabel(i18n.tr("Signature")).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().signature().file(), signature), true).customLabel(i18n.tr("Signature")).build());
         return main;
     }
 
