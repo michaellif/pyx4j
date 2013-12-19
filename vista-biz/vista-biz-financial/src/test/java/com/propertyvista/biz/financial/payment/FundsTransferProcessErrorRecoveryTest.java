@@ -92,4 +92,46 @@ public class FundsTransferProcessErrorRecoveryTest extends LeaseFinancialTestBas
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
 
     }
+
+    public void testSendSedonFile() throws Exception {
+        // Make a payment
+        PaymentRecord paymentRecord1 = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord1, null);
+        Persistence.service().commit();
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        SchedulerMock.runProcess(PmcProcessType.paymentsPadSend, (Date) null);
+        // Do not Acknowledgment the file.
+
+        //Prepare second file
+        PaymentRecord paymentRecord2 = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "200");
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord2, null);
+        Persistence.service().commit();
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        try {
+            SchedulerMock.runProcess(PmcProcessType.paymentsPadSend, (Date) null);
+            Assert.fail("Process should fail");
+        } catch (Error ok) {
+            Assert.assertTrue("Can't send expected", ok.getMessage().contains("Acknowledged or Canceled"));
+        }
+
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveAcknowledgment, (Date) null);
+
+        // Should be able to send the payment record again
+        SchedulerMock.runProcess(PmcProcessType.paymentsPadSend, (Date) null);
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
+
+        // Receive first Reconciliation
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveReconciliation, (Date) null);
+
+        // The second record was still not processes
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
+
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveAcknowledgment, (Date) null);
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveReconciliation, (Date) null);
+
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+
+    }
 }
