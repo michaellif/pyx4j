@@ -154,6 +154,13 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(caption = "Caledon Convenience Fee")
+        public static class PmcCaledonConvenienceFee extends VistaTermsAccess {
+            public PmcCaledonConvenienceFee() {
+                super(Target.TenantPaymentConvenienceFee);
+            }
+        }
+
         @PlaceProperties(caption = "Caledon Sole Propetorship Section Terms")
         public static class PmcCaledonSoleProprietorshipSection extends VistaTermsAccess {
             public PmcCaledonSoleProprietorshipSection() {
