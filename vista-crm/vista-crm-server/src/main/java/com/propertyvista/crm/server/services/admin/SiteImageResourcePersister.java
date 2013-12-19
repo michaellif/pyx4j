@@ -30,6 +30,10 @@ import com.propertyvista.domain.site.SiteImageResource;
 class SiteImageResourcePersister {
 
     public static void persist(SiteImageResource resource) {
+        // Replace upload SiteImageResource.
+        if (!resource.file().accessKey().isNull()) {
+            resource.id().setValue(null);
+        }
         Persistence.service().merge(resource);
     }
 
