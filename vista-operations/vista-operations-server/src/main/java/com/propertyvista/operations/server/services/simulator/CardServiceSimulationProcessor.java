@@ -183,7 +183,7 @@ public class CardServiceSimulationProcessor {
                 CaledonResponse caledonResponse = processCard(merchantAccount, caledonRequest);
                 response.responseCode = caledonResponse.code;
                 response.responsePaymentAuthorization = caledonResponse.authorizationNumber;
-                String feeAuthorizationNumber = "F" + new Random().nextInt(99999);
+                String feeAuthorizationNumber = "sF" + new Random().nextInt(99999);
                 response.responseFeeAuthorization = feeAuthorizationNumber;
 
             }
@@ -391,7 +391,7 @@ public class CardServiceSimulationProcessor {
                 } else {
                     card.balance().setValue(newBalance);
                     caledonResponse.code = "0000";
-                    caledonResponse.authorizationNumber = "T" + new Random().nextInt(99999);
+                    caledonResponse.authorizationNumber = "sT" + new Random().nextInt(99999);
                     caledonResponse.text = caledonResponse.authorizationNumber + " $" + transaction.amount().getStringView();
                     moveMoney(merchantAccount, transaction.amount().getValue());
                     if (caledonRequest instanceof CaledonRequestTokenWithFee) {
@@ -407,7 +407,7 @@ public class CardServiceSimulationProcessor {
                 } else {
                     card.reserved().setValue(transaction.amount().getValue().add(card.reserved().getValue(BigDecimal.ZERO)));
                     caledonResponse.code = "0000";
-                    caledonResponse.authorizationNumber = "T" + new Random().nextInt(99999);
+                    caledonResponse.authorizationNumber = "sT" + new Random().nextInt(99999);
                     caledonResponse.text = caledonResponse.authorizationNumber + " $" + transaction.amount().getStringView();
                 }
                 break;
