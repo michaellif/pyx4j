@@ -22,8 +22,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface DepositSlipPaymentRecordDTO extends IEntity {
 
-    IPrimitive<String> building();
-
     IPrimitive<String> unit();
 
     IPrimitive<String> tenantId();

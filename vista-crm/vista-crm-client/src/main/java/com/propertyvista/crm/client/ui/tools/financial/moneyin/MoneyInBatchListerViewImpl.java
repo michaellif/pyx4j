@@ -38,7 +38,7 @@ public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBat
                     new MemberColumnDescriptor.Builder(proto().depositSlipNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().totalReceivedAmount()).build(),
                     new MemberColumnDescriptor.Builder(proto().numberOfReceipts()).build(),
-                    new MemberColumnDescriptor.Builder(proto().postingStatus()).build()
+                    new MemberColumnDescriptor.Builder(proto().isPosted()).build()
             ));//@formatter:off
         }
         

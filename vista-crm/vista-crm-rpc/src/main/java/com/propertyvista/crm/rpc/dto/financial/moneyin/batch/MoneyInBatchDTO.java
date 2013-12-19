@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.dto.financial.moneyin.batch;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -36,8 +37,9 @@ public interface MoneyInBatchDTO extends IEntity {
 
     IPrimitive<Integer> numberOfReceipts();
 
-    // TODO may be an entity
-    IPrimitive<String> postingStatus();
+    // TODO may be an entity or Enum
+    @Caption(name = "Posted")
+    IPrimitive<Boolean> isPosted();
 
     IList<DepositSlipPaymentRecordDTO> payments();
 
