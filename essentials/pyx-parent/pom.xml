@@ -121,8 +121,8 @@
         <timestamp>${maven.build.timestamp}</timestamp>
 
         <gwtVersion>2.5.1</gwtVersion>
-        <gaeVersion>1.8.2</gaeVersion>
-        <gaeVersion.kindleit.deploy>1.8.0</gaeVersion.kindleit.deploy>
+        <gaeVersion>1.8.8</gaeVersion>
+        <gaeVersion.kindleit.deploy>1.8.6</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
 
 
