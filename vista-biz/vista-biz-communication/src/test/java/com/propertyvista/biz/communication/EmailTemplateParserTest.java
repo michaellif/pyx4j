@@ -15,14 +15,9 @@ package com.propertyvista.biz.communication;
 
 import junit.framework.TestCase;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 
 public class EmailTemplateParserTest extends TestCase {
-
-    private final static Logger log = LoggerFactory.getLogger(EmailTemplateParserTest.class);
 
     public void testLinkParserBoth() {
         String protocol = "http://";
@@ -44,5 +39,32 @@ public class EmailTemplateParserTest extends TestCase {
         String out = "<a href=\"" + protocol + url + "\">" + url + "</a>";
 
         assertEquals("Url only", out, EmailTemplateManager.parseTemplate(in, null));
+    }
+
+    public void testMultipleLinks() {
+        String protocol = "http://";
+        String url = "aaa.bbb.ccc/ddd?eee";
+        String body = "Click Here";
+
+        String in = "[[" + protocol + url + "|" + body + "]] blah-blah blah [[" + protocol + url + "|" + body + "]]";
+        String out = "<a href=\"" + protocol + url + "\">" + body + "</a> blah-blah blah <a href=\"" + protocol + url + "\">" + body + "</a>";
+
+        assertEquals("Multiple Urls", out, EmailTemplateManager.parseTemplate(in, null));
+    }
+
+    // incomplete expression should not change the output
+    public void testNegative() {
+        String protocol = "http://";
+        String url = "aaa.bbb.ccc/ddd?eee";
+        String body = "Click Here";
+
+        String in = "[[" + protocol + url + "|" + body;
+        assertEquals("Negative Test", in, EmailTemplateManager.parseTemplate(in, null));
+
+        in = "[[" + protocol + url + body;
+        assertEquals("Negative Test", in, EmailTemplateManager.parseTemplate(in, null));
+
+        in = protocol + url + "|" + body + "]]";
+        assertEquals("Negative Test", in, EmailTemplateManager.parseTemplate(in, null));
     }
 }
