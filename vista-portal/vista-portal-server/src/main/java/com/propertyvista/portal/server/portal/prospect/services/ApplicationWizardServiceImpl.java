@@ -110,6 +110,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         saveCoApplicants(bo, editableEntity);
         saveGuarantors(bo, editableEntity);
 
+        saveLegalTerms(bo, editableEntity);
+
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -254,7 +256,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             screening.assets().addAll(to.applicant().assets());
 
             Persistence.service().merge(screening);
-
             break;
 
         case Guarantor:
@@ -355,16 +356,64 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             grnt.email().setValue(ltg.leaseParticipant().customer().person().email().getValue());
 
             // remember corresponding customer: 
-            grnt.set(grnt.customer(), ltg.leaseParticipant().customer());
-            grnt.customer().setAttachLevel(AttachLevel.IdOnly);
+            grnt.set(grnt.guarantorId(), ltg);
+            grnt.guarantorId().setAttachLevel(AttachLevel.IdOnly);
 
             to.guarantors().add(grnt);
         }
     }
 
-    private void saveGuarantors(OnlineApplication bo, OnlineApplicationDTO editableEntity) {
-        // TODO Auto-generated method stub
+    private void saveGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
+        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
+                .getPrimaryKey());
 
+        // clear removed:
+        Iterator<LeaseTermGuarantor> it = leaseTerm.version().guarantors().iterator();
+        while (it.hasNext()) {
+            Boolean present = false;
+            LeaseTermGuarantor ltg = it.next();
+            Persistence.ensureRetrieve(ltg, AttachLevel.Attached);
+            if (!ltg.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
+                for (GuarantorDTO grnt : to.guarantors()) {
+                    if (!grnt.guarantorId().isNull() && grnt.guarantorId().getPrimaryKey().equals(ltg.getPrimaryKey())) {
+                        present = true;
+                        break;
+                    }
+                }
+                if (!present) {
+                    it.remove();
+                }
+            }
+        }
+
+        // add/update the rest:
+        for (GuarantorDTO grnt : to.guarantors()) {
+            if (grnt.guarantorId().isNull()) {
+                // create new:
+                LeaseTermGuarantor ltt = EntityFactory.create(LeaseTermGuarantor.class);
+                updateGuarantor(ltt, grnt);
+                leaseTerm.version().guarantors().add(ltt);
+            } else {
+                // update current:
+                for (LeaseTermGuarantor ltg : leaseTerm.version().guarantors()) {
+                    if (ltg.getPrimaryKey().equals(grnt.guarantorId().getPrimaryKey())) {
+                        Persistence.ensureRetrieve(ltg, AttachLevel.Attached);
+                        updateGuarantor(ltg, grnt);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // do not forget to save:
+        ServerSideFactory.create(LeaseFacade.class).persist(leaseTerm);
+    }
+
+    private void updateGuarantor(LeaseTermGuarantor ltt, GuarantorDTO cap) {
+        ltt.leaseParticipant().customer().person().name().firstName().setValue(cap.firstName().getValue());
+        ltt.leaseParticipant().customer().person().name().lastName().setValue(cap.lastName().getValue());
+
+        ltt.leaseParticipant().customer().person().email().setValue(cap.email().getValue());
     }
 
     private void fillUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
