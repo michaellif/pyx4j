@@ -48,7 +48,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             @Override
             public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
                 if (value != null) {
-                    assert (documentsPolicy != null);
+//                    assert (documentsPolicy != null);
                     if (documentsPolicy != null) {
                         int numOfRemainingDocs = documentsPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                         if (numOfRemainingDocs > 0) {

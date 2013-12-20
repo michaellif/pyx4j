@@ -295,14 +295,17 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         while (it.hasNext()) {
             Boolean present = false;
             LeaseTermTenant ltt = it.next();
-            for (CoapplicantDTO cap : to.coapplicants()) {
-                if (!cap.tenantId().isNull() && ltt.getPrimaryKey().equals(cap.tenantId().getPrimaryKey())) {
-                    present = true;
-                    break;
+            Persistence.ensureRetrieve(ltt, AttachLevel.Attached);
+            if (!ltt.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
+                for (CoapplicantDTO cap : to.coapplicants()) {
+                    if (!cap.tenantId().isNull() && cap.tenantId().getPrimaryKey().equals(ltt.getPrimaryKey())) {
+                        present = true;
+                        break;
+                    }
                 }
-            }
-            if (!present) {
-                it.remove();
+                if (!present) {
+                    it.remove();
+                }
             }
         }
 
@@ -317,6 +320,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 // update current:
                 for (LeaseTermTenant ltt : leaseTerm.version().tenants()) {
                     if (ltt.getPrimaryKey().equals(cap.tenantId().getPrimaryKey())) {
+                        Persistence.ensureRetrieve(ltt, AttachLevel.Attached);
                         updateCoApplicant(ltt, cap);
                         break;
                     }
