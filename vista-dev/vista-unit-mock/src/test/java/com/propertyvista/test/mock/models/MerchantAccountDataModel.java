@@ -63,6 +63,12 @@ public class MerchantAccountDataModel extends MockDataModel<MerchantAccount> {
             createMerchantAccount.accountNumber().setValue("548758665");
             createMerchantAccount.chargeDescription().setValue("Pay for Tests");
 
+            createMerchantAccount.setup().acceptedEcheck().setValue(true);
+            createMerchantAccount.setup().acceptedDirectBanking().setValue(true);
+            createMerchantAccount.setup().acceptedCreditCard().setValue(true);
+            createMerchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
+            createMerchantAccount.setup().acceptedInterac().setValue(true);
+
             NamespaceManager.runInTargetNamespace(VistaNamespace.operationsNamespace, new Callable<Void>() {
                 @Override
                 public Void call() {

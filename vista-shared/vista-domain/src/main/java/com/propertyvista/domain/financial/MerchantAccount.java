@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -27,6 +28,7 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
@@ -38,6 +40,20 @@ import com.propertyvista.domain.property.asset.building.Building;
 @ToStringFormat("{1}-{0}: {2}")
 @DiscriminatorValue("MerchantAccount")
 public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAttachments {
+
+    @EmbeddedEntity
+    public interface ElectronicPaymentSetup extends IEntity {
+
+        IPrimitive<Boolean> acceptedEcheck();
+
+        IPrimitive<Boolean> acceptedDirectBanking();
+
+        IPrimitive<Boolean> acceptedCreditCard();
+
+        IPrimitive<Boolean> acceptedCreditCardConvenienceFee();
+
+        IPrimitive<Boolean> acceptedInterac();
+    }
 
     @I18n
     enum MerchantAccountActivationStatus {
@@ -87,6 +103,8 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
     @NotNull
     @MemberColumn(notNull = true)
     IPrimitive<Boolean> invalid();
+
+    ElectronicPaymentSetup setup();
 
     @ReadOnly
     @Format("yyyy-MM-dd HH:mm")

@@ -59,6 +59,12 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
         TwoColumnFlexFormPanel tenantSureMaintenanceTab = new TwoColumnFlexFormPanel(i18n.tr("Vista Interfaces"));
         row = -1;
         tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableTenantSureMaintenance()), 5, true).build());
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableFundsTransferMaintenance()), 5, true).build());
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableCreditCardMaintenance()), 5, true).build());
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableCreditCardConvenienceFeeMaintenance()), 5, true).build());
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableInteracMaintenance()), 5, true).build());
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableEquifaxMaintenance()), 5, true).build());
+
         addTab(tenantSureMaintenanceTab);
 
     }

@@ -18,10 +18,24 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 
+/**
+ * All boolean are set to false by default.
+ */
+
 @Transient
 public interface VistaSystemMaintenanceState extends SystemMaintenanceState {
 
     @Caption(description = "When checked disables TenantSure on tenant portal")
     IPrimitive<Boolean> enableTenantSureMaintenance();
+
+    IPrimitive<Boolean> enableFundsTransferMaintenance();
+
+    IPrimitive<Boolean> enableCreditCardMaintenance();
+
+    IPrimitive<Boolean> enableCreditCardConvenienceFeeMaintenance();
+
+    IPrimitive<Boolean> enableInteracMaintenance();
+
+    IPrimitive<Boolean> enableEquifaxMaintenance();
 
 }

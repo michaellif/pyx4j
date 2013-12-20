@@ -201,6 +201,12 @@ public class MerchantAccountProcessor {
             account.status().setValue(MerchantAccountActivationStatus.Active);
             ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
 
+            account.setup().acceptedEcheck().setValue(true);
+            account.setup().acceptedDirectBanking().setValue(true);
+            account.setup().acceptedCreditCard().setValue(true);
+            account.setup().acceptedCreditCardConvenienceFee().setValue(true);
+            account.setup().acceptedInterac().setValue(true);
+
             setAccountInBuilding(model, account, pmc);
 
             counters.imported++;

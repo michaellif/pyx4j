@@ -92,6 +92,12 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                             merchantAccount.invalid().setValue(Boolean.FALSE);
                             merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
 
+                            merchantAccount.setup().acceptedEcheck().setValue(true);
+                            merchantAccount.setup().acceptedDirectBanking().setValue(true);
+                            merchantAccount.setup().acceptedCreditCard().setValue(true);
+                            merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
+                            merchantAccount.setup().acceptedInterac().setValue(true);
+
                             ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, merchantAccount);
                         }
                     }
@@ -104,6 +110,12 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         merchantAccount.bankId().setValue(ordinal + "00");
                         merchantAccount.branchTransitNumber().setValue("0100" + n);
                         merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
+
+                        merchantAccount.setup().acceptedEcheck().setValue(true);
+                        merchantAccount.setup().acceptedDirectBanking().setValue(true);
+                        merchantAccount.setup().acceptedCreditCard().setValue(true);
+                        merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
+                        merchantAccount.setup().acceptedInterac().setValue(true);
 
                         // Make one ElectronicPaymentsAllowed FALSE
                         if (n == internalAccounts) {
@@ -127,6 +139,12 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         merchantAccount.bankId().setValue("001");
                         merchantAccount.branchTransitNumber().setValue("3" + String.valueOf(offsetNumber));
                         merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
+
+                        merchantAccount.setup().acceptedEcheck().setValue(true);
+                        merchantAccount.setup().acceptedDirectBanking().setValue(true);
+                        merchantAccount.setup().acceptedCreditCard().setValue(true);
+                        merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
+                        merchantAccount.setup().acceptedInterac().setValue(true);
 
                         // Make one ElectronicPaymentsAllowed FALSE
                         if (n == internalAccounts) {

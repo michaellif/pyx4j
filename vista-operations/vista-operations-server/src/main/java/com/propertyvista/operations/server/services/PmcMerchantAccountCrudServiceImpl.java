@@ -62,6 +62,12 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
         ent.merchantAccount().status().setValue(MerchantAccountActivationStatus.PendindAppoval);
         ent.merchantAccount().invalid().setValue(Boolean.FALSE);
 
+        ent.merchantAccount().setup().acceptedEcheck().setValue(true);
+        ent.merchantAccount().setup().acceptedDirectBanking().setValue(true);
+        ent.merchantAccount().setup().acceptedCreditCard().setValue(true);
+        ent.merchantAccount().setup().acceptedCreditCardConvenienceFee().setValue(true);
+        ent.merchantAccount().setup().acceptedInterac().setValue(true);
+
         return ent;
     }
 

@@ -20,14 +20,17 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount.ElectronicPaymentSetup;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
@@ -38,6 +41,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 
 class PaymentUtils {
 
@@ -71,6 +75,33 @@ class PaymentUtils {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
         return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
+    }
+
+    public static ElectronicPaymentSetup getElectronicPaymentsSetup(BillingAccount billingAccountId) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
+        MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
+        if (isElectronicPaymentsSetup(merchantAccount)) {
+            return merchantAccount.setup();
+        } else {
+            return EntityFactory.create(ElectronicPaymentSetup.class);
+        }
+    }
+
+    public static ElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(BillingAccount billingAccountId) {
+        ElectronicPaymentSetup paymentsSetup = getElectronicPaymentsSetup(billingAccountId);
+        VistaSystemMaintenanceState systemState = (VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo();
+        if (systemState.enableCreditCardMaintenance().getValue(false)) {
+            paymentsSetup.acceptedCreditCard().setValue(false);
+            paymentsSetup.acceptedCreditCardConvenienceFee().setValue(false);
+        } else if (systemState.enableCreditCardConvenienceFeeMaintenance().getValue(false)) {
+            paymentsSetup.acceptedCreditCardConvenienceFee().setValue(false);
+        }
+
+        if (systemState.enableInteracMaintenance().getValue(false)) {
+            paymentsSetup.acceptedInterac().setValue(false);
+        }
+        return paymentsSetup;
     }
 
     public static boolean isElectronicPaymentsSetup(Lease leaseId) {
@@ -117,6 +148,7 @@ class PaymentUtils {
         }
 
         boolean electronicPaymentsAllowed = isElectronicPaymentsSetup(billingAccountId);
+        ElectronicPaymentSetup setup = getEffectiveElectronicPaymentsSetup(billingAccountId);
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
@@ -124,8 +156,8 @@ class PaymentUtils {
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }
-        return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, electronicPaymentsAllowed, paymentAccepted == PaymentAccepted.CashEquivalent,
-                paymentMethodSelectionPolicy);
+        return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, setup, electronicPaymentsAllowed,
+                paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy);
     }
 
     public static Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
@@ -140,7 +172,8 @@ class PaymentUtils {
         BillingAccount billingAccount = billingAccountId.duplicate();
         Persistence.ensureRetrieve(billingAccount, AttachLevel.Attached);
         PaymentAccepted paymentAccepted = billingAccount.paymentAccepted().getValue();
-        if ((paymentAccepted == PaymentAccepted.DoNotAccept) || !isElectronicPaymentsSetup(billingAccountId)) {
+        ElectronicPaymentSetup setup = getEffectiveElectronicPaymentsSetup(billingAccountId);
+        if ((paymentAccepted == PaymentAccepted.DoNotAccept) || !setup.acceptedCreditCard().getValue(false)) {
             return Collections.emptyList();
         }
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
@@ -150,7 +183,7 @@ class PaymentUtils {
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }
-        return PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, paymentAccepted == PaymentAccepted.CashEquivalent,
+        return PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, setup, paymentAccepted == PaymentAccepted.CashEquivalent,
                 paymentMethodSelectionPolicy, forConvenienceFeeOnly);
     }
 

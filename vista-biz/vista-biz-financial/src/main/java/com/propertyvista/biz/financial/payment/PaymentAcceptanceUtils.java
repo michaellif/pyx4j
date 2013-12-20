@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.financial.MerchantAccount.ElectronicPaymentSetup;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
@@ -35,7 +36,10 @@ public class PaymentAcceptanceUtils {
     @Transient
     public interface ElectronicPaymentMethodSelection extends PaymentTypeSelectionPolicy {
 
+        @Deprecated
         IPrimitive<Boolean> electronicPayments();
+
+        ElectronicPaymentSetup setup();
 
         IPrimitive<Boolean> notCashEquivalent();
     }
@@ -54,7 +58,7 @@ public class PaymentAcceptanceUtils {
 
         public boolean accept(ElectronicPaymentMethodSelection selection) {
             for (IPrimitive<?> member : require) {
-                if (selection.getMember(member.getFieldName()).getValue() != Boolean.TRUE) {
+                if (selection.getMember(member.getPath()).getValue() != Boolean.TRUE) {
                     return false;
                 }
             }
@@ -77,7 +81,7 @@ public class PaymentAcceptanceUtils {
 
         public boolean accept(ElectronicPaymentMethodSelection selection) {
             for (IPrimitive<?> member : require) {
-                if (selection.getMember(member.getFieldName()).getValue() != Boolean.TRUE) {
+                if (selection.getMember(member.getPath()).getValue() != Boolean.TRUE) {
                     return false;
                 }
             }
@@ -98,8 +102,8 @@ public class PaymentAcceptanceUtils {
     private static Collection<CardTypeAcceptance> residentPortalCardWithoutConvenienceFee = VistaTODO.convenienceFeeEnabled ? buildCardAcceptanceMatrixWithoutConvenienceFeePortal()
             : Collections.<CardTypeAcceptance> emptyList();
 
-    static Collection<PaymentType> getAllowedPaymentTypes(VistaApplication vistaApplication, boolean electronicPaymentsAllowed, boolean requireCashEquivalent,
-            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy) {
+    static Collection<PaymentType> getAllowedPaymentTypes(VistaApplication vistaApplication, ElectronicPaymentSetup setup, boolean electronicPaymentsAllowed,
+            boolean requireCashEquivalent, PaymentTypeSelectionPolicy paymentMethodSelectionPolicy) {
 
         Collection<PaymentTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
@@ -115,6 +119,7 @@ public class PaymentAcceptanceUtils {
 
         ElectronicPaymentMethodSelection selection = paymentMethodSelectionPolicy.duplicate(ElectronicPaymentMethodSelection.class);
         selection.electronicPayments().setValue(electronicPaymentsAllowed);
+        selection.setup().set(setup);
         selection.notCashEquivalent().setValue(!requireCashEquivalent);
 
         Collection<PaymentType> allowedPaymentTypes = new ArrayList<PaymentType>();
@@ -127,8 +132,8 @@ public class PaymentAcceptanceUtils {
         return Collections.unmodifiableCollection(allowedPaymentTypes);
     }
 
-    public static Collection<CreditCardType> getAllowedCreditCardTypes(VistaApplication vistaApplication, boolean requireCashEquivalent,
-            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy, boolean forConvenienceFeeOnly) {
+    public static Collection<CreditCardType> getAllowedCreditCardTypes(VistaApplication vistaApplication, ElectronicPaymentSetup setup,
+            boolean requireCashEquivalent, PaymentTypeSelectionPolicy paymentMethodSelectionPolicy, boolean forConvenienceFeeOnly) {
         Collection<CardTypeAcceptance> requireAcceptance;
         Collection<CardTypeAcceptance> feeAcceptance;
         switch (vistaApplication) {
@@ -146,6 +151,7 @@ public class PaymentAcceptanceUtils {
 
         ElectronicPaymentMethodSelection selection = paymentMethodSelectionPolicy.duplicate(ElectronicPaymentMethodSelection.class);
         selection.notCashEquivalent().setValue(!requireCashEquivalent);
+        selection.setup().set(setup);
 
         Collection<CreditCardType> allowedPaymentTypes = new ArrayList<CreditCardType>();
         for (CardTypeAcceptance acceptance : requireAcceptance) {
@@ -178,18 +184,19 @@ public class PaymentAcceptanceUtils {
         require.add(new PaymentTypeAcceptance(PaymentType.Check, p.acceptedCheck(), p.notCashEquivalent()));
         require.add(new PaymentTypeAcceptance(PaymentType.Check, p.acceptedCheck(), p.cashEquivalentCheck()));
 
-        require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.cashEquivalentEcheck()));
+        require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.setup().acceptedEcheck(), p.acceptedEcheck(), p.notCashEquivalent()));
+        require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.setup().acceptedEcheck(), p.acceptedEcheck(), p.cashEquivalentEcheck()));
 
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p.notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.setup().acceptedCreditCard(), p.acceptedCreditCardMasterCard(), p.notCashEquivalent()));
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.setup().acceptedCreditCard(), p.acceptedCreditCardMasterCard(), p
                 .cashEquivalentCreditCardMasterCard()));
 
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.cashEquivalentCreditCardVisa()));
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.setup().acceptedCreditCard(), p.acceptedCreditCardVisa(), p.notCashEquivalent()));
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.setup().acceptedCreditCard(), p.acceptedCreditCardVisa(), p
+                .cashEquivalentCreditCardVisa()));
 
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.cashEquivalentVisaDebit()));
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.setup().acceptedCreditCard(), p.acceptedVisaDebit(), p.notCashEquivalent()));
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.setup().acceptedCreditCard(), p.acceptedVisaDebit(), p.cashEquivalentVisaDebit()));
 
         return require;
     }
@@ -199,13 +206,14 @@ public class PaymentAcceptanceUtils {
         Collection<PaymentTypeAcceptance> require = new ArrayList<PaymentTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
 
-        require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.residentPortalEcheck(), p.notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.residentPortalEcheck(), p
+        require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.setup().acceptedEcheck(), p.acceptedEcheck(), p.residentPortalEcheck(), p
+                .notCashEquivalent()));
+        require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.setup().acceptedEcheck(), p.acceptedEcheck(), p.residentPortalEcheck(), p
                 .cashEquivalentEcheck()));
 
         if (VistaTODO.convenienceFeeEnabled) {
-            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.notCashEquivalent()));
-            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.cashEquivalentCreditCardMasterCard()));
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.setup().acceptedCreditCard(), p.notCashEquivalent()));
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.setup().acceptedCreditCard(), p.cashEquivalentCreditCardMasterCard()));
         } else {
             require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p
                     .residentPortalCreditCardMasterCard(), p.notCashEquivalent()));
@@ -223,15 +231,15 @@ public class PaymentAcceptanceUtils {
                     .cashEquivalentVisaDebit()));
         }
 
-        require.add(new PaymentTypeAcceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedDirectBanking(), p.residentPortalDirectBanking(), p
-                .notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedDirectBanking(), p.residentPortalDirectBanking(), p
-                .cashEquivalentDirectBanking()));
+        require.add(new PaymentTypeAcceptance(PaymentType.DirectBanking, p.setup().acceptedDirectBanking(), p.acceptedDirectBanking(), p
+                .residentPortalDirectBanking(), p.notCashEquivalent()));
+        require.add(new PaymentTypeAcceptance(PaymentType.DirectBanking, p.setup().acceptedDirectBanking(), p.acceptedDirectBanking(), p
+                .residentPortalDirectBanking(), p.cashEquivalentDirectBanking()));
 
         if (!VistaTODO.removedForProduction && false) {
-            require.add(new PaymentTypeAcceptance(PaymentType.Interac, p.electronicPayments(), p.acceptedInterac(), p.residentPortalInterac(), p
+            require.add(new PaymentTypeAcceptance(PaymentType.Interac, p.setup().acceptedInterac(), p.acceptedInterac(), p.residentPortalInterac(), p
                     .notCashEquivalent()));
-            require.add(new PaymentTypeAcceptance(PaymentType.Interac, p.electronicPayments(), p.acceptedInterac(), p.residentPortalInterac(), p
+            require.add(new PaymentTypeAcceptance(PaymentType.Interac, p.setup().acceptedInterac(), p.acceptedInterac(), p.residentPortalInterac(), p
                     .cashEquivalentInterac()));
 
         }
@@ -297,11 +305,12 @@ public class PaymentAcceptanceUtils {
         Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
 
-        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.acceptedCreditCardMasterCard(), p.residentPortalCreditCardMasterCard()));
+        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.setup().acceptedCreditCard(), p.acceptedCreditCardMasterCard(), p
+                .residentPortalCreditCardMasterCard()));
 
-        require.add(new CardTypeAcceptance(CreditCardType.Visa, p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa()));
+        require.add(new CardTypeAcceptance(CreditCardType.Visa, p.setup().acceptedCreditCard(), p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa()));
 
-        require.add(new CardTypeAcceptance(CreditCardType.VisaDebit, p.acceptedVisaDebit(), p.residentPortalVisaDebit()));
+        require.add(new CardTypeAcceptance(CreditCardType.VisaDebit, p.setup().acceptedCreditCard(), p.acceptedVisaDebit(), p.residentPortalVisaDebit()));
 
         return require;
     }
