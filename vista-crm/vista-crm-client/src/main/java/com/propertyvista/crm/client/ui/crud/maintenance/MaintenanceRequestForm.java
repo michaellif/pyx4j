@@ -181,14 +181,19 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // --------------------------------------------------------------------------------------------------------------------
 
         unitAccessPanel = new TwoColumnFlexFormPanel();
-        unitAccessPanel.setH1(++row, 0, 2, i18n.tr("Unit Access"));
-        panel.setWidget(++row, 0, 2, unitAccessPanel);
+        int innerRow = -1;
+        unitAccessPanel.setH1(++innerRow, 0, 2, i18n.tr("Unit Access"));
 
         accessPanel = new TwoColumnFlexFormPanel();
-        accessPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().permissionToEnter()), 20, true).build());
+        unitAccessPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().permissionToEnter()), 20, true).build());
 
         get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
-
+        get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                accessPanel.setVisible(event.getValue());
+            }
+        });
         // --------------------------------------------------------------------------------------------------------------------
 
         // --------------------------------------------------------------------------------------------------------------------
@@ -202,17 +207,17 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         accessPanel.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().preferredDate2()), 10).build());
         accessPanel.setWidget(2, 1, new FormDecoratorBuilder(inject(proto().preferredTime2()), 10).build());
 
+        unitAccessPanel.setWidget(++innerRow, 0, 2, accessPanel);
         get(proto().preferredDate1()).addValueValidator(new FutureDateValidator());
         get(proto().preferredDate2()).addValueValidator(new FutureDateValidator());
 
-        panel.setWidget(++row, 0, 2, accessPanel);
+        panel.setWidget(++row, 0, 2, unitAccessPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
 
         statusPanel = new TwoColumnFlexFormPanel();
         statusPanel.setH1(0, 0, 3, i18n.tr("Status"));
-
-        int innerRow = 0;
+        innerRow = 0;
         statusPanel.setWidget(++innerRow, 0, 2,
                 new FormDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10, true).build());
         statusPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10, true).build());
@@ -262,14 +267,14 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                accessPanel.setVisible(event.getValue());
                 if (!event.getValue().booleanValue()) {
                     unitSelector.setValue(null);
                 }
-                unitSelector.setVisible(event.getValue());
-                get(proto().permissionToEnter()).setVisible(event.getValue());
-                unitAccessPanel.setVisible(event.getValue());
+                unitSelector.setVisible(event.getValue().booleanValue());
+                get(proto().permissionToEnter()).setValue(event.getValue());
+                unitAccessPanel.setVisible(event.getValue().booleanValue());
                 getValue().category().set(null);
+                accessPanel.setVisible(getValue().permissionToEnter().isBooleanTrue() && event.getValue().booleanValue());
                 setMaintenanceRequestCategoryMeta();
             }
         });
@@ -279,15 +284,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     @Override
     protected MaintenanceRequestDTO preprocessValue(MaintenanceRequestDTO value, boolean fireEvent, boolean populate) {
-        if (value.reportedForOwnUnit().isNull()) {
-            value.reportedForOwnUnit().setValue(true);
-            accessPanel.setVisible(true);
-            unitSelector.setVisible(true);
-            get(proto().permissionToEnter()).setVisible(true);
-            unitAccessPanel.setVisible(true);
-        }
-        if (value.permissionToEnter().isNull()) {
-            value.permissionToEnter().setValue(true);
+        if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
+            if (value.reportedForOwnUnit().isNull()) {
+                value.reportedForOwnUnit().setValue(true);
+            }
+            if (value.permissionToEnter().isNull()) {
+                value.permissionToEnter().setValue(value.reportedForOwnUnit().isBooleanTrue()); // according reportedForOwnUnit
+            }
         }
         return value;
     }
@@ -362,7 +365,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         statusPanel.setVisible(!mr.id().isNull());
         surveyPanel.setVisible(phase == StatusPhase.Resolved);
-        accessPanel.setVisible(getValue().permissionToEnter().isBooleanTrue() && getValue().reportedForOwnUnit().getValue());
+
+        unitSelector.setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+        unitAccessPanel.setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+        accessPanel.setVisible(mr.permissionToEnter().isBooleanTrue() && getValue().reportedForOwnUnit().isBooleanTrue());
+        setMaintenanceRequestCategoryMeta();
+
     }
 
     class BuildingSelector extends CEntitySelectorHyperlink<Building> {

@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -47,8 +44,6 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
     private final static I18n i18n = I18n.get(MaintenanceRequestWizard.class);
 
-    private final Map<Boolean, MaintenanceRequestMetadata> cachedMeta = new HashMap<Boolean, MaintenanceRequestMetadata>();
-
     private MaintenanceRequestMetadata meta;
 
     private MaintenanceRequestCategoryChoice mrCategory;
@@ -73,10 +68,6 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         if (meta == null || meta.isNull()) {
             throw new RuntimeException(i18n.tr("Maintenance Metadata not configured."));
         }
-        assignMetaAccordingIssueType(true, meta);
-    }
-
-    private void assignMetaAccordingIssueType(Boolean issueType, MaintenanceRequestMetadata meta) {
         this.meta = meta;
         initSelectors();
     }
@@ -135,10 +126,13 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                permissionPanel.setVisible(event.getValue());
+                permissionPanel.setVisible(event.getValue().booleanValue());
                 getValue().category().set(null);
+                if (!event.getValue().booleanValue()) {
+                    getValue().unit().set(null);
+                }
                 categoryPanel.clear();
-                assignMetaAccordingIssueType(event.getValue(), meta);
+                initSelectors();
             }
         });
 
@@ -157,12 +151,13 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
     @Override
     protected MaintenanceRequestDTO preprocessValue(MaintenanceRequestDTO value, boolean fireEvent, boolean populate) {
-        if (value.reportedForOwnUnit().isNull()) {
-            value.reportedForOwnUnit().setValue(true);
-            assignMetaAccordingIssueType(true, this.meta);
-        }
-        if (value.permissionToEnter().isNull()) {
-            value.permissionToEnter().setValue(true);
+        if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
+            if (value.reportedForOwnUnit().isNull()) {
+                value.reportedForOwnUnit().setValue(true);
+            }
+            if (value.permissionToEnter().isNull()) {
+                value.permissionToEnter().setValue(value.reportedForOwnUnit().isBooleanTrue()); // according reportedForOwnUnit
+            }
         }
         return value;
     }

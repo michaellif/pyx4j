@@ -230,6 +230,11 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         if (subCategories == null) {
             return null;
         }
+
+        // performance optimization: filter only 1t level
+        if (parent != null && parent.parent != null) {
+            return subCategories;
+        }
         List<MaintenanceRequestCategory> categories = new ArrayList<MaintenanceRequestCategory>();
         for (MaintenanceRequestCategory c : subCategories) {
             if ((c.type() == null || c.type().isNull() || (c.type().getValue().equals(IssueElementType.ApartmentUnit) && isForUnit) || (!isForUnit && !c.type()
