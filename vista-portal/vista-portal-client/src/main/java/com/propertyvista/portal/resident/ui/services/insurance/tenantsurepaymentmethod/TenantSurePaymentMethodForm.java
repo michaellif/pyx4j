@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CSignature;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
 public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePaymentMethod> {
@@ -77,13 +79,18 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
         content.setBR(row, 0, 2);
         content.setWidget(++row, 0, 2, createPapAgreementTermsPanel());
         content.setBR(++row, 0, 2);
-        content.setWidget(
-                ++row,
-                0,
-                2,
-                inject(proto().preAuthorizedAgreementSignature(),
-                        new CSignature(SignatureType.AgreeBox, i18n.tr("I agree to the preauthorized payments agreement"))));
-        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        content.setWidget(++row, 0, 2,
+                new FormWidgetDecoratorBuilder(inject(proto().preAuthorizedAgreementSignature())).customLabel("").labelPosition(LabelPosition.hidden)
+                        .contentWidth("250px").componentWidth("250px").build());
+        get(proto().preAuthorizedAgreementSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
+            @Override
+            public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
+                if (!value.agree().isBooleanTrue()) {
+                    return new ValidationError(component, i18n.tr("You must agree to the Pre-authorized Agreement Terms to continue"));
+                }
+                return null;
+            }
+        });
         return content;
     }
 

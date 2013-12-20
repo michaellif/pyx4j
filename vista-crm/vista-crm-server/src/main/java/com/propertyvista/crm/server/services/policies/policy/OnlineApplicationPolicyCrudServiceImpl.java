@@ -16,12 +16,12 @@ package com.propertyvista.crm.server.services.policies.policy;
 import com.propertyvista.crm.rpc.services.policies.policy.OnlineApplicationPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.OnlineApplicationPolicyDTO;
-import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
+import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 
-public class OnlineApplicationPolicyCrudServiceImpl extends GenericPolicyCrudService<OnlineApplicationPolicy, OnlineApplicationPolicyDTO> implements
+public class OnlineApplicationPolicyCrudServiceImpl extends GenericPolicyCrudService<OnlineApplicationLegalPolicy, OnlineApplicationPolicyDTO> implements
         OnlineApplicationPolicyCrudService {
 
     public OnlineApplicationPolicyCrudServiceImpl() {
-        super(OnlineApplicationPolicy.class, OnlineApplicationPolicyDTO.class);
+        super(OnlineApplicationLegalPolicy.class, OnlineApplicationPolicyDTO.class);
     }
 }

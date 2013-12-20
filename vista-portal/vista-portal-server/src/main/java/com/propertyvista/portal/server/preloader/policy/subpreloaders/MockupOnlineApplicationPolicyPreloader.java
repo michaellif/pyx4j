@@ -13,60 +13,45 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
+import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm.TargetRole;
-import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
-import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<OnlineApplicationPolicy> {
-
-    private final static I18n i18n = I18n.get(MockupOnlineApplicationPolicyPreloader.class);
-
-    private AvailableLocale defaultLocale;
+public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<OnlineApplicationLegalPolicy> {
 
     public MockupOnlineApplicationPolicyPreloader() {
-        super(OnlineApplicationPolicy.class);
+        super(OnlineApplicationLegalPolicy.class);
     }
 
     @Override
-    protected OnlineApplicationPolicy createPolicy(StringBuilder log) {
-        OnlineApplicationPolicy policy = EntityFactory.create(OnlineApplicationPolicy.class);
+    protected OnlineApplicationLegalPolicy createPolicy(StringBuilder log) {
+        OnlineApplicationLegalPolicy policy = EntityFactory.create(OnlineApplicationLegalPolicy.class);
 
         // add legal terms
-        policy.terms().add(randomTerm());
-        policy.terms().add(randomTerm());
+        policy.terms().add(createTerm(SignatureType.None));
+        policy.terms().add(createTerm(SignatureType.AgreeBox));
+        policy.terms().add(createTerm(SignatureType.AgreeBoxAndFullName));
+        policy.terms().add(createTerm(SignatureType.FullName));
+        policy.terms().add(createTerm(SignatureType.Initials));
 
         return policy;
     }
 
-    private OnlineApplicationLegalTerm randomTerm() {
+    private OnlineApplicationLegalTerm createTerm(SignatureType type) {
         OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
 
-        term.signatureType().setValue(RandomUtil.randomEnum(SignatureType.class));
+        term.signatureType().setValue(type);
         term.applyToRole().setValue(TargetRole.Any);
         term.title().setValue(CommonsGenerator.lipsumShort());
-        term.body().setValue(CommonsGenerator.lipsum());
+        term.body().setValue(CommonsGenerator.lipsum() + " <i>" + CommonsGenerator.lipsumShort() + "</i>" + CommonsGenerator.lipsum());
 
         return term;
     }
 
-    private AvailableLocale getDefaultLocale() {
-        if (defaultLocale == null) {
-            EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lang(), CompiledLocale.en));
-            defaultLocale = Persistence.service().retrieve(criteria);
-        }
-        return defaultLocale;
-    }
 }

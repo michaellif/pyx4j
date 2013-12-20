@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.prospect.SignedLegalTerm;
+import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 
 @Transient
 public interface OnlineApplicationDTO extends IEntity {
@@ -56,5 +56,5 @@ public interface OnlineApplicationDTO extends IEntity {
 
     UnitOptionsSelectionDTO unitOptionsSelection();
 
-    IList<SignedLegalTerm> legalTerms();
+    IList<SignedOnlineApplicationLegalTerm> legalTerms();
 }

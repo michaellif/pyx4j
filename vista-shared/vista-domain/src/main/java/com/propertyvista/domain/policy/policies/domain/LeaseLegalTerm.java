@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
 
-import com.propertyvista.domain.policy.policies.LeaseSigningPolicy;
+import com.propertyvista.domain.policy.policies.LeaseLegalPolicy;
 
 public interface LeaseLegalTerm extends IEntity {
 
@@ -34,7 +34,7 @@ public interface LeaseLegalTerm extends IEntity {
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
-    LeaseSigningPolicy policy();
+    LeaseLegalPolicy policy();
 
     IPrimitive<String> title();
 

@@ -17,26 +17,26 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.policy.policies.LeaseSigningPolicy;
+import com.propertyvista.domain.policy.policies.LeaseLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
-public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<LeaseSigningPolicy> {
+public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<LeaseLegalPolicy> {
 
     private final static I18n i18n = I18n.get(MockupLeaseSigningPolicyPreloader.class);
 
     private AvailableLocale defaultLocale;
 
     public MockupLeaseSigningPolicyPreloader() {
-        super(LeaseSigningPolicy.class);
+        super(LeaseLegalPolicy.class);
     }
 
     @Override
-    protected LeaseSigningPolicy createPolicy(StringBuilder log) {
-        LeaseSigningPolicy policy = EntityFactory.create(LeaseSigningPolicy.class);
+    protected LeaseLegalPolicy createPolicy(StringBuilder log) {
+        LeaseLegalPolicy policy = EntityFactory.create(LeaseLegalPolicy.class);
 
         // add legal terms
         policy.terms().add(randomTerm());

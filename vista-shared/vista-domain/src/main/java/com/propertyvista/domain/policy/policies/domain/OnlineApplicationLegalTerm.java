@@ -21,14 +21,17 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISignature.SignatureType;
 
-import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
+import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
+@ToStringFormat("{0}")
 public interface OnlineApplicationLegalTerm extends IEntity {
 
     public enum TargetRole {
@@ -55,8 +58,9 @@ public interface OnlineApplicationLegalTerm extends IEntity {
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
-    OnlineApplicationPolicy policy();
+    OnlineApplicationLegalPolicy policy();
 
+    @ToString(index = 0)
     IPrimitive<String> title();
 
     @NotNull

@@ -32,7 +32,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
+import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm.TargetRole;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -54,7 +54,7 @@ import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
-import com.propertyvista.domain.tenant.prospect.SignedLegalTerm;
+import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
@@ -368,14 +368,14 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public List<SignedLegalTerm> getOnlineApplicationTerms(OnlineApplication app) {
-        List<SignedLegalTerm> terms = new ArrayList<SignedLegalTerm>();
-        OnlineApplicationPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                app.masterOnlineApplication().leaseApplication().lease().unit().building(), OnlineApplicationPolicy.class);
+    public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationTerms(OnlineApplication app) {
+        List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
+        OnlineApplicationLegalPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                app.masterOnlineApplication().leaseApplication().lease().unit().building(), OnlineApplicationLegalPolicy.class);
         for (OnlineApplicationLegalTerm term : onlineApplicationPolicy.terms()) {
             TargetRole termRole = term.applyToRole().getValue();
             if (termRole.matchesApplicationRole(app.role().getValue())) {
-                SignedLegalTerm signedTerm = EntityFactory.create(SignedLegalTerm.class);
+                SignedOnlineApplicationLegalTerm signedTerm = EntityFactory.create(SignedOnlineApplicationLegalTerm.class);
                 signedTerm.term().set(term);
                 signedTerm.signature().signatureType().set(term.signatureType());
                 terms.add(signedTerm);

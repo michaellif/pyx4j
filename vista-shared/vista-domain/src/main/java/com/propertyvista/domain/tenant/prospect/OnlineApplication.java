@@ -91,7 +91,7 @@ public interface OnlineApplication extends IEntity {
     IPrimitive<Role> role();
 
     @Owned
-    IList<SignedLegalTerm> legalTerms();
+    IList<SignedOnlineApplicationLegalTerm> legalTerms();
 
     IPrimitive<Status> status();
 

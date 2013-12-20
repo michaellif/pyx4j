@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntitySuggestBox;
@@ -35,7 +34,7 @@ public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
     public CComponent<?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().equals(CustomerSignature.class)) {
-            return new CSignature(SignatureType.AgreeBox, mm.getCaption());
+            return new CSignature(mm.getCaption());
         } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {

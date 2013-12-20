@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application;
+package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -21,34 +21,35 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
+import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
+import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
+public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
 
-    private static final I18n i18n = I18n.get(CoapplicantsFolder.class);
+    private static final I18n i18n = I18n.get(GuarantorsFolder.class);
 
-    private final ApplicationWizardView view;
+    private final ApplicationWizardViewImpl view;
 
-    public CoapplicantsFolder(ApplicationWizardView view) {
-        super(CoapplicantDTO.class, i18n.tr("Occupant"));
+    public GuarantorsFolder(ApplicationWizardViewImpl view) {
+        super(GuarantorDTO.class, i18n.tr("Guarantor"));
         this.view = view;
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof CoapplicantDTO) {
-            return new CoapplicantForm();
+        if (member instanceof GuarantorDTO) {
+            return new GuarantorForm();
         } else {
             return super.create(member);
         }
     }
 
-    class CoapplicantForm extends CEntityForm<CoapplicantDTO> {
+    class GuarantorForm extends CEntityForm<GuarantorDTO> {
 
-        public CoapplicantForm() {
-            super(CoapplicantDTO.class);
+        public GuarantorForm() {
+            super(GuarantorDTO.class);
         }
 
         @Override
@@ -56,7 +57,6 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());

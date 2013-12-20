@@ -28,8 +28,9 @@ public class LegalStep extends ApplicationWizardStep {
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
-        // TODO : real content goes here...
+        panel.setWidget(++row, 0, inject(proto().legalTerms(), new LegalTermsFolder(getView())));
 
         return panel;
     }
+
 }

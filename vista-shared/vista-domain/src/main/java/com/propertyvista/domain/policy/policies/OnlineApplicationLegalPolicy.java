@@ -19,13 +19,13 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
+import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@DiscriminatorValue("LeaseSigningPolicy")
+@DiscriminatorValue("OnlineAppPolicy")
 @LowestApplicableNode(value = Building.class)
-public interface LeaseSigningPolicy extends Policy {
+public interface OnlineApplicationLegalPolicy extends Policy {
 
     @Owned
-    IList<LeaseLegalTerm> terms();
+    IList<OnlineApplicationLegalTerm> terms();
 }
