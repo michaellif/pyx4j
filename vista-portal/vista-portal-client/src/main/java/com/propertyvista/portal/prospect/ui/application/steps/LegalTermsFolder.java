@@ -30,8 +30,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
-import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
-import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -77,15 +75,6 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLeg
 
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().signature())).customLabel("").labelPosition(LabelPosition.hidden)
                     .contentWidth("250px").componentWidth("250px").build());
-            get(proto().signature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
-                @Override
-                public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
-                    if (value != null && !value.agree().isBooleanTrue()) {
-                        return new ValidationError(component, i18n.tr("You must agree to the Terms to continue"));
-                    }
-                    return null;
-                }
-            });
 
             return mainPanel;
         }

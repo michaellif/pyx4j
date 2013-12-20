@@ -59,20 +59,6 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
     }
 
     @Override
-    public void addValidations() {
-        super.addValidations();
-        get(proto().preAuthorizedAgreementSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
-            @Override
-            public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
-                if (value != null && !value.agree().isBooleanTrue()) {
-                    return new ValidationError(component, i18n.tr("You must agree to preauthorized payment agreement to continue"));
-                }
-                return null;
-            }
-        });
-    }
-
-    @Override
     public IsWidget createContent() {
         BasicFlexFormPanel content = (BasicFlexFormPanel) super.createContent();
         int row = content.getRowCount() + 1;
@@ -82,15 +68,6 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
         content.setWidget(++row, 0, 2,
                 new FormWidgetDecoratorBuilder(inject(proto().preAuthorizedAgreementSignature())).customLabel("").labelPosition(LabelPosition.hidden)
                         .contentWidth("250px").componentWidth("250px").build());
-        get(proto().preAuthorizedAgreementSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
-            @Override
-            public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
-                if (!value.agree().isBooleanTrue()) {
-                    return new ValidationError(component, i18n.tr("You must agree to the Pre-authorized Agreement Terms to continue"));
-                }
-                return null;
-            }
-        });
         return content;
     }
 
