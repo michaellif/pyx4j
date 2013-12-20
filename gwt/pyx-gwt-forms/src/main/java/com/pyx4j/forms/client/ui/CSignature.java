@@ -66,12 +66,12 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
                         }
                     case FullName:
                         if (value.fullName().getValue() == null || value.fullName().getValue().trim().equals("")) {
-                            return new ValidationError(component, i18n.tr("You must type your First and Last name to continue"));
+                            return new ValidationError(component, i18n.tr("You must agree to the Terms by typing your First and Last name to continue"));
                         }
                         break;
                     case Initials:
                         if (value.initials().getValue() == null || value.initials().getValue().trim().equals("")) {
-                            return new ValidationError(component, i18n.tr("You must type your Initials to continue"));
+                            return new ValidationError(component, i18n.tr("You must agree to the Terms by typing your Initials to continue"));
                         }
                         break;
                     }
