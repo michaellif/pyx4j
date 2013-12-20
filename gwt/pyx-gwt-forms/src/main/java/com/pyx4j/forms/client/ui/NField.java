@@ -132,7 +132,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
     @Override
     public void init() {
-        setViewable(true);
+        setViewable(cComponent.isViewable());
     }
 
     protected void onEditorInit() {

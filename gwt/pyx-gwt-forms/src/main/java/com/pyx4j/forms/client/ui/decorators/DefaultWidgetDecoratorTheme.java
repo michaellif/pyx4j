@@ -37,7 +37,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
 
         WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder,
 
-        EntityContainerDecorator, EntityContainerDecoratorCollapsedCaption
+        EntityContainerDecorator, EntityContainerDecoratorToolbar, EntityContainerDecoratorCollapsedCaption
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -156,6 +156,10 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style = new Style(".", StyleName.EntityContainerDecoratorCollapsedCaption);
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.EntityContainerDecoratorToolbar);
+        style.addProperty("height", "20px");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityContainerDecorator);

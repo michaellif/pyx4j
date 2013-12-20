@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.IWidget;
 
 public interface INativeComponent<E> extends IWidget {
 
-    CComponent<?> getCComponent();
+    CComponent<E> getCComponent();
 
     boolean isViewable();
 

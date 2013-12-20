@@ -61,6 +61,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
     public EntityContainerDecoratorToolbar(WidgetsImages images) {
 
         setWidth("100%");
+        setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecoratorToolbar.name());
 
         captionHolder = new HorizontalPanel();
         captionHolder.getElement().getStyle().setMarginLeft(50, Unit.PX);

@@ -33,8 +33,8 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -95,7 +95,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
             }
         });
 
-        VerticalPanel mainPanel = new VerticalPanel();
+        FlowPanel mainPanel = new FlowPanel();
         mainPanel.setWidth("100%");
         collapsablePanel.setWidget(mainPanel);
 

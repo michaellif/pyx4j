@@ -70,10 +70,6 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style.addProperty("display", "block");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderBoxItem, " .", StyleName.EntityFolder);
-        style.addProperty("width", "100%");
-        addStyle(style);
-
         style = new Style(".", StyleName.EntityFolderBoxDecorator);
         addStyle(style);
 
@@ -92,7 +88,11 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderBoxItem);
-        style.addProperty("padding", "18px 6px 6px");
+        style.addProperty("padding", "6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.EntityFolderBoxItem, " .", StyleName.EntityFolder);
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderRowItemDecorator);

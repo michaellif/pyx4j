@@ -21,24 +21,28 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
 
 import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.forms.client.ui.NSignature.SignaturePanel;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
-import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.IFocusWidget;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.TextBox;
 
-public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSignature> {
+public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignature, Label> {
+
+    private ISignature signature;
 
     public NSignature(CSignature cComponent) {
         super(cComponent);
@@ -50,20 +54,103 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
     }
 
     @Override
+    protected Label createViewer() {
+        return new Label();
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        if (getEditor() != null) {
+            getEditor().init(SignatureType.None);
+        }
+    }
+
+    @Override
     public void setNativeValue(ISignature value) {
-        super.setNativeValue(value);
-        if (value != null && getEditor() != null) {
-            getEditor().checkBox.setValue(value.agree().getValue());
+        if (value == null || value.isNull()) {
+            signature = null;
+            if (getEditor() != null) {
+                getEditor().checkBox.setValue(null);
+                getEditor().textBox.setValue(null);
+                getEditor().init(SignatureType.None);
+            }
+            if (getViewer() != null) {
+                getViewer().setText(null);
+            }
+        } else {
+            signature = value.duplicate();
+            if (getEditor() != null) {
+                getEditor().checkBox.setValue(signature.agree().getValue());
+                switch (signature.signatureType().getValue()) {
+                case AgreeBox:
+                case None:
+                    getEditor().textBox.setValue(null);
+                    break;
+                case AgreeBoxAndFullName:
+                case FullName:
+                    getEditor().textBox.setValue(signature.fullName().getValue());
+                    break;
+                case Initials:
+                    getEditor().textBox.setValue(signature.initials().getValue());
+                    break;
+                }
+            }
+            if (getViewer() != null) {
+                if (signature.agree().isBooleanTrue()) {
+                    switch (signature.signatureType().getValue()) {
+                    case AgreeBox:
+                        getViewer().setText(null);
+                        break;
+                    case AgreeBoxAndFullName:
+                    case FullName:
+                        getViewer().setText(signature.fullName().getValue());
+                        break;
+                    case Initials:
+                        getViewer().setText(signature.initials().getValue());
+                        break;
+                    case None:
+                        break;
+                    }
+                } else {
+                    getViewer().setText(null);
+                }
+            }
+            getEditor().init(signature.signatureType().getValue());
         }
     }
 
     @Override
     public ISignature getNativeValue() throws java.text.ParseException {
-        ISignature signature = super.getNativeValue();
-        if (getEditor() != null) {
-            signature.agree().setValue(getEditor().checkBox.getValue());
+        if (isViewable()) {
+            assert false : "getNativeValue() shouldn't be called in viewable mode";
+            return null;
+        } else {
+            if (getEditor() != null && signature != null) {
+                signature.agree().setValue(getEditor().checkBox.getValue());
+                switch (signature.signatureType().getValue()) {
+                case AgreeBox:
+                case None:
+                    signature.fullName().setValue(null);
+                    signature.initials().setValue(null);
+                    break;
+                case AgreeBoxAndFullName:
+                case FullName:
+                    signature.fullName().setValue(getEditor().textBox.getText());
+                    signature.initials().setValue(null);
+                    break;
+                case Initials:
+                    signature.initials().setValue(getEditor().textBox.getText());
+                    signature.fullName().setValue(null);
+                    break;
+                }
+            }
+            if (signature == null) {
+                return null;
+            } else {
+                return signature.duplicate();
+            }
         }
-        return signature.duplicate();
     }
 
     @Override
@@ -80,29 +167,41 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
 
     }
 
-    class SignaturePanel extends FlowPanel implements ITextWidget {
+    class SignaturePanel extends FlowPanel implements IFocusWidget {
 
         private final CheckBox checkBox;
 
         private final TextBox textBox;
+
+        private final Anchor checkBoxAnchor;
 
         public SignaturePanel() {
 
             checkBox = new CheckBox(getCComponent().getCheckBoxText());
             add(checkBox);
             add(new InlineHTML("&nbsp;"));
+            checkBoxAnchor = new Anchor(null, new Command() {
+
+                @Override
+                public void execute() {
+                    if (getCComponent().getCheckBoxAnchorCommand() != null) {
+                        getCComponent().getCheckBoxAnchorCommand().execute();
+                    }
+                }
+            });
+            add(checkBoxAnchor);
             textBox = new TextBox();
             add(textBox);
 
-            switch (getCComponent().getSignatureType()) {
+        }
+
+        public void init(SignatureType signatureType) {
+            switch (signatureType) {
             case AgreeBox:
             case AgreeBoxAndFullName:
-
                 checkBox.setVisible(true);
-
                 if (getCComponent().getCheckBoxAnchorText() != null) {
-                    Anchor checkBoxAnchor = new Anchor(getCComponent().getCheckBoxAnchorText(), getCComponent().getCheckBoxAnchorCommand());
-                    add(checkBoxAnchor);
+                    checkBoxAnchor.setText(getCComponent().getCheckBoxAnchorText());
                 }
                 break;
             default:
@@ -110,22 +209,26 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
 
             }
 
-            switch (getCComponent().getSignatureType()) {
+            switch (signatureType) {
             case AgreeBox:
+                setVisible(true);
                 textBox.setVisible(false);
                 break;
             case AgreeBoxAndFullName:
             case FullName:
+                setVisible(true);
                 textBox.setVisible(true);
                 textBox.setWidth("100%");
                 break;
             case Initials:
+                setVisible(true);
                 textBox.setVisible(true);
                 textBox.setWidth("4em");
                 break;
-
+            case None:
+                setVisible(false);
+                break;
             }
-
         }
 
         @Override
@@ -190,19 +293,6 @@ public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSign
             textBox.setTabIndex(index);
         }
 
-        @Override
-        public String getText() {
-            return textBox.getText().trim();
-        }
-
-        @Override
-        public void setText(String text) {
-            textBox.setText(text);
-        }
-
-        @Override
-        public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-            return textBox.addChangeHandler(handler);
-        }
     }
+
 }
