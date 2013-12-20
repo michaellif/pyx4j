@@ -123,6 +123,7 @@ public class OpenIdFilter implements Filter {
                         }
                     }
                     OpenIdServlet.createResponsePage(
+                            httprequest,
                             (HttpServletResponse) response,
                             true,
                             OpenId.getDestinationUrl(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdDomain(),

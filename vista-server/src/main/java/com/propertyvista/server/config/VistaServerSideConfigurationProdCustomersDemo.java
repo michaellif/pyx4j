@@ -54,6 +54,15 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
     }
 
     @Override
+    public String getDevelopmentSessionCookieName() {
+        if (getApplicationURLNamespace(true) == null) {
+            return "vista_demo";
+        } else {
+            return "vista_demo" + getApplicationURLNamespace(true).replaceAll("[\\-\\./:]", "_");
+        }
+    }
+
+    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista\" <no-reply@propertyvista.com>";
     }

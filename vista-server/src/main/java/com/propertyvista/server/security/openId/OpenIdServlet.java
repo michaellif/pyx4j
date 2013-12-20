@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 import java.util.Locale;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +53,7 @@ public class OpenIdServlet extends HttpServlet {
         OpenIdResponse openIdResponse = OpenId.readResponse(request, domain);
         if (openIdResponse == null) {
             log.debug("Can't find authentication information in OpenId URL");
-            createResponsePage(response, true, OpenId.getDestinationUrl(domain, ServerSideConfiguration.instance().getMainApplicationURL()));
+            createResponsePage(request, response, true, OpenId.getDestinationUrl(domain, ServerSideConfiguration.instance().getMainApplicationURL()));
         } else {
             log.info("openIdResponse.email [{}]", openIdResponse.email);
             DevSession devSession = DevSession.getSession();
@@ -74,11 +75,11 @@ public class OpenIdServlet extends HttpServlet {
                 }
 
             }
-            createResponsePage(response, false, receivingURL);
+            createResponsePage(request, response, false, receivingURL);
         }
     }
 
-    static void createResponsePage(HttpServletResponse response, boolean signIn, String location) throws IOException {
+    static void createResponsePage(HttpServletRequest httprequest, HttpServletResponse response, boolean signIn, String location) throws IOException {
         String message;
         if (signIn) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -97,8 +98,18 @@ public class OpenIdServlet extends HttpServlet {
         body = body.replace("${title}", "Access " + (signIn ? " Restricted" : " Granted"));
 
         String meta = "";
-        if ((!signIn) && (!VistaDemo.isDemo() && isOurDeveloper())) {
-            //meta = "<meta http-equiv=\"refresh\" content=\"2;url=\"" + location + "\">";
+        boolean autoRedirect = false;
+        if (!VistaDemo.isDemo()) {
+            if ((!signIn) && isOurDeveloper()) {
+                meta = "<meta http-equiv=\"refresh\" content=\"1; url=" + location + "\">";
+                autoRedirect = true;
+            } else if (signIn && hasDevelopmentSessionCookie(httprequest)) {
+                meta = "<meta http-equiv=\"refresh\" content=\"0; url=" + location + "\">";
+                autoRedirect = true;
+            }
+        }
+        if (autoRedirect) {
+            response.setHeader("Refresh", "0;url=" + location);
         }
 
         body = body.replace("${head}", meta);
@@ -106,7 +117,7 @@ public class OpenIdServlet extends HttpServlet {
         body = body.replace("${name}", VistaDemo.isDemo() ? "PropertyVista Demo " : "" + "Access " + (signIn ? " Restricted" : " Granted"));
 
         body = body.replace("${text}", "<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" tabindex=\"1\" autofocus=\"autofocus\" href=\"" + location
-                + "\">" + message + "</a>");
+                + "\">" + message + "</a>" + (autoRedirect ? "<br/><br/><b>You will be redirected automatically</b>" : ""));
 
         String rc_message;
         if (signIn) {
@@ -118,6 +129,18 @@ public class OpenIdServlet extends HttpServlet {
 
         out.print(body);
         out.flush();
+    }
+
+    private static boolean hasDevelopmentSessionCookie(HttpServletRequest httprequest) {
+        Cookie[] cookies = httprequest.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().startsWith("dev_access")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static boolean isOurDeveloper() {
