@@ -81,7 +81,7 @@ public class LeaseSigningPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseSign
 
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().body()), 35).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureType()), 35).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureFormat()), 35).build());
                 return main;
             }
         }

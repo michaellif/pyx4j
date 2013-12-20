@@ -14,13 +14,12 @@
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm.TargetRole;
 import com.propertyvista.generator.util.CommonsGenerator;
-import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<OnlineApplicationLegalPolicy> {
@@ -34,19 +33,19 @@ public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloa
         OnlineApplicationLegalPolicy policy = EntityFactory.create(OnlineApplicationLegalPolicy.class);
 
         // add legal terms
-        policy.terms().add(createTerm(SignatureType.None));
-        policy.terms().add(createTerm(SignatureType.AgreeBox));
-        policy.terms().add(createTerm(SignatureType.AgreeBoxAndFullName));
-        policy.terms().add(createTerm(SignatureType.FullName));
-        policy.terms().add(createTerm(SignatureType.Initials));
+        policy.terms().add(createTerm(SignatureFormat.None));
+        policy.terms().add(createTerm(SignatureFormat.AgreeBox));
+        policy.terms().add(createTerm(SignatureFormat.AgreeBoxAndFullName));
+        policy.terms().add(createTerm(SignatureFormat.FullName));
+        policy.terms().add(createTerm(SignatureFormat.Initials));
 
         return policy;
     }
 
-    private OnlineApplicationLegalTerm createTerm(SignatureType type) {
+    private OnlineApplicationLegalTerm createTerm(SignatureFormat type) {
         OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
 
-        term.signatureType().setValue(type);
+        term.signatureFormat().setValue(type);
         term.applyToRole().setValue(TargetRole.Any);
         term.title().setValue(CommonsGenerator.lipsumShort());
         term.body().setValue(CommonsGenerator.lipsum() + " <i>" + CommonsGenerator.lipsumShort() + "</i>" + CommonsGenerator.lipsum());

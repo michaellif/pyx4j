@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.policy.policies.LeaseLegalPolicy;
 
@@ -42,7 +42,7 @@ public interface LeaseLegalTerm extends IEntity {
     @Length(48000)
     IPrimitive<String> body();
 
-    IPrimitive<SignatureType> signatureType();
+    IPrimitive<SignatureFormat> signatureFormat();
 
     @OrderColumn
     IPrimitive<Integer> orderId();

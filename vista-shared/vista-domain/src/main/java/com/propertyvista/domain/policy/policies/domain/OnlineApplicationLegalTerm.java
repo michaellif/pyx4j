@@ -26,7 +26,7 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
@@ -69,7 +69,7 @@ public interface OnlineApplicationLegalTerm extends IEntity {
     IPrimitive<String> body();
 
     @NotNull
-    IPrimitive<SignatureType> signatureType();
+    IPrimitive<SignatureFormat> signatureFormat();
 
     @NotNull
     IPrimitive<TargetRole> applyToRole();

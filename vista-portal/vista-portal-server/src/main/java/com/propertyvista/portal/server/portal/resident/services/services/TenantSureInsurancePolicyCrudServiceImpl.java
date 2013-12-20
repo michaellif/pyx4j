@@ -31,7 +31,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -195,8 +195,8 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
         tenantInsurancePolicy.paymentMethod().set(EntityFactory.create(InsurancePaymentMethod.class));
         tenantInsurancePolicy.paymentMethod().type().setValue(PaymentType.CreditCard);
-        tenantInsurancePolicy.paymentMethod().preAuthorizedAgreementSignature().signatureType().setValue(SignatureType.AgreeBox);
-        tenantInsurancePolicy.personalDisclaimerSignature().signatureType().setValue(SignatureType.AgreeBox);
+        tenantInsurancePolicy.paymentMethod().preAuthorizedAgreementSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
+        tenantInsurancePolicy.personalDisclaimerSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
 
         callback.onSuccess(tenantInsurancePolicy);
 

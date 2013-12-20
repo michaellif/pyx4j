@@ -14,7 +14,7 @@
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.policy.policies.LeaseLegalPolicy;
@@ -47,7 +47,7 @@ public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<L
 
     private LeaseLegalTerm randomTerm() {
         LeaseLegalTerm term = EntityFactory.create(LeaseLegalTerm.class);
-        term.signatureType().setValue(RandomUtil.randomEnum(SignatureType.class));
+        term.signatureFormat().setValue(RandomUtil.randomEnum(SignatureFormat.class));
 
         term.title().setValue(CommonsGenerator.lipsumShort());
         term.body().setValue(CommonsGenerator.lipsum());

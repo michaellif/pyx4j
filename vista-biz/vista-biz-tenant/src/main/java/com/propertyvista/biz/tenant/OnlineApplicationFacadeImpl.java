@@ -377,7 +377,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             if (termRole.matchesApplicationRole(app.role().getValue())) {
                 SignedOnlineApplicationLegalTerm signedTerm = EntityFactory.create(SignedOnlineApplicationLegalTerm.class);
                 signedTerm.term().set(term);
-                signedTerm.signature().signatureType().set(term.signatureType());
+                signedTerm.signature().signatureFormat().set(term.signatureFormat());
                 terms.add(signedTerm);
             }
         }
