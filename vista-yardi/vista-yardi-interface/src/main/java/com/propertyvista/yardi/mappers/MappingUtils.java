@@ -40,6 +40,7 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.CanadianStreetAddressParser;
+import com.propertyvista.server.common.util.CnadianPostalCodeValidator;
 import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 public class MappingUtils {
@@ -127,7 +128,11 @@ public class MappingUtils {
 
         address.city().setValue(mitsAddress.getCity());
 
-        address.postalCode().setValue(mitsAddress.getPostalCode());
+        CnadianPostalCodeValidator pcValidator = new CnadianPostalCodeValidator(mitsAddress.getPostalCode());
+        address.postalCode().setValue(pcValidator.format());
+        if (!pcValidator.isValid()) {
+            error.append("\nInvalid Postal Code: " + pcValidator.original());
+        }
 
         return address;
     }
