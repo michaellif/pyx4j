@@ -147,7 +147,6 @@ class PaymentUtils {
             return Collections.emptyList();
         }
 
-        boolean electronicPaymentsAllowed = isElectronicPaymentsSetup(billingAccountId);
         ElectronicPaymentSetup setup = getEffectiveElectronicPaymentsSetup(billingAccountId);
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
@@ -156,8 +155,8 @@ class PaymentUtils {
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }
-        return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, setup, electronicPaymentsAllowed,
-                paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy);
+        return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, setup, paymentAccepted == PaymentAccepted.CashEquivalent,
+                paymentMethodSelectionPolicy);
     }
 
     public static Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
