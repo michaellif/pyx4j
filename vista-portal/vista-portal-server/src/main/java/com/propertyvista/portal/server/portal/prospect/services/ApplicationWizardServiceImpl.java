@@ -91,7 +91,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillUnitSelectionData(bo, to);
 
-        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
+        fillLegalTerms(bo, to);
 
         callback.onSuccess(to);
     }
@@ -345,6 +345,17 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             Persistence.ensureRetrieve(unitSelection.floorplan(), AttachLevel.ToStringMembers);
         }
     }
+
+    private void fillLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
+        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
+    }
+
+    private void saveLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
+        bo.legalTerms().clear();
+        bo.legalTerms().addAll(bo.legalTerms());
+    }
+
+    // ================================================================================================================
 
     private String retrieveUtilities(AptUnit unit) {
         assert (!unit.building().isValueDetached());

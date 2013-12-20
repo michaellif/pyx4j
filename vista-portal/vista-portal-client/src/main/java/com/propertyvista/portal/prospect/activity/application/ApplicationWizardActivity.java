@@ -22,9 +22,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -41,6 +41,8 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardSe
 import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
 public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineApplicationDTO> implements ApplicationWizardPresenter {
+
+    private static final I18n i18n = I18n.get(ApplicationWizardActivity.class);
 
     private final ApplicationWizardService service;
 
@@ -84,9 +86,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     }
 
     @Override
-    public void onStepSelected(WizardStep selectedStep) {
-        super.onStepSelected(selectedStep);
-
+    protected void onDiscard() {
         OnlineApplicationDTO currentValue = getView().getValue();
         if (currentValue != null) {
             // save current value state:
@@ -97,10 +97,8 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
                 }
             }, currentValue);
         }
-    }
 
-    @Override
-    protected void onDiscard() {
+        // call super AFTER! 
         super.onDiscard();
         ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(null, ApplicationWizardStateChangeEvent.ChangeType.discard));
     }
