@@ -75,6 +75,7 @@ public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
             // @formatter:off
             PropertyUpdater updater = new PropertyUpdater(propertyId).
             set(PropertyUpdater.ADDRESS.Address1, "11 " + propertyId  + " str").
+            set(PropertyUpdater.ADDRESS.PostalCode, "A1B 2C3").
             set(PropertyUpdater.ADDRESS.Country, "Canada");        
             // @formatter:on
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));

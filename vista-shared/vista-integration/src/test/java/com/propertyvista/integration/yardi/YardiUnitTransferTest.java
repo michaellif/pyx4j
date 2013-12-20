@@ -46,6 +46,7 @@ public class YardiUnitTransferTest extends YardiTestBase {
             // @formatter:off
             PropertyUpdater updater = new PropertyUpdater("prop123").
             set(PropertyUpdater.ADDRESS.Address1, "11 prop123 str").
+            set(PropertyUpdater.ADDRESS.PostalCode, "A1B 2C3").
             set(PropertyUpdater.ADDRESS.Country, "Canada");        
             // @formatter:on
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
