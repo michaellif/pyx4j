@@ -84,4 +84,5 @@ public class MoneyInBatchCrudServiceImpl implements MoneyInBatchCrudService {
     public void save(AsyncCallback<Key> callback, MoneyInBatchDTO editableEntity) {
         throw new RuntimeException("Operation NOT supported");
     }
+
 }

@@ -95,7 +95,7 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
 
     @Override
     public void createPaymentBatch(AsyncCallback<String> callback, LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInCreateBatchDeferredProcess(receiptDate, payments), ThreadPoolNames.IMPORTS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInBatchDepositSlipPrintDeferredProcess(receiptDate, payments), ThreadPoolNames.IMPORTS));
     }
 
     private EntityQueryCriteria<Lease> makeCriteria(MoneyInCandidateSearchCriteriaDTO criteriaEntity) {

@@ -21,7 +21,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInPaymentDTO;
 
-public class MoneyInCreateBatchDeferredProcess extends AbstractDeferredProcess {
+public class MoneyInBatchDepositSlipPrintDeferredProcess extends AbstractDeferredProcess {
 
     private static final long serialVersionUID = 4099464017607928359L;
 
@@ -29,7 +29,7 @@ public class MoneyInCreateBatchDeferredProcess extends AbstractDeferredProcess {
 
     private volatile int progressMax;
 
-    public MoneyInCreateBatchDeferredProcess(LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments) {
+    public MoneyInBatchDepositSlipPrintDeferredProcess(LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments) {
         progressMax = 100;
         progress = 0;
     }

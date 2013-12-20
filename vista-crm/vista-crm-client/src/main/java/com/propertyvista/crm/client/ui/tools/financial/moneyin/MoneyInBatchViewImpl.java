@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.tools.common.LinkDialog;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInBatchForm;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
 public class MoneyInBatchViewImpl extends CrmViewerViewImplBase<MoneyInBatchDTO> implements MoneyInBatchView {
+
+    private static final I18n i18n = I18n.get(MoneyInBatchViewImpl.class);
 
     public MoneyInBatchViewImpl() {
         setBreadcrumbsBar(null);
@@ -26,6 +31,18 @@ public class MoneyInBatchViewImpl extends CrmViewerViewImplBase<MoneyInBatchDTO>
 
     @Override
     protected void populateBreadcrumbs(MoneyInBatchDTO value) {
+
+    }
+
+    @Override
+    public void displayReportDownloadLink(final String downloadUrl) {
+        new LinkDialog(i18n.tr("Deposit Slip is Ready"), "Download Deposit Slip", downloadUrl) {
+            @Override
+            public boolean onClickCancel() {
+                ((MoneyInBatchView.Presenter) getPresenter()).cancelPrintOutGeneration(downloadUrl);
+                return false;
+            }
+        }.show();
 
     }
 }

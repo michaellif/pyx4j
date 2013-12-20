@@ -15,17 +15,12 @@ package com.propertyvista.crm.client.ui.tools.legal.n4;
 
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.CancelOption;
-import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
+import com.propertyvista.crm.client.ui.tools.common.LinkDialog;
 import com.propertyvista.crm.client.ui.tools.legal.n4.datawidget.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.legal.n4.datawidget.LegalNoticeCandidateHolder;
 import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4DownloadSettingsForm;
@@ -68,26 +63,6 @@ public class N4DownloadToolViewImpl extends BulkOperationToolViewImpl<N4Download
     @Override
     public void setGenerations(List<N4GenerationDTO> generations) {
         downloadSettingsForm.setGenerations(generations);
-    }
-
-    private abstract static class LinkDialog extends Dialog implements CancelOption {
-
-        private final Anchor downloadAnchor;
-
-        public LinkDialog(String caption, String anchorLabel, String url) {
-            super(caption);
-            FlowPanel panel = new FlowPanel();
-            downloadAnchor = new Anchor(anchorLabel, url, "_blank");
-            downloadAnchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    LinkDialog.this.hide(false);
-                }
-            });
-            panel.add(downloadAnchor);
-            setBody(panel);
-        }
-
     }
 
 }

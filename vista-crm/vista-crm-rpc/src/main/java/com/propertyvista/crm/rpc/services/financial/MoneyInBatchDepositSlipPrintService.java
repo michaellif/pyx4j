@@ -7,25 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-12-19
+ * Created on 2013-12-20
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.financial.moneyin;
+package com.propertyvista.crm.rpc.services.financial;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.rpc.report.ReportService;
 
-import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
+public interface MoneyInBatchDepositSlipPrintService extends ReportService<IEntity> {
 
-public interface MoneyInBatchView extends IViewer<MoneyInBatchDTO> {
+    public static String PARAM_BATCH_PK = "batch_pk";
 
-    interface Presenter extends IViewer.Presenter {
-
-        void createDownloadableDepositSlipPrintout();
-
-        void cancelPrintOutGeneration(String downloadUrl);
-
-    }
-
-    void displayReportDownloadLink(String downloadUrl);
 }

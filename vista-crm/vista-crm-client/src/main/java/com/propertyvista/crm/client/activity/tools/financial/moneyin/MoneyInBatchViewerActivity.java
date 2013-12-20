@@ -30,4 +30,17 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
         super(place, CrmSite.getViewFactory().getView(MoneyInBatchView.class), GWT.<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
     }
 
+    @Override
+    public void createDownloadableDepositSlipPrintout() {
+//        DeferredReportProcessProgressResponse response = (DeferredReportProcessProgressResponse) result;
+//        String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
+//        new ReportDialog(i18n.tr("Creating Money In Deposit Printout"), );
+    }
+
+    @Override
+    public void cancelPrintOutGeneration(String downloadUrl) {
+        // TODO Auto-generated method stub
+
+    }
+
 }
