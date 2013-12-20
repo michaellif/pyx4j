@@ -29,7 +29,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISignature;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.widgets.client.RadioGroup;
 

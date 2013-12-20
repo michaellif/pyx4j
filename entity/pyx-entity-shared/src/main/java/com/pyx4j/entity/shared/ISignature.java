@@ -33,7 +33,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @EmbeddedEntity
 public interface ISignature extends IEntity {
 
-    public static enum SignatureType {
+    public static enum SignatureFormat {
         FullName, Initials, AgreeBox, AgreeBoxAndFullName, None
     }
 
@@ -46,7 +46,7 @@ public interface ISignature extends IEntity {
     @Length(39)
     IPrimitive<String> ipAddress();
 
-    IPrimitive<SignatureType> signatureType();
+    IPrimitive<SignatureFormat> signatureFormat();
 
     @NotNull
     @Caption(name = "Type Your Full Name")

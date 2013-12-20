@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
 
 import com.pyx4j.entity.shared.ISignature;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.ui.NSignature.SignaturePanel;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
@@ -62,7 +62,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
     public void init() {
         super.init();
         if (getEditor() != null) {
-            getEditor().init(SignatureType.None);
+            getEditor().init(SignatureFormat.None);
         }
     }
 
@@ -73,7 +73,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             if (getEditor() != null) {
                 getEditor().checkBox.setValue(null);
                 getEditor().textBox.setValue(null);
-                getEditor().init(SignatureType.None);
+                getEditor().init(SignatureFormat.None);
             }
             if (getViewer() != null) {
                 getViewer().setText(null);
@@ -82,7 +82,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             signature = value.duplicate();
             if (getEditor() != null) {
                 getEditor().checkBox.setValue(signature.agree().getValue());
-                switch (signature.signatureType().getValue()) {
+                switch (signature.signatureFormat().getValue()) {
                 case AgreeBox:
                 case None:
                     getEditor().textBox.setValue(null);
@@ -98,7 +98,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             }
             if (getViewer() != null) {
                 if (signature.agree().isBooleanTrue()) {
-                    switch (signature.signatureType().getValue()) {
+                    switch (signature.signatureFormat().getValue()) {
                     case AgreeBox:
                         getViewer().setText(null);
                         break;
@@ -116,7 +116,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                     getViewer().setText(null);
                 }
             }
-            getEditor().init(signature.signatureType().getValue());
+            getEditor().init(signature.signatureFormat().getValue());
         }
     }
 
@@ -128,7 +128,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
         } else {
             if (getEditor() != null && signature != null) {
                 signature.agree().setValue(getEditor().checkBox.getValue());
-                switch (signature.signatureType().getValue()) {
+                switch (signature.signatureFormat().getValue()) {
                 case AgreeBox:
                 case None:
                     signature.fullName().setValue(null);
@@ -195,7 +195,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
         }
 
-        public void init(SignatureType signatureType) {
+        public void init(SignatureFormat signatureType) {
             switch (signatureType) {
             case AgreeBox:
             case AgreeBoxAndFullName:

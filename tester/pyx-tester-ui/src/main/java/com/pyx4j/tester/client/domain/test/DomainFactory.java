@@ -30,7 +30,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.entity.shared.ISignature;
-import com.pyx4j.entity.shared.ISignature.SignatureType;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.tester.client.TesterUtils;
 import com.pyx4j.tester.domain.TFile;
 
@@ -121,7 +121,7 @@ public class DomainFactory {
         ISignature signature = EntityFactory.create(ISignature.class);
         signature.fullName().setValue("John Doe");
         signature.agree().setValue(true);
-        signature.signatureType().setValue(SignatureType.AgreeBoxAndFullName);
+        signature.signatureFormat().setValue(SignatureFormat.AgreeBoxAndFullName);
         retVal.signature1().set(signature);
 
         retVal.enumBox().setValue(enumvalues[pos]);
