@@ -195,8 +195,8 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
         }
 
-        public void init(SignatureFormat signatureType) {
-            switch (signatureType) {
+        public void init(SignatureFormat format) {
+            switch (format) {
             case AgreeBox:
             case AgreeBoxAndFullName:
                 checkBox.setVisible(true);
@@ -209,7 +209,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
             }
 
-            switch (signatureType) {
+            switch (format) {
             case AgreeBox:
                 setVisible(true);
                 textBox.setVisible(false);
