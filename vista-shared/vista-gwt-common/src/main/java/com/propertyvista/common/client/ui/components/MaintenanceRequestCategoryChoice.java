@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 import com.propertyvista.domain.maintenance.IssueElementType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceRequestCategory> {
 
@@ -230,7 +231,9 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         if (subCategories == null) {
             return null;
         }
-
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return subCategories;
+        }
         // performance optimization: filter only 1t level
         if (parent != null && parent.parent != null) {
             return subCategories;
