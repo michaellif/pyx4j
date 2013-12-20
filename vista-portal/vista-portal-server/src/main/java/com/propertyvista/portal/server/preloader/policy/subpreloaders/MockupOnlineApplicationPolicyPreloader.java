@@ -42,10 +42,10 @@ public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloa
         return policy;
     }
 
-    private OnlineApplicationLegalTerm createTerm(SignatureFormat type) {
+    private OnlineApplicationLegalTerm createTerm(SignatureFormat format) {
         OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
 
-        term.signatureFormat().setValue(type);
+        term.signatureFormat().setValue(format);
         term.applyToRole().setValue(TargetRole.Any);
         term.title().setValue(CommonsGenerator.lipsumShort());
         term.body().setValue(CommonsGenerator.lipsum() + " <i>" + CommonsGenerator.lipsumShort() + "</i>" + CommonsGenerator.lipsum());
