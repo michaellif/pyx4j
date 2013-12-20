@@ -59,7 +59,7 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements IT
     @Override
     public String getText() {
         if (watermark != null && watermark.isShown()) {
-            return null;
+            return "";
         } else {
             return super.getText();
         }

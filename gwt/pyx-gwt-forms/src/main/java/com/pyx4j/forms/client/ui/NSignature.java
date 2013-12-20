@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.InlineHTML;
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.ui.NSignature.SignaturePanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.IFocusWidget;
@@ -41,6 +42,8 @@ import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.TextBox;
 
 public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignature, Label> {
+
+    private static final I18n i18n = I18n.get(NSignature.class);
 
     private ISignature signature;
 
@@ -127,7 +130,6 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             return null;
         } else {
             if (getEditor() != null && signature != null) {
-                signature.agree().setValue(getEditor().checkBox.getValue());
                 switch (signature.signatureFormat().getValue()) {
                 case AgreeBox:
                 case None:
@@ -142,6 +144,19 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                 case Initials:
                     signature.initials().setValue(getEditor().textBox.getText());
                     signature.fullName().setValue(null);
+                    break;
+                }
+
+                switch (signature.signatureFormat().getValue()) {
+                case None:
+                    break;
+                case AgreeBox:
+                case AgreeBoxAndFullName:
+                    signature.agree().setValue(getEditor().checkBox.getValue());
+                    break;
+                case FullName:
+                case Initials:
+                    signature.agree().setValue(!getEditor().textBox.getText().isEmpty());
                     break;
                 }
             }
@@ -177,9 +192,8 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
         public SignaturePanel() {
 
-            checkBox = new CheckBox(getCComponent().getCheckBoxText());
+            checkBox = new CheckBox(getCComponent().getCheckBoxText() + " ");
             add(checkBox);
-            add(new InlineHTML("&nbsp;"));
             checkBoxAnchor = new Anchor(null, new Command() {
 
                 @Override
@@ -200,35 +214,48 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             case AgreeBox:
             case AgreeBoxAndFullName:
                 checkBox.setVisible(true);
+                checkBoxAnchor.setVisible(true);
                 if (getCComponent().getCheckBoxAnchorText() != null) {
                     checkBoxAnchor.setText(getCComponent().getCheckBoxAnchorText());
                 }
                 break;
             default:
+                checkBox.setVisible(false);
+                checkBoxAnchor.setVisible(false);
                 break;
-
             }
 
             switch (format) {
             case AgreeBox:
-                setVisible(true);
                 textBox.setVisible(false);
                 break;
             case AgreeBoxAndFullName:
             case FullName:
-                setVisible(true);
                 textBox.setVisible(true);
                 textBox.setWidth("100%");
+                textBox.setWatermark(i18n.tr("Enter Your First and Last Name"));
                 break;
             case Initials:
-                setVisible(true);
                 textBox.setVisible(true);
-                textBox.setWidth("4em");
+                textBox.setWidth("10em");
+                textBox.setWatermark(i18n.tr("Enter Your Initials"));
+                break;
+            case None:
+                break;
+            }
+
+            switch (format) {
+            case AgreeBox:
+            case AgreeBoxAndFullName:
+            case FullName:
+            case Initials:
+                setVisible(true);
                 break;
             case None:
                 setVisible(false);
                 break;
             }
+
         }
 
         @Override

@@ -23,8 +23,13 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.i18n.shared.I18n;
 
 public class CSignature extends CFocusComponent<ISignature, NSignature> {
+
+    private static final I18n i18n = I18n.get(CSignature.class);
 
     private String checkBoxText;
 
@@ -43,6 +48,37 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
         setNativeWidget(new NSignature(this));
         asWidget().setWidth("100%");
 
+        addValueValidator(new EditableValueValidator<ISignature>() {
+            @Override
+            public ValidationError isValid(CComponent<ISignature> component, ISignature value) {
+                if (value != null) {
+                    switch (value.signatureFormat().getValue()) {
+                    case None:
+                        break;
+                    case AgreeBox:
+                        if (!value.agree().isBooleanTrue()) {
+                            return new ValidationError(component, i18n.tr("You must agree to the Terms to continue"));
+                        }
+                        break;
+                    case AgreeBoxAndFullName:
+                        if (!value.agree().isBooleanTrue()) {
+                            return new ValidationError(component, i18n.tr("You must agree to the Terms to continue"));
+                        }
+                    case FullName:
+                        if (value.fullName().getValue() == null || value.fullName().getValue().trim().equals("")) {
+                            return new ValidationError(component, i18n.tr("You must type your First and Last name to continue"));
+                        }
+                        break;
+                    case Initials:
+                        if (value.initials().getValue() == null || value.initials().getValue().trim().equals("")) {
+                            return new ValidationError(component, i18n.tr("You must type your Initials to continue"));
+                        }
+                        break;
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     public void setCheckBoxText(String checkBoxText) {
