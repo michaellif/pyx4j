@@ -13,10 +13,11 @@
  */
 package com.propertyvista.portal.shared.ui.util.editors;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -25,9 +26,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
@@ -40,7 +39,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
     final static I18n i18n = I18n.get(IdUploaderFolder.class);
 
-    protected ApplicationDocumentationPolicy documentationPolicy = null;
+    protected ApplicationDocumentationPolicy documentsPolicy = null;
 
     public IdUploaderFolder() {
         super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
@@ -49,9 +48,9 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             @Override
             public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
                 if (value != null) {
-//                    assert (documentationPolicy != null);
-                    if (documentationPolicy != null) {
-                        int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                    assert (documentsPolicy != null);
+                    if (documentsPolicy != null) {
+                        int numOfRemainingDocs = documentsPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                         if (numOfRemainingDocs > 0) {
                             return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
                         }
@@ -64,19 +63,13 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
         asWidget().setSize("100%", "100%");
     }
 
-    public void setParentEntity(IEntity parentEntity) {
-        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
-                new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
-                    @Override
-                    public void onSuccess(ApplicationDocumentationPolicy result) {
-                        documentationPolicy = result;
-                    }
-                });
+    public void setDocumentsPolicy(ApplicationDocumentationPolicy documentsPolicy) {
+        this.documentsPolicy = documentsPolicy;
     }
 
     @Override
     protected void addItem() {
-        new DocumentTypeSelectorDialog(documentationPolicy) {
+        new DocumentTypeSelectorDialog(documentsPolicy) {
             @Override
             public boolean onClickOk() {
                 IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
@@ -108,6 +101,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
             int row = -1;
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idType())).build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().donotHave())).build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idNumber())).build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().notes())).build());
 
@@ -126,6 +120,13 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             // Tune ups:
             get(proto().idType()).setViewable(true);
 
+            get(proto().donotHave()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    updateEditablity();
+                }
+            });
+
             content.setH3(++row, 0, 2, i18n.tr("Files"));
             content.setWidget(++row, 0, 2, inject(proto().files(), docPagesFolder));
             return content;
@@ -138,6 +139,15 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             if (isViewable()) {
                 get(proto().notes()).setVisible(!getValue().notes().isNull());
             }
+            get(proto().donotHave()).setVisible(getValue().idType().required().getValue(false));
+            updateEditablity();
+        }
+
+        private void updateEditablity() {
+            boolean canEdit = !getValue().donotHave().getValue(false);
+            get(proto().idNumber()).setEnabled(canEdit);
+            get(proto().notes()).setEnabled(canEdit);
+            get(proto().files()).setEnabled(canEdit);
         }
 
         @Override

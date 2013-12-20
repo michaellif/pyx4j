@@ -72,6 +72,8 @@ public interface IdentificationDocumentType extends IEntity {
     @Caption(name = "ID Name")
     IPrimitive<String> name();
 
+    IPrimitive<Boolean> required();
+
     @NotNull
     @ToString(index = 0)
     @Caption(name = "ID Type")

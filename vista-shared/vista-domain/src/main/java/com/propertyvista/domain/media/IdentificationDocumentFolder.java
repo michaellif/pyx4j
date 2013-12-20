@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.media;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -42,10 +43,15 @@ public interface IdentificationDocumentFolder extends IEntity {
 
     @NotNull
     @ToString(index = 0)
+    @Caption(name = "Identification Document Type")
     IdentificationDocumentType idType();
+
+    @Caption(name = "I do not have it", description = "Check here if you do not have this Document")
+    IPrimitive<Boolean> donotHave();
 
     @NotNull
     @ToString(index = 1)
+    @Caption(name = "Document Number")
     IPrimitive<String> idNumber();
 
     @Editor(type = EditorType.textarea)

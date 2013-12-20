@@ -36,6 +36,7 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
 
         IdentificationDocumentType id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue(i18n.tr("SIN"));
+        id.required().setValue(true);
         id.type().setValue(Type.canadianSIN);
         policy.allowedIDs().add(id);
 

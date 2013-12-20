@@ -22,14 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
-import com.propertyvista.misc.VistaTODO;
 
-/**
- * TODO
- * 
- * @see VistaTODO#ApplicationDocumentationPolicyRefacotring
- * 
- */
 @DiscriminatorValue("ApplicationDocumentationPolicy")
 public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessiblePolicy {
 

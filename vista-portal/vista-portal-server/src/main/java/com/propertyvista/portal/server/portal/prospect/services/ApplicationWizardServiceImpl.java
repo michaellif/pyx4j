@@ -35,7 +35,10 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -198,6 +201,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             to.applicant().set(to.applicant().previousAddress(), screening.previousAddress());
 
             to.applicant().set(to.applicant().documents(), screening.documents());
+            to.applicant().set(
+                    to.applicant().documentsPolicy(),
+                    ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
+                            ApplicationDocumentationPolicy.class));
+            initializeRequiredDocuments(to.applicant());
+
             to.applicant().set(to.applicant().legalQuestions(), screening.legalQuestions());
 
             to.applicant().set(to.applicant().incomes(), screening.incomes());
@@ -222,6 +231,27 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
         for (CustomerScreeningPersonalAsset i : to.applicant().assets()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
+        }
+    }
+
+    private void initializeRequiredDocuments(ApplicantDTO applicant) {
+        for (IdentificationDocumentType docType : applicant.documentsPolicy().allowedIDs()) {
+            if (docType.required().getValue(false)) {
+                // Find if we already have it.
+                boolean found = false;
+                for (IdentificationDocumentFolder doc : applicant.documents()) {
+                    if (doc.idType().equals(docType)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
+                    doc.idType().set(doc.idType(), docType);
+                    applicant.documents().add(doc);
+                }
+            }
         }
     }
 
@@ -304,6 +334,16 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             grnt.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
 
             to.guarantors().add(grnt);
+        }
+    }
+
+    private PolicyNode getPolicyNode(MasterOnlineApplication moa) {
+        if (!moa.leaseApplication().lease().unit().isNull()) {
+            return moa.leaseApplication().lease().unit();
+        } else if (!moa.building().isNull()) {
+            return moa.building();
+        } else {
+            throw new Error("Application do not have building relations");
         }
     }
 
