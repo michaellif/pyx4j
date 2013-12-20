@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.prospect.services;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -30,6 +31,7 @@ import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -82,9 +84,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         OnlineApplicationDTO to = EntityFactory.create(OnlineApplicationDTO.class);
 
-        to.unit().set(createUnitTO(bo.masterOnlineApplication().leaseApplication().lease().unit()));
-        to.utilities().setValue(retrieveUtilities(bo.masterOnlineApplication().leaseApplication().lease().unit()));
-
         fillLeaseData(bo, to);
 
         fillApplicantData(bo, to);
@@ -107,6 +106,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
 
         saveApplicantData(bo, editableEntity);
+
+        saveCoApplicants(bo, editableEntity);
+        saveGuarantors(bo, editableEntity);
 
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -133,33 +135,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     // internals: -----------------------------------------------------------------------------------------------------
 
-    private AptUnit createUnitTO(AptUnit unit) {
-        assert (!unit.building().isValueDetached());
-        assert (!unit.floorplan().isValueDetached());
-
-        AptUnit to = new EntityBinder<AptUnit, AptUnit>(AptUnit.class, AptUnit.class) {
-            @Override
-            protected void bind() {
-                bind(toProto.id(), boProto.id());
-                bind(toProto.info().number(), boProto.info().number());
-
-                bind(toProto.building().id(), boProto.building().id());
-                bind(toProto.building().info().address(), boProto.building().info().address());
-
-                bind(toProto.floorplan().id(), boProto.floorplan().id());
-                bind(toProto.floorplan().name(), boProto.floorplan().name());
-                bind(toProto.floorplan().marketingName(), boProto.floorplan().marketingName());
-            }
-        }.createTO(unit);
-
-        return to;
-    }
-
     private void fillLeaseData(OnlineApplication bo, OnlineApplicationDTO to) {
         assert (!bo.masterOnlineApplication().leaseApplication().lease().isValueDetached());
 
         LeaseTerm term = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
                 .getPrimaryKey());
+
+        to.unit().set(createUnitTO(bo.masterOnlineApplication().leaseApplication().lease().unit()));
+        to.utilities().setValue(retrieveUtilities(bo.masterOnlineApplication().leaseApplication().lease().unit()));
 
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
         to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
@@ -234,27 +217,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
     }
 
-    private void initializeRequiredDocuments(ApplicantDTO applicant) {
-        for (IdentificationDocumentType docType : applicant.documentsPolicy().allowedIDs()) {
-            if (docType.required().getValue(false)) {
-                // Find if we already have it.
-                boolean found = false;
-                for (IdentificationDocumentFolder doc : applicant.documents()) {
-                    if (doc.idType().equals(docType)) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
-                    doc.idType().set(doc.idType(), docType);
-                    applicant.documents().add(doc);
-                }
-            }
-        }
-    }
-
     private void saveApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
         switch (bo.role().getValue()) {
         case Applicant:
@@ -307,17 +269,72 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
 
         for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
-            CoapplicantDTO cant = EntityFactory.create(CoapplicantDTO.class);
+            CoapplicantDTO cap = EntityFactory.create(CoapplicantDTO.class);
 
-            cant.dependent().setValue(ltt.role().getValue() == Role.Dependent);
+            cap.dependent().setValue(ltt.role().getValue() == Role.Dependent);
 
-            cant.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
-            cant.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
+            cap.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
+            cap.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
 
-            cant.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
+            cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
 
-            to.coapplicants().add(cant);
+            // remember corresponding tenant: 
+            cap.set(cap.tenantId(), ltt);
+            cap.tenantId().setAttachLevel(AttachLevel.IdOnly);
+
+            to.coapplicants().add(cap);
         }
+    }
+
+    private void saveCoApplicants(OnlineApplication bo, OnlineApplicationDTO to) {
+        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
+                .getPrimaryKey());
+
+        // clear removed:
+        Iterator<LeaseTermTenant> it = leaseTerm.version().tenants().iterator();
+        while (it.hasNext()) {
+            Boolean present = false;
+            LeaseTermTenant ltt = it.next();
+            for (CoapplicantDTO cap : to.coapplicants()) {
+                if (!cap.tenantId().isNull() && ltt.getPrimaryKey().equals(cap.tenantId().getPrimaryKey())) {
+                    present = true;
+                    break;
+                }
+            }
+            if (!present) {
+                it.remove();
+            }
+        }
+
+        // add/update the rest:
+        for (CoapplicantDTO cap : to.coapplicants()) {
+            if (cap.tenantId().isNull()) {
+                // create new:
+                LeaseTermTenant ltt = EntityFactory.create(LeaseTermTenant.class);
+                updateCoApplicant(ltt, cap);
+                leaseTerm.version().tenants().add(ltt);
+            } else {
+                // update current:
+                for (LeaseTermTenant ltt : leaseTerm.version().tenants()) {
+                    if (ltt.getPrimaryKey().equals(cap.tenantId().getPrimaryKey())) {
+                        updateCoApplicant(ltt, cap);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // do not forget to save:
+        ServerSideFactory.create(LeaseFacade.class).persist(leaseTerm);
+    }
+
+    private void updateCoApplicant(LeaseTermTenant ltt, CoapplicantDTO cap) {
+        ltt.role().setValue(cap.dependent().isBooleanTrue() ? Role.Dependent : Role.CoApplicant);
+
+        ltt.leaseParticipant().customer().person().name().firstName().setValue(cap.firstName().getValue());
+        ltt.leaseParticipant().customer().person().name().lastName().setValue(cap.lastName().getValue());
+
+        ltt.leaseParticipant().customer().person().email().setValue(cap.email().getValue());
     }
 
     private void fillGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -325,26 +342,25 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
         criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
 
-        for (LeaseTermGuarantor ltt : Persistence.service().query(criteria)) {
+        for (LeaseTermGuarantor ltg : Persistence.service().query(criteria)) {
             GuarantorDTO grnt = EntityFactory.create(GuarantorDTO.class);
 
-            grnt.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
-            grnt.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
+            grnt.firstName().setValue(ltg.leaseParticipant().customer().person().name().firstName().getValue());
+            grnt.lastName().setValue(ltg.leaseParticipant().customer().person().name().lastName().getValue());
 
-            grnt.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
+            grnt.email().setValue(ltg.leaseParticipant().customer().person().email().getValue());
+
+            // remember corresponding customer: 
+            grnt.set(grnt.customer(), ltg.leaseParticipant().customer());
+            grnt.customer().setAttachLevel(AttachLevel.IdOnly);
 
             to.guarantors().add(grnt);
         }
     }
 
-    private PolicyNode getPolicyNode(MasterOnlineApplication moa) {
-        if (!moa.leaseApplication().lease().unit().isNull()) {
-            return moa.leaseApplication().lease().unit();
-        } else if (!moa.building().isNull()) {
-            return moa.building();
-        } else {
-            throw new Error("Application do not have building relations");
-        }
+    private void saveGuarantors(OnlineApplication bo, OnlineApplicationDTO editableEntity) {
+        // TODO Auto-generated method stub
+
     }
 
     private void fillUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -397,6 +413,28 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     // ================================================================================================================
 
+    private AptUnit createUnitTO(AptUnit unit) {
+        assert (!unit.building().isValueDetached());
+        assert (!unit.floorplan().isValueDetached());
+
+        AptUnit to = new EntityBinder<AptUnit, AptUnit>(AptUnit.class, AptUnit.class) {
+            @Override
+            protected void bind() {
+                bind(toProto.id(), boProto.id());
+                bind(toProto.info().number(), boProto.info().number());
+
+                bind(toProto.building().id(), boProto.building().id());
+                bind(toProto.building().info().address(), boProto.building().info().address());
+
+                bind(toProto.floorplan().id(), boProto.floorplan().id());
+                bind(toProto.floorplan().name(), boProto.floorplan().name());
+                bind(toProto.floorplan().marketingName(), boProto.floorplan().marketingName());
+            }
+        }.createTO(unit);
+
+        return to;
+    }
+
     private String retrieveUtilities(AptUnit unit) {
         assert (!unit.building().isValueDetached());
 
@@ -423,6 +461,27 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         loadDetachedProducts(options);
 
         return options;
+    }
+
+    private void initializeRequiredDocuments(ApplicantDTO applicant) {
+        for (IdentificationDocumentType docType : applicant.documentsPolicy().allowedIDs()) {
+            if (docType.required().getValue(false)) {
+                // Find if we already have it.
+                boolean found = false;
+                for (IdentificationDocumentFolder doc : applicant.documents()) {
+                    if (doc.idType().equals(docType)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
+                    doc.idType().set(doc.idType(), docType);
+                    applicant.documents().add(doc);
+                }
+            }
+        }
     }
 
     private void fillCurrentProductItems(UnitOptionsSelectionDTO options, LeaseTerm leaseTerm) {
@@ -566,5 +625,15 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         newItem.agreedPrice().setValue(productItem.price().getValue());
 
         return newItem;
+    }
+
+    private PolicyNode getPolicyNode(MasterOnlineApplication moa) {
+        if (!moa.leaseApplication().lease().unit().isNull()) {
+            return moa.leaseApplication().lease().unit();
+        } else if (!moa.building().isNull()) {
+            return moa.building();
+        } else {
+            throw new Error("Application do not have building relations");
+        }
     }
 }
