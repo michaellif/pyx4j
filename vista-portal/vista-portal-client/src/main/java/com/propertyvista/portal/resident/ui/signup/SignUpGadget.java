@@ -57,7 +57,7 @@ import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
-public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
+public class SignUpGadget extends AbstractGadget<SignUpView> {
 
     static final I18n i18n = I18n.get(SignUpGadget.class);
 

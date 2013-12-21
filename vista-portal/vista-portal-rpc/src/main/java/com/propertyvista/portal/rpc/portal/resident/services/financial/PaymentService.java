@@ -18,8 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummaryDTO;

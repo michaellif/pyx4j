@@ -42,6 +42,8 @@ import com.propertyvista.portal.resident.activity.financial.paymentmethod.Paymen
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
+import com.propertyvista.portal.resident.activity.movein.LeaseSigningWizardActivity;
+import com.propertyvista.portal.resident.activity.movein.NewResidentWelcomePageActivity;
 import com.propertyvista.portal.resident.activity.offers.dashboard.OffersDashboardActivity;
 import com.propertyvista.portal.resident.activity.profile.AccountPageActivity;
 import com.propertyvista.portal.resident.activity.profile.ProfilePageActivity;
@@ -94,7 +96,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof ResidentPortalSiteMap.Account) {
                         activity = new AccountPageActivity(appPlace);
 
-// Financial:
+// Financial
                     } else if (appPlace instanceof ResidentPortalSiteMap.Financial) {
                         activity = new FinancialDashboardActivity(appPlace);
                     } else if (appPlace instanceof ResidentPortalSiteMap.Financial.Payment.PayNow) {
@@ -124,10 +126,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof ResidentPortalSiteMap.Financial.BillingHistory.BillView) {
                         activity = new BillViewActivity(appPlace);
 
-// Services:
+// Services
                     } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices) {
                         activity = new ServicesDashboardActivity(appPlace);
-// Insurance:
+// Insurance
                     } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {
                         activity = new TenantSureOrderWizardActivity(appPlace);
                     } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSureWizardConfirmation) {
@@ -147,7 +149,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new GeneralPolicyUploadWizardActivity(appPlace);
                     } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyPage) {
                         activity = new GeneralPolicyPageActivity(appPlace);
-// Maintenance:
+// Maintenance
                     } else if (place instanceof ResidentPortalSiteMap.Maintenance) {
                         activity = new MaintenanceDashboardActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.Maintenance.MaintenanceRequestWizard) {
@@ -155,7 +157,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof ResidentPortalSiteMap.Maintenance.MaintenanceRequestPage) {
                         activity = new MaintenanceRequestPageActivity(appPlace);
 
-// Internals:
+// Move-in
+                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage) {
+                        activity = new NewResidentWelcomePageActivity(appPlace);
+                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
+                        activity = new LeaseSigningWizardActivity(appPlace);
+
+// Internals
                     } else if (place instanceof Login) {
                         activity = new LandingActivity(place);
                     } else if (place instanceof Logout) {
@@ -175,7 +183,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof NotificationPlace) {
                         activity = new NotificationPageActivity((NotificationPlace) place);
 
-// Internals/Terms: @formatter:off
+// Internals/Terms
+                        // @formatter:off
                     } else if (place instanceof ResidentPortalSiteMap.BillingPolicy 
                             || place instanceof ResidentPortalSiteMap.CreditCardPolicy
                             || place instanceof ResidentPortalSiteMap.PadPolicy

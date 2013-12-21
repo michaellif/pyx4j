@@ -155,6 +155,16 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         }
     }
 
+    public static class MoveIn extends AppPlace {
+
+        public static class NewTenantWelcomePage extends AppPlace {
+        }
+
+        public static class MoveInWizard extends AppPlace {
+        }
+
+    }
+
     @PlaceProperties(navigLabel = "Comm Center", caption = "Communication Center")
     public static class CommunicationCenter extends AppPlace {
     }

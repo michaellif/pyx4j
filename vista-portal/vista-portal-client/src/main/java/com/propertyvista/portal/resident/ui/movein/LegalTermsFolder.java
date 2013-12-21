@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application.steps;
+package com.propertyvista.portal.resident.ui.movein;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -25,39 +25,34 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
-import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
+import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLegalTerm> {
+public class LegalTermsFolder extends PortalBoxFolder<SignedLeaseLegalTerm> {
 
     private static final I18n i18n = I18n.get(LegalTermsFolder.class);
 
-    private final ApplicationWizardView view;
-
-    public LegalTermsFolder(ApplicationWizardView view) {
-        super(SignedOnlineApplicationLegalTerm.class);
+    public LegalTermsFolder() {
+        super(SignedLeaseLegalTerm.class);
         setOrderable(false);
         setAddable(false);
         setRemovable(false);
-
-        this.view = view;
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof SignedOnlineApplicationLegalTerm) {
+        if (member instanceof SignedLeaseLegalTerm) {
             return new LegalTermForm();
         } else {
             return super.create(member);
         }
     }
 
-    class LegalTermForm extends CEntityForm<SignedOnlineApplicationLegalTerm> {
+    class LegalTermForm extends CEntityForm<SignedLeaseLegalTerm> {
 
         public LegalTermForm() {
-            super(SignedOnlineApplicationLegalTerm.class);
+            super(SignedLeaseLegalTerm.class);
         }
 
         @Override

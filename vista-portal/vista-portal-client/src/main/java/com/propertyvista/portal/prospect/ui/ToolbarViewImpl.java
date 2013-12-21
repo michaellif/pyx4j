@@ -52,7 +52,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private final Button loginButton;
 
-    private final Button tenantButton;
+    private final Button residentButton;
 
     private final MenuItem applicationSelectionMenu;
 
@@ -82,8 +82,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
         rightToolbar = new Toolbar();
 
-        tenantButton = new Button("");
-        ButtonMenuBar tenantButtonMenu = new ButtonMenuBar();
+        residentButton = new Button("");
+        ButtonMenuBar residentButtonMenu = new ButtonMenuBar();
 
         applicationSelectionMenu = new MenuItem(i18n.tr("My Applications"), new Command() {
             @Override
@@ -91,7 +91,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
                 presenter.showApplications();
             }
         });
-        tenantButtonMenu.addItem(applicationSelectionMenu);
+        residentButtonMenu.addItem(applicationSelectionMenu);
 
         logoutMenu = new MenuItem(i18n.tr("Logout"), new Command() {
             @Override
@@ -99,9 +99,9 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
                 presenter.logout();
             }
         });
-        tenantButtonMenu.addItem(logoutMenu);
+        residentButtonMenu.addItem(logoutMenu);
 
-        tenantButton.setMenu(tenantButtonMenu);
+        residentButton.setMenu(residentButtonMenu);
 
         loginButton = new Button(i18n.tr("Log In"), new Command() {
             @Override
@@ -114,7 +114,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         languageButton = new Button(ClientNavigUtils.getCurrentLocale().toString());
 
         rightToolbar.addItem(loginButton);
-        rightToolbar.addItem(tenantButton);
+        rightToolbar.addItem(residentButton);
 
         //TODO implement lang selector
         if (false) {
@@ -188,7 +188,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     public void onLogedOut(boolean hideLoginButton) {
         this.loggedIn = false;
         this.hideLoginButton = hideLoginButton;
-        tenantButton.setTextLabel("");
+        residentButton.setTextLabel("");
         //TODO add image tenantButton.setImage(PortalImages.INSTANCE.avatar());
         calculateActionsState();
     }
@@ -196,7 +196,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     @Override
     public void onLogedIn(String userName) {
         this.loggedIn = true;
-        tenantButton.setTextLabel(userName);
+        residentButton.setTextLabel(userName);
         //TODO add image tenantButton.setImage(PortalImages.INSTANCE.avatar());
         calculateActionsState();
     }
@@ -233,14 +233,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         case phonePortrait:
         case phoneLandscape:
             sideMenuButton.setVisible(loggedIn && true);
-            tenantButton.setVisible(false);
+            residentButton.setVisible(false);
             languageButton.setVisible(false);
             brandHolder.getElement().getStyle().setProperty("margin", "0 50%");
             brandImage.getElement().getStyle().setProperty("margin", "5px -25px 0");
             break;
         default:
             sideMenuButton.setVisible(false);
-            tenantButton.setVisible(loggedIn);
+            residentButton.setVisible(loggedIn);
             languageButton.setVisible(true);
             brandHolder.getElement().getStyle().setProperty("margin", "0");
             brandImage.getElement().getStyle().setProperty("margin", "5px 0 0 10px");

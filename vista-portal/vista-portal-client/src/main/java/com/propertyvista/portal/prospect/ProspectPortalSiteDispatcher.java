@@ -23,7 +23,6 @@ import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;

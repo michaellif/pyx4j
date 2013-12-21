@@ -13,11 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui;
 
-import java.util.LinkedList;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;

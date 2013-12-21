@@ -15,12 +15,14 @@ package com.propertyvista.portal.resident;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -28,6 +30,8 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
 public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
+
+    private static final I18n i18n = I18n.get(ResidentPortalSiteDispatcher.class);
 
     @Override
     public NotificationAppPlace getNotificationPlace(Notification notification) {
@@ -56,10 +60,20 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
-        if (SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
+        if (newPlace instanceof PortalSiteMap.NotificationPlace) {
+            return null;
+        } else if (SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
+        } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseSigningRequired)) {
+            if (newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
+                return null;
+            }
+            if (!(newPlace instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage || newPlace == AppPlace.NOWHERE)) {
+                MessageDialog.info(i18n.tr("Sorry"), i18n.tr("In order to access that functionality you have to complete Move-In Wizard first."));
+            }
+            return new ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage();
         } else {
             return null;
         }

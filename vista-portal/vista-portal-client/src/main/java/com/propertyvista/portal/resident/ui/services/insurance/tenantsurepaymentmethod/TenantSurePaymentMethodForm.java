@@ -19,24 +19,18 @@ import java.util.Set;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;

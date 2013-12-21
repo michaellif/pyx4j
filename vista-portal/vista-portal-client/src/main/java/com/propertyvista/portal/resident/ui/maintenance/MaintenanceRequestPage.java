@@ -22,7 +22,6 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.gwt.commons.print.PrintManager;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
