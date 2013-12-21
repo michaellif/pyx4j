@@ -63,6 +63,18 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
+        -- dev_card_service_simulation_merchant_account
+        
+        ALTER TABLE dev_card_service_simulation_merchant_account        ADD COLUMN visa_credit_convenience_fee NUMERIC(18,4),
+                                                                        ADD COLUMN master_card_convenience_fee NUMERIC(18,4),
+                                                                        ADD COLUMN visa_debit_convenience_fee NUMERIC(18,4);
+                                                                        
+                                                                        
+        -- dev_card_service_simulation_transaction
+        
+        ALTER TABLE dev_card_service_simulation_transaction ADD COLUMN convenience_fee NUMERIC(18,2);
+        
+        
         -- card_transaction_record
         
         CREATE TABLE card_transaction_record

@@ -69,6 +69,13 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- merchant_account
+        
+        ALTER TABLE merchant_account    ADD COLUMN setup_accepted_echeck BOOLEAN,
+                                        ADD COLUMN setup_accepted_direct_banking BOOLEAN,
+                                        ADD COLUMN setup_accepted_credit_card BOOLEAN,
+                                        ADD COLUMN setup_accepted_credit_card_convenience_fee BOOLEAN,
+                                        ADD COLUMN setup_accepted_interac BOOLEAN ;
         
         -- payment_record
         
@@ -136,6 +143,19 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.merchant_account '
                 ||'SET  invalid = FALSE '
                 ||'WHERE invalid IS NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.merchant_account '
+                ||'SET  setup_accepted_echeck = TRUE, '
+                ||'     setup_accepted_direct_banking = TRUE, '
+                ||'     setup_accepted_credit_card = TRUE, '
+                ||'     setup_accepted_interac = TRUE ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.merchant_account AS m '
+                ||'SET     setup_accepted_credit_card_convenience_fee = TRUE '
+                ||'FROM '||v_schema_name||'.building b '
+                ||'JOIN '||v_schema_name||'.building_merchant_account bm ON (b.id = bm.building) '
+                ||'WHERE   UPPER(b.info_address_city) IN (''CAMBRIDGE'',''GUELPH'',''KITCHENER'',''LONDON'',''WATERLOO'') '
+                ||'AND     m.id = bm.merchant_account ';
        
         
         /**
