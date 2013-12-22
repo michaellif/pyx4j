@@ -172,6 +172,9 @@ public class EquifaxModelMapper {
 
         // sin
         for (IdentificationDocumentFolder document : pcc.screening().version().documents()) {
+            if (document.donotHave().getValue(false)) {
+                continue;
+            }
             if ((document.idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) && (!document.idNumber().isNull())) {
                 subject.setSocialInsuranceNumber(new BigInteger(document.idNumber().getValue().replaceAll("[\\s-]+", "")));
                 break;
