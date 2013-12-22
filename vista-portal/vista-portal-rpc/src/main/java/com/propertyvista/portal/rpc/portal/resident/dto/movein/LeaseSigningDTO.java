@@ -14,11 +14,13 @@
 package com.propertyvista.portal.rpc.portal.resident.dto.movein;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
 
+@Transient
 public interface LeaseSigningDTO extends IEntity {
 
     @Owned
