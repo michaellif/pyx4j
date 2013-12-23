@@ -48,7 +48,7 @@ public enum PmcProcessType implements Serializable {
     paymentsScheduledEcheck(PmcProcessOptions.RunForDay),
 
     @Translate("P 4 - Process Scheduled Cards Payments")
-    // TODO rename enum to remove redit 
+    // TODO rename enum to remove redit
     paymentsScheduledCreditCards(PmcProcessOptions.RunForDay),
 
     @Translate("P 5A - Send eCheque(PAD) Funds Transfer to Caledon")
@@ -107,6 +107,12 @@ public enum PmcProcessType implements Serializable {
     tenantSureReports,
 
     tenantSureTransactionReports(PmcProcessOptions.RunForDay),
+
+    @Translate("ILS Vendor Update")
+    ilsUpdate,
+
+    @Translate("ILS Email Feed")
+    ilsEmailFeed,
 
     // Used for scheduler testing
     test;

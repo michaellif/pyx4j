@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,12 +27,15 @@ import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
 
 public class KijijiLocationMapper {
 
+    private final static String SALES_FORCE_ID = "0014000000cnJLf";
+
     public void convert(ILSBuildingDTO from, ILSLocation to) {
         Persistence.ensureRetrieve(from, AttachLevel.Attached);
         Marketing info = from.building().marketing();
 
         // identification
         to.setClientLocationId((int) from.building().getPrimaryKey().asLong());
+        to.setSalesforceId(SALES_FORCE_ID);
         to.setBuildingName(info.name().getValue());
         // address
         AddressStructured address = info.marketingAddress();

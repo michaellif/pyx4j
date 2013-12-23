@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,6 +21,7 @@ import com.kijiji.pint.rs.ILSUnit.BedroomsEnum;
 import com.kijiji.pint.rs.ILSUnit.IsFurnished;
 import com.kijiji.pint.rs.ILSUnit.IsPetsAllowed;
 import com.kijiji.pint.rs.ILSUnit.OfferedByEnum;
+import com.kijiji.pint.rs.ILSUnit.UnitTypeEnum;
 
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSFloorplanDTO;
@@ -30,6 +31,7 @@ public class KijijiUnitMapper {
     public void convert(ILSFloorplanDTO from, ILSUnit to) {
         to.setClientUnitId((int) from.floorplan().getPrimaryKey().asLong());
         to.setRentOrSale("rent");
+        to.setUnitType(UnitTypeEnum.APARTMENT_CONDO);// TODO: read it from real data
         to.setOfferedBy(OfferedByEnum.OWNER);
 
         String title = from.profile().listingTitle().getValue();

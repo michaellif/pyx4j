@@ -7,20 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 20, 2013
+ * Created on Dec 2, 2013
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.ils.gottarent.mapper.dto;
+package com.propertyvista.ils;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.biz.ExecutionMonitor;
 
-@Transient
-public interface ILSUnitDTO extends IEntity {
-    IPrimitive<LogicalDate> availability();
+public interface VistaILSFacade {
 
-    IPrimitive<String> unitId();
+    public void updateGottarentListing(ExecutionMonitor executionMonitor);
+
+    public void emailFeed(ExecutionMonitor executionMonitor);
 }

@@ -30,7 +30,7 @@ public class ILSVendorConfigDataModel extends MockDataModel<ILSVendorConfig> {
     @Override
     protected void generate() {
         ILSVendorConfig vendorConfig = EntityFactory.create(ILSVendorConfig.class);
-        vendorConfig.vendor().setValue(ILSVendor.kijiji);
+        vendorConfig.vendor().setValue(ILSVendor.gottarent);
         vendorConfig.maxDailyAds().setValue(30);
 
         ILSConfig config = EntityFactory.create(ILSConfig.class);

@@ -29,9 +29,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gottarent.rs.Listing;
+import com.gottarent.rs.ObjectFactory;
 import com.gottarent.ws.GottarentWSStub;
 import com.gottarent.ws.GottarentWSStub.ImportOp;
 import com.gottarent.ws.GottarentWSStub.ImportResponse;
+
+import com.pyx4j.essentials.server.dev.DataDump;
+
+import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.occupancy.ILSGottarentIntegrationAgent;
+import com.propertyvista.ils.gottarent.mapper.GottarentDataMapper;
+import com.propertyvista.ils.gottarent.mapper.dto.ILSReportDTO;
 
 /**
  * @author smolka
@@ -40,6 +48,23 @@ import com.gottarent.ws.GottarentWSStub.ImportResponse;
 public class GottarentClient {
 
     private final static Logger log = LoggerFactory.getLogger(GottarentClient.class);
+
+    private final static boolean testMode = true;
+
+    public static void updateGottarentListing(ExecutionMonitor executionMonitor) {
+        // TODO - use ExecutionMonitor to register state (target points, errors, etc) in the course of execution
+        try {
+            // fetch relevant data and prepare gottarent xml
+            Listing listing = generateData();
+
+            if (hasData(listing)) {
+                // update gottarent server
+                GottarentClient.updateGottarent("UserId", listing);
+            }
+        } catch (Exception e) {// TODO: Smolka
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Import to gottarent server basing provided input
@@ -52,7 +77,7 @@ public class GottarentClient {
      * @throws Exception
      * @throws RemoteException
      */
-    public static void updateGottarent(String userId, Listing requestListing) throws AxisFault, Exception, RemoteException {
+    private static void updateGottarent(String userId, Listing requestListing) throws Exception {
         if (requestListing == null) {
             //TODO: Smolka
             return;
@@ -62,13 +87,16 @@ public class GottarentClient {
         ImportOp input = new ImportOp();
 
         String generatedXml = objectToXml(requestListing, Listing.class);
-        DataSource dataSource = new ByteArrayDataSource(Base64.encodeBase64(generatedXml.getBytes()));
+        DataDump.dump("Gottarent", generatedXml);
+        if (!testMode) {
+            DataSource dataSource = new ByteArrayDataSource(Base64.encodeBase64(generatedXml.getBytes()));
 
-        input.setBuffer(new DataHandler(dataSource));
-        input.setUserID(userId);
-        ImportResponse response = ws.importOp(new ImportOp());
-        //TODO: Smolka. Gottarent response always empty. What to return?
-        response = null;
+            input.setBuffer(new DataHandler(dataSource));
+            input.setUserID(userId);
+            ImportResponse response = ws.importOp(new ImportOp());
+            //TODO: Smolka. Gottarent response always empty. What to return?
+            response = null;
+        }
     }
 
     private static <T> String objectToXml(T object, Class<T> classType) throws Exception {
@@ -84,5 +112,17 @@ public class GottarentClient {
             log.error("Failed to convert object to XMl format. " + e.getMessage());
             throw new Exception(e);
         }
+    }
+
+    private static boolean hasData(Listing listing) {
+        return listing != null && listing.getCompany() != null && listing.getCompany().getPortfolio() != null
+                && listing.getCompany().getPortfolio().getBuilding() != null && listing.getCompany().getPortfolio().getBuilding().size() > 0;
+    }
+
+    private static Listing generateData() throws JAXBException {
+
+        ILSReportDTO ilsReport = new ILSGottarentIntegrationAgent().getUnitListing();
+
+        return new GottarentDataMapper(new ObjectFactory()).createListing(ilsReport);
     }
 }

@@ -29,7 +29,6 @@ import com.propertyvista.domain.property.asset.Floorplan;
  * @author smolka
  * 
  */
-// TODO: Smolka, make it common entity
 @Transient
 public interface ILSFloorplanDTO extends IEntity {
 

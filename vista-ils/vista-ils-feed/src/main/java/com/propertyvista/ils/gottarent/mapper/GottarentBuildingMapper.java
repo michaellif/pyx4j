@@ -14,23 +14,17 @@
 package com.propertyvista.ils.gottarent.mapper;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.gottarent.rs.Address;
 import com.gottarent.rs.Building;
 import com.gottarent.rs.BuildingAmenity;
-import com.gottarent.rs.BuildingIncentives;
 import com.gottarent.rs.BuildingInfo;
 import com.gottarent.rs.BuildingRentalOffice;
 import com.gottarent.rs.BuildingVacancies;
-import com.gottarent.rs.BuildingVacancy;
-import com.gottarent.rs.CommunityInfo;
+import com.gottarent.rs.CommunityAmenity;
 import com.gottarent.rs.ObjectFactory;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
@@ -38,15 +32,13 @@ import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.marketing.MarketingContacts;
+import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.Type;
-import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.ils.common.ILSUtils;
 import com.propertyvista.ils.gottarent.mapper.dto.ILSBuildingDTO;
-import com.propertyvista.ils.gottarent.mapper.dto.ILSFloorplanDTO;
-import com.propertyvista.ils.gottarent.mapper.dto.ILSUnitDTO;
 
 /**
  * The class responsible to convert ILS Building DTO into gottarent Building DTO
@@ -55,8 +47,7 @@ import com.propertyvista.ils.gottarent.mapper.dto.ILSUnitDTO;
  * 
  */
 public class GottarentBuildingMapper {
-
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final short MAX_NAME_LENGTH = 120;
 
     private final ObjectFactory factory;
 
@@ -64,72 +55,51 @@ public class GottarentBuildingMapper {
         this.factory = factory;
     }
 
-    private BuildingIncentives createBuildingIncentives(com.propertyvista.domain.property.asset.building.Building from) {
-        BuildingIncentives to = factory.createBuildingIncentives();
-        return to;
-    }
+    public Building createBuilding(ILSBuildingDTO bldDto) {
+        com.propertyvista.domain.property.asset.building.Building from = bldDto.building();
 
-    private BuildingVacancies createBuildingFloorplanVacancies(com.propertyvista.domain.property.asset.building.Building from,
-            Collection<ILSFloorplanDTO> fpList) {
-        BuildingVacancies to = factory.createBuildingVacancies();
-        List<BuildingVacancy> toVacancies = to.getBuildingVacancy();
-        if (fpList != null && fpList.size() > 0) {
-            for (ILSFloorplanDTO fromVacancy : fpList) {
-                toVacancies.add(createBuildingVacancies(fromVacancy));
-            }
+        Address address = getAddress(from);
+        String id = getBuildingId(from);
+        String buildingName = generateBuildingName(from);
+        BuildingRentalOffice rentalOffice = getBuildingRentalOffice(bldDto);
+        // if no mandatory fields, return
+        if (address == null || id == null || buildingName == null || rentalOffice == null) {
+            return null;
+        }
+        com.gottarent.rs.Building to = factory.createBuilding();
+
+        to.setExternalBuildingId(id);
+        to.setBuildingName(buildingName);
+        to.setAddress(address);
+        to.setBuildingEnabled(GottarentMapperUtils.booleanNot2String(bldDto.profile().disabled().getValue()));
+        to.setBuildingRentalOffice(rentalOffice);
+
+        setBuildingTypeOptionalData(from.info(), to);
+        setBuildingInfoOptionalData(from, to);
+
+        setCommunityAmenityOptionalData(from.amenities(), to);
+        //to.setBuildingIncentives(createBuildingIncentives(from)); // TODO: Smolka,  not now
+        setBuildingAmenityOptionalData(from.amenities(), to);
+
+        BuildingVacancies vacancies = new GottarentUnitMapper(factory, from).createBuildingFloorplanVacancies(bldDto.floorplans());
+        if (vacancies.getBuildingVacancy().size() > 0) {
+            to.setBuildingVacancies(vacancies);
         }
         return to;
     }
 
-    private BuildingVacancy createBuildingVacancies(ILSFloorplanDTO from) {
-        BuildingVacancy to = factory.createBuildingVacancy();
-        IList<ILSUnitDTO> units = from.units();
-        if (units != null && units.size() > 0) {
-            for (ILSUnitDTO unit : units) {
-                //to.setBuildingVacancyAltTag(value);// TODO: Smolka
-                setAvailability(to, unit);
-                to.setBuildingVacancyBaths(ILSUtils.getBathrooms(from.floorplan().bathrooms().getValue(), from.floorplan().halfBath().getValue()).value());
-                //to.setBuildingVacancyBedroomSize(value);// TODO: Smolka; does not exist
-                to.setBuildingVacancyPrice(from.minPrice().getValue().toPlainString());// TODO: Smolka Why always 0? Should be updated by yaris
-                to.setBuildingVacancySize((DomainUtil.getAreaInSqFeet(from.floorplan().area(), from.floorplan().areaUnits())).toString());// Smolka m^2 or feets; number or words?
-                to.setExternalBuildingVacancySuiteID(unit.externalId().getValue());
-            }
-        }
-        return to;
-    }
-
-    private void setAvailability(BuildingVacancy to, ILSUnitDTO from) {
-        if (from.availability() != null && !from.availability().isNull()) {
-            to.setBuildingVacancyAvailabilityDate(from.availability().getValue().toString());
-            Calendar cal = new GregorianCalendar();
-            cal.setTime(new LogicalDate());
-            cal.add(Calendar.MONTH, -1);// TODO, Smolka. Which time buffer to check
-
-            if (from.availability().getValue().after(cal.getTime())) {
-                to.setBuildingVacancyVisible(ILSUtils.boolean2String(Boolean.TRUE));
-                to.setBuildingVacancyEnabled(ILSUtils.boolean2String(Boolean.TRUE));
-                return;
-            }
-        }
-        to.setBuildingVacancyVisible(ILSUtils.boolean2String(Boolean.FALSE));
-        to.setBuildingVacancyEnabled(ILSUtils.boolean2String(Boolean.FALSE));
-
-    }
-
-    private BuildingRentalOffice createBuildingRentalOffice(ILSBuildingDTO from) {
-        BuildingRentalOffice to = factory.createBuildingRentalOffice();
-        //to.setBuildingRentalOfficeSaturday(value);// TODO: Smolka, has no value in vista
-        //to.setBuildingRentalOfficeSunday(value);// TODO: Smolka, has no value in vista
-        //to.setBuildingRentalOfficeWeekday(value);// TODO: Smolka, has no value in vista
-
+    private BuildingRentalOffice getBuildingRentalOffice(ILSBuildingDTO from) {
         Marketing info = from.building().marketing();
-        String phone, email;
-        if (!from.profile().preferredContacts().isEmpty()) {
-            phone = from.profile().preferredContacts().phone().value().getValue();
-            email = from.profile().preferredContacts().email().value().getValue();
-        } else {
-            phone = info.marketingContacts().phone().value().getValue();
-            email = info.marketingContacts().email().value().getValue();
+        if (GottarentMapperUtils.isNull(info) || info.isEmpty()) {
+            return null;
+        }
+        String phone = null, email = null;
+        ILSProfileBuilding profile = from.profile();
+        if (GottarentMapperUtils.isNull(profile) || profile.isEmpty() || GottarentMapperUtils.isNull(from.profile().preferredContacts())
+                || from.profile().preferredContacts().isEmpty()) {
+            MarketingContacts marketingContacts = info.marketingContacts();
+            phone = marketingContacts.phone().value().getValue();
+            email = marketingContacts.email().value().getValue();
             if (email == null || phone == null) {
                 // check main office contact
                 Persistence.service().retrieveMember(from.building().contacts().propertyContacts(), AttachLevel.Attached);
@@ -144,104 +114,212 @@ public class GottarentBuildingMapper {
                     }
                 }
             }
+        } else {
+            phone = from.profile().preferredContacts().phone().value().getValue();
+            email = from.profile().preferredContacts().email().value().getValue();
         }
 
-        to.setRentalOfficeEmail(email);
-        to.setRentalOfficePhone(phone);
+        if (email == null) {
+            return null;
+        }
+
+        BuildingRentalOffice rentalOffice = factory.createBuildingRentalOffice();
+        rentalOffice.setRentalOfficeEmail(email);
+
+        if (phone != null) {
+            rentalOffice.setRentalOfficePhone(GottarentMapperUtils.formatPhone(phone));
+        }
+
+        //to.setBuildingRentalOfficeSaturday(value);// TODO: Smolka, has no value in vista
+        //to.setBuildingRentalOfficeSunday(value);// TODO: Smolka, has no value in vista
+        //to.setBuildingRentalOfficeWeekday(value);// TODO: Smolka, has no value in vista
+
         //to.setRentalOfficePhoneExt(value);// TODO: Smolka, has no value in vista
-        return to;
+        return rentalOffice;
     }
 
-    private BuildingAmenity createBuildingAmenity(IList<com.propertyvista.domain.property.asset.building.BuildingAmenity> from) {
-        BuildingAmenity to = factory.createBuildingAmenity();
-        // TODO: Smolka
-        /*
-         * List<String> toAmenities = to.getBuildingAmenityName();
-         * if (from != null && from.size() > 0) {
-         * for (com.propertyvista.domain.property.asset.building.BuildingAmenity fromAmenity : from) {
-         * toAmenities.add(fromAmenity.type().getStringView()); // TODO: Smolka Should use aggregated values from units
-         * }
-         * }
-         */
-        return to;
-    }
+    private void setBuildingAmenityOptionalData(IList<com.propertyvista.domain.property.asset.building.BuildingAmenity> from, com.gottarent.rs.Building to) {
+        if (GottarentMapperUtils.isNull(from) || from.size() < 1) {
+            return;
+        }
 
-    private BuildingInfo createBuildingInfo(com.propertyvista.domain.property.asset.building.Building from) {
-        BuildingInfo to = factory.createBuildingInfo();
+        BuildingAmenity toAmenity = factory.createBuildingAmenity();
 
-        //TODO: Smolka, improve description based on extra-properties
-        to.setBuildingInfoDescription("<![CDATA[<p>" + from.marketing().description().getValue() + "</p>]]>");
-        return to;
-    }
+        List<String> amenities = toAmenity.getBuildingAmenityName();
 
-    private CommunityInfo createCommunityInfo(IList<com.propertyvista.domain.property.asset.building.BuildingAmenity> from) {
-        CommunityInfo to = factory.createCommunityInfo();
-        if (from != null && from.size() > 0) {
-            for (com.propertyvista.domain.property.asset.building.BuildingAmenity fromAmenity : from) {
-                if (!fromAmenity.type().isNull()) {
-                    switch (fromAmenity.type().getValue()) {
-                    case transportation:
-                        to.setCommunityInfoDescription("Public transit");
-                        return to;
-                    case childCare:
-                        to.setCommunityInfoDescription("Schools nearby");
-                        return to;
-                    default:
-                        break;
-                    }
+        for (com.propertyvista.domain.property.asset.building.BuildingAmenity fromAmenity : from) {
+
+            if (!fromAmenity.isNull() && !fromAmenity.isEmpty() && fromAmenity.type() != null) {
+                switch (fromAmenity.type().getValue()) {
+                case coveredParking:
+                    amenities.add("Covered parking");
+                    break;
+                case elevator:
+                    amenities.add("Elevators");
+                    break;
+                case groupExercise:
+                    amenities.add("Exercise room");
+                    break;
+                case fitness:
+                case fitnessCentre:
+                    amenities.add("Fitness room");
+                    break;
+                case storageSpace:
+                    amenities.add("In-suite storage");
+                    break;
+                case laundry:
+                    amenities.add("Laundry onsite");
+                    break;
+                case doorAttendant:
+                case housekeeping:
+                case houseSitting:
+                case concierge:
+                case onSiteManagement:
+                    amenities.add("On-site staff");
+                    break;
+                case parking:
+                    amenities.add("Parking available");
+                    break;
+                case basketballCourt:
+                case volleyballCourt:
+                case playGround:
+                case tennisCourt:
+                    amenities.add("Outdoor play area");
+                    break;
+                case recreationalRoom:
+                    amenities.add("Recreation room");
+                    break;
+                case sauna:
+                    amenities.add("Sauna");
+                    break;
+                case tvLounge:
+                    amenities.add("Satellite included");
+                    break;
+                case pool:
+                    amenities.add("Swimming poold");
+                    break;
+                default:
+                    // TODO: Smolka Should use aggregated values from units
+                    break;
                 }
             }
         }
 
+        if (amenities.size() > 0) {
+            to.setBuildingAmenity(toAmenity);
+        }
+    }
+
+    private void setBuildingInfoOptionalData(com.propertyvista.domain.property.asset.building.Building from, com.gottarent.rs.Building to) {
+        String description = from.marketing().description().getValue();
+        if (description == null || description.trim().isEmpty()) {
+            return;
+        }
+        BuildingInfo buildingInfo = factory.createBuildingInfo();
+
+        //TODO: Smolka, improve description based on extra-properties
+        description = "<![CDATA[" + description + "]]>";
+        buildingInfo.setBuildingInfoDescription(description);
+        to.setBuildingInfo(buildingInfo);
+    }
+
+    private void setCommunityAmenityOptionalData(IList<com.propertyvista.domain.property.asset.building.BuildingAmenity> from, com.gottarent.rs.Building to) {
+        if (GottarentMapperUtils.isNull(from) || from.size() < 1) {
+            return;
+        }
+
+        CommunityAmenity amenities = factory.createCommunityAmenity();
+
+        for (com.propertyvista.domain.property.asset.building.BuildingAmenity fromAmenity : from) {
+            if (!fromAmenity.type().isNull()) {
+                switch (fromAmenity.type().getValue()) {
+                case transportation:
+                    amenities.getCommunityAmenityName().add("Public transit");
+                    break;
+                case childCare:
+                    amenities.getCommunityAmenityName().add("Schools nearby");
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+
+        if (amenities.getCommunityAmenityName().size() > 0) {
+            to.setCommunityAmenity(amenities);
+        }
+    }
+
+    private Address getAddress(com.propertyvista.domain.property.asset.building.Building from) {
+        AddressStructured address = GottarentMapperUtils.getAddress(from);
+        // if no mandatory fields, return
+        if (GottarentMapperUtils.isNull(address) || address.isEmpty() || GottarentMapperUtils.isNull(address.province()) || address.province().isEmpty()
+                || GottarentMapperUtils.isNullOrEmpty(address.city())) {
+            return null;
+        }
+
+        String street = GottarentMapperUtils.formatStreetOnly(address);
+        String number = GottarentMapperUtils.formatStreetNumber(address);
+        // if no mandatory fields, return
+        if (street == null || number == null || street.trim().isEmpty() || number.trim().isEmpty()) {
+            return null;
+        }
+
+        Address to = factory.createAddress();
+        to.setBuildingProvinceAbbreviation(address.province().code().getStringView());
+        to.setBuildingCity(address.city().getStringView());
+        if (!GottarentMapperUtils.isNullOrEmpty(address.postalCode())) {
+            to.setBuildingPostalCode(address.postalCode().getStringView());
+        }
+        to.setBuildingStreetAddress(street);
+        to.setBuildingStreetNumber(number);
+        setGeoLocationOptionalData(from, to);
+
         return to;
     }
 
-    private Address createAddress(com.propertyvista.domain.property.asset.building.Building from) {
-        Address to = factory.createAddress();
-        AddressStructured address = from.marketing().marketingAddress();
-        if (address.isEmpty()) {
-            address = from.info().address();
-        }
-        to.setBuildingCity(address.city().getStringView());
-        to.setBuildingProvinceAbbreviation(address.province().code().getStringView());
-        to.setBuildingPostalCode(address.postalCode().getStringView());
-        //to.setBuildingRegion(address.country().getStringView());// TODO: Smolka, it is unclear whether we need it
-        to.setBuildingStreetAddress(ILSUtils.formatStreetOnly(address));
-        to.setBuildingStreetNumber(ILSUtils.formatStreetNumber(address));
-        GeoPoint gp = from.info().location().getValue();
+    private void setGeoLocationOptionalData(com.propertyvista.domain.property.asset.building.Building from, Address to) {
+        GeoPoint gp = GottarentMapperUtils.isNull(from.info()) || from.info().isEmpty() || GottarentMapperUtils.isNull(from.info().location()) ? null : from
+                .info().location().getValue();
         if (gp != null) {
             to.setBuildingLatitude(new BigDecimal(gp.getLat()));
             to.setBuildingLongitude(new BigDecimal(gp.getLng()));
         }
-
-        //to.setBuildingIntersection(value);  //TODO: Smolka does not exist in vista
-
-        return to;
     }
 
-    public Building createBuilding(ILSBuildingDTO bldDto) {
-        com.gottarent.rs.Building to = factory.createBuilding();
-        com.propertyvista.domain.property.asset.building.Building from = bldDto.building();
-        to.setExternalBuildingId(generateBuildingId(from));
-        to.setAddress(createAddress(from));
-        to.setBuildingRentalOffice(createBuildingRentalOffice(bldDto));
-        to.setBuildingEnabled(ILSUtils.booleanNot2String(bldDto.profile().disabled().getValue()));
-        to.setBuildingName(from.info().name().getStringView());
-        to.setBuildingIncentives(createBuildingIncentives(from)); // TODO: Smolka,  not now
-        setBuildingType(from.info(), to);
-        to.setBuildingAmenity(createBuildingAmenity(from.amenities()));
-        to.setCommunityInfo(createCommunityInfo(from.amenities()));
-        to.setBuildingInfo(createBuildingInfo(from));
-        to.setBuildingVacancies(createBuildingFloorplanVacancies(from, bldDto.floorplans()));
-        return to;
+    public static String getBuildingId(com.propertyvista.domain.property.asset.building.Building from) {
+        return from.propertyCode().getValue();
     }
 
-    private String generateBuildingId(com.propertyvista.domain.property.asset.building.Building from) {
-        // TODO: Smolka id or  integrationSystemId()
-        return from.id().getStringView();
+    private String generateBuildingName(com.propertyvista.domain.property.asset.building.Building from) {
+        Marketing info = from.marketing();
+        String result = null;
+        if (GottarentMapperUtils.isNull(info) || info.isEmpty() || GottarentMapperUtils.isNullOrEmpty(info.name())) {
+            com.propertyvista.domain.property.asset.building.BuildingInfo buildingInfo = from.info();
+            if (GottarentMapperUtils.isNull(buildingInfo) || buildingInfo.isEmpty() || GottarentMapperUtils.isNullOrEmpty(buildingInfo.name())) {
+                result = GottarentMapperUtils.formatStreetAndNumber(GottarentMapperUtils.getAddress(from));
+            } else {
+                result = buildingInfo.name().getValue();
+            }
+        } else {
+            result = info.name().getValue();
+        }
+
+        if (result == null) {
+            return null;
+        }
+
+        result = result.trim();
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result.length() > MAX_NAME_LENGTH ? result.substring(0, MAX_NAME_LENGTH) : result;
     }
 
-    private void setBuildingType(com.propertyvista.domain.property.asset.building.BuildingInfo from, com.gottarent.rs.Building to) {
+    private void setBuildingTypeOptionalData(com.propertyvista.domain.property.asset.building.BuildingInfo from, com.gottarent.rs.Building to) {
+        if (from == null) {
+            return;
+        }
         String value = null;
         StructureType structureType = from.structureType().getValue();
 
@@ -284,7 +362,10 @@ public class GottarentBuildingMapper {
             }
         }
         if (value != null) {
+
+            // LENGTH MUST be <= 25
             to.setBuildingType(value);
         }
     }
+
 }

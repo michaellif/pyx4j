@@ -13,6 +13,8 @@
 		<xs:sequence>
 			<xs:element name="ClientLocationId" type="xs:int"
 				minOccurs="1" />
+			<xs:element name="SalesforceId" type="xs:string"
+				minOccurs="1" />
 			<xs:element name="BuildingName" type="xs:string"
 				minOccurs="1" />
 			<xs:element name="StreetAddress" type="xs:string"
@@ -20,10 +22,10 @@
 			<xs:element name="City" type="xs:string" minOccurs="1" />
 			<xs:element name="Province" type="xs:string" minOccurs="1" />
 			<xs:element name="PostalCode" type="xs:string" minOccurs="1" />
-			<xs:element name="Email" type="xs:string" />
-			<xs:element name="PhoneNumber" type="xs:string" minOccurs="1" />
-			<xs:element name="WebSite" type="xs:string" minOccurs="1" />
-			<xs:element name="Logo" type="logo" />
+			<xs:element name="Email" type="xs:string" minOccurs="1" />
+			<xs:element name="PhoneNumber" type="xs:string" minOccurs="0" />
+			<xs:element name="WebSite" type="xs:string" minOccurs="0" />
+			<xs:element name="Logo" type="logo" minOccurs="0" />
 			<xs:element name="Units" type="Units" minOccurs="1"
 				maxOccurs="unbounded" />
 		</xs:sequence>
@@ -49,7 +51,14 @@
 			<xs:element name="ClientUnitId" type="xs:int" minOccurs="1" />
 			<xs:element name="Title" type="xs:string" minOccurs="1" />
 			<xs:element name="Description" type="xs:string" minOccurs="1" />
-			<xs:element name="RentOrSale" type="xs:string" minOccurs="1" />
+			<xs:element name="RentOrSale" minOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="rent" />
+						<xs:enumeration value="sale" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
 			<xs:element name="OfferedBy" minOccurs="1">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">

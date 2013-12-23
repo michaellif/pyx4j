@@ -35,7 +35,7 @@ public class ILSProfileBuildingDataModel extends MockDataModel<ILSProfileBuildin
         ILSProfileBuilding profileBuilding = EntityFactory.create(ILSProfileBuilding.class);
         profileBuilding.building().set(building);
         profileBuilding.disabled().setValue(Boolean.FALSE);
-        profileBuilding.vendor().setValue(ILSVendor.kijiji);
+        profileBuilding.vendor().setValue(ILSVendor.gottarent);
         MarketingContacts mc = EntityFactory.create(MarketingContacts.class);
         mc.email().value().setValue("a@b.com");
         mc.phone().value().setValue("987-654-3210");
@@ -45,7 +45,7 @@ public class ILSProfileBuildingDataModel extends MockDataModel<ILSProfileBuildin
         for (Floorplan f : building.floorplans()) {
             ILSProfileFloorplan floorplan = EntityFactory.create(ILSProfileFloorplan.class);
             floorplan.floorplan().set(f);
-            floorplan.vendor().setValue(ILSVendor.kijiji);
+            floorplan.vendor().setValue(ILSVendor.gottarent);
             Persistence.service().persist(floorplan);
         }
     }

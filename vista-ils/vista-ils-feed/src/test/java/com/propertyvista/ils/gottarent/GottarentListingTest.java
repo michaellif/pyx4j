@@ -13,17 +13,9 @@
  */
 package com.propertyvista.ils.gottarent;
 
-import javax.xml.bind.JAXBException;
-
 import org.junit.experimental.categories.Category;
 
-import com.gottarent.rs.Listing;
-import com.gottarent.rs.ObjectFactory;
-
-import com.propertyvista.biz.occupancy.ILSGottarentIntegrationAgent;
 import com.propertyvista.ils.ILSTestBase;
-import com.propertyvista.ils.gottarent.mapper.GottarentDataMapper;
-import com.propertyvista.ils.gottarent.mapper.dto.ILSReportDTO;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
@@ -43,29 +35,11 @@ public class GottarentListingTest extends ILSTestBase {
 
     public void testScenario() {
         try {
-            // fetch relevant data and prepare gottarent xml
-            Listing listing = generateData();
 
-            if (hasData(listing)) {
-                // update gottarent server
-                GottarentClient.updateGottarent("UserId", listing);
-            }
+            GottarentClient.updateGottarentListing(null);
+            //EmailFeedClient.emailFeed(null);
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
-
-    private boolean hasData(Listing listing) {
-        return listing != null && listing.getCompany() != null && listing.getCompany().getPortfolio() != null
-                && listing.getCompany().getPortfolio().getBuilding() != null && listing.getCompany().getPortfolio().getBuilding().size() > 0;
-    }
-
-    private Listing generateData() throws JAXBException {
-
-        ILSReportDTO ilsReport = new ILSGottarentIntegrationAgent().getUnitListing();
-        assertTrue("No Units found", ilsReport.totalUnits().getValue() > 0);
-
-        return new GottarentDataMapper(new ObjectFactory()).createListing(ilsReport);
-    }
-
 }

@@ -28,6 +28,11 @@ public class PmcProcessFactory {
         case test:
             return new TestPmcProcess();
 
+        case ilsUpdate:
+            return new ILSClientProcess();
+
+        case ilsEmailFeed:
+            return new ILSEmailFeedProcess();
 // Billing-related:
         case billing:
             return new BillingProcess();
@@ -54,7 +59,7 @@ public class PmcProcessFactory {
         case paymentsDbpProcess:
             return new PaymentsDbpPostProcess();
 
-// Caledon            
+// Caledon
         case paymentsPadSend:
             return new PaymentsFundsTransferSendProcess(FundsTransferType.PreAuthorizedDebit);
         case paymentsDbpSend:

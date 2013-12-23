@@ -7,32 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 20, 2013
+ * Created on Oct 10, 2013
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.settings;
+package com.propertyvista.ils.gottarent.setup;
 
-import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.essentials.rpc.ImportColumn;
 
-public interface ILSConfig extends IEntity {
-    public enum ILSVendor {
-        kijiji, gottarent, emg
-    }
+@Transient
+public interface UnitAvailData extends IEntity {
+    @ImportColumn(names = { "property_code" })
+    IPrimitive<String> propertyCode();
 
-    // work-around to avoid SQL errors for an empty entity - remove if more methods added
-    @Deprecated
-    IPrimitive<String> x();
+    @ImportColumn(names = { "unit_number" })
+    IPrimitive<String> unitNo();
 
-    @Owned
-    @OrderBy(PrimaryKey.class)
-    IList<ILSVendorConfig> vendors();
+    @ImportColumn(names = { "availability_date" })
+    IPrimitive<String> available();
 
-    @Owned
-    @OrderBy(PrimaryKey.class)
-    IList<ILSEmailConfig> emailFeeds();
+    @ImportColumn(names = { "market_rent" })
+    IPrimitive<String> marketRent();
 }

@@ -13,9 +13,6 @@ package com.propertyvista.ils.gottarent.mapper;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.gottarent.rs.Building;
 import com.gottarent.rs.Company;
 import com.gottarent.rs.Listing;
@@ -34,46 +31,53 @@ import com.propertyvista.ils.gottarent.mapper.dto.ILSReportDTO;
  * 
  */
 public class GottarentDataMapper {
-    private static Logger log = LoggerFactory.getLogger(GottarentDataMapper.class);
-
     private final ObjectFactory factory;
 
     public GottarentDataMapper(ObjectFactory newFactory) {
         factory = newFactory;
     }
 
-    private Portfolio createPortfolio(IList<ILSBuildingDTO> vistaListing) {
+    private Portfolio createPortfolio(IList<ILSBuildingDTO> vistaListing, Listing listing) {
         Portfolio portfolio = factory.createPortfolio();
         List<Building> buildings = portfolio.getBuilding();
         GottarentBuildingMapper buildingMapper = new GottarentBuildingMapper(factory);
+        int totalBuildings = 0, totalUnits = 0;
         for (ILSBuildingDTO bldDto : vistaListing) {
             // TODO: Smolka : Uncomment it if needed
             //if (bldDto.profile().vendor().equals(ILSVendor.gottarent)) {
-            buildings.add(buildingMapper.createBuilding(bldDto));
-            //}
+            Building building = buildingMapper.createBuilding(bldDto);
+            if (building != null) {
+                buildings.add(building);
+                totalUnits += (building.getBuildingVacancies() == null || building.getBuildingVacancies().getBuildingVacancy() == null ? 0 : building
+                        .getBuildingVacancies().getBuildingVacancy().size());
+                totalBuildings++;
+            }
+            // }
         }
+
+        listing.setNumProperties(new BigInteger(Integer.toString(totalBuildings)));
+        listing.setNumUnits(new BigInteger(Integer.toString(totalUnits)));
 
         return portfolio;
     }
 
-    private Company createCompany(IList<ILSBuildingDTO> vistaListing) {
+    private Company createCompany(IList<ILSBuildingDTO> vistaListing, Listing listing) {
         //TODO: Smolka, how to fill company properties
         Company company = factory.createCompany();
-        company.setCompanyName("propertyvista");
+        company.setCompanyName("Property Vista");
         company.setCompanyWebsite("http://propertyvista.com");
-        company.setCompanyEmail("a@b.com");
+        company.setCompanyEmail("ils-feed@propertyvista.com");
 
-        company.setPortfolio(createPortfolio(vistaListing));
+        company.setPortfolio(createPortfolio(vistaListing, listing));
         return company;
     }
 
     public Listing createListing(ILSReportDTO report) {
         Listing listing = factory.createListing();
 
-        listing.setCompany(createCompany(report.buildings()));
-        listing.setNumProperties(new BigInteger(Integer.toString(report.buildings().size())));
-        listing.setNumUnits(new BigInteger(Integer.toString(report.totalUnits().getValue())));
+        listing.setCompany(createCompany(report.buildings(), listing));
 
         return listing;
     }
+
 }
