@@ -13,6 +13,9 @@
  */
 package com.propertyvista.payment.pad.data;
 
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -37,6 +40,12 @@ public interface PadAckFile extends IEntity {
     public static String FileNameSufix = "_acknowledgement.csv";
 
     IPrimitive<String> fileName();
+
+    @Format("yyyy-MM-dd HH:mm")
+    IPrimitive<Date> remoteFileDate();
+
+    @Format("yyyy-MM-dd HH:mm")
+    IPrimitive<Date> fileNameDate();
 
     IPrimitive<FundsTransferType> fundsTransferType();
 

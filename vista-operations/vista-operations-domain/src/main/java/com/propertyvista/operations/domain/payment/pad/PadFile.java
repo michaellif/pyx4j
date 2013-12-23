@@ -149,4 +149,12 @@ public interface PadFile extends IEntity {
 
     IPrimitive<FileAcknowledgmentStatus> acknowledgmentStatus();
 
+    IPrimitive<String> acknowledgmentFileName();
+
+    @Format("yyyy-MM-dd HH:mm")
+    IPrimitive<Date> acknowledgmentRemoteFileDate();
+
+    @Format("yyyy-MM-dd HH:mm")
+    IPrimitive<Date> acknowledgmentFileNameDate();
+
 }

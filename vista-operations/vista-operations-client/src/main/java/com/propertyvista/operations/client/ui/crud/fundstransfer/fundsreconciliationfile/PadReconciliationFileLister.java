@@ -27,7 +27,9 @@ public class PadReconciliationFileLister extends AbstractLister<PadReconciliatio
         setColumnDescriptors(//@formatter:off                
                     new MemberColumnDescriptor.Builder(proto().fileName()).build(),
                     new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().created()).build()
+                    new MemberColumnDescriptor.Builder(proto().created()).build(),
+                    new MemberColumnDescriptor.Builder(proto().remoteFileDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().fileNameDate()).build()
             );//@formatter:on
     }
 }

@@ -27,6 +27,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
@@ -146,6 +147,7 @@ public class SftpClient implements Closeable {
                         receivedFile = dst;
                         receivedFile.remoteName = rFile.getFilename();
                         receivedFile.remotePath = dir;
+                        receivedFile.lastModified = (long) rFile.getAttrs().getMTime() * Consts.SEC2MSEC;
                         break scanDirectories;
                     }
                 }

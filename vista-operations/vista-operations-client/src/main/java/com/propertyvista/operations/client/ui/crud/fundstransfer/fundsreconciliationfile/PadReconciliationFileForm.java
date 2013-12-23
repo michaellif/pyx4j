@@ -40,6 +40,8 @@ public class PadReconciliationFileForm extends OperationsEntityForm<PadReconcili
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fileName())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fundsTransferType())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().created())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().remoteFileDate())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fileNameDate())).build());
 
         // TODO Sorry for the mess with DTO and DBO here,  will be fixed once we have AttacheLEvel.countOnly
         AppPlaceBuilder<IList<PadReconciliationDebitRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<PadReconciliationDebitRecord>>() {

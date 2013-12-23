@@ -50,6 +50,8 @@ public class DebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().paymentDate()), 10).build());
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().reasonText()), 10).build());
 
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated())).build());
+
         selectTab(addTab(content));
     }
 }

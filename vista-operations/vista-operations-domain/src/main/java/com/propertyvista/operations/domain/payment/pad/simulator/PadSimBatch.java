@@ -13,8 +13,12 @@
  */
 package com.propertyvista.operations.domain.payment.pad.simulator;
 
+import java.util.Date;
+
 import com.pyx4j.config.shared.ApplicationDevelopmentFeature;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -23,6 +27,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -113,5 +118,10 @@ public interface PadSimBatch extends IEntity {
     IPrimitive<String> merchantBalance();
 
     IPrimitive<String> fundsReleased();
+
+    @Timestamp(Timestamp.Update.Updated)
+    @Format("yyyy-MM-dd HH:mm")
+    @Editor(type = Editor.EditorType.label)
+    IPrimitive<Date> updated();
 
 }

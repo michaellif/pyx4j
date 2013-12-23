@@ -276,6 +276,13 @@ public class PadSimulationManager {
         Persistence.service().persist(padFileNew);
 
         for (PadSimBatch padBatch : padFileNew.batches()) {
+            padBatch.grossPaymentCount().setValue(null);
+            padBatch.grossPaymentAmount().setValue(null);
+            padBatch.rejectItemsCount().setValue(null);
+            padBatch.rejectItemsAmount().setValue(null);
+            padBatch.returnItemsCount().setValue(null);
+            padBatch.returnItemsAmount().setValue(null);
+
             Persistence.service().persist(padBatch);
         }
 
@@ -307,7 +314,7 @@ public class PadSimulationManager {
                     }
                     switch (record.reconciliationStatus().getValue()) {
                     case REJECTED:
-                        returns.add(record.amount().getValue());
+                        rejects.add(record.amount().getValue());
                         break;
                     case RETURNED:
                         returns.add(record.amount().getValue());
@@ -339,6 +346,7 @@ public class PadSimulationManager {
             if (padBatch.returnItemsAmount().isNull()) {
                 padBatch.returnItemsAmount().setValue(CaledonPadUtils.formatAmount(returns.totalAmount));
             }
+            Persistence.service().persist(padBatch);
         }
     }
 

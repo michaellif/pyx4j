@@ -72,6 +72,9 @@ class FundsTransferCaledonAcknowledgement {
 
         padFile.acknowledged().setValue(SystemDateManager.getDate());
         padFile.acknowledgmentRejectReasonMessage().setValue(ackFile.acknowledgmentRejectReasonMessage().getValue());
+        padFile.acknowledgmentFileName().setValue(ackFile.fileName().getValue());
+        padFile.acknowledgmentRemoteFileDate().setValue(ackFile.remoteFileDate().getValue());
+        padFile.acknowledgmentFileNameDate().setValue(ackFile.fileNameDate().getValue());
 
         if (padFile.acknowledgmentStatus().getValue() == FileAcknowledgmentStatus.Accepted) {
             assertAcknowledgedValues(padFile, ackFile);

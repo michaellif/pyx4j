@@ -53,6 +53,8 @@ public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().batchAmount()), 10).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().recordsCount()), 10).build());
 
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated())).build());
+
         content.setH1(++row, 0, 1, i18n.tr("Acknowledgment"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 

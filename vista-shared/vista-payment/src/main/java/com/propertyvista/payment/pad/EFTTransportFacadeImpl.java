@@ -15,6 +15,7 @@ package com.propertyvista.payment.pad;
 
 import java.io.File;
 import java.text.MessageFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -115,6 +116,12 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             }
             PadAckFile padAkFile = new CaledonPadAcknowledgmentParser().parsReport(sftpFile.localFile);
             padAkFile.fundsTransferType().setValue(sftpFile.fundsTransferType);
+            try {
+                padAkFile.fileNameDate().setValue(new SimpleDateFormat("yyyyMMddHHmmss").parse(sftpFile.remoteName.substring(0, 15)));
+            } catch (ParseException e) {
+                throw new Error("Invalid acknowledgment file name format" + sftpFile.localFile.getName(), e);
+            }
+            padAkFile.remoteFileDate().setValue(new Date(sftpFile.lastModified));
             parsOk = true;
             return padAkFile;
         } finally {
@@ -138,6 +145,12 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             }
             PadReconciliationFile reconciliationFile = new CaledonPadReconciliationParser().parsReport(sftpFile.localFile);
             reconciliationFile.fundsTransferType().setValue(sftpFile.fundsTransferType);
+            try {
+                reconciliationFile.fileNameDate().setValue(new SimpleDateFormat("yyyyMMddHHmmss").parse(sftpFile.remoteName.substring(0, 15)));
+            } catch (ParseException e) {
+                throw new Error("Invalid acknowledgment file name format" + sftpFile.localFile.getName(), e);
+            }
+            reconciliationFile.remoteFileDate().setValue(new Date(sftpFile.lastModified));
             parsOk = true;
             return reconciliationFile;
         } finally {

@@ -42,6 +42,8 @@ public class PadFileLister extends AbstractLister<PadFileDTO> {
                     new MemberColumnDescriptor.Builder(proto().fileAmount()).build(),
                     new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(),
                     new MemberColumnDescriptor.Builder(proto().acknowledgmentRejectReasonMessage()).build(),
+                    new MemberColumnDescriptor.Builder(proto().acknowledgmentFileName(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().acknowledgmentRemoteFileDate(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().acknowledgmentStatus()).build()
             );//@formatter:on
     }

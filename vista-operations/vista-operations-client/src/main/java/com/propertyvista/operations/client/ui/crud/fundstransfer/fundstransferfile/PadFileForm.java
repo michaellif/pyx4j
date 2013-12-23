@@ -50,6 +50,8 @@ public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledged())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().recordsCount())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fileAmount())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentFileName())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentRemoteFileDate())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentRejectReasonMessage())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatus())).build());

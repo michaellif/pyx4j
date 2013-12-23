@@ -107,12 +107,15 @@ public interface PadSimFile extends IEntity {
     IPrimitive<Date> updated();
 
     @Editor(type = Editor.EditorType.label)
+    @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> acknowledged();
 
     @Editor(type = Editor.EditorType.label)
+    @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> reconciliationSent();
 
     @Editor(type = Editor.EditorType.label)
+    @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> returnSent();
 
     @Owned(cascade = {})

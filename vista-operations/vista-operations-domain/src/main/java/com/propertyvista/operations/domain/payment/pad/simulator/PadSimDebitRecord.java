@@ -13,8 +13,12 @@
  */
 package com.propertyvista.operations.domain.payment.pad.simulator;
 
+import java.util.Date;
+
 import com.pyx4j.config.shared.ApplicationDevelopmentFeature;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -23,6 +27,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -81,4 +86,8 @@ public interface PadSimDebitRecord extends IEntity {
     @Caption(description = "Reject/Return Item Fee; This field will contain the fee for the reject or returned item.")
     IPrimitive<String> fee();
 
+    @Timestamp(Timestamp.Update.Updated)
+    @Format("yyyy-MM-dd HH:mm")
+    @Editor(type = Editor.EditorType.label)
+    IPrimitive<Date> updated();
 }

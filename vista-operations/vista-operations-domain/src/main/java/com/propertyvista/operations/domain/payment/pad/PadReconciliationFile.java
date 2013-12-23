@@ -45,6 +45,12 @@ public interface PadReconciliationFile extends IEntity {
     IPrimitive<FundsTransferType> fundsTransferType();
 
     @Format("yyyy-MM-dd HH:mm")
+    IPrimitive<Date> remoteFileDate();
+
+    @Format("yyyy-MM-dd HH:mm")
+    IPrimitive<Date> fileNameDate();
+
+    @Format("yyyy-MM-dd HH:mm")
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
