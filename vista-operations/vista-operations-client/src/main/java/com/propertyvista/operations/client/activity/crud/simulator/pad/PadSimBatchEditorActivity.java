@@ -84,6 +84,8 @@ public class PadSimBatchEditorActivity extends AbstractEditorActivity<PadSimBatc
                 case RETURNED:
                     returns.add(record.amount().getValue());
                     break;
+                default:
+                    break;
                 }
                 total.add(record.amount().getValue());
             }
