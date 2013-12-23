@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -79,7 +80,9 @@ public abstract class DatastoreTestBase extends TestCase {
         persistenceEnvironment = getPersistenceEnvironment();
         if (persistenceEnvironment != null) {
             srv = persistenceEnvironment.setupDatastore();
-            PersistenceServicesFactory.setPersistenceService(srv);
+            if (ApplicationBackend.getBackendType() != ApplicationBackendType.GAE) {
+                PersistenceServicesFactory.setPersistenceService(srv);
+            }
         }
         if (srv == null) {
             srv = PersistenceServicesFactory.getPersistenceService();
