@@ -170,6 +170,7 @@ public class CollectionsImplementationTest extends InitializerTestBase {
         try {
             ent.references().iterator();
             accessed = true;
+        } catch (ClassCastException ok) {
         } catch (AssertionError ok) {
         }
         Assert.assertFalse("access should have fail", accessed);
@@ -179,6 +180,7 @@ public class CollectionsImplementationTest extends InitializerTestBase {
             for (Base1Entity ent2 : ent.references()) {
             }
             accessed = true;
+        } catch (ClassCastException ok) {
         } catch (AssertionError ok) {
         }
         Assert.assertFalse("access should have fail", accessed);
