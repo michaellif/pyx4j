@@ -438,7 +438,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         Command displayBatches = new Command() {
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.MoneyIn.Batches());
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.MoneyIn.Batch());
             }            
         };
         Command refreshData = new Command() {

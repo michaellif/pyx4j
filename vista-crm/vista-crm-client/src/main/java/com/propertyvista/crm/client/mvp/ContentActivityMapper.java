@@ -784,7 +784,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Finance.MoneyIn.Batches) {
+                    } else if (crudPlace instanceof Finance.MoneyIn.Batch) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new MoneyInBatchListerActivity(crudPlace);

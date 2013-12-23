@@ -306,11 +306,8 @@ public class CrmSiteMap implements SiteMap {
         public static class MoneyIn extends AppPlace {
 
             @PlaceProperties(navigLabel = "Bank Deposit Slip / Batch")
-            public static class Batches extends CrudAppPlace {
+            public static class Batch extends CrudAppPlace {
 
-                public static class Batch extends AppPlace {
-
-                }
             }
 
         }

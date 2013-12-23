@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.financial;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -37,7 +38,7 @@ public class MoneyInBatchCrudServiceImpl implements MoneyInBatchCrudService {
     @Override
     public void list(AsyncCallback<EntitySearchResult<MoneyInBatchDTO>> callback, EntityListCriteria<MoneyInBatchDTO> criteria) {
         // TODO replace this stub with implementation
-        new InMemeoryListService<MoneyInBatchDTO>(new ArrayList<MoneyInBatchDTO>()).list(callback, criteria);
+        new InMemeoryListService<MoneyInBatchDTO>(makeMokupBatches()).list(callback, criteria);
     }
 
     @Override
@@ -48,25 +49,7 @@ public class MoneyInBatchCrudServiceImpl implements MoneyInBatchCrudService {
     @Override
     public void retrieve(AsyncCallback<MoneyInBatchDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         // TODO replace mockup with code
-        MoneyInBatchDTO mockupBatch = EntityFactory.create(MoneyInBatchDTO.class);
-        mockupBatch.building().setValue("bath1660");
-        mockupBatch.bankAccount().setValue("12324533");
-        mockupBatch.bankDepositDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
-        mockupBatch.isPosted().setValue(false);
-        mockupBatch.totalReceivedAmount().setValue(new BigDecimal("1000"));
-        for (int i = 1; i < 100; ++i) {
-            DepositSlipPaymentRecordDTO payment = mockupBatch.payments().$();
-            payment.unit().setValue("" + (100 + i));
-            payment.tenantId().setValue("t01204" + (100 + i));
-            payment.tenantName().setValue("Tenant Tenantovic #" + i);
-            payment.checkNumber().setValue("" + new Random().nextInt(200));
-            payment.amount().setValue(new BigDecimal(1000 + new Random().nextInt(200)));
-            mockupBatch.totalReceivedAmount().setValue(mockupBatch.totalReceivedAmount().getValue().add(payment.amount().getValue()));
-            mockupBatch.payments().add(payment);
-        }
-        mockupBatch.numberOfReceipts().setValue(mockupBatch.payments().size());
-
-        callback.onSuccess(mockupBatch);
+        callback.onSuccess(makeMokupBatches().get(0));
     }
 
     @Override
@@ -83,6 +66,31 @@ public class MoneyInBatchCrudServiceImpl implements MoneyInBatchCrudService {
     @ServiceExecution(waitCaption = "Saving...")
     public void save(AsyncCallback<Key> callback, MoneyInBatchDTO editableEntity) {
         throw new RuntimeException("Operation NOT supported");
+    }
+
+    List<MoneyInBatchDTO> makeMokupBatches() {
+        List<MoneyInBatchDTO> mockupBatches = new ArrayList<MoneyInBatchDTO>();
+
+        MoneyInBatchDTO mockupBatch = EntityFactory.create(MoneyInBatchDTO.class);
+        mockupBatch.setPrimaryKey(new Key(1));
+        mockupBatch.building().setValue("bath1660");
+        mockupBatch.bankAccount().setValue("12324533");
+        mockupBatch.bankDepositDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
+        mockupBatch.isPosted().setValue(false);
+        mockupBatch.totalReceivedAmount().setValue(new BigDecimal("1000"));
+        for (int i = 1; i < 100; ++i) {
+            DepositSlipPaymentRecordDTO payment = mockupBatch.payments().$();
+            payment.unit().setValue("" + (100 + i));
+            payment.tenantId().setValue("t01204" + (100 + i));
+            payment.tenantName().setValue("Tenant Tenantovic #" + i);
+            payment.checkNumber().setValue("" + new Random().nextInt(200));
+            payment.amount().setValue(new BigDecimal(1000 + new Random().nextInt(200)));
+            mockupBatch.totalReceivedAmount().setValue(mockupBatch.totalReceivedAmount().getValue().add(payment.amount().getValue()));
+            mockupBatch.payments().add(payment);
+        }
+        mockupBatch.numberOfReceipts().setValue(mockupBatch.payments().size());
+        mockupBatches.add(mockupBatch);
+        return mockupBatches;
     }
 
 }

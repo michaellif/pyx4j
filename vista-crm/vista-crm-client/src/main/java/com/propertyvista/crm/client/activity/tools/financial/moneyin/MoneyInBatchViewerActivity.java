@@ -13,9 +13,15 @@
  */
 package com.propertyvista.crm.client.activity.tools.financial.moneyin;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -23,8 +29,12 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInBatchView;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
+import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDTO> implements MoneyInBatchView.Presenter {
+
+    private static final I18n i18n = I18n.get(MoneyInBatchViewerActivity.class);
 
     public MoneyInBatchViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(MoneyInBatchView.class), GWT.<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
@@ -32,15 +42,15 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
 
     @Override
     public void createDownloadableDepositSlipPrintout() {
-//        DeferredReportProcessProgressResponse response = (DeferredReportProcessProgressResponse) result;
-//        String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
-//        new ReportDialog(i18n.tr("Creating Money In Deposit Printout"), );
-    }
+        ReportDialog reportDialog = new ReportDialog(i18n.tr("Creating Deposit Slip"), "");
+        reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
 
-    @Override
-    public void cancelPrintOutGeneration(String downloadUrl) {
-        // TODO Auto-generated method stub
+        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+        parameters.put(MoneyInBatchDepositSlipPrintService.PARAM_BATCH_PK, getEntityId().toString());
 
+        ReportRequest request = new ReportRequest();
+        request.setParameters(parameters);
+        reportDialog.start(GWT.<MoneyInBatchDepositSlipPrintService> create(MoneyInBatchDepositSlipPrintService.class), request);
     }
 
 }

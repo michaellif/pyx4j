@@ -31,7 +31,8 @@ public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBat
     private static class MoneyInBatchLister extends AbstractLister<MoneyInBatchDTO> {
 
         public MoneyInBatchLister() {
-            super(MoneyInBatchDTO.class);
+            super(MoneyInBatchDTO.class, false, false);
+            setAllowZoomIn(true);
             setColumnDescriptors(Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().building()).build(),
                     new MemberColumnDescriptor.Builder(proto().bankAccount()).build(),

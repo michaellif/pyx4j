@@ -13,10 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.tools.common.LinkDialog;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInBatchForm;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
@@ -27,6 +29,12 @@ public class MoneyInBatchViewImpl extends CrmViewerViewImplBase<MoneyInBatchDTO>
     public MoneyInBatchViewImpl() {
         setBreadcrumbsBar(null);
         setForm(new MoneyInBatchForm(this));
+        addHeaderToolbarItem(new Button(i18n.tr("Create Deposit Slip"), new Command() {
+            @Override
+            public void execute() {
+                MoneyInBatchViewImpl.this.createDepositSlip();
+            }
+        }));
     }
 
     @Override
@@ -34,15 +42,7 @@ public class MoneyInBatchViewImpl extends CrmViewerViewImplBase<MoneyInBatchDTO>
 
     }
 
-    @Override
-    public void displayReportDownloadLink(final String downloadUrl) {
-        new LinkDialog(i18n.tr("Deposit Slip is Ready"), "Download Deposit Slip", downloadUrl) {
-            @Override
-            public boolean onClickCancel() {
-                ((MoneyInBatchView.Presenter) getPresenter()).cancelPrintOutGeneration(downloadUrl);
-                return false;
-            }
-        }.show();
-
+    private void createDepositSlip() {
+        ((MoneyInBatchView.Presenter) getPresenter()).createDownloadableDepositSlipPrintout();
     }
 }

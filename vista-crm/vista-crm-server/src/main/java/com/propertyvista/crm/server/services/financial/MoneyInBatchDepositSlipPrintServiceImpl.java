@@ -29,7 +29,7 @@ public class MoneyInBatchDepositSlipPrintServiceImpl extends ReportServiceImpl<I
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInBandDepositSlipDeferredProcess(EntityFactory.create(MoneyInBatchDTO.class)),
+        callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInCreateDepositSlipPrintoutProcess(EntityFactory.create(MoneyInBatchDTO.class)),
                 ThreadPoolNames.DOWNLOADS));
     }
 }

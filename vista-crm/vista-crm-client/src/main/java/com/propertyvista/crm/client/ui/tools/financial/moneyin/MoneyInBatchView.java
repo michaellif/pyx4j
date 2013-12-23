@@ -23,9 +23,6 @@ public interface MoneyInBatchView extends IViewer<MoneyInBatchDTO> {
 
         void createDownloadableDepositSlipPrintout();
 
-        void cancelPrintOutGeneration(String downloadUrl);
-
     }
 
-    void displayReportDownloadLink(String downloadUrl);
 }

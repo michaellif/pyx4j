@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient()
+@Transient
 public interface MoneyInBatchDTO extends IEntity {
 
     IPrimitive<String> building();

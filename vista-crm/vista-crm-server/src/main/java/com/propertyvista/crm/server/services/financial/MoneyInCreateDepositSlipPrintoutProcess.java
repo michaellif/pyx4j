@@ -15,12 +15,16 @@ package com.propertyvista.crm.server.services.financial;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
+import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
-public class MoneyInBandDepositSlipDeferredProcess extends AbstractDeferredProcess {
+public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredProcess {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +34,9 @@ public class MoneyInBandDepositSlipDeferredProcess extends AbstractDeferredProce
 
     private final MoneyInBatchDTO batch;
 
-    public MoneyInBandDepositSlipDeferredProcess(MoneyInBatchDTO batch) {
+    private String fileName;
+
+    public MoneyInCreateDepositSlipPrintoutProcess(MoneyInBatchDTO batch) {
         this.progress = new AtomicInteger();
         this.progress.set(0);
         this.progressMax = 1;
@@ -42,15 +48,22 @@ public class MoneyInBandDepositSlipDeferredProcess extends AbstractDeferredProce
 //      pdf = new FileOutputStream(debugFileName(model.getDesignName(), ".pdf"));
 //      JasperReportProcessor.createReport(model, JasperFileFormat.PDF, pdf);
 //      pdf.flush();
+        Downloadable d = new Downloadable("deposit slip! :-)".getBytes(), MimeMap.getContentType(DownloadFormat.TXT));
+        fileName = "deposit-slip-stub.txt";
+        d.save(fileName);
         completed = true;
     }
 
     @Override
     public DeferredProcessProgressResponse status() {
-        DeferredProcessProgressResponse status = super.status();
-        status.setProgress(progress.get());
-        status.setProgressMaximum(progressMax);
-        return status;
+        DeferredReportProcessProgressResponse r = new DeferredReportProcessProgressResponse();
+        r.setProgress(progress.get());
+        r.setProgressMaximum(progressMax);
+        if (completed) {
+            r.setCompleted();
+            r.setDownloadLink(System.currentTimeMillis() + "/" + fileName);
+        }
+        return r;
     }
 
 }
