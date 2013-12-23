@@ -30,7 +30,6 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -43,9 +42,8 @@ import com.propertyvista.domain.marketing.MarketingContactPhone;
 import com.propertyvista.domain.marketing.MarketingContactUrl;
 import com.propertyvista.domain.marketing.ils.ILSOpenHouse;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.shared.config.VistaFeatures;
 
-public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
+public class MarketingEditor extends CEntityForm<Marketing> {
 
     private final CEntityForm<? extends Building> parentForm;
 
@@ -77,9 +75,6 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 16).build());
-        if (VistaFeatures.instance().yardiIntegration()) {
-            get(proto().name()).setEditable(false);
-        }
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().visibility()), 10).build());
 
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
@@ -147,7 +142,7 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
         super.setEditorValue(value);
     }
 
-    public static class MarketingContactEditor<T extends MarketingContact> extends CEntityDecoratableForm<T> {
+    public static class MarketingContactEditor<T extends MarketingContact> extends CEntityForm<T> {
         public MarketingContactEditor(Class<T> valueClass) {
             super(valueClass);
         }
@@ -179,7 +174,7 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
             }
         }
 
-        private class ILSOpenHouseEditor extends CEntityDecoratableForm<ILSOpenHouse> {
+        private class ILSOpenHouseEditor extends CEntityForm<ILSOpenHouse> {
             public ILSOpenHouseEditor() {
                 super(ILSOpenHouse.class);
             }

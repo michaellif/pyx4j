@@ -75,7 +75,7 @@ public class GottarentBuildingMapper {
         to.setBuildingRentalOffice(rentalOffice);
 
         setBuildingTypeOptionalData(from.info(), to);
-        setBuildingInfoOptionalData(from, to);
+        setBuildingInfoOptionalData(bldDto, to);
 
         setCommunityAmenityOptionalData(from.amenities(), to);
         //to.setBuildingIncentives(createBuildingIncentives(from)); // TODO: Smolka,  not now
@@ -210,8 +210,9 @@ public class GottarentBuildingMapper {
         }
     }
 
-    private void setBuildingInfoOptionalData(com.propertyvista.domain.property.asset.building.Building from, com.gottarent.rs.Building to) {
-        String description = from.marketing().description().getValue();
+    private void setBuildingInfoOptionalData(ILSBuildingDTO bldDto, com.gottarent.rs.Building to) {
+        String description = bldDto.profile().description().isNull() ? bldDto.building().marketing().description().getValue() : bldDto.profile().description()
+                .getValue();
         if (description == null || description.trim().isEmpty()) {
             return;
         }

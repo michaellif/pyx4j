@@ -14,9 +14,11 @@
 package com.propertyvista.domain.marketing.ils;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -40,6 +42,12 @@ public interface ILSProfileBuilding extends IEntity {
     Building building();
 
     IPrimitive<ILSVendor> vendor();
+
+    IPrimitive<String> listingTitle();
+
+    @Length(4000)
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> description();
 
     @Owned
     @EmbeddedEntity

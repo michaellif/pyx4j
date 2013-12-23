@@ -23,6 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
@@ -56,7 +57,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor.MarketingContactEditor;
@@ -259,7 +259,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 return null;
             }
         });
-        ((CField) get(proto().contacts().website())).setNavigationCommand(new Command() {
+        ((CField<?, ?>) get(proto().contacts().website())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().contacts().website().getValue();
@@ -501,7 +501,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             }, EntityFactory.createIdentityStub(Building.class, BuildingForm.this.getValue().getPrimaryKey()));
         }
 
-        private class ILSProfileBuildingEditor extends CEntityDecoratableForm<ILSProfileBuilding> {
+        private class ILSProfileBuildingEditor extends CEntityForm<ILSProfileBuilding> {
             public ILSProfileBuildingEditor() {
                 super(ILSProfileBuilding.class);
             }
@@ -513,6 +513,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().vendor(), new CEnumLabel())).build());
                 content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().disabled())).build());
+
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().listingTitle())).build());
+                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().description())).build());
+                content.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
                 content.setH1(++row, 0, 2, proto().preferredContacts().getMeta().getCaption());
                 content.setWidget(++row, 0, 2,

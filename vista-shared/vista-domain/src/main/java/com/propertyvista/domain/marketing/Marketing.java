@@ -40,7 +40,7 @@ public interface Marketing extends IEntity {
     @Length(128)
     IPrimitive<String> name();
 
-    @Length(20845)
+    @Length(4000)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
