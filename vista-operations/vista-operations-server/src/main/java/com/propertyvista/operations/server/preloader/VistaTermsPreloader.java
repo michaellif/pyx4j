@@ -31,6 +31,13 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
 
+        /*****************
+         * N.B. While adding the new file of change file here please open defect for support to update the same datA in production. immediately or post version
+         * installation.
+         * 
+         * The change in policy text is not covered by DBA migration script.
+         ****************/
+
         createTerms(Target.PMC, "PmcVistaTerms.html");
         createTerms(Target.PmcCaledonTemplate, "PmcCaledonTemplateVistaTerms.html");
         createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html");
