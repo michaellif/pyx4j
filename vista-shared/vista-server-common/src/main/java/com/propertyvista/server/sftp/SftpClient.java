@@ -15,6 +15,8 @@ package com.propertyvista.server.sftp;
 
 import java.io.Closeable;
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -27,6 +29,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
+import com.pyx4j.commons.CompareHelper;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -140,6 +143,16 @@ public class SftpClient implements Closeable {
 
                 @SuppressWarnings("unchecked")
                 Vector<LsEntry> rFiles = client.channel.ls(".");
+
+                // VISTA-3967 Sort files by name, earliest first.
+                // this assumes that files are named  yyyyMMddHHmmss from caledon, other consumers of this functions are not sensitive to order. 
+                Collections.sort(rFiles, new Comparator<LsEntry>() {
+
+                    @Override
+                    public int compare(LsEntry o1, LsEntry o2) {
+                        return CompareHelper.compareTo(o1.getFilename(), o2.getFilename());
+                    }
+                });
 
                 for (LsEntry rFile : rFiles) {
                     E dst = filter.accept(dir, rFile.getFilename());
