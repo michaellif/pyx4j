@@ -60,7 +60,7 @@ public class GottarentBuildingMapper {
 
         Address address = getAddress(from);
         String id = getBuildingId(from);
-        String buildingName = generateBuildingName(from);
+        String buildingName = generateBuildingName(bldDto);
         BuildingRentalOffice rentalOffice = getBuildingRentalOffice(bldDto);
         // if no mandatory fields, return
         if (address == null || id == null || buildingName == null || rentalOffice == null) {
@@ -292,19 +292,8 @@ public class GottarentBuildingMapper {
         return from.propertyCode().getValue();
     }
 
-    private String generateBuildingName(com.propertyvista.domain.property.asset.building.Building from) {
-        Marketing info = from.marketing();
-        String result = null;
-        if (GottarentMapperUtils.isNull(info) || info.isEmpty() || GottarentMapperUtils.isNullOrEmpty(info.name())) {
-            com.propertyvista.domain.property.asset.building.BuildingInfo buildingInfo = from.info();
-            if (GottarentMapperUtils.isNull(buildingInfo) || buildingInfo.isEmpty() || GottarentMapperUtils.isNullOrEmpty(buildingInfo.name())) {
-                result = GottarentMapperUtils.formatStreetAndNumber(GottarentMapperUtils.getAddress(from));
-            } else {
-                result = buildingInfo.name().getValue();
-            }
-        } else {
-            result = info.name().getValue();
-        }
+    private String generateBuildingName(ILSBuildingDTO bldDto) {
+        String result = bldDto.profile().listingTitle().isNull() ? bldDto.building().marketing().name().getValue() : bldDto.profile().listingTitle().getValue();
 
         if (result == null) {
             return null;
