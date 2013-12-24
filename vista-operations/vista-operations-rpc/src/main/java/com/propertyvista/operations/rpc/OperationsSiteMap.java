@@ -178,7 +178,7 @@ public class OperationsSiteMap implements SiteMap {
         @PlaceProperties(caption = "T&C Tenant Payment Pre-Authorization")
         public static class TenantPaymentPad extends VistaTermsAccess {
             public TenantPaymentPad() {
-                super(Target.TenantPaymentPreAuthorization);
+                super(Target.TenantPreAuthorizedPaymentsAgreement);
             }
         }
 

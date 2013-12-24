@@ -45,7 +45,7 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
 
         createTerms(Target.TenantPropertyVistaService, "TenantVistaTerms.html");
         createTerms(Target.TenantBilling, "TenantBillingAndRefundPolicy.html");
-        createTerms(Target.TenantPaymentPreAuthorization, "Pre-AuthorizationLegalPAD.html");
+        createTerms(Target.TenantPreAuthorizedPaymentsAgreement, "Pre-AuthorizationLegalPAD.html");
         createTerms(Target.TenantPaymentCreditCard, "Pre-AuthorizationLegalCC.html");
         createTerms(Target.TenantPaymentConvenienceFee, "TenantPaymentConvenienceFee.html");
 
