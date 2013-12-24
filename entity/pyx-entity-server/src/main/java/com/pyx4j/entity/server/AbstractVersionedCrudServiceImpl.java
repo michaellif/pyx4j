@@ -49,7 +49,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
         E entity = Persistence.secureRetrieve(boClass, primaryKey);
         if (primaryKey.isDraft() && (entity == null)) {
             entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTarget);
-        } else if (primaryKey.getVersion() == Key.VERSION_CURRENT && entity.version().isNull()) {
+        } else if (primaryKey.getVersion() == Key.VERSION_CURRENT && ((entity == null) || entity.version().isNull())) {
             entity = super.retrieve(primaryKey.asDraftKey(), retrieveTarget);
         }
         return entity;
