@@ -56,16 +56,16 @@ public class ResidentTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof ResidentPortalSiteMap.CreditCardPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalCcPolicy(new DefaultAsyncCallback<String>() {
+        } else if (place instanceof ResidentPortalSiteMap.CreditCardTermsAndConditions) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalCcTermsAndConditions(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof ResidentPortalSiteMap.PadPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalPadPolicy(new DefaultAsyncCallback<String>() {
+        } else if (place instanceof ResidentPortalSiteMap.PadTermsAndConditions) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalPreAuthorizationTermsAndConditions(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);

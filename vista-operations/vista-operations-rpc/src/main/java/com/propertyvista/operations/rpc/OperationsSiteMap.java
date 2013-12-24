@@ -133,69 +133,70 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "PMC Terms and Conditions")
+        @PlaceProperties(caption = "T&C PMC Vista Service")
         public static class PmcTerms extends VistaTermsAccess {
             public PmcTerms() {
-                super(Target.PMC);
+                super(Target.PMCPropertyVistaService);
             }
         }
 
-        @PlaceProperties(caption = "PMC PAD Terms")
-        public static class PmcPadTerms extends VistaTermsAccess {
-            public PmcPadTerms() {
+        @PlaceProperties(caption = "T&C PMC PaymentPad")
+        public static class PmcPaymentPadTerms extends VistaTermsAccess {
+            public PmcPaymentPadTerms() {
                 super(Target.PmcPaymentPad);
             }
         }
 
-        @PlaceProperties(caption = "Caledon Terms and Conditions")
+        @PlaceProperties(caption = "T&C PMC Caledon")
         public static class PmcCaledonTermsTemplate extends VistaTermsAccess {
             public PmcCaledonTermsTemplate() {
                 super(Target.PmcCaledonTemplate);
             }
         }
 
-        @PlaceProperties(caption = "Caledon Convenience Fee")
-        public static class PmcCaledonConvenienceFee extends VistaTermsAccess {
-            public PmcCaledonConvenienceFee() {
-                super(Target.TenantPaymentConvenienceFee);
-            }
-        }
-
-        @PlaceProperties(caption = "Caledon Sole Propetorship Section Terms")
+        @PlaceProperties(caption = "T&C PMC Caledon Sole Proprietorship Section")
         public static class PmcCaledonSoleProprietorshipSection extends VistaTermsAccess {
             public PmcCaledonSoleProprietorshipSection() {
                 super(Target.PmcCaledonSoleProprietorshipSection);
             }
         }
 
-        @PlaceProperties(caption = "Tenant Terms and Conditions")
+        @PlaceProperties(caption = "T&C Tenant")
         public static class TenantTerms extends VistaTermsAccess {
             public TenantTerms() {
-                super(Target.Tenant);
+                super(Target.TenantPropertyVistaService);
             }
         }
 
+        @PlaceProperties(caption = "T&C Tenant Billing")
         public static class TenantBillingTerms extends VistaTermsAccess {
             public TenantBillingTerms() {
                 super(Target.TenantBilling);
             }
         }
 
-        @PlaceProperties(caption = "Tenant PAD Terms")
-        public static class TenantPAD extends VistaTermsAccess {
-            public TenantPAD() {
-                super(Target.TenantPaymentPad);
+        @PlaceProperties(caption = "T&C Tenant Payment Pre-Authorization")
+        public static class TenantPaymentPad extends VistaTermsAccess {
+            public TenantPaymentPad() {
+                super(Target.TenantPaymentPreAuthorization);
             }
         }
 
-        @PlaceProperties(caption = "Tenant Credit Card Terms")
+        @PlaceProperties(caption = "T&C Tenant Credit Card")
         public static class TenantCC extends VistaTermsAccess {
             public TenantCC() {
                 super(Target.TenantPaymentCreditCard);
             }
         }
 
-        @PlaceProperties(caption = "TenantSure PAP Terms")
+        @PlaceProperties(caption = "T&C Tenant Convenience Fee")
+        public static class TenantCaledonConvenienceFee extends VistaTermsAccess {
+            public TenantCaledonConvenienceFee() {
+                super(Target.TenantPaymentConvenienceFee);
+            }
+        }
+
+        @PlaceProperties(caption = "T&C TenantSure PAP")
         public static class TenantSurePapAgreement extends VistaTermsAccess {
             public TenantSurePapAgreement() {
                 super(Target.TenantSurePreAuthorizedPaymentsAgreement);

@@ -96,12 +96,12 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
 
     @Override
     public Class<? extends Place> getPadPolicyPlace() {
-        return ResidentPortalSiteMap.PadPolicy.class;
+        return ResidentPortalSiteMap.PadTermsAndConditions.class;
     }
 
     @Override
     public Class<? extends Place> getCcPolicyPlace() {
-        return ResidentPortalSiteMap.CreditCardPolicy.class;
+        return ResidentPortalSiteMap.CreditCardTermsAndConditions.class;
     }
 
     @Override
@@ -110,12 +110,12 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
     }
 
     @Override
-    public void showPadPolicy() {
+    public void showPaymentPreAuthorizationTermsConditions() {
         Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPadPolicyPlace()), "_blank", null);
     }
 
     @Override
-    public void showCcPolicy() {
+    public void showPaymentCcTermsConditions() {
         Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getCcPolicyPlace()), "_blank", null);
     }
 }

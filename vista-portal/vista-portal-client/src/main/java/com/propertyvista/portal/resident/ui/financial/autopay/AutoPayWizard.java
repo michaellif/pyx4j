@@ -395,11 +395,11 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
                 switch (get(proto().paymentMethod()).getValue().type().getValue()) {
                 case Echeck:
                     preAuthorizedAgreementAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPadPolicyPlace()));
-                    presenter.showPadPolicy();
+                    presenter.showPaymentPreAuthorizationTermsConditions();
                     break;
                 case CreditCard:
                     preAuthorizedAgreementAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getCcPolicyPlace()));
-                    presenter.showCcPolicy();
+                    presenter.showPaymentCcTermsConditions();
                     break;
                 default:
                     assert false : "Illegal payment method type!";

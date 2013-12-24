@@ -38,7 +38,7 @@ public class PmcTermsOfServiceServiceImpl implements PmcTermsOfServiceService {
             public String call() {
                 String result = null;
                 EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
-                criteria.eq(criteria.proto().target(), VistaTerms.Target.PMC);
+                criteria.eq(criteria.proto().target(), VistaTerms.Target.PMCPropertyVistaService);
                 List<VistaTerms> list = Persistence.service().query(criteria);
                 if (!list.isEmpty()) {
                     VistaTerms terms = list.get(0);

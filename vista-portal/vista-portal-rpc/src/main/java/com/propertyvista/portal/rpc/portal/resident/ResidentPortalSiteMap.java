@@ -34,10 +34,10 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
     public static class TermsAndConditions extends AppPlace implements PublicPlace {
     }
 
-    public static class PadPolicy extends AppPlace implements PublicPlace {
+    public static class PadTermsAndConditions extends AppPlace implements PublicPlace {
     }
 
-    public static class CreditCardPolicy extends AppPlace implements PublicPlace {
+    public static class CreditCardTermsAndConditions extends AppPlace implements PublicPlace {
     }
 
     public static class BillingPolicy extends AppPlace implements PublicPlace {

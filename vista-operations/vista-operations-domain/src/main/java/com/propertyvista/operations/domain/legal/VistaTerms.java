@@ -15,6 +15,8 @@ package com.propertyvista.operations.domain.legal;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
@@ -24,11 +26,12 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
+@ToStringFormat("{0}")
 public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
     public enum Target {
 
-        PMC,
+        PMCPropertyVistaService,
 
         PmcCaledonTemplate,
 
@@ -36,11 +39,11 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         PmcPaymentPad,
 
-        Tenant,
+        TenantPropertyVistaService,
 
         TenantBilling,
 
-        TenantPaymentPad,
+        TenantPaymentPreAuthorization,
 
         TenantPaymentCreditCard,
 
@@ -50,13 +53,15 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         TenantSurePreAuthorizedPaymentsAgreement,
 
-        Prospect;
+        ProspectPropertyVistaService;
     }
 
+    @ToString
     IPrimitive<Target> target();
 
     @Table(namespace = VistaNamespace.operationsNamespace)
     public interface VistaTermsV extends IVersionData<VistaTerms> {
+
         @Owned
         IList<LegalDocument> document();
     }

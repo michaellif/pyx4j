@@ -24,7 +24,11 @@ public class VistaTermsEditorViewImpl extends OperationsEditorViewImplBase<Vista
 
     @Override
     public void populate(VistaTerms value) {
+        if (EditMode.newItem.equals(mode)) {
+            setCaptionBase("T&C " + value.getStringView());
+        } else {
+            setCaptionBase("T&C");
+        }
         super.populate(value);
-        setCaption("Terms for " + value.target().getValue());
     }
 }

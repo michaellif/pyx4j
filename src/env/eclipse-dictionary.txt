@@ -170,3 +170,4 @@ yardi
 caledon
 debit
 refactoring
+proprietorship

@@ -42,8 +42,8 @@ public interface AutoPayWizardView extends IWizardView<AutoPayDTO> {
 
         void showTermsOfUse();
 
-        void showPadPolicy();
+        void showPaymentPreAuthorizationTermsConditions();
 
-        void showCcPolicy();
+        void showPaymentCcTermsConditions();
     }
 }

@@ -30,6 +30,7 @@ import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 
 public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
+
     private final static I18n i18n = I18n.get(VistaTermsForm.class);
 
     public VistaTermsForm(IForm<VistaTerms> view) {

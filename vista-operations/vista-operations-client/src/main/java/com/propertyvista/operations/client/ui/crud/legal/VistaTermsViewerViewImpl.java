@@ -28,7 +28,7 @@ public class VistaTermsViewerViewImpl extends OperationsViewerViewImplBase<Vista
 
     @Override
     public void populate(VistaTerms value) {
+        setCaptionBase("T&C");
         super.populate(value);
-        setCaption("Terms for " + value.target().getValue());
     }
 }

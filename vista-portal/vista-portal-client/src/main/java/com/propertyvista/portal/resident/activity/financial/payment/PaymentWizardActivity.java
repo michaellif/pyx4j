@@ -82,7 +82,7 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
 
     @Override
     public Class<? extends Place> getBillingPolicyPlace() {
-        return ResidentPortalSiteMap.PadPolicy.class;
+        return ResidentPortalSiteMap.PadTermsAndConditions.class;
     }
 
     @Override

@@ -38,16 +38,18 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
          * The change in policy text is not covered by DBA migration script.
          ****************/
 
-        createTerms(Target.PMC, "PmcVistaTerms.html");
+        createTerms(Target.PMCPropertyVistaService, "PmcVistaTerms.html");
         createTerms(Target.PmcCaledonTemplate, "PmcCaledonTemplateVistaTerms.html");
         createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html");
         createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html");
 
-        createTerms(Target.Tenant, "TenantVistaTerms.html");
+        createTerms(Target.TenantPropertyVistaService, "TenantVistaTerms.html");
         createTerms(Target.TenantBilling, "TenantBillingAndRefundPolicy.html");
-        createTerms(Target.TenantPaymentPad, "Pre-AuthorizationLegalPAD.html");
+        createTerms(Target.TenantPaymentPreAuthorization, "Pre-AuthorizationLegalPAD.html");
         createTerms(Target.TenantPaymentCreditCard, "Pre-AuthorizationLegalCC.html");
         createTerms(Target.TenantPaymentConvenienceFee, "TenantPaymentConvenienceFee.html");
+
+        createTerms(Target.ProspectPropertyVistaService, "TenantVistaTerms.html");
 
         createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html");
 

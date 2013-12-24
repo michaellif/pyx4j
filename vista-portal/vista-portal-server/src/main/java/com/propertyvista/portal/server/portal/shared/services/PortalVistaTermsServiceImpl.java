@@ -30,7 +30,7 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
     public void getResidentPortalTerms(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.Tenant);
+        getVistaTerms(callback, VistaTerms.Target.TenantPropertyVistaService);
     }
 
     @Override
@@ -39,13 +39,13 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
     }
 
     @Override
-    public void getResidentPortalCcPolicy(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPaymentPad);
+    public void getResidentPortalCcTermsAndConditions(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantPaymentCreditCard);
     }
 
     @Override
-    public void getResidentPortalPadPolicy(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPaymentCreditCard);
+    public void getResidentPortalPreAuthorizationTermsAndConditions(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantPaymentPreAuthorization);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
     @Override
     public void getProspectPortalTerms(AsyncCallback<String> callback) {
         //TODO implement Prospect Terms
-        getVistaTerms(callback, VistaTerms.Target.Prospect);
+        getVistaTerms(callback, VistaTerms.Target.ProspectPropertyVistaService);
     }
 
     private void getVistaTerms(AsyncCallback<String> callback, final VistaTerms.Target target) {
