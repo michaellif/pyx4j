@@ -159,7 +159,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
      */
     @Override
     protected void doUnexpectedFailure(Throwable failure) {
-        log.error("return http error {}", failure);
+        log.error("return http error", failure);
         if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
             RequestDebug.debug(getThreadLocalRequest());
         }
