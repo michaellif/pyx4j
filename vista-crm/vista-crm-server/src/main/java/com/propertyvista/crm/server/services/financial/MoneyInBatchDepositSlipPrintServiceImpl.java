@@ -15,7 +15,8 @@ package com.propertyvista.crm.server.services.financial;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.ReportServiceImpl;
@@ -28,8 +29,18 @@ import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrint
 public class MoneyInBatchDepositSlipPrintServiceImpl extends ReportServiceImpl<IEntity> implements MoneyInBatchDepositSlipPrintService {
 
     @Override
-    public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInCreateDepositSlipPrintoutProcess(EntityFactory.create(MoneyInBatchDTO.class)),
-                ThreadPoolNames.DOWNLOADS));
+    public void createDownload(final AsyncCallback<String> callback, ReportRequest reportRequest) {
+        new MoneyInBatchCrudServiceImpl().retrieve(new AsyncCallback<MoneyInBatchDTO>() {
+            @Override
+            public void onSuccess(MoneyInBatchDTO result) {
+                callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInCreateDepositSlipPrintoutProcess(result), ThreadPoolNames.DOWNLOADS));
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+        }, new Key((String) reportRequest.getParameters().get(MoneyInBatchDepositSlipPrintService.PARAM_BATCH_PK)), RetrieveTarget.View);
+
     }
 }
