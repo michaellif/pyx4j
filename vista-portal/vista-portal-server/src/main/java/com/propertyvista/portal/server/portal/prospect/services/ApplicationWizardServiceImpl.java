@@ -511,18 +511,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         return res;
     }
 
-    private UnitOptionsSelectionDTO retriveCurrentUnitOptions(Lease lease) {
-        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
-        assert (!lease.unit().isNull());
-
-        options.unit().set(lease.unit());
-        options.restrictions().set(retriveUnitOptionRestrictions(lease.unit()));
-        fillCurrentProductItems(options, lease.currentTerm());
-        loadDetachedProducts(options);
-
-        return options;
-    }
-
     private void initializeRequiredDocuments(ApplicantDTO applicant) {
         for (IdentificationDocumentType docType : applicant.documentsPolicy().allowedIDs()) {
             if (docType.required().getValue(false)) {
@@ -537,11 +525,45 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
                 if (!found) {
                     IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
-                    doc.idType().set(doc.idType(), docType);
+                    doc.set(doc.idType(), docType);
                     applicant.documents().add(doc);
                 }
             }
         }
+    }
+
+    private UnitOptionsSelectionDTO retriveCurrentUnitOptions(Lease lease) {
+        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
+        assert (!lease.unit().isNull());
+
+        options.unit().set(lease.unit());
+        options.restrictions().set(retriveUnitOptionRestrictions(lease.unit()));
+        fillCurrentProductItems(options, lease.currentTerm());
+        loadDetachedProducts(options);
+
+        return options;
+    }
+
+    private UnitOptionsSelectionDTO retriveAvailableUnitOptions(AptUnit unit) {
+        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
+
+        options.unit().set(unit);
+        options.restrictions().set(retriveUnitOptionRestrictions(unit));
+        fillAvailableCatalogItems(options);
+        loadDetachedProducts(options);
+
+        return options;
+    }
+
+    private UnitOptionsSelectionDTO.Restrictions retriveUnitOptionRestrictions(AptUnit unit) {
+        UnitOptionsSelectionDTO.Restrictions restrictions = EntityFactory.create(UnitOptionsSelectionDTO.Restrictions.class);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit, RestrictionsPolicy.class);
+
+        restrictions.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
+        restrictions.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
+        restrictions.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
+
+        return restrictions;
     }
 
     private void fillCurrentProductItems(UnitOptionsSelectionDTO options, LeaseTerm leaseTerm) {
@@ -570,17 +592,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         fillCatalogItems(options, (Service.ServiceV) options.selectedService().item().product().cast(), false);
-    }
-
-    private UnitOptionsSelectionDTO retriveAvailableUnitOptions(AptUnit unit) {
-        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
-
-        options.unit().set(unit);
-        options.restrictions().set(retriveUnitOptionRestrictions(unit));
-        fillAvailableCatalogItems(options);
-        loadDetachedProducts(options);
-
-        return options;
     }
 
     private void fillAvailableCatalogItems(UnitOptionsSelectionDTO options) {
@@ -649,17 +660,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 }
             }
         }
-    }
-
-    private UnitOptionsSelectionDTO.Restrictions retriveUnitOptionRestrictions(AptUnit unit) {
-        UnitOptionsSelectionDTO.Restrictions restrictions = EntityFactory.create(UnitOptionsSelectionDTO.Restrictions.class);
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit, RestrictionsPolicy.class);
-
-        restrictions.maxLockers().setValue(restrictionsPolicy.maxLockers().getValue());
-        restrictions.maxParkingSpots().setValue(restrictionsPolicy.maxParkingSpots().getValue());
-        restrictions.maxPets().setValue(restrictionsPolicy.maxPets().getValue());
-
-        return restrictions;
     }
 
     private void loadDetachedProducts(UnitOptionsSelectionDTO options) {
