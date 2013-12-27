@@ -65,9 +65,9 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().building())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().bankAccount())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().bankDepositDate())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().bankAccountName())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().depositSlipNumber())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().depositDate())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().totalReceivedAmount())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().numberOfReceipts())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().isPosted())).build());
@@ -75,5 +75,4 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         panel.setWidget(++row, 0, 2, inject(proto().payments(), new DepositSlipPaymentRecordFolder()));
         return panel;
     }
-
 }

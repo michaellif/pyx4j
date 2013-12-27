@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.financial;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -59,8 +60,19 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
     public void execute() {
         try {
             ByteArrayOutputStream depositSlipOutputStream = new ByteArrayOutputStream();
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("depositSlipNumber", batch.depositSlipNumber().getValue());
+            params.put("depositDate", batch.depositDate().getValue());
+            params.put("accountName", batch.bankAccountName().getValue());
+            params.put("bankId", batch.bankId().getValue());
+            params.put("transitNumber", batch.bankTransitNumber().getValue());
+            params.put("accountNumber", batch.bankAccountNumber().getValue());
+
+            params.put("totalAmount", batch.totalReceivedAmount().getValue());
+            params.put("numberOfChecks", batch.numberOfReceipts().getValue());
+
             JasperReportProcessor.createReport(new JasperReportModel(MoneyInCreateDepositSlipPrintoutProcess.class.getPackage().getName() + ".BankDepositSlip",
-                    batch.payments(), new HashMap<String, Object>()), JasperFileFormat.PDF, depositSlipOutputStream);
+                    batch.payments(), params), JasperFileFormat.PDF, depositSlipOutputStream);
 
             depositSlipOutputStream.flush();
             Downloadable d = new Downloadable(depositSlipOutputStream.toByteArray(), MimeMap.getContentType(DownloadFormat.PDF));

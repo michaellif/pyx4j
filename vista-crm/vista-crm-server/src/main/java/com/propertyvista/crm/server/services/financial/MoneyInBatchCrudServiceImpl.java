@@ -74,8 +74,15 @@ public class MoneyInBatchCrudServiceImpl implements MoneyInBatchCrudService {
         MoneyInBatchDTO mockupBatch = EntityFactory.create(MoneyInBatchDTO.class);
         mockupBatch.setPrimaryKey(new Key(1));
         mockupBatch.building().setValue("bath1660");
-        mockupBatch.bankAccount().setValue("12324533");
-        mockupBatch.bankDepositDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
+
+        mockupBatch.depositSlipNumber().setValue(42);
+        mockupBatch.depositDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
+
+        mockupBatch.bankAccountName().setValue("True North Properties");
+        mockupBatch.bankId().setValue("12");
+        mockupBatch.bankTransitNumber().setValue("5123");
+        mockupBatch.bankAccountNumber().setValue("123456");
+
         mockupBatch.isPosted().setValue(false);
         mockupBatch.totalReceivedAmount().setValue(new BigDecimal("1000"));
         for (int i = 1; i < 100; ++i) {

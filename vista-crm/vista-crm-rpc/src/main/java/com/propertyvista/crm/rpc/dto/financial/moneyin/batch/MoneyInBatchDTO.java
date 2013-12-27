@@ -29,9 +29,13 @@ public interface MoneyInBatchDTO extends IEntity {
 
     IPrimitive<String> building();
 
-    IPrimitive<String> bankAccount();
+    IPrimitive<String> bankAccountName();
 
-    IPrimitive<LogicalDate> bankDepositDate();
+    IPrimitive<String> bankId();
+
+    IPrimitive<String> bankTransitNumber();
+
+    IPrimitive<String> bankAccountNumber();
 
     IPrimitive<Integer> depositSlipNumber();
 
@@ -45,5 +49,7 @@ public interface MoneyInBatchDTO extends IEntity {
     IPrimitive<Boolean> isPosted();
 
     IList<DepositSlipPaymentRecordDTO> payments();
+
+    IPrimitive<LogicalDate> depositDate();
 
 }

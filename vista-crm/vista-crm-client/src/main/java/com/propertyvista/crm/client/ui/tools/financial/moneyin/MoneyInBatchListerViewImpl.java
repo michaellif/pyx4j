@@ -35,12 +35,13 @@ public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBat
             setAllowZoomIn(true);
             setColumnDescriptors(Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().building()).build(),
-                    new MemberColumnDescriptor.Builder(proto().bankAccount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().bankDepositDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().bankAccountName()).build(),
                     new MemberColumnDescriptor.Builder(proto().depositSlipNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().totalReceivedAmount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().numberOfReceipts()).build(),
+                    new MemberColumnDescriptor.Builder(proto().numberOfReceipts()).build(),                    
                     new MemberColumnDescriptor.Builder(proto().isPosted()).build()
+                    
             ));//@formatter:off
         }
         
