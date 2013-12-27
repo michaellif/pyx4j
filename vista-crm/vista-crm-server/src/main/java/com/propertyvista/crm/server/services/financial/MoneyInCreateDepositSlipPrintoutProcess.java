@@ -13,8 +13,17 @@
  */
 package com.propertyvista.crm.server.services.financial;
 
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sun.xml.messaging.saaj.util.ByteOutputStream;
+
+import com.pyx4j.entity.report.JasperFileFormat;
+import com.pyx4j.entity.report.JasperReportModel;
+import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -26,6 +35,8 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
 public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredProcess {
 
+    private static final Logger log = LoggerFactory.getLogger(MoneyInBatchCreateDeferredProcess.class);
+
     private static final long serialVersionUID = 1L;
 
     private final AtomicInteger progress;
@@ -36,6 +47,8 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
 
     private String fileName;
 
+    private volatile Throwable error;
+
     public MoneyInCreateDepositSlipPrintoutProcess(MoneyInBatchDTO batch) {
         this.progress = new AtomicInteger();
         this.progress.set(0);
@@ -45,13 +58,22 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
 
     @Override
     public void execute() {
-//      pdf = new FileOutputStream(debugFileName(model.getDesignName(), ".pdf"));
-//      JasperReportProcessor.createReport(model, JasperFileFormat.PDF, pdf);
-//      pdf.flush();
-        Downloadable d = new Downloadable("deposit slip! :-)".getBytes(), MimeMap.getContentType(DownloadFormat.TXT));
-        fileName = "deposit-slip-stub.txt";
-        d.save(fileName);
-        completed = true;
+        try {
+            ByteOutputStream depositSlipOutputStream = new ByteOutputStream();
+            JasperReportProcessor.createReport(new JasperReportModel(MoneyInCreateDepositSlipPrintoutProcess.class.getPackage().getName() + ".BankDepositSlip",
+                    batch.payments(), new HashMap<String, Object>()), JasperFileFormat.PDF, depositSlipOutputStream);
+
+            depositSlipOutputStream.flush();
+            Downloadable d = new Downloadable(depositSlipOutputStream.getBytes(), MimeMap.getContentType(DownloadFormat.PDF));
+            fileName = "deposit-slip-stub.pdf";
+            d.save(fileName);
+        } catch (Throwable e) {
+            log.error("deposit slip generation failed", e);
+            error = e;
+        } finally {
+            completed = true;
+        }
+
     }
 
     @Override
@@ -62,6 +84,10 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
         if (completed) {
             r.setCompleted();
             r.setDownloadLink(System.currentTimeMillis() + "/" + fileName);
+        }
+        if (error != null) {
+            r.setError();
+            r.setErrorStatusMessage("failed to create deposit slip printout due to " + error.getMessage());
         }
         return r;
     }
