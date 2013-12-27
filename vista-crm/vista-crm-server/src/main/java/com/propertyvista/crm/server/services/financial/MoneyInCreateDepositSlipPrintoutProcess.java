@@ -13,13 +13,12 @@
  */
 package com.propertyvista.crm.server.services.financial;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sun.xml.messaging.saaj.util.ByteOutputStream;
 
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
@@ -59,12 +58,12 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
     @Override
     public void execute() {
         try {
-            ByteOutputStream depositSlipOutputStream = new ByteOutputStream();
+            ByteArrayOutputStream depositSlipOutputStream = new ByteArrayOutputStream();
             JasperReportProcessor.createReport(new JasperReportModel(MoneyInCreateDepositSlipPrintoutProcess.class.getPackage().getName() + ".BankDepositSlip",
                     batch.payments(), new HashMap<String, Object>()), JasperFileFormat.PDF, depositSlipOutputStream);
 
             depositSlipOutputStream.flush();
-            Downloadable d = new Downloadable(depositSlipOutputStream.getBytes(), MimeMap.getContentType(DownloadFormat.PDF));
+            Downloadable d = new Downloadable(depositSlipOutputStream.toByteArray(), MimeMap.getContentType(DownloadFormat.PDF));
             fileName = "deposit-slip-stub.pdf";
             d.save(fileName);
         } catch (Throwable e) {
