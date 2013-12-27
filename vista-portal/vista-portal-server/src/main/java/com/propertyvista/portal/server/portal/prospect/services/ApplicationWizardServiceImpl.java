@@ -100,17 +100,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void save(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
-        OnlineApplication bo = ProspectPortalContext.getOnlineApplication();
-
-        Persistence.ensureRetrieve(bo.masterOnlineApplication(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
-
-        saveApplicantData(bo, editableEntity);
-
-        saveCoApplicants(bo, editableEntity);
-        saveGuarantors(bo, editableEntity);
-
-        saveLegalTerms(bo, editableEntity);
+        saveApplicationData(editableEntity);
 
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -118,6 +108,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
+        saveApplicationData(editableEntity);
+
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 
@@ -462,6 +455,20 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void saveLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
         bo.legalTerms().clear();
         bo.legalTerms().addAll(bo.legalTerms());
+    }
+
+    private void saveApplicationData(OnlineApplicationDTO to) {
+        OnlineApplication bo = ProspectPortalContext.getOnlineApplication();
+
+        Persistence.ensureRetrieve(bo.masterOnlineApplication(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
+
+        saveApplicantData(bo, to);
+
+        saveCoApplicants(bo, to);
+        saveGuarantors(bo, to);
+
+        saveLegalTerms(bo, to);
     }
 
     // ================================================================================================================

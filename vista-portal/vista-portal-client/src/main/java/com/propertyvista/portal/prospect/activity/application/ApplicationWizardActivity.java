@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.gwt.commons.ClientEventBus;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
@@ -67,22 +66,13 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
 
     @Override
     public void finish() {
-        assert service != null : "Service shouldn't be null or method finish() has to be implemented in subclass.";
-        service.submit(new AsyncCallback<Key>() {
+        service.submit(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 ApplicationWizardActivity.super.finish();
                 AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.ApplicationConfirmation());
             }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (!getView().manageSubmissionFailure(caught)) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            }
         }, getView().getValue());
-
     }
 
     @Override

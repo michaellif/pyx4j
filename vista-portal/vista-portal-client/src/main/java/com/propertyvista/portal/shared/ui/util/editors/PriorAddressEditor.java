@@ -37,6 +37,8 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
 
         int row = main.getRowCount();
 
+        main.setBR(++row, 0, 1);
+
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().moveInDate()), 120).build());
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().moveOutDate()), 120).build());
 
