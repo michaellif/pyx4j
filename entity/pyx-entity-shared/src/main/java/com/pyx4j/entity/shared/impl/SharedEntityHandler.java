@@ -784,11 +784,13 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     @Override
     public void setMemberValue(String memberName, Serializable value) {
         assert (memberName != null);
+        assert (getEntityMeta().getMemberMeta(memberName) != null);
         ensureValue(true).put(memberName, value);
     }
 
     @Override
     public <T extends IObject<?>> void set(T member, T value) {
+        assert (getEntityMeta().getMemberMeta(member.getFieldName()) != null);
         ensureValue(true).put(member.getFieldName(), (Serializable) value.getValue());
     }
 
