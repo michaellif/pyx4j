@@ -64,7 +64,7 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
 
             depositSlipOutputStream.flush();
             Downloadable d = new Downloadable(depositSlipOutputStream.toByteArray(), MimeMap.getContentType(DownloadFormat.PDF));
-            fileName = "deposit-slip-stub.pdf";
+            fileName = "deposit-slip.pdf";
             d.save(fileName);
         } catch (Throwable e) {
             log.error("deposit slip generation failed", e);

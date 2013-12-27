@@ -7,6 +7,14 @@
 	<field name="unit" class="java.lang.String"/>
 	<field name="checkNumber" class="java.lang.String"/>
 	<field name="amount" class="java.math.BigDecimal"/>
+	<variable name="totalAmount" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0.00")]]></initialValueExpression>
+	</variable>
+	<variable name="numberOfCheques" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -21,28 +29,28 @@
 			<staticText>
 				<reportElement x="0" y="0" width="272" height="20"/>
 				<textElement>
-					<font fontName="DejaVu Sans"/>
+					<font fontName="Tahoma"/>
 				</textElement>
 				<text><![CDATA[Payer]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="272" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans"/>
+					<font fontName="Tahoma"/>
 				</textElement>
 				<text><![CDATA[Unit]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="372" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans"/>
+					<font fontName="Tahoma"/>
 				</textElement>
 				<text><![CDATA[Cheque #]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="472" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans"/>
+					<font fontName="Tahoma"/>
 				</textElement>
 				<text><![CDATA[Deposit Amount]]></text>
 			</staticText>
@@ -53,27 +61,28 @@
 			<textField>
 				<reportElement x="0" y="0" width="272" height="20"/>
 				<textElement>
-					<font fontName="DejaVu Sans"/>
+					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tenantName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="272" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans"/>
+					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="372" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans"/>
+					<font fontName="Tahoma"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{checkNumber}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
 				<reportElement x="472" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans"/>
+					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
@@ -86,6 +95,31 @@
 		<band height="54" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="372" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Total Amount:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="472" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{totalAmount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="372" y="20" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Number of Cheques:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="472" y="20" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{numberOfCheques}]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 </jasperReport>
