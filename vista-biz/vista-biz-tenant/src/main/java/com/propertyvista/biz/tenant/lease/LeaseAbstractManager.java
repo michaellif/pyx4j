@@ -154,7 +154,7 @@ public abstract class LeaseAbstractManager {
 
     public Lease setUnit(Lease lease, AptUnit unitId) {
         assert !lease.currentTerm().isNull();
-        return setUnit(lease, lease.currentTerm(), unitId);
+        return setUnit(lease, lease.currentTerm(), unitId, true);
     }
 
     public Lease setService(Lease lease, ProductItem serviceId) {
@@ -194,13 +194,29 @@ public abstract class LeaseAbstractManager {
 
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
         assert !leaseTerm.lease().isNull();
-        setUnit(leaseTerm.lease(), leaseTerm, unitId);
+        setUnit(leaseTerm.lease(), leaseTerm, unitId, true);
         return leaseTerm;
     }
 
     public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
         assert !leaseTerm.lease().isNull();
         return setService(leaseTerm.lease(), leaseTerm, serviceId);
+    }
+
+    public LeaseTerm setPackage(LeaseTerm leaseTerm, AptUnit unitId, BillableItem serviceItem, List<BillableItem> featureItems) {
+        assert !leaseTerm.lease().isNull();
+
+        setUnit(leaseTerm.lease(), leaseTerm, unitId, false);
+
+        // update service/features:
+        leaseTerm.version().leaseProducts().serviceItem().set(serviceItem);
+
+        leaseTerm.version().leaseProducts().featureItems().clear();
+        leaseTerm.version().leaseProducts().featureItems().addAll(featureItems);
+
+        leaseTerm.version().leaseProducts().concessions().clear();
+
+        return leaseTerm;
     }
 
     public LeaseTerm persist(LeaseTerm leaseTerm) {
@@ -717,7 +733,7 @@ public abstract class LeaseAbstractManager {
 
     // Internals: -----------------------------------------------------------------------------------------------------
 
-    private Lease setUnit(Lease lease, LeaseTerm leaseTerm, AptUnit unitId) {
+    private Lease setUnit(Lease lease, LeaseTerm leaseTerm, AptUnit unitId, boolean updateTermData) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
         if (!Lease.Status.draft().contains(lease.status().getValue())) {
@@ -747,7 +763,9 @@ public abstract class LeaseAbstractManager {
                 throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", lease.billingAccount().billingPeriod().getValue()));
             }
 
-            updateTermUnitRelatedData(leaseTerm);
+            if (updateTermData) {
+                updateTermUnitRelatedData(leaseTerm);
+            }
         } else {
             throw new IllegalArgumentException(i18n.tr("Invalid Lease/Term pair supplied"));
         }
@@ -758,6 +776,9 @@ public abstract class LeaseAbstractManager {
     private void setBuildingUtilities(LeaseTerm term) {
         assert (!term.unit().isNull());
         assert (!term.unit().isValueDetached());
+
+        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.Attached);
+        term.version().utilities().clear();
 
         EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
         criteria.eq(criteria.proto().building(), term.unit().building());
@@ -795,7 +816,7 @@ public abstract class LeaseAbstractManager {
             if (!Lease.Status.draft().contains(lease.status().getValue())) {
                 throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
-            // TODO - review deposts lifecicle management!
+            // TODO - review deposits lifecycle management!
 //            // clear current deposits: 
 //            EntityQueryCriteria<DepositLifecycle> criteria = EntityQueryCriteria.create(DepositLifecycle.class);
 //            criteria.eq(criteria.proto().billingAccount(), lease.billingAccount());
@@ -856,7 +877,7 @@ public abstract class LeaseAbstractManager {
             }
         }
 
-        // actual persist mechanics::
+        // actual persist mechanics:
         if (lease.currentTerm().getPrimaryKey() == null) {
             LeaseTerm term = lease.currentTerm().detach();
 
@@ -866,6 +887,9 @@ public abstract class LeaseAbstractManager {
 
             lease.currentTerm().lease().set(lease);
         }
+
+        // sync. unit:
+        lease.unit().set(lease.currentTerm().unit());
 
         if (finalize) {
             finalize(lease.currentTerm());

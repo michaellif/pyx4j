@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.prospect.services;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -86,12 +87,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillLeaseData(bo, to);
 
+        fillUnitSelectionData(bo, to);
+
         fillApplicantData(bo, to);
 
         fillCoApplicants(bo, to);
         fillGuarantors(bo, to);
-
-        fillUnitSelectionData(bo, to);
 
         fillLegalTerms(bo, to);
 
@@ -281,8 +282,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void saveCoApplicants(OnlineApplication bo, OnlineApplicationDTO to) {
-        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
-                .getPrimaryKey());
+        LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
         // clear removed:
         Iterator<LeaseTermTenant> it = leaseTerm.version().tenants().iterator();
@@ -321,9 +321,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 }
             }
         }
-
-        // do not forget to save:
-        ServerSideFactory.create(LeaseFacade.class).persist(leaseTerm);
     }
 
     private void updateCoApplicant(LeaseTermTenant ltt, CoapplicantDTO cap) {
@@ -357,8 +354,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void saveGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
-        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
-                .getPrimaryKey());
+        LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
         // clear removed:
         Iterator<LeaseTermGuarantor> it = leaseTerm.version().guarantors().iterator();
@@ -397,9 +393,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 }
             }
         }
-
-        // do not forget to save:
-        ServerSideFactory.create(LeaseFacade.class).persist(leaseTerm);
     }
 
     private void updateGuarantor(LeaseTermGuarantor ltt, GuarantorDTO cap) {
@@ -448,6 +441,22 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
     }
 
+    private void saveUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
+        if (!to.unitSelection().isNull() && !to.unitOptionsSelection().isNull()) {
+            LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
+
+            List<BillableItem> featureItems = new ArrayList<BillableItem>();
+            featureItems.addAll(to.unitOptionsSelection().selectedPets());
+            featureItems.addAll(to.unitOptionsSelection().selectedParking());
+            featureItems.addAll(to.unitOptionsSelection().selectedStorage());
+            featureItems.addAll(to.unitOptionsSelection().selectedUtilities());
+            featureItems.addAll(to.unitOptionsSelection().selectedOther());
+
+            ServerSideFactory.create(LeaseFacade.class).setPackage(leaseTerm, to.unitSelection().unit(), to.unitOptionsSelection().selectedService(),
+                    featureItems);
+        }
+    }
+
     private void fillLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
         to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
     }
@@ -463,12 +472,23 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(bo.masterOnlineApplication(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
 
+        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
+                .getPrimaryKey());
+
+        // All saveXXX methods SHOULD use this Lease and current LeaseTerm:
+        bo.masterOnlineApplication().leaseApplication().lease().set(bo.masterOnlineApplication().leaseApplication().lease().currentTerm(), leaseTerm);
+
+        saveUnitSelectionData(bo, to);
+
         saveApplicantData(bo, to);
 
         saveCoApplicants(bo, to);
         saveGuarantors(bo, to);
 
         saveLegalTerms(bo, to);
+
+        // do not forget to save LEASE:
+        ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease());
     }
 
     // ================================================================================================================

@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant.lease;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
@@ -59,6 +60,8 @@ public interface LeaseFacade {
     LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId);
 
     LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId);
+
+    LeaseTerm setPackage(LeaseTerm leaseTerm, AptUnit unitId, BillableItem serviceItem, List<BillableItem> featureItems);
 
     LeaseTerm persist(LeaseTerm leaseTerm);
 

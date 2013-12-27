@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant.lease.yardi;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
@@ -76,6 +77,11 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     @Override
     public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
         return new LeaseYardiManager().setService(leaseTerm, serviceId);
+    }
+
+    @Override
+    public LeaseTerm setPackage(LeaseTerm leaseTerm, AptUnit unitId, BillableItem serviceItem, List<BillableItem> featureItems) {
+        return new LeaseYardiManager().setPackage(leaseTerm, unitId, serviceItem, featureItems);
     }
 
     @Override
