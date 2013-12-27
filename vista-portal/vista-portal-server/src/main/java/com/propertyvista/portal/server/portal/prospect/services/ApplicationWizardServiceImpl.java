@@ -477,6 +477,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // All saveXXX methods SHOULD use this Lease and current LeaseTerm:
         bo.masterOnlineApplication().leaseApplication().lease().set(bo.masterOnlineApplication().leaseApplication().lease().currentTerm(), leaseTerm);
+        bo.masterOnlineApplication().leaseApplication().lease().currentTerm().lease().set(bo.masterOnlineApplication().leaseApplication().lease());
 
         saveUnitSelectionData(bo, to);
 
@@ -486,6 +487,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         saveGuarantors(bo, to);
 
         saveLegalTerms(bo, to);
+
+        System.out.println(bo.masterOnlineApplication().leaseApplication().lease().currentTerm().unit().getStringView());
+        System.out.println(bo.masterOnlineApplication().leaseApplication().lease().unit().getStringView());
 
         // do not forget to save LEASE:
         ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease());
