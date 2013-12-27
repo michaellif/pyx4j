@@ -126,7 +126,6 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
     protected abstract VIEWER createViewer();
 
     protected void onEditorCreate() {
-        getEditor().setWidth("100%");
         setDebugId(getCComponent().getDebugId());
     }
 
@@ -140,7 +139,6 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
     }
 
     protected void onViewerCreate() {
-        getViewer().setWidth("100%");
         setDebugId(getCComponent().getDebugId());
     }
 

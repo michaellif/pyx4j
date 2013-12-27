@@ -75,7 +75,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         add(editButton);
         setWidgetBottomHeight(editButton, 20, Unit.PCT, 40, Unit.PX);
 
-        setImageSize(dimension.width, dimension.width);
+        setImageSize(dimension.width, dimension.height);
     }
 
     public void setScaleMode(ScaleMode scaleMode) {
