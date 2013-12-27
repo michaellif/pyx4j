@@ -208,7 +208,7 @@ public class OptionsStep extends ApplicationWizardStep {
                     @Override
                     public boolean onClickOk() {
                         for (ProductItem item : getSelectedItems()) {
-                            if (getValue().size() < getMaxCount()) {
+                            if (getMaxCount() < 0 || getValue().size() < getMaxCount()) {
                                 BillableItem newItem = EntityFactory.create(BillableItem.class);
                                 newItem.item().set(item);
                                 newItem.agreedPrice().setValue(item.price().getValue());

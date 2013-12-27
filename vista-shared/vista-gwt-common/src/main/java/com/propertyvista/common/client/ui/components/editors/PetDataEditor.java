@@ -19,17 +19,17 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 
-public class PetDataEditor extends CEntityDecoratableForm<Pet> {
+public class PetDataEditor extends CEntityForm<Pet> {
 
     private static final I18n i18n = I18n.get(PetDataEditor.class);
 
