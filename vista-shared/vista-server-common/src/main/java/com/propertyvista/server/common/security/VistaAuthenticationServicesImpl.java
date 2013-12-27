@@ -401,8 +401,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             //TODO remove this when we have second Audit connection 
             // ignore logout 
         }
-        Lifecycle.endSession();
-        callback.onSuccess(createAuthenticationResponse(null));
+        super.logout(callback);
     }
 
     @Override
