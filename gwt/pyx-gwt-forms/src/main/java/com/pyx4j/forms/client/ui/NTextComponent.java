@@ -43,6 +43,7 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
 
     @Override
     protected void onEditorCreate() {
+        getEditor().setWidth("100%");
         super.onEditorCreate();
         getEditor().addKeyDownHandler(new KeyDownHandler() {
             @Override
@@ -53,6 +54,12 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
             }
         });
         setWatermark(getCComponent().getWatermark());
+    }
+
+    @Override
+    protected void onViewerCreate() {
+        getViewer().setWidth("100%");
+        super.onViewerCreate();
     }
 
     @Override
