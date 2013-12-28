@@ -546,7 +546,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         delete.add(PropertyCriterion.ge(delete.proto().dateFrom(), addDay(leasedSegment.dateTo().getValue())));
         Persistence.service().delete(delete);
         leasedSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-        Persistence.secureSave(leasedSegment);
+        Persistence.service().merge(leasedSegment);
 
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
         setUnitAvailableFrom(unitPk, null);
@@ -878,7 +878,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         // TODO: unit price zeroed in ADNVANCE! - i.g. TODAY instead newAvaialbleFrom date!!!
         unit.financial()._unitRent().setValue(null);
 
-        Persistence.secureSave(unit);
+        Persistence.service().merge(unit);
     }
 
     private boolean isInProductCatalog(Key unitPk) {

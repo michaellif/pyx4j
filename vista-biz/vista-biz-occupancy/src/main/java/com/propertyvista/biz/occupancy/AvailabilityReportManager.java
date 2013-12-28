@@ -53,7 +53,7 @@ public class AvailabilityReportManager {
     }
 
     public AvailabilityReportManager(Key unitId) {
-        this(Persistence.secureRetrieve(AptUnit.class, unitId));
+        this(Persistence.service().retrieve(AptUnit.class, unitId));
     }
 
     /**
@@ -73,7 +73,7 @@ public class AvailabilityReportManager {
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), startingOn));
         criteria.asc(criteria.proto().dateFrom());
 
-        List<AptUnitOccupancySegment> occupancy = Persistence.secureQuery(criteria);
+        List<AptUnitOccupancySegment> occupancy = Persistence.service().query(criteria);
         if (occupancy.isEmpty()) {
             throw new IllegalStateException("failed to retreive occupancy for unit pk = " + unit.getPrimaryKey());
         }

@@ -740,17 +740,18 @@ public abstract class LeaseAbstractManager {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
-        if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
-            AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey());
-            Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey());
+        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
 
+        leaseTerm.unit().set(unit);
+        setBuildingUtilities(leaseTerm);
+
+        if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
             lease.unit().set(unit);
-            lease.currentTerm().unit().set(unit);
-            setBuildingUtilities(lease.currentTerm());
 
             // set LeaseBillingPolicy offsets
-            LeaseBillingPolicy billingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.building(), LeaseBillingPolicy.class);
             boolean policyFound = false;
+            LeaseBillingPolicy billingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.building(), LeaseBillingPolicy.class);
             for (LeaseBillingTypePolicyItem policyItem : billingPolicy.availableBillingTypes()) {
                 if (policyItem.billingPeriod().getValue().equals(lease.billingAccount().billingPeriod().getValue())) {
                     lease.billingAccount().paymentDueDayOffset().set(policyItem.paymentDueDayOffset());
@@ -762,28 +763,13 @@ public abstract class LeaseAbstractManager {
             if (!policyFound) {
                 throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", lease.billingAccount().billingPeriod().getValue()));
             }
+        }
 
-            if (updateTermData) {
-                updateTermUnitRelatedData(leaseTerm);
-            }
-        } else {
-            throw new IllegalArgumentException(i18n.tr("Invalid Lease/Term pair supplied"));
+        if (updateTermData) {
+            updateTermUnitRelatedData(leaseTerm);
         }
 
         return lease;
-    }
-
-    private void setBuildingUtilities(LeaseTerm term) {
-        assert (!term.unit().isNull());
-        assert (!term.unit().isValueDetached());
-
-        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.Attached);
-        term.version().utilities().clear();
-
-        EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
-        criteria.eq(criteria.proto().building(), term.unit().building());
-        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-        term.version().utilities().addAll(Persistence.service().query(criteria));
     }
 
     private LeaseTerm setService(Lease lease, LeaseTerm leaseTerm, ProductItem serviceId) {
@@ -853,6 +839,19 @@ public abstract class LeaseAbstractManager {
         return leaseTerm;
     }
 
+    private void setBuildingUtilities(LeaseTerm term) {
+        assert (!term.unit().isNull());
+        assert (!term.unit().isValueDetached());
+    
+        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.Attached);
+        term.version().utilities().clear();
+    
+        EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
+        criteria.eq(criteria.proto().building(), term.unit().building());
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        term.version().utilities().addAll(Persistence.service().query(criteria));
+    }
+
     protected void finalizeBillableItems(LeaseTerm leaseTerm) {
         leaseTerm.version().leaseProducts().serviceItem().finalized().setValue(Boolean.TRUE);
         for (BillableItem item : leaseTerm.version().leaseProducts().featureItems()) {
@@ -889,7 +888,9 @@ public abstract class LeaseAbstractManager {
         }
 
         // sync. unit:
-        lease.unit().set(lease.currentTerm().unit());
+        if (!lease.currentTerm().unit().isNull()) {
+            lease.unit().set(lease.currentTerm().unit());
+        }
 
         if (finalize) {
             finalize(lease.currentTerm());

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -52,7 +51,7 @@ public class AptUnitOccupancyManagerHelper {
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), startingAt));
         criteria.add(PropertyCriterion.in(criteria.proto().status(), new ArrayList<Status>(relevantStatuses)));
 
-        Vector<AptUnitOccupancySegment> segments = Persistence.secureQuery(criteria);
+        List<AptUnitOccupancySegment> segments = Persistence.service().query(criteria);
         LinkedList<AptUnitOccupancySegment> deleteCandidates = new LinkedList<AptUnitOccupancySegment>();
 
         Iterator<AptUnitOccupancySegment> i = segments.iterator();
@@ -76,13 +75,13 @@ public class AptUnitOccupancyManagerHelper {
                     deleteCandidates.add(s1);
                     deleteCandidates.add(s2);
 
-                    Persistence.secureSave(merged);
+                    Persistence.service().merge(merged);
 
                     s1 = merged;
                 } else {
                     if (handler.isMergeable(s2, s2)) {
                         handler.onMerged(s2, s2, s2);
-                        Persistence.secureSave(s2);
+                        Persistence.service().merge(s2);
                         s1 = s2;
                     }
                 }
@@ -94,7 +93,7 @@ public class AptUnitOccupancyManagerHelper {
             // here we treat the special case when there's only one segment to be merged
             if (handler.isMergeable(s1, s1)) {
                 handler.onMerged(s1, s1, s1);
-                Persistence.secureSave(s1);
+                Persistence.service().merge(s1);
             }
         }
     }
@@ -157,14 +156,13 @@ public class AptUnitOccupancyManagerHelper {
         criteria.add(PropertyCriterion.eq(criteria.proto().unit().id(), unitPk));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), dateContainedByTheFirstSegment));
         criteria.asc(criteria.proto().dateFrom());
-        List<AptUnitOccupancySegment> occupancyTimeline = Persistence.secureQuery(criteria);
-        return occupancyTimeline;
+        return Persistence.service().query(criteria);
     }
 
     public static boolean isOccupancyListEmpty(Key unitPk) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit().id(), unitPk));
-        return Persistence.secureQuery(criteria).isEmpty();
+        return !Persistence.service().exists(criteria);
     }
 
     /**
