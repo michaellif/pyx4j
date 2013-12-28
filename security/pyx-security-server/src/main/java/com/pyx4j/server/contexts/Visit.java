@@ -23,6 +23,8 @@ package com.pyx4j.server.contexts;
 import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.security.shared.Acl;
@@ -56,6 +58,8 @@ public class Visit implements Serializable {
     private transient boolean changed;
 
     private final String sessionToken;
+
+    private transient final ReadWriteLock sessionGuardLock = new ReentrantReadWriteLock();
 
     public Visit(String sessionToken) {
         this.userVisit = null;
@@ -174,6 +178,15 @@ public class Visit implements Serializable {
     public synchronized long getNewRequestID() {
         requestIDCount++;
         return requestIDCount;
+    }
+
+    /**
+     * This only guards RPC Requests for now.
+     * 
+     * @return
+     */
+    public ReadWriteLock getSessionGuardLock() {
+        return sessionGuardLock;
     }
 
     @Override

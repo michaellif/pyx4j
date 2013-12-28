@@ -22,6 +22,8 @@ package com.pyx4j.security.server;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,7 +136,31 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
     @Override
     @IgnoreSessionToken
     public void logout(AsyncCallback<AuthenticationResponse> callback) {
-        Lifecycle.endSession();
+        // Allow all RPC requests to complete before session is closed, TODO Consider moving the same to behavior change in session.
+        // Visit is destroyed after endSession, keep the variable
+        ReadWriteLock sessionGuardLock = null;
+        if (Context.getVisit() != null) {
+            sessionGuardLock = Context.getVisit().getSessionGuardLock();
+            try {
+                //This thread hold a read lock already,
+                sessionGuardLock.readLock().unlock();
+
+                // 1 minute is default DB online transaction pool timeout
+                if (!sessionGuardLock.writeLock().tryLock(1, TimeUnit.MINUTES)) {
+                    sessionGuardLock = null;
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try {
+            Lifecycle.endSession();
+        } finally {
+            if (sessionGuardLock != null) {
+                sessionGuardLock.writeLock().unlock();
+                sessionGuardLock.readLock().lock();
+            }
+        }
         callback.onSuccess(createAuthenticationResponse(null));
     }
 

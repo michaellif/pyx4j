@@ -116,6 +116,9 @@ public class RemoteServiceImpl implements RemoteService {
                 userVisit = visit.getUserVisit();
             }
             boolean inService = false;
+            if (visit != null) {
+                visit.getSessionGuardLock().readLock().lock();
+            }
             try {
                 List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
                 if (filters != null) {
@@ -189,6 +192,13 @@ public class RemoteServiceImpl implements RemoteService {
                             // Don't show the actual error to customers.
                             throw new UnRecoverableRuntimeException(i18n.tr("System Error. Please Contact Support"));
                         }
+                    }
+                }
+            } finally {
+                if (visit != null) {
+                    try {
+                        visit.getSessionGuardLock().readLock().unlock();
+                    } catch (IllegalMonitorStateException ignore) {
                     }
                 }
             }
