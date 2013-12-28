@@ -38,7 +38,6 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -746,7 +745,7 @@ public abstract class LeaseAbstractManager {
         leaseTerm.unit().set(unit);
         setBuildingUtilities(leaseTerm);
 
-        if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
+        if (leaseTerm.equals(lease.currentTerm())) {
             lease.unit().set(unit);
 
             // set LeaseBillingPolicy offsets
@@ -802,7 +801,7 @@ public abstract class LeaseAbstractManager {
             if (!Lease.Status.draft().contains(lease.status().getValue())) {
                 throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
-            // TODO - review deposits lifecycle management!
+// TODO - review deposits lifecycle management!
 //            // clear current deposits: 
 //            EntityQueryCriteria<DepositLifecycle> criteria = EntityQueryCriteria.create(DepositLifecycle.class);
 //            criteria.eq(criteria.proto().billingAccount(), lease.billingAccount());
@@ -842,10 +841,10 @@ public abstract class LeaseAbstractManager {
     private void setBuildingUtilities(LeaseTerm term) {
         assert (!term.unit().isNull());
         assert (!term.unit().isValueDetached());
-    
+
         Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.Attached);
         term.version().utilities().clear();
-    
+
         EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
         criteria.eq(criteria.proto().building(), term.unit().building());
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);

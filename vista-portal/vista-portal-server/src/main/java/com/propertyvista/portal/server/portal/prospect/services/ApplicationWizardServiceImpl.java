@@ -488,9 +488,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         saveLegalTerms(bo, to);
 
-        System.out.println(bo.masterOnlineApplication().leaseApplication().lease().currentTerm().unit().getStringView());
-        System.out.println(bo.masterOnlineApplication().leaseApplication().lease().unit().getStringView());
-
         // do not forget to save LEASE:
         ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease());
     }
