@@ -250,7 +250,7 @@ public class ServerSideConfiguration {
         if (isUnitTest == null) {
             StackTraceElement[] ste = new Throwable().getStackTrace();
             for (int i = ste.length - 1; i > 2; i--) {
-                if (ste[i].getClassName().startsWith("junit.")) {
+                if (ste[i].getClassName().startsWith("org.junit.") || ste[i].getClassName().startsWith("junit.")) {
                     isUnitTest = true;
                     break;
                 }
