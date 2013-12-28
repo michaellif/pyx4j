@@ -119,7 +119,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     public void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplan, LogicalDate moveIn) {
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         criteria.eq(criteria.proto().floorplan(), floorplan);
-        criteria.ge(criteria.proto()._availableForRent(), moveIn);
+        criteria.le(criteria.proto()._availableForRent(), moveIn);
 
         callback.onSuccess(new Vector<AptUnit>(Persistence.service().query(criteria)));
     }
@@ -409,6 +409,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             Lease lease = ProspectPortalContext.getLease();
 
             if (lease != null && !lease.unit().isNull()) {
+                Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
+
                 unitSelection.unit().set(lease.unit());
                 unitSelection.building().set(lease.unit().building());
                 unitSelection.floorplan().set(lease.unit().floorplan());
@@ -430,7 +432,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             if (!unitSelection.floorplan().isNull()) {
                 EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
                 criteria.eq(criteria.proto().floorplan(), unitSelection.floorplan());
-                criteria.ge(criteria.proto()._availableForRent(), unitSelection.moveIn());
+                criteria.le(criteria.proto()._availableForRent(), unitSelection.moveIn());
                 unitSelection.availableUnits().addAll(Persistence.service().query(criteria));
             }
 
