@@ -19,7 +19,7 @@
 	<field name="oneTimeFeatureCharges" class="java.math.BigDecimal"/>
 	<field name="depositAmount" class="java.math.BigDecimal"/>
 	<field name="pendingAccountAdjustments" class="java.math.BigDecimal"/>
-	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
+	<field name="lineItems" class="com.pyx4j.entity.core.IList"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="depositRefundLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<field name="immediateAccountAdjustmentLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
