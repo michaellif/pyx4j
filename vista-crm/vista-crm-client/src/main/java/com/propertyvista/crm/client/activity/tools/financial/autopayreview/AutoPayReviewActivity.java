@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.core.shared.GWT;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlace;

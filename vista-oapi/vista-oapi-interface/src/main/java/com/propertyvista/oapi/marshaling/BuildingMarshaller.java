@@ -13,9 +13,9 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.model.BuildingIO;

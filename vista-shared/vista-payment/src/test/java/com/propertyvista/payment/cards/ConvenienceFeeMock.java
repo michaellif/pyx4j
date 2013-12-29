@@ -16,7 +16,7 @@ package com.propertyvista.payment.cards;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.payment.FeeCalulationRequest;
 import com.propertyvista.payment.FeeCalulationResponse;

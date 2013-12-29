@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.AbstractUser;

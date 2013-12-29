@@ -16,7 +16,7 @@ package com.propertyvista.domain.payment;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 @AbstractEntity
 @Table(prefix = "payment")

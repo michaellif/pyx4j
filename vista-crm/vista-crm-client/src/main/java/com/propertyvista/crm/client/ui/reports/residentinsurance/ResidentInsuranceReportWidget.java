@@ -33,7 +33,7 @@ import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.reports.ReportWidget;
 

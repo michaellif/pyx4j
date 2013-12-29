@@ -20,7 +20,7 @@ import javax.xml.bind.JAXBException;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.contact.AddressStructured;

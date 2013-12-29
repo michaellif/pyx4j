@@ -26,15 +26,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.report.master.MasterReportEntry;
 import com.pyx4j.entity.report.master.MasterReportModel;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;

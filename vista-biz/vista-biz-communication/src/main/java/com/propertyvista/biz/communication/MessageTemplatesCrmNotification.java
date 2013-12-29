@@ -19,9 +19,9 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;

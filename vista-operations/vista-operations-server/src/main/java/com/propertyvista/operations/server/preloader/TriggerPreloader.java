@@ -15,9 +15,9 @@ package com.propertyvista.operations.server.preloader;
 
 import java.util.EnumSet;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;

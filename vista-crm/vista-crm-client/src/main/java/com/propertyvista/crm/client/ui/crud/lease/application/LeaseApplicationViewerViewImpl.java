@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;

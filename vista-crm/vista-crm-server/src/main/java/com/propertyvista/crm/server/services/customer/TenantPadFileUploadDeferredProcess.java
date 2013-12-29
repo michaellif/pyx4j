@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.interfaces.importer.model.PadFileModel;

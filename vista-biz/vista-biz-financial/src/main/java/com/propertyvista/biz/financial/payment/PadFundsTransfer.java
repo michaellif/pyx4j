@@ -17,14 +17,14 @@ import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;

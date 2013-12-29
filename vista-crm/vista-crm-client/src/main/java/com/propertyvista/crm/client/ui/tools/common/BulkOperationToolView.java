@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;

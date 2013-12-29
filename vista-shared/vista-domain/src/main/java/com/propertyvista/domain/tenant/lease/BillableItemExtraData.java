@@ -15,7 +15,7 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Inheritance

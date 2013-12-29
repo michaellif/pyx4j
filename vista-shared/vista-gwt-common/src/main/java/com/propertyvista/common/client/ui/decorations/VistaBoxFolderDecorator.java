@@ -13,7 +13,7 @@
  */
 package com.propertyvista.common.client.ui.decorations;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 

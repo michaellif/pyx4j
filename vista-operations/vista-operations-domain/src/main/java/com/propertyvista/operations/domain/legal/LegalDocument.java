@@ -17,8 +17,8 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.shared.i18n.CompiledLocale;

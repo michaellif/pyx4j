@@ -18,8 +18,8 @@ import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.domain.pmc.info;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface CaledonCoSigner extends IEntity {
 

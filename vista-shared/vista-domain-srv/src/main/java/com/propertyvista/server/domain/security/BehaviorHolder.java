@@ -15,8 +15,8 @@ package com.propertyvista.server.domain.security;
 
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.security.shared.Behavior;
 

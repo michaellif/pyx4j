@@ -33,10 +33,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;

@@ -18,8 +18,8 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
 public interface DepositSlipPaymentRecordDTO extends IEntity {

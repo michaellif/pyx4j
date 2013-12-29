@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;

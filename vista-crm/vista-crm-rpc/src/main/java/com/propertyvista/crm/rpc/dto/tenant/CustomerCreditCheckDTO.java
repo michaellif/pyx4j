@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.dto.tenant;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;

@@ -15,8 +15,8 @@ package com.propertyvista.operations.server.upgrade.u_1_0_9;
 
 import java.util.List;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;

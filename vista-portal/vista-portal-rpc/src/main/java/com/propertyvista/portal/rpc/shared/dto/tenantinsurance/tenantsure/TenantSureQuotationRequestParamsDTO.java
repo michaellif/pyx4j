@@ -16,9 +16,9 @@ package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
 
 import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 

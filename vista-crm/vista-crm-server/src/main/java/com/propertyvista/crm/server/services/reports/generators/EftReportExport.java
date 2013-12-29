@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services.reports.generators;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.report.EntityReportFormatter;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedReport;

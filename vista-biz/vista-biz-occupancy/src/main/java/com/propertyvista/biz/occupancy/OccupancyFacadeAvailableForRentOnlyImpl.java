@@ -16,8 +16,8 @@ package com.propertyvista.biz.occupancy;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;

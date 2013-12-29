@@ -14,8 +14,8 @@
 package com.propertyvista.crm.rpc.services;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 

@@ -15,8 +15,8 @@ package com.propertyvista.portal.server.portal.resident.services.profile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;

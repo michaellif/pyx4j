@@ -14,8 +14,8 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface SocialLink extends IEntity {
     public enum SocialSite {

@@ -19,8 +19,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;

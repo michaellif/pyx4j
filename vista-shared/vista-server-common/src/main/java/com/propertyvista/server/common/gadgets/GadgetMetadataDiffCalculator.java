@@ -15,11 +15,11 @@ package com.propertyvista.server.common.gadgets;
 
 import java.io.Serializable;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
 
 public class GadgetMetadataDiffCalculator {
 

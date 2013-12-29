@@ -14,8 +14,8 @@
 package com.propertyvista.server.domain;
 
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 

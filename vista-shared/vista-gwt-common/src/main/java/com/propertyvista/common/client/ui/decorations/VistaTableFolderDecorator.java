@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.decorations;
 
 import java.util.List;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;

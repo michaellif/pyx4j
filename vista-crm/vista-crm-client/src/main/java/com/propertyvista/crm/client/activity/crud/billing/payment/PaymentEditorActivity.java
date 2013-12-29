@@ -19,9 +19,9 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

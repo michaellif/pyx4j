@@ -17,10 +17,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.validation.framework.EntityValidator;

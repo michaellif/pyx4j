@@ -13,8 +13,8 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.common;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 /**
  * Entity for persisting state of table columns in lister based gadgets or for transferring state of columns from client to the server.

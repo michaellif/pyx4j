@@ -20,8 +20,8 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.media.ThumbnailSize;

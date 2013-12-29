@@ -33,10 +33,10 @@ import com.yardi.entity.maintenance.meta.Statuses;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.system.YardiServiceException;

@@ -36,10 +36,10 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
 import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldDescriptor;

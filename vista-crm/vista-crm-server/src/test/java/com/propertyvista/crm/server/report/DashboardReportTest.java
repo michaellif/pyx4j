@@ -21,10 +21,10 @@ import org.junit.After;
 import org.junit.Test;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 

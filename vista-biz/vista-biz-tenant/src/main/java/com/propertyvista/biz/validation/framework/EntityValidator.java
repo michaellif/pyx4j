@@ -15,7 +15,7 @@ package com.propertyvista.biz.validation.framework;
 
 import java.util.Set;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface EntityValidator<E extends IEntity> {
 

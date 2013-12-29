@@ -14,7 +14,7 @@
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;

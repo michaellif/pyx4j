@@ -17,8 +17,8 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 import com.propertyvista.domain.company.Portfolio;

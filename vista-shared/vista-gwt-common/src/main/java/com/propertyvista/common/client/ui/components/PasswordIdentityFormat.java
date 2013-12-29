@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField.PersonalIdentityIFormat;
 

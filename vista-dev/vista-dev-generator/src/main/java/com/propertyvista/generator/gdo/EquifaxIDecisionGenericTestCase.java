@@ -15,8 +15,8 @@ package com.propertyvista.generator.gdo;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.essentials.rpc.ImportColumn;
 import com.pyx4j.i18n.annotations.I18n;
 

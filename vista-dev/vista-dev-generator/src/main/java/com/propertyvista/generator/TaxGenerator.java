@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.tax.Tax;
 

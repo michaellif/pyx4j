@@ -16,7 +16,6 @@ package com.propertyvista.domain.property.asset.building;
 import java.util.Date;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
@@ -37,10 +36,11 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;

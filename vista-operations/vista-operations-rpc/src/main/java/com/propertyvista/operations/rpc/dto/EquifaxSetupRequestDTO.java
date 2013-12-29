@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;

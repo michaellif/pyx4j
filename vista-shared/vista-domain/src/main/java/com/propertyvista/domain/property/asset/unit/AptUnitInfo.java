@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
-import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -23,8 +22,9 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 

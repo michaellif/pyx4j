@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 

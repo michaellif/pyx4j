@@ -19,10 +19,10 @@ import java.util.Date;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.ExecutionMonitor;

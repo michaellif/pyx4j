@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;

@@ -17,9 +17,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
 import com.pyx4j.server.contexts.NamespaceManager;

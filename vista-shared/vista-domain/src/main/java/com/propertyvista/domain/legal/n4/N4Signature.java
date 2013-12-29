@@ -15,8 +15,8 @@ package com.propertyvista.domain.legal.n4;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
 public interface N4Signature extends IEntity {

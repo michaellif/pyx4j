@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;

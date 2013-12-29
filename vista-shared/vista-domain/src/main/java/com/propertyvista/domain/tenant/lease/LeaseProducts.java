@@ -18,8 +18,8 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.financial.offering.Concession;
 

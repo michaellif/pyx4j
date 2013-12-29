@@ -16,9 +16,9 @@ package com.propertyvista.biz.financial.maintenance.yardi;
 import java.util.Date;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceMetadataAbstractManager;
 import com.propertyvista.biz.system.YardiMaintenanceFacade;

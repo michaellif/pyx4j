@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.server.domain.CampaignHistory;

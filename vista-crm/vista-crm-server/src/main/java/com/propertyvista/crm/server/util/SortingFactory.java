@@ -22,12 +22,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;

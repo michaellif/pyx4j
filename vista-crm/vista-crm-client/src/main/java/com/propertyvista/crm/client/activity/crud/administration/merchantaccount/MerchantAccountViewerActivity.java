@@ -15,10 +15,10 @@ package com.propertyvista.crm.client.activity.crud.administration.merchantaccoun
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

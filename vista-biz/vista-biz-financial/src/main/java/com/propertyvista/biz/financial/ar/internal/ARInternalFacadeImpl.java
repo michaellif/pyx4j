@@ -21,9 +21,9 @@ import java.util.Vector;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARArrearsManager;

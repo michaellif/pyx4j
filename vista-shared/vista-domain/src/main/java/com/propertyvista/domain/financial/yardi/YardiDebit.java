@@ -16,7 +16,7 @@ package com.propertyvista.domain.financial.yardi;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.billing.InvoiceCharge;
 

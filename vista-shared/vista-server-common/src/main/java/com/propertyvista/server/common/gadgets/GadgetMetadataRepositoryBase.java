@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.server.common.gadgets.defaultsettings.GadgetMetadataDefaultSettings;

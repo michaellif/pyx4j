@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ColumnSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;

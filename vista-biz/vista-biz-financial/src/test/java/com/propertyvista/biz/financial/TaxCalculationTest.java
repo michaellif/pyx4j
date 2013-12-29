@@ -19,7 +19,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;

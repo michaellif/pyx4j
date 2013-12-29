@@ -39,9 +39,9 @@ import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.pojo.IPojo;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.tenant.LeadFacade;

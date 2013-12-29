@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;

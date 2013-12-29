@@ -22,9 +22,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ISet;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;

@@ -22,12 +22,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.Path;
 
 import com.propertyvista.biz.validation.framework.CollectionValidator;
 import com.propertyvista.biz.validation.framework.EntityValidator;

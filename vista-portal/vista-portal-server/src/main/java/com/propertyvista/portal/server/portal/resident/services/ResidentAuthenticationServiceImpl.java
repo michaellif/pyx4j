@@ -22,10 +22,10 @@ import java.util.Set;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.Behavior;
 

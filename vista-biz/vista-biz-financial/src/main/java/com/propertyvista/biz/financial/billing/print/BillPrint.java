@@ -20,11 +20,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.financial.billing.Bill;

@@ -15,7 +15,7 @@ package com.propertyvista.domain.pmc.info;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.ISet;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;

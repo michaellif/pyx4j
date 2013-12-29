@@ -15,7 +15,7 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.BillingAccount;

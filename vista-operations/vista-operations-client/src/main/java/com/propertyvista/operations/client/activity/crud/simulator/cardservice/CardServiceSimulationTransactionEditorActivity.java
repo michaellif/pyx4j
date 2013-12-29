@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

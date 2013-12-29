@@ -16,7 +16,6 @@ package com.propertyvista.domain.company;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.Detached;
@@ -33,9 +32,10 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.person.Person;

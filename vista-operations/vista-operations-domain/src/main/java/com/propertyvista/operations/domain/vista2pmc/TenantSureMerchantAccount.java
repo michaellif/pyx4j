@@ -16,7 +16,7 @@ package com.propertyvista.operations.domain.vista2pmc;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.AbstractMerchantAccount;

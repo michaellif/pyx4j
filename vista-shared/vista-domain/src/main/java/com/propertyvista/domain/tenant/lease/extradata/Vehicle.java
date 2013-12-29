@@ -24,7 +24,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;

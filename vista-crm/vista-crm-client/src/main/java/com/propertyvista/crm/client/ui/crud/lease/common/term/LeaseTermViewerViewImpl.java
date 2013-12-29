@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.gwt.commons.print.PrintManager;
 import com.pyx4j.i18n.shared.I18n;

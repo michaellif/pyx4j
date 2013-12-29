@@ -13,7 +13,7 @@
  */
 package com.propertyvista.oapi.marshaling;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.billingext.dto.PaymentDTO;
 import com.propertyvista.oapi.model.PaymentIO;

@@ -47,7 +47,7 @@ import ca.equifax.uat.to.SubjectsType.Subject;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.PriorAddress;

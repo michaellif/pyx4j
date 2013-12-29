@@ -14,8 +14,8 @@
 package com.propertyvista.server.common.security;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.InstanceAccess;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.ISharedUserEntity;
 

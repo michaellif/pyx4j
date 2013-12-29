@@ -15,7 +15,7 @@ package com.propertyvista.portal.shared.ui.util.editors;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.i18n.shared.I18n;

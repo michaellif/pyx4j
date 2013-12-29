@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;

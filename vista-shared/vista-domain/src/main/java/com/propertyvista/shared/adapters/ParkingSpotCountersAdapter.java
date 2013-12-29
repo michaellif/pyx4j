@@ -13,7 +13,7 @@
  */
 package com.propertyvista.shared.adapters;
 
-import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.core.adapters.MemberModificationAdapter;
 
 import com.propertyvista.domain.property.asset.ParkingSpot;
 

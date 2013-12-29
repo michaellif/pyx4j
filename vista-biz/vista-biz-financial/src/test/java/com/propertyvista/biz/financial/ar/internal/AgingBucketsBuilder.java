@@ -15,7 +15,7 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.shared.ui;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;

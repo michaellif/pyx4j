@@ -13,8 +13,8 @@
  */
 package com.propertyvista.domain.company;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 
 public interface OrganizationContacts extends IEntity {
 

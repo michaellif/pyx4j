@@ -14,8 +14,8 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

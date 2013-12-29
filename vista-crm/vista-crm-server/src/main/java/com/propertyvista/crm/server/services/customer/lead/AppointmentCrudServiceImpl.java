@@ -15,9 +15,9 @@ package com.propertyvista.crm.server.services.customer.lead;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;

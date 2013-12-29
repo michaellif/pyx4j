@@ -15,7 +15,7 @@ package com.propertyvista.domain.marketing;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 @EmbeddedEntity
 public interface MarketingContactUrl extends MarketingContact {

@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.legal.l1.L1ApplicationSchedule.ApplicationPackageDeliveryMethodToLandlord;

@@ -21,7 +21,7 @@ import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Unit;
 import com.yardi.entity.mits.Uniteconstatusinfo;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;

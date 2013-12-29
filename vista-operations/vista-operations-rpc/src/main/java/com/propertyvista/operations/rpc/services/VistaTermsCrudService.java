@@ -17,8 +17,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.legal.VistaTerms.Target;

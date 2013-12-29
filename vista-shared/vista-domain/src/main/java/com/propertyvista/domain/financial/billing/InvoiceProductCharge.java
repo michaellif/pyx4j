@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 /**
  * ProductCharge - total charge for a single item from product catalog for given billing period

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services.lease.financial;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.crm.rpc.dto.lease.financial.DebitLinkDTO;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.server.services.selections;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.domain.tenant.lease.Lease;

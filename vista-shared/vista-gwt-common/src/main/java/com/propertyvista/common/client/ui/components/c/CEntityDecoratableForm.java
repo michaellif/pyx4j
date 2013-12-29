@@ -13,7 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components.c;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 

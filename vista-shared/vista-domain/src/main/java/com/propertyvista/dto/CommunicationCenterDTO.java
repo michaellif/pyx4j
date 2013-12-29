@@ -16,7 +16,7 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.communication.CommunicationMessage;
 

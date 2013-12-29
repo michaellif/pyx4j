@@ -14,8 +14,8 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 
 public interface SiteImageSet extends IEntity {
 

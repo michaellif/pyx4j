@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;

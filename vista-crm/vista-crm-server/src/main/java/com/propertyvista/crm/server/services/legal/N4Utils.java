@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.server.services.legal;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.legal.n4.N4LegalLetter;

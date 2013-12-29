@@ -22,9 +22,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.crm.server.services.breadcrumbs.BreadcrumbsHelper;

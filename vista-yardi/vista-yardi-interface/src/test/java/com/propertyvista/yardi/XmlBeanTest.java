@@ -31,8 +31,8 @@ import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;

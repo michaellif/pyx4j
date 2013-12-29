@@ -20,7 +20,7 @@
  */
 package com.propertyvista.biz.legal.forms.framework.filling;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldsMapping;
 

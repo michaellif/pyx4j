@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.tools.common.datagrid;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.user.cellview.client.Column;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
 
 public class EntityFieldColumn<E extends IEntity, DataType> extends Column<E, DataType> {
 

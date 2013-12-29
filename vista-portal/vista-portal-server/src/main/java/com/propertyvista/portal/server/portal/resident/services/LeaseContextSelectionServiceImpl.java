@@ -19,7 +19,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.biz.tenant.CustomerFacade;

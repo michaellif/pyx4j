@@ -37,8 +37,8 @@ import com.yardi.entity.mits.Information;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;

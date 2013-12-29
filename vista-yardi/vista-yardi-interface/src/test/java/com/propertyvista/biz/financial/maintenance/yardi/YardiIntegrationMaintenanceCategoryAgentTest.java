@@ -15,7 +15,7 @@ package com.propertyvista.biz.financial.maintenance.yardi;
 
 import java.rmi.RemoteException;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;

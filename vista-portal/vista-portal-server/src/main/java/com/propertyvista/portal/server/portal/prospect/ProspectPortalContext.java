@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.server.portal.prospect;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.lease.Guarantor;

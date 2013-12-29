@@ -50,10 +50,10 @@ import org.apache.wicket.validation.validator.StringValidator;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.site.SiteImageResource;

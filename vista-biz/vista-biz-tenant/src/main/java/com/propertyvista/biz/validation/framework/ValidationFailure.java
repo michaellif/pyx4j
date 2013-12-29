@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.validation.framework;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 
 public interface ValidationFailure {
 

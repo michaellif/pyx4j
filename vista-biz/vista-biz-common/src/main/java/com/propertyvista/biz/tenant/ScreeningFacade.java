@@ -15,7 +15,7 @@ package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.core.AttachLevel;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;

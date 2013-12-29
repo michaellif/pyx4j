@@ -30,8 +30,8 @@ import com.kijiji.pint.rs.ILSLocations;
 import com.kijiji.pint.rs.ObjectFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailAttachment;

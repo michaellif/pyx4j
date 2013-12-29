@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.server.security.access.prospect;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.portal.server.portal.shared.PortalVistaContext;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.shared.ui;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.IsView;
 
 public interface IViewerView<E extends IEntity> extends IsView {

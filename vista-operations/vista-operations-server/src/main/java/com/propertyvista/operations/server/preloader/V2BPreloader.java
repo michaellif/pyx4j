@@ -16,9 +16,9 @@ package com.propertyvista.operations.server.preloader;
 import java.math.BigDecimal;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;

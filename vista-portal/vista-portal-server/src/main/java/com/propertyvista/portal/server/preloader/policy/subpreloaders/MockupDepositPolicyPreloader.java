@@ -16,10 +16,10 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.ARCode;

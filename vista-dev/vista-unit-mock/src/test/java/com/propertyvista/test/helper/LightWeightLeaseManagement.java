@@ -13,9 +13,9 @@
  */
 package com.propertyvista.test.helper;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;

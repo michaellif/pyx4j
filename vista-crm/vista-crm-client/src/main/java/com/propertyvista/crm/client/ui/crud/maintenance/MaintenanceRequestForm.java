@@ -27,9 +27,9 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EnglishGrammar;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;

@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;

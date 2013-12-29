@@ -16,7 +16,7 @@ package com.propertyvista.domain.policy.policies;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;

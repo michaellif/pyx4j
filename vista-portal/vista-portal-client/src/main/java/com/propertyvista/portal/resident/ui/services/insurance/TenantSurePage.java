@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CViewer;

@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;

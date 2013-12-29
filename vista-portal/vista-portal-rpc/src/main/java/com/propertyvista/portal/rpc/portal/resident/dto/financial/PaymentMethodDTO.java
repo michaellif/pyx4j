@@ -14,9 +14,9 @@
 package com.propertyvista.portal.rpc.portal.resident.dto.financial;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;

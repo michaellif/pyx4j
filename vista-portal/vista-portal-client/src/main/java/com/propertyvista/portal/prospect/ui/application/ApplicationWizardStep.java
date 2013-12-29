@@ -15,9 +15,9 @@ package com.propertyvista.portal.prospect.ui.application;
 
 import java.util.List;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;

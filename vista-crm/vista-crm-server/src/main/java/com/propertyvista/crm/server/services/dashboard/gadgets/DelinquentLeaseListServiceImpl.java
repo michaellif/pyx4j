@@ -15,11 +15,11 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.Vector;
 
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListService;

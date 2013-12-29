@@ -13,8 +13,8 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.oapi.model.MarketingIO;

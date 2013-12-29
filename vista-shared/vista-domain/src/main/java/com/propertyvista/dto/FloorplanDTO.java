@@ -15,7 +15,7 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;

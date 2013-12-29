@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.reports;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface ITableColumnFormatter {
 

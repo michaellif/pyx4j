@@ -20,7 +20,7 @@ import java.util.Random;
 import org.apache.commons.lang.RandomStringUtils;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyClient;
 import com.propertyvista.domain.tenant.lease.Tenant;

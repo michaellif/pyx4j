@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
-import com.pyx4j.entity.shared.criterion.AndCriterion;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.OrCriterion;
+import com.pyx4j.entity.core.criterion.AndCriterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 
 import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
 import com.propertyvista.domain.tenant.lease.Guarantor;

@@ -28,8 +28,8 @@ import com.kijiji.pint.rs.ILSUnit.Images.Image;
 import com.kijiji.pint.rs.ILSUnits;
 import com.kijiji.pint.rs.ObjectFactory;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;

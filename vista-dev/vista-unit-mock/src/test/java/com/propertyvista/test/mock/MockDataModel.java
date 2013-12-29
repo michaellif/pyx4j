@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class MockDataModel<E extends IEntity> {

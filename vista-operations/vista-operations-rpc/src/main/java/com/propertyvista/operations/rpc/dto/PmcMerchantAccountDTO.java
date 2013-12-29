@@ -14,7 +14,7 @@
 package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;

@@ -27,7 +27,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;

@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.Merchant;

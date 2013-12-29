@@ -25,10 +25,10 @@ import com.yardi.entity.mits.Phone;
 import com.yardi.entity.mits.YardiCustomer;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.ExecutionMonitor;

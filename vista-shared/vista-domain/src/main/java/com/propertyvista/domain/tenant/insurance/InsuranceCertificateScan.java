@@ -17,8 +17,8 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
 

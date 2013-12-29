@@ -13,11 +13,11 @@
  */
 package com.propertyvista.domain.ref;
 
-import com.pyx4j.entity.adapters.IndexAdapter;
-import com.pyx4j.entity.adapters.ReferenceAdapter;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.core.adapters.IndexAdapter;
+import com.pyx4j.entity.core.adapters.ReferenceAdapter;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 
 public class CountryReferenceAdapter implements ReferenceAdapter<Country> {
 

@@ -21,8 +21,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.report.JasperReportModel;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;

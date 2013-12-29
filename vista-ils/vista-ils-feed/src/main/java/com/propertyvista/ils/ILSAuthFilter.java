@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.shared.ClientSystemInfo;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;

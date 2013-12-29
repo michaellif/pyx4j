@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;

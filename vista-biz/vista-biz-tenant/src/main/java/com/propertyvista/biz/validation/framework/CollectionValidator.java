@@ -15,8 +15,8 @@ package com.propertyvista.biz.validation.framework;
 
 import java.util.Set;
 
-import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.IEntity;
 
 public interface CollectionValidator<E extends IEntity> {
 

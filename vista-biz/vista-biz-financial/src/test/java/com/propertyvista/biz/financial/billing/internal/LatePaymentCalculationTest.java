@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.financial.billing.internal.LatePaymentUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;

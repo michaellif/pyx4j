@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;

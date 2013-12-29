@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.customer;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
 public interface TenantPadFileUploadService extends UploadService<IEntity, AbstractIFileBlob> {

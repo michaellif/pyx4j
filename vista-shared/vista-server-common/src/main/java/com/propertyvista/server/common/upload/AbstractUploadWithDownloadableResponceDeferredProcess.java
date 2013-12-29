@@ -13,9 +13,9 @@
  */
 package com.propertyvista.server.common.upload;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
 import com.pyx4j.essentials.server.upload.UploadedData;

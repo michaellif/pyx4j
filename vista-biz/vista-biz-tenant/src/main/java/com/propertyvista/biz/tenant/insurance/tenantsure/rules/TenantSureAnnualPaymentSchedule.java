@@ -15,7 +15,7 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.rules;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;

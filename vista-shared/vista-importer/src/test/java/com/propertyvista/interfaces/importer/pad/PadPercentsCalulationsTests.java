@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.interfaces.importer.model.PadFileModel;
 import com.propertyvista.interfaces.importer.model.PadProcessorInformation;

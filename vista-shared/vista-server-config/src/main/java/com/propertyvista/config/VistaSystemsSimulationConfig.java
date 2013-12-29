@@ -16,7 +16,7 @@ package com.propertyvista.config;
 import java.util.EnumSet;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.operations.dto.VistaSystemsSimulationConfigDTO;
 import com.propertyvista.shared.VistaSystemIdentification;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.config;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.settings.PmcYardiCredential;
 

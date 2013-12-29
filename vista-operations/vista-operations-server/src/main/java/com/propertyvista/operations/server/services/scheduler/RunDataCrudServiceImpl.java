@@ -15,9 +15,9 @@ package com.propertyvista.operations.server.services.scheduler;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.scheduler.RunData;

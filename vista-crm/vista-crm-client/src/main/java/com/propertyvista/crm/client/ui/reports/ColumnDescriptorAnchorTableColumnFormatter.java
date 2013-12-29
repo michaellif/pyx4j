@@ -17,8 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.rpc.AppPlaceInfo;

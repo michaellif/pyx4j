@@ -20,7 +20,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.validation.framework.PrimitiveValidator;

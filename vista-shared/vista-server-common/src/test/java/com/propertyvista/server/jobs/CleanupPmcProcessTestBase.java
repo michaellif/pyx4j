@@ -18,10 +18,10 @@ import static com.pyx4j.gwt.server.DateUtils.detectDateformat;
 import java.util.Date;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;

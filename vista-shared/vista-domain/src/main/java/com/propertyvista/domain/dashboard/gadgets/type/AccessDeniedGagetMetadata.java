@@ -15,7 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;

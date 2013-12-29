@@ -18,7 +18,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.framework.domain.EntityA;

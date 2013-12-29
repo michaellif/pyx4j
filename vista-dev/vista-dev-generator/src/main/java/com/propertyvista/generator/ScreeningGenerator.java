@@ -24,10 +24,10 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;

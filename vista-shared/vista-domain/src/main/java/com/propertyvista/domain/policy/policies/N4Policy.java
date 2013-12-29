@@ -20,8 +20,8 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.ARCode;

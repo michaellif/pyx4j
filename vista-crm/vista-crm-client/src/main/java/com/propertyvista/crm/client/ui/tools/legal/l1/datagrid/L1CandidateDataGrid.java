@@ -33,8 +33,8 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.DataGridScrollFixerHack;

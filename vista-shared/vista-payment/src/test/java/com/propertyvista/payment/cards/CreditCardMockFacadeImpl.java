@@ -15,7 +15,7 @@ package com.propertyvista.payment.cards;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo;

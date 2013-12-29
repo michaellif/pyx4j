@@ -16,9 +16,9 @@ package com.propertyvista.server.common.upload;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadedData;

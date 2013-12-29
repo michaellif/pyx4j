@@ -15,9 +15,9 @@ package com.propertyvista.domain.communication;
 
 import java.util.Date;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitiveSet;
 
 public interface Campaign extends IEntity {
 

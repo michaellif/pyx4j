@@ -27,11 +27,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.upload.UploadService;

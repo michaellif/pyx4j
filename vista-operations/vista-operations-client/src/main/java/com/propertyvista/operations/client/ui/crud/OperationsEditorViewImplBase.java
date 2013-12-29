@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.ui.prime.form.AbstractEditor;
 
 public class OperationsEditorViewImplBase<E extends IEntity> extends AbstractEditor<E> {

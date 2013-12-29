@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;

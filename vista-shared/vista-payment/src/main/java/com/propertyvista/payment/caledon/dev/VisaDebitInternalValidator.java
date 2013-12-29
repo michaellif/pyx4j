@@ -15,8 +15,8 @@ package com.propertyvista.payment.caledon.dev;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.dev.VisaDebitRange;

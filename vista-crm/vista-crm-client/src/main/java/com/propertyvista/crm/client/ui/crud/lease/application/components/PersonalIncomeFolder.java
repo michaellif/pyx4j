@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import java.util.EnumSet;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;

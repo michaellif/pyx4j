@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.xml.XMLStringWriter;
 
 import com.propertyvista.config.VistaDeployment;

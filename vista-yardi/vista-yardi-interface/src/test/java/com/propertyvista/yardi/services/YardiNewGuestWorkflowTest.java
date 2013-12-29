@@ -57,8 +57,8 @@ import com.yardi.entity.ils.VacateDate;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;

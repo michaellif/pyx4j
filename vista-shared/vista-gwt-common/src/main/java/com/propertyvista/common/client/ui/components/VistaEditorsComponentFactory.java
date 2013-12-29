@@ -14,9 +14,9 @@
 package com.propertyvista.common.client.ui.components;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntitySuggestBox;
 import com.pyx4j.forms.client.ui.CSignature;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.components;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 

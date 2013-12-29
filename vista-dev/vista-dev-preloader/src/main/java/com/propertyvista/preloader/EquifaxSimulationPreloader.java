@@ -16,8 +16,8 @@ package com.propertyvista.preloader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;

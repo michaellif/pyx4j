@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.report.JasperReportModel;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 

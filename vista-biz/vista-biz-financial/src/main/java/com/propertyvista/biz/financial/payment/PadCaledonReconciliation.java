@@ -16,8 +16,8 @@ package com.propertyvista.biz.financial.payment;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;

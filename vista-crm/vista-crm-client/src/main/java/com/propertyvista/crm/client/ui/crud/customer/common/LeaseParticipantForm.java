@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;

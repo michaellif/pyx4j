@@ -13,7 +13,7 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.contact.AddressStructured;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;

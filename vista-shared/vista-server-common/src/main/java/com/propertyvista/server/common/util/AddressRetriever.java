@@ -13,9 +13,9 @@
  */
 package com.propertyvista.server.common.util;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.util;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.i18n.shared.I18n;
 

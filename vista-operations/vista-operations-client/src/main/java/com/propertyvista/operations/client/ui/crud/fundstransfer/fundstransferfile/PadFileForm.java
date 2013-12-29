@@ -13,8 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;

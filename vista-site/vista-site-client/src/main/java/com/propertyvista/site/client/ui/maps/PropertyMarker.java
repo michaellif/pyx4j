@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.i18n.shared.I18n;
 

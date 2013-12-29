@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;

@@ -15,7 +15,7 @@ package com.propertyvista.server.common.gadgets;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.server.common.gadgets.testdomain.Bar;
 import com.propertyvista.server.common.gadgets.testdomain.Foo;

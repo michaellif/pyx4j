@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.preloader.DataGenerator;

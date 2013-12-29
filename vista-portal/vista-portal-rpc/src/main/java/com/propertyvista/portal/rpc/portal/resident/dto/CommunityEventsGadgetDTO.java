@@ -14,7 +14,7 @@
 package com.propertyvista.portal.rpc.portal.resident.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 @Transient
 public interface CommunityEventsGadgetDTO extends ExtraGadgetDTO {

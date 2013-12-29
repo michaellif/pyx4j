@@ -22,8 +22,8 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
 
 @AbstractEntity
 public interface InvoiceCredit extends InvoiceLineItem {

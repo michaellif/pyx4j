@@ -21,10 +21,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;

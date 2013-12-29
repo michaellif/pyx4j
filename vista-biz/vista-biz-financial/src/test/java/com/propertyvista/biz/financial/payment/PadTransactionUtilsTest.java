@@ -18,7 +18,7 @@ import junit.framework.Assert;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;

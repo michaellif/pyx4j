@@ -13,7 +13,7 @@
  */
 package com.propertyvista.shared.adapters;
 
-import com.pyx4j.entity.adapters.EntityModificationAdapter;
+import com.pyx4j.entity.core.adapters.EntityModificationAdapter;
 
 import com.propertyvista.domain.security.CustomerSignature;
 

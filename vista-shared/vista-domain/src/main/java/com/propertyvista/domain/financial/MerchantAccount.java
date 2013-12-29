@@ -27,10 +27,10 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 

@@ -17,7 +17,7 @@ import java.util.UUID;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;

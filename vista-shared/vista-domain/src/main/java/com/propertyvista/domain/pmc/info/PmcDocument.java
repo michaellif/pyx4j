@@ -20,8 +20,8 @@ import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.VistaNamespace;
 

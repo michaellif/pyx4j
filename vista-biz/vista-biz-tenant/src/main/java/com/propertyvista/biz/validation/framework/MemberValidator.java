@@ -15,7 +15,7 @@ package com.propertyvista.biz.validation.framework;
 
 import java.util.Set;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 
 public interface MemberValidator {
 

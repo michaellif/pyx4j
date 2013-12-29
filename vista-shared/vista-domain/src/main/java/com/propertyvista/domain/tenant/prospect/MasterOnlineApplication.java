@@ -16,7 +16,6 @@ package com.propertyvista.domain.tenant.prospect;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
@@ -28,9 +27,10 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 

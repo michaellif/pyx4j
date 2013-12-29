@@ -16,7 +16,7 @@ package com.propertyvista.domain.property.asset;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface Boiler extends Equipment {
 

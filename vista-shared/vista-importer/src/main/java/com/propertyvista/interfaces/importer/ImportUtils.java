@@ -23,7 +23,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.xml.XMLEntityParser;
 import com.pyx4j.gwt.shared.DownloadFormat;

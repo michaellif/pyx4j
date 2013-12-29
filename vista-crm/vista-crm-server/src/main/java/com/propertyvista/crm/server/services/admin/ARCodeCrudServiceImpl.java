@@ -20,11 +20,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;

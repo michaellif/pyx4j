@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.services.customer;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;

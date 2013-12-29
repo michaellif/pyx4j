@@ -18,7 +18,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
 

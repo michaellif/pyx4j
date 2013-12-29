@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.server.security;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.lead.Lead;

@@ -15,8 +15,8 @@ package com.propertyvista.domain.dashboard.gadgets.type.base;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 public interface HasCustomizableDateGadgetMetadata extends IEntity {

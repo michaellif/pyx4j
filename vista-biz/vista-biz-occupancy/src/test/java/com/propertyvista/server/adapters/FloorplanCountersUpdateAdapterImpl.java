@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.adapters;
 
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;

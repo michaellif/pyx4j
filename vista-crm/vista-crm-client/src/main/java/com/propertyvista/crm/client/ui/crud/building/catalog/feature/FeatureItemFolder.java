@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;

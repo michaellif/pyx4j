@@ -13,8 +13,8 @@
  */
 package com.propertyvista.operations.rpc.services;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
 public interface MerchantAccountFileUploadService extends UploadService<IEntity, AbstractIFileBlob> {

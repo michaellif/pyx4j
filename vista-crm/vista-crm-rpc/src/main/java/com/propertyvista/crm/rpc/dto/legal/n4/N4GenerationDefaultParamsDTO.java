@@ -14,8 +14,8 @@
 package com.propertyvista.crm.rpc.dto.legal.n4;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.company.Employee;
 

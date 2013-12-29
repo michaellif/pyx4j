@@ -16,7 +16,7 @@ package com.propertyvista.biz.generator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;

@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;

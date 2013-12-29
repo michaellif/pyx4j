@@ -27,8 +27,8 @@ import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 

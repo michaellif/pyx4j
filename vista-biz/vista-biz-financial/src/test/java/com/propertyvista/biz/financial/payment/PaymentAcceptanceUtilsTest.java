@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.MerchantAccount.ElectronicPaymentSetup;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;

@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.misc.IMemento;

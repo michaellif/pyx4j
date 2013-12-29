@@ -14,7 +14,7 @@
 package com.propertyvista.biz.tenant;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;

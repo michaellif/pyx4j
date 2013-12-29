@@ -14,8 +14,8 @@
 package com.propertyvista.server.common.util;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;

@@ -21,8 +21,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;

@@ -20,13 +20,13 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 

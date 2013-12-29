@@ -14,7 +14,7 @@
 package com.propertyvista.server.config;
 
 import com.pyx4j.config.shared.ClientVersionMismatchError;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.Visit;

@@ -24,8 +24,8 @@ import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.from.ObjectFactory;
 import ca.equifax.uat.to.CNConsAndCommRequestType;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;

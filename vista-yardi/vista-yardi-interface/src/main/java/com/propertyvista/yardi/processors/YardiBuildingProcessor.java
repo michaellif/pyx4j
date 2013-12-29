@@ -27,9 +27,9 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;

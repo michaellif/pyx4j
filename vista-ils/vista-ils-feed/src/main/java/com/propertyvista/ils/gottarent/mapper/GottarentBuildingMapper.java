@@ -25,9 +25,9 @@ import com.gottarent.rs.BuildingVacancies;
 import com.gottarent.rs.CommunityAmenity;
 import com.gottarent.rs.ObjectFactory;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.domain.contact.AddressStructured;

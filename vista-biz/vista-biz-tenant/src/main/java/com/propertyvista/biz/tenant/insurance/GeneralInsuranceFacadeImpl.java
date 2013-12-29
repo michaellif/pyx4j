@@ -13,9 +13,9 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;

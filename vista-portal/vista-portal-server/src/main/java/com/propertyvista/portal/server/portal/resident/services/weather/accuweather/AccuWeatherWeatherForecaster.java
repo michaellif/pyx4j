@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherForecastDTO;

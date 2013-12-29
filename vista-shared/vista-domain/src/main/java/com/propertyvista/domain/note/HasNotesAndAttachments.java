@@ -15,7 +15,7 @@ package com.propertyvista.domain.note;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 /**
  * Marker interface. Represents a domain object that can have a NotesAndAttachments.

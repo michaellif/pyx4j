@@ -21,8 +21,8 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 

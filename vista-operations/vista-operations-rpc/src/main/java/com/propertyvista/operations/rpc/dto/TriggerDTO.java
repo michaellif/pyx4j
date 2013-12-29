@@ -14,7 +14,7 @@
 package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.operations.domain.scheduler.Trigger;
 

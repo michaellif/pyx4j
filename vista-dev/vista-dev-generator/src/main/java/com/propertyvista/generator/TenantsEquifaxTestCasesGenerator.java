@@ -16,7 +16,7 @@ package com.propertyvista.generator;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 

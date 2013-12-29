@@ -15,8 +15,8 @@ package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.DepositPolicy;

@@ -24,8 +24,8 @@ import org.junit.experimental.categories.Category;
 import com.yardi.entity.mits.Customerinfo;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;

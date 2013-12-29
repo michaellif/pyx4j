@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 import com.propertyvista.biz.system.PmcFacade;

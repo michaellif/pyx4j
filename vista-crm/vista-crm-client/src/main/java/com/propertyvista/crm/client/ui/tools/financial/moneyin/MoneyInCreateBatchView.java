@@ -19,7 +19,7 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;

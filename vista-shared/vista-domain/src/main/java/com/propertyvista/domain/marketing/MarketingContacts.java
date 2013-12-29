@@ -14,7 +14,7 @@
 package com.propertyvista.domain.marketing;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 @EmbeddedEntity
 public interface MarketingContacts extends IEntity {

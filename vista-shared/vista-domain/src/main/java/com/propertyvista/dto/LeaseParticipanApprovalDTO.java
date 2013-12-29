@@ -17,8 +17,8 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerScreening;

@@ -15,10 +15,10 @@ package com.propertyvista.operations.server.preloader;
 
 import java.io.IOException;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.operations.domain.legal.LegalDocument;

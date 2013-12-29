@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.visor.maintenance;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractVisorController;

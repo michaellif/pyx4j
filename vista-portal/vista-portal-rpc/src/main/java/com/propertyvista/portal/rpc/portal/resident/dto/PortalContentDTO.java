@@ -14,9 +14,9 @@
 package com.propertyvista.portal.rpc.portal.resident.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.PortalBannerImage;

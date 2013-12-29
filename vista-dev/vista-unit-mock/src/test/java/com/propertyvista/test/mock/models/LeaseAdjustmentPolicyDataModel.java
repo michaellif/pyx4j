@@ -14,8 +14,8 @@
 package com.propertyvista.test.mock.models;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.ARCode;

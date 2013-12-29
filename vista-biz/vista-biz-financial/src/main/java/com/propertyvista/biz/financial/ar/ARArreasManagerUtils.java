@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.domain.financial.ARCode;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.interfaces.importer.xml;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.xml.XMLEntityNamingConventionDefault;
 
 public class ImportXMLEntityNamingConvention extends XMLEntityNamingConventionDefault {

@@ -14,7 +14,7 @@
 package com.propertyvista.biz.communication.mail.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
 

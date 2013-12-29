@@ -13,15 +13,15 @@
  */
 package com.propertyvista.domain.ref;
 
-import com.pyx4j.entity.adapters.index.CaseInsensitiveIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.shared.adapters.index.CaseInsensitiveIndexAdapter;
 
 import com.propertyvista.domain.policy.framework.PolicyNode;
 

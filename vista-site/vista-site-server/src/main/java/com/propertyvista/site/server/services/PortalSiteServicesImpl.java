@@ -19,7 +19,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
 import com.propertyvista.domain.property.asset.Floorplan;

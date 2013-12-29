@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;

@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.resident.RTCustomer;
 
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.tenant.lease.Lease;

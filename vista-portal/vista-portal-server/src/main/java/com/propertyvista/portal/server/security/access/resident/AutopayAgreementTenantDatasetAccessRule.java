@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.server.security.access.resident;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;

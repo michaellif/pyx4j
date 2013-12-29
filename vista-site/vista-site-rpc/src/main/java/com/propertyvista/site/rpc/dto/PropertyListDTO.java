@@ -14,9 +14,9 @@
 package com.propertyvista.site.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitiveSet;
 
 @Transient
 public interface PropertyListDTO extends IEntity {

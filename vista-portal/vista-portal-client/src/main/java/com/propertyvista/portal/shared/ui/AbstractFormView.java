@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.shared.ui;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel implements IViewerView<E> {

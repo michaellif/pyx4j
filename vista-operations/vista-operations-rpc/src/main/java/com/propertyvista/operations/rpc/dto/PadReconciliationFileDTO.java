@@ -15,8 +15,8 @@ package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;

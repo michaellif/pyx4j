@@ -16,10 +16,10 @@ package com.propertyvista.crm.server.services.customer.lead;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;

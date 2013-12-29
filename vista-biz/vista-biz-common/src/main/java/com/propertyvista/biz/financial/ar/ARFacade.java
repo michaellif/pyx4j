@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;

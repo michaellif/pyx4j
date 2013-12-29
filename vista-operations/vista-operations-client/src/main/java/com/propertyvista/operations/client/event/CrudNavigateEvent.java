@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CrudNavigateEvent extends GwtEvent<CrudNavigateHandler> {

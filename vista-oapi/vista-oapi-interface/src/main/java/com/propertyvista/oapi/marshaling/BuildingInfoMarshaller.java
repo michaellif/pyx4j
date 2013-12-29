@@ -13,7 +13,7 @@
  */
 package com.propertyvista.oapi.marshaling;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.oapi.model.BuildingInfoIO;

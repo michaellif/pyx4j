@@ -16,8 +16,8 @@ package com.propertyvista.ils.gottarent.mapper;
 import java.text.DecimalFormat;
 
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
 

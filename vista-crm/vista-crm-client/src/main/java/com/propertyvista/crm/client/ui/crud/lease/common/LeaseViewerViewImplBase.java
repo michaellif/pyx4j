@@ -18,7 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 

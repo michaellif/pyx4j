@@ -22,8 +22,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.HasData;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;

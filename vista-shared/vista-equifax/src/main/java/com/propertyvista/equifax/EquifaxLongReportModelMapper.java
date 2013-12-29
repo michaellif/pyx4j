@@ -37,9 +37,9 @@ import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.from.ParsedTelephone;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RatingLevel;

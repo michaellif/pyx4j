@@ -15,7 +15,7 @@ package com.propertyvista.portal.rpc.shared.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.policy.framework.Policy;

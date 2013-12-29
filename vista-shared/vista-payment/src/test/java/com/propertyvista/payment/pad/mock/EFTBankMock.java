@@ -20,7 +20,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;

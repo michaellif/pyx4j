@@ -13,8 +13,8 @@
  */
 package com.propertyvista.ils.mock;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.marketing.MarketingContacts;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;

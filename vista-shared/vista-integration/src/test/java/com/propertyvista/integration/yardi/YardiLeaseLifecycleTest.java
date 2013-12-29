@@ -19,9 +19,9 @@ import org.junit.experimental.categories.Category;
 
 import com.yardi.entity.mits.Customerinfo;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;

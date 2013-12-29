@@ -17,9 +17,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.validation.framework.MemberValidator;

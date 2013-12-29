@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;

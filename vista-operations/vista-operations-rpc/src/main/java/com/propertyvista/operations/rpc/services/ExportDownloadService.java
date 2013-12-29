@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.rpc.services;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportService;
 
 public interface ExportDownloadService extends ReportService<IEntity> {

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.oapi.binder;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 public abstract class AbstractPersister<E extends IEntity, DTO extends IEntity> extends EntityBinder<E, DTO> {

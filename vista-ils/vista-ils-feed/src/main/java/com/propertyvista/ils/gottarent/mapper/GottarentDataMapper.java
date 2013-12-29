@@ -19,7 +19,7 @@ import com.gottarent.rs.Listing;
 import com.gottarent.rs.ObjectFactory;
 import com.gottarent.rs.Portfolio;
 
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.ils.gottarent.mapper.dto.ILSBuildingDTO;
 import com.propertyvista.ils.gottarent.mapper.dto.ILSReportDTO;

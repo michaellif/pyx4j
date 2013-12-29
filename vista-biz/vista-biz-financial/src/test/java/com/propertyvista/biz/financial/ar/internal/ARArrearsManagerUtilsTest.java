@@ -19,7 +19,7 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARArreasManagerUtils;
 import com.propertyvista.domain.financial.ARCode;

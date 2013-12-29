@@ -14,8 +14,8 @@
 package com.propertyvista.biz.financial.payment;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;

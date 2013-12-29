@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.activity.crud.pmc;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.crud;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.client.ui.prime.form.IViewer;

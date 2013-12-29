@@ -13,9 +13,9 @@
  */
 package com.propertyvista.domain.ref;
 
-import com.pyx4j.entity.adapters.ReferenceAdapter;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.adapters.ReferenceAdapter;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 
 public class ProvinceReferenceAdapter implements ReferenceAdapter<Province> {
 

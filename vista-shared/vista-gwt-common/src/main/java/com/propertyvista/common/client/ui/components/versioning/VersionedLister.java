@@ -19,10 +19,10 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.entity.shared.IVersionedEntity;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.core.IVersionedEntity;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;

@@ -25,9 +25,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.shared.SecurityController;

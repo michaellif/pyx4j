@@ -20,8 +20,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.validator.EntityValidator;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.validator.EntityValidator;
 
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
@@ -25,7 +26,6 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 

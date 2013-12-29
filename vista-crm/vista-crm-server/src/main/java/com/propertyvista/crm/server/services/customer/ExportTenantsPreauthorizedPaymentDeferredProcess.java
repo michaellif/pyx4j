@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.essentials.server.report.EntityReportFormatter;

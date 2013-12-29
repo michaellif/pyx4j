@@ -13,8 +13,8 @@
  */
 package com.propertyvista.domain.marketing;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface AdvertisingBlurb extends IEntity {
 

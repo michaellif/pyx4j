@@ -16,8 +16,8 @@ package com.propertyvista.ils.kijiji.mapper;
 import com.kijiji.pint.rs.ILSLocation;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.Marketing;

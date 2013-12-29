@@ -14,7 +14,7 @@
 package com.propertyvista.shared.adapters;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.adapters.PersistenceAdapter;
+import com.pyx4j.entity.core.adapters.PersistenceAdapter;
 
 public interface LogicalDateAsIntegerPersistenceAdapter extends PersistenceAdapter<LogicalDate, Integer> {
 

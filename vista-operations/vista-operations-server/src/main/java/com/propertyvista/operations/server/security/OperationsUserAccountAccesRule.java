@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.server.security;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.server.common.security.VistaContext;

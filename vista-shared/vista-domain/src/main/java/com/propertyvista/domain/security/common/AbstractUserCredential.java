@@ -24,8 +24,8 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 
 /**

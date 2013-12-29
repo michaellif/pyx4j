@@ -17,9 +17,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;

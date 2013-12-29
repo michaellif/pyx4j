@@ -15,7 +15,7 @@ package com.propertyvista.domain.policy.framework;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 /**
  * Represents a node in organizational structure that can have a policy

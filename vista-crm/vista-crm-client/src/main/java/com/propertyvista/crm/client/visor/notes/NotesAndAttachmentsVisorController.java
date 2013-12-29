@@ -17,8 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.AbstractVisorController;

@@ -16,8 +16,8 @@ package com.propertyvista.crm.server.services.organization;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.property.asset.building.Building;
 

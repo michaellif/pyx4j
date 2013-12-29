@@ -24,9 +24,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;

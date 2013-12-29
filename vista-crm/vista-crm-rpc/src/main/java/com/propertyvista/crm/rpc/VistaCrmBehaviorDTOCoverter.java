@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.Vector;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;

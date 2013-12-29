@@ -42,7 +42,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCfcMoneyAdapter;

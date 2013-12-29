@@ -14,7 +14,7 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 @AbstractEntity
 public interface BookingSchedule extends IEntity {

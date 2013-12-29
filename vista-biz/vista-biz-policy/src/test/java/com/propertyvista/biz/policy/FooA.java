@@ -14,7 +14,7 @@
 package com.propertyvista.biz.policy;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 @DiscriminatorValue("FooA")
 public interface FooA extends AbstractFoo {

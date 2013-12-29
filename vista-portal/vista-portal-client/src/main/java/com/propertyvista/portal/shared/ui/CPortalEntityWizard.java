@@ -15,7 +15,7 @@ package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;

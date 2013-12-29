@@ -16,8 +16,8 @@ package com.propertyvista.biz.financial.payment;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.operations.domain.vista2pmc.TenantSureMerchantAccount;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;

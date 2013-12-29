@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;

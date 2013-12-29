@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services.financial;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportService;
 
 public interface MoneyInBatchDepositSlipPrintService extends ReportService<IEntity> {

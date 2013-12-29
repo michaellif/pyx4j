@@ -15,9 +15,9 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.LinkedList;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;

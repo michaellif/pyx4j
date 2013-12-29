@@ -17,8 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 

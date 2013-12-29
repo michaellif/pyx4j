@@ -25,7 +25,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.report.EntityReportFormatter;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;

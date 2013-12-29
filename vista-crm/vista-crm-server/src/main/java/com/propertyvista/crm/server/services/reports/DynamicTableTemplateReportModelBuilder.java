@@ -19,8 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.report.JasperReportModel;
-import com.pyx4j.entity.shared.IEntity;
 
 public class DynamicTableTemplateReportModelBuilder {
 

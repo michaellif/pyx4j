@@ -16,9 +16,9 @@ package com.propertyvista.domain;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.blob.MediaFileBlob;
 

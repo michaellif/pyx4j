@@ -33,9 +33,9 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 

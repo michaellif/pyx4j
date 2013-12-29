@@ -19,7 +19,7 @@ import java.util.HashMap;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.widgets.client.Button;

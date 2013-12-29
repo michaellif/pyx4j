@@ -15,7 +15,7 @@ package com.propertyvista.portal.rpc;
 
 import java.io.Serializable;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;

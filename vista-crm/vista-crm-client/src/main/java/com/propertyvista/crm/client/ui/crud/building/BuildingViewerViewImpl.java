@@ -22,8 +22,8 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;

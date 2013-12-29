@@ -21,8 +21,8 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 

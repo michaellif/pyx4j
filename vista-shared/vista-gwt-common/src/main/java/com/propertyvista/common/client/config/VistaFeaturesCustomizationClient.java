@@ -13,7 +13,7 @@
  */
 package com.propertyvista.common.client.config;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.settings.PmcVistaFeatures;

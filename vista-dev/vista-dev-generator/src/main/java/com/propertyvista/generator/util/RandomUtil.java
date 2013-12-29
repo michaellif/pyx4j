@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Random;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 

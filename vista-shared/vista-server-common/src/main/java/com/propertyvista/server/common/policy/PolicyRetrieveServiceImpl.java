@@ -16,7 +16,7 @@ package com.propertyvista.server.common.policy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.framework.Policy;

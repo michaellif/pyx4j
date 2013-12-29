@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.portal.resident.services.weather.openwea
 import java.util.LinkedList;
 import java.util.List;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherForecastDTO;

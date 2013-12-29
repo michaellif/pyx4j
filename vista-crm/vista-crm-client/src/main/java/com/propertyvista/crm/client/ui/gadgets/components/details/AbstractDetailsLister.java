@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components.details;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;

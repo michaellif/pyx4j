@@ -15,7 +15,7 @@ package com.propertyvista.domain.site.gadgets;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.site.News;
 

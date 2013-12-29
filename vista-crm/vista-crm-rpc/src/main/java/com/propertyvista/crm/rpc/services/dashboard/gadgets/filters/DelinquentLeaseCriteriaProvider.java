@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.dashboard.gadgets.filters;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetQueryDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;

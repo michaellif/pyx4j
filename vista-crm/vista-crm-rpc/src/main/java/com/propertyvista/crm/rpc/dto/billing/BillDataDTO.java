@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.BillDTO;

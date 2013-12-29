@@ -14,7 +14,7 @@
 package com.propertyvista.portal.rpc.portal.resident.dto.financial;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.dto.BillDTO;
 

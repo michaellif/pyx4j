@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.Path;
 
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 

@@ -16,9 +16,9 @@ package com.propertyvista.biz.communication.notifications;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.company.Employee;

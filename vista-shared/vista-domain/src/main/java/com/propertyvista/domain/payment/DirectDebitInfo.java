@@ -16,7 +16,7 @@ package com.propertyvista.domain.payment;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

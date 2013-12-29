@@ -17,10 +17,10 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;

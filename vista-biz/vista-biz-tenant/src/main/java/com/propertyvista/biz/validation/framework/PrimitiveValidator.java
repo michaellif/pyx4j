@@ -16,7 +16,7 @@ package com.propertyvista.biz.validation.framework;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface PrimitiveValidator<T extends Serializable> {
 

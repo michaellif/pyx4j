@@ -13,10 +13,10 @@
  */
 package com.propertyvista.server.versioning;
 
+import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IVersionData;
 
 import com.propertyvista.domain.security.common.AbstractUser;
 

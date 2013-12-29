@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IPersonalIdentity;
-import com.pyx4j.entity.shared.IPrimitive;
 
 @EmbeddedEntity
 public interface PasswordIdentity extends IPersonalIdentity {

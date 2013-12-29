@@ -22,7 +22,7 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.user.client.Window;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;

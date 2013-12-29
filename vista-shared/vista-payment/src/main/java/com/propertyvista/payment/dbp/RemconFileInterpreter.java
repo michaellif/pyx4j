@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface OperationsAlertFacade {
 

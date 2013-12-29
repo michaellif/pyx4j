@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;

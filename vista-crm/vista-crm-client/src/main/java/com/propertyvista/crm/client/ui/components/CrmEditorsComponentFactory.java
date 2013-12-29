@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;

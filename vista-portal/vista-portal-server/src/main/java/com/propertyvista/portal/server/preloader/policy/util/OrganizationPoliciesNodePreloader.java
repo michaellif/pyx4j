@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.server.preloader.policy.util;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 

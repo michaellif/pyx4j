@@ -17,9 +17,9 @@ import java.sql.Time;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;

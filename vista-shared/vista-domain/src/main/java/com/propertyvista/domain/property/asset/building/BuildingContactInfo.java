@@ -17,9 +17,9 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.property.PropertyContact;

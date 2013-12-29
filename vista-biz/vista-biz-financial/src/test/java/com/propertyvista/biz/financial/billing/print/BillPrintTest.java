@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillingUtils;

@@ -17,7 +17,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.yardi.entity.mits.Address;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.PriorAddress;
 

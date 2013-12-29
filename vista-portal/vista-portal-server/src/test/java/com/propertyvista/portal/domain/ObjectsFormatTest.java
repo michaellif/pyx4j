@@ -15,7 +15,7 @@ package com.propertyvista.portal.domain;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.charges.ChargeLine;

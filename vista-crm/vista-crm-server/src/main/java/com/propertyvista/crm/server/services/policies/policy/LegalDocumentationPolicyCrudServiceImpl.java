@@ -14,7 +14,7 @@
 package com.propertyvista.crm.server.services.policies.policy;
 
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;

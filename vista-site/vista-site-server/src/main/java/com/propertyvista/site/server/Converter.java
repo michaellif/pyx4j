@@ -16,11 +16,11 @@ package com.propertyvista.site.server;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;

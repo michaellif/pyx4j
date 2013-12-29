@@ -15,7 +15,7 @@ package com.propertyvista.payment.caledon;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.CreditCardPaymentProcessorFacade;

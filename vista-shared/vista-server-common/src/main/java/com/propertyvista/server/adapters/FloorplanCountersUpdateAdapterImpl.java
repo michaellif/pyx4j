@@ -14,10 +14,10 @@
 package com.propertyvista.server.adapters;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

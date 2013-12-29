@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.activity.crud.lease.common;
 
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;

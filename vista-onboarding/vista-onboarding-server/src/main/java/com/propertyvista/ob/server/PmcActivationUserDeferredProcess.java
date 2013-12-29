@@ -16,8 +16,8 @@ package com.propertyvista.ob.server;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.CrmUser;

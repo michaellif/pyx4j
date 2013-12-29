@@ -16,7 +16,8 @@ package com.propertyvista.generator.util;
 import java.math.BigDecimal;
 
 
-import com.pyx4j.entity.shared.EntityFactory;
+
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.CompanyEmail;

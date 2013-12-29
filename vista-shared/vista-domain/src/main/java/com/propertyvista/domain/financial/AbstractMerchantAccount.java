@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 public interface AbstractMerchantAccount extends IEntity {

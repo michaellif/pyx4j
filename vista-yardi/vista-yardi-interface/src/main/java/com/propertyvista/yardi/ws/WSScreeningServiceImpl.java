@@ -31,8 +31,8 @@ import com.yardi.ws.ServiceResponse.ServiceResponseResult;
 import com.yardi.ws.WSScreeningService;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.i18n.shared.I18n;
 

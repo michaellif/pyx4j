@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;

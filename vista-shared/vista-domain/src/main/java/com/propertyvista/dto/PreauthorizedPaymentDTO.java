@@ -15,7 +15,7 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.payment.AutopayAgreement;
 

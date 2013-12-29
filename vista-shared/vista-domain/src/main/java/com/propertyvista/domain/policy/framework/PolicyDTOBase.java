@@ -15,7 +15,7 @@ package com.propertyvista.domain.policy.framework;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
 public abstract interface PolicyDTOBase extends Policy {

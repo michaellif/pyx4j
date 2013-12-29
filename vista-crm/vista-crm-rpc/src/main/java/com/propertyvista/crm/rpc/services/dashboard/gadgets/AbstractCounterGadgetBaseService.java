@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.rpc.shared.IService;
 
 public interface AbstractCounterGadgetBaseService<GadgetData extends IEntity, QueryParams> extends IService {

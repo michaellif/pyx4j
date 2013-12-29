@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.legal.n4.datawidget;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.crm.client.ui.tools.common.BulkItemsFolder;

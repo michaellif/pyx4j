@@ -13,9 +13,9 @@
  */
 package com.propertyvista.ils.kijiji.mapper;
 
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.MediaFile;

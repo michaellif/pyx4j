@@ -15,7 +15,7 @@ package com.propertyvista.domain.tenant.access;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
 
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;

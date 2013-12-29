@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;

@@ -19,9 +19,9 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.payment.AutopayAgreement;

@@ -13,11 +13,11 @@
  */
 package com.propertyvista.server.common.reference;
 
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ReferenceDataServiceImpl;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;

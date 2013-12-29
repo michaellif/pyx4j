@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;

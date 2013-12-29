@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.server.services.selections;
 
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
 import com.propertyvista.domain.financial.ARCode;

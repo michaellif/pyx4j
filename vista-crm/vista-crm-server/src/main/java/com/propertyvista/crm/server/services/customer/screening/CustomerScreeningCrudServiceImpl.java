@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.server.services.customer.screening;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;

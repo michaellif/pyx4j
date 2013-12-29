@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.pyx4j.entity.shared.ICollection;
+import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.validation.framework.CollectionValidator;

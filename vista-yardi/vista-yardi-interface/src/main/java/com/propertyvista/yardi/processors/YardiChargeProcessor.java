@@ -16,8 +16,8 @@ package com.propertyvista.yardi.processors;
 import com.yardi.entity.resident.RTCustomer;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;

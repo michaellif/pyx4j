@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.server.security;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.InstanceAccess;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;

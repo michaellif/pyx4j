@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;

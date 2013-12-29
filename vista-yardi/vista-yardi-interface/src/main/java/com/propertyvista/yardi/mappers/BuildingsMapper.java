@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.mits.Identification;
 import com.yardi.entity.mits.PropertyIDType;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.Building;
 

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.oapi.marshaling;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface Marshaller<ValueType extends IEntity, BoundType> {
 

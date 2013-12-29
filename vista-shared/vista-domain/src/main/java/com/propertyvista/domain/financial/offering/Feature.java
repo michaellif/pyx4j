@@ -18,7 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.Feature.FeatureV;
 

@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.blob.MediaFileBlob;

@@ -16,7 +16,7 @@ package com.propertyvista.oapi.marshaling;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.oapi.model.ContactIO;

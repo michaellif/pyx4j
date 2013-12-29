@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.server.services.admin;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.domain.financial.GlCodeCategory;

@@ -16,7 +16,7 @@ package com.propertyvista.site.client.ui.maps;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.contact.AddressSimple;

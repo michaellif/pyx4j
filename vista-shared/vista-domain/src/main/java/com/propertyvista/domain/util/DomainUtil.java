@@ -17,8 +17,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import com.pyx4j.commons.MinMaxPair;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;

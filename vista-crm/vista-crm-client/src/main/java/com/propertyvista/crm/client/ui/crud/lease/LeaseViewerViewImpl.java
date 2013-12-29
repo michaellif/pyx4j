@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;

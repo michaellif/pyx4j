@@ -13,8 +13,8 @@
  */
 package com.propertyvista.domain.communication;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface CommunicationMedia extends IEntity {
     public enum MediaType {

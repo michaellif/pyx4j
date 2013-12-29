@@ -18,8 +18,8 @@ import java.util.Set;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;

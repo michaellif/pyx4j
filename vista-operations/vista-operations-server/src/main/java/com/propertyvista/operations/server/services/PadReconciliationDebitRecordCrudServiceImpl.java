@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.server.services;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;

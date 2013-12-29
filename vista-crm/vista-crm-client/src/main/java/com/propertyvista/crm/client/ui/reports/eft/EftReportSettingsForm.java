@@ -26,9 +26,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.i18n.shared.I18n;

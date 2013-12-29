@@ -17,8 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.client.upload.UploadReceiver;

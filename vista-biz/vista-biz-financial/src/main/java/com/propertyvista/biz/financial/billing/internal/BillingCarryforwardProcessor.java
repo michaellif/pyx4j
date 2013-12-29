@@ -16,7 +16,7 @@ package com.propertyvista.biz.financial.billing.internal;
 import java.math.BigDecimal;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;

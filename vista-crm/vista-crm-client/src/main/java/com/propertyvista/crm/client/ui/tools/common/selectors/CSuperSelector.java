@@ -18,8 +18,8 @@ import java.text.ParseException;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;

@@ -18,9 +18,9 @@ import javax.naming.OperationNotSupportedException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;

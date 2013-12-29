@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;

@@ -16,7 +16,7 @@ package com.propertyvista.portal.rpc.portal.resident.dto.insurance;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 

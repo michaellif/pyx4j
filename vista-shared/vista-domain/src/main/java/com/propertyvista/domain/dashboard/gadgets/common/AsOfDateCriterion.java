@@ -14,7 +14,7 @@
 package com.propertyvista.domain.dashboard.gadgets.common;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.Criterion;
 
 public class AsOfDateCriterion implements Criterion {
 

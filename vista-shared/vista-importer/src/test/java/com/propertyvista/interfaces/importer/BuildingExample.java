@@ -24,10 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;

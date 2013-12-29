@@ -20,11 +20,11 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
 
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;

@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.activity.crud.billing.transfer;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.ListerController;

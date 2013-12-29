@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.interfaces.importer.model.PadFileModel;
 import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadProcessingStatus;

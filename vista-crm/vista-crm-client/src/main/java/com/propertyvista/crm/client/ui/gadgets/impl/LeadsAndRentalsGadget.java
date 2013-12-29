@@ -18,7 +18,7 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;

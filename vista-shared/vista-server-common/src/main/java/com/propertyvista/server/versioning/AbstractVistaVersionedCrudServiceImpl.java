@@ -13,9 +13,9 @@
  */
 package com.propertyvista.server.versioning;
 
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IVersionedEntity;
 
 import com.propertyvista.domain.security.common.AbstractUser;
 

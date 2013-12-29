@@ -16,8 +16,8 @@ package com.propertyvista.biz.financial.payment;
 import org.apache.commons.lang.Validate;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 

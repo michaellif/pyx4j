@@ -14,7 +14,7 @@
 package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxLimit;

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.server.services.building.catalog;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
 import com.propertyvista.domain.financial.offering.Feature;

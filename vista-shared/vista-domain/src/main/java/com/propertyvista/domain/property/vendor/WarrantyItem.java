@@ -14,8 +14,8 @@
 package com.propertyvista.domain.property.vendor;
 
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface WarrantyItem extends IEntity {
 

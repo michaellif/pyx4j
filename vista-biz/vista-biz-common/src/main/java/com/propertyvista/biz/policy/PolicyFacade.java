@@ -15,7 +15,7 @@ package com.propertyvista.biz.policy;
 
 import java.util.List;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;

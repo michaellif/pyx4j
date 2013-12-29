@@ -19,8 +19,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Locale;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.validator.EntityValidator;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.validator.EntityValidator;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.CSVReciver;

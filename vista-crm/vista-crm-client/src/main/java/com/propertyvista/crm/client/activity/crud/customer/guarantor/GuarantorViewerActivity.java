@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;

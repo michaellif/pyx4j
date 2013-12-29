@@ -13,8 +13,8 @@
  */
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IObject;
 
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 

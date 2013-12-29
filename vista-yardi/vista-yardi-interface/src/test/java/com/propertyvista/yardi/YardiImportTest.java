@@ -21,9 +21,9 @@ import com.yardi.entity.mits.Customerinfo;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;

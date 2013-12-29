@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.domain.site.PageCaption;

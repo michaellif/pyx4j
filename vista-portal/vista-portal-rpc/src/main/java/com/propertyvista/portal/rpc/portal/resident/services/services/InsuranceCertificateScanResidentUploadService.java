@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.services.services;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
 import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
