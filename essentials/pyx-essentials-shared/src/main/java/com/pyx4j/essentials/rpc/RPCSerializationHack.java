@@ -22,7 +22,7 @@ package com.pyx4j.essentials.rpc;
 
 import java.io.Serializable;
 
-import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.Criterion;
 
 /**
  * 

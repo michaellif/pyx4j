@@ -24,10 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.adapters.EntityModificationAdapter;
-import com.pyx4j.entity.adapters.IndexAdapter;
-import com.pyx4j.entity.adapters.MemberModificationAdapter;
-import com.pyx4j.entity.adapters.PersistenceAdapter;
+import com.pyx4j.entity.core.adapters.EntityModificationAdapter;
+import com.pyx4j.entity.core.adapters.IndexAdapter;
+import com.pyx4j.entity.core.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.core.adapters.PersistenceAdapter;
 
 public class AdapterFactory {
 

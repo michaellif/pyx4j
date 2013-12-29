@@ -25,8 +25,8 @@ import java.util.Date;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.temporal.WithTimestamp;
 import com.pyx4j.security.shared.SecurityViolationException;
 

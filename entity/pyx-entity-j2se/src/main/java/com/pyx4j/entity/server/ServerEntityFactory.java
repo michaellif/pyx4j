@@ -34,15 +34,15 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.server.impl.EntityMetaImpl;
 import com.pyx4j.entity.server.impl.EntityPojoWrapperGenerator;
 import com.pyx4j.entity.server.pojo.IPojo;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IEntityFactory;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class ServerEntityFactory implements IEntityFactory {
 

@@ -23,8 +23,8 @@ package com.pyx4j.entity.test.shared;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.impl.ObjectHandler;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.impl.ObjectHandler;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;

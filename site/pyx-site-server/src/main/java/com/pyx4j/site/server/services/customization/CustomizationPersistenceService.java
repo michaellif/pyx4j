@@ -25,8 +25,8 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.shared.domain.cusomization.CustomizationHolder;

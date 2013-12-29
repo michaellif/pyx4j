@@ -23,7 +23,6 @@ package com.pyx4j.examples.domain.crm;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -32,8 +31,9 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.adapters.index.KeywordsIndexAdapter;
 
 public interface Resource extends IEntity {
 

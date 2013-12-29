@@ -23,10 +23,10 @@ package com.pyx4j.entity.client;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.impl.IEntityFactoryImpl;
+import com.pyx4j.entity.core.meta.EntityMeta;
 
 /**
  * Base implementation for generated classes by GWT rebind.

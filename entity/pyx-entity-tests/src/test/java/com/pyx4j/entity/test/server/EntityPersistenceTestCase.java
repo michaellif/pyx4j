@@ -25,7 +25,7 @@ import java.util.Iterator;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;

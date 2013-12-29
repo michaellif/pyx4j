@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;

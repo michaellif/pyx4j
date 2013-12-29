@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.shared.domain.inherit;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
 @ExtendsBO

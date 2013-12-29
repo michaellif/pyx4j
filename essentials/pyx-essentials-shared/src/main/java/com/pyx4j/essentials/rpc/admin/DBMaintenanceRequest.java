@@ -22,7 +22,7 @@ package com.pyx4j.essentials.rpc.admin;
 
 import java.io.Serializable;
 
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.core.criterion.EntitySearchCriteria;
 
 public class DBMaintenanceRequest implements Serializable {
 

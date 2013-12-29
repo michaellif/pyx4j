@@ -20,14 +20,14 @@
  */
 package com.pyx4j.examples.domain.crm;
 
-import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.adapters.index.KeywordsIndexAdapter;
 
 @EmbeddedEntity
 @ToStringFormat("{0}, {1}, {2} {3}")

@@ -27,10 +27,10 @@ import java.util.EnumSet;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.widgets.client.RadioGroup;
 
 public class BaseEditableComponentFactory implements IEditableComponentFactory {

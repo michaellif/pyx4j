@@ -22,7 +22,7 @@ package com.pyx4j.entity.asrt.domain.ownership;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 
 public class TestOwnership extends TestCase {
 

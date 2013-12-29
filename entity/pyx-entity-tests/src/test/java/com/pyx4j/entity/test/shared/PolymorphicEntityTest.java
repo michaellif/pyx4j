@@ -25,7 +25,7 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;

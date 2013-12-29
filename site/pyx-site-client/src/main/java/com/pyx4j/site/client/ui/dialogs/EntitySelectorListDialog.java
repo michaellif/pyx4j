@@ -40,7 +40,7 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class EntitySelectorListDialog<E extends IEntity> extends AbstractEntitySelectorDialog<E> {

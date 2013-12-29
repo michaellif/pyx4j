@@ -20,9 +20,9 @@
  */
 package com.pyx4j.entity.test.shared;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;

@@ -20,7 +20,7 @@
  */
 package com.pyx4j.tester.shared.file;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.tester.domain.TFileBlob;
 

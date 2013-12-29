@@ -21,8 +21,8 @@
 package com.pyx4j.examples.rpc;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.examples.domain.ExamplesBehavior;
 import com.pyx4j.examples.domain.User;
 

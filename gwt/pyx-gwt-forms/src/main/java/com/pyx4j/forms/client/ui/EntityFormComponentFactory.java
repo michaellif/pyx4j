@@ -21,9 +21,9 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 
 public class EntityFormComponentFactory extends BaseEditableComponentFactory {

@@ -23,8 +23,8 @@ package com.pyx4j.entity.xml;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.xml.XMLEntityFactory;
 import com.pyx4j.entity.xml.XMLEntityNamingConvention;
 

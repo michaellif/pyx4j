@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.adapters.ReferenceAdapter;
+import com.pyx4j.entity.core.adapters.ReferenceAdapter;
 
 /**
  * Maps to javax.persistence.OneToMany with CascadeType.PERSIST

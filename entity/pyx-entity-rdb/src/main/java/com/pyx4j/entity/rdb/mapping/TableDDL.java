@@ -33,17 +33,17 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.adapters.IndexAdapter;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel.ModelType;
 import com.pyx4j.entity.server.AdapterFactory;
-import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class TableDDL {
 

@@ -23,8 +23,8 @@ package com.pyx4j.entity.test.shared.domain.inherit.single;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)

@@ -27,11 +27,11 @@ import junit.framework.TestCase;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityPojoWrapperGenerator;
 import com.pyx4j.entity.server.pojo.model.PojoMemberTestEntity;
 import com.pyx4j.entity.server.pojo.model.PojoTestEntity;
-import com.pyx4j.entity.shared.EntityFactory;
 
 public class IPojoTest extends TestCase {
 

@@ -32,7 +32,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.xml.XMLEntityConverter;
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;

@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.client.ui.visor;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public abstract class AbstractVisorViewer<E extends IEntity> extends AbstractVisorForm<E> implements IVisorViewer<E> {
 

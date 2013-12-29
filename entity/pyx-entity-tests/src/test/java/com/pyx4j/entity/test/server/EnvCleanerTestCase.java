@@ -20,8 +20,8 @@
  */
 package com.pyx4j.entity.test.server;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Country;

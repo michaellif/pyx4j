@@ -24,11 +24,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.Path;
 
 public class CollectionInMemoryFilter extends InMemoryFilter {
 

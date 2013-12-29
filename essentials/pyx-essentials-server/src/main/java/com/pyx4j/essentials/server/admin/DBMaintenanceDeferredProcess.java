@@ -24,11 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.search.IndexedEntitySearch;
 import com.pyx4j.entity.server.search.SearchResultIterator;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.admin.DBMaintenanceRequest;
 import com.pyx4j.essentials.rpc.admin.IDBMaintenanceProcessor;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;

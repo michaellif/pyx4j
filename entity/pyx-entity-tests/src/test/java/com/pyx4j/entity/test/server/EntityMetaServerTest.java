@@ -20,8 +20,8 @@
  */
 package com.pyx4j.entity.test.server;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.test.shared.InitializerTestBase;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SBase;

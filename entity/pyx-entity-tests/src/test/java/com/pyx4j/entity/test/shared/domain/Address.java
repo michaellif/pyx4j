@@ -25,8 +25,8 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.test.shared.adapters.ProvinceReferenceAdapter;
 import com.pyx4j.geo.GeoPoint;
 

@@ -22,8 +22,8 @@ package com.pyx4j.entity.test.shared.domain.attach;
 
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Table(prefix = "test")
 public interface AttachToStringOneChild extends IEntity {

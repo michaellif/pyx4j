@@ -20,13 +20,13 @@
  */
 package com.pyx4j.entity.test.shared.domain.sort;
 
-import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 
 @Table(prefix = "test")
 public interface SortBy extends IEntity {

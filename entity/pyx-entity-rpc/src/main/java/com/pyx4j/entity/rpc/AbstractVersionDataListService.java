@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.rpc;
 
-import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.core.IVersionData;
 
 public interface AbstractVersionDataListService<E extends IVersionData<?>> extends AbstractListService<E> {
 

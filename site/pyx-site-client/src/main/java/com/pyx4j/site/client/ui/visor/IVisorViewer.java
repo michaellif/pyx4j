@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.client.ui.visor;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface IVisorViewer<E extends IEntity> extends IVisorForm<E> {
 

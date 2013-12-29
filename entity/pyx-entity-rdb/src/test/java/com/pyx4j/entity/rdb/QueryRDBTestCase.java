@@ -25,11 +25,11 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.AndCriterion;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.OrCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.AndCriterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;

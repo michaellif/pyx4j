@@ -42,6 +42,10 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionReason;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
@@ -51,10 +55,6 @@ import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.Ddl;
 import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public class Mappings {

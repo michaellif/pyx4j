@@ -24,9 +24,9 @@ import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class MemberCollectionOrderMeta {
 

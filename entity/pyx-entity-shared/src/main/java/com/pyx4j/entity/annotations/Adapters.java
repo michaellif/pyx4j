@@ -25,8 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.adapters.EntityModificationAdapter;
-import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.core.adapters.EntityModificationAdapter;
+import com.pyx4j.entity.core.adapters.MemberModificationAdapter;
 
 /**
  * Collection of Entity behaviors that are used on back-end.

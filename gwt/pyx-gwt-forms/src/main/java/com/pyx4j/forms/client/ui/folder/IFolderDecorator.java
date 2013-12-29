@@ -24,8 +24,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityFolder<E>>, ValueChangeHandler<IList<E>> {

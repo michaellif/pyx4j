@@ -26,10 +26,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.essentials.rpc.admin.BackupRecordsResponse;
 import com.pyx4j.essentials.rpc.admin.BackupRequest;
 

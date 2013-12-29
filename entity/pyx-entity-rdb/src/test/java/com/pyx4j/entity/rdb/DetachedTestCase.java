@@ -27,8 +27,8 @@ import junit.framework.Assert;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.detached.DetachedCompletely;
 import com.pyx4j.entity.test.shared.domain.detached.DetachedEntity;

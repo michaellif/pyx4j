@@ -27,17 +27,17 @@ import java.util.Collection;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.AndCriterion;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.criterion.AndCriterion;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.OrCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.security.shared.SecurityController;
 

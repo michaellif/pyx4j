@@ -27,9 +27,9 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.server.IndexString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
 
 public class StringCompositeInMemoryFilter extends InMemoryFilter {
 

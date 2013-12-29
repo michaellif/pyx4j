@@ -36,12 +36,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;

@@ -27,9 +27,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.geo.GeoPoint;
 
 class ValueAdapterGeoPoint implements ValueAdapter {

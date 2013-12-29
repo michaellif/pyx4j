@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportRequest;

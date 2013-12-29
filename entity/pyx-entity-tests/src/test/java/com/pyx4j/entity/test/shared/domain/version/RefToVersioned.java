@@ -22,8 +22,8 @@ package com.pyx4j.entity.test.shared.domain.version;
 
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Versioned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Table(prefix = "test")
 public interface RefToVersioned extends IEntity {

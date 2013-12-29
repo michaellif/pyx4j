@@ -26,9 +26,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class ValueAdapterByteArray extends ValueAdapterPrimitive {
 

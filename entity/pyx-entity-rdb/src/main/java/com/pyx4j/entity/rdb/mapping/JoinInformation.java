@@ -27,13 +27,13 @@ import com.pyx4j.entity.annotations.ManagedColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 abstract class JoinInformation {
 

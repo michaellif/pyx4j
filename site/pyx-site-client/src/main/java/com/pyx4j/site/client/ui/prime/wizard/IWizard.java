@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.client.ui.prime.wizard;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 

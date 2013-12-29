@@ -21,7 +21,7 @@
 package com.pyx4j.site.client.ui.prime.form;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface IViewer<E extends IEntity> extends IForm<E> {
 

@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.server;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public class EntityCollectionRequest<E extends IEntity> {
 

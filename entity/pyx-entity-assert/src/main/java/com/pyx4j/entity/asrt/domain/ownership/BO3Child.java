@@ -22,7 +22,7 @@ package com.pyx4j.entity.asrt.domain.ownership;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface BO3Child extends IEntity {
 

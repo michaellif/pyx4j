@@ -27,10 +27,10 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.criteria.DataTableCriteriaPanel;

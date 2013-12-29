@@ -22,9 +22,6 @@ package com.pyx4j.examples.domain.crm;
 
 import java.util.Date;
 
-import com.pyx4j.entity.adapters.index.EnumCollectionIndexAdapter;
-import com.pyx4j.entity.adapters.index.GeoPointIndexAdapter;
-import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -36,11 +33,14 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
+import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.rpc.GeoCriteria;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.adapters.index.EnumCollectionIndexAdapter;
+import com.pyx4j.entity.shared.adapters.index.GeoPointIndexAdapter;
+import com.pyx4j.entity.shared.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
 import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.geo.GeoPoint;

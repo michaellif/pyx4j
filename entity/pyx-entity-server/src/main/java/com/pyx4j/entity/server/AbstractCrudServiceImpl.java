@@ -20,8 +20,8 @@
  */
 package com.pyx4j.entity.server;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.IEntity;
 
 public abstract class AbstractCrudServiceImpl<E extends IEntity> extends AbstractCrudServiceDtoImpl<E, E> implements AbstractCrudService<E> {
 

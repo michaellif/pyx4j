@@ -1,7 +1,7 @@
 package com.pyx4j.tester.client.domain.test;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface ListerDataItem extends IEntity {
     IPrimitive<String> field0();

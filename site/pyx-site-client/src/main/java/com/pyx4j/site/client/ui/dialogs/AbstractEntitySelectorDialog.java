@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.client.ui.dialogs;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class AbstractEntitySelectorDialog<E extends IEntity> extends OkCancelDialog {

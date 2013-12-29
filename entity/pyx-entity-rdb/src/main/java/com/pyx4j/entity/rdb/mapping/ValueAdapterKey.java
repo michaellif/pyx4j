@@ -26,9 +26,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
 
 class ValueAdapterKey extends ValueAdapterPrimitive {
 

@@ -21,7 +21,7 @@
 package com.pyx4j.entity.xml;
 
 import com.pyx4j.commons.EnglishGrammar;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.xml.XMLEntityNamingConvention;
 
 public class XMLEntityNamingConventionDefault implements XMLEntityNamingConvention {

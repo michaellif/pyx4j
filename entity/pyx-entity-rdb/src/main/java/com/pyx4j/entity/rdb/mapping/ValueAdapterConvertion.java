@@ -26,10 +26,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.pyx4j.entity.adapters.PersistenceAdapter;
+import com.pyx4j.entity.core.adapters.PersistenceAdapter;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 @SuppressWarnings("rawtypes")
 class ValueAdapterConvertion implements ValueAdapter {

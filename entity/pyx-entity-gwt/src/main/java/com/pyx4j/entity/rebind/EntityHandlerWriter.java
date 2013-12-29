@@ -37,11 +37,11 @@ import com.google.gwt.user.rebind.SourceWriter;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.impl.EntityImplNativeHelper;
 import com.pyx4j.entity.client.impl.EntityMemberMapCreator;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.impl.PrimitiveHandler;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.impl.PrimitiveHandler;
+import com.pyx4j.entity.core.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.meta.EntityMeta;
 
 public class EntityHandlerWriter {
 

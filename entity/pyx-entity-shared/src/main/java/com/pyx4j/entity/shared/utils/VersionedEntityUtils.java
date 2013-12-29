@@ -24,10 +24,10 @@ import java.io.Serializable;
 import java.util.Map;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.IVersionedEntity;
+import com.pyx4j.entity.core.impl.SharedEntityHandler;
 
 public class VersionedEntityUtils {
 

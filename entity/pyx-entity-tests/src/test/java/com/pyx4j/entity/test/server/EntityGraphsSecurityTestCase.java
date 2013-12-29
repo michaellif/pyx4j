@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.server;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.security.shared.SecurityViolationException;

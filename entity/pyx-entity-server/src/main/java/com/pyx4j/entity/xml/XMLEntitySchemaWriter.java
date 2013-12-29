@@ -31,8 +31,8 @@ import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.impl.EntityPojoWrapperGenerator;
-import com.pyx4j.entity.shared.IEntity;
 
 public class XMLEntitySchemaWriter {
 

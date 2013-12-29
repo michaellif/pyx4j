@@ -23,8 +23,8 @@ package com.pyx4j.forms.client.ui.folder;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 
 public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {

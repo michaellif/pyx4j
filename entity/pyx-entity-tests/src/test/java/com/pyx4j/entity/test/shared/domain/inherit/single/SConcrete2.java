@@ -21,7 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.inherit.single;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 @DiscriminatorValue("C2")
 public interface SConcrete2 extends SBase {

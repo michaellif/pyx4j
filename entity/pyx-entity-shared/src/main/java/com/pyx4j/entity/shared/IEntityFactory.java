@@ -20,7 +20,9 @@
  */
 package com.pyx4j.entity.shared;
 
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.meta.EntityMeta;
 
 public interface IEntityFactory {
 

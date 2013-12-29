@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.shared.adapters;
 
-import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.core.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.shared.IHasFile;
 
 public interface FileUploadBlobSecurityAdapter extends MemberModificationAdapter<IHasFile<?>> {

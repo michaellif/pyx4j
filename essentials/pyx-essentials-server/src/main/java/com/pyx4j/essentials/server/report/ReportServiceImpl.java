@@ -24,7 +24,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.essentials.server.download.DownloadableServiceImpl;

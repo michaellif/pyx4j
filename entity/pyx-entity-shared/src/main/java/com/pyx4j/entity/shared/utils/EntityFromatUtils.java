@@ -21,7 +21,7 @@
 package com.pyx4j.entity.shared.utils;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 public class EntityFromatUtils {
 

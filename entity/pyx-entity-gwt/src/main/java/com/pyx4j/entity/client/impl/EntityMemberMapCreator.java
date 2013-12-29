@@ -22,8 +22,8 @@ package com.pyx4j.entity.client.impl;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.impl.SharedEntityHandler;
 
 /**
  * Optimisation for generated code size

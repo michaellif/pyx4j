@@ -28,11 +28,11 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 class ValueAdapterEntity implements ValueAdapter {
 

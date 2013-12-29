@@ -32,12 +32,12 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.IEntity;
 
 public class DataPreloaderCollection extends AbstractDataPreloader {
 

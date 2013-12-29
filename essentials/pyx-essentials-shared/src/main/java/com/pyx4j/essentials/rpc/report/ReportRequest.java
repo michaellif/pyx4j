@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
 @SuppressWarnings("serial")

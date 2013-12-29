@@ -49,7 +49,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 

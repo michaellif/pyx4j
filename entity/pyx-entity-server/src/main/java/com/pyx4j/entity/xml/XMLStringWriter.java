@@ -24,7 +24,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Stack;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.xml.XMLEscape;
 import com.pyx4j.entity.xml.XMLStringWriter;
 

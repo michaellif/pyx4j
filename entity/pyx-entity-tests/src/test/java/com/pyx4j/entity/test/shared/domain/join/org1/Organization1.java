@@ -22,9 +22,9 @@ package com.pyx4j.entity.test.shared.domain.join.org1;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
 
 @Table(prefix = "test")
 public interface Organization1 extends IEntity {

@@ -21,10 +21,10 @@
 package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.test.shared.domain.inherit.GenericAbstract;
 import com.pyx4j.entity.test.shared.domain.inherit.GenericAbstractImplementation;
 import com.pyx4j.entity.test.shared.domain.inherit.GenericBaseImplementation;

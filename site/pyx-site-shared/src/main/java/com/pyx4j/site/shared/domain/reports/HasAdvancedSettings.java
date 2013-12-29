@@ -21,8 +21,8 @@
 package com.pyx4j.site.shared.domain.reports;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 public interface HasAdvancedSettings extends IEntity {

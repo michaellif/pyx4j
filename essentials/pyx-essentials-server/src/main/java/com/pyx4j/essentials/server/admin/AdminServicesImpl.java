@@ -27,12 +27,12 @@ import com.google.appengine.api.memcache.Stats;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.rpc.admin.AdminServices;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;

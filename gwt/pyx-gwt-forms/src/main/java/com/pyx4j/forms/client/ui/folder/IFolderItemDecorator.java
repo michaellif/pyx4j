@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 

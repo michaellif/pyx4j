@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.IHaveServiceCallMarker;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.log4j.LoggerConfig;

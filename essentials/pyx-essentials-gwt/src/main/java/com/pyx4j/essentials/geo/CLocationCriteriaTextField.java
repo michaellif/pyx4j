@@ -24,8 +24,8 @@ import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.GeoCriteria;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IAcceptText;

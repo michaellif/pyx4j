@@ -8,7 +8,7 @@
 	</parameter>
 	<parameter name="REPORT_TITLE" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
-	<field name="departments" class="com.pyx4j.entity.shared.ISet"/>
+	<field name="departments" class="com.pyx4j.entity.core.ISet"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

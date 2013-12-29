@@ -24,8 +24,8 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 interface ValueAdapter extends ValueBindAdapter {
 

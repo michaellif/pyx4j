@@ -27,10 +27,10 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
 import com.pyx4j.tester.server.crud.DBTestsSetup;

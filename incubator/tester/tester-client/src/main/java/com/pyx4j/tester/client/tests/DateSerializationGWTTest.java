@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.test.client.TestServices;

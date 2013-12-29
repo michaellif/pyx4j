@@ -21,7 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.version;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedA.PolymorphicVersionDataA;
 
 @DiscriminatorValue("A")

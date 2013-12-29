@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ClassFinder;
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public class EntityClassFinder extends ClassFinder {
 

@@ -24,7 +24,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.forms.client.ui.NFocusField;

@@ -24,9 +24,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ILooseVersioning;
-import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.ILooseVersioning;
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;

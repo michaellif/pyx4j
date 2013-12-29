@@ -28,7 +28,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
+import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 
 public class AlphanumComparatorTest extends TestCase {
 

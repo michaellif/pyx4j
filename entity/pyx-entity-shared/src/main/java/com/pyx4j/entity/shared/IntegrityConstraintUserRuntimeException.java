@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.IEntity;
 
 @SuppressWarnings("serial")
 public class IntegrityConstraintUserRuntimeException extends UserRuntimeException {

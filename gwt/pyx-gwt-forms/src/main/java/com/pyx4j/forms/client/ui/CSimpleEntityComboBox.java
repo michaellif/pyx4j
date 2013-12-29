@@ -21,7 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public class CSimpleEntityComboBox<E extends IEntity> extends CComboBox<E> {
 

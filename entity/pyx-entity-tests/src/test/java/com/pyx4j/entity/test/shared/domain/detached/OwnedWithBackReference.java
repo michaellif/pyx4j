@@ -23,8 +23,8 @@ package com.pyx4j.entity.test.shared.domain.detached;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Table(prefix = "test")
 public interface OwnedWithBackReference extends IEntity {

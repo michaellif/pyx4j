@@ -24,9 +24,9 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.test.shared.domain.version.ItemC.ItemCVersion;
 
 //TODO Not supported!

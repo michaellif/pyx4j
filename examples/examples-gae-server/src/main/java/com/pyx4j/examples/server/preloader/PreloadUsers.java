@@ -21,9 +21,9 @@
 package com.pyx4j.examples.server.preloader;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.examples.domain.DemoData;
 import com.pyx4j.examples.domain.ExamplesBehavior;
 import com.pyx4j.examples.domain.User;

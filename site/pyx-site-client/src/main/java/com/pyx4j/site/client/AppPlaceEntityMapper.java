@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class AppPlaceEntityMapper {

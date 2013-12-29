@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.prime.misc;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.ICollection;
+import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.site.client.AppSite;

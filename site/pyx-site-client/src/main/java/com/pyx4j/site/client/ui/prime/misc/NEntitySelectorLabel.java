@@ -23,7 +23,7 @@ package com.pyx4j.site.client.ui.prime.misc;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.forms.client.ui.NFocusField;

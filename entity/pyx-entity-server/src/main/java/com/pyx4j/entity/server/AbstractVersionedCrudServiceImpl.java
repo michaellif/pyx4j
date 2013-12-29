@@ -23,9 +23,9 @@ package com.pyx4j.entity.server;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.IVersionedEntity;
+import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
-import com.pyx4j.entity.shared.IVersionedEntity;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;

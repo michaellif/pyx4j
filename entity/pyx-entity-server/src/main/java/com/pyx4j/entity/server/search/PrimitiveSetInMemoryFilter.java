@@ -23,8 +23,8 @@ package com.pyx4j.entity.server.search;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 
 public class PrimitiveSetInMemoryFilter extends InMemoryFilter {
 

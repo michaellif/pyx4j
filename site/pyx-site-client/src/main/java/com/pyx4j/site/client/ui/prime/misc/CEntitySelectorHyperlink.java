@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.client.ui.prime.misc;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.rpc.AppPlace;

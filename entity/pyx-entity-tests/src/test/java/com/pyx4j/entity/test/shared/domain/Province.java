@@ -20,12 +20,12 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
-import com.pyx4j.entity.adapters.index.CaseInsensitiveIndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.shared.adapters.index.CaseInsensitiveIndexAdapter;
 
 @Table(prefix = "test")
 public interface Province extends IEntity {

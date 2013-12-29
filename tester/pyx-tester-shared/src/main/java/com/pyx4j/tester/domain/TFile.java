@@ -20,8 +20,8 @@
  */
 package com.pyx4j.tester.domain;
 
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TFile extends IHasFile<TFileBlob> {
 

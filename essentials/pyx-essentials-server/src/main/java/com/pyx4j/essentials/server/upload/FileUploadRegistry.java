@@ -26,9 +26,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.server.contexts.Context;
 
 public class FileUploadRegistry {

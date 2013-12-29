@@ -23,11 +23,11 @@ package com.pyx4j.entity.server;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.domain.GraphItem;
 import com.pyx4j.entity.server.domain.bidir.Child;
 import com.pyx4j.entity.server.domain.bidir.Master;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 public class RpcEntityServiceFilterTest extends TestCase {

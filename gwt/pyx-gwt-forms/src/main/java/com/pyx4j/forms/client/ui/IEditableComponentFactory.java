@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IObject;
 
 public interface IEditableComponentFactory {
 

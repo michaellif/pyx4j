@@ -22,11 +22,11 @@ package com.pyx4j.entity.client;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.impl.IEntityFactoryImpl;
+import com.pyx4j.entity.core.meta.EntityMeta;
 
 public class ClientEntityFactory implements IEntityFactoryImpl {
 

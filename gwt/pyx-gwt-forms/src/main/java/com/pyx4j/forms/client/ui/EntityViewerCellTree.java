@@ -31,11 +31,11 @@ import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.TreeViewModel;
 
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
 
 public class EntityViewerCellTree extends CellTree {
 

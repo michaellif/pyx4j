@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface IPojo<E extends IEntity> extends Serializable {
 

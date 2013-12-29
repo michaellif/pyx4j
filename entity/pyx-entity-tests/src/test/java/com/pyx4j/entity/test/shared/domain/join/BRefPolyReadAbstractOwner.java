@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.shared.domain.join;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 @AbstractEntity
 @Inheritance

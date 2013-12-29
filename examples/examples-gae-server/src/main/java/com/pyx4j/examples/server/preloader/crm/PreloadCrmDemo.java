@@ -23,9 +23,9 @@ package com.pyx4j.examples.server.preloader.crm;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.domain.crm.DomainUtils;
 import com.pyx4j.examples.domain.crm.Order;

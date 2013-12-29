@@ -24,16 +24,16 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.adapters.IndexAdapter;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.dialect.TypeMetaConfiguration;
 import com.pyx4j.entity.server.AdapterFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class MemberOperationsMeta implements EntityMemberAccess {
 

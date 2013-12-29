@@ -23,7 +23,7 @@ package com.pyx4j.workflow.attempt2;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.workflow.attempt2.domain.Case;
 import com.pyx4j.workflow.attempt2.domain.Token;
 

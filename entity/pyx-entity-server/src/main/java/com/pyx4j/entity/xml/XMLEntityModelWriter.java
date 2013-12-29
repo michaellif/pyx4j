@@ -35,11 +35,11 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.geo.GeoPoint;
 
 public class XMLEntityModelWriter {

@@ -22,15 +22,15 @@ package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.EnumSet;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
+import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.meta.MemberMeta;
 
 public class MemberColumnDescriptor extends ColumnDescriptor {
 

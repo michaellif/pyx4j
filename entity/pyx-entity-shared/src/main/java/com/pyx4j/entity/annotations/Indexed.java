@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.core.adapters.IndexAdapter;
 
 /**
  * Define a index in RDBMS or indexed property in App Engine persistent storage.

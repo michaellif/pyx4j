@@ -21,7 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.join;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 @Transient
 public interface AggregatorDTO extends IEntity {

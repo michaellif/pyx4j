@@ -23,8 +23,8 @@ package com.pyx4j.entity.server.search;
 import java.util.Collection;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 
 public class PrimitiveInCollectionInMemoryFilter extends InMemoryFilter {
 

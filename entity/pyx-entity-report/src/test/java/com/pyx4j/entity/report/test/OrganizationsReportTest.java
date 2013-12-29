@@ -29,8 +29,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.report.JasperReportModel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Organization;
 

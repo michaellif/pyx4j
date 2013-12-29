@@ -25,7 +25,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 public interface IPolymorphicEditorDecorator<E extends IEntity> extends IDecorator<CPolymorphicEntityEditor<E>>, ValueChangeHandler<E> {

@@ -22,8 +22,8 @@ package com.pyx4j.entity.test.shared;
 
 import java.util.Iterator;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.entity.test.shared.domain.Task;
 
 public class PrimitiveSetTest extends InitializerTestBase {

@@ -23,9 +23,9 @@ package com.pyx4j.entity.shared.utils;
 import java.util.Comparator;
 
 import com.pyx4j.commons.CompareHelper;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
 
 public class EntityComparatorFactory {
 

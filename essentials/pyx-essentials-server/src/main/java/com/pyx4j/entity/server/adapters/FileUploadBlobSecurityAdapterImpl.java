@@ -20,9 +20,9 @@
  */
 package com.pyx4j.entity.server.adapters;
 
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.entity.shared.adapters.FileUploadBlobSecurityAdapter;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
 public class FileUploadBlobSecurityAdapterImpl implements FileUploadBlobSecurityAdapter {

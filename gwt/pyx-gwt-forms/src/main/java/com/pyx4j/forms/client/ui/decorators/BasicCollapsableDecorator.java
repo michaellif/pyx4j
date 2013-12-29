@@ -21,7 +21,7 @@
 package com.pyx4j.forms.client.ui.decorators;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.images.WidgetsImages;

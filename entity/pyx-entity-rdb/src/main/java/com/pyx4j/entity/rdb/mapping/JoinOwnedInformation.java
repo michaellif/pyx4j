@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class JoinOwnedInformation extends JoinInformation {
 

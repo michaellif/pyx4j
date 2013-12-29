@@ -27,14 +27,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class ClientEntityMetaImpl implements EntityMeta {
@@ -167,7 +167,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     protected abstract MemberMeta createMemberMeta(String memberName);
 
     private static MemberMeta primaryKeyMeta = new ClientMemberMetaImpl(IEntity.PRIMARY_KEY, "Id", i18n.tr("Id"), "", "", com.pyx4j.commons.Key.class,
-            com.pyx4j.entity.shared.IPrimitive.class, ObjectClassType.Primitive, false, false, false, false, AttachLevel.Attached, false, true, false, false,
+            com.pyx4j.entity.core.IPrimitive.class, ObjectClassType.Primitive, false, false, false, false, AttachLevel.Attached, false, true, false, false,
             false, -1, null, false, "", false);
 
     @Override

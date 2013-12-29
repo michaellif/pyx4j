@@ -30,10 +30,10 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class ValueAdapterString extends ValueAdapterPrimitive {
 

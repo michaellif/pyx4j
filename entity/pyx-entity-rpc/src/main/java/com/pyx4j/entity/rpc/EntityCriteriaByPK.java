@@ -21,9 +21,9 @@
 package com.pyx4j.entity.rpc;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 
 /**
  * Special criteria builder for retrieve by PK.

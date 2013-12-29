@@ -22,7 +22,7 @@ package com.pyx4j.entity.rdb;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.attach.AttachToStringMain;
 

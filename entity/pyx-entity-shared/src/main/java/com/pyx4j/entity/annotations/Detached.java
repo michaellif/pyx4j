@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.core.AttachLevel;
 
 /**
  * This annotation specifies that the Member is not retrieved and serialized together with

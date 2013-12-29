@@ -23,7 +23,7 @@ package com.pyx4j.entity.rpc;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AbstractVersionedCrudService<E extends IVersionedEntity<?>> extends AbstractCrudService<E> {

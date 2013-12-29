@@ -23,7 +23,7 @@ package com.pyx4j.entity.rpc;
 import java.io.Serializable;
 import java.util.Vector;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 @SuppressWarnings("serial")
 public class EntitySearchResult<E extends IEntity> implements Serializable {

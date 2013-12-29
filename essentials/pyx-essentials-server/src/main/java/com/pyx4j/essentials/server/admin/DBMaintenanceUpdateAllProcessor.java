@@ -20,7 +20,7 @@
  */
 package com.pyx4j.essentials.server.admin;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.admin.IDBMaintenanceProcessor;
 
 public class DBMaintenanceUpdateAllProcessor implements IDBMaintenanceProcessor<IEntity> {

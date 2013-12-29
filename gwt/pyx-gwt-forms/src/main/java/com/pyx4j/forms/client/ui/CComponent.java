@@ -44,7 +44,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;

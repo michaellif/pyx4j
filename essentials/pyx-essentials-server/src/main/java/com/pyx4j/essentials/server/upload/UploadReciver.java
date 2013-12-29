@@ -22,8 +22,8 @@ package com.pyx4j.essentials.server.upload;
 
 import java.util.Collection;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 
 /**

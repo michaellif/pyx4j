@@ -21,8 +21,8 @@
 package com.pyx4j.entity.test.shared.domain.graphwalking;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 public interface BaseEntity extends IEntity {

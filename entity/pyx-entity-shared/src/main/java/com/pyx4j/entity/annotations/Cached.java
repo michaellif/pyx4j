@@ -25,8 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.adapters.CacheAdapter;
-import com.pyx4j.entity.adapters.CacheAlwaysAdapter;
+import com.pyx4j.entity.core.adapters.CacheAdapter;
+import com.pyx4j.entity.core.adapters.CacheAlwaysAdapter;
 
 /**
  * All entities instances to be cached.

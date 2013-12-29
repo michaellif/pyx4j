@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui.wizard;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;

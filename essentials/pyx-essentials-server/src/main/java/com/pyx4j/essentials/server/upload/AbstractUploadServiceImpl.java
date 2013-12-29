@@ -29,9 +29,9 @@ import org.apache.commons.io.FilenameUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadId;

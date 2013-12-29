@@ -31,12 +31,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Filter;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.criterion.EntityCriteriaFilter;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.EntityCriteriaFilter;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 
 public class InMemeoryListService<E extends IEntity> implements AbstractListService<E> {
 

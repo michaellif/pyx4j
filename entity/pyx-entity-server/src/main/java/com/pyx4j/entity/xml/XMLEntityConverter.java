@@ -37,7 +37,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.xml.XMLEntityFactory;
 import com.pyx4j.entity.xml.XMLEntityFactoryDefault;
 import com.pyx4j.entity.xml.XMLEntityParser;

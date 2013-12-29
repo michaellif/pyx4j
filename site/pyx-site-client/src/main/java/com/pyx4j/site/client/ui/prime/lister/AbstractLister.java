@@ -25,7 +25,7 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;

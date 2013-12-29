@@ -39,8 +39,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
 
 /**
  * Compatibility layer with Selenium v1 i.e. with Selenium IDE generated scripts.

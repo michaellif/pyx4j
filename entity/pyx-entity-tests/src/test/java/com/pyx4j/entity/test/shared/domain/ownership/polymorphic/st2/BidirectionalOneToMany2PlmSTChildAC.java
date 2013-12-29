@@ -21,7 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 @DiscriminatorValue(value = "BidirectionalOneToMany2PlmChildAC")
 public interface BidirectionalOneToMany2PlmSTChildAC extends BidirectionalOneToMany2PlmSTChildA {

@@ -21,8 +21,8 @@
 package com.pyx4j.entity.test.shared.domain.inherit;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
 public interface GenericBase extends IEntity {

@@ -22,6 +22,7 @@ package com.pyx4j.entity.shared;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity

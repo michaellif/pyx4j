@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.Path;
 
 class QueryJoinBuilderSubQuery extends QueryJoinBuilder {
 

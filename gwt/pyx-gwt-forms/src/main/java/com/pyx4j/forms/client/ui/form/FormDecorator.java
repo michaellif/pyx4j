@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.StyleManager;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.actionbar.Toolbar;

@@ -27,11 +27,11 @@ import java.util.Set;
 
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.entity.shared.validator.Validator;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.core.validator.Validator;
 
 public class ClientMemberMetaImpl implements MemberMeta {
 

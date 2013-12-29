@@ -64,11 +64,11 @@ import com.pyx4j.entity.annotations.validator.Pattern;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
 import com.pyx4j.entity.client.impl.MemberMetaData;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 public class EntityMetaWriter {

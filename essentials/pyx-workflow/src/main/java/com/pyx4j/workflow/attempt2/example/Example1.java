@@ -20,7 +20,7 @@
  */
 package com.pyx4j.workflow.attempt2.example;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.workflow.attempt2.Condition;
 import com.pyx4j.workflow.attempt2.Place;
 import com.pyx4j.workflow.attempt2.Process;

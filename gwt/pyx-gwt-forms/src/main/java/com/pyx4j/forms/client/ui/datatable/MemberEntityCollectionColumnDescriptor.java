@@ -24,7 +24,7 @@ import java.util.Collection;
 
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public class MemberEntityCollectionColumnDescriptor extends MemberColumnDescriptor {
 

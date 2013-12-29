@@ -24,8 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.Credentials;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.j2se.J2SEService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;

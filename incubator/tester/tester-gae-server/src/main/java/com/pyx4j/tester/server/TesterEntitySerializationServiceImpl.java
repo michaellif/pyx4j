@@ -22,7 +22,7 @@ package com.pyx4j.tester.server;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.tester.rpc.TesterEntitySerializationService;
 
 public class TesterEntitySerializationServiceImpl implements TesterEntitySerializationService {

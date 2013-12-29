@@ -24,9 +24,9 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedSuper.PolymorphicVersionDataSuper;
 
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)

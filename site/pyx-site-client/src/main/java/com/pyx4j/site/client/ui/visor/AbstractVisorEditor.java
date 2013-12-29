@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.visor;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;

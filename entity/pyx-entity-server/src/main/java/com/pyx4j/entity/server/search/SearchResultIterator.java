@@ -20,8 +20,8 @@
  */
 package com.pyx4j.entity.server.search;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
-import com.pyx4j.entity.shared.IEntity;
 
 public interface SearchResultIterator<E extends IEntity> extends ICursorIterator<E> {
 

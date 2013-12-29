@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import com.pyx4j.entity.annotations.GeneratedValue;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 
 public class ValueGenerator {
 

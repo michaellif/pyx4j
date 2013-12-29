@@ -38,16 +38,16 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
 public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E> {

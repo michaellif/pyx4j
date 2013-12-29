@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.List;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface DataTableConverter<E extends IEntity> {
 

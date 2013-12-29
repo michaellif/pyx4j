@@ -29,7 +29,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;

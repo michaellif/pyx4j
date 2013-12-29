@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.server.EntityCollectionRequest;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 
 class RetrieveRequestsAggregator {
 

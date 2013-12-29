@@ -3,9 +3,9 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;

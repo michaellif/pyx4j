@@ -20,8 +20,8 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.meta.MemberMeta;
 
 public class MemberExternalOperationsMeta extends MemberOperationsMeta {
 

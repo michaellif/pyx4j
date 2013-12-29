@@ -23,8 +23,8 @@ package com.pyx4j.site.shared.domain.reports;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 @ToStringFormat(value = "{0,choice,null#Untitled|!null#{0}}", nil = "{0,choice,null#Untitled|!null#{0}}")

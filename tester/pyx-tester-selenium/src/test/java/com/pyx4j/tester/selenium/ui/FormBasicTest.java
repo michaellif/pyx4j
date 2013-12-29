@@ -20,7 +20,7 @@
  */
 package com.pyx4j.tester.selenium.ui;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.client.NavigationIDs;

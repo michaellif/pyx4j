@@ -37,6 +37,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.rebind.AbstractGeneratorClassCreator;
 import com.google.gwt.user.rebind.AbstractMethodCreator;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.rpc.client.ServiceExecutionInfo;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.ServiceExecution.OperationType;
@@ -53,7 +54,7 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
         super(classCreator);
         try {
             asyncCallbackType = oracle.getType(AsyncCallback.class.getName());
-            iEntityType = oracle.getType("com.pyx4j.entity.shared.IEntity");
+            iEntityType = oracle.getType(IEntity.class.getName());
         } catch (NotFoundException e) {
             throw new UnableToCompleteException();
         }

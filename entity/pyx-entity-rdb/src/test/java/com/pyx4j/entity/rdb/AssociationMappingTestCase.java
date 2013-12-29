@@ -22,10 +22,10 @@ package com.pyx4j.entity.rdb;
 
 import java.sql.SQLException;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 
 public abstract class AssociationMappingTestCase extends DatastoreTestBase {

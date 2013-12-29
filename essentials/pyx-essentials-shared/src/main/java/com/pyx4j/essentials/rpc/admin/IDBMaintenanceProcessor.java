@@ -22,7 +22,7 @@ package com.pyx4j.essentials.rpc.admin;
 
 import java.io.Serializable;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface IDBMaintenanceProcessor<E extends IEntity> extends Serializable {
 

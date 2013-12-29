@@ -38,15 +38,15 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public class RDBUtils implements Closeable {

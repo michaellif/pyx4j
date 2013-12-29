@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.shared.domain.graphwalking;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.core.IList;
 
 @Transient
 public interface OwnerA extends BaseEntity {

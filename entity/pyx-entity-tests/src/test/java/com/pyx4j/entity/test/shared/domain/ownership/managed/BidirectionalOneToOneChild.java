@@ -22,8 +22,8 @@ package com.pyx4j.entity.test.shared.domain.ownership.managed;
 
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Table(prefix = "test")
 //This table does not have column that references owner because this is one to one relationship

@@ -23,8 +23,8 @@ package com.pyx4j.entity.rdb.mapping;
 import java.io.Serializable;
 import java.util.List;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 
 class EntityMemberEmbeddedAccess implements EntityMemberAccess {
 

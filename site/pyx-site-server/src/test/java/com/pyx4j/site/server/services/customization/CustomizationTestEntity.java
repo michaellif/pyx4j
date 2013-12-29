@@ -22,8 +22,8 @@ package com.pyx4j.site.server.services.customization;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface CustomizationTestEntity extends IEntity {
 

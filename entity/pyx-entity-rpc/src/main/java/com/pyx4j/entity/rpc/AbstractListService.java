@@ -23,8 +23,8 @@ package com.pyx4j.entity.rpc;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.IService;
 
 public interface AbstractListService<E extends IEntity> extends IService {

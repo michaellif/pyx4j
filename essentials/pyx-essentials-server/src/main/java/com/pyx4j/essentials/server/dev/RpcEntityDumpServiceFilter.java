@@ -24,8 +24,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.Service;
 

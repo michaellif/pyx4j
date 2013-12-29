@@ -27,8 +27,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.tester.rpc.TesterEntitySerializationService;
 import com.pyx4j.unit.client.GUnitTester;

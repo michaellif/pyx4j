@@ -22,8 +22,8 @@ package com.pyx4j.entity.server.search;
 
 import java.util.Date;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 
 public class DayRangeInMemoryFilter extends InMemoryFilter {
 

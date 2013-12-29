@@ -22,10 +22,10 @@ package com.pyx4j.entity.test.shared.domain.version;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.test.shared.domain.version.ItemD.ItemDVersion;
 
 //TODO Not supported!

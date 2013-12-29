@@ -22,7 +22,7 @@ package com.pyx4j.entity.server;
 
 import java.util.Map;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface IEntityCacheService {
 

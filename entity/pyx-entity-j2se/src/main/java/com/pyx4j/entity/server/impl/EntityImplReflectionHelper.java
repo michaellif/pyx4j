@@ -30,13 +30,13 @@ import java.lang.reflect.TypeVariable;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
+import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.core.impl.SharedEntityHandler;
 
 /**
  * We do use runtime reflection to collect meta data.

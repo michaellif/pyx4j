@@ -21,9 +21,9 @@
 package com.pyx4j.entity.client.impl;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ObjectClassType;
 
 public class MemberMetaData {
 
@@ -76,7 +76,7 @@ public class MemberMetaData {
         this.stringLength = -1;
         this.valueClass = valueClass;
         this.objectClassType = ObjectClassType.Primitive;
-        this.objectClass = (Class<? extends IObject<?>>) ((Class<?>) com.pyx4j.entity.shared.IPrimitive.class);
+        this.objectClass = (Class<? extends IObject<?>>) ((Class<?>) com.pyx4j.entity.core.IPrimitive.class);
         this.nullString = "";
         this.valueClassIsNumber = isNumber;
         this.attachLevel = AttachLevel.Attached;

@@ -25,8 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.meta.EntityMeta;
 
 /**
  * Instance of this class usually wrap single class that can be persisted .

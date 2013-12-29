@@ -41,8 +41,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.client.ClientDeploymentConfig;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;

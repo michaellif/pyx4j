@@ -59,10 +59,10 @@ import com.pyx4j.config.server.ClassFinder;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.meta.EntityMeta;
 
 public class EntityImplGenerator {
 

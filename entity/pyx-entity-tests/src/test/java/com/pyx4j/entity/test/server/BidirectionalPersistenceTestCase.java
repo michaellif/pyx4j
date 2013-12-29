@@ -23,10 +23,10 @@ package com.pyx4j.entity.test.server;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.IFullDebug;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Organization;
 import com.pyx4j.entity.test.shared.domain.ownership.creation.ForceCreationOneToOneParent;

@@ -29,14 +29,14 @@ import java.util.Map;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
+import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.meta.MemberMeta;
 
 public class EntityArgsConverter {
 

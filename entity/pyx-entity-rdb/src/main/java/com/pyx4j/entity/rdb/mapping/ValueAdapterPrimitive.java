@@ -24,8 +24,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 abstract class ValueAdapterPrimitive implements ValueAdapter {
 

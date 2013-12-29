@@ -25,8 +25,8 @@ import java.util.List;
 import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.Criterion;
 
 public interface ICriteriaForm<E extends IEntity> extends IsWidget, HasVisibility {
 

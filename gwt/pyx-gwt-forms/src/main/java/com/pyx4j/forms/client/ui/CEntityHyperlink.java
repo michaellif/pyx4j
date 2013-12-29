@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public class CEntityHyperlink<E extends IEntity> extends CEntityLabel<E> {
 

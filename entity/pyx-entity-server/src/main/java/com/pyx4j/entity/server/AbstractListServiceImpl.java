@@ -20,8 +20,8 @@
  */
 package com.pyx4j.entity.server;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.IEntity;
 
 public abstract class AbstractListServiceImpl<E extends IEntity> extends AbstractListServiceDtoImpl<E, E> implements AbstractListService<E> {
 

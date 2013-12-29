@@ -23,7 +23,7 @@ package com.pyx4j.site.client.ui.visor;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 
 public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisorPane implements IVisorViewer<E> {

@@ -31,14 +31,14 @@ import java.util.Vector;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 
 public class EntityDiff {
 

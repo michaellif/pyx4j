@@ -22,8 +22,8 @@ package com.pyx4j.entity.rdb;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToManyNCPChild;
 import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToManyNCPParent;
 import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToOneNCPParent;

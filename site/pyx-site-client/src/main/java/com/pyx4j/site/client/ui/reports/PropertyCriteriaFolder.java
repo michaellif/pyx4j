@@ -24,9 +24,9 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.ListBox;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;

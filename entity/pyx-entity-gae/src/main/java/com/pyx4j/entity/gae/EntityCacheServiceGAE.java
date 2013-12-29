@@ -33,11 +33,11 @@ import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import com.pyx4j.entity.annotations.Cached;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.server.EntityCollectionRequest;
 import com.pyx4j.entity.server.IEntityCacheService;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityCacheServiceGAE implements IEntityCacheService {
 

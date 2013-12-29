@@ -23,8 +23,8 @@ package com.pyx4j.entity.rpc;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.geo.GeoPoint;
 
 @Transient

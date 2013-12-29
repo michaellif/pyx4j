@@ -22,9 +22,9 @@ package com.pyx4j.entity.server.search;
 
 import java.util.regex.Pattern;
 
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.server.IndexString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
 
 public class StringInMemoryFilter extends InMemoryFilter {
 

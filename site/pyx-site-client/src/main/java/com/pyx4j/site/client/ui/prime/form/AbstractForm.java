@@ -23,7 +23,7 @@ package com.pyx4j.site.client.ui.prime.form;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 

@@ -39,9 +39,9 @@ import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.meta.EntityMeta;
 
 public class EntityFactoryGenerator extends Generator {
 

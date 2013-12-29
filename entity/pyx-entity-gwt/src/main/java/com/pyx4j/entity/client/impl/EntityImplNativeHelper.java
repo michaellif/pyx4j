@@ -24,9 +24,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.impl.PrimitiveHandler;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.impl.PrimitiveHandler;
+import com.pyx4j.entity.core.impl.SharedEntityHandler;
 
 public abstract class EntityImplNativeHelper {
 

@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.shared.adapters.index;
 
 import java.util.Comparator;
 
-import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
+import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 
 public class AlphanumComparator implements Comparator<String> {
 

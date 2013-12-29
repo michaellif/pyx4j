@@ -26,12 +26,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.meta.EntityMeta;
 
 public interface IEntityPersistenceService {
 

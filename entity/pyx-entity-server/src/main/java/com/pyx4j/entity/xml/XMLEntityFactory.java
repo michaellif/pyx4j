@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.xml;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.core.IEntity;
 
 public interface XMLEntityFactory {
 

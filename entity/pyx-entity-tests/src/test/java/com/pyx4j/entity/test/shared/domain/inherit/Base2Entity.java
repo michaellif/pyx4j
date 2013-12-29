@@ -21,7 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.inherit;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 public interface Base2Entity extends Base1Entity {

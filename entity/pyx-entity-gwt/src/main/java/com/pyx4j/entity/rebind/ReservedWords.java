@@ -34,7 +34,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.entity.core.ObjectClassType;
 
 public class ReservedWords {
 
