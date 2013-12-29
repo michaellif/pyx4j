@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,25 +13,35 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.PrintUtils;
+import com.propertyvista.common.client.PublicMediaURLBuilder;
+import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageView.MaintenanceRequestPagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestMediaUploadPortalService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -43,6 +53,8 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     private final Button btnCancel;
 
     private final Button btnPrint;
+
+    private BasicFlexFormPanel imagePanel;
 
     public MaintenanceRequestPage(MaintenanceRequestPageViewImpl view) {
         super(MaintenanceRequestDTO.class, view, "Maintenance Request", ThemeColor.contrast5);
@@ -108,6 +120,33 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 100).build());
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
 
+        int innerRow = -1;
+        imagePanel = new TwoColumnFlexFormPanel();
+        imagePanel.setH1(++innerRow, 0, 1, i18n.tr("Images"));
+        CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
+                GWT.<MaintenanceRequestMediaUploadPortalService> create(MaintenanceRequestMediaUploadPortalService.class), new PublicMediaURLBuilder()) {
+            @Override
+            protected EntityFolderImages getFolderIcons() {
+                return VistaImages.INSTANCE;
+            }
+
+            @Override
+            public Widget getImageEntryView(CEntityForm<MediaFile> entryForm) {
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().visibility()), 8, 7, 16).build());
+
+                return main;
+            }
+        };
+        imageSlider.setImageSize(240, 160);
+        imagePanel.setWidget(++innerRow, 0, 1, inject(proto().media(), imageSlider));
+        mainPanel.setWidget(++row, 0, imagePanel);
+        mainPanel.setBR(++row, 0, 1);
+
         return mainPanel;
     }
 
@@ -123,6 +162,12 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
     @Override
     protected void onValueSet(boolean populate) {
-        btnCancel.setVisible(getValue() != null && StatusPhase.open().contains(getValue().status().phase().getValue()));
+        MaintenanceRequestDTO mr = getValue();
+
+        btnCancel.setVisible(mr != null && StatusPhase.open().contains(mr.status().phase().getValue()));
+        if (mr == null) {
+            return;
+        }
+        imagePanel.setVisible(mr.media() != null && !mr.media().isNull() && !mr.media().isEmpty());
     }
 }

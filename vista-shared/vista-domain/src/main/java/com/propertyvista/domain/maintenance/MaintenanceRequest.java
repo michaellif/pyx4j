@@ -33,6 +33,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -41,6 +42,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -169,4 +171,8 @@ public interface MaintenanceRequest extends IEntity, HasNotesAndAttachments {
 
     @EmbeddedEntity
     SurveyResponse surveyResponse();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    IList<MediaFile> media();
 }

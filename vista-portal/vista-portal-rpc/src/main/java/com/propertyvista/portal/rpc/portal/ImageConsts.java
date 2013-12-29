@@ -30,7 +30,9 @@ public interface ImageConsts {
 
         Building,
 
-        Floorplan
+        Floorplan,
+
+        MaintenanceRequest
     }
 
     public static final Dimension BUILDING_XSMALL = new Dimension(57, 41);

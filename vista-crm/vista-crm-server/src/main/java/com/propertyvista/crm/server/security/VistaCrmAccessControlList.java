@@ -28,6 +28,7 @@ import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
+import com.propertyvista.crm.rpc.services.MediaUploadMaintenanceRequestService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
@@ -276,7 +277,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmReportsService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmReportsSettingsPersistenceService.class));
 
-// - Legal:        
+// - Legal:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(N4CreateBatchService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(N4DownloadToolService.class));
 
@@ -555,6 +556,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Organization, new EntityPermission(NoteAttachment.class, EntityPermission.READ));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PmcDocumentFileUploadService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MediaUploadMaintenanceRequestService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Company.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(VendorCrudService.class));

@@ -13,30 +13,40 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestMediaUploadPortalService;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -57,6 +67,8 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     private final BasicFlexFormPanel statusPanel = new BasicFlexFormPanel();
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
+
+    private BasicFlexFormPanel imagePanel;
 
     public MaintenanceRequestWizard(MaintenanceRequestWizardView view) {
         super(MaintenanceRequestDTO.class, view, i18n.tr("New Maintenance Request"), i18n.tr("Submit"), ThemeColor.contrast5);
@@ -121,6 +133,33 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 100).build());
         statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 100).build());
         content.setWidget(++row, 0, statusPanel);
+
+        innerRow = -1;
+        imagePanel = new TwoColumnFlexFormPanel();
+        imagePanel.setH1(++innerRow, 0, 1, i18n.tr("Images"));
+        CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
+                GWT.<MaintenanceRequestMediaUploadPortalService> create(MaintenanceRequestMediaUploadPortalService.class), new PublicMediaURLBuilder()) {
+            @Override
+            protected EntityFolderImages getFolderIcons() {
+                return VistaImages.INSTANCE;
+            }
+
+            @Override
+            public Widget getImageEntryView(CEntityForm<MediaFile> entryForm) {
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, 1, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
+                main.setWidget(++row, 0, 1, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
+                main.setWidget(++row, 0, 1, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().visibility()), 8, 7, 16).build());
+
+                return main;
+            }
+        };
+        imageSlider.setImageSize(240, 160);
+        imagePanel.setWidget(++innerRow, 0, 1, inject(proto().media(), imageSlider));
+        content.setWidget(++row, 0, imagePanel);
+        content.setBR(++row, 0, 1);
 
         // tweaks:
         get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {

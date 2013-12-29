@@ -59,6 +59,7 @@ import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistr
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestMediaUploadPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentAccountCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
@@ -172,6 +173,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.LeaseSigningRequired, new IServiceExecutePermission(LeaseSigningCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestMediaUploadPortalService.class));
+
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
@@ -182,6 +185,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(MaintenanceRequestMediaUploadPortalService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(IdentificationDocumentProspectUploadService.class));

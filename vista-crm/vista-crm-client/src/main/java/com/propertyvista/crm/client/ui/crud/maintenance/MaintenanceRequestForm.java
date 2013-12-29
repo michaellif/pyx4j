@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -25,16 +26,19 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -50,7 +54,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.images.HelperImages;
 
+import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -59,6 +65,8 @@ import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.services.MediaUploadMaintenanceRequestService;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
@@ -89,6 +97,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     private TwoColumnFlexFormPanel resolvedPanel;
 
     private TwoColumnFlexFormPanel surveyPanel;
+
+    private TwoColumnFlexFormPanel imagePanel;
 
     private final BuildingSelector buildingSelector = new BuildingSelector();
 
@@ -179,9 +189,35 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
 
         // --------------------------------------------------------------------------------------------------------------------
+        int innerRow = -1;
+        imagePanel = new TwoColumnFlexFormPanel();
+        imagePanel.setH1(++innerRow, 0, 2, i18n.tr("Images"));
+        CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
+                GWT.<MediaUploadMaintenanceRequestService> create(MediaUploadMaintenanceRequestService.class), new PublicMediaURLBuilder()) {
+            @Override
+            protected EntityFolderImages getFolderIcons() {
+                return VistaImages.INSTANCE;
+            }
+
+            @Override
+            public Widget getImageEntryView(CEntityForm<MediaFile> entryForm) {
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().visibility()), 8, 7, 16).build());
+
+                return main;
+            }
+        };
+        imageSlider.setImageSize(240, 160);
+        imagePanel.setWidget(++innerRow, 0, 2, inject(proto().media(), imageSlider));
+        panel.setWidget(++row, 0, 2, imagePanel);
+        // --------------------------------------------------------------------------------------------------------------------
 
         unitAccessPanel = new TwoColumnFlexFormPanel();
-        int innerRow = -1;
+        innerRow = -1;
         unitAccessPanel.setH1(++innerRow, 0, 2, i18n.tr("Unit Access"));
 
         accessPanel = new TwoColumnFlexFormPanel();
@@ -345,6 +381,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.maintenance, get(proto().requestId()), getValue().getPrimaryKey());
+            imagePanel.setVisible(true);
         }
 
         MaintenanceRequestDTO mr = getValue();
@@ -352,6 +389,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             return;
         }
 
+        if (!isEditable()) {
+            imagePanel.setVisible(mr.media() != null && !mr.media().isNull() && !mr.media().isEmpty());
+        }
         // to support yardi mode with multiple interfaces
         ensureBuilding();
 
@@ -360,6 +400,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().status()).setVisible(!mr.submitted().isNull());
 
         StatusPhase phase = mr.status().phase().getValue();
+
         scheduledPanel.setVisible(phase == StatusPhase.Scheduled);
         resolvedPanel.setVisible(phase == StatusPhase.Resolved);
 

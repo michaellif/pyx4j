@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -62,6 +62,8 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     protected void enhanceRetrieved(MaintenanceRequest bo, MaintenanceRequestDTO to, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieveMember(bo.media());
+        to.media().set(bo.media());
         enhanceAll(to);
     }
 
@@ -73,6 +75,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     protected void enhanceAll(MaintenanceRequestDTO dto) {
         enhanceDbo(dto);
         dto.reportedForOwnUnit().setValue(ResidentPortalContext.getUnit().id().equals(dto.unit().id()));
+
         // populate latest scheduled info
         if (!dto.workHistory().isEmpty()) {
             MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
@@ -84,6 +87,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     protected void enhanceDbo(MaintenanceRequest dbo) {
         Persistence.ensureRetrieve(dbo.building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dbo.media(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dbo.reporter(), AttachLevel.Attached);
         MaintenanceRequestCategory parent = dbo.category().parent();
         while (!parent.isNull()) {
