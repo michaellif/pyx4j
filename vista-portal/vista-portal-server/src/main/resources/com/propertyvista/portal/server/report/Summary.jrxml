@@ -20,16 +20,16 @@
 	<field name="selectedUnit/area" class="java.lang.Integer"/>
 	<field name="selectedUnit/avalableForRent" class="java.util.Date"/>
 	<field name="unitSelection/selectedLeaseTerm" class="java.lang.Integer"/>
-	<field name="tenantList/tenants" class="com.pyx4j.entity.shared.IList"/>
-	<field name="tenantFinancials" class="com.pyx4j.entity.shared.IList"/>
-	<field name="pets/pets" class="com.pyx4j.entity.shared.IList"/>
-	<field name="charges/monthlyCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="tenantList/tenants" class="com.pyx4j.entity.core.IList"/>
+	<field name="tenantFinancials" class="com.pyx4j.entity.core.IList"/>
+	<field name="pets/pets" class="com.pyx4j.entity.core.IList"/>
+	<field name="charges/monthlyCharges/charges" class="com.pyx4j.entity.core.IList"/>
 	<field name="charges/monthlyCharges/total/amount" class="java.lang.Double"/>
-	<field name="charges/proRatedCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/proRatedCharges/charges" class="com.pyx4j.entity.core.IList"/>
 	<field name="charges/proRatedCharges/total/amount" class="java.lang.Double"/>
-	<field name="charges/applicationCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/applicationCharges/charges" class="com.pyx4j.entity.core.IList"/>
 	<field name="charges/applicationCharges/total/amount" class="java.lang.Double"/>
-	<field name="charges/paymentSplitCharges/charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges/paymentSplitCharges/charges" class="com.pyx4j.entity.core.IList"/>
 	<field name="charges/paymentSplitCharges/total/amount" class="java.lang.Double"/>
 	<field name="fullName" class="java.lang.String"/>
 	<background>

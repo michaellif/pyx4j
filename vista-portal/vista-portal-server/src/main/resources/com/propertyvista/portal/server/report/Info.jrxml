@@ -51,7 +51,7 @@
 	<field name="previousAddress/phone" class="java.lang.String"/>
 	<field name="previousAddress/rented" class="com.propertyvista.portal.domain.ptapp.Address.OwnedRented"/>
 	<field name="previousAddress/managerName" class="java.lang.String"/>
-	<field name="vehicles" class="com.pyx4j.entity.shared.IList"/>
+	<field name="vehicles" class="com.pyx4j.entity.core.IList"/>
 	<field name="legalQuestions/suedForRent" class="java.lang.Boolean"/>
 	<field name="legalQuestions/suedForDamages" class="java.lang.Boolean"/>
 	<field name="legalQuestions/everEvicted" class="java.lang.Boolean"/>
@@ -59,7 +59,7 @@
 	<field name="legalQuestions/convictedOfFelony" class="java.lang.Boolean"/>
 	<field name="legalQuestions/legalTroubles" class="java.lang.Boolean"/>
 	<field name="legalQuestions/filedBankruptcy" class="java.lang.Boolean"/>
-	<field name="emergencyContacts" class="com.pyx4j.entity.shared.IList"/>
+	<field name="emergencyContacts" class="com.pyx4j.entity.core.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

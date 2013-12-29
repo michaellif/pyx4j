@@ -7,9 +7,9 @@
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<field name="tenantFullName" class="java.lang.String"/>
-	<field name="tenantFinancial/incomes" class="com.pyx4j.entity.shared.IList"/>
-	<field name="tenantFinancial/assets" class="com.pyx4j.entity.shared.IList"/>
-	<field name="tenantFinancial/guarantors" class="com.pyx4j.entity.shared.IList"/>
+	<field name="tenantFinancial/incomes" class="com.pyx4j.entity.core.IList"/>
+	<field name="tenantFinancial/assets" class="com.pyx4j.entity.core.IList"/>
+	<field name="tenantFinancial/guarantors" class="com.pyx4j.entity.core.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
