@@ -37,6 +37,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- required for generator to create method signature -->
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-serialization</artifactId>
