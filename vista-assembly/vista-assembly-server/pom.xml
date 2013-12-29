@@ -241,7 +241,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.propertyvista</groupId>
-                                    <artifactId>vista-yardi-interface-wsdl</artifactId>
+                                    <artifactId>vista-biz-yardi-interface-wsdl</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
