@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.propertyvista</groupId>
+        <artifactId>vista-biz</artifactId>
+        <version>1.1.3-SNAPSHOT</version><!--vista-version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-biz-yardi-interface-wsdl</artifactId>
+    <name>vista-biz-yardi-interface-wsdl</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-adb</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <!-- Avoid extra warnings in build output -->
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>removet-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.build.directory}/generated-sources</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+	    <!-- WebServices: WSDL compilation -->
+            <plugin>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+                <configuration>
+                    <generateServerSide>true</generateServerSide>
+                    <generateServerSideInterface>true</generateServerSideInterface>
+                    <generateAllClasses>true</generateAllClasses>
+                    <unpackClasses>true</unpackClasses>
+                    <syncMode>sync</syncMode>
+                    <databindingName>adb</databindingName>
+                    <namespaceURIs>
+                        <namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfResidentTransactions20</uri>
+                            <packageName>com.yardi.ws.operations.transactions</packageName>
+                        </namespaceURI>
+                        <namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ResidentTransactions20_SysBatch</uri>
+                            <packageName>com.yardi.ws.operations.transactionsbatch</packageName>
+                        </namespaceURI>
+                        <namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfApplicantScreening</uri>
+                            <packageName>com.yardi.ws.operations.appscreening</packageName>
+                        </namespaceURI>
+			            <namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfServiceRequests</uri>
+                            <packageName>com.yardi.ws.operations.requests</packageName>
+                        </namespaceURI>
+			            <namespaceURI>
+			                <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard20</uri>
+                            <packageName>com.yardi.ws.operations.ils</packageName>
+                        </namespaceURI>
+			            <namespaceURI>
+			                <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard</uri>
+                            <packageName>com.yardi.ws.operations.guestcard40</packageName>
+                        </namespaceURI>
+                    </namespaceURIs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>wsdl2code-client-yardi-rt</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/common/ItfResidentTransactions20.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-xjc-Xcollection-setter-injector</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
+                            <wsdlFile>${basedir}/src/main/resources/common/ItfResidentTransactions20.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsdl2code-client-yardi-rtb</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/common/ItfResidentTransactions20_SysBatch.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsdl2code-client-yardi-as</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/common/ItfApplicantScreening20.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+		            <execution>
+                        <id>wsdl2code-client-yardi-sr</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/maintenance/ItfServiceRequests.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+		            <execution>
+                        <id>wsdl2code-client-yardi-ils</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/ils/ItfILSGuestCard20.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+		            <execution>
+                        <id>wsdl2code-client-yardi-guestcard40</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/guestcard40/ItfILSGuestCard40.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+	    <!-- WebServices: XSD compilation -->
+	    <!-- ATTENTION: All references to remote xsd includes must be manually downloaded and converted to local files, eg:
+		 <xs:include schemaLocation="http://sample.com/sample.xsd"/> change to <xs:include schemaLocation="sample.xsd"/>
+		 http://sample.com/sample.xsd must be downloaded and stored in the schemaDirectory.
+		-->
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+			            <id>common-schemas-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/common</schemaDirectory>
+                            <bindingDirectory>src/main/resources/common</bindingDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-common</staleFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+			            <id>ils-schemas-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/ils</schemaDirectory>
+                            <bindingDirectory>src/main/resources/ils</bindingDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-ils</staleFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+			            <id>guestcard40-schema-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/guestcard40</schemaDirectory>
+                            <bindingDirectory>src/main/resources/guestcard40</bindingDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-guestcard40</staleFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+			            <id>leaseapp30-schema-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/leaseapp30</schemaDirectory>
+                            <bindingDirectory>src/main/resources/leaseapp30</bindingDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-leaseapp30</staleFile>
+                        </configuration>
+                    </execution>
+		            <execution>
+			            <id>maintenance-schema-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+			                <schemaDirectory>src/main/resources/maintenance</schemaDirectory>
+                            <schemaFiles>Itf_ServiceRequest.xsd</schemaFiles>
+			                <bindingDirectory>src/main/resources/maintenance</bindingDirectory>
+                            <bindingFiles>bindings-maintenance.xjb</bindingFiles>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-maintenance</staleFile>
+                        </configuration>
+                    </execution>
+		            <execution>
+			            <id>maintenance-meta-schema-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+			                <schemaDirectory>src/main/resources/maintenance</schemaDirectory>
+                            <schemaFiles>Itf_CustomValues.xsd</schemaFiles>
+			                <bindingDirectory>src/main/resources/maintenance</bindingDirectory>
+                            <bindingFiles>bindings-maintenance-meta.xjb</bindingFiles>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-maintenance-meta</staleFile>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-namespace-prefix</artifactId>
+                        <version>1.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jvnet.jax-ws-commons</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keep>true</keep>
+                    <verbose>true</verbose>
+                    <wsdlDirectory>${basedir}/src/main/resources/common</wsdlDirectory>
+                    <wsdlFiles>
+                        <wsdlFile>ScreeningService.wsdl</wsdlFile>
+                    </wsdlFiles>
+                    <packageName>com.yardi.ws</packageName>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven
+                    build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.axis2</groupId>
+                                        <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+                                        <versionRange>[1.5.4,)</versionRange>
+                                        <goals>
+                                            <goal>wsdl2code</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

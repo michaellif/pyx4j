@@ -37,7 +37,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-gwt-common</artifactId>
+            <artifactId>vista-shared-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -79,7 +79,7 @@
                                 </goals>
                                 <configuration>
                                     <module>${gwtModuleCompile}</module>
-                                </configuration>    
+                                </configuration>
                             </execution>
                             <execution>
                                 <id>compile-java2script-1</id>
@@ -89,7 +89,7 @@
                                 </goals>
                                 <configuration>
                                     <module>${gwtModuleCompile1}</module>
-                                </configuration>    
+                                </configuration>
                             </execution>
                         </executions>
                         <configuration>

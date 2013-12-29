@@ -22,15 +22,9 @@
         <module>vista-domain</module>
         <module>vista-svg-shared</module>
         <module>vista-domain-srv</module>
-        <module>vista-server-common</module>
-        <module>vista-gwt-common</module>
-        <module>vista-callfire</module>
+        <module>vista-shared-server</module>
+        <module>vista-shared-client</module>
         <module>vista-importer</module>
-        <module>vista-equifax-gen</module>
-        <module>vista-equifax</module>
-        <module>vista-payment</module>
-        <module>vista-selenium</module>
-        <module>vista-integration</module>
     </modules>
 
 </project>

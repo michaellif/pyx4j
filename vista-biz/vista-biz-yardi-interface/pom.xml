@@ -13,36 +13,30 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-biz-tenant</artifactId>
-    <name>vista-biz-tenant</name>
+    <artifactId>vista-biz-yardi-interface</artifactId>
+    <name>vista-biz-yardi-interface</name>
 
     <dependencies>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-common</artifactId>
+            <artifactId>vista-biz-yardi-interface-wsdl</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-policy</artifactId>
+            <artifactId>vista-server-config</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-occupancy</artifactId>
-            <version>${project.version}</version>
+        	<groupId>com.propertyvista</groupId>
+        	<artifactId>vista-shared-server</artifactId>
+        	<version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-shared-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
+         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-equifax</artifactId>
             <version>${project.version}</version>
@@ -50,15 +44,39 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-tenantsure-gen</artifactId>
+            <artifactId>vista-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-financial</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-j2se</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-adb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-http</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-local</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
 
         <dependency>
@@ -71,16 +89,17 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-preloader</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
 
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <classifier>jdk6debug</classifier>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-tenant</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
@@ -91,10 +110,14 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <reuseForks>false</reuseForks>
-                </configuration>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

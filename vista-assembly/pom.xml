@@ -13,16 +13,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-dev</artifactId>
-    <name>vista-dev</name>
+    <artifactId>vista-assembly</artifactId>
+    <name>vista-assembly</name>
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-dev-generator</module>
-        <module>vista-dev-preloader</module>
-        <module>vista-unit-mock</module>
-        <module>vista-dev-integration</module>
-        <module>vista-dev-selenium</module>
+        <module>vista-assembly-server</module>
+        <module>vista-assembly-i18n</module>
     </modules>
 
 </project>

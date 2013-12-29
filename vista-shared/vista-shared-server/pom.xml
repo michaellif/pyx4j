@@ -8,43 +8,25 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-operations</artifactId>
+        <artifactId>vista-shared</artifactId>
         <version>1.1.3-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-operations-server</artifactId>
-    <name>vista-operations-server</name>
+    <artifactId>vista-shared-server</artifactId>
+    <name>vista-shared-server</name>
 
     <dependencies>
 
-        <!-- ensure proper version, NOT from gwt-dev.jar -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-operations-rpc</artifactId>
+            <artifactId>vista-server-config</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-system</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-onboarding-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-oapi-interface</artifactId>
+            <artifactId>vista-biz-common</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -56,82 +38,84 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-shared-server</artifactId>
+            <artifactId>vista-portal-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-portal-server</artifactId>
+            <artifactId>vista-crm-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-payment</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-callfire</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-importer</artifactId>
+            <artifactId>vista-operations-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-essentials-server</artifactId>
+            <artifactId>pyx-site-shared</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-svg-j2se</artifactId>
+            <artifactId>pyx-essentials-j2se</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-mail-server</artifactId>
             <version>${pyxVersion}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-rdb</artifactId>
-            <version>${pyxVersion}</version>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>net.tanesha.recaptcha4j</groupId>
-            <artifactId>recaptcha4j</artifactId>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
+            <groupId>com.mortennobel</groupId>
+            <artifactId>java-image-scaling</artifactId>
+            <version>0.8.5</version>
         </dependency>
 
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
+            <groupId>net.oauth.core</groupId>
+            <artifactId>oauth</artifactId>
+            <version>20100527</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.mina</groupId>
-            <artifactId>mina-core</artifactId>
-            <version>2.0.7</version>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.sshd</groupId>
-            <artifactId>sshd-core</artifactId>
-            <version>0.8.0</version>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+	    <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+	    </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -142,18 +126,25 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
             <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
+            <classifier>jdk6debug</classifier>
         </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-unit-mock</artifactId>
+            <artifactId>vista-server-config</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>

@@ -23,7 +23,7 @@
             <artifactId>vista-site-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-shared</artifactId>
@@ -37,7 +37,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-gwt-common</artifactId>
+            <artifactId>vista-shared-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

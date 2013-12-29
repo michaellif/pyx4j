@@ -37,7 +37,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-gwt-common</artifactId>
+            <artifactId>vista-shared-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

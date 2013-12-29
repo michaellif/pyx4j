@@ -21,13 +21,21 @@
         <module>vista-biz-common</module>
         <module>vista-biz-tenantsure-gen</module>
         <module>vista-biz-tenant</module>
-        <module>vista-biz-legal</module> 
+        <module>vista-biz-legal</module>
         <module>vista-biz-occupancy</module>
         <module>vista-biz-communication</module>
         <module>vista-biz-policy</module>
         <module>vista-biz-system</module>
+        <module>vista-biz-payment</module>
         <module>vista-biz-financial</module>
         <module>vista-biz-preloader</module>
+        <module>vista-biz-yardi-interface</module>
+        <module>vista-biz-yardi-interface-wsdl</module>
+        <module>vista-biz-ils</module>
+        <module>vista-biz-ils-gen</module>
+        <module>vista-biz-equifax</module>
+        <module>vista-biz-equifax-gen</module>
+        <module>vista-biz-callfire</module>
     </modules>
 
 </project>

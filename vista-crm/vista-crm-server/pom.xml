@@ -38,19 +38,13 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-server-common</artifactId>
+            <artifactId>vista-shared-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-svg-shared</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-payment</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -63,12 +57,6 @@
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-legal</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-callfire</artifactId>
             <version>${project.version}</version>
         </dependency>
 

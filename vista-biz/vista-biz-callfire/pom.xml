@@ -13,44 +13,41 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-biz-policy</artifactId>
-    <name>vista-biz-policy</name>
+    <artifactId>vista-biz-callfire</artifactId>
+    <name>vista-biz-callfire</name>
 
     <dependencies>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-common</artifactId>
+            <artifactId>vista-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-shared-server</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-j2se</artifactId>
         </dependency>
 
-	    <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-unit-mock</artifactId>
-            <version>${project.version}</version>
-            <classifier>tests</classifier>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+		</dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <reuseForks>false</reuseForks>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

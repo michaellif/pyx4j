@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/pyx-entity-j2se/src/main/java/com/pyx4j/entity/server/impl/EntityImplGenerator.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.pyx4j.entity.server.impl.EntityImplGenerator"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-assembly-server"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-enableassertions -Djava.net.preferIPv4Stack=true -Duser.language=en -Dlogback.configurationFile=file:&quot;${workspace_loc:vista-assembly-server}/src/main/resources/logback.xml&quot; -Dcom.pyx4j.appConfig=DevPostgreSQL"/>
+<stringAttribute key="yk-options" value="&#13;&#10;additional-options2=onexit\=snapshot&#13;&#10;startup=12&#13;&#10;"/>
+</launchConfiguration>

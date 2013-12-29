@@ -38,7 +38,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-server-common</artifactId>
+            <artifactId>vista-shared-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 

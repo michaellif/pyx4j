@@ -172,14 +172,12 @@
         <module>vista-shared</module>
         <module>vista-dev</module>
         <module>vista-portal</module>
-        <module>vista-yardi</module>
-        <module>vista-ils</module>
         <module>vista-oapi</module>
         <module>vista-operations</module>
         <module>vista-onboarding</module>
         <module>vista-crm</module>
         <module>vista-site</module>
-        <module>vista-server</module>
+        <module>vista-assembly-server</module>
         <module>vista-i18n-catalog</module>
     </modules>
 
