@@ -31,7 +31,7 @@
 
          <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-domain-srv</artifactId>
+            <artifactId>vista-domain-srv</artifactId>
             <version>${project.version}</version>
         </dependency>
 
