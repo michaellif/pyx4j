@@ -177,8 +177,7 @@
         <module>vista-onboarding</module>
         <module>vista-crm</module>
         <module>vista-site</module>
-        <module>vista-assembly-server</module>
-        <module>vista-i18n-catalog</module>
+        <module>vista-assembly</module>
     </modules>
 
     <properties>

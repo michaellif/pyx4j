@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-domain</artifactId>
+            <artifactId>vista-biz-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
 

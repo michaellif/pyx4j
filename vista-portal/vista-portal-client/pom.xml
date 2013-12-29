@@ -58,7 +58,7 @@
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
         <gwtModule1>prospect</gwtModule1>
         <gwtModuleCompile1>vista.${gwtModule1}${appGWTModuleSufix}</gwtModuleCompile1>
-        <warFolder>${basedir}/../../vista-server/src/main/webapp</warFolder>
+        <warFolder>${basedir}/../../vista-assembly/vista-assembly-server/src/main/webapp</warFolder>
         <gwtDestinationWarFolder>${warFolder}</gwtDestinationWarFolder>
     </properties>
 
@@ -116,7 +116,7 @@
             <id>i18n-merge</id>
             <properties>
                 <i18n.merge>true</i18n.merge>
-                <i18n.catalog>../../vista-i18n-catalog/src/main/resources/translations</i18n.catalog>
+                <i18n.catalog>../../vista-assembly/vista-assembly-i18n/src/main/resources/translations</i18n.catalog>
             </properties>
         </profile>
 
@@ -131,7 +131,7 @@
             <id>i18n-auto</id>
             <properties>
                 <i18n.autoTranslate>true</i18n.autoTranslate>
-                <i18n.catalog>../../vista-i18n-catalog/src/main/resources/translations</i18n.catalog>
+                <i18n.catalog>../../vista-assembly/vista-assembly-i18n/src/main/resources/translations</i18n.catalog>
             </properties>
         </profile>
 

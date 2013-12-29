@@ -58,7 +58,7 @@
     <properties>
         <gwtModule>operations</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
-        <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
+        <gwtDestinationWarFolder>${basedir}/../../vista-assembly/vista-assembly-server/src/main/webapp</gwtDestinationWarFolder>
     </properties>
 
     <profiles>

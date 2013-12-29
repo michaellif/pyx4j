@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-server-config</artifactId>
-    <name>vista-server-config</name>
+    <artifactId>vista-assembly/vista-assembly-server-config</artifactId>
+    <name>vista-assembly/vista-assembly-server-config</name>
 
     <dependencies>
 
@@ -26,7 +26,7 @@
         
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-domain-srv</artifactId>
+            <artifactId>vista-biz-domain-srv</artifactId>
             <version>${project.version}</version>
         </dependency>
         

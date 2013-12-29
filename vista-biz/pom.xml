@@ -18,6 +18,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>vista-biz-domain</module>
         <module>vista-biz-common</module>
         <module>vista-biz-tenantsure-gen</module>
         <module>vista-biz-tenant</module>

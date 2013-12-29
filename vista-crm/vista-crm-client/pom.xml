@@ -75,7 +75,7 @@
     <properties>
         <gwtModule>crm</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
-        <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
+        <gwtDestinationWarFolder>${basedir}/../../vista-assembly/vista-assembly-server/src/main/webapp</gwtDestinationWarFolder>
 
         <poSaveLocation>true</poSaveLocation>
         <poSufix></poSufix>
@@ -123,7 +123,7 @@
             <id>i18n-merge</id>
             <properties>
                 <i18n.merge>true</i18n.merge>
-                <i18n.catalog>../../vista-i18n-catalog/src/main/resources/translations</i18n.catalog>
+                <i18n.catalog>../../vista-assembly/vista-assembly-i18n/src/main/resources/translations</i18n.catalog>
             </properties>
         </profile>
 
@@ -138,7 +138,7 @@
             <id>i18n-auto</id>
             <properties>
                 <i18n.autoTranslate>true</i18n.autoTranslate>
-                <i18n.catalog>../../vista-i18n-catalog/src/main/resources/translations</i18n.catalog>
+                <i18n.catalog>../../vista-assembly/vista-assembly-i18n/src/main/resources/translations</i18n.catalog>
             </properties>
         </profile>
 

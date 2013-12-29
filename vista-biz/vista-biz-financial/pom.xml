@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-domain</artifactId>
+            <artifactId>vista-biz-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -32,7 +32,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-server-config</artifactId>
+            <artifactId>vista-assembly/vista-assembly-server-config</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -18,8 +18,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-server-config</module>
-        <module>vista-domain</module>
+        <module>vista-assembly/vista-assembly-server-config</module>
         <module>vista-svg-shared</module>
         <module>vista-domain-srv</module>
         <module>vista-shared-server</module>
