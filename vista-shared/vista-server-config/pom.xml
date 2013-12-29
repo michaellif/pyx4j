@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-assembly/vista-assembly-server-config</artifactId>
-    <name>vista-assembly/vista-assembly-server-config</name>
+    <artifactId>vista-server-config</artifactId>
+    <name>vista-server-config</name>
 
     <dependencies>
 
@@ -23,13 +23,13 @@
             <artifactId>vista-operations-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-domain-srv</artifactId>
+            <artifactId>vista-domain-srv</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>
@@ -62,7 +62,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
