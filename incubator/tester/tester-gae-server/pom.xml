@@ -211,6 +211,26 @@
                 <artifactId>maven-gae-plugin</artifactId>
             </plugin>
 
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/war/test</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/war/WEB-INF/classes</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/war/WEB-INF/lib</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/war/WEB-INF/deploy</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
         </plugins>
 
     </build>
