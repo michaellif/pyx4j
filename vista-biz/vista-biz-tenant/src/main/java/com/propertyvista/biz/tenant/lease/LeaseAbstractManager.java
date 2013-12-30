@@ -873,8 +873,8 @@ public abstract class LeaseAbstractManager {
             } else {
                 previousLeaseEdition = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
                 if (!EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
-                    doUnreserve = previousLeaseEdition.unit().getPrimaryKey() != null;
-                    doReserve = lease.unit().getPrimaryKey() != null;
+                    doUnreserve = !previousLeaseEdition.unit().isNull();
+                    doReserve = !lease.unit().isNull();
                 }
             }
         }
@@ -893,6 +893,12 @@ public abstract class LeaseAbstractManager {
         // sync. unit:
         if (!lease.currentTerm().unit().isNull()) {
             lease.unit().set(lease.currentTerm().unit());
+
+            // double check reservation logic:
+            if (previousLeaseEdition != null && !EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
+                doUnreserve = !previousLeaseEdition.unit().isNull();
+                doReserve = !lease.unit().isNull();
+            }
         }
 
         if (finalize) {

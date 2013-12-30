@@ -624,12 +624,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void fillAvailableCatalogItems(UnitOptionsSelectionDTO options) {
         assert (!options.unit().isNull());
-        Persistence.ensureRetrieve(options.unit().building(), AttachLevel.Attached);
 
         Service service;
         {
             EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
-            criteria.eq(criteria.proto().catalog(), options.unit().building().productCatalog());
+            criteria.eq(criteria.proto().catalog().building().units(), options.unit());
             criteria.in(criteria.proto().code().type(), ARCode.Type.Residential);
             criteria.eq(criteria.proto().isDefaultCatalogItem(), Boolean.FALSE);
             criteria.isCurrent(criteria.proto().version());
