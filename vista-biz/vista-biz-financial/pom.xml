@@ -44,13 +44,13 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-payment</artifactId>
+            <artifactId>vista-biz-eft</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-payment</artifactId>
+            <artifactId>vista-biz-eft</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
