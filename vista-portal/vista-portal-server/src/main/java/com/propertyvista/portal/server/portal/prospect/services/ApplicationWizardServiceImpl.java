@@ -27,7 +27,6 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
@@ -118,16 +117,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplanId, LogicalDate moveIn) {
-        Lease lease = ProspectPortalContext.getLease();
-
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         criteria.eq(criteria.proto().floorplan(), floorplanId);
-
-        if (lease.unit().isEmpty()) {
-            criteria.le(criteria.proto()._availableForRent(), moveIn);
-        } else { // include currently selected unit (it's already marked as reserved)
-            criteria.or(PropertyCriterion.le(criteria.proto()._availableForRent(), moveIn), PropertyCriterion.eq(criteria.proto().id(), lease.unit().id()));
-        }
+        criteria.le(criteria.proto()._availableForRent(), moveIn);
 
         callback.onSuccess(new Vector<AptUnit>(Persistence.service().query(criteria)));
     }
@@ -452,7 +444,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void saveUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
-        if (!to.unitSelection().isNull() && !to.unitOptionsSelection().isNull()) {
+        if (!to.unitSelection().unit().isNull() && !to.unitOptionsSelection().selectedService().isNull()) {
             LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
             List<BillableItem> featureItems = new ArrayList<BillableItem>();

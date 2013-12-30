@@ -158,12 +158,14 @@ public class UnitStep extends ApplicationWizardStep {
     }
 
     private void updateUnitOptions(AptUnit unit) {
-        getWizard().getPresenter().getAvailableUnitOptions(new DefaultAsyncCallback<UnitOptionsSelectionDTO>() {
-            @Override
-            public void onSuccess(UnitOptionsSelectionDTO result) {
-                ((OptionsStep) getWizard().getStep(OptionsStep.class)).setStepValue(result);
-            }
-        }, unit);
+        if (unit != null) {
+            getWizard().getPresenter().getAvailableUnitOptions(new DefaultAsyncCallback<UnitOptionsSelectionDTO>() {
+                @Override
+                public void onSuccess(UnitOptionsSelectionDTO result) {
+                    ((OptionsStep) getWizard().getStep(OptionsStep.class)).setStepValue(result);
+                }
+            }, unit);
+        }
     }
 
     private void setAvailableUnits(Collection<AptUnit> result) {

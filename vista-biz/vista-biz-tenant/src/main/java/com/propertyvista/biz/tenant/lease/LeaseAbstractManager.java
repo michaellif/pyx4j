@@ -207,6 +207,7 @@ public abstract class LeaseAbstractManager {
 
     public LeaseTerm setPackage(LeaseTerm leaseTerm, AptUnit unitId, BillableItem serviceItem, List<BillableItem> featureItems) {
         assert !leaseTerm.lease().isNull();
+        assert !unitId.isNull();
 
         setUnit(leaseTerm.lease(), leaseTerm, unitId, false);
 
