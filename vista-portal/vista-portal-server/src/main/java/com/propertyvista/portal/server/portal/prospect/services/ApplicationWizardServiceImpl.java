@@ -103,7 +103,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void save(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
-        saveApplicationData(editableEntity);
+        saveApplicationData(editableEntity, false);
 
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -111,7 +111,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
-        saveApplicationData(editableEntity);
+        saveApplicationData(editableEntity, true);
 
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -442,14 +442,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         if (!to.unitSelection().unit().isNull() && !to.unitOptionsSelection().selectedService().isNull()) {
             LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
-            leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
-
             List<BillableItem> featureItems = new ArrayList<BillableItem>();
             featureItems.addAll(to.unitOptionsSelection().selectedPets());
             featureItems.addAll(to.unitOptionsSelection().selectedParking());
             featureItems.addAll(to.unitOptionsSelection().selectedStorage());
             featureItems.addAll(to.unitOptionsSelection().selectedUtilities());
             featureItems.addAll(to.unitOptionsSelection().selectedOther());
+
+            leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
 
             ServerSideFactory.create(LeaseFacade.class).setPackage(leaseTerm, to.unitSelection().unit(), to.unitOptionsSelection().selectedService(),
                     featureItems);
@@ -465,7 +465,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         bo.legalTerms().addAll(bo.legalTerms());
     }
 
-    private void saveApplicationData(OnlineApplicationDTO to) {
+    private void saveApplicationData(OnlineApplicationDTO to, boolean submit) {
         OnlineApplication bo = ProspectPortalContext.getOnlineApplication();
 
         Persistence.ensureRetrieve(bo.masterOnlineApplication(), AttachLevel.Attached);
@@ -489,6 +489,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // do not forget to save LEASE:
         ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease());
+
+        if (submit) {
+            ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(bo);
+        }
     }
 
     // ================================================================================================================
