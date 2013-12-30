@@ -22,11 +22,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.administration.website.RichTextContentEditor;
@@ -58,11 +58,11 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         TwoColumnFlexFormPanel generalPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = 0;
-        generalPanel.setH1(row++, 0, 1, i18n.tr("General"));
-        generalPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().name()), 10).build());
-        generalPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().area()), 10).build());
-        generalPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().status()), 10).build());
-        generalPanel.setWidget(row++, 0, mainPanel);
+        generalPanel.setH1(row++, 0, 2, i18n.tr("General"));
+        generalPanel.setWidget(row++, 0, 2, new FormDecoratorBuilder(inject(proto().name()), 10, true).build());
+        generalPanel.setWidget(row++, 0, 2, new FormDecoratorBuilder(inject(proto().area()), 10, true).build());
+        generalPanel.setWidget(row++, 0, 2, new FormDecoratorBuilder(inject(proto().status()), 10, true).build());
+        generalPanel.setWidget(row++, 0, 2, mainPanel);
 
         selectTab(addTab(generalPanel));
 
@@ -95,13 +95,13 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     private CComponent<?> getCustomContentEditor() {
-        CEntityDecoratableForm<CustomGadgetContent> editor = new CEntityDecoratableForm<CustomGadgetContent>(CustomGadgetContent.class) {
+        CEntityForm<CustomGadgetContent> editor = new CEntityForm<CustomGadgetContent>(CustomGadgetContent.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
-                main.setH1(row++, 0, 1, proto().htmlContent().getMeta().getCaption());
-                main.setWidget(row++, 0, inject(proto().htmlContent(), new RichTextContentEditor(true)));
+                main.setH1(row++, 0, 2, proto().htmlContent().getMeta().getCaption());
+                main.setWidget(row++, 0, 2, inject(proto().htmlContent(), new RichTextContentEditor(true)));
                 return main;
             }
         };
@@ -109,13 +109,13 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     private CComponent<?> getNewsContentEditor() {
-        CEntityDecoratableForm<NewsGadgetContent> editor = new CEntityDecoratableForm<NewsGadgetContent>(NewsGadgetContent.class) {
+        CEntityForm<NewsGadgetContent> editor = new CEntityForm<NewsGadgetContent>(NewsGadgetContent.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
-                main.setH1(row++, 0, 1, proto().news().getMeta().getCaption());
-                main.setWidget(row++, 0, inject(proto().news(), new NewsFolder(isEditable())));
+                main.setH1(row++, 0, 2, proto().news().getMeta().getCaption());
+                main.setWidget(row++, 0, 2, inject(proto().news(), new NewsFolder(isEditable())));
                 return main;
             }
         };
@@ -123,13 +123,13 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     private CComponent<?> getTestimContentEditor() {
-        CEntityDecoratableForm<TestimonialsGadgetContent> editor = new CEntityDecoratableForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
+        CEntityForm<TestimonialsGadgetContent> editor = new CEntityForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
-                main.setH1(row++, 0, 1, proto().testimonials().getMeta().getCaption());
-                main.setWidget(row++, 0, inject(proto().testimonials(), new TestimonialFolder(isEditable())));
+                main.setH1(row++, 0, 2, proto().testimonials().getMeta().getCaption());
+                main.setWidget(row++, 0, 2, inject(proto().testimonials(), new TestimonialFolder(isEditable())));
                 return main;
             }
         };
@@ -137,13 +137,13 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     private CComponent<?> getPromoContentEditor() {
-        CEntityDecoratableForm<PromoGadgetContent> editor = new CEntityDecoratableForm<PromoGadgetContent>(PromoGadgetContent.class) {
+        CEntityForm<PromoGadgetContent> editor = new CEntityForm<PromoGadgetContent>(PromoGadgetContent.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
-                main.setH1(row++, 0, 1, i18n.tr("Promotions"));
-                main.setWidget(row++, 0, new HTML(i18n.tr("No input required. Content will be generated automatically according to built-in rules")));
+                main.setH1(row++, 0, 2, i18n.tr("Promotions"));
+                main.setWidget(row++, 0, 2, new HTML(i18n.tr("No input required. Content will be generated automatically according to built-in rules")));
                 return main;
             }
         };
