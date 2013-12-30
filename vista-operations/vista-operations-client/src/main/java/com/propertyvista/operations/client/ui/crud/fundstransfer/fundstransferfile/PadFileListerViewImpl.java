@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 
-public class PadFileListerViewImpl extends OperationsListerViewImplBase<PadFileDTO> implements PadFileListerView {
+public class PadFileListerViewImpl extends OperationsListerViewImplBase<FundsTransferFileDTO> implements PadFileListerView {
 
     public PadFileListerViewImpl() {
         setLister(new PadFileLister());

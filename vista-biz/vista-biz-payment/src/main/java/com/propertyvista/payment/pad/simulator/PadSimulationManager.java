@@ -33,8 +33,8 @@ import com.pyx4j.essentials.j2se.util.FileUtils;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
-import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile.FileAcknowledgmentStatus;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimDebitRecord;
@@ -353,7 +353,7 @@ public class PadSimulationManager {
     String reconciliationReportFileName(PadSimFile padFile) {
         // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID
         String fileName = padFile.fileName().getValue().substring(0, padFile.fileName().getValue().indexOf("_"));
-        fileName += PadReconciliationFile.FileNameSufix;
+        fileName += FundsReconciliationFile.FileNameSufix;
         fileName += "_" + padFile.fundsTransferType().getValue().getFileNamePart();
         fileName += "." + padFile.companyId().getValue();
         return fileName;

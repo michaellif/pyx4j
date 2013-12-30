@@ -36,10 +36,10 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecordTransaction;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordTransaction;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
 import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -47,7 +47,7 @@ class DirectDebitFundsTransfer {
 
     private final ExecutionMonitor executionMonitor;
 
-    private final PadFile padFile;
+    private final FundsTransferFile padFile;
 
     private final Pmc pmc;
 
@@ -55,7 +55,7 @@ class DirectDebitFundsTransfer {
 
     private final VistaMerchantAccount vistaMerchantAccount;
 
-    DirectDebitFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile) {
+    DirectDebitFundsTransfer(ExecutionMonitor executionMonitor, FundsTransferFile padFile) {
         this.executionMonitor = executionMonitor;
         this.padFile = padFile;
         this.pmc = VistaDeployment.getCurrentPmc();
@@ -116,7 +116,7 @@ class DirectDebitFundsTransfer {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                PadBatch padBatch = FundsTransferCaledon.getPadBatch(padFile, pmc, merchantAccount);
+                FundsTransferBatch padBatch = FundsTransferCaledon.getPadBatch(padFile, pmc, merchantAccount);
                 updatePadDebitRecord(padBatch, paymentRecord);
                 return null;
             }
@@ -126,12 +126,12 @@ class DirectDebitFundsTransfer {
         return true;
     }
 
-    private void updatePadDebitRecord(PadBatch padBatch, PaymentRecord paymentRecord) {
-        EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+    private void updatePadDebitRecord(FundsTransferBatch padBatch, PaymentRecord paymentRecord) {
+        EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
         criteria.eq(criteria.proto().padBatch(), padBatch);
-        PadDebitRecord padRecord = Persistence.service().retrieve(criteria);
+        FundsTransferRecord padRecord = Persistence.service().retrieve(criteria);
         if (padRecord == null) {
-            padRecord = EntityFactory.create(PadDebitRecord.class);
+            padRecord = EntityFactory.create(FundsTransferRecord.class);
             padRecord.padBatch().set(padBatch);
             padRecord.processed().setValue(Boolean.FALSE);
             padRecord.clientId().setValue("vista");
@@ -158,7 +158,7 @@ class DirectDebitFundsTransfer {
 
         Persistence.service().persist(padRecord);
 
-        PadDebitRecordTransaction transactionRecord = EntityFactory.create(PadDebitRecordTransaction.class);
+        FundsTransferRecordTransaction transactionRecord = EntityFactory.create(FundsTransferRecordTransaction.class);
         transactionRecord.padDebitRecord().set(padRecord);
         transactionRecord.paymentRecordKey().setValue(paymentRecord.getPrimaryKey());
         transactionRecord.feeAmount().setValue(feeAmount);

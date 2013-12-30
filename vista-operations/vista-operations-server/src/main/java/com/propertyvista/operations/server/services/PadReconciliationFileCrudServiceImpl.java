@@ -18,16 +18,16 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
 
-public class PadReconciliationFileCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadReconciliationFile, PadReconciliationFileDTO> implements
+public class PadReconciliationFileCrudServiceImpl extends AbstractCrudServiceDtoImpl<FundsReconciliationFile, FundsReconciliationFileDTO> implements
         PadReconciliationFileCrudService {
 
     public PadReconciliationFileCrudServiceImpl() {
-        super(PadReconciliationFile.class, PadReconciliationFileDTO.class);
+        super(FundsReconciliationFile.class, FundsReconciliationFileDTO.class);
     }
 
     @Override
@@ -36,9 +36,9 @@ public class PadReconciliationFileCrudServiceImpl extends AbstractCrudServiceDto
     }
 
     @Override
-    protected void enhanceRetrieved(PadReconciliationFile bo, PadReconciliationFileDTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(FundsReconciliationFile bo, FundsReconciliationFileDTO to, RetrieveTarget retrieveTarget) {
         { //TODO count only,
-            EntityQueryCriteria<PadReconciliationDebitRecord> criteria = EntityQueryCriteria.create(PadReconciliationDebitRecord.class);
+            EntityQueryCriteria<FundsReconciliationRecordRecord> criteria = EntityQueryCriteria.create(FundsReconciliationRecordRecord.class);
             criteria.eq(criteria.proto().reconciliationSummary().reconciliationFile(), bo);
             to.reconciliationRecords().addAll(Persistence.service().query(criteria, AttachLevel.IdOnly));
         }

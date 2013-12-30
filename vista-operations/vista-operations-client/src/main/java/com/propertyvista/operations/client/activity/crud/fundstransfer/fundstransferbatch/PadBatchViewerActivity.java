@@ -21,14 +21,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferbatch.PadBatchViewerView;
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 
-public class PadBatchViewerActivity extends AbstractViewerActivity<PadBatchDTO> implements PadBatchViewerView.Presenter {
+public class PadBatchViewerActivity extends AbstractViewerActivity<FundsTransferBatchDTO> implements PadBatchViewerView.Presenter {
 
     public PadBatchViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().getView(PadBatchViewerView.class), GWT
-                .<AbstractCrudService<PadBatchDTO>> create(PadBatchCrudService.class));
+                .<AbstractCrudService<FundsTransferBatchDTO>> create(PadBatchCrudService.class));
     }
 
     @Override

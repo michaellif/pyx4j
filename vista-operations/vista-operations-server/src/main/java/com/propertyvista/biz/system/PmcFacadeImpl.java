@@ -34,7 +34,7 @@ import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcAccountNumbers;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.pmc.ReservedPmcNames;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.TriggerPmc;
 import com.propertyvista.operations.domain.security.AuditRecord;
@@ -101,7 +101,7 @@ public class PmcFacadeImpl implements PmcFacade {
         }
 
         {
-            EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);
+            EntityQueryCriteria<FundsReconciliationSummary> criteria = EntityQueryCriteria.create(FundsReconciliationSummary.class);
             criteria.eq(criteria.proto().merchantAccount().pmc(), pmc);
             Persistence.service().delete(criteria);
         }

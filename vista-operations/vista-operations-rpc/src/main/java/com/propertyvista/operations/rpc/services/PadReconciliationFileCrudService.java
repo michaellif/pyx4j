@@ -15,8 +15,8 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 
-public interface PadReconciliationFileCrudService extends AbstractCrudService<PadReconciliationFileDTO> {
+public interface PadReconciliationFileCrudService extends AbstractCrudService<FundsReconciliationFileDTO> {
 
 }

@@ -15,15 +15,15 @@ package com.propertyvista.operations.server.services;
 
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
-import com.propertyvista.operations.rpc.dto.PadReconciliationSummaryDTO;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationSummaryListService;
 
-public class PadReconciliationSummaryListServiceImpl extends AbstractListServiceDtoImpl<PadReconciliationSummary, PadReconciliationSummaryDTO> implements
+public class PadReconciliationSummaryListServiceImpl extends AbstractListServiceDtoImpl<FundsReconciliationSummary, FundsReconciliationSummaryDTO> implements
         PadReconciliationSummaryListService {
 
     public PadReconciliationSummaryListServiceImpl() {
-        super(PadReconciliationSummary.class, PadReconciliationSummaryDTO.class);
+        super(FundsReconciliationSummary.class, FundsReconciliationSummaryDTO.class);
     }
 
     @Override

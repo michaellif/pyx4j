@@ -21,13 +21,13 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile.PadFileListerView;
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
 
-public class PadFileListerActivity extends AbstractListerActivity<PadFileDTO> {
+public class PadFileListerActivity extends AbstractListerActivity<FundsTransferFileDTO> {
 
     public PadFileListerActivity(Place place) {
         super(place, OperationsSite.getViewFactory().getView(PadFileListerView.class), GWT
-                .<AbstractCrudService<PadFileDTO>> create(PadFileCrudService.class), PadFileDTO.class);
+                .<AbstractCrudService<FundsTransferFileDTO>> create(PadFileCrudService.class), FundsTransferFileDTO.class);
     }
 }

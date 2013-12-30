@@ -15,7 +15,7 @@ package com.propertyvista.payment.pad;
 
 import java.io.File;
 
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.server.sftp.SftpRetrieveFilter;
 
@@ -45,7 +45,7 @@ public class CaledonFundsTransferSftpRetrieveFilter implements SftpRetrieveFilte
             break;
         case Reconciliation:
             // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID
-            if (!(fileName.contains(PadReconciliationFile.FileNameSufix) && fileName.endsWith("." + companyId))) {
+            if (!(fileName.contains(FundsReconciliationFile.FileNameSufix) && fileName.endsWith("." + companyId))) {
                 return null;
             }
             break;

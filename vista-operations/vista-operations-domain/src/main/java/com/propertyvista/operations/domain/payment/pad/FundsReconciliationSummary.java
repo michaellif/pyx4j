@@ -39,14 +39,13 @@ import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-//TODO rename to FundsReconciliationSummary
-public interface PadReconciliationSummary extends IEntity {
+public interface FundsReconciliationSummary extends IEntity {
 
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
     @Indexed
-    PadReconciliationFile reconciliationFile();
+    FundsReconciliationFile reconciliationFile();
 
     IPrimitive<LogicalDate> paymentDate();
 
@@ -115,6 +114,6 @@ public interface PadReconciliationSummary extends IEntity {
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
-    IList<PadReconciliationDebitRecord> records();
+    IList<FundsReconciliationRecordRecord> records();
 
 }

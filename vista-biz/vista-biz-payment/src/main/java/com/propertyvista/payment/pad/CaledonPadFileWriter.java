@@ -21,30 +21,30 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
 
 public class CaledonPadFileWriter implements Closeable {
 
-    private final PadFile padFile;
+    private final FundsTransferFile padFile;
 
     private final Writer writer;
 
-    public CaledonPadFileWriter(PadFile padFile, File file) throws IOException {
+    public CaledonPadFileWriter(FundsTransferFile padFile, File file) throws IOException {
         this.padFile = padFile;
         writer = new FileWriter(file);
     }
 
     public void write() throws IOException {
         writeFileHeader(padFile);
-        for (PadBatch padBatch : padFile.batches()) {
+        for (FundsTransferBatch padBatch : padFile.batches()) {
             writeBatch(padBatch);
         }
         writeFileTrailer(padFile);
     }
 
-    private void writeFileHeader(PadFile padFile) throws IOException {
+    private void writeFileHeader(FundsTransferFile padFile) throws IOException {
         // Record Type
         writer.append("A").append(",");
 
@@ -72,7 +72,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append("\n");
     }
 
-    private void writeFileTrailer(PadFile padFile) throws IOException {
+    private void writeFileTrailer(FundsTransferFile padFile) throws IOException {
         // Record Type
         writer.append("Z").append(",");
 
@@ -84,15 +84,15 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append("\n");
     }
 
-    private void writeBatch(PadBatch padBatch) throws IOException {
+    private void writeBatch(FundsTransferBatch padBatch) throws IOException {
         writeBatchHeader(padBatch);
-        for (PadDebitRecord record : padBatch.records()) {
+        for (FundsTransferRecord record : padBatch.records()) {
             writeDebitRecord(record);
         }
         writeBatchTrailer(padBatch);
     }
 
-    private void writeBatchHeader(PadBatch padBatch) throws IOException {
+    private void writeBatchHeader(FundsTransferBatch padBatch) throws IOException {
         // Record Type
         writer.append("X").append(",");
 
@@ -115,7 +115,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append("\n");
     }
 
-    private void writeBatchTrailer(PadBatch padBatch) throws IOException {
+    private void writeBatchTrailer(FundsTransferBatch padBatch) throws IOException {
         // Record Type
         writer.append("Y").append(",");
         // Batch Payment Type | 'D' - fixed, represents debit
@@ -128,7 +128,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append("\n");
     }
 
-    private void writeDebitRecord(PadDebitRecord record) throws IOException {
+    private void writeDebitRecord(FundsTransferRecord record) throws IOException {
         // Record Type
         writer.append("D").append(",");
         writer.append(record.clientId().getStringView()).append(",");

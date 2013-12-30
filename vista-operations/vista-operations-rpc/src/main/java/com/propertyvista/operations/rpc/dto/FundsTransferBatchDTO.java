@@ -7,24 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 19, 2013
+ * Created on Oct 3, 2013
  * @author VladL
  * @version $Id$
  */
 package com.propertyvista.operations.rpc.dto;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
 
 @Transient
-public interface PadReconciliationFileDTO extends PadReconciliationFile {
+public interface FundsTransferBatchDTO extends FundsTransferBatch {
 
-    //TODO count only, Should be DTO
-    @Detached(level = AttachLevel.Detached)
-    IList<PadReconciliationDebitRecord> reconciliationRecords();
 }

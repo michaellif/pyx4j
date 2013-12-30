@@ -21,15 +21,15 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordViewerView;
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 
-public class PadReconciliationDebitRecordViewerActivity extends AbstractViewerActivity<PadReconciliationDebitRecordDTO> implements
+public class PadReconciliationDebitRecordViewerActivity extends AbstractViewerActivity<FundsReconciliationRecordRecordDTO> implements
         PadReconciliationDebitRecordViewerView.Presenter {
 
     public PadReconciliationDebitRecordViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().getView(PadReconciliationDebitRecordViewerView.class), GWT
-                .<AbstractCrudService<PadReconciliationDebitRecordDTO>> create(PadReconciliationDebitRecordCrudService.class));
+                .<AbstractCrudService<FundsReconciliationRecordRecordDTO>> create(PadReconciliationDebitRecordCrudService.class));
     }
 
     @Override

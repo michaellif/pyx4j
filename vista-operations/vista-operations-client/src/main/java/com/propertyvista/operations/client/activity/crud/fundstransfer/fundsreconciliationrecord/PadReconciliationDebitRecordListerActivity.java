@@ -24,20 +24,20 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordListerView;
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 
-public class PadReconciliationDebitRecordListerActivity extends AbstractListerActivity<PadReconciliationDebitRecordDTO> {
+public class PadReconciliationDebitRecordListerActivity extends AbstractListerActivity<FundsReconciliationRecordRecordDTO> {
 
     public PadReconciliationDebitRecordListerActivity(Place place) {
         super(place, OperationsSite.getViewFactory().getView(PadReconciliationDebitRecordListerView.class), GWT
-                .<AbstractCrudService<PadReconciliationDebitRecordDTO>> create(PadReconciliationDebitRecordCrudService.class),
-                PadReconciliationDebitRecordDTO.class);
+                .<AbstractCrudService<FundsReconciliationRecordRecordDTO>> create(PadReconciliationDebitRecordCrudService.class),
+                FundsReconciliationRecordRecordDTO.class);
     }
 
     @Override
-    protected void parseExternalFilters(AppPlace place, Class<PadReconciliationDebitRecordDTO> entityClass,
-            EntityFiltersBuilder<PadReconciliationDebitRecordDTO> filters) {
+    protected void parseExternalFilters(AppPlace place, Class<FundsReconciliationRecordRecordDTO> entityClass,
+            EntityFiltersBuilder<FundsReconciliationRecordRecordDTO> filters) {
         super.parseExternalFilters(place, entityClass, filters);
 
         String val;

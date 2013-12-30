@@ -16,14 +16,14 @@ package com.propertyvista.operations.server.services;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 
-public class PadBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadBatch, PadBatchDTO> implements PadBatchCrudService {
+public class PadBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<FundsTransferBatch, FundsTransferBatchDTO> implements PadBatchCrudService {
 
     public PadBatchCrudServiceImpl() {
-        super(PadBatch.class, PadBatchDTO.class);
+        super(FundsTransferBatch.class, FundsTransferBatchDTO.class);
     }
 
     @Override
@@ -32,12 +32,12 @@ public class PadBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadBatch
     }
 
     @Override
-    protected void enhanceRetrieved(PadBatch bo, PadBatchDTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(FundsTransferBatch bo, FundsTransferBatchDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(to.pmc());
     }
 
     @Override
-    protected void enhanceListRetrieved(PadBatch entity, PadBatchDTO dto) {
+    protected void enhanceListRetrieved(FundsTransferBatch entity, FundsTransferBatchDTO dto) {
         Persistence.service().retrieve(dto.pmc());
     }
 

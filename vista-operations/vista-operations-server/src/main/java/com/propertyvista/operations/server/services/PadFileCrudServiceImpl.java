@@ -17,16 +17,16 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
 
-public class PadFileCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadFile, PadFileDTO> implements PadFileCrudService {
+public class PadFileCrudServiceImpl extends AbstractCrudServiceDtoImpl<FundsTransferFile, FundsTransferFileDTO> implements PadFileCrudService {
 
     public PadFileCrudServiceImpl() {
-        super(PadFile.class, PadFileDTO.class);
+        super(FundsTransferFile.class, FundsTransferFileDTO.class);
     }
 
     @Override
@@ -35,14 +35,14 @@ public class PadFileCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadFile, 
     }
 
     @Override
-    protected void enhanceRetrieved(PadFile bo, PadFileDTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(FundsTransferFile bo, FundsTransferFileDTO to, RetrieveTarget retrieveTarget) {
         {
-            EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+            EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
             criteria.eq(criteria.proto().padBatch().padFile(), bo);
             to.debitRecords().setCollectionSizeOnly(Persistence.service().count(criteria));
         }
         {
-            EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
+            EntityQueryCriteria<FundsTransferBatch> criteria = EntityQueryCriteria.create(FundsTransferBatch.class);
             criteria.eq(criteria.proto().padFile(), bo);
             to.batches().setCollectionSizeOnly(Persistence.service().count(criteria));
         }

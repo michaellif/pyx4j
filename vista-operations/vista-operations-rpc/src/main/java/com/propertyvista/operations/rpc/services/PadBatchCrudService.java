@@ -15,8 +15,8 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 
-public interface PadBatchCrudService extends AbstractCrudService<PadBatchDTO> {
+public interface PadBatchCrudService extends AbstractCrudService<FundsTransferBatchDTO> {
 
 }

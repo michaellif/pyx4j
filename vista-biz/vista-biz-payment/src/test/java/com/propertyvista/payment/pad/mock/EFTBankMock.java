@@ -24,9 +24,9 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
 import com.propertyvista.payment.pad.FileCreationException;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
@@ -57,11 +57,11 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
         return SingletonHolder.INSTANCE;
     }
 
-    private final List<PadFile> receivedPadFile = new ArrayList<PadFile>();
+    private final List<FundsTransferFile> receivedPadFile = new ArrayList<FundsTransferFile>();
 
-    private final List<PadDebitRecord> unprocessedRecords = new ArrayList<PadDebitRecord>();
+    private final List<FundsTransferRecord> unprocessedRecords = new ArrayList<FundsTransferRecord>();
 
-    private final List<PadDebitRecord> reconciliationRecords = new ArrayList<PadDebitRecord>();
+    private final List<FundsTransferRecord> reconciliationRecords = new ArrayList<FundsTransferRecord>();
 
     private final EFTBankMockAck acknowledgment = new EFTBankMockAck();
 
@@ -69,17 +69,17 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
 
     private final List<DirectDebitRecord> scheduledBmoRecords = new ArrayList<DirectDebitRecord>();
 
-    void receivedPadFile(PadFile padFile) throws SftpTransportConnectionException, FileCreationException {
+    void receivedPadFile(FundsTransferFile padFile) throws SftpTransportConnectionException, FileCreationException {
         if (connectionErrorEnabled) {
             throw new SftpTransportConnectionException("Connection error Mock", null);
         }
 
         log.debug("receivedPadFile {}, records {}", padFile.fileCreationNumber().getValue(), padFile.recordsCount().getValue());
-        receivedPadFile.add(padFile.<PadFile> duplicate());
+        receivedPadFile.add(padFile.<FundsTransferFile> duplicate());
         DataDump.dumpToDirectory("eft", "pad", padFile);
     }
 
-    void addAcknowledgedRecord(PadDebitRecord padDebitRecord) {
+    void addAcknowledgedRecord(FundsTransferRecord padDebitRecord) {
         log.debug("Acknowledged transactionId:{}", padDebitRecord.transactionId().getValue());
         unprocessedRecords.add(padDebitRecord);
     }
@@ -90,8 +90,8 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
         }
 
         // Find unacknowledged file
-        PadFile unacknowledgedFile = null;
-        for (PadFile padFile : receivedPadFile) {
+        FundsTransferFile unacknowledgedFile = null;
+        for (FundsTransferFile padFile : receivedPadFile) {
             if (padFile.companyId().getValue().equals(companyId)) {
                 unacknowledgedFile = padFile;
                 break;
@@ -109,15 +109,15 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
         }
     }
 
-    public PadReconciliationFile reconciliationFile(String companyId) throws SftpTransportConnectionException {
+    public FundsReconciliationFile reconciliationFile(String companyId) throws SftpTransportConnectionException {
         if (connectionErrorEnabled) {
             throw new SftpTransportConnectionException("Connection error Mock", null);
         }
 
-        List<PadDebitRecord> records = new ArrayList<PadDebitRecord>();
-        Iterator<PadDebitRecord> it = unprocessedRecords.iterator();
+        List<FundsTransferRecord> records = new ArrayList<FundsTransferRecord>();
+        Iterator<FundsTransferRecord> it = unprocessedRecords.iterator();
         while (it.hasNext()) {
-            PadDebitRecord padRecord = it.next();
+            FundsTransferRecord padRecord = it.next();
             if (padRecord.padBatch().padFile().companyId().getValue().equals(companyId)) {
                 it.remove();
                 records.add(padRecord);
@@ -128,7 +128,7 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
             return null;
         } else {
             reconciliationRecords.addAll(records);
-            PadReconciliationFile rec = reconciliation.createReconciliationFile(records);
+            FundsReconciliationFile rec = reconciliation.createReconciliationFile(records);
             //TODO
             rec.fundsTransferType().setValue(records.get(0).padBatch().padFile().fundsTransferType().getValue());
             DataDump.dumpToDirectory("eft", "reconciliation", rec);

@@ -16,10 +16,10 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcili
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
-import com.propertyvista.operations.rpc.dto.PadReconciliationSummaryDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
-public interface PadReconciliationFileViewerView extends IViewer<PadReconciliationFileDTO> {
+public interface PadReconciliationFileViewerView extends IViewer<FundsReconciliationFileDTO> {
 
-    ILister<PadReconciliationSummaryDTO> getSummaryListerView();
+    ILister<FundsReconciliationSummaryDTO> getSummaryListerView();
 }

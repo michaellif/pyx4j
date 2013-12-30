@@ -15,8 +15,8 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.operations.rpc.dto.PadReconciliationSummaryDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
-public interface PadReconciliationSummaryListService extends AbstractListService<PadReconciliationSummaryDTO> {
+public interface PadReconciliationSummaryListService extends AbstractListService<FundsReconciliationSummaryDTO> {
 
 }

@@ -16,12 +16,12 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferb
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 
-public class PadBatchLister extends AbstractLister<PadBatchDTO> {
+public class PadBatchLister extends AbstractLister<FundsTransferBatchDTO> {
 
     public PadBatchLister() {
-        super(PadBatchDTO.class, false, false);
+        super(FundsTransferBatchDTO.class, false, false);
         setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off

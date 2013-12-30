@@ -25,16 +25,16 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
-import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 
-public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
+public class PadFileForm extends OperationsEntityForm<FundsTransferFileDTO> {
 
-    public PadFileForm(IForm<PadFileDTO> view) {
-        super(PadFileDTO.class, view);
+    public PadFileForm(IForm<FundsTransferFileDTO> view) {
+        super(FundsTransferFileDTO.class, view);
 
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
@@ -58,32 +58,32 @@ public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
 
         // TODO The mess with DTO and DBO here
         {
-            AppPlaceBuilder<IList<PadDebitRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<PadDebitRecord>>() {
+            AppPlaceBuilder<IList<FundsTransferRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<FundsTransferRecord>>() {
                 @Override
-                public AppPlace createAppPlace(IList<PadDebitRecord> value) {
-                    CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(PadDebitRecordDTO.class);
-                    place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(PadDebitRecordDTO.class).padBatch().padFile().id().getPath().toString(),
+                public AppPlace createAppPlace(IList<FundsTransferRecord> value) {
+                    CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(FundsTransferRecordDTO.class);
+                    place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(FundsTransferRecordDTO.class).padBatch().padFile().id().getPath().toString(),
                             value.getOwner().getPrimaryKey().toString());
                     return place;
                 }
             };
 
-            CEntityCollectionCrudHyperlink<IList<PadDebitRecord>> link = new CEntityCollectionCrudHyperlink<IList<PadDebitRecord>>(appPlaceBuilder);
+            CEntityCollectionCrudHyperlink<IList<FundsTransferRecord>> link = new CEntityCollectionCrudHyperlink<IList<FundsTransferRecord>>(appPlaceBuilder);
             panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecords(), link)).build());
         }
 
         {
-            AppPlaceBuilder<IList<PadBatch>> appPlaceBuilder = new AppPlaceBuilder<IList<PadBatch>>() {
+            AppPlaceBuilder<IList<FundsTransferBatch>> appPlaceBuilder = new AppPlaceBuilder<IList<FundsTransferBatch>>() {
                 @Override
-                public AppPlace createAppPlace(IList<PadBatch> value) {
-                    CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(PadBatchDTO.class);
-                    place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(PadBatchDTO.class).padFile().id().getPath().toString(),
+                public AppPlace createAppPlace(IList<FundsTransferBatch> value) {
+                    CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(FundsTransferBatchDTO.class);
+                    place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(FundsTransferBatchDTO.class).padFile().id().getPath().toString(),
                             value.getOwner().getPrimaryKey().toString());
                     return place;
                 }
             };
 
-            CEntityCollectionCrudHyperlink<IList<PadBatch>> link = new CEntityCollectionCrudHyperlink<IList<PadBatch>>(appPlaceBuilder);
+            CEntityCollectionCrudHyperlink<IList<FundsTransferBatch>> link = new CEntityCollectionCrudHyperlink<IList<FundsTransferBatch>>(appPlaceBuilder);
             panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().batches(), link)).build());
         }
 

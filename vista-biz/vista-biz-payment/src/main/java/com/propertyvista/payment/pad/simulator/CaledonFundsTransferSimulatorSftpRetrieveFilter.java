@@ -15,7 +15,7 @@ package com.propertyvista.payment.pad.simulator;
 
 import java.io.File;
 
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
 import com.propertyvista.payment.pad.CaledonFundsTransferDirectories;
 import com.propertyvista.payment.pad.CaledonFundsTransferFileType;
 import com.propertyvista.payment.pad.CaledonFundsTransferSftpFile;
@@ -34,7 +34,7 @@ public class CaledonFundsTransferSimulatorSftpRetrieveFilter implements SftpRetr
     public CaledonFundsTransferSftpFile accept(String directoryName, String fileName) {
         // file name match;
         // Only load PadFiles.
-        if (fileName.contains(PadAckFile.FileNameSufix) || fileName.contains(PadReconciliationFile.FileNameSufix)) {
+        if (fileName.contains(PadAckFile.FileNameSufix) || fileName.contains(FundsReconciliationFile.FileNameSufix)) {
             return null;
         }
 

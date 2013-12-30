@@ -20,12 +20,12 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 
-public class PadFileLister extends AbstractLister<PadFileDTO> {
+public class PadFileLister extends AbstractLister<FundsTransferFileDTO> {
 
     public PadFileLister() {
-        super(PadFileDTO.class, false, false);
+        super(FundsTransferFileDTO.class, false, false);
         setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off                

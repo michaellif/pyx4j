@@ -21,9 +21,9 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
 
 class PadCaledonReconciliation {
 
@@ -33,9 +33,9 @@ class PadCaledonReconciliation {
         this.executionMonitor = executionMonitor;
     }
 
-    void validateAndPersistFile(PadReconciliationFile reconciliationFile) {
+    void validateAndPersistFile(FundsReconciliationFile reconciliationFile) {
         {
-            EntityQueryCriteria<PadReconciliationFile> criteria = EntityQueryCriteria.create(PadReconciliationFile.class);
+            EntityQueryCriteria<FundsReconciliationFile> criteria = EntityQueryCriteria.create(FundsReconciliationFile.class);
             criteria.eq(criteria.proto().fileName(), reconciliationFile.fileName());
             if (Persistence.service().count(criteria) > 0) {
                 throw new Error("Duplicate reconciliation file received " + reconciliationFile.fileName().getValue());
@@ -43,11 +43,11 @@ class PadCaledonReconciliation {
         }
 
         // Save detached objects
-        List<PadReconciliationSummary> batches = new ArrayList<PadReconciliationSummary>(reconciliationFile.batches());
+        List<FundsReconciliationSummary> batches = new ArrayList<FundsReconciliationSummary>(reconciliationFile.batches());
         Persistence.service().persist(reconciliationFile);
 
         // Match merchantAccounts.
-        for (PadReconciliationSummary summary : batches) {
+        for (FundsReconciliationSummary summary : batches) {
             summary.reconciliationFile().set(reconciliationFile);
 
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
@@ -61,10 +61,10 @@ class PadCaledonReconciliation {
             summary.processingStatus().setValue(false);
 
             //Save detached objects
-            List<PadReconciliationDebitRecord> records = new ArrayList<PadReconciliationDebitRecord>(summary.records());
+            List<FundsReconciliationRecordRecord> records = new ArrayList<FundsReconciliationRecordRecord>(summary.records());
             Persistence.service().persist(summary);
 
-            for (final PadReconciliationDebitRecord debitRecord : records) {
+            for (final FundsReconciliationRecordRecord debitRecord : records) {
                 debitRecord.reconciliationSummary().set(summary);
                 debitRecord.processingStatus().setValue(false);
                 Persistence.service().persist(debitRecord);

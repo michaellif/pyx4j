@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.FundsTransferType;
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @GwtBlacklist
-public interface PadFileCreationNumber extends IEntity {
+public interface FundsTransferFileCreationNumber extends IEntity {
 
     @NotNull
     IPrimitive<Integer> number();

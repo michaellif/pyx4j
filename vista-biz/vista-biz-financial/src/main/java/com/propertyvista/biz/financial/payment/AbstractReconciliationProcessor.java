@@ -40,10 +40,10 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecordProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordProcessingStatus;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
 import com.propertyvista.server.jobs.TaskRunner;
 
 abstract class AbstractReconciliationProcessor {
@@ -70,9 +70,9 @@ abstract class AbstractReconciliationProcessor {
     /**
      * Creates records aggregation. each record is processed individually after this
      */
-    protected abstract void processReconciliationSummary(PadReconciliationSummary summary);
+    protected abstract void processReconciliationSummary(FundsReconciliationSummary summary);
 
-    protected AggregatedTransfer createAggregatedTransfer(PadReconciliationSummary summary) {
+    protected AggregatedTransfer createAggregatedTransfer(FundsReconciliationSummary summary) {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.padReconciliationSummaryKey().setValue(summary.getPrimaryKey());
         switch (summary.reconciliationStatus().getValue()) {
@@ -115,22 +115,22 @@ abstract class AbstractReconciliationProcessor {
 
     private void processReconciliationSummaryRecords() {
 
-        List<PadReconciliationSummary> summaryTransactions = TaskRunner.runInOperationsNamespace(new Callable<List<PadReconciliationSummary>>() {
+        List<FundsReconciliationSummary> summaryTransactions = TaskRunner.runInOperationsNamespace(new Callable<List<FundsReconciliationSummary>>() {
             @Override
-            public List<PadReconciliationSummary> call() throws Exception {
-                EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);
+            public List<FundsReconciliationSummary> call() throws Exception {
+                EntityQueryCriteria<FundsReconciliationSummary> criteria = EntityQueryCriteria.create(FundsReconciliationSummary.class);
                 criteria.eq(criteria.proto().reconciliationFile().fundsTransferType(), fundsTransferType);
                 criteria.eq(criteria.proto().processingStatus(), Boolean.FALSE);
                 criteria.eq(criteria.proto().merchantAccount().pmc(), pmc);
-                List<PadReconciliationSummary> transactions = Persistence.service().query(criteria);
-                for (PadReconciliationSummary summary : transactions) {
+                List<FundsReconciliationSummary> transactions = Persistence.service().query(criteria);
+                for (FundsReconciliationSummary summary : transactions) {
                     Persistence.service().retrieveMember(summary.records());
                 }
                 return transactions;
             }
         });
 
-        for (final PadReconciliationSummary summary : summaryTransactions) {
+        for (final FundsReconciliationSummary summary : summaryTransactions) {
 
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
@@ -164,14 +164,14 @@ abstract class AbstractReconciliationProcessor {
 
     }
 
-    protected abstract void processReconciliationDebitRecord(PadReconciliationDebitRecord debitRecord, PadDebitRecord padDebitRecord);
+    protected abstract void processReconciliationDebitRecord(FundsReconciliationRecordRecord debitRecord, FundsTransferRecord padDebitRecord);
 
     private void processReconciliationDebitRecords() {
 
-        List<PadReconciliationDebitRecord> records = TaskRunner.runInOperationsNamespace(new Callable<List<PadReconciliationDebitRecord>>() {
+        List<FundsReconciliationRecordRecord> records = TaskRunner.runInOperationsNamespace(new Callable<List<FundsReconciliationRecordRecord>>() {
             @Override
-            public List<PadReconciliationDebitRecord> call() throws Exception {
-                EntityQueryCriteria<PadReconciliationDebitRecord> criteria = EntityQueryCriteria.create(PadReconciliationDebitRecord.class);
+            public List<FundsReconciliationRecordRecord> call() throws Exception {
+                EntityQueryCriteria<FundsReconciliationRecordRecord> criteria = EntityQueryCriteria.create(FundsReconciliationRecordRecord.class);
                 criteria.eq(criteria.proto().processingStatus(), Boolean.FALSE);
                 criteria.eq(criteria.proto().reconciliationSummary().processingStatus(), Boolean.TRUE);
                 criteria.eq(criteria.proto().reconciliationSummary().merchantAccount().pmc(), pmc);
@@ -180,7 +180,7 @@ abstract class AbstractReconciliationProcessor {
             }
         });
 
-        for (final PadReconciliationDebitRecord debitRecord : records) {
+        for (final FundsReconciliationRecordRecord debitRecord : records) {
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
@@ -216,13 +216,13 @@ abstract class AbstractReconciliationProcessor {
 
     }
 
-    private void debitRecordUnitOfWrok(final PadReconciliationDebitRecord debitRecord) {
-        final PadDebitRecord padDebitRecord = getPadDebitRecord(debitRecord);
+    private void debitRecordUnitOfWrok(final FundsReconciliationRecordRecord debitRecord) {
+        final FundsTransferRecord padDebitRecord = getPadDebitRecord(debitRecord);
 
         // Status and integrity validations
         switch (debitRecord.reconciliationStatus().getValue()) {
         case PROCESSED:
-            if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationReceived) {
+            if (padDebitRecord.processingStatus().getValue() != FundsTransferRecordProcessingStatus.ReconciliationReceived) {
                 throw new Error("Payment " + fundsTransferType + " transaction '" + padDebitRecord.getStringView() + "' was not attached to AggregatedTransfer");
             }
             if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
@@ -230,7 +230,7 @@ abstract class AbstractReconciliationProcessor {
             }
             break;
         case REJECTED:
-            if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationReceived) {
+            if (padDebitRecord.processingStatus().getValue() != FundsTransferRecordProcessingStatus.ReconciliationReceived) {
                 throw new Error("Payment " + fundsTransferType + " transaction '" + padDebitRecord.getStringView() + "' was not attached to AggregatedTransfer");
             }
             if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
@@ -251,7 +251,7 @@ abstract class AbstractReconciliationProcessor {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.ReconciliationProcessed);
+                padDebitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.ReconciliationProcessed);
                 padDebitRecord.processed().setValue(Boolean.TRUE);
                 Persistence.service().persist(padDebitRecord);
 
@@ -262,18 +262,18 @@ abstract class AbstractReconciliationProcessor {
         });
     }
 
-    protected PadDebitRecord getPadDebitRecord(final PadReconciliationDebitRecord debitRecord) {
+    protected FundsTransferRecord getPadDebitRecord(final FundsReconciliationRecordRecord debitRecord) {
         // Verify PAD record
 
-        final PadDebitRecord padDebitRecord = TaskRunner.runInOperationsNamespace(new Callable<PadDebitRecord>() {
+        final FundsTransferRecord padDebitRecord = TaskRunner.runInOperationsNamespace(new Callable<FundsTransferRecord>() {
             @Override
-            public PadDebitRecord call() throws Exception {
-                EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+            public FundsTransferRecord call() throws Exception {
+                EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
                 criteria.eq(criteria.proto().transactionId(), debitRecord.transactionId());
                 criteria.eq(criteria.proto().padBatch().padFile().fundsTransferType(), fundsTransferType);
-                criteria.ne(criteria.proto().processingStatus(), PadDebitRecordProcessingStatus.AcknowledgeReject);
+                criteria.ne(criteria.proto().processingStatus(), FundsTransferRecordProcessingStatus.AcknowledgeReject);
                 criteria.eq(criteria.proto().padBatch().pmc(), pmc);
-                PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
+                FundsTransferRecord padDebitRecord = Persistence.service().retrieve(criteria);
                 if (padDebitRecord != null) {
                     retrieveOperationsPadDebitRecordDetails(padDebitRecord);
                 }
@@ -287,11 +287,11 @@ abstract class AbstractReconciliationProcessor {
         return padDebitRecord;
     }
 
-    protected void retrieveOperationsPadDebitRecordDetails(PadDebitRecord padDebitRecord) {
+    protected void retrieveOperationsPadDebitRecordDetails(FundsTransferRecord padDebitRecord) {
 
     }
 
-    protected void reconciliationClearedPayment(PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
+    protected void reconciliationClearedPayment(FundsReconciliationRecordRecord debitRecord, PaymentRecord paymentRecord) {
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
             throw new Error("Processed payment '" + debitRecord.transactionId().getValue() + "' can't be cleared");
         }

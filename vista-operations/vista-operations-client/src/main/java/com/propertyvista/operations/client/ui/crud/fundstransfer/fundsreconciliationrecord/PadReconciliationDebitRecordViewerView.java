@@ -15,8 +15,8 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcili
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 
-public interface PadReconciliationDebitRecordViewerView extends IViewer<PadReconciliationDebitRecordDTO> {
+public interface PadReconciliationDebitRecordViewerView extends IViewer<FundsReconciliationRecordRecordDTO> {
 
 }

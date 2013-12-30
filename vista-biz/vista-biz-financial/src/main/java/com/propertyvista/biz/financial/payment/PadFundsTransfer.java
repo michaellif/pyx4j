@@ -33,18 +33,18 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
 import com.propertyvista.server.jobs.TaskRunner;
 
 class PadFundsTransfer {
 
     private final ExecutionMonitor executionMonitor;
 
-    private final PadFile padFile;
+    private final FundsTransferFile padFile;
 
-    PadFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile) {
+    PadFundsTransfer(ExecutionMonitor executionMonitor, FundsTransferFile padFile) {
         this.executionMonitor = executionMonitor;
         this.padFile = padFile;
     }
@@ -97,7 +97,7 @@ class PadFundsTransfer {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                PadBatch padBatch = FundsTransferCaledon.getPadBatch(padFile, pmc, paymentRecord.merchantAccount());
+                FundsTransferBatch padBatch = FundsTransferCaledon.getPadBatch(padFile, pmc, paymentRecord.merchantAccount());
                 createPadDebitRecord(padBatch, paymentRecord);
                 return null;
             }
@@ -106,8 +106,8 @@ class PadFundsTransfer {
         return true;
     }
 
-    private void createPadDebitRecord(PadBatch padBatch, PaymentRecord paymentRecord) {
-        PadDebitRecord padRecord = EntityFactory.create(PadDebitRecord.class);
+    private void createPadDebitRecord(FundsTransferBatch padBatch, PaymentRecord paymentRecord) {
+        FundsTransferRecord padRecord = EntityFactory.create(FundsTransferRecord.class);
         padRecord.padBatch().set(padBatch);
         padRecord.processed().setValue(Boolean.FALSE);
         padRecord.clientId().setValue(paymentRecord.billingAccount().accountNumber().getValue());

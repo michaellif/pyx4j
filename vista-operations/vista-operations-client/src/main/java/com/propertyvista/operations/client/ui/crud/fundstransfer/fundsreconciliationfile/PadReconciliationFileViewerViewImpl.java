@@ -17,21 +17,21 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
-import com.propertyvista.operations.rpc.dto.PadReconciliationSummaryDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
-public class PadReconciliationFileViewerViewImpl extends OperationsViewerViewImplBase<PadReconciliationFileDTO> implements PadReconciliationFileViewerView {
+public class PadReconciliationFileViewerViewImpl extends OperationsViewerViewImplBase<FundsReconciliationFileDTO> implements PadReconciliationFileViewerView {
 
-    private final ILister<PadReconciliationSummaryDTO> summaryLister;
+    private final ILister<FundsReconciliationSummaryDTO> summaryLister;
 
     public PadReconciliationFileViewerViewImpl() {
         super(true);
-        summaryLister = new ListerInternalViewImplBase<PadReconciliationSummaryDTO>(new PadReconciliationSummaryLister());
+        summaryLister = new ListerInternalViewImplBase<FundsReconciliationSummaryDTO>(new PadReconciliationSummaryLister());
         setForm(new PadReconciliationFileForm(this));
     }
 
     @Override
-    public ILister<PadReconciliationSummaryDTO> getSummaryListerView() {
+    public ILister<FundsReconciliationSummaryDTO> getSummaryListerView() {
         return summaryLister;
     }
 }

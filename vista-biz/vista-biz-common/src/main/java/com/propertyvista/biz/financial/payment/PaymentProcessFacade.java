@@ -18,17 +18,17 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
 
 public interface PaymentProcessFacade {
 
-    PadFile prepareFundsTransferFile(FundsTransferType fundsTransferType);
+    FundsTransferFile prepareFundsTransferFile(FundsTransferType fundsTransferType);
 
-    void prepareEcheckFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile);
+    void prepareEcheckFundsTransfer(ExecutionMonitor executionMonitor, FundsTransferFile padFile);
 
-    void prepareDirectDebitFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile);
+    void prepareDirectDebitFundsTransfer(ExecutionMonitor executionMonitor, FundsTransferFile padFile);
 
-    boolean sendFundsTransferFile(PadFile padFile);
+    boolean sendFundsTransferFile(FundsTransferFile padFile);
 
     //Funds Transfer
     FundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor);

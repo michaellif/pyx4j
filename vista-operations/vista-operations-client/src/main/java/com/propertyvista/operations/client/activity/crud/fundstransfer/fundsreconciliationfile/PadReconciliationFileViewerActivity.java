@@ -23,26 +23,26 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileViewerView;
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
-import com.propertyvista.operations.rpc.dto.PadReconciliationSummaryDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
 import com.propertyvista.operations.rpc.services.PadReconciliationSummaryListService;
 
-public class PadReconciliationFileViewerActivity extends AbstractViewerActivity<PadReconciliationFileDTO> implements PadReconciliationFileViewerView.Presenter {
+public class PadReconciliationFileViewerActivity extends AbstractViewerActivity<FundsReconciliationFileDTO> implements PadReconciliationFileViewerView.Presenter {
 
     private final ILister.Presenter<?> summaryLister;
 
     public PadReconciliationFileViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().getView(PadReconciliationFileViewerView.class), GWT
-                .<AbstractCrudService<PadReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
+                .<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
 
-        summaryLister = new ListerController<PadReconciliationSummaryDTO>(((PadReconciliationFileViewerView) getView()).getSummaryListerView(),
-                GWT.<PadReconciliationSummaryListService> create(PadReconciliationSummaryListService.class), PadReconciliationSummaryDTO.class);
+        summaryLister = new ListerController<FundsReconciliationSummaryDTO>(((PadReconciliationFileViewerView) getView()).getSummaryListerView(),
+                GWT.<PadReconciliationSummaryListService> create(PadReconciliationSummaryListService.class), FundsReconciliationSummaryDTO.class);
 
     }
 
     @Override
-    protected void onPopulateSuccess(PadReconciliationFileDTO result) {
+    protected void onPopulateSuccess(FundsReconciliationFileDTO result) {
         super.onPopulateSuccess(result);
 
         summaryLister.setParent(result.getPrimaryKey());

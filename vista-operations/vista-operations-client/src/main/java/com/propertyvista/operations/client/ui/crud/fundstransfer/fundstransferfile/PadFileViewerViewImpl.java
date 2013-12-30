@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 
-public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadFileDTO> implements PadFileViewerView {
+public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<FundsTransferFileDTO> implements PadFileViewerView {
 
     public PadFileViewerViewImpl() {
         super(true);

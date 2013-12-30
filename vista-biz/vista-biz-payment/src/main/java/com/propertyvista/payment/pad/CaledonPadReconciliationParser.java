@@ -25,14 +25,14 @@ import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
 
 class CaledonPadReconciliationParser {
 
-    PadReconciliationFile parsReport(File file) {
-        final PadReconciliationFile reconciliationFile = EntityFactory.create(PadReconciliationFile.class);
+    FundsReconciliationFile parsReport(File file) {
+        final FundsReconciliationFile reconciliationFile = EntityFactory.create(FundsReconciliationFile.class);
         reconciliationFile.fileName().setValue(file.getName());
 
         InputStream is;
@@ -45,7 +45,7 @@ class CaledonPadReconciliationParser {
 
         CSVLoad.loadFile(is, parser, new CSVReciver() {
 
-            PadReconciliationSummary summary;
+            FundsReconciliationSummary summary;
 
             @Override
             public boolean onHeader(String[] headers) {
@@ -61,7 +61,7 @@ class CaledonPadReconciliationParser {
                 if (values[0].equals("SUMM")) {
                     parsSummary(values);
                 } else if (values[0].equals("TDTL")) {
-                    PadReconciliationDebitRecord record = EntityFactory.create(PadReconciliationDebitRecord.class);
+                    FundsReconciliationRecordRecord record = EntityFactory.create(FundsReconciliationRecordRecord.class);
                     record.processingStatus().setValue(Boolean.FALSE);
                     int v = 1;
                     record.paymentDate().setValue(CaledonPadUtils.parsDateReconciliation(values[v++]));
@@ -88,7 +88,7 @@ class CaledonPadReconciliationParser {
             }
 
             private void parsSummary(String[] values) {
-                summary = EntityFactory.create(PadReconciliationSummary.class);
+                summary = EntityFactory.create(FundsReconciliationSummary.class);
                 summary.processingStatus().setValue(Boolean.FALSE);
                 int v = 1;
                 summary.paymentDate().setValue(CaledonPadUtils.parsDateReconciliation(values[v++]));

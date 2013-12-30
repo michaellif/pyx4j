@@ -18,12 +18,12 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 
-public class PadBatchForm extends OperationsEntityForm<PadBatchDTO> {
+public class PadBatchForm extends OperationsEntityForm<FundsTransferBatchDTO> {
 
-    public PadBatchForm(IForm<PadBatchDTO> view) {
-        super(PadBatchDTO.class, view);
+    public PadBatchForm(IForm<FundsTransferBatchDTO> view) {
+        super(FundsTransferBatchDTO.class, view);
 
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;

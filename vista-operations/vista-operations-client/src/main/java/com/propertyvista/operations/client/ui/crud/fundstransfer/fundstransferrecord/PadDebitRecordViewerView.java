@@ -15,8 +15,8 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferr
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 
-public interface PadDebitRecordViewerView extends IViewer<PadDebitRecordDTO> {
+public interface PadDebitRecordViewerView extends IViewer<FundsTransferRecordDTO> {
 
 }

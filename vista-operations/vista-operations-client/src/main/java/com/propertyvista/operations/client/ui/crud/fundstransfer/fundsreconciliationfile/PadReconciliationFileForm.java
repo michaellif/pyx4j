@@ -25,14 +25,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 
-public class PadReconciliationFileForm extends OperationsEntityForm<PadReconciliationFileDTO> {
+public class PadReconciliationFileForm extends OperationsEntityForm<FundsReconciliationFileDTO> {
 
-    public PadReconciliationFileForm(IForm<PadReconciliationFileDTO> view) {
-        super(PadReconciliationFileDTO.class, view);
+    public PadReconciliationFileForm(IForm<FundsReconciliationFileDTO> view) {
+        super(FundsReconciliationFileDTO.class, view);
 
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
@@ -44,18 +44,18 @@ public class PadReconciliationFileForm extends OperationsEntityForm<PadReconcili
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fileNameDate())).build());
 
         // TODO Sorry for the mess with DTO and DBO here,  will be fixed once we have AttacheLEvel.countOnly
-        AppPlaceBuilder<IList<PadReconciliationDebitRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<PadReconciliationDebitRecord>>() {
+        AppPlaceBuilder<IList<FundsReconciliationRecordRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<FundsReconciliationRecordRecord>>() {
             @Override
-            public AppPlace createAppPlace(IList<PadReconciliationDebitRecord> value) {
-                CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(PadReconciliationDebitRecordDTO.class);
+            public AppPlace createAppPlace(IList<FundsReconciliationRecordRecord> value) {
+                CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(FundsReconciliationRecordRecordDTO.class);
                 place.formListerPlace().queryArg(
-                        EntityFactory.getEntityPrototype(PadReconciliationDebitRecordDTO.class).reconciliationSummary().reconciliationFile().id().getPath()
+                        EntityFactory.getEntityPrototype(FundsReconciliationRecordRecordDTO.class).reconciliationSummary().reconciliationFile().id().getPath()
                                 .toString(), value.getOwner().getPrimaryKey().toString());
                 return place;
             }
         };
 
-        CEntityCollectionCrudHyperlink<IList<PadReconciliationDebitRecord>> link = new CEntityCollectionCrudHyperlink<IList<PadReconciliationDebitRecord>>(
+        CEntityCollectionCrudHyperlink<IList<FundsReconciliationRecordRecord>> link = new CEntityCollectionCrudHyperlink<IList<FundsReconciliationRecordRecord>>(
                 appPlaceBuilder);
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecords(), link)).build());
 

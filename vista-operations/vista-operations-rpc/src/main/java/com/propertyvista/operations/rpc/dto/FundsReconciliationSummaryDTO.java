@@ -7,21 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-26
- * @author vlads
+ * Created on Sep 19, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.operations.domain.payment.pad;
+package com.propertyvista.operations.rpc.dto;
 
-public enum PadDebitRecordProcessingStatus {
+import com.pyx4j.entity.annotations.Transient;
 
-    AcknowledgedReceived,
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
 
-    AcknowledgeProcessed,
+@Transient
+public interface FundsReconciliationSummaryDTO extends FundsReconciliationSummary {
 
-    AcknowledgeReject,
-
-    ReconciliationReceived,
-
-    ReconciliationProcessed
 }

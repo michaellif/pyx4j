@@ -31,11 +31,11 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecordProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecordTransaction;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordProcessingStatus;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordTransaction;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
 import com.propertyvista.server.jobs.TaskRunner;
 
 class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor {
@@ -47,12 +47,12 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
     }
 
     @Override
-    protected void retrieveOperationsPadDebitRecordDetails(PadDebitRecord padDebitRecord) {
+    protected void retrieveOperationsPadDebitRecordDetails(FundsTransferRecord padDebitRecord) {
         Persistence.service().retrieveMember(padDebitRecord.transactionRecords());
     }
 
     @Override
-    protected void processReconciliationSummary(PadReconciliationSummary summary) {
+    protected void processReconciliationSummary(FundsReconciliationSummary summary) {
         AggregatedTransfer at = createAggregatedTransfer(summary);
         Persistence.service().persist(at);
 
@@ -63,13 +63,13 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
         BigDecimal grossPaymentFee = BigDecimal.ZERO;
 
         // Validate payment records and add them to this aggregatedTransfer
-        for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
-            final PadDebitRecord padDebitRecord = getPadDebitRecord(debitRecord);
+        for (final FundsReconciliationRecordRecord debitRecord : summary.records()) {
+            final FundsTransferRecord padDebitRecord = getPadDebitRecord(debitRecord);
 
             //TODO Improve validation
             switch (debitRecord.reconciliationStatus().getValue()) {
             case PROCESSED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
+                if (padDebitRecord.processingStatus().getValue() != FundsTransferRecordProcessingStatus.AcknowledgeProcessed) {
                     throw new Error("Payment DirectBanking transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
@@ -77,7 +77,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 }
                 break;
             case REJECTED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
+                if (padDebitRecord.processingStatus().getValue() != FundsTransferRecordProcessingStatus.AcknowledgeProcessed) {
                     throw new Error("Payment DirectBanking transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
@@ -85,7 +85,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 }
                 break;
             case RETURNED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationProcessed) {
+                if (padDebitRecord.processingStatus().getValue() != FundsTransferRecordProcessingStatus.ReconciliationProcessed) {
                     throw new Error("Payment DirectBanking transaction '" + padDebitRecord.getStringView() + "' was not processed");
                 }
                 break;
@@ -95,7 +95,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 throw new IllegalArgumentException("reconciliationStatus:" + debitRecord.reconciliationStatus().getValue());
             }
 
-            for (PadDebitRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
+            for (FundsTransferRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
                 PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, transactionRecord.paymentRecordKey().getValue());
                 switch (debitRecord.reconciliationStatus().getValue()) {
                 case PROCESSED:
@@ -116,11 +116,11 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 Persistence.service().persist(paymentRecord);
             }
 
-            if (padDebitRecord.processingStatus().getValue() == PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
+            if (padDebitRecord.processingStatus().getValue() == FundsTransferRecordProcessingStatus.AcknowledgeProcessed) {
                 TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                     @Override
                     public Void call() {
-                        padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.ReconciliationReceived);
+                        padDebitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.ReconciliationReceived);
                         Persistence.service().persist(padDebitRecord);
                         return null;
                     }
@@ -145,8 +145,8 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
     }
 
     @Override
-    protected void processReconciliationDebitRecord(PadReconciliationDebitRecord debitRecord, PadDebitRecord padDebitRecord) {
-        for (PadDebitRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
+    protected void processReconciliationDebitRecord(FundsReconciliationRecordRecord debitRecord, FundsTransferRecord padDebitRecord) {
+        for (FundsTransferRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, transactionRecord.paymentRecordKey().getValue());
             Validate.isEquals(PaymentType.DirectBanking, paymentRecord.paymentMethod().type().getValue(), "PaymentRecord {0}", paymentRecord);
 

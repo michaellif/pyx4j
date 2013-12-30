@@ -15,8 +15,8 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcili
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 
-public interface PadReconciliationDebitRecordListerView extends ILister<PadReconciliationDebitRecordDTO> {
+public interface PadReconciliationDebitRecordListerView extends ILister<FundsReconciliationRecordRecordDTO> {
 
 }

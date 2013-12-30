@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferbatch;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 
-public class PadBatchListerViewImpl extends OperationsListerViewImplBase<PadBatchDTO> implements PadBatchListerView {
+public class PadBatchListerViewImpl extends OperationsListerViewImplBase<FundsTransferBatchDTO> implements PadBatchListerView {
 
     public PadBatchListerViewImpl() {
         setLister(new PadBatchLister());

@@ -16,12 +16,12 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcili
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 
-public class PadReconciliationFileLister extends AbstractLister<PadReconciliationFileDTO> {
+public class PadReconciliationFileLister extends AbstractLister<FundsReconciliationFileDTO> {
 
     public PadReconciliationFileLister() {
-        super(PadReconciliationFileDTO.class, false, false);
+        super(FundsReconciliationFileDTO.class, false, false);
         setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off                

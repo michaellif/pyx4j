@@ -25,10 +25,10 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
 import com.propertyvista.operations.domain.payment.pad.TransactionReconciliationStatus;
 
 class EFTBankMockReconciliation {
@@ -39,26 +39,26 @@ class EFTBankMockReconciliation {
 
     }
 
-    PadReconciliationFile createReconciliationFile(List<PadDebitRecord> records) {
-        PadReconciliationFile reconciliationFile = EntityFactory.create(PadReconciliationFile.class);
+    FundsReconciliationFile createReconciliationFile(List<FundsTransferRecord> records) {
+        FundsReconciliationFile reconciliationFile = EntityFactory.create(FundsReconciliationFile.class);
         reconciliationFile.fileName().setValue(String.valueOf(System.nanoTime()));
 
-        Map<String, PadReconciliationSummary> byMID = new HashMap<String, PadReconciliationSummary>();
+        Map<String, FundsReconciliationSummary> byMID = new HashMap<String, FundsReconciliationSummary>();
 
         log.debug("Creating Reconciliation for {} records", records.size());
 
-        for (PadDebitRecord padRecord : records) {
-            PadReconciliationSummary summary = getSummary(reconciliationFile, byMID, padRecord.padBatch().merchantTerminalId().getValue());
+        for (FundsTransferRecord padRecord : records) {
+            FundsReconciliationSummary summary = getSummary(reconciliationFile, byMID, padRecord.padBatch().merchantTerminalId().getValue());
             addRecordToSummary(summary, padRecord);
         }
 
         return reconciliationFile;
     }
 
-    private PadReconciliationSummary getSummary(PadReconciliationFile reconciliationFile, Map<String, PadReconciliationSummary> byMID, String merchantTerminalId) {
-        PadReconciliationSummary summary = byMID.get(merchantTerminalId);
+    private FundsReconciliationSummary getSummary(FundsReconciliationFile reconciliationFile, Map<String, FundsReconciliationSummary> byMID, String merchantTerminalId) {
+        FundsReconciliationSummary summary = byMID.get(merchantTerminalId);
         if (summary == null) {
-            summary = EntityFactory.create(PadReconciliationSummary.class);
+            summary = EntityFactory.create(FundsReconciliationSummary.class);
             summary.processingStatus().setValue(Boolean.FALSE);
             summary.reconciliationStatus().setValue(MerchantReconciliationStatus.PAID);
             summary.merchantTerminalId().setValue(merchantTerminalId);
@@ -69,8 +69,8 @@ class EFTBankMockReconciliation {
         return summary;
     }
 
-    private void addRecordToSummary(PadReconciliationSummary summary, PadDebitRecord padRecord) {
-        PadReconciliationDebitRecord record = EntityFactory.create(PadReconciliationDebitRecord.class);
+    private void addRecordToSummary(FundsReconciliationSummary summary, FundsTransferRecord padRecord) {
+        FundsReconciliationRecordRecord record = EntityFactory.create(FundsReconciliationRecordRecord.class);
         record.processingStatus().setValue(Boolean.FALSE);
 
         record.paymentDate().setValue(new LogicalDate(SystemDateManager.getDate()));

@@ -45,8 +45,7 @@ import com.propertyvista.domain.financial.FundsTransferType;
  */
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-//TODO rename to FundsTransferFile
-public interface PadFile extends IEntity {
+public interface FundsTransferFile extends IEntity {
 
     public enum PadFileStatus {
 
@@ -117,7 +116,7 @@ public interface PadFile extends IEntity {
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
-    IList<PadBatch> batches();
+    IList<FundsTransferBatch> batches();
 
     @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> sent();

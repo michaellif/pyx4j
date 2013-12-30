@@ -38,11 +38,11 @@ import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFileCreationNumber;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
 import com.propertyvista.payment.pad.EFTTransportFacade;
 import com.propertyvista.payment.pad.FileCreationException;
 import com.propertyvista.payment.pad.data.PadAckFile;
@@ -55,19 +55,19 @@ public class FundsTransferCaledon {
     private final String companyId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
             .getIntefaceCompanyId();
 
-    public PadFile prepareFundsTransferFile(final FundsTransferType fundsTransferType) {
-        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PadFile, RuntimeException>() {
+    public FundsTransferFile prepareFundsTransferFile(final FundsTransferType fundsTransferType) {
+        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<FundsTransferFile, RuntimeException>() {
 
             @Override
-            public PadFile execute() {
-                EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
+            public FundsTransferFile execute() {
+                EntityQueryCriteria<FundsTransferFile> criteria = EntityQueryCriteria.create(FundsTransferFile.class);
                 criteria.eq(criteria.proto().companyId(), companyId);
                 criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
-                criteria.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendError);
-                PadFile padFile = Persistence.service().retrieve(criteria);
+                criteria.in(criteria.proto().status(), FundsTransferFile.PadFileStatus.Creating, FundsTransferFile.PadFileStatus.SendError);
+                FundsTransferFile padFile = Persistence.service().retrieve(criteria);
                 if (padFile == null) {
-                    padFile = EntityFactory.create(PadFile.class);
-                    padFile.status().setValue(PadFile.PadFileStatus.Creating);
+                    padFile = EntityFactory.create(FundsTransferFile.class);
+                    padFile.status().setValue(FundsTransferFile.PadFileStatus.Creating);
                     padFile.fileCreationNumber().setValue(getNextFileCreationNumber(fundsTransferType, false, null));
                     padFile.companyId().setValue(companyId);
                     padFile.fundsTransferType().setValue(fundsTransferType);
@@ -82,14 +82,14 @@ public class FundsTransferCaledon {
         });
     }
 
-    static PadBatch getPadBatch(PadFile padFile, Pmc pmc, MerchantAccount merchantAccount) {
-        EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
+    static FundsTransferBatch getPadBatch(FundsTransferFile padFile, Pmc pmc, MerchantAccount merchantAccount) {
+        EntityQueryCriteria<FundsTransferBatch> criteria = EntityQueryCriteria.create(FundsTransferBatch.class);
         criteria.eq(criteria.proto().padFile(), padFile);
         criteria.eq(criteria.proto().pmc(), pmc);
         criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.id());
-        PadBatch padBatch = Persistence.service().retrieve(criteria);
+        FundsTransferBatch padBatch = Persistence.service().retrieve(criteria);
         if (padBatch == null) {
-            padBatch = EntityFactory.create(PadBatch.class);
+            padBatch = EntityFactory.create(FundsTransferBatch.class);
             padBatch.padFile().set(padFile);
             padBatch.pmc().set(pmc);
 
@@ -105,8 +105,8 @@ public class FundsTransferCaledon {
         return padBatch;
     }
 
-    public boolean sendFundsTransferFile(final PadFile padFile) {
-        EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+    public boolean sendFundsTransferFile(final FundsTransferFile padFile) {
+        EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
         criteria.eq(criteria.proto().padBatch().padFile(), padFile);
         int records = Persistence.service().count(criteria);
         if (records == 0) {
@@ -117,7 +117,7 @@ public class FundsTransferCaledon {
 
             @Override
             public Void execute() {
-                padFile.status().setValue(PadFile.PadFileStatus.Sending);
+                padFile.status().setValue(FundsTransferFile.PadFileStatus.Sending);
                 padFile.fileCreationNumber().setValue(getNextFileCreationNumber(padFile.fundsTransferType().getValue(), true, padFile));
                 padFile.sent().setValue(new Date());
                 Persistence.service().merge(padFile);
@@ -136,12 +136,12 @@ public class FundsTransferCaledon {
                 BigDecimal fileAmount = BigDecimal.ZERO;
                 int batchNumberCount = 0;
                 Persistence.service().retrieveMember(padFile.batches());
-                for (PadBatch padBatch : padFile.batches()) {
+                for (FundsTransferBatch padBatch : padFile.batches()) {
                     Persistence.service().retrieveMember(padBatch.records());
 
                     padBatch.batchNumber().setValue(++batchNumberCount);
                     BigDecimal batchAmount = BigDecimal.ZERO;
-                    for (PadDebitRecord record : padBatch.records()) {
+                    for (FundsTransferRecord record : padBatch.records()) {
                         batchAmount = batchAmount.add(record.amount().getValue());
                     }
                     padBatch.batchAmount().setValue(batchAmount);
@@ -163,21 +163,21 @@ public class FundsTransferCaledon {
         Throwable sendError = null;
         try {
             ServerSideFactory.create(EFTTransportFacade.class).sendPadFile(padFile);
-            padFile.status().setValue(PadFile.PadFileStatus.Sent);
+            padFile.status().setValue(FundsTransferFile.PadFileStatus.Sent);
             padFile.sent().setValue(new Date());
         } catch (SftpTransportConnectionException e) {
             // Allow to recover the process automatically
             sendError = e;
-            padFile.status().setValue(PadFile.PadFileStatus.Creating);
+            padFile.status().setValue(FundsTransferFile.PadFileStatus.Creating);
             log.info("file was no sent due to connection error, set status to {} for next resned", padFile.status());
         } catch (FileCreationException e) {
             // Allow to recover the process automatically
             sendError = e;
-            padFile.status().setValue(PadFile.PadFileStatus.Creating);
+            padFile.status().setValue(FundsTransferFile.PadFileStatus.Creating);
             log.info("file was no sent due file system error, set status to {} for next resned", padFile.status());
         } catch (Throwable e) {
             sendError = e;
-            padFile.status().setValue(PadFile.PadFileStatus.SendError);
+            padFile.status().setValue(FundsTransferFile.PadFileStatus.SendError);
         }
 
         padFile.batches().setAttachLevel(AttachLevel.Detached);
@@ -209,23 +209,23 @@ public class FundsTransferCaledon {
      *            the file is sent or attempt to send is made, the sequence is changed
      * @return
      */
-    private String getNextFileCreationNumber(FundsTransferType fundsTransferType, boolean consumeNumber, PadFile consumerFile) {
+    private String getNextFileCreationNumber(FundsTransferType fundsTransferType, boolean consumeNumber, FundsTransferFile consumerFile) {
         boolean useSimulator = VistaSystemsSimulationConfig.getConfiguration().useFundsTransferSimulator().getValue(Boolean.FALSE);
         boolean useFileBaseSequence = !VistaDeployment.isVistaProduction();
         if (useSimulator) {
             useFileBaseSequence = false;
         }
 
-        PadFileCreationNumber sequence;
+        FundsTransferFileCreationNumber sequence;
         {
-            EntityQueryCriteria<PadFileCreationNumber> criteria = EntityQueryCriteria.create(PadFileCreationNumber.class);
+            EntityQueryCriteria<FundsTransferFileCreationNumber> criteria = EntityQueryCriteria.create(FundsTransferFileCreationNumber.class);
             criteria.eq(criteria.proto().simulator(), useSimulator);
             criteria.eq(criteria.proto().companyId(), companyId);
             criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
             sequence = Persistence.service().retrieve(criteria);
         }
         if (sequence == null) {
-            sequence = EntityFactory.create(PadFileCreationNumber.class);
+            sequence = EntityFactory.create(FundsTransferFileCreationNumber.class);
             sequence.number().setValue(0);
             sequence.simulator().setValue(useSimulator);
             sequence.companyId().setValue(companyId);
@@ -238,19 +238,19 @@ public class FundsTransferCaledon {
         // Find and verify that previous file has acknowledgment
         {
             String previousValue = fileCreationNumberFormat(useSimulator, sequence.number().getValue());
-            EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
+            EntityQueryCriteria<FundsTransferFile> criteria = EntityQueryCriteria.create(FundsTransferFile.class);
             criteria.eq(criteria.proto().companyId(), companyId);
             criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
             criteria.eq(criteria.proto().fileCreationNumber(), previousValue);
-            PadFile padFile = Persistence.service().retrieve(criteria);
+            FundsTransferFile padFile = Persistence.service().retrieve(criteria);
             if ((padFile != null) && ((consumerFile == null || (!consumerFile.equals(padFile))))) {
-                if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
+                if (!EnumSet.of(FundsTransferFile.PadFileStatus.Acknowledged, FundsTransferFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
                     throw new Error(SimpleMessageFormat.format("Can''t send FundsTransfer {0} File until previous file {1} is Acknowledged or Canceled",
                             fundsTransferType, previousValue));
                 }
 
                 //If a file has rejected the corrected file must be submitted using the same file creation number.
-                if (PadFile.PadFileStatus.Canceled == padFile.status().getValue()) {
+                if (FundsTransferFile.PadFileStatus.Canceled == padFile.status().getValue()) {
                     return previousValue;
                 }
             }
@@ -263,7 +263,7 @@ public class FundsTransferCaledon {
 
         // Assert file number duplication when creating the file, in other case index on the table will do assertions
         if (!consumeNumber) {
-            EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
+            EntityQueryCriteria<FundsTransferFile> criteria = EntityQueryCriteria.create(FundsTransferFile.class);
             criteria.eq(criteria.proto().companyId(), companyId);
             criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
             criteria.eq(criteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, value));
@@ -329,7 +329,7 @@ public class FundsTransferCaledon {
     }
 
     public FundsTransferType receiveFundsTransferReconciliation(final ExecutionMonitor executionMonitor) {
-        final PadReconciliationFile reconciliationFile;
+        final FundsReconciliationFile reconciliationFile;
         try {
             reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
         } catch (SftpTransportConnectionException e) {

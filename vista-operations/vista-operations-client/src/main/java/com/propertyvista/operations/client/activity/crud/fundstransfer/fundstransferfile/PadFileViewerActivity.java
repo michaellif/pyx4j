@@ -21,14 +21,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile.PadFileViewerView;
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
 
-public class PadFileViewerActivity extends AbstractViewerActivity<PadFileDTO> implements PadFileViewerView.Presenter {
+public class PadFileViewerActivity extends AbstractViewerActivity<FundsTransferFileDTO> implements PadFileViewerView.Presenter {
 
     public PadFileViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().getView(PadFileViewerView.class), GWT
-                .<AbstractCrudService<PadFileDTO>> create(PadFileCrudService.class));
+                .<AbstractCrudService<FundsTransferFileDTO>> create(PadFileCrudService.class));
     }
 
     @Override

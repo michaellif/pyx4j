@@ -33,8 +33,7 @@ import com.propertyvista.domain.financial.FundsTransferType;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-//TODO rename to FundsReconciliationFile
-public interface PadReconciliationFile extends IEntity {
+public interface FundsReconciliationFile extends IEntity {
 
     // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID
     public static String FileNameSufix = "_reconciliation_rpt";
@@ -57,5 +56,5 @@ public interface PadReconciliationFile extends IEntity {
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
-    IList<PadReconciliationSummary> batches();
+    IList<FundsReconciliationSummary> batches();
 }

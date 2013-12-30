@@ -29,8 +29,8 @@ import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
 import com.propertyvista.payment.dbp.BmoSftpClient;
 import com.propertyvista.payment.dbp.RemconFileInterpreter;
 import com.propertyvista.payment.dbp.remcon.RemconFile;
@@ -47,7 +47,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     private static final Logger log = LoggerFactory.getLogger(EFTTransportFacadeImpl.class);
 
     @Override
-    public void sendPadFile(PadFile padFile) throws FileCreationException, SftpTransportConnectionException {
+    public void sendPadFile(FundsTransferFile padFile) throws FileCreationException, SftpTransportConnectionException {
         File padWorkdir = getPadBaseDir();
         File file = null;
         try {
@@ -132,7 +132,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     }
 
     @Override
-    public PadReconciliationFile receivePadReconciliation(String companyId) throws SftpTransportConnectionException {
+    public FundsReconciliationFile receivePadReconciliation(String companyId) throws SftpTransportConnectionException {
         File padWorkdir = getPadBaseDir();
         CaledonFundsTransferSftpFile sftpFile = new CaledonPadSftpClient().receiveFiles(companyId, CaledonFundsTransferFileType.Reconciliation, padWorkdir);
         if (sftpFile == null) {
@@ -143,7 +143,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             if (sftpFile.fileType != CaledonFundsTransferFileType.Reconciliation) {
                 throw new Error("Invalid Reconciliation file name" + sftpFile.localFile.getName());
             }
-            PadReconciliationFile reconciliationFile = new CaledonPadReconciliationParser().parsReport(sftpFile.localFile);
+            FundsReconciliationFile reconciliationFile = new CaledonPadReconciliationParser().parsReport(sftpFile.localFile);
             reconciliationFile.fundsTransferType().setValue(sftpFile.fundsTransferType);
             try {
                 reconciliationFile.fileNameDate().setValue(new SimpleDateFormat("yyyyMMddHHmmss").parse(sftpFile.remoteName.substring(0, 15)));

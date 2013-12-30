@@ -17,16 +17,16 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 
-public class PadDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadDebitRecord, PadDebitRecordDTO> implements PadDebitRecordCrudService {
+public class PadDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<FundsTransferRecord, FundsTransferRecordDTO> implements PadDebitRecordCrudService {
 
     public PadDebitRecordCrudServiceImpl() {
-        super(PadDebitRecord.class, PadDebitRecordDTO.class);
+        super(FundsTransferRecord.class, FundsTransferRecordDTO.class);
     }
 
     @Override
@@ -35,32 +35,32 @@ public class PadDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pa
     }
 
     @Override
-    protected void enhanceRetrieved(PadDebitRecord bo, PadDebitRecordDTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(FundsTransferRecord bo, FundsTransferRecordDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(to.padBatch().pmc());
 
         {
-            EntityQueryCriteria<PadReconciliationDebitRecord> criteria = EntityQueryCriteria.create(PadReconciliationDebitRecord.class);
+            EntityQueryCriteria<FundsReconciliationRecordRecord> criteria = EntityQueryCriteria.create(FundsReconciliationRecordRecord.class);
             criteria.eq(criteria.proto().transactionId(), bo.transactionId());
             criteria.asc(criteria.proto().id());
-            PadReconciliationDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
+            FundsReconciliationRecordRecord padDebitRecord = Persistence.service().retrieve(criteria);
             if (padDebitRecord != null) {
-                to.reconciliationRecordPaidOrRejected().set(padDebitRecord.duplicate(PadReconciliationDebitRecordDTO.class));
+                to.reconciliationRecordPaidOrRejected().set(padDebitRecord.duplicate(FundsReconciliationRecordRecordDTO.class));
             }
         }
 
         if (!to.reconciliationRecordPaidOrRejected().isEmpty()) {
-            EntityQueryCriteria<PadReconciliationDebitRecord> criteria = EntityQueryCriteria.create(PadReconciliationDebitRecord.class);
+            EntityQueryCriteria<FundsReconciliationRecordRecord> criteria = EntityQueryCriteria.create(FundsReconciliationRecordRecord.class);
             criteria.eq(criteria.proto().transactionId(), bo.transactionId());
             criteria.ne(criteria.proto().id(), to.reconciliationRecordPaidOrRejected());
-            PadReconciliationDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
+            FundsReconciliationRecordRecord padDebitRecord = Persistence.service().retrieve(criteria);
             if (padDebitRecord != null) {
-                to.reconciliationRecordReturn().set(padDebitRecord.duplicate(PadReconciliationDebitRecordDTO.class));
+                to.reconciliationRecordReturn().set(padDebitRecord.duplicate(FundsReconciliationRecordRecordDTO.class));
             }
         }
     }
 
     @Override
-    protected void enhanceListRetrieved(PadDebitRecord entity, PadDebitRecordDTO dto) {
+    protected void enhanceListRetrieved(FundsTransferRecord entity, FundsTransferRecordDTO dto) {
         Persistence.service().retrieve(dto.padBatch().pmc());
     }
 

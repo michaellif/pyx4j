@@ -18,27 +18,27 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
-    public PadFile prepareFundsTransferFile(FundsTransferType fundsTransferType) {
+    public FundsTransferFile prepareFundsTransferFile(FundsTransferType fundsTransferType) {
         return new FundsTransferCaledon().prepareFundsTransferFile(fundsTransferType);
     }
 
     @Override
-    public boolean sendFundsTransferFile(final PadFile padFile) {
+    public boolean sendFundsTransferFile(final FundsTransferFile padFile) {
         return new FundsTransferCaledon().sendFundsTransferFile(padFile);
     }
 
     @Override
-    public void prepareEcheckFundsTransfer(final ExecutionMonitor executionMonitor, final PadFile padFile) {
+    public void prepareEcheckFundsTransfer(final ExecutionMonitor executionMonitor, final FundsTransferFile padFile) {
         new PadFundsTransfer(executionMonitor, padFile).prepareEcheckFundsTransfer();
     }
 
     @Override
-    public void prepareDirectDebitFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile) {
+    public void prepareDirectDebitFundsTransfer(ExecutionMonitor executionMonitor, FundsTransferFile padFile) {
         new DirectDebitFundsTransfer(executionMonitor, padFile).prepareDirectDebitFundsTransfer();
     }
 

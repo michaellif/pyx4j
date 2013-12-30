@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferrecord;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 
-public class PadDebitRecordViewerViewImpl extends OperationsViewerViewImplBase<PadDebitRecordDTO> implements PadDebitRecordViewerView {
+public class PadDebitRecordViewerViewImpl extends OperationsViewerViewImplBase<FundsTransferRecordDTO> implements PadDebitRecordViewerView {
 
     public PadDebitRecordViewerViewImpl() {
         super(true);

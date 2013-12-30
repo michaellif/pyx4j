@@ -22,12 +22,12 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadBatchProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecordProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatchProcessingStatus;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordProcessingStatus;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile.FileAcknowledgmentStatus;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.payment.pad.CaledonPadUtils;
 import com.propertyvista.payment.pad.data.PadAckBatch;
@@ -43,9 +43,9 @@ class FundsTransferCaledonAcknowledgement {
     }
 
     void validateAndPersistFile(PadAckFile ackFile) {
-        PadFile padFile;
+        FundsTransferFile padFile;
         {
-            EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
+            EntityQueryCriteria<FundsTransferFile> criteria = EntityQueryCriteria.create(FundsTransferFile.class);
             criteria.eq(criteria.proto().fileCreationNumber(), ackFile.fileCreationNumber());
             criteria.eq(criteria.proto().companyId(), ackFile.companyId());
             criteria.eq(criteria.proto().fundsTransferType(), ackFile.fundsTransferType());
@@ -53,7 +53,7 @@ class FundsTransferCaledonAcknowledgement {
             if (padFile == null) {
                 throw new Error("Unexpected fileCreationNumber '" + ackFile.fileCreationNumber().getValue() + "' in file " + ackFile.fileName().getValue());
             }
-            if (padFile.status().getValue() != PadFile.PadFileStatus.Sent) {
+            if (padFile.status().getValue() != FundsTransferFile.PadFileStatus.Sent) {
                 throw new Error("Unexpected file status '" + padFile.status().getValue() + "' for file " + ackFile.fileName().getValue());
             }
         }
@@ -86,7 +86,7 @@ class FundsTransferCaledonAcknowledgement {
                 throw new Error("Unexpected record level rejects for acknowledgmentStatus '" + ackFile.acknowledgmentStatusCode().getValue() + "' in file "
                         + ackFile.fileName().getValue());
             }
-            padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
+            padFile.status().setValue(FundsTransferFile.PadFileStatus.Acknowledged);
             Persistence.service().merge(padFile);
 
             markAcknowledgedReceived(padFile);
@@ -98,14 +98,14 @@ class FundsTransferCaledonAcknowledgement {
             assertAcknowledgedValues(padFile, ackFile);
             updateBatches(padFile, ackFile);
             updateRecords(padFile, ackFile);
-            padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
+            padFile.status().setValue(FundsTransferFile.PadFileStatus.Acknowledged);
             Persistence.service().merge(padFile);
 
             markAcknowledgedReceived(padFile);
 
             executionMonitor.addInfoEvent("fileStatus", padFile.acknowledgmentStatusCode().getValue());
         } else {
-            padFile.status().setValue(PadFile.PadFileStatus.Invalid);
+            padFile.status().setValue(FundsTransferFile.PadFileStatus.Invalid);
             Persistence.service().merge(padFile);
 
             executionMonitor.setMessage("File not Accepted");
@@ -113,7 +113,7 @@ class FundsTransferCaledonAcknowledgement {
         }
     }
 
-    private void assertAcknowledgedValues(PadFile padFile, PadAckFile ackFile) {
+    private void assertAcknowledgedValues(FundsTransferFile padFile, PadAckFile ackFile) {
         if (!padFile.recordsCount().getValue().equals(Integer.valueOf(ackFile.recordsCount().getValue()))) {
             throw new Error("Unexpected recordsCount '" + ackFile.recordsCount().getValue() + "' != '" + padFile.recordsCount().getValue() + "'; in akFile "
                     + ackFile.fileCreationNumber().getValue());
@@ -124,12 +124,12 @@ class FundsTransferCaledonAcknowledgement {
         }
     }
 
-    private void updateBatches(PadFile padFile, PadAckFile ackFile) {
+    private void updateBatches(FundsTransferFile padFile, PadAckFile ackFile) {
         for (PadAckBatch akBatch : ackFile.batches()) {
-            EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
+            EntityQueryCriteria<FundsTransferBatch> criteria = EntityQueryCriteria.create(FundsTransferBatch.class);
             criteria.eq(criteria.proto().padFile(), padFile);
             criteria.eq(criteria.proto().batchNumber(), Integer.valueOf(akBatch.batchId().getValue()));
-            PadBatch padBatch = Persistence.service().retrieve(criteria);
+            FundsTransferBatch padBatch = Persistence.service().retrieve(criteria);
             if (padBatch == null) {
                 throw new Error("Unexpected batchId '" + akBatch.batchId().getValue() + "', terminalId '" + akBatch.terminalId().getValue() + "' in akFile "
                         + ackFile.fileCreationNumber().getValue());
@@ -148,7 +148,7 @@ class FundsTransferCaledonAcknowledgement {
                         + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
 
-            padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgedReceived);
+            padBatch.processingStatus().setValue(FundsTransferBatchProcessingStatus.AcknowledgedReceived);
             padBatch.acknowledgmentStatusCode().setValue(akBatch.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padBatch);
 
@@ -161,12 +161,12 @@ class FundsTransferCaledonAcknowledgement {
         }
     }
 
-    private void updateRecords(PadFile padFile, PadAckFile ackFile) {
+    private void updateRecords(FundsTransferFile padFile, PadAckFile ackFile) {
         for (PadAckDebitRecord akDebitRecord : ackFile.records()) {
-            EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+            EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
             criteria.eq(criteria.proto().padBatch().padFile(), padFile);
             criteria.eq(criteria.proto().transactionId(), akDebitRecord.transactionId());
-            PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
+            FundsTransferRecord padDebitRecord = Persistence.service().retrieve(criteria);
             if (padDebitRecord == null) {
                 throw new Error("Unexpected transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '" + akDebitRecord.clientId().getValue()
                         + "' in akFile " + ackFile.fileCreationNumber().getValue());
@@ -190,7 +190,7 @@ class FundsTransferCaledonAcknowledgement {
                         + akDebitRecord.clientId().getValue() + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
 
-            padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgedReceived);
+            padDebitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.AcknowledgedReceived);
             padDebitRecord.acknowledgmentStatusCode().setValue(akDebitRecord.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padDebitRecord);
 
@@ -198,13 +198,13 @@ class FundsTransferCaledonAcknowledgement {
         }
     }
 
-    private void markAcknowledgedReceived(PadFile padFile) {
+    private void markAcknowledgedReceived(FundsTransferFile padFile) {
         {
-            EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+            EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
             criteria.eq(criteria.proto().padBatch().padFile(), padFile);
             criteria.isNull(criteria.proto().processingStatus());
-            for (PadDebitRecord padDebitRecord : Persistence.service().query(criteria)) {
-                padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgedReceived);
+            for (FundsTransferRecord padDebitRecord : Persistence.service().query(criteria)) {
+                padDebitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.AcknowledgedReceived);
                 if (padDebitRecord.padBatch().acknowledgmentStatusCode().isNull()) {
                     executionMonitor.addProcessedEvent("Record Acknowledged", padDebitRecord.amount().getValue());
                 } else {
@@ -215,11 +215,11 @@ class FundsTransferCaledonAcknowledgement {
         }
 
         {
-            EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
+            EntityQueryCriteria<FundsTransferBatch> criteria = EntityQueryCriteria.create(FundsTransferBatch.class);
             criteria.eq(criteria.proto().padFile(), padFile);
             criteria.isNull(criteria.proto().processingStatus());
-            for (PadBatch padBatch : Persistence.service().query(criteria)) {
-                padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgedReceived);
+            for (FundsTransferBatch padBatch : Persistence.service().query(criteria)) {
+                padBatch.processingStatus().setValue(FundsTransferBatchProcessingStatus.AcknowledgedReceived);
                 executionMonitor.addInfoEvent("Batch Acknowledged", null, padBatch.batchAmount().getValue());
                 Persistence.service().persist(padBatch);
             }

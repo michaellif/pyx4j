@@ -15,12 +15,8 @@ package com.propertyvista.operations.domain.payment.pad;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -28,9 +24,9 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -38,69 +34,56 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.pmc.Pmc;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-//TODO rename to FundsTransferBatch
-public interface PadBatch extends IEntity {
+@ToStringFormat("Id:{1} Account:{0} Status:{2}")
+public interface FundsTransferRecord extends IEntity {
 
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     @Indexed
-    @MemberColumn(notNull = true)
-    PadFile padFile();
+    FundsTransferBatch padBatch();
 
-    IPrimitive<Integer> batchNumber();
+    // A unique value to represent the client/cardholder
+    @Length(29)
+    @ToString
+    IPrimitive<String> clientId();
+
+    IPrimitive<BigDecimal> amount();
+
+    @Length(3)
+    IPrimitive<String> bankId();
+
+    @Length(5)
+    IPrimitive<String> branchTransitNumber();
+
+    @Length(12)
+    IPrimitive<String> accountNumber();
+
+    interface TransactionId extends ColumnId {
+    }
+
+    //A unique value to represent the transaction/payment
+    @Length(15)
+    @Indexed
+    @ToString
+    @JoinColumn(TransactionId.class)
+    IPrimitive<String> transactionId();
+
+    IPrimitive<String> acknowledgmentStatusCode();
+
+    // Not coming from Caledon, Record processing status
+    IPrimitive<Boolean> processed();
+
+    // Not coming from Caledon, this is our processing flag
+    @ToString
+    IPrimitive<FundsTransferRecordProcessingStatus> processingStatus();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
-    IList<PadDebitRecord> records();
-
-    @ReadOnly
-    @MemberColumn(notNull = true)
-    @Detached
-    @Indexed(group = { "m,1" })
-    Pmc pmc();
-
-    @Indexed(group = { "m,2" })
-    IPrimitive<Key> merchantAccountKey();
-
-    /**
-     * Copy of merchantAccount at the time of Batch creation
-     */
-    @Length(8)
-    IPrimitive<String> merchantTerminalId();
-
-    @Length(3)
-    @ToString
-    IPrimitive<String> bankId();
-
-    @Length(5)
-    @ToString
-    IPrimitive<String> branchTransitNumber();
-
-    @Length(12)
-    @ToString
-    IPrimitive<String> accountNumber();
-
-    // filed editable by CRM
-
-    /**
-     * Caledon: Description to appear on client's statement. Typically a merchant's business name.
-     */
-    @Length(60)
-    @Caption(description = "Description to appear on client's statement. Typically a merchant's business name.")
-    IPrimitive<String> chargeDescription();
-
-    // Updated when batch is sent to Caledon
-    @Format("#0.00")
-    @Editor(type = EditorType.moneylabel)
-    IPrimitive<BigDecimal> batchAmount();
-
-    IPrimitive<String> acknowledgmentStatusCode();
-
-    IPrimitive<PadBatchProcessingStatus> processingStatus();
+    IList<FundsTransferRecordTransaction> transactionRecords();
 
 }

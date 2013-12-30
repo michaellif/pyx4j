@@ -32,10 +32,10 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadBatchProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecordProcessingStatus;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatchProcessingStatus;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordProcessingStatus;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -55,15 +55,15 @@ abstract class AbstractAcknowledgementProcessor {
     final void processPmcAcknowledgement() {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
 
-        List<PadBatch> batchList = TaskRunner.runInOperationsNamespace(new Callable<List<PadBatch>>() {
+        List<FundsTransferBatch> batchList = TaskRunner.runInOperationsNamespace(new Callable<List<FundsTransferBatch>>() {
             @Override
-            public List<PadBatch> call() {
-                EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
+            public List<FundsTransferBatch> call() {
+                EntityQueryCriteria<FundsTransferBatch> criteria = EntityQueryCriteria.create(FundsTransferBatch.class);
                 criteria.eq(criteria.proto().padFile().fundsTransferType(), fundsTransferType);
                 criteria.eq(criteria.proto().pmc(), pmc);
-                criteria.eq(criteria.proto().processingStatus(), PadBatchProcessingStatus.AcknowledgedReceived);
-                List<PadBatch> batchList = Persistence.service().query(criteria);
-                for (PadBatch padBatch : batchList) {
+                criteria.eq(criteria.proto().processingStatus(), FundsTransferBatchProcessingStatus.AcknowledgedReceived);
+                List<FundsTransferBatch> batchList = Persistence.service().query(criteria);
+                for (FundsTransferBatch padBatch : batchList) {
                     Persistence.service().retrieveMember(padBatch.records());
                     retrieveOperationsPadBatchDetails(padBatch);
                 }
@@ -71,7 +71,7 @@ abstract class AbstractAcknowledgementProcessor {
             }
         });
 
-        for (final PadBatch padBatch : batchList) {
+        for (final FundsTransferBatch padBatch : batchList) {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
                 @Override
@@ -84,7 +84,7 @@ abstract class AbstractAcknowledgementProcessor {
         }
     }
 
-    private void processPadBatch(final PadBatch padBatch) {
+    private void processPadBatch(final FundsTransferBatch padBatch) {
         if (!padBatch.acknowledgmentStatusCode().isNull()) {
             processPadBatchReject(padBatch);
         } else {
@@ -92,17 +92,17 @@ abstract class AbstractAcknowledgementProcessor {
         }
     }
 
-    protected void retrieveOperationsPadBatchDetails(PadBatch padBatch) {
+    protected void retrieveOperationsPadBatchDetails(FundsTransferBatch padBatch) {
     }
 
-    protected abstract void createRejectedAggregatedTransfer(PadBatch padBatch);
+    protected abstract void createRejectedAggregatedTransfer(FundsTransferBatch padBatch);
 
-    protected abstract void acknowledgmentReject(PadDebitRecord debitRecord);
+    protected abstract void acknowledgmentReject(FundsTransferRecord debitRecord);
 
-    private void processPadBatchReject(final PadBatch padBatch) {
-        for (PadDebitRecord debitRecord : padBatch.records()) {
-            Validate.isTrue(debitRecord.processingStatus().getValue() == PadDebitRecordProcessingStatus.AcknowledgedReceived,
-                    "Invalid PadDebitRecord records status");
+    private void processPadBatchReject(final FundsTransferBatch padBatch) {
+        for (FundsTransferRecord debitRecord : padBatch.records()) {
+            Validate.isTrue(debitRecord.processingStatus().getValue() == FundsTransferRecordProcessingStatus.AcknowledgedReceived,
+                    "Invalid FundsTransferRecord records status");
         }
 
         // Find MerchantAccount
@@ -124,12 +124,12 @@ abstract class AbstractAcknowledgementProcessor {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgeReject);
+                padBatch.processingStatus().setValue(FundsTransferBatchProcessingStatus.AcknowledgeReject);
                 Persistence.service().persist(padBatch);
 
                 // mark BatchRecords as AcknowledgeProcesed
-                for (PadDebitRecord debitRecord : padBatch.records()) {
-                    debitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgeReject);
+                for (FundsTransferRecord debitRecord : padBatch.records()) {
+                    debitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.AcknowledgeReject);
                     Persistence.service().persist(debitRecord);
                     executionMonitor.addFailedEvent("Debit Record", debitRecord.amount().getValue());
                 }
@@ -141,12 +141,12 @@ abstract class AbstractAcknowledgementProcessor {
                 .addInfoEvent("Batch Rejected", CompletionType.failed, padBatch.merchantTerminalId().getStringView(), padBatch.batchAmount().getValue());
     }
 
-    private void processPadBatchRecords(final PadBatch padBatch) {
+    private void processPadBatchRecords(final FundsTransferBatch padBatch) {
         // there still maybe individual rejected records
 
         int unprocessedRecordsCount = 0;
-        for (final PadDebitRecord debitRecord : padBatch.records()) {
-            if (debitRecord.processingStatus().getValue() == PadDebitRecordProcessingStatus.AcknowledgedReceived) {
+        for (final FundsTransferRecord debitRecord : padBatch.records()) {
+            if (debitRecord.processingStatus().getValue() == FundsTransferRecordProcessingStatus.AcknowledgedReceived) {
 
                 try {
                     new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
@@ -161,7 +161,7 @@ abstract class AbstractAcknowledgementProcessor {
 
                 } catch (Throwable e) {
                     unprocessedRecordsCount++;
-                    log.error("PadDebitRecord {} processing failed", debitRecord, e);
+                    log.error("FundsTransferRecord {} processing failed", debitRecord, e);
                     executionMonitor.addErredEvent("Debit Record", debitRecord.amount().getValue(),
                             SimpleMessageFormat.format("DebitRecord {0} {1}", debitRecord.id(), debitRecord), e);
                 }
@@ -173,7 +173,7 @@ abstract class AbstractAcknowledgementProcessor {
             TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                 @Override
                 public Void call() {
-                    padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgeProcessed);
+                    padBatch.processingStatus().setValue(FundsTransferBatchProcessingStatus.AcknowledgeProcessed);
                     Persistence.service().persist(padBatch);
                     return null;
                 }
@@ -183,7 +183,7 @@ abstract class AbstractAcknowledgementProcessor {
 
     }
 
-    private void processPadRecord(final PadDebitRecord debitRecord) {
+    private void processPadRecord(final FundsTransferRecord debitRecord) {
         if (!debitRecord.acknowledgmentStatusCode().isNull()) {
             acknowledgmentReject(debitRecord);
         }
@@ -191,7 +191,7 @@ abstract class AbstractAcknowledgementProcessor {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                debitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgeProcessed);
+                debitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.AcknowledgeProcessed);
                 Persistence.service().persist(debitRecord);
                 return null;
             }
@@ -204,7 +204,7 @@ abstract class AbstractAcknowledgementProcessor {
         }
     }
 
-    protected String getAcknowledgmentErrorMessage(PadBatch padBatch) {
+    protected String getAcknowledgmentErrorMessage(FundsTransferBatch padBatch) {
         // Caledon status codes
         if ("1003".equals(padBatch.acknowledgmentStatusCode().getValue())) {
             return "Invalid Terminal ID";
@@ -221,7 +221,7 @@ abstract class AbstractAcknowledgementProcessor {
         }
     }
 
-    protected String getAcknowledgmentErrorMessage(PadDebitRecord debitRecord) {
+    protected String getAcknowledgmentErrorMessage(FundsTransferRecord debitRecord) {
         // Caledon status codes
         if ("2001".equals(debitRecord.acknowledgmentStatusCode().getValue())) {
             return "Invalid Amount";

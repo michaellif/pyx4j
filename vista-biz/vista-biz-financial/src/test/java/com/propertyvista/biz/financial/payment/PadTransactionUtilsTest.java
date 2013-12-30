@@ -20,7 +20,7 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -32,7 +32,7 @@ public class PadTransactionUtilsTest extends VistaDBTestBase {
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.setPrimaryKey(new Key(100));
 
-        PadDebitRecord debitRecord = EntityFactory.create(PadDebitRecord.class);
+        FundsTransferRecord debitRecord = EntityFactory.create(FundsTransferRecord.class);
         debitRecord.transactionId().setValue(PadTransactionUtils.toCaldeonTransactionId(paymentRecord.id()));
 
         Key paymentRecordKey = PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId());

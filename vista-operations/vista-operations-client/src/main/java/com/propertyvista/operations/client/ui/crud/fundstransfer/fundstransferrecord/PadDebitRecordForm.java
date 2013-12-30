@@ -19,14 +19,14 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 
-public class PadDebitRecordForm extends OperationsEntityForm<PadDebitRecordDTO> {
+public class PadDebitRecordForm extends OperationsEntityForm<FundsTransferRecordDTO> {
 
     private static final I18n i18n = I18n.get(PadDebitRecordForm.class);
 
-    public PadDebitRecordForm(IForm<PadDebitRecordDTO> view) {
-        super(PadDebitRecordDTO.class, view);
+    public PadDebitRecordForm(IForm<FundsTransferRecordDTO> view) {
+        super(FundsTransferRecordDTO.class, view);
 
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;

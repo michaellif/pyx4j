@@ -15,8 +15,8 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferf
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 
-public interface PadFileListerView extends ILister<PadFileDTO> {
+public interface PadFileListerView extends ILister<FundsTransferFileDTO> {
 
 }

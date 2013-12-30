@@ -30,12 +30,12 @@ import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.domain.scheduler.ExecutionReportMessage;
@@ -153,22 +153,22 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(DirectDebitRecord.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationFileCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadReconciliationFile.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsReconciliationFile.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationDebitRecordCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadReconciliationDebitRecord.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsReconciliationRecordRecord.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationSummaryListService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadReconciliationSummary.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsReconciliationSummary.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadFileCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadFile.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsTransferFile.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadDebitRecordCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadDebitRecord.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsTransferRecord.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadBatchCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadBatch.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsTransferBatch.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationConfigService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));

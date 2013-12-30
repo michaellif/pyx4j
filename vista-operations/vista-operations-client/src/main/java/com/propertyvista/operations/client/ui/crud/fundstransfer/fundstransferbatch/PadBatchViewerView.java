@@ -15,8 +15,8 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferb
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 
-public interface PadBatchViewerView extends IViewer<PadBatchDTO> {
+public interface PadBatchViewerView extends IViewer<FundsTransferBatchDTO> {
 
 }

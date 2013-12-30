@@ -31,11 +31,11 @@ import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
-import com.propertyvista.operations.rpc.dto.PadBatchDTO;
-import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
-import com.propertyvista.operations.rpc.dto.PadFileDTO;
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
@@ -56,12 +56,12 @@ public class OperationsEntityMapper {
 
         register(DirectDebitRecord.class, OperationsSiteMap.FundsTransfer.DirectDebitRecord.class, DEFAULT_IMAGE);
 
-        register(PadFileDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferFile.class, DEFAULT_IMAGE);
-        register(PadDebitRecordDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferRecord.class, DEFAULT_IMAGE);
-        register(PadBatchDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferBatch.class, DEFAULT_IMAGE);
+        register(FundsTransferFileDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferFile.class, DEFAULT_IMAGE);
+        register(FundsTransferRecordDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferRecord.class, DEFAULT_IMAGE);
+        register(FundsTransferBatchDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferBatch.class, DEFAULT_IMAGE);
 
-        register(PadReconciliationFileDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationFile.class, DEFAULT_IMAGE);
-        register(PadReconciliationDebitRecordDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationRecord.class, DEFAULT_IMAGE);
+        register(FundsReconciliationFileDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationFile.class, DEFAULT_IMAGE);
+        register(FundsReconciliationRecordRecordDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationRecord.class, DEFAULT_IMAGE);
 
         register(PadSimFile.class, OperationsSiteMap.Simulator.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
         register(PadSimBatch.class, OperationsSiteMap.Simulator.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);

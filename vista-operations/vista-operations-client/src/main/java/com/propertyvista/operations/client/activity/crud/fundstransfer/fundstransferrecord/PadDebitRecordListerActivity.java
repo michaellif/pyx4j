@@ -24,18 +24,18 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferrecord.PadDebitRecordListerView;
-import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 
-public class PadDebitRecordListerActivity extends AbstractListerActivity<PadDebitRecordDTO> {
+public class PadDebitRecordListerActivity extends AbstractListerActivity<FundsTransferRecordDTO> {
 
     public PadDebitRecordListerActivity(Place place) {
         super(place, OperationsSite.getViewFactory().getView(PadDebitRecordListerView.class), GWT
-                .<AbstractCrudService<PadDebitRecordDTO>> create(PadDebitRecordCrudService.class), PadDebitRecordDTO.class);
+                .<AbstractCrudService<FundsTransferRecordDTO>> create(PadDebitRecordCrudService.class), FundsTransferRecordDTO.class);
     }
 
     @Override
-    protected void parseExternalFilters(AppPlace place, Class<PadDebitRecordDTO> entityClass, EntityFiltersBuilder<PadDebitRecordDTO> filters) {
+    protected void parseExternalFilters(AppPlace place, Class<FundsTransferRecordDTO> entityClass, EntityFiltersBuilder<FundsTransferRecordDTO> filters) {
         super.parseExternalFilters(place, entityClass, filters);
 
         String val;

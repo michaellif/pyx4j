@@ -18,18 +18,18 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
 
 @Transient
-public interface PadFileDTO extends PadFile {
+public interface FundsTransferFileDTO extends FundsTransferFile {
 
     @Detached(level = AttachLevel.CollectionSizeOnly)
-    IList<PadDebitRecord> debitRecords();
+    IList<FundsTransferRecord> debitRecords();
 
     @Override
     @Detached(level = AttachLevel.CollectionSizeOnly)
-    IList<PadBatch> batches();
+    IList<FundsTransferBatch> batches();
 
 }

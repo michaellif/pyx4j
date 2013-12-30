@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.validator.EntityValidator;
 
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
 import com.propertyvista.payment.pad.CaledonPadUtils;
 import com.propertyvista.payment.pad.data.PadAckBatch;
 import com.propertyvista.payment.pad.data.PadAckDebitRecord;
@@ -57,13 +57,13 @@ class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, Schedul
         merchantScheduled.put(event.merchantTerminalId, event);
     }
 
-    PadAckFile createAcknowledgementFile(PadFile unacknowledgedFile) {
+    PadAckFile createAcknowledgementFile(FundsTransferFile unacknowledgedFile) {
         PadAckFile ackFile = EntityFactory.create(PadAckFile.class);
         ackFile.fileName().setValue(String.valueOf(System.nanoTime()));
 
         boolean batchLevelReject = false;
         boolean transactionReject = false;
-        for (PadBatch padBatch : unacknowledgedFile.batches()) {
+        for (FundsTransferBatch padBatch : unacknowledgedFile.batches()) {
             // Has Bach reject request?
             ScheduledResponseAckMerchant merchantReject = merchantScheduled.get(padBatch.merchantTerminalId().getValue());
             if (merchantReject != null) {
@@ -78,7 +78,7 @@ class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, Schedul
                 batchLevelReject = true;
             } else {
                 // Find TRANSACTION REJECT RECORDs
-                for (PadDebitRecord padDebitRecord : padBatch.records()) {
+                for (FundsTransferRecord padDebitRecord : padBatch.records()) {
                     ScheduledResponseAckTransaction askReject = transactionsScheduled.get(padDebitRecord.transactionId().getValue());
                     if (askReject == null) {
                         EFTBankMock.instance().addAcknowledgedRecord(padDebitRecord);

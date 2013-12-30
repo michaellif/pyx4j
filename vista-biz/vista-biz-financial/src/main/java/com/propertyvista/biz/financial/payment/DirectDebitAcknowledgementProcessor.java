@@ -28,9 +28,9 @@ import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferS
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecordTransaction;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordTransaction;
 
 public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
 
@@ -41,8 +41,8 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
     }
 
     @Override
-    protected void retrieveOperationsPadBatchDetails(PadBatch padBatch) {
-        for (PadDebitRecord padDebitRecord : padBatch.records()) {
+    protected void retrieveOperationsPadBatchDetails(FundsTransferBatch padBatch) {
+        for (FundsTransferRecord padDebitRecord : padBatch.records()) {
             Persistence.service().retrieveMember(padDebitRecord.transactionRecords());
         }
     }
@@ -50,7 +50,7 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
     // TODO this two functions are nearly the same make them more unified
 
     @Override
-    protected void createRejectedAggregatedTransfer(PadBatch padBatch) {
+    protected void createRejectedAggregatedTransfer(FundsTransferBatch padBatch) {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.fundsTransferType().setValue(FundsTransferType.DirectBankingPayment);
@@ -63,14 +63,14 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
 
         Persistence.service().persist(at);
 
-        for (PadDebitRecord padDebitRecord : padBatch.records()) {
+        for (FundsTransferRecord padDebitRecord : padBatch.records()) {
             rejectPaymentRecords(padDebitRecord, at);
         }
     }
 
     @Override
     // DirectBanking is Aggregated Transfer anyway
-    protected void acknowledgmentReject(PadDebitRecord padDebitRecord) {
+    protected void acknowledgmentReject(FundsTransferRecord padDebitRecord) {
 
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
@@ -87,9 +87,9 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
         rejectPaymentRecords(padDebitRecord, at);
     }
 
-    private void rejectPaymentRecords(PadDebitRecord padDebitRecord, AggregatedTransfer at) {
+    private void rejectPaymentRecords(FundsTransferRecord padDebitRecord, AggregatedTransfer at) {
 
-        for (PadDebitRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
+        for (FundsTransferRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, transactionRecord.paymentRecordKey().getValue());
 
             if (paymentRecord == null) {

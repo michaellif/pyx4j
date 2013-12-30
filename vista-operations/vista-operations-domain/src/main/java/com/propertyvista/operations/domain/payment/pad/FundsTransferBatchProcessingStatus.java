@@ -7,17 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 3, 2013
- * @author VladL
+ * Created on 2013-04-28
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.operations.rpc.dto;
+package com.propertyvista.operations.domain.payment.pad;
 
-import com.pyx4j.entity.annotations.Transient;
+public enum FundsTransferBatchProcessingStatus {
 
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
+    AcknowledgedReceived,
 
-@Transient
-public interface PadBatchDTO extends PadBatch {
+    AcknowledgeProcessed,
+
+    AcknowledgeReject
 
 }

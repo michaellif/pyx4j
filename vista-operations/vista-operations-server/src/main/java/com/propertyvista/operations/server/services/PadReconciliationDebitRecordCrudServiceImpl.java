@@ -17,17 +17,17 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 
-public class PadReconciliationDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadReconciliationDebitRecord, PadReconciliationDebitRecordDTO>
+public class PadReconciliationDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<FundsReconciliationRecordRecord, FundsReconciliationRecordRecordDTO>
         implements PadReconciliationDebitRecordCrudService {
 
     public PadReconciliationDebitRecordCrudServiceImpl() {
-        super(PadReconciliationDebitRecord.class, PadReconciliationDebitRecordDTO.class);
+        super(FundsReconciliationRecordRecord.class, FundsReconciliationRecordRecordDTO.class);
     }
 
     @Override
@@ -36,22 +36,22 @@ public class PadReconciliationDebitRecordCrudServiceImpl extends AbstractCrudSer
     }
 
     @Override
-    protected void enhanceRetrieved(PadReconciliationDebitRecord bo, PadReconciliationDebitRecordDTO to,
+    protected void enhanceRetrieved(FundsReconciliationRecordRecord bo, FundsReconciliationRecordRecordDTO to,
             com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(to.reconciliationSummary().merchantAccount().pmc());
 
         {
-            EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+            EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
             criteria.eq(criteria.proto().transactionId(), bo.transactionId());
-            PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
+            FundsTransferRecord padDebitRecord = Persistence.service().retrieve(criteria);
             if (padDebitRecord != null) {
-                to.debitRecord().set(padDebitRecord.duplicate(PadDebitRecordDTO.class));
+                to.debitRecord().set(padDebitRecord.duplicate(FundsTransferRecordDTO.class));
             }
         }
     }
 
     @Override
-    protected void enhanceListRetrieved(PadReconciliationDebitRecord entity, PadReconciliationDebitRecordDTO dto) {
+    protected void enhanceListRetrieved(FundsReconciliationRecordRecord entity, FundsReconciliationRecordRecordDTO dto) {
         Persistence.service().retrieve(dto.reconciliationSummary().merchantAccount().pmc());
     }
 

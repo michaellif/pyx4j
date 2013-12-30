@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 
-public class PadReconciliationFileListerViewImpl extends OperationsListerViewImplBase<PadReconciliationFileDTO> implements PadReconciliationFileListerView {
+public class PadReconciliationFileListerViewImpl extends OperationsListerViewImplBase<FundsReconciliationFileDTO> implements PadReconciliationFileListerView {
 
     public PadReconciliationFileListerViewImpl() {
         setLister(new PadReconciliationFileLister());

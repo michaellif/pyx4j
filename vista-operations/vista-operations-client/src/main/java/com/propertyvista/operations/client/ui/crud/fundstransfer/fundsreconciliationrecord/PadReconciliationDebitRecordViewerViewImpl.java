@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 
-public class PadReconciliationDebitRecordViewerViewImpl extends OperationsViewerViewImplBase<PadReconciliationDebitRecordDTO> implements
+public class PadReconciliationDebitRecordViewerViewImpl extends OperationsViewerViewImplBase<FundsReconciliationRecordRecordDTO> implements
         PadReconciliationDebitRecordViewerView {
 
     public PadReconciliationDebitRecordViewerViewImpl() {

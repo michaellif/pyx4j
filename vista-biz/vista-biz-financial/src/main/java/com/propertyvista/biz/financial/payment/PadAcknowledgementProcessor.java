@@ -33,8 +33,8 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
 
 class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
 
@@ -45,7 +45,7 @@ class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
     }
 
     @Override
-    protected void createRejectedAggregatedTransfer(PadBatch padBatch) {
+    protected void createRejectedAggregatedTransfer(FundsTransferBatch padBatch) {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.fundsTransferType().setValue(FundsTransferType.PreAuthorizedDebit);
@@ -58,7 +58,7 @@ class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
 
         Persistence.service().persist(at);
 
-        for (PadDebitRecord debitRecord : padBatch.records()) {
+        for (FundsTransferRecord debitRecord : padBatch.records()) {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
                     PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
             if (paymentRecord == null) {
@@ -79,7 +79,7 @@ class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
     }
 
     @Override
-    protected void acknowledgmentReject(PadDebitRecord debitRecord) {
+    protected void acknowledgmentReject(FundsTransferRecord debitRecord) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
                 PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {

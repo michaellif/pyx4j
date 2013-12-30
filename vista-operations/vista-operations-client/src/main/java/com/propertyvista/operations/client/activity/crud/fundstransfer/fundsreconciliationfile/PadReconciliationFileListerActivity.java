@@ -21,13 +21,13 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileListerView;
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
 
-public class PadReconciliationFileListerActivity extends AbstractListerActivity<PadReconciliationFileDTO> {
+public class PadReconciliationFileListerActivity extends AbstractListerActivity<FundsReconciliationFileDTO> {
 
     public PadReconciliationFileListerActivity(Place place) {
         super(place, OperationsSite.getViewFactory().getView(PadReconciliationFileListerView.class), GWT
-                .<AbstractCrudService<PadReconciliationFileDTO>> create(PadReconciliationFileCrudService.class), PadReconciliationFileDTO.class);
+                .<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class), FundsReconciliationFileDTO.class);
     }
 }

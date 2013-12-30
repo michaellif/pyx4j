@@ -16,14 +16,14 @@ package com.propertyvista.operations.rpc.dto;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
 
 @Transient
-@ExtendsBO(PadDebitRecord.class)
-public interface PadDebitRecordDTO extends PadDebitRecord {
+@ExtendsBO(FundsTransferRecord.class)
+public interface FundsTransferRecordDTO extends FundsTransferRecord {
 
-    PadReconciliationDebitRecordDTO reconciliationRecordPaidOrRejected();
+    FundsReconciliationRecordRecordDTO reconciliationRecordPaidOrRejected();
 
-    PadReconciliationDebitRecordDTO reconciliationRecordReturn();
+    FundsReconciliationRecordRecordDTO reconciliationRecordReturn();
 
 }
