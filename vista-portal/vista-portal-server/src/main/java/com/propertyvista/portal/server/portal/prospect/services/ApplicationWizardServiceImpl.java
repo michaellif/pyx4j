@@ -45,6 +45,7 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -68,6 +69,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
@@ -410,7 +412,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 unitSelection.unit().set(lease.unit());
                 unitSelection.building().set(lease.unit().building());
                 unitSelection.floorplan().set(lease.unit().floorplan());
-                unitSelection.moveIn().setValue(lease.expectedMoveIn().getValue());
+                unitSelection.moveIn().setValue(lease.leaseFrom().getValue());
 
                 to.unitOptionsSelection().set(retriveCurrentUnitOptions(lease));
             } else {
@@ -439,6 +441,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void saveUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
         if (!to.unitSelection().unit().isNull() && !to.unitOptionsSelection().selectedService().isNull()) {
             LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
+
+            leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
 
             List<BillableItem> featureItems = new ArrayList<BillableItem>();
             featureItems.addAll(to.unitOptionsSelection().selectedPets());
@@ -555,7 +559,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         criteria.eq(criteria.proto().floorplan(), floorplanId);
-        criteria.le(criteria.proto()._availableForRent(), moveIn);
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            criteria.le(criteria.proto()._availableForRent(), moveIn);
+        } else {
+            criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
+            criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
+            criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
+        }
 
         return Persistence.service().query(criteria);
     }
