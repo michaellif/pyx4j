@@ -117,11 +117,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplanId, LogicalDate moveIn) {
-        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        criteria.eq(criteria.proto().floorplan(), floorplanId);
-        criteria.le(criteria.proto()._availableForRent(), moveIn);
-
-        callback.onSuccess(new Vector<AptUnit>(Persistence.service().query(criteria)));
+        callback.onSuccess(new Vector<AptUnit>(retriveAvailableUnits(floorplanId, moveIn)));
     }
 
     @Override
@@ -430,10 +426,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             }
 
             if (!unitSelection.floorplan().isNull()) {
-                EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-                criteria.eq(criteria.proto().floorplan(), unitSelection.floorplan());
-                criteria.le(criteria.proto()._availableForRent(), unitSelection.moveIn());
-                unitSelection.availableUnits().addAll(Persistence.service().query(criteria));
+                unitSelection.availableUnits().addAll(retriveAvailableUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
             }
 
             to.unitSelection().set(unitSelection);
@@ -553,6 +546,18 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 }
             }
         }
+    }
+
+    private List<AptUnit> retriveAvailableUnits(Floorplan floorplanId, LogicalDate moveIn) {
+        if (moveIn == null) {
+            moveIn = new LogicalDate(SystemDateManager.getDate());
+        }
+
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        criteria.eq(criteria.proto().floorplan(), floorplanId);
+        criteria.le(criteria.proto()._availableForRent(), moveIn);
+
+        return Persistence.service().query(criteria);
     }
 
     private UnitOptionsSelectionDTO retriveCurrentUnitOptions(Lease lease) {
