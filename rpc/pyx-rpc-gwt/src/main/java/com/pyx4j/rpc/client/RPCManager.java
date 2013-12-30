@@ -227,8 +227,12 @@ public class RPCManager {
     private static void fireStatusChangeEvent(When when, ServiceExecutionInfo info, Class<? extends Service<?, ?>> serviceDescriptorClass,
             Object callbackInstance, long requestDuration) {
         if (eventBus != null) {
-            eventBus.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, info, serviceDescriptorClass, callbackInstance, requestDuration));
+            eventBus.fireEvent(new RPCStatusChangeEvent(when, isRpcIdle(), info, serviceDescriptorClass, callbackInstance, requestDuration));
         }
+    }
+
+    public static boolean isRpcIdle() {
+        return runningServicesCount == 0;
     }
 
     public static HandlerRegistration addRPCStatusChangeHandler(RPCStatusChangeHandler handler) {
