@@ -25,23 +25,23 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationToken;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
-import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
-import com.propertyvista.payment.caledon.CaledonCardProduct;
-import com.propertyvista.payment.caledon.CaledonCardsUtils;
-import com.propertyvista.payment.caledon.CaledonFeeCalulationRequest;
-import com.propertyvista.payment.caledon.CaledonFeeCalulationResponse;
-import com.propertyvista.payment.caledon.CaledonFeeRequestTypes;
-import com.propertyvista.payment.caledon.CaledonPaymentWithFeeRequest;
-import com.propertyvista.payment.caledon.CaledonPaymentWithFeeResponse;
-import com.propertyvista.payment.caledon.CaledonRequest;
-import com.propertyvista.payment.caledon.CaledonRequestToken;
-import com.propertyvista.payment.caledon.CaledonResponse;
-import com.propertyvista.payment.caledon.CaledonTokenAction;
-import com.propertyvista.payment.caledon.CaledonTransactionType;
+import com.propertyvista.eft.caledoncards.CaledonCardProduct;
+import com.propertyvista.eft.caledoncards.CaledonCardsUtils;
+import com.propertyvista.eft.caledoncards.CaledonFeeCalulationRequest;
+import com.propertyvista.eft.caledoncards.CaledonFeeCalulationResponse;
+import com.propertyvista.eft.caledoncards.CaledonFeeRequestTypes;
+import com.propertyvista.eft.caledoncards.CaledonPaymentWithFeeRequest;
+import com.propertyvista.eft.caledoncards.CaledonPaymentWithFeeResponse;
+import com.propertyvista.eft.caledoncards.CaledonRequest;
+import com.propertyvista.eft.caledoncards.CaledonRequestToken;
+import com.propertyvista.eft.caledoncards.CaledonResponse;
+import com.propertyvista.eft.caledoncards.CaledonTokenAction;
+import com.propertyvista.eft.caledoncards.CaledonTransactionType;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationToken;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 
 public class CardServiceSimulationProcessor {
 

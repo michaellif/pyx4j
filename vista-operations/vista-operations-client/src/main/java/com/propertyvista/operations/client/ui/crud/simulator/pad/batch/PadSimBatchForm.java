@@ -21,8 +21,8 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
 

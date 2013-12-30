@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
 
 @Transient
 public interface FundsTransferBatchDTO extends FundsTransferBatch {

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 
 public interface PadSimBatchEditorView extends IEditor<PadSimBatch> {
 

@@ -15,7 +15,7 @@ package com.propertyvista.operations.server.services.simulator;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 
 public class PadSimBatchCrudServiceImpl extends AbstractCrudServiceImpl<PadSimBatch> implements PadSimBatchCrudService {

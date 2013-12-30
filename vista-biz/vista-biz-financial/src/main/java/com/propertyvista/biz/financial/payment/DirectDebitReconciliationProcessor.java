@@ -31,11 +31,11 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordTransaction;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordTransaction;
 import com.propertyvista.server.jobs.TaskRunner;
 
 class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor {

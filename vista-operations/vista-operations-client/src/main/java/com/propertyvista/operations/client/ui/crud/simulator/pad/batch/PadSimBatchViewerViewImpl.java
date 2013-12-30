@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 
 public class PadSimBatchViewerViewImpl extends OperationsViewerViewImplBase<PadSimBatch> implements PadSimBatchViewerView {
 

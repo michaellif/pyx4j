@@ -33,9 +33,9 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.server.jobs.TaskRunner;
 
 class PadFundsTransfer {

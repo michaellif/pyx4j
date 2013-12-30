@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrec
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.client.ui.crud.pmc.DirectDebitRecordLister;
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public class DirectDebitRecordListerViewImpl extends OperationsListerViewImplBase<DirectDebitRecord> implements DirectDebitRecordListerView {
 

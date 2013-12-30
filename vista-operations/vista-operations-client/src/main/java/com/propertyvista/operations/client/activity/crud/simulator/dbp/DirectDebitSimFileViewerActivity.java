@@ -24,8 +24,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimFileViewerView;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
 public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<DirectDebitSimFile> implements DirectDebitSimFileViewerView.Presenter {

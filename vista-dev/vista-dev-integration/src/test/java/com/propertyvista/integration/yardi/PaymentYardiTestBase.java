@@ -25,12 +25,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.system.OperationsTriggerFacade;
+import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.payment.pad.EFTTransportFacade;
-import com.propertyvista.payment.pad.mock.EFTTransportFacadeMock;
+import com.propertyvista.eft.mock.efttransport.EFTTransportFacadeMock;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.BuildingDataModel;

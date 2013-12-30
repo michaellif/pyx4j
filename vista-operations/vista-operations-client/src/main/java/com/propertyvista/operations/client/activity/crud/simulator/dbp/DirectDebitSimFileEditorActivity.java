@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimFileEditorView;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
 public class DirectDebitSimFileEditorActivity extends AbstractEditorActivity<DirectDebitSimFile> implements DirectDebitSimFileEditorView.Presenter {

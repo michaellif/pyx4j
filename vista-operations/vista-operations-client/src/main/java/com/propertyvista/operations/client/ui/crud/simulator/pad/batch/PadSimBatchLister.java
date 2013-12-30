@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 
 public class PadSimBatchLister extends AbstractLister<PadSimBatch> {
 

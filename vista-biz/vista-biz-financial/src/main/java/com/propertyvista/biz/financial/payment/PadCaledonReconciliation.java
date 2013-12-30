@@ -21,9 +21,9 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
 
 class PadCaledonReconciliation {
 

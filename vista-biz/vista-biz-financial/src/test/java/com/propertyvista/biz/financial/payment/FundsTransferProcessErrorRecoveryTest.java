@@ -25,15 +25,15 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
+import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.eft.mock.efttransport.EFTTransportFacadeMock;
+import com.propertyvista.eft.mock.efttransport.ScheduleTransportConnectionError;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
-import com.propertyvista.payment.pad.EFTTransportFacade;
-import com.propertyvista.payment.pad.mock.EFTTransportFacadeMock;
-import com.propertyvista.payment.pad.mock.ScheduleTransportConnectionError;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.mock.MockEventBus;

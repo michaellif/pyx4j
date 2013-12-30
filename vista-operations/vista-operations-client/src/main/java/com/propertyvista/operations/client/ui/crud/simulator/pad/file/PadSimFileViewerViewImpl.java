@@ -22,8 +22,8 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadSimBatchLister;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public class PadSimFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFile> implements PadSimFileViewerView {
 

@@ -19,7 +19,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimDebitRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
 
 public class DebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
 

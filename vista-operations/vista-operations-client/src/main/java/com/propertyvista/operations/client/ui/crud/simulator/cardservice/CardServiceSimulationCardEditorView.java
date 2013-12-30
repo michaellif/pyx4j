@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 
 public interface CardServiceSimulationCardEditorView extends IEditor<CardServiceSimulationCard> {
 

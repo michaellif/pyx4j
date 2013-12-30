@@ -33,8 +33,8 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 
 class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
 

@@ -19,7 +19,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public class PadSimFileListerViewImpl extends OperationsListerViewImplBase<PadSimFile> implements PadSimFileListerView {
 

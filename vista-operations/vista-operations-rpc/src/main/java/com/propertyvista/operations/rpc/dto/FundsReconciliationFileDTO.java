@@ -18,8 +18,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
 
 @Transient
 public interface FundsReconciliationFileDTO extends FundsReconciliationFile {

@@ -17,8 +17,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
 
 public class CardServiceSimulationTransactionCrudServiceImpl extends AbstractCrudServiceImpl<CardServiceSimulationTransaction> implements

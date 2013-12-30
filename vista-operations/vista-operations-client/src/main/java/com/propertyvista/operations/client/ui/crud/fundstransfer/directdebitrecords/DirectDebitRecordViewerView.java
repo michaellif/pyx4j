@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrec
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public interface DirectDebitRecordViewerView extends IViewer<DirectDebitRecord> {
 

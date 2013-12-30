@@ -35,6 +35,7 @@ import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.config.SftpConnectionConfiguration;
 
 public class SftpClient implements Closeable {

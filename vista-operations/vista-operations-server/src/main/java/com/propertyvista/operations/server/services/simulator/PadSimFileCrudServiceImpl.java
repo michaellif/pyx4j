@@ -18,9 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.eft.caledoneft.simulator.PadSimulationManager;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
-import com.propertyvista.payment.pad.simulator.PadSimulationManager;
 
 public class PadSimFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSimFile> implements PadSimFileCrudService {
 

@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public interface PmcDirectDebitRecordCrudService extends AbstractCrudService<DirectDebitRecord> {
 

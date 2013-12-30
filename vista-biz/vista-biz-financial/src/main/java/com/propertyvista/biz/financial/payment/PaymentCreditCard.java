@@ -33,7 +33,7 @@ import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.operations.domain.payment.cards.CardTransactionRecord;
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.server.jobs.TaskRunner;
 
 class PaymentCreditCard {

@@ -19,7 +19,7 @@ import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 
 public class PaymentsFundsTransferSendProcess implements PmcProcess {
 

@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
 

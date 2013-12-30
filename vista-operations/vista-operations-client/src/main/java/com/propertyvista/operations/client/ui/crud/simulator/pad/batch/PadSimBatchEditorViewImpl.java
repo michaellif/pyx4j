@@ -19,7 +19,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 
 public class PadSimBatchEditorViewImpl extends OperationsEditorViewImplBase<PadSimBatch> implements PadSimBatchEditorView {
 

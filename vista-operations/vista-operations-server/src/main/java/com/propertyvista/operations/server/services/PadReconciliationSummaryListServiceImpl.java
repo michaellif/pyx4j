@@ -15,7 +15,7 @@ package com.propertyvista.operations.server.services;
 
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationSummaryListService;
 

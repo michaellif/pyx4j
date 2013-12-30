@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public class PadSimFileEditorViewImpl extends OperationsEditorViewImplBase<PadSimFile> implements PadSimFileEditorView {
 

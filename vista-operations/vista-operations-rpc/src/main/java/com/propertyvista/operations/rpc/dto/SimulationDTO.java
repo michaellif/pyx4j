@@ -19,8 +19,8 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 
-import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 import com.propertyvista.operations.dto.VistaSystemsSimulationConfigDTO;
 
 @Transient

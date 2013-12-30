@@ -24,10 +24,10 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadSimBatchEditorView;
-import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
-import com.propertyvista.operations.domain.payment.pad.TransactionReconciliationStatus;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimDebitRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.MerchantReconciliationStatus;
+import com.propertyvista.operations.domain.eft.caledoneft.TransactionReconciliationStatus;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 
 public class PadSimBatchEditorActivity extends AbstractEditorActivity<PadSimBatch> implements PadSimBatchEditorView.Presenter {

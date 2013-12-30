@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationMerchantAccountListerView;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationMerchantAccountCrudService;
 
 public class CardServiceSimulationMerchantAccountListerActivity extends AbstractListerActivity<CardServiceSimulationMerchantAccount> {

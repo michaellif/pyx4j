@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 
 @Transient
 public interface CardServiceSimulatorConfigDTO extends CardServiceSimulatorConfig {

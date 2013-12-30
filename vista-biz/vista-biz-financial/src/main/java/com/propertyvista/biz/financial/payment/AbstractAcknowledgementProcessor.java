@@ -32,10 +32,10 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatchProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordProcessingStatus;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatchProcessingStatus;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.server.jobs.TaskRunner;
 

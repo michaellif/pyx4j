@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 import com.propertyvista.operations.rpc.dto.CardServiceSimulatorConfigDTO;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationConfigService;
 

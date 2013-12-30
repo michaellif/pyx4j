@@ -18,7 +18,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 
 public interface PaymentProcessFacade {
 

@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadSimFileEditorView;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 
 public class PadSimFileEditorActivity extends AbstractEditorActivity<PadSimFile> {

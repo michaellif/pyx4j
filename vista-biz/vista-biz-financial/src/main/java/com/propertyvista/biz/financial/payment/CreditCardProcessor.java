@@ -33,6 +33,7 @@ import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
+import com.propertyvista.biz.system.eft.CreditCardPaymentProcessorFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -41,16 +42,15 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
-import com.propertyvista.operations.domain.payment.cards.CardTransactionRecord;
-import com.propertyvista.payment.CCInformation;
-import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
-import com.propertyvista.payment.FeeCalulationRequest;
-import com.propertyvista.payment.FeeCalulationResponse;
-import com.propertyvista.payment.Merchant;
-import com.propertyvista.payment.PaymentInstrument;
-import com.propertyvista.payment.PaymentRequest;
-import com.propertyvista.payment.PaymentResponse;
-import com.propertyvista.payment.Token;
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
+import com.propertyvista.operations.domain.eft.cards.to.CreditCardPaymentInstrument;
+import com.propertyvista.operations.domain.eft.cards.to.FeeCalulationRequest;
+import com.propertyvista.operations.domain.eft.cards.to.FeeCalulationResponse;
+import com.propertyvista.operations.domain.eft.cards.to.Merchant;
+import com.propertyvista.operations.domain.eft.cards.to.PaymentInstrument;
+import com.propertyvista.operations.domain.eft.cards.to.PaymentRequest;
+import com.propertyvista.operations.domain.eft.cards.to.PaymentResponse;
+import com.propertyvista.operations.domain.eft.cards.to.TokenPaymentInstrument;
 import com.propertyvista.server.jobs.TaskRunner;
 
 class CreditCardProcessor {
@@ -104,7 +104,7 @@ class CreditCardProcessor {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
-        CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+        CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
         if (!cc.card().number().isNull()) {
             if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
                 throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
@@ -129,7 +129,7 @@ class CreditCardProcessor {
             throw new Error("CreditCardInfo should be saved first");
         }
 
-        Token token = EntityFactory.create(Token.class);
+        TokenPaymentInstrument token = EntityFactory.create(TokenPaymentInstrument.class);
         if (!cc.token().isNull()) {
             token.code().setValue(cc.token().getValue());
         } else {
@@ -178,7 +178,7 @@ class CreditCardProcessor {
         if (cc.cardType().getValue() != CreditCardType.VisaDebit) {
             return false;
         } else {
-            CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+            CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
             ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
 
             PaymentResponse response = getPaymentProcessor().validateVisaDebit(ccInfo);
@@ -188,7 +188,7 @@ class CreditCardProcessor {
 
     private static PaymentInstrument createPaymentInstrument(CreditCardInfo cc) {
         if (!cc.token().isNull()) {
-            Token token = EntityFactory.create(Token.class);
+            TokenPaymentInstrument token = EntityFactory.create(TokenPaymentInstrument.class);
             token.code().setValue(cc.token().getStringView());
             token.cardType().setValue(cc.cardType().getValue());
             return token;
@@ -202,7 +202,7 @@ class CreditCardProcessor {
             if ((cc.cardType().getValue() == CreditCardType.VisaDebit) && (!validateVisaDebit(cc))) {
                 throw new UserRuntimeException(i18n.tr("The credit card number doesn't match the credit card type"));
             }
-            CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+            CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
             ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
             ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
             ccInfo.securityCode().setValue(cc.securityCode().getValue());

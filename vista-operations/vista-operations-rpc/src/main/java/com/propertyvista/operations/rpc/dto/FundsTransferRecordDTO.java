@@ -16,7 +16,7 @@ package com.propertyvista.operations.rpc.dto;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 
 @Transient
 @ExtendsBO(FundsTransferRecord.class)

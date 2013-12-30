@@ -22,17 +22,17 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatchProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferFile.FileAcknowledgmentStatus;
+import com.propertyvista.eft.caledoneft.CaledonPadUtils;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatchProcessingStatus;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile.FileAcknowledgmentStatus;
+import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
-import com.propertyvista.payment.pad.CaledonPadUtils;
-import com.propertyvista.payment.pad.data.PadAckBatch;
-import com.propertyvista.payment.pad.data.PadAckDebitRecord;
-import com.propertyvista.payment.pad.data.PadAckFile;
 
 class FundsTransferCaledonAcknowledgement {
 
@@ -42,7 +42,7 @@ class FundsTransferCaledonAcknowledgement {
         this.executionMonitor = executionMonitor;
     }
 
-    void validateAndPersistFile(PadAckFile ackFile) {
+    void validateAndPersistFile(FundsTransferAckFile ackFile) {
         FundsTransferFile padFile;
         {
             EntityQueryCriteria<FundsTransferFile> criteria = EntityQueryCriteria.create(FundsTransferFile.class);
@@ -113,7 +113,7 @@ class FundsTransferCaledonAcknowledgement {
         }
     }
 
-    private void assertAcknowledgedValues(FundsTransferFile padFile, PadAckFile ackFile) {
+    private void assertAcknowledgedValues(FundsTransferFile padFile, FundsTransferAckFile ackFile) {
         if (!padFile.recordsCount().getValue().equals(Integer.valueOf(ackFile.recordsCount().getValue()))) {
             throw new Error("Unexpected recordsCount '" + ackFile.recordsCount().getValue() + "' != '" + padFile.recordsCount().getValue() + "'; in akFile "
                     + ackFile.fileCreationNumber().getValue());
@@ -124,8 +124,8 @@ class FundsTransferCaledonAcknowledgement {
         }
     }
 
-    private void updateBatches(FundsTransferFile padFile, PadAckFile ackFile) {
-        for (PadAckBatch akBatch : ackFile.batches()) {
+    private void updateBatches(FundsTransferFile padFile, FundsTransferAckFile ackFile) {
+        for (FundsTransferAckBatch akBatch : ackFile.batches()) {
             EntityQueryCriteria<FundsTransferBatch> criteria = EntityQueryCriteria.create(FundsTransferBatch.class);
             criteria.eq(criteria.proto().padFile(), padFile);
             criteria.eq(criteria.proto().batchNumber(), Integer.valueOf(akBatch.batchId().getValue()));
@@ -161,8 +161,8 @@ class FundsTransferCaledonAcknowledgement {
         }
     }
 
-    private void updateRecords(FundsTransferFile padFile, PadAckFile ackFile) {
-        for (PadAckDebitRecord akDebitRecord : ackFile.records()) {
+    private void updateRecords(FundsTransferFile padFile, FundsTransferAckFile ackFile) {
+        for (FundsTransferAckRecord akDebitRecord : ackFile.records()) {
             EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
             criteria.eq(criteria.proto().padBatch().padFile(), padFile);
             criteria.eq(criteria.proto().transactionId(), akDebitRecord.transactionId());

@@ -28,9 +28,9 @@ import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferS
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordTransaction;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordTransaction;
 
 public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
 

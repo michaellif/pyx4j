@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 
 public class DirectDebitSimRecordListerViewImpl extends OperationsListerViewImplBase<DirectDebitSimRecord> implements DirectDebitSimRecordListerView {
 

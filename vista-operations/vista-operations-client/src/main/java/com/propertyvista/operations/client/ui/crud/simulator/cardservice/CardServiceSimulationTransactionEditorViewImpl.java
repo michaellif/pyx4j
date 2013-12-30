@@ -20,9 +20,9 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
 
 public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationTransaction> implements
         CardServiceSimulationTransactionEditorView {

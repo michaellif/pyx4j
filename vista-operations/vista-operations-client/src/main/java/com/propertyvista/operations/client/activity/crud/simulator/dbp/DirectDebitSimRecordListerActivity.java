@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimRecordListerView;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimRecordCrudService;
 
 public class DirectDebitSimRecordListerActivity extends AbstractListerActivity<DirectDebitSimRecord> implements DirectDebitSimRecordListerView.Presenter {

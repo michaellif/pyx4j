@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 
 public interface DirectDebitSimFileListerView extends ILister<DirectDebitSimFile> {
 

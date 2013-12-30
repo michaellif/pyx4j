@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords.DirectDebitRecordListerView;
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
 
 public class DirectDebitRecordListerActivity extends AbstractListerActivity<DirectDebitRecord> {

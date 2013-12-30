@@ -32,11 +32,11 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction.SimpulationTransactionType;
-import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
-import com.propertyvista.payment.caledon.CaledonTokenAction;
-import com.propertyvista.payment.caledon.CaledonTransactionType;
-import com.propertyvista.payment.caledon.dev.VisaDebitInternalValidator;
+import com.propertyvista.eft.caledoncards.CaledonTokenAction;
+import com.propertyvista.eft.caledoncards.CaledonTransactionType;
+import com.propertyvista.eft.caledoncards.dev.VisaDebitInternalValidator;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimpulationTransactionType;
 
 public class CardServiceSimulationUtils {
 

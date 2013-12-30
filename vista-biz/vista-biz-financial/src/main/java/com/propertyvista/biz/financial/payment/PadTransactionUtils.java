@@ -25,7 +25,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.operations.domain.payment.pad.PadTestTransactionOffset;
+import com.propertyvista.operations.domain.eft.caledoneft.PadTestTransactionOffset;
 import com.propertyvista.server.jobs.TaskRunner;
 
 /**

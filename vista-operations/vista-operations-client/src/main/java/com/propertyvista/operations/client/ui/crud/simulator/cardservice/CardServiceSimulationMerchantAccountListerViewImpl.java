@@ -17,7 +17,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 
 public class CardServiceSimulationMerchantAccountListerViewImpl extends OperationsListerViewImplBase<CardServiceSimulationMerchantAccount> implements
         CardServiceSimulationMerchantAccountListerView {

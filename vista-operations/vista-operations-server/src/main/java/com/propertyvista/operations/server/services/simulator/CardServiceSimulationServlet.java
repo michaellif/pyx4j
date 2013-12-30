@@ -30,16 +30,16 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
-import com.propertyvista.payment.caledon.CaledonFeeCalulationRequest;
-import com.propertyvista.payment.caledon.CaledonFeeCalulationResponse;
-import com.propertyvista.payment.caledon.CaledonFeeRequestTypes;
-import com.propertyvista.payment.caledon.CaledonPaymentWithFeeRequest;
-import com.propertyvista.payment.caledon.CaledonPaymentWithFeeResponse;
-import com.propertyvista.payment.caledon.CaledonRequestToken;
-import com.propertyvista.payment.caledon.CaledonResponse;
-import com.propertyvista.payment.caledon.HttpRequestField;
-import com.propertyvista.payment.caledon.HttpResponseField;
+import com.propertyvista.eft.caledoncards.CaledonFeeCalulationRequest;
+import com.propertyvista.eft.caledoncards.CaledonFeeCalulationResponse;
+import com.propertyvista.eft.caledoncards.CaledonFeeRequestTypes;
+import com.propertyvista.eft.caledoncards.CaledonPaymentWithFeeRequest;
+import com.propertyvista.eft.caledoncards.CaledonPaymentWithFeeResponse;
+import com.propertyvista.eft.caledoncards.CaledonRequestToken;
+import com.propertyvista.eft.caledoncards.CaledonResponse;
+import com.propertyvista.eft.caledoncards.HttpRequestField;
+import com.propertyvista.eft.caledoncards.HttpResponseField;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 
 @SuppressWarnings("serial")
 public class CardServiceSimulationServlet extends HttpServlet {

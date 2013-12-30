@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.services.simulator;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 
 public interface DirectDebitSimRecordCrudService extends AbstractCrudService<DirectDebitSimRecord> {
 

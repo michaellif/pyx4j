@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public interface PadSimFileViewerView extends IViewer<PadSimFile> {
 

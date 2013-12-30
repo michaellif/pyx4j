@@ -24,14 +24,14 @@ import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.system.SftpTransportConnectionException;
+import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecordProcessingStatus;
-import com.propertyvista.payment.pad.EFTTransportFacade;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecordProcessingStatus;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 class DirectDebitReceiveProcessor {
 

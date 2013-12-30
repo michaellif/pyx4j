@@ -45,9 +45,9 @@ import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationToken;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationToken;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
 
 public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationCard> implements
         CardServiceSimulationCardEditorView {

@@ -40,10 +40,10 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecordProcessingStatus;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationSummary;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
 import com.propertyvista.server.jobs.TaskRunner;
 
 abstract class AbstractReconciliationProcessor {

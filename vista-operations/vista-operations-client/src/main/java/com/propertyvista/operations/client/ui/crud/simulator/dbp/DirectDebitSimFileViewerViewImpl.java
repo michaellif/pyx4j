@@ -19,7 +19,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 
 public class DirectDebitSimFileViewerViewImpl extends OperationsViewerViewImplBase<DirectDebitSimFile> implements DirectDebitSimFileViewerView {
 

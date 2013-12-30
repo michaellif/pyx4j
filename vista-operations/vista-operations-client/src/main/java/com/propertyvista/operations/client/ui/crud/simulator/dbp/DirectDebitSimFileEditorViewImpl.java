@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 
 public class DirectDebitSimFileEditorViewImpl extends OperationsEditorViewImplBase<DirectDebitSimFile> {
 

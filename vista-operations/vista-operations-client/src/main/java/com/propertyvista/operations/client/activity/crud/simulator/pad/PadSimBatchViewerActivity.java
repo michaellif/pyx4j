@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadSimBatchViewerView;
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 
 public class PadSimBatchViewerActivity extends AdminViewerActivity<PadSimBatch> implements PadSimBatchViewerView.Presenter {

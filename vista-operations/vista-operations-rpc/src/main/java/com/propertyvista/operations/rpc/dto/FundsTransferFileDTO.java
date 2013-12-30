@@ -18,9 +18,9 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 
 @Transient
 public interface FundsTransferFileDTO extends FundsTransferFile {

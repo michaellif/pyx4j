@@ -32,21 +32,21 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.SftpTransportConnectionException;
+import com.propertyvista.biz.system.eft.EFTTransportFacade;
+import com.propertyvista.biz.system.eft.FileCreationException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferBatch;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferRecord;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferFile;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferFileCreationNumber;
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationFile;
-import com.propertyvista.payment.pad.EFTTransportFacade;
-import com.propertyvista.payment.pad.FileCreationException;
-import com.propertyvista.payment.pad.data.PadAckFile;
-import com.propertyvista.server.sftp.SftpTransportConnectionException;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFileCreationNumber;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
 
 public class FundsTransferCaledon {
 
@@ -162,7 +162,7 @@ public class FundsTransferCaledon {
 
         Throwable sendError = null;
         try {
-            ServerSideFactory.create(EFTTransportFacade.class).sendPadFile(padFile);
+            ServerSideFactory.create(EFTTransportFacade.class).sendFundsTransferFile(padFile);
             padFile.status().setValue(FundsTransferFile.PadFileStatus.Sent);
             padFile.sent().setValue(new Date());
         } catch (SftpTransportConnectionException e) {
@@ -292,9 +292,9 @@ public class FundsTransferCaledon {
     }
 
     public FundsTransferType receiveFundsTransferAcknowledgementFile(final ExecutionMonitor executionMonitor) {
-        final PadAckFile padAkFile;
+        final FundsTransferAckFile padAkFile;
         try {
-            padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
+            padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receiveFundsTransferAcknowledgementFile(companyId);
         } catch (SftpTransportConnectionException e) {
             executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
             return null;
@@ -331,7 +331,7 @@ public class FundsTransferCaledon {
     public FundsTransferType receiveFundsTransferReconciliation(final ExecutionMonitor executionMonitor) {
         final FundsReconciliationFile reconciliationFile;
         try {
-            reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
+            reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receiveFundsTransferReconciliation(companyId);
         } catch (SftpTransportConnectionException e) {
             executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
             return null;

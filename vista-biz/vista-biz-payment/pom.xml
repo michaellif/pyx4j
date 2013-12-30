@@ -83,7 +83,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes>
-                                <exclude>**/caledon/*.*</exclude>
+                                <exclude>**/caledoncards/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>

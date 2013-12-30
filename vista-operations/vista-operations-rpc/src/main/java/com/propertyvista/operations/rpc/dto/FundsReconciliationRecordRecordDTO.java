@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.operations.domain.payment.pad.FundsReconciliationRecordRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
 
 @Transient
 public interface FundsReconciliationRecordRecordDTO extends FundsReconciliationRecordRecord {

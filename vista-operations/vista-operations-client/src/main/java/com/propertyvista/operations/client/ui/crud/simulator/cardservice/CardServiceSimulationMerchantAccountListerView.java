@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 
 public interface CardServiceSimulationMerchantAccountListerView extends ILister<CardServiceSimulationMerchantAccount> {
 

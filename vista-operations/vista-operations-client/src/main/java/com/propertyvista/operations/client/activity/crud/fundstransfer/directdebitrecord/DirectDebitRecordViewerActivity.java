@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords.DirectDebitRecordViewerView;
-import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
 
 public class DirectDebitRecordViewerActivity extends AbstractViewerActivity<DirectDebitRecord> implements DirectDebitRecordViewerView.Presenter {

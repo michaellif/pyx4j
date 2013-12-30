@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public class PadSimFileLister extends AbstractLister<PadSimFile> {
 

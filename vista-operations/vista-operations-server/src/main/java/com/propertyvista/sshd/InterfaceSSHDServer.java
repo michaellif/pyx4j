@@ -38,8 +38,8 @@ import com.pyx4j.essentials.j2se.util.FileUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
-import com.propertyvista.payment.dbp.simulator.DirectDebitSimManager;
-import com.propertyvista.payment.pad.simulator.PadSimSftpHelper;
+import com.propertyvista.eft.caledoneft.simulator.PadSimSftpHelper;
+import com.propertyvista.eft.dbp.simulator.DirectDebitSimManager;
 import com.propertyvista.sshd.fs.UsersFileSystemFactory;
 
 public class InterfaceSSHDServer {
