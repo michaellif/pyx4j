@@ -5,7 +5,7 @@
 <stringAttribute key="com.google.gdt.eclipse.suiteMainTypeProcessor.PREVIOUSLY_SET_MAIN_TYPE_NAME" value="com.google.gwt.dev.DevMode"/>
 <stringAttribute key="com.google.gwt.eclipse.core.CODE_SERVER_PORT" value="9997"/>
 <listAttribute key="com.google.gwt.eclipse.core.ENTRY_POINT_MODULES">
-<listEntry value="vista.portalHosted"/>
+<listEntry value="vista.siteHosted"/>
 </listAttribute>
 <stringAttribute key="com.google.gwt.eclipse.core.URL" value="http://vista-site.dev.birchwoodsoftwaregroup.com:8888/vista/site/en/"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
@@ -21,7 +21,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gdt.eclipse.maven.mavenClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.HostedMode"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9997 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://vista-site.dev.birchwoodsoftwaregroup.com:8888/vista/site/en/ -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-site-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-site-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-assembly-server}/src/main/webapp/site&quot; -deploy &quot;${workspace_loc:vista-assembly-server}/src/main/webapp/WEB-INF/deploy&quot; vista.portalHosted"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9997 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://vista-site.dev.birchwoodsoftwaregroup.com:8888/vista/site/en/ -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-site-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-site-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-assembly-server}/src/main/webapp/site&quot; -deploy &quot;${workspace_loc:vista-assembly-server}/src/main/webapp/WEB-INF/deploy&quot; vista.siteHosted"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-site-client"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m"/>
 </launchConfiguration>
