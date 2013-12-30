@@ -130,7 +130,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
             actualBehaviors.add(VistaBasicBehavior.VistaTermsAcceptanceRequired);
         }
 
-        if (true) {
+        if (false) {
             actualBehaviors.add(PortalResidentBehavior.LeaseSigningRequired);
         }
 
