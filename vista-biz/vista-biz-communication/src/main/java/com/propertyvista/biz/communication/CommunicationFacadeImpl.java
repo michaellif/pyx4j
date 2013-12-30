@@ -44,8 +44,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.operations.domain.security.OperationsUser;
-import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -55,6 +53,8 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     private static final I18n i18n = I18n.get(CommunicationFacadeImpl.class);
 
     final static String GENERIC_FAILED_MESSAGE = "Invalid User Account";
+
+    final static String GENERIC_UNAVAIL_MESSAGE = "Mail Service Is Temporary Unavailable. Please Try Again Later.";
 
     @Override
     public void sendProspectWelcome(LeaseTermTenant tenant) {
@@ -84,7 +84,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
         MailMessage m = MessageTemplatesCustomizable.createTenantInvitationEmail(leaseParticipant, emailTemplateType, token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
     }
 
@@ -107,7 +107,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
         MailMessage m = MessageTemplatesCustomizable.createApplicationStatusEmail(tenant, emailType);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
 
     }
@@ -138,7 +138,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
         MailMessage m = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, customer.user(), token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
     }
 
@@ -150,19 +150,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
         MailMessage m = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, customer.user(), token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
-    }
-
-    @Override
-    public void sendOperationsPasswordRetrievalToken(OperationsUser user) {
-        String token = AccessKey.createAccessToken(user, OperationsUserCredential.class, 1);
-        if (token == null) {
-            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
-        }
-        MailMessage m = MessageTemplatesCrmNotification.createOperationsPasswordResetEmail(user, token);
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
     }
 
@@ -180,7 +168,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
     }
 
@@ -191,7 +179,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         m.setTo(user.email().getValue());
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
     }
 
@@ -211,17 +199,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumedEmail();
         m.setTo(tenantEmail);
         Mail.send(m, getTenantSureConfig());
-    }
-
-    @Override
-    public void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail) {
-        MailMessage m = MessageTemplatesCrmNotification.createOnlinePaymentSetupCompletedEmail(userName);
-
-        m.setTo(userEmail);
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
     }
 
     @Override
@@ -327,7 +304,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         MailMessage m = MessageTemplatesCustomizable.createMaintenanceRequestEmail(emailType, request);
         m.setTo(sendTo);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
         return m;
     }

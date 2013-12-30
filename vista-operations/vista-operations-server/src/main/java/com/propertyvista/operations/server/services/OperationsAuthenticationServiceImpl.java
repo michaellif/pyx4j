@@ -20,7 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.communication.OperationsNotificationFacade;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.domain.security.OperationsUser;
@@ -71,7 +71,7 @@ public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServ
 
     @Override
     protected void sendPasswordRetrievalToken(OperationsUser user) {
-        ServerSideFactory.create(CommunicationFacade.class).sendOperationsPasswordRetrievalToken(user);
+        ServerSideFactory.create(OperationsNotificationFacade.class).sendOperationsPasswordRetrievalToken(user);
         Persistence.service().commit();
     }
 

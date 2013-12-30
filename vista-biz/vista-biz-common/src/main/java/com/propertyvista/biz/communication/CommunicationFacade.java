@@ -30,7 +30,6 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.operations.domain.security.OperationsUser;
 
 /**
  * to Tenant/Applicant (Lease)
@@ -38,9 +37,6 @@ import com.propertyvista.operations.domain.security.OperationsUser;
  * to Lead(Guest) (Building)
  */
 public interface CommunicationFacade {
-
-    //TODO move to OprationsNotificationFacade
-    void sendOperationsPasswordRetrievalToken(OperationsUser user) throws UserRuntimeException;
 
     void sendCrmPasswordRetrievalToken(CrmUser user) throws UserRuntimeException;
 
@@ -68,9 +64,6 @@ public interface CommunicationFacade {
     void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate);
 
     void sendTenantSurePaymentsResumedEmail(String tenantEmail);
-
-    //TODO move to OprationsNotificationFacade
-    void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
     void sendPaymentRejectedNotification(List<String> targetEmail, PaymentRecord paymentRecord, boolean applyNSF);
 

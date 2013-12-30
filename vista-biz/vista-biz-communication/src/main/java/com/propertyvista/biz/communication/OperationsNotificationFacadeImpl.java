@@ -1,0 +1,56 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Dec 30, 2013
+ * @author stanp
+ * @version $Id$
+ */
+package com.propertyvista.biz.communication;
+
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.mail.Mail;
+import com.pyx4j.server.mail.MailDeliveryStatus;
+import com.pyx4j.server.mail.MailMessage;
+
+import com.propertyvista.operations.domain.security.OperationsUser;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
+import com.propertyvista.server.common.security.AccessKey;
+
+public class OperationsNotificationFacadeImpl implements OperationsNotificationFacade {
+
+    private static final I18n i18n = I18n.get(OperationsNotificationFacadeImpl.class);
+
+    final static String GENERIC_FAILED_MESSAGE = "Invalid User Account";
+
+    final static String GENERIC_UNAVAIL_MESSAGE = "Mail Service Is Temporary Unavailable. Please Try Again Later.";
+
+    @Override
+    public void sendOperationsPasswordRetrievalToken(OperationsUser user) {
+        String token = AccessKey.createAccessToken(user, OperationsUserCredential.class, 1);
+        if (token == null) {
+            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        }
+        MailMessage m = MessageTemplatesCrmNotification.createOperationsPasswordResetEmail(user, token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
+        }
+    }
+
+    @Override
+    public void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail) {
+        MailMessage m = MessageTemplatesCrmNotification.createOnlinePaymentSetupCompletedEmail(userName);
+
+        m.setTo(userEmail);
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
+        }
+    }
+}

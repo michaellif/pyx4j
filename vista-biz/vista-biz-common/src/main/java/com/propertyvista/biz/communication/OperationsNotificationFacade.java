@@ -13,9 +13,16 @@
  */
 package com.propertyvista.biz.communication;
 
+import com.pyx4j.commons.UserRuntimeException;
+
+import com.propertyvista.operations.domain.security.OperationsUser;
+
 /**
  * @see also OperationsAlertFacade
  */
 public interface OperationsNotificationFacade {
+    void sendOperationsPasswordRetrievalToken(OperationsUser user) throws UserRuntimeException;
+
+    void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
 }
