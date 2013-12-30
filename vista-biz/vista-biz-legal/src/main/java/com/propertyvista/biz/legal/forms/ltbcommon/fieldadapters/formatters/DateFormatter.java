@@ -24,7 +24,7 @@ public class DateFormatter implements Formatter {
     @Override
     public String format(Object object) {
         Date value = (Date) object;
-        return SimpleMessageFormat.format("{0,date,dd/MM/YYYY}", value);
+        return SimpleMessageFormat.format("{0,date,dd/MM/yyyy}", value);
     }
 
 }
