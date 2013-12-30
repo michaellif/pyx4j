@@ -95,11 +95,11 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
 
     @Override
     public void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplan, LogicalDate moveIn) {
-        service.getAvailableUnits(callback, floorplan, moveIn);
+        service.getAvailableUnits(callback, floorplan.<Floorplan> createIdentityStub(), moveIn);
     }
 
     @Override
     public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, AptUnit unit) {
-        service.getAvailableUnitOptions(callback, unit);
+        service.getAvailableUnitOptions(callback, unit/* .<AptUnit> createIdentityStub() */);
     }
 }

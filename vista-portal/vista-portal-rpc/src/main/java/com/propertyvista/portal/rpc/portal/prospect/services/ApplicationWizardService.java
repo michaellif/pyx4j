@@ -36,7 +36,7 @@ public interface ApplicationWizardService extends IService {
 
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity);
 
-    void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplan, LogicalDate moveIn);
+    void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplanId, LogicalDate moveIn);
 
-    void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, AptUnit unit);
+    void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, AptUnit unitId);
 }
