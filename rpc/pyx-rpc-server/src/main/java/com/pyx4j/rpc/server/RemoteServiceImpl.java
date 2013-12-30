@@ -21,8 +21,10 @@
 package com.pyx4j.rpc.server;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +61,15 @@ public class RemoteServiceImpl implements RemoteService {
     private static final I18n i18n = I18n.get(RemoteServiceImpl.class);
 
     private final IServiceFactory serviceFactory;
+
+    private static final Set<Class<?>> serializableExceptions = new HashSet<Class<?>>();
+
+    static {
+        serializableExceptions.add(RuntimeException.class);
+        serializableExceptions.add(Exception.class);
+        serializableExceptions.add(Error.class);
+        serializableExceptions.add(Throwable.class);
+    }
 
     public RemoteServiceImpl(String name, IServiceFactory serviceFactory) {
         this.serviceFactory = serviceFactory;
@@ -211,7 +222,17 @@ public class RemoteServiceImpl implements RemoteService {
             } else {
                 throw oe;
             }
+        } catch (RuntimeException e) {
+            if (logOnce) {
+                log.error("Service call error {} for " + Context.getVisit(), serviceInterfaceClassName, e);
+            }
+            if (isSerializable(e)) {
+                throw e;
+            } else {
+                throw new UnRecoverableRuntimeException(i18n.tr("System Error. Please Contact Support"));
+            }
         }
+
     }
 
     static boolean logStakTrace(Throwable e) {
@@ -219,6 +240,14 @@ public class RemoteServiceImpl implements RemoteService {
             return !((UserRuntimeException) e).isSkipLogStackTrace();
         } else if ((e.getCause() != null) && (e.getCause() != e) && (e.getCause() instanceof UserRuntimeException)) {
             return !((UserRuntimeException) e.getCause()).isSkipLogStackTrace();
+        } else {
+            return true;
+        }
+    }
+
+    static boolean isSerializable(Throwable e) {
+        if (e.getClass().getName().startsWith("java.lang.")) {
+            return serializableExceptions.contains(e.getClass());
         } else {
             return true;
         }
