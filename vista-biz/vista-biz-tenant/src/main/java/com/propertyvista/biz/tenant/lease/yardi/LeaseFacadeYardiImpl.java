@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.internal.LeaseInternalManager;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -27,6 +28,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -192,5 +195,10 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     @Override
     public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
         new LeaseYardiManager().simpleLeaseRenew(leaseId, leaseEndDate);
+    }
+
+    @Override
+    public List<SignedLeaseLegalTerm> getLeaseTerms(LeaseTermTenant tenant) {
+        return new LeaseYardiManager().getLeaseTerms(tenant);
     }
 }

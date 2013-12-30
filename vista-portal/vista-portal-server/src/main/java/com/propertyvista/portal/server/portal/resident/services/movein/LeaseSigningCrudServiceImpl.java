@@ -16,19 +16,22 @@ package com.propertyvista.portal.server.portal.resident.services.movein;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseSigningDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
 
     @Override
-    public void init(AsyncCallback<LeaseSigningDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+    public void init(AsyncCallback<LeaseSigningDTO> callback, InitializationData initializationData) {
         LeaseSigningDTO to = EntityFactory.create(LeaseSigningDTO.class);
-
+        to.legalTerms().addAll(ServerSideFactory.create(LeaseFacade.class).getLeaseTerms(ResidentPortalContext.getLeaseTermTenant()));
         callback.onSuccess(to);
     }
 

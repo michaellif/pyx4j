@@ -15,20 +15,13 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.policy.policies.LeaseLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
-import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.generator.util.CommonsGenerator;
-import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<LeaseLegalPolicy> {
-
-    private final static I18n i18n = I18n.get(MockupLeaseSigningPolicyPreloader.class);
-
-    private AvailableLocale defaultLocale;
 
     public MockupLeaseSigningPolicyPreloader() {
         super(LeaseLegalPolicy.class);
@@ -39,18 +32,21 @@ public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<L
         LeaseLegalPolicy policy = EntityFactory.create(LeaseLegalPolicy.class);
 
         // add legal terms
-        policy.terms().add(randomTerm());
-        policy.terms().add(randomTerm());
+        policy.terms().add(createTerm(SignatureFormat.None));
+        policy.terms().add(createTerm(SignatureFormat.AgreeBox));
+        policy.terms().add(createTerm(SignatureFormat.AgreeBoxAndFullName));
+        policy.terms().add(createTerm(SignatureFormat.FullName));
+        policy.terms().add(createTerm(SignatureFormat.Initials));
 
         return policy;
     }
 
-    private LeaseLegalTerm randomTerm() {
+    private LeaseLegalTerm createTerm(SignatureFormat format) {
         LeaseLegalTerm term = EntityFactory.create(LeaseLegalTerm.class);
-        term.signatureFormat().setValue(RandomUtil.randomEnum(SignatureFormat.class));
 
+        term.signatureFormat().setValue(format);
         term.title().setValue(CommonsGenerator.lipsumShort());
-        term.body().setValue(CommonsGenerator.lipsum());
+        term.body().setValue(CommonsGenerator.lipsum() + " <i>" + CommonsGenerator.lipsumShort() + "</i>" + CommonsGenerator.lipsum());
 
         return term;
     }

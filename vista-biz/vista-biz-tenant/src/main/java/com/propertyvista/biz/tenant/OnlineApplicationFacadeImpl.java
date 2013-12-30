@@ -370,8 +370,12 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     @Override
     public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationTerms(OnlineApplication app) {
         List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
-        OnlineApplicationLegalPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                app.masterOnlineApplication().leaseApplication().lease().unit().building(), OnlineApplicationLegalPolicy.class);
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().units().$()._Leases().$().leaseApplication().onlineApplication(), app.masterOnlineApplication());
+        Building building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+
+        OnlineApplicationLegalPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
+                OnlineApplicationLegalPolicy.class);
         for (OnlineApplicationLegalTerm term : onlineApplicationPolicy.terms()) {
             TargetRole termRole = term.applyToRole().getValue();
             if (termRole.matchesApplicationRole(app.role().getValue())) {

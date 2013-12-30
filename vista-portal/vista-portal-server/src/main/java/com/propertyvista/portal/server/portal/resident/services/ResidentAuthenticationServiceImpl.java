@@ -130,7 +130,9 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
             actualBehaviors.add(VistaBasicBehavior.VistaTermsAcceptanceRequired);
         }
 
-        //TODO actualBehaviors.add(PortalResidentBehavior.LeaseSigningRequired);
+        if (true) {
+            actualBehaviors.add(PortalResidentBehavior.LeaseSigningRequired);
+        }
 
         if (selectedLease != null) {
             Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(selectedLease.billingAccount(),
