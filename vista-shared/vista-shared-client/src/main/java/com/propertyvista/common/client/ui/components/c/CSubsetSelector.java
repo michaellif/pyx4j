@@ -16,8 +16,8 @@ package com.propertyvista.common.client.ui.components.c;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CFocusComponent;
-import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 

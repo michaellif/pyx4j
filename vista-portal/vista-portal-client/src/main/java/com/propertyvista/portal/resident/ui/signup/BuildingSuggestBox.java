@@ -21,8 +21,8 @@ import java.util.List;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.NSuggestBox;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;

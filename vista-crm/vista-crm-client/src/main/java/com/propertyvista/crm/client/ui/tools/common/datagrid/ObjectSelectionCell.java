@@ -27,8 +27,8 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.forms.client.ui.IFormat;
 
 public class ObjectSelectionCell<E> extends AbstractInputCell<ObjectSelectionState<E>, ObjectSelectionState<E>> {
 

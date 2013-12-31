@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.tools.common.selectors;
 
 import java.text.ParseException;
 
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.commons.IFormat;
 
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;

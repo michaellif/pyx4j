@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.commons.IFormat;
 
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 

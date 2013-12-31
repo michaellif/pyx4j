@@ -25,7 +25,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.view.client.ProvidesKey;
 
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
 import com.pyx4j.i18n.shared.I18n;
 

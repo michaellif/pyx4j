@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.validators;
 
 import java.text.ParseException;
 
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.commons.IFormat;
 
 public class YouTubeVideoIdFormat implements IFormat<String> {
 

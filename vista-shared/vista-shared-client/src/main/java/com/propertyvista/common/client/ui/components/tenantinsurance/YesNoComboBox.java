@@ -16,8 +16,8 @@ package com.propertyvista.common.client.ui.components.tenantinsurance;
 import java.text.ParseException;
 import java.util.Arrays;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 public class YesNoComboBox extends CComboBox<Boolean> {

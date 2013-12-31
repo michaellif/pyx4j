@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.editors;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.util.ValidationUtils;

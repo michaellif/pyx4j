@@ -22,8 +22,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
 import com.pyx4j.forms.client.ui.formatters.PercentageFormat;
 

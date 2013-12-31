@@ -13,8 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.c;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
 

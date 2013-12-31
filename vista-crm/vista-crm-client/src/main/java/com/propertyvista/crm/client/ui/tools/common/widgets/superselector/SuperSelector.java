@@ -44,8 +44,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.forms.client.ui.IFormat;
 
 public abstract class SuperSelector<DataType> extends Composite {
 

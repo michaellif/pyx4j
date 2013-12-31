@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.widgets.client.Label;
 
 public class ObjectEditCell<E> extends AbstractEditableCell<E, ValidationErrors> {

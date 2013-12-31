@@ -17,8 +17,8 @@ import java.text.ParseException;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 

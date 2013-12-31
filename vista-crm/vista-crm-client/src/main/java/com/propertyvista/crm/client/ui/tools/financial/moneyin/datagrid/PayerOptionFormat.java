@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
 import java.text.ParseException;
 
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.commons.IFormat;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
