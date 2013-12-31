@@ -17,15 +17,15 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseSigningDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 
-public class LeaseSigningWizard extends CPortalEntityWizard<LeaseSigningDTO> {
+public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
     private final static I18n i18n = I18n.get(LeaseSigningWizard.class);
 
     public LeaseSigningWizard(LeaseSigningWizardView view) {
-        super(LeaseSigningDTO.class, view, i18n.tr("Lease"), i18n.tr("Submit"), ThemeColor.contrast2);
+        super(LeaseAgreementDTO.class, view, i18n.tr("Lease"), i18n.tr("Submit"), ThemeColor.contrast2);
 
         addStep(createDetailsStep());
         addStep(createAgreementStep());

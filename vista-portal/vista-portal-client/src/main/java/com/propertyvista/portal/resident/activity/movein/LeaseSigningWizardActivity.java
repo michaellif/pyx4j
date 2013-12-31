@@ -21,16 +21,16 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ui.movein.LeaseSigningWizardView;
 import com.propertyvista.portal.resident.ui.movein.LeaseSigningWizardView.LeaseSigningWizardPresenter;
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseSigningDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class LeaseSigningWizardActivity extends AbstractWizardCrudActivity<LeaseSigningDTO> implements LeaseSigningWizardPresenter {
+public class LeaseSigningWizardActivity extends AbstractWizardCrudActivity<LeaseAgreementDTO> implements LeaseSigningWizardPresenter {
 
     private static final I18n i18n = I18n.get(LeaseSigningWizardActivity.class);
 
     public LeaseSigningWizardActivity(AppPlace place) {
-        super(LeaseSigningWizardView.class, GWT.<LeaseSigningCrudService> create(LeaseSigningCrudService.class), LeaseSigningDTO.class);
+        super(LeaseSigningWizardView.class, GWT.<LeaseSigningCrudService> create(LeaseSigningCrudService.class), LeaseAgreementDTO.class);
     }
 
     @Override

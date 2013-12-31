@@ -15,8 +15,8 @@ package com.propertyvista.portal.rpc.portal.resident.services.movein;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseSigningDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 
-public interface LeaseSigningCrudService extends AbstractCrudService<LeaseSigningDTO> {
+public interface LeaseSigningCrudService extends AbstractCrudService<LeaseAgreementDTO> {
 
 }

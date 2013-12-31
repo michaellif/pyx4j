@@ -22,39 +22,39 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseSigningDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
 
     @Override
-    public void init(AsyncCallback<LeaseSigningDTO> callback, InitializationData initializationData) {
-        LeaseSigningDTO to = EntityFactory.create(LeaseSigningDTO.class);
+    public void init(AsyncCallback<LeaseAgreementDTO> callback, InitializationData initializationData) {
+        LeaseAgreementDTO to = EntityFactory.create(LeaseAgreementDTO.class);
         to.legalTerms().addAll(ServerSideFactory.create(LeaseFacade.class).getLeaseTerms(ResidentPortalContext.getLeaseTermTenant()));
         callback.onSuccess(to);
     }
 
     @Override
-    public void retrieve(AsyncCallback<LeaseSigningDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+    public void retrieve(AsyncCallback<LeaseAgreementDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, LeaseSigningDTO editableEntity) {
+    public void create(AsyncCallback<Key> callback, LeaseAgreementDTO editableEntity) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, LeaseSigningDTO editableEntity) {
+    public void save(AsyncCallback<Key> callback, LeaseAgreementDTO editableEntity) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<LeaseSigningDTO>> callback, EntityListCriteria<LeaseSigningDTO> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<LeaseAgreementDTO>> callback, EntityListCriteria<LeaseAgreementDTO> criteria) {
         // TODO Auto-generated method stub
 
     }

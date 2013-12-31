@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseSigningDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.shared.ui.IWizardView;
 
-public interface LeaseSigningWizardView extends IWizardView<LeaseSigningDTO> {
+public interface LeaseSigningWizardView extends IWizardView<LeaseAgreementDTO> {
 
-    public interface LeaseSigningWizardPresenter extends IWizardFormPresenter<LeaseSigningDTO> {
+    public interface LeaseSigningWizardPresenter extends IWizardFormPresenter<LeaseAgreementDTO> {
 
     }
 

@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.IList;
 import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
 
 @Transient
-public interface LeaseSigningDTO extends IEntity {
+public interface LeaseAgreementDTO extends IEntity {
 
     @Owned
     IList<SignedLeaseLegalTerm> legalTerms();
