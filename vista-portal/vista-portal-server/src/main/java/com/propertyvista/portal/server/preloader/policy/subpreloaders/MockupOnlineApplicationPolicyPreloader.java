@@ -48,7 +48,7 @@ public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloa
         term.signatureFormat().setValue(format);
         term.applyToRole().setValue(TargetRole.Any);
         term.title().setValue(CommonsGenerator.lipsumShort());
-        term.body().setValue(CommonsGenerator.lipsum() + " <i>" + CommonsGenerator.lipsumShort() + "</i>" + CommonsGenerator.lipsum());
+        term.body().setValue(CommonsGenerator.lipsum() + " <i>" + CommonsGenerator.lipsumShort() + "</i> " + CommonsGenerator.lipsum());
 
         return term;
     }

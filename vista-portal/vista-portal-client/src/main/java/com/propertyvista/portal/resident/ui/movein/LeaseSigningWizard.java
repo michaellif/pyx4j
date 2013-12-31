@@ -27,12 +27,20 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseSigningDTO> {
     public LeaseSigningWizard(LeaseSigningWizardView view) {
         super(LeaseSigningDTO.class, view, i18n.tr("Lease"), i18n.tr("Submit"), ThemeColor.contrast2);
 
-        //   addStep(createDetailsStep());
+        addStep(createDetailsStep());
         addStep(createAgreementStep());
     }
 
+    public BasicFlexFormPanel createDetailsStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Details"));
+        int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
+
+        return panel;
+    }
+
     public BasicFlexFormPanel createAgreementStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Legal"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Agreement"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
