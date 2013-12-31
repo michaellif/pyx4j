@@ -11,7 +11,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.pyx4j.i18n.gettext.POPrintForEclipse"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="style ../../vista-i18n-catalog/src/main/resources/translations/vista-all-keys.pot"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-integration"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="corrections ../../vista-i18n-catalog/src/main/resources/translations/corrections.po"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-assembly-i18n"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 </launchConfiguration>
