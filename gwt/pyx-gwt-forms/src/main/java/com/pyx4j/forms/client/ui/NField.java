@@ -243,7 +243,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
     class EditorPanel extends FlowPanel implements HasDoubleClickHandlers {
 
-        private final GroupFocusHandler focusHandlerManager;
+        private final GroupFocusHandler groupFocusHandler;
 
         private final Set<HandlerRegistration> triggerButtonHandlerRegistrations = new HashSet<HandlerRegistration>();
 
@@ -269,11 +269,11 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             editorHolder.getElement().getStyle().setProperty("display", "table-cell");
             add(editorHolder);
 
-            focusHandlerManager = new GroupFocusHandler(this);
+            groupFocusHandler = new GroupFocusHandler(this);
 
             if (editor instanceof NFocusField) {
-                ((NFocusField<?, ?, ?, ?>) editor).addFocusHandler(focusHandlerManager);
-                ((NFocusField<?, ?, ?, ?>) editor).addBlurHandler(focusHandlerManager);
+                ((NFocusField<?, ?, ?, ?>) editor).addFocusHandler(groupFocusHandler);
+                ((NFocusField<?, ?, ?, ?>) editor).addBlurHandler(groupFocusHandler);
             }
 
             { // Trigger Button
@@ -324,8 +324,8 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
             if (triggerButton != null) {
 
-                triggerButtonHandlerRegistrations.add(triggerButton.addFocusHandler(focusHandlerManager));
-                triggerButtonHandlerRegistrations.add(triggerButton.addBlurHandler(focusHandlerManager));
+                triggerButtonHandlerRegistrations.add(triggerButton.addFocusHandler(groupFocusHandler));
+                triggerButtonHandlerRegistrations.add(triggerButton.addBlurHandler(groupFocusHandler));
 
                 triggerButtonHandlerRegistrations.add(triggerButton.addKeyDownHandler(new KeyDownHandler() {
 
@@ -378,8 +378,8 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
             if (clearButton != null) {
 
-                clearButtonHandlerRegistrations.add(clearButton.addFocusHandler(focusHandlerManager));
-                clearButtonHandlerRegistrations.add(clearButton.addBlurHandler(focusHandlerManager));
+                clearButtonHandlerRegistrations.add(clearButton.addFocusHandler(groupFocusHandler));
+                clearButtonHandlerRegistrations.add(clearButton.addBlurHandler(groupFocusHandler));
 
                 clearButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
                 clearButton.getElement().getStyle().setDisplay(Display.BLOCK);
@@ -388,7 +388,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         }
 
         protected GroupFocusHandler getGroupFocusHandler() {
-            return focusHandlerManager;
+            return groupFocusHandler;
         }
 
         @Override

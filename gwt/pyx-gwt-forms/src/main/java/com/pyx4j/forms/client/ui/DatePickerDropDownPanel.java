@@ -78,7 +78,6 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
                 nativeDatePicker.setNativeValue(value);
                 nativeDatePicker.getCComponent().onEditingStop();
                 hideDatePicker();
-                nativeDatePicker.setFocus(true);
             }
         });
 
