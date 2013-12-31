@@ -12,6 +12,8 @@ import java.sql.Time;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
+import com.pyx4j.commons.IFormat;
+
 public class CTimeLabel extends CLabel<Time> {
 
     public CTimeLabel() {

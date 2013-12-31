@@ -28,6 +28,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;

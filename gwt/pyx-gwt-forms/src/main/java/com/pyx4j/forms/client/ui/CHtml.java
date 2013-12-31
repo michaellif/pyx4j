@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.IFormat;
+
 public class CHtml extends CField<String, NHtml> {
 
     private IFormat<String> format;

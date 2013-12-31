@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CBigDecimalField extends CNumberField<BigDecimal> {

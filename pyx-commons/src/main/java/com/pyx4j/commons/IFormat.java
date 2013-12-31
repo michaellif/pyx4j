@@ -18,7 +18,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.commons;
 
 import java.text.ParseException;
 

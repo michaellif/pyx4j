@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CLongField extends CNumberField<Long> {

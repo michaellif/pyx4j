@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.IFileURLBuilder;

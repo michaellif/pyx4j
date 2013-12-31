@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Map;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.widgets.client.RadioGroup;
 
 public class CRadioGroupInteger extends CRadioGroup<Integer> {

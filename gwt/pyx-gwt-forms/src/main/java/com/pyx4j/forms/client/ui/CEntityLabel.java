@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.entity.core.IEntity;
 
 public class CEntityLabel<E extends IEntity> extends CLabel<E> {

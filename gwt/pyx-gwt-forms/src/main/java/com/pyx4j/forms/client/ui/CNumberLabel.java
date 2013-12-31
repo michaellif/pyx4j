@@ -12,6 +12,7 @@ import java.text.ParseException;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.SimpleMessageFormat;
 
 public class CNumberLabel extends CLabel<Number> {

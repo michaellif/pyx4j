@@ -12,6 +12,8 @@ import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
+import com.pyx4j.commons.IFormat;
+
 public class CDateLabel extends CLabel<Date> {
 
     public CDateLabel() {

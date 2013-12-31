@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.IFormat;
+
 public class CLabel<E> extends CField<E, NLabel<E>> {
 
     private IFormat<E> format;

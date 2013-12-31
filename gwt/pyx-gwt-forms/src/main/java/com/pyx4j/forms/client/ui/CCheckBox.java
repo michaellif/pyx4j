@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {

@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.widgets.client.RadioGroup;
 
 public class CRadioGroupEnum<E extends Enum<E>> extends CRadioGroup<E> {
