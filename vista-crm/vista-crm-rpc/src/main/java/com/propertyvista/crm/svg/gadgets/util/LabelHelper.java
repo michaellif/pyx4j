@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.svg.gadgets.util;
+package com.propertyvista.crm.svg.gadgets.util;
 
 import java.util.Iterator;
 

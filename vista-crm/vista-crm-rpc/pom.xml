@@ -51,6 +51,12 @@
             <artifactId>pyx-site-shared</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-svg-shared</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
     </dependencies>
 
     <properties>

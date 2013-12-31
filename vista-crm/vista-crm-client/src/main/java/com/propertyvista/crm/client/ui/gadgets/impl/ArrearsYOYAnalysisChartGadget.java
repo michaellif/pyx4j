@@ -34,10 +34,10 @@ import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstan
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsYoyAnalysisGadgetMetadataForm;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
+import com.propertyvista.crm.svg.gadgets.ArrearsYoyAnalysisChartFactory;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.svg.gadgets.ArrearsYoyAnalysisChartFactory;
 
 public class ArrearsYOYAnalysisChartGadget extends GadgetInstanceBase<ArrearsYOYAnalysisChartGadgetMetadata> implements IBuildingBoardGadgetInstance {
 

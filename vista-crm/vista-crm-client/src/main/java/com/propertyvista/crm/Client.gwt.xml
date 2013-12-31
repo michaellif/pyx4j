@@ -6,13 +6,13 @@
 	<inherits name='com.google.gwt.user.User'/>
 
     <inherits name='com.pyx4j.site.GwtSite' />
-    
+
+    <inherits name='com.propertyvista.Domain' />    
     <inherits name='com.propertyvista.crm.Rpc' />
-    <inherits name='com.propertyvista.Domain' />
-    <inherits name='com.propertyvista.SVG' />
+    <inherits name='com.propertyvista.crm.SVG' />
+
     <inherits name='com.pyx4j.essentials.EssentialsSwf' />
     
-
 	<inherits name='com.propertyvista.common.VistaCommon' />
 
     <source path="client"/>    

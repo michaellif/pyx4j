@@ -44,12 +44,6 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-svg-shared</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-financial</artifactId>
             <version>${project.version}</version>
         </dependency>

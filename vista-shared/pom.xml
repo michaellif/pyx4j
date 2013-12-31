@@ -18,7 +18,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-svg-shared</module>
         <module>vista-shared-rpc</module>
         <module>vista-shared-server</module>
         <module>vista-shared-client</module>

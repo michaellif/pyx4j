@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.svg.gadgets;
+package com.propertyvista.crm.svg.gadgets;
 
 import java.sql.Date;
 import java.util.ArrayList;

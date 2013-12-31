@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.impl;
 
-import static com.propertyvista.svg.gadgets.util.LabelHelper.makeListView;
+import static com.propertyvista.crm.svg.gadgets.util.LabelHelper.makeListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
