@@ -169,6 +169,7 @@
 
     <modules>
         <module>vista-biz</module>
+        <module>vista-server</module>
         <module>vista-shared</module>
         <module>vista-dev</module>
         <module>vista-portal</module>
