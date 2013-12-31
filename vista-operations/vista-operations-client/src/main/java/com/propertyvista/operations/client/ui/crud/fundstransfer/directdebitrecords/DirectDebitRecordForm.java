@@ -36,6 +36,8 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().receivedDate())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
 
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().operationsNotes())).build());
+
         panel.setH1(++row, 0, 2, "Trace");
 
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().collectionDate())).build());

@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
@@ -92,6 +93,9 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
     };
 
     IPrimitive<MerchantAccountActivationStatus> status();
+
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> operationsNotes();
 
     /**
      * Calculated base on terminal_id before sending it to GWT

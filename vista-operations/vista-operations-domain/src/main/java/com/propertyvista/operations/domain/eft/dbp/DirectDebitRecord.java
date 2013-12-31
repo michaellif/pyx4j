@@ -78,4 +78,7 @@ public interface DirectDebitRecord extends IEntity {
 
     DirectDebitRecordTrace trace();
 
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> operationsNotes();
+
 }

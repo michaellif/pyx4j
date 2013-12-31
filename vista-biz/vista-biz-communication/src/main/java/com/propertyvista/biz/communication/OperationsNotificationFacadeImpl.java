@@ -19,6 +19,7 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.server.common.security.AccessKey;
@@ -52,5 +53,10 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
+    }
+
+    @Override
+    public void invalidDirectDebitReceived(DirectDebitRecord paymentRecord) {
+        // TODO Auto-generated method stub
     }
 }

@@ -88,6 +88,8 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().accountNumber()), 15).build());
 
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().operationsNotes()), 15).build());
+
         content.setH2(++row, 0, 2, i18n.tr("Payment Types Activation"));
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().setup().acceptedEcheck()), 5).build());

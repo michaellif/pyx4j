@@ -19,6 +19,8 @@ public enum DirectDebitRecordProcessingStatus {
 
     Invalid,
 
-    Processed;
+    Processed,
+
+    Refunded;
 
 }

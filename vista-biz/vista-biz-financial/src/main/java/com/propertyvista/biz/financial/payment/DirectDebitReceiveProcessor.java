@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.communication.OperationsNotificationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.biz.system.eft.EFTTransportFacade;
@@ -116,6 +117,7 @@ class DirectDebitReceiveProcessor {
                 executionMonitor.addProcessedEvent("payment", record.amount().getValue());
             } else {
                 executionMonitor.addFailedEvent("payment", record.amount().getValue());
+                ServerSideFactory.create(OperationsNotificationFacade.class).invalidDirectDebitReceived(record);
             }
         }
     }
