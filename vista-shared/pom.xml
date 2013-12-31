@@ -18,13 +18,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-server-config</module>
         <module>vista-svg-shared</module>
-        <module>vista-domain-srv</module>
         <module>vista-shared-rpc</module>
         <module>vista-shared-server</module>
         <module>vista-shared-client</module>
-        <module>vista-importer</module>
     </modules>
 
 </project>
