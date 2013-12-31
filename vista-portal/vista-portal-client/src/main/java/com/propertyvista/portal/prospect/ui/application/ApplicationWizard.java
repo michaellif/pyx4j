@@ -32,7 +32,6 @@ import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
 import com.propertyvista.portal.prospect.ui.application.steps.OptionsStep;
-import com.propertyvista.portal.prospect.ui.application.steps.PaymentStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PersonalInfoAStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PersonalInfoBStep;
@@ -66,7 +65,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new ContactsStep());
             addStep(new LegalStep());
             addStep(new SummaryStep());
-            addStep(new PaymentStep());
+// TODO disabled for the very first version:          
+//            addStep(new PaymentStep());
         } else {
             addStep(new LeaseStep());
             addStep(new PersonalInfoAStep());
