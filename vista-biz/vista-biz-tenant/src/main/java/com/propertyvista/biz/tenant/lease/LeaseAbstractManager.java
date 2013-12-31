@@ -166,11 +166,19 @@ public abstract class LeaseAbstractManager {
     }
 
     public Lease persist(Lease lease) {
-        return persist(lease, false);
+        return persist(lease, false, true);
     }
 
     public Lease finalize(Lease lease) {
-        return persist(lease, true);
+        return persist(lease, true, true);
+    }
+
+    public Lease persist(Lease lease, boolean reserve) {
+        return persist(lease, false, reserve);
+    }
+
+    public Lease finalize(Lease lease, boolean reserve) {
+        return persist(lease, true, reserve);
     }
 
     public Lease load(Lease leaseId, boolean editingTerm) {
@@ -639,8 +647,8 @@ public abstract class LeaseAbstractManager {
 
         persist(lease);
 
-        AptUnitOccupancySegment segment = ServerSideFactory.create(OccupancyFacade.class).getOccupancySegment(lease.unit(), lease.actualMoveOut().getValue());
         // if unit is not reserved/leased for new application/lease yet - correct the move out date:
+        AptUnitOccupancySegment segment = ServerSideFactory.create(OccupancyFacade.class).getOccupancySegment(lease.unit(), lease.actualMoveOut().getValue());
         if (segment.lease().equals(lease)) {
             try {
                 ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.actualMoveOut().getValue(), lease);
@@ -653,25 +661,15 @@ public abstract class LeaseAbstractManager {
     public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
-        Status status = lease.status().getValue();
-        lease.status().setValue(Status.Cancelled);
-
-        Persistence.service().merge(lease);
-
-        switch (status) {
-        case ExistingLease:
-            ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
-            break;
-
-        case NewLease:
-        case Approved:
-            ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
-            break;
-
-        default:
+        // Verify the status
+        if (!lease.status().getValue().isDraft() || lease.status().getValue() != Status.Approved) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
+        releaseUnit(lease);
+
+        lease.status().setValue(Status.Cancelled);
+        Persistence.service().merge(lease);
         Persistence.service().merge(creteLeaseNote(leaseId, "Cancel Lease", decisionReason, decidedBy.user()));
     }
 
@@ -732,6 +730,22 @@ public abstract class LeaseAbstractManager {
         lease.currentTerm().termTo().setValue(leaseEndDate);
 
         finalize(lease);
+    }
+
+    public List<SignedLeaseLegalTerm> getLeaseTerms(LeaseTermTenant tenant) {
+        List<SignedLeaseLegalTerm> terms = new ArrayList<SignedLeaseLegalTerm>();
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().units().$()._Leases().$().currentTerm().version().tenants(), tenant);
+        Building building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+
+        LeaseLegalPolicy leaseLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, LeaseLegalPolicy.class);
+        for (LeaseLegalTerm term : leaseLegalPolicy.terms()) {
+            SignedLeaseLegalTerm signedTerm = EntityFactory.create(SignedLeaseLegalTerm.class);
+            signedTerm.term().set(term);
+            signedTerm.signature().signatureFormat().set(term.signatureFormat());
+            terms.add(signedTerm);
+        }
+        return terms;
     }
 
     // Internals: -----------------------------------------------------------------------------------------------------
@@ -862,19 +876,17 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    private Lease persist(Lease lease, boolean finalize) {
+    private Lease persist(Lease lease, boolean finalize, boolean reserve) {
         boolean doReserve = false;
-        boolean doUnreserve = false;
+        boolean doRelease = false;
         Lease previousLeaseEdition = null;
 
         if (lease.status().getValue().isDraft()) {
-            if (lease.getPrimaryKey() == null) {
-                doReserve = !lease.unit().isNull();
-            } else {
+            doReserve = !lease.unit().isNull();
+            if (lease.getPrimaryKey() != null) {
                 previousLeaseEdition = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
                 if (!EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
-                    doUnreserve = !previousLeaseEdition.unit().isNull();
-                    doReserve = !lease.unit().isNull();
+                    doRelease = !previousLeaseEdition.unit().isNull();
                 }
             }
         }
@@ -896,8 +908,7 @@ public abstract class LeaseAbstractManager {
 
             // double check reservation logic:
             if (previousLeaseEdition != null && !EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
-                doUnreserve = !previousLeaseEdition.unit().isNull();
-                doReserve = !lease.unit().isNull();
+                doRelease = !previousLeaseEdition.unit().isNull();
             }
         }
 
@@ -922,34 +933,47 @@ public abstract class LeaseAbstractManager {
         ServerSideFactory.create(PaymentMethodFacade.class).terminateAutopayAgreements(lease);
 
         // update reservation if necessary:
-        if (doUnreserve) {
-            switch (lease.status().getValue()) {
-            case NewLease:
-            case Application:
-                ServerSideFactory.create(OccupancyFacade.class).unreserve(previousLeaseEdition.unit().getPrimaryKey());
-                break;
-            case ExistingLease:
-                ServerSideFactory.create(OccupancyFacade.class).migratedCancel(previousLeaseEdition.unit().<AptUnit> createIdentityStub());
-                break;
-            default:
-                throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
-            }
+        if (doRelease) {
+            releaseUnit(lease);
         }
-        if (doReserve) {
-            switch (lease.status().getValue()) {
-            case NewLease:
-            case Application:
-                ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
-                break;
-            case ExistingLease:
-                ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
-                break;
-            default:
-                throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
-            }
+        if (reserve && doReserve) {
+            reserveUnit(lease);
         }
 
         return lease;
+    }
+
+    private void reserveUnit(Lease lease) {
+        switch (lease.status().getValue()) {
+        case NewLease:
+        case Application:
+            if (ServerSideFactory.create(OccupancyFacade.class).isReserveAvailable(lease.unit().getPrimaryKey()) != null) {
+                ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
+            }
+            break;
+        case ExistingLease:
+            ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
+            break;
+        default:
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+    }
+
+    private void releaseUnit(Lease lease) {
+        switch (lease.status().getValue()) {
+        case NewLease:
+        case Application:
+        case Approved:
+            if (ServerSideFactory.create(OccupancyFacade.class).isUnreserveAvailable(lease.unit().getPrimaryKey())) {
+                ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
+            }
+            break;
+        case ExistingLease:
+            ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
+            break;
+        default:
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
     }
 
     // Internals: -----------------------------------------------------------------------------------------------------
@@ -1199,21 +1223,5 @@ public abstract class LeaseAbstractManager {
             return !one.getValue().after(two.getValue());
         }
         return false;
-    }
-
-    public List<SignedLeaseLegalTerm> getLeaseTerms(LeaseTermTenant tenant) {
-        List<SignedLeaseLegalTerm> terms = new ArrayList<SignedLeaseLegalTerm>();
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$()._Leases().$().currentTerm().version().tenants(), tenant);
-        Building building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-
-        LeaseLegalPolicy leaseLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, LeaseLegalPolicy.class);
-        for (LeaseLegalTerm term : leaseLegalPolicy.terms()) {
-            SignedLeaseLegalTerm signedTerm = EntityFactory.create(SignedLeaseLegalTerm.class);
-            signedTerm.term().set(term);
-            signedTerm.signature().signatureFormat().set(term.signatureFormat());
-            terms.add(signedTerm);
-        }
-        return terms;
     }
 }

@@ -488,7 +488,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         saveLegalTerms(bo, to);
 
         // do not forget to save LEASE:
-        ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease());
+        ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease(), submit);
 
         if (submit) {
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(bo);

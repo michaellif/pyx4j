@@ -72,6 +72,16 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
     }
 
     @Override
+    public Lease persist(Lease lease, boolean reserve) {
+        return new LeaseInternalManager().persist(lease, reserve);
+    }
+
+    @Override
+    public Lease finalize(Lease lease, boolean reserve) {
+        return new LeaseInternalManager().finalize(lease, reserve);
+    }
+
+    @Override
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
         return new LeaseInternalManager().setUnit(leaseTerm, unitId);
     }

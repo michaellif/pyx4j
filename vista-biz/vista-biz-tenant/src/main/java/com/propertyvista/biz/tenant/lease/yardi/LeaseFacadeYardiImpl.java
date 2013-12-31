@@ -19,7 +19,6 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.biz.tenant.lease.internal.LeaseInternalManager;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -28,12 +27,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
 
 public class LeaseFacadeYardiImpl implements LeaseFacade {
 
@@ -70,6 +69,16 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     @Override
     public Lease load(Lease leaseId, boolean forEdit) {
         return new LeaseYardiManager().load(leaseId, forEdit);
+    }
+
+    @Override
+    public Lease persist(Lease lease, boolean reserve) {
+        return new LeaseYardiManager().persist(lease, reserve);
+    }
+
+    @Override
+    public Lease finalize(Lease lease, boolean reserve) {
+        return new LeaseYardiManager().finalize(lease, reserve);
     }
 
     @Override
