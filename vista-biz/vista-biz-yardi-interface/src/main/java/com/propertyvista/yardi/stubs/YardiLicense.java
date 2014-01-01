@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -35,7 +37,9 @@ import com.propertyvista.yardi.beans.Messages;
 
 public class YardiLicense {
 
-    static String errorMessage_VendorLicense_Fragement = "License invalid for Vendor";
+    private final static Logger log = LoggerFactory.getLogger(YardiLicense.class);
+
+    static String[] errorMessage_License_Fragements = new String[] { "License invalid for Vendor", "Interface License expired" };
 
     private static boolean configLoaded = false;
 
@@ -60,6 +64,7 @@ public class YardiLicense {
 
                 String fileName = "yardi-license/YSIInstall-" + yardiInterface.name() + ".lic";
                 File licenseFile = new File(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getConfigDirectory(), fileName);
+                log.debug("LicenseFile {} exists:{}", licenseFile.getAbsolutePath(), licenseFile.exists());
                 if (licenseFile.canRead()) {
                     if (licenseFile.length() == 0) {
                         return null;
@@ -126,7 +131,7 @@ public class YardiLicense {
     }
 
     static void handleVendorLicenseError(Messages messages) {
-        if (messages.hasErrorMessage(errorMessage_VendorLicense_Fragement)) {
+        if (messages.hasErrorMessage(errorMessage_License_Fragements)) {
             restLicenseCache();
         }
     }
