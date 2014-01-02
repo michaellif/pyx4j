@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets;
+package com.propertyvista.biz.dashboard;
 
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class GadgetMetadataRepositoryTest extends GadgetMetadataRepositoryTestBa
             public String reportWhatIsWrongWith(Class<? extends GadgetMetadata> klass) {
                 Throwable instantiationError = null;
                 try {
-                    GadgetMetadataRepository.get().createGadgetMetadata(klass);
+                    GadgetMetadataRepositoryFacadeImpl.get().createGadgetMetadata(klass);
                 } catch (Throwable e) {
                     instantiationError = e;
                 }
@@ -58,7 +58,7 @@ public class GadgetMetadataRepositoryTest extends GadgetMetadataRepositoryTestBa
                     public String reportWhatIsWrongWith(Class<? extends GadgetMetadata> klass) {
                         boolean hasUUID = false;
                         try {
-                            GadgetMetadata metadata = GadgetMetadataRepository.get().createGadgetMetadata(klass);
+                            GadgetMetadata metadata = GadgetMetadataRepositoryFacadeImpl.get().createGadgetMetadata(klass);
                             UUID.fromString(metadata.gadgetId().getValue());
                             hasUUID = true;
                         } catch (Throwable e) {

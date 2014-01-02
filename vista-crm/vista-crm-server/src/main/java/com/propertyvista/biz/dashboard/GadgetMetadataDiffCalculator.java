@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets;
+package com.propertyvista.biz.dashboard;
 
 import java.io.Serializable;
 

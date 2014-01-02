@@ -7,25 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-10-15
+ * Created on 2014-01-02
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets.testdomain;
+package com.propertyvista.biz.dashboard;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.core.ISet;
+import com.pyx4j.config.server.FacadeFactory;
 
-@Transient
-public interface Foo extends IEntity {
+public class GadgetMetadataRepositoryFacadeFactory implements FacadeFactory<GadgetMetadataRepositoryFacade> {
 
-    IPrimitive<Integer> intValue();
+    @Override
+    public GadgetMetadataRepositoryFacade getFacade() {
+        return GadgetMetadataRepositoryFacadeImpl.get();
+    }
 
-    IPrimitive<String> strValue();
-
-    Bar bar();
-
-    ISet<Bar> xs();
 }

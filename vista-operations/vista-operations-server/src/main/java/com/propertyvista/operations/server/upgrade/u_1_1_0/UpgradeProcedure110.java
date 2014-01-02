@@ -30,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.dashboard.GadgetMetadataRepositoryFacade;
 import com.propertyvista.biz.dashboard.GadgetStorageFacade;
 import com.propertyvista.biz.financial.ar.ARArreasManagerUtils;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
@@ -51,7 +52,6 @@ import com.propertyvista.portal.server.preloader.ReferenceDataPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
 import com.propertyvista.server.TaskRunner;
-import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 
 public class UpgradeProcedure110 implements UpgradeProcedure {
 
@@ -173,8 +173,8 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         for (GadgetMetadataHolder rawGadgetMetadata : gadgets) {
             ArrearsStatusGadgetMetadata oldGadgetMetadata = (ArrearsStatusGadgetMetadata) ServerSideFactory.create(GadgetStorageFacade.class).load(
                     rawGadgetMetadata.identifierKey().getValue());
-            ArrearsSummaryGadgetMetadata upgradedGadgetMetadata = (ArrearsSummaryGadgetMetadata) GadgetMetadataRepository.get().createGadgetMetadata(
-                    EntityFactory.getEntityPrototype(ArrearsSummaryGadgetMetadata.class));
+            ArrearsSummaryGadgetMetadata upgradedGadgetMetadata = (ArrearsSummaryGadgetMetadata) ServerSideFactory.create(GadgetMetadataRepositoryFacade.class)
+                    .createGadgetMetadata(EntityFactory.getEntityPrototype(ArrearsSummaryGadgetMetadata.class));
 
             upgradedGadgetMetadata.gadgetId().setValue(rawGadgetMetadata.identifierKey().getValue());
             if (!oldGadgetMetadata.category().isNull()) {

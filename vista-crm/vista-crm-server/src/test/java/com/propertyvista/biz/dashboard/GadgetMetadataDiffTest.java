@@ -11,14 +11,15 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets;
+package com.propertyvista.biz.dashboard;
 
 import junit.framework.TestCase;
 
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.server.common.gadgets.testdomain.Bar;
-import com.propertyvista.server.common.gadgets.testdomain.Foo;
+import com.propertyvista.biz.dashboard.testdomain.Bar;
+import com.propertyvista.biz.dashboard.testdomain.Foo;
+
 
 public class GadgetMetadataDiffTest extends TestCase {
 

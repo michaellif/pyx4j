@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets;
+package com.propertyvista.biz.dashboard;
 
 import java.util.Arrays;
 
@@ -48,11 +48,11 @@ import com.propertyvista.server.common.gadgets.defaultsettings.PaymentsSummaryGa
 import com.propertyvista.server.common.gadgets.defaultsettings.UnitAvailabilityGadgetMetadataDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.UnitTurnoverAnalysisGadgetMetadataDefaultSettings;
 
-public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase {
+public final class GadgetMetadataRepositoryFacadeImpl extends GadgetMetadataRepositoryFacadeBase implements GadgetMetadataRepositoryFacade {
 
-    private static GadgetMetadataRepository INSTANCE = new GadgetMetadataRepository();
+    private static GadgetMetadataRepositoryFacadeImpl INSTANCE = new GadgetMetadataRepositoryFacadeImpl();
 
-    private GadgetMetadataRepository() {
+    private GadgetMetadataRepositoryFacadeImpl() {
         // bind gadget metadata settings here
         super(Arrays.<GadgetDefaultSettingsBinding<?>> asList(//@formatter:off
                 
@@ -94,7 +94,7 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
         ));//@formatter:on
     }
 
-    public static GadgetMetadataRepository get() {
+    public static GadgetMetadataRepositoryFacadeImpl get() {
         return INSTANCE;
     }
 

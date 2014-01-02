@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets;
+package com.propertyvista.biz.dashboard;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.server.common.gadgets.defaultsettings.GadgetMetadataDefaultSettings;
 
-public abstract class GadgetMetadataRepositoryBase {
+public abstract class GadgetMetadataRepositoryFacadeBase implements GadgetMetadataRepositoryFacade {
 
     protected static final class GadgetDefaultSettingsBinding<G extends GadgetMetadata> {
 
@@ -45,7 +45,7 @@ public abstract class GadgetMetadataRepositoryBase {
 
     private final Set<Class<? extends GadgetMetadata>> gadgetMetadataClasses;
 
-    protected GadgetMetadataRepositoryBase(Collection<GadgetDefaultSettingsBinding<?>> bindings) {
+    protected GadgetMetadataRepositoryFacadeBase(Collection<GadgetDefaultSettingsBinding<?>> bindings) {
         Map<Class<? extends GadgetMetadata>, Class<? extends GadgetMetadataDefaultSettings>> preparingBindingsMap = new HashMap<Class<? extends GadgetMetadata>, Class<? extends GadgetMetadataDefaultSettings>>();
         for (GadgetDefaultSettingsBinding<?> binding : bindings) {
             preparingBindingsMap.put(binding.gadgetMetadataClass, binding.gadgetMetadataDefaultSettingsClass);
@@ -54,14 +54,17 @@ public abstract class GadgetMetadataRepositoryBase {
         gadgetMetadataClasses = Collections.unmodifiableSet(new HashSet<Class<? extends GadgetMetadata>>(preparingBindingsMap.keySet()));
     }
 
+    @Override
     public final Set<Class<? extends GadgetMetadata>> getGadgetMetadataClasses() {
         return gadgetMetadataClasses;
     }
 
+    @Override
     public final GadgetMetadata createGadgetMetadata(GadgetMetadata proto) {
         return createGadgetMetadata((Class<? extends GadgetMetadata>) proto.getInstanceValueClass());
     }
 
+    @Override
     public final GadgetMetadata createGadgetMetadata(Class<? extends GadgetMetadata> clazz) {
         Class<? extends GadgetMetadataDefaultSettings> initializerClass = bindingsMap.get(clazz);
 

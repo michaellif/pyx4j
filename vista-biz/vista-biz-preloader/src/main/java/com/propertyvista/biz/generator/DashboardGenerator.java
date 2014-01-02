@@ -16,9 +16,11 @@ package com.propertyvista.biz.generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.dashboard.GadgetMetadataRepositoryFacade;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -40,7 +42,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadge
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.OccupancyChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.OutstandingMaintenanceChartGadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -133,7 +134,7 @@ public class DashboardGenerator {
         dmd.encodedLayout().setValue(new DashboardColumnLayoutFormat.Builder(LayoutType.One).build().getSerializedForm());
 
         for (Class<? extends GadgetMetadata> gadgetMetadata : gadgetMetadatas) {
-            dmd.gadgetMetadataList().add(GadgetMetadataRepository.get().createGadgetMetadata(gadgetMetadata));
+            dmd.gadgetMetadataList().add(ServerSideFactory.create(GadgetMetadataRepositoryFacade.class).createGadgetMetadata(gadgetMetadata));
         }
         return dmd;
     }

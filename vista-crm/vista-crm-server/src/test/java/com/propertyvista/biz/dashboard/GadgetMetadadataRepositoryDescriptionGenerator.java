@@ -11,7 +11,7 @@
  * @author artyom
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets;
+package com.propertyvista.biz.dashboard;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.annotations.Caption;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.DemoGadget;
@@ -35,7 +36,7 @@ public class GadgetMetadadataRepositoryDescriptionGenerator {
         OutputStream out = System.out;
         PrintWriter writer = new PrintWriter(out);
         List<Class<? extends GadgetMetadata>> gadgets = new ArrayList<Class<? extends GadgetMetadata>>();
-        for (Class<? extends GadgetMetadata> gadget : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
+        for (Class<? extends GadgetMetadata> gadget : ServerSideFactory.create(GadgetMetadataRepositoryFacade.class).getGadgetMetadataClasses()) {
             if (DemoGadget.class.isAssignableFrom(gadget)) {
                 continue;
             }

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets;
+package com.propertyvista.biz.dashboard;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -34,7 +34,7 @@ public class GadgetMetadataRepositoryTestBase extends TestCase {
     /** skips metadatas marked with {@link AbstractEntity} */
     protected final void assertForEachGagetMetadataClass(String assertion, Predicate p) {
         StringBuilder b = new StringBuilder();
-        for (Class<? extends GadgetMetadata> klass : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
+        for (Class<? extends GadgetMetadata> klass : GadgetMetadataRepositoryFacadeImpl.get().getGadgetMetadataClasses()) {
             String error = p.reportWhatIsWrongWith(klass);
             if (error != null) {
                 b.append(klass.getName());

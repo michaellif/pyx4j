@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
 
+import com.propertyvista.biz.dashboard.GadgetMetadataRepositoryFacade;
 import com.propertyvista.biz.dashboard.GadgetStorageFacade;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
@@ -41,7 +42,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.DemoGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class GadgetMetadataServiceImpl implements GadgetMetadataService {
@@ -60,7 +60,7 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
 
     @Override
     public void createGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata proto) {
-        GadgetMetadata gadgetMetadata = GadgetMetadataRepository.get().createGadgetMetadata(proto);
+        GadgetMetadata gadgetMetadata = ServerSideFactory.create(GadgetMetadataRepositoryFacade.class).createGadgetMetadata(proto);
         gadgetMetadata.ownerUser().setPrimaryKey(CrmAppContext.getCurrentUserPrimaryKey());
 
         ServerSideFactory.create(GadgetStorageFacade.class).save(gadgetMetadata, false);
@@ -94,7 +94,7 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
     public void listAvailableGadgets(AsyncCallback<Vector<GadgetDescriptorDTO>> callback, DashboardType boardType) {
         Vector<GadgetDescriptorDTO> descriptors = new Vector<GadgetDescriptorDTO>();
 
-        for (Class<? extends GadgetMetadata> gadgetMetadataClass : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
+        for (Class<? extends GadgetMetadata> gadgetMetadataClass : ServerSideFactory.create(GadgetMetadataRepositoryFacade.class).getGadgetMetadataClasses()) {
             GadgetDescription gadgetDescription = gadgetMetadataClass.getAnnotation(GadgetDescription.class);
 
             if (//@formatter:off

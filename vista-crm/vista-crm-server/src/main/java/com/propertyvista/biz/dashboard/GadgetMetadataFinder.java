@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.gadgets;
+package com.propertyvista.biz.dashboard;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 /**
  * @deprecated I've discovered that this approach of finding GadgetMetadata works only during local build on developer's machine, so it won't be used anymore.
- *             Instead the {@link GadgetMetadata} concrete implementations, should to be bound implicitly in {@link GadgetMetadataRepository}, and it will be used
+ *             Instead the {@link GadgetMetadata} concrete implementations, should to be bound implicitly in {@link GadgetMetadataRepositoryFacade}, and it will
+ *             be used
  *             as a repository for all gadget types
  * @author ArtyomB
  */
