@@ -1121,8 +1121,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         for (MemberOperationsMeta member : tm.operationsMeta().getAllMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             Object value;
-            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                value = ((IEntity) member.getMember(entity)).getPrimaryKey();
+            if (memberMeta.getObjectClassType() == ObjectClassType.Entity) {
+                IEntity memberEntity = (IEntity) member.getMember(entity);
+                if (memberEntity.getAttachLevel() == AttachLevel.Detached) {
+                    continue;
+                }
+                value = memberEntity.getPrimaryKey();
             } else {
                 value = member.getMemberValue(entity);
             }

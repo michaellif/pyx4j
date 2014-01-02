@@ -200,7 +200,7 @@ public class Persistence {
         EntityGraph.applyRecursively(rootEntity, new ApplyMemberMethod() {
             @Override
             public boolean apply(IEntity entity) {
-                if ((rootEntity == entity) || entity.getMeta().isOwnedRelationships()) {
+                if ((rootEntity == entity) || (entity.getMeta().isOwnedRelationships() && entity.getMeta().isCascadePersist())) {
                     if (entity.isValueDetached()) {
                         service().retrieve(entity);
                     }
@@ -212,7 +212,7 @@ public class Persistence {
 
             @Override
             public boolean apply(ICollection<IEntity, ?> memberCollection) {
-                if (memberCollection.getMeta().isOwnedRelationships()) {
+                if (memberCollection.getMeta().isOwnedRelationships() && memberCollection.getMeta().isCascadePersist()) {
                     ensureRetrieve(memberCollection, AttachLevel.Attached);
                     return true;
                 } else {
