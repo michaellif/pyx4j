@@ -30,6 +30,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -92,6 +93,7 @@ public class VistaTestDBSetup {
                 classes.add(IdAssignmentSequence.class);
                 classes.add(Lease.class);
                 classes.add(Lead.class);
+                classes.add(LeaseTermAgreementDocumentBlob.class);
                 classes.add(NotesAndAttachments.class);
                 classes.add(YardiInterfacePolicy.class);
                 classes.add(CustomerUserCredential.class);

@@ -53,6 +53,7 @@ import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementPrinter;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
@@ -263,9 +264,10 @@ public abstract class LeaseAbstractManager {
         for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
             guarantor.screening().set(retrivePersonScreeningId(guarantor.leaseParticipant().customer()));
         }
-
         leaseTerm.saveAction().setValue(SaveAction.saveAsFinal);
         leaseTerm = persist(leaseTerm);
+
+        LeaseTermAgreementPrinter.startLeaseTermAgreementDocumentCreation(leaseTerm);
 
         // update lease deposits/unit rent if current term:
         Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);

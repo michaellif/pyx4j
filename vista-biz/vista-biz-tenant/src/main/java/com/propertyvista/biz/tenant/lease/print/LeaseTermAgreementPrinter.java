@@ -13,6 +13,21 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
+
+import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
+
 public class LeaseTermAgreementPrinter {
+
+    public static void startLeaseTermAgreementDocumentCreation(LeaseTerm leaseTerm) {
+        //TODO add detection of DB dev preloader 
+        if (ServerSideConfiguration.isStartedUnderUnitTest()) {
+            return;
+        }
+        // Create thread and save LeaseTermAgreementDocument in this thread
+        DeferredProcessRegistry.fork(new LeaseTermAgreementPrinterDeferredProcess(leaseTerm), ThreadPoolNames.IMPORTS);
+    }
 
 }
