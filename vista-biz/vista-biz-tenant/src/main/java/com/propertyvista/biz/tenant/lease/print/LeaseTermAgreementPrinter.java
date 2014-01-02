@@ -14,23 +14,31 @@
 package com.propertyvista.biz.tenant.lease.print;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class LeaseTermAgreementPrinter {
 
-    public static void startLeaseTermAgreementDocumentCreation(LeaseTerm leaseTerm) {
-        if (true) {
-            return;
-        }
+    public static void startLeaseTermAgreementDocumentCreation(final LeaseTerm leaseTerm) {
         //TODO add detection of DB dev preloader 
-        if (ServerSideConfiguration.isStartedUnderUnitTest()) {
+        if (ServerSideConfiguration.isStartedUnderUnitTest() || (Context.getSession() == null)) {
             return;
         }
-        // Create thread and save LeaseTermAgreementDocument in this thread
-        DeferredProcessRegistry.fork(new LeaseTermAgreementPrinterDeferredProcess(leaseTerm), ThreadPoolNames.IMPORTS);
+
+        Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() throws RuntimeException {
+                // Create thread and save LeaseTermAgreementDocument in this thread
+                DeferredProcessRegistry.fork(new LeaseTermAgreementPrinterDeferredProcess(leaseTerm), ThreadPoolNames.IMPORTS);
+                return null;
+            }
+        });
+
     }
 
 }
