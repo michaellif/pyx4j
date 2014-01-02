@@ -22,6 +22,9 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 public class LeaseTermAgreementPrinter {
 
     public static void startLeaseTermAgreementDocumentCreation(LeaseTerm leaseTerm) {
+        if (true) {
+            return;
+        }
         //TODO add detection of DB dev preloader 
         if (ServerSideConfiguration.isStartedUnderUnitTest()) {
             return;
