@@ -13,12 +13,23 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+
+import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
@@ -35,6 +46,42 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Details"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
+
+        CEntityLabel<Building> buildingLabel = new CEntityLabel<Building>();
+        buildingLabel.setFormat(new IFormat<Building>() {
+
+            @Override
+            public Building parse(String string) throws ParseException {
+                return null;
+            }
+
+            @Override
+            public String format(Building value) {
+                StringBuilder builder = new StringBuilder();
+                builder.append(value.marketing().name().getValue());
+                builder.append(" (").append(value.info().address().getStringView()).append(")");
+                return builder.toString();
+            }
+        });
+
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().building(), buildingLabel)).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit(), new CEntityLabel<AptUnit>())).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>())).build());
+
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseTerm().termFrom(), new CDateLabel())).customLabel(i18n.tr("Lease From"))
+                .build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseTerm().termTo(), new CDateLabel())).customLabel(i18n.tr("Lease To"))
+                .build());
+
+        panel.setWidget(++row, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CLabel<BigDecimal>()))
+                        .customLabel(i18n.tr("Base Rent")).build());
+
+        panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
+        panel.setWidget(++row, 0, inject(proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder()));
+
+        panel.setH3(++row, 0, 1, i18n.tr("People Living with You"));
+        panel.setWidget(++row, 0, inject(proto().leaseTerm().version().tenants(), new TenantsFolder()));
 
         return panel;
     }

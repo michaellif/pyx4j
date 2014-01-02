@@ -207,7 +207,7 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     }
 
     @Override
-    public List<SignedLeaseLegalTerm> getLeaseTerms(LeaseTermTenant tenant) {
+    public List<SignedLeaseLegalTerm> getLeaseLegalTerms(LeaseTermTenant tenant) {
         return new LeaseYardiManager().getLeaseTerms(tenant);
     }
 }

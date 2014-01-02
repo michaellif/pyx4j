@@ -18,6 +18,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
 
 @Transient
@@ -25,5 +27,9 @@ public interface LeaseAgreementDTO extends IEntity {
 
     @Owned
     IList<SignedLeaseLegalTerm> legalTerms();
+
+    AptUnit unit();
+
+    LeaseTerm leaseTerm();
 
 }

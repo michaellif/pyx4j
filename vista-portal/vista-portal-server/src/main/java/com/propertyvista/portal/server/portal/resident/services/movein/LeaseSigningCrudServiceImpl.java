@@ -20,8 +20,10 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -31,7 +33,16 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
     @Override
     public void init(AsyncCallback<LeaseAgreementDTO> callback, InitializationData initializationData) {
         LeaseAgreementDTO to = EntityFactory.create(LeaseAgreementDTO.class);
-        to.legalTerms().addAll(ServerSideFactory.create(LeaseFacade.class).getLeaseTerms(ResidentPortalContext.getLeaseTermTenant()));
+        to.legalTerms().addAll(ServerSideFactory.create(LeaseFacade.class).getLeaseLegalTerms(ResidentPortalContext.getLeaseTermTenant()));
+
+        Lease lease = ResidentPortalContext.getLease();
+        Persistence.service().retrieve(lease.unit().building());
+        Persistence.service().retrieve(lease.unit().floorplan());
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+
+        to.unit().set(lease.unit());
+        to.leaseTerm().set(lease.currentTerm());
+
         callback.onSuccess(to);
     }
 

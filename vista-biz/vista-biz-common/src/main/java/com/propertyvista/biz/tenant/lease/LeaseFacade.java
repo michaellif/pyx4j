@@ -125,6 +125,6 @@ public interface LeaseFacade {
      */
     void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate);
 
-    List<SignedLeaseLegalTerm> getLeaseTerms(LeaseTermTenant tenant);
+    List<SignedLeaseLegalTerm> getLeaseLegalTerms(LeaseTermTenant tenant);
 
 }
