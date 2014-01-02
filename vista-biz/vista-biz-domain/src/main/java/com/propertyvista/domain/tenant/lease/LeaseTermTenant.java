@@ -44,6 +44,6 @@ public interface LeaseTermTenant extends LeaseTermParticipant<Tenant> {
      */
     IPrimitive<SignatureType> signatureType();
 
-    @Owned
+    @Owned(cascade = {})
     IList<SignedLeaseLegalTerm> legalTerms();
 }
