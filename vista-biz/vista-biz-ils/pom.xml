@@ -32,7 +32,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-shared-server</artifactId>
+            <artifactId>vista-server-base</artifactId>
             <version>${project.version}</version>
         </dependency>
 
