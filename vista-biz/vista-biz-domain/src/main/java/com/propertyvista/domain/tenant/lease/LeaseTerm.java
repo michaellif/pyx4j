@@ -34,6 +34,7 @@ import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionData;
@@ -139,6 +140,10 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
         @Detached
         IList<BuildingUtility> utilities();
+
+        @Owned(cascade = {})
+        @Detached(level = AttachLevel.Detached)
+        LeaseTermAgreementDocument agreementDocument();
     }
 
     // internals:   -----------------------------------------------

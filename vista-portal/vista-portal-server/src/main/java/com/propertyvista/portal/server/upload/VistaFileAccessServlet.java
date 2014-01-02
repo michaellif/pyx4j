@@ -17,6 +17,7 @@ import com.propertyvista.domain.blob.CustomerPictureBlob;
 import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
+import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.blob.NoteAttachmentBlob;
 import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
@@ -29,6 +30,7 @@ import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
+import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 
 @SuppressWarnings("serial")
 public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
@@ -40,6 +42,8 @@ public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
         register(ProofOfEmploymentDocumentFile.class, ProofOfEmploymentDocumentBlob.class);
         register(IdentificationDocumentFile.class, IdentificationDocumentBlob.class);
         register(LegalLetter.class, LegalLetterBlob.class);
+        register(LeaseTermAgreementDocument.class, LeaseTermAgreementDocumentBlob.class);
+
         register(NoteAttachment.class, NoteAttachmentBlob.class);
 
         register(PmcDocumentFile.class, PmcDocumentBlob.class);
