@@ -40,10 +40,11 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
     @Override
     public void sendOperationsPasswordRetrievalToken(OperationsUser user) {
         String token = AccessKey.createAccessToken(user, OperationsUserCredential.class, 1);
-        if (token == null) {
-            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        if (token != null) {
+            send(OperationsNotificationManager.createOperationsPasswordResetEmail(user, token));
+        } else {
+            log.error(GENERIC_FAILED_MESSAGE);
         }
-        send(OperationsNotificationManager.createOperationsPasswordResetEmail(user, token));
     }
 
     @Override
