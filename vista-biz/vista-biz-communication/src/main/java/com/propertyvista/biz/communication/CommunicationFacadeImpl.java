@@ -261,6 +261,17 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
+    public void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail) {
+        MailMessage m = MessageTemplatesCrmNotification.createOnlinePaymentSetupCompletedEmail(userName);
+
+        m.setTo(userEmail);
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
+        }
+    }
+
+    @Override
     public void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request) {
         for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
             sendMaintenanceRequestEmail(employee.email().getValue(), EmailTemplateType.MaintenanceRequestCreatedPMC, request);

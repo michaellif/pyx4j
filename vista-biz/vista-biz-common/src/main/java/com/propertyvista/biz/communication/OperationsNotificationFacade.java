@@ -25,7 +25,5 @@ public interface OperationsNotificationFacade {
 
     void sendOperationsPasswordRetrievalToken(OperationsUser user) throws UserRuntimeException;
 
-    void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
-
     void invalidDirectDebitReceived(DirectDebitRecord paymentRecord);
 }

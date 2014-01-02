@@ -27,7 +27,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.biz.communication.OperationsNotificationFacade;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
@@ -65,7 +65,7 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
         criteria.eq(criteria.proto().id(), VistaContext.getCurrentUserPrimaryKey());
         CrmUser user = Persistence.service().query(criteria).get(0);
 
-        ServerSideFactory.create(OperationsNotificationFacade.class).sendOnlinePaymentSetupCompletedEmail(user.name().getValue(), user.email().getValue());
+        ServerSideFactory.create(CommunicationFacade.class).sendOnlinePaymentSetupCompletedEmail(user.name().getValue(), user.email().getValue());
 
         callback.onSuccess(null);
     }

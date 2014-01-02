@@ -23,7 +23,6 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.server.mail.MessageTemplate;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -36,10 +35,8 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 class MessageTemplatesCrmNotification {
 
@@ -49,26 +46,6 @@ class MessageTemplatesCrmNotification {
 
     private static String getSender() {
         return ServerSideConfiguration.instance().getApplicationEmailSender();
-    }
-
-    public static MailMessage createOperationsPasswordResetEmail(AbstractUser user, String token) {
-        MailMessage email = new MailMessage();
-        email.setSender(getSender());
-        email.setTo(user.email().getValue());
-        email.setSubject(i18n.tr("Vista Operations Password Retrieval"));
-
-        MessageTemplate template = new MessageTemplate();
-        template.setBodyTemplate("Dear ${name},<br/>\n"
-                + "This email was sent to you in response to your request to modify your Property Vista Support Administration account password.<br/>\n"
-                + "Click the link below to go to the Property Vista Operations site and create new password for your account:<br/>\n"
-                + "    <a href=\"${link}\">Change Your Password</a>");
-
-        template.variable("${name}", user.name());
-        template.variable("${link}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
-                OperationsSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token));
-
-        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
-        return email;
     }
 
     public static MailMessage createNewPmcEmail(OnboardingUser user, Pmc pmc) {

@@ -83,6 +83,8 @@ public interface CommunicationFacade {
 
     void sendTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement);
 
+    void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
+
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 
     //void sendEmployeeMessage(EmployeeMessageType employeeMessageType, Employee employee);
