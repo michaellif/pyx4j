@@ -20,10 +20,10 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 
+import com.propertyvista.biz.dashboard.PaymentsSummaryHelper;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.server.common.util.PaymentsSummaryHelper;
 
 public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
 

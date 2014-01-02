@@ -21,7 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class TenantSureTextFacadeImpl implements TenantSureTextFacade {
 

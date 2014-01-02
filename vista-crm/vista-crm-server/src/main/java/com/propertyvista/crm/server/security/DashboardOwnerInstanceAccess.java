@@ -16,8 +16,8 @@ package com.propertyvista.crm.server.security;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.InstanceAccess;
 
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.server.common.security.VistaContext;
 
 public class DashboardOwnerInstanceAccess implements InstanceAccess {
 

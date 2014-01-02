@@ -36,7 +36,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 class PadFundsTransfer {
 

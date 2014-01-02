@@ -26,9 +26,26 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-domain</artifactId>
+            <artifactId>vista-biz-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+        </dependency>
+
 
     </dependencies>
 

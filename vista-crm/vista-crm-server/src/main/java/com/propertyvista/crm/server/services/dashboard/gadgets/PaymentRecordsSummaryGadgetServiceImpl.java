@@ -36,6 +36,7 @@ import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.dashboard.PaymentsSummaryHelper;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsSummaryGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
@@ -47,7 +48,6 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.server.common.util.PaymentsSummaryHelper;
 
 public class PaymentRecordsSummaryGadgetServiceImpl implements PaymentRecordsSummaryGadgetService {
 

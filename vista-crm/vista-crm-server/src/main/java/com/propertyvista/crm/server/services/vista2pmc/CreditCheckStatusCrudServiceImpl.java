@@ -32,7 +32,7 @@ import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudService {
 

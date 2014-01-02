@@ -35,7 +35,7 @@ import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudService {
 

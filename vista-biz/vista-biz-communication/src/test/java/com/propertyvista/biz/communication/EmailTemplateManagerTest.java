@@ -99,7 +99,7 @@ import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 
 public class EmailTemplateManagerTest extends VistaDBTestBase {

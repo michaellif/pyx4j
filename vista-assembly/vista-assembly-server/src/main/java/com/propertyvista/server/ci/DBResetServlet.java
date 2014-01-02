@@ -78,9 +78,9 @@ import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.server.preloader.VistaOperationsDataPreloaders;
 import com.propertyvista.operations.server.qa.DBIntegrityCheckDeferredProcess;
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
-import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
 
 @SuppressWarnings("serial")

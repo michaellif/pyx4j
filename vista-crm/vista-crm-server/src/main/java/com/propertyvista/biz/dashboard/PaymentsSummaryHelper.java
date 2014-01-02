@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.util;
+package com.propertyvista.biz.dashboard;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -31,6 +31,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
+import com.propertyvista.biz.dashboard.DashboardCalulationsFacade.PaymentsSummarySnapshotHook;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -42,22 +43,6 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public final class PaymentsSummaryHelper {
-
-    public interface PaymentsSummarySnapshotHook {
-
-        /**
-         * @param summmary
-         * @return if the snapshot taking should continue
-         */
-        boolean onPaymentsSummarySnapshotTaken(PaymentsSummary summmary);
-
-        /**
-         * @param caught
-         * @return if the snapshot taking should continue
-         */
-        boolean onPaymentsSummarySnapshotFailed(Throwable caught);
-
-    }
 
     private class PaymentTypeMapper {
 

@@ -78,7 +78,7 @@ import com.propertyvista.operations.domain.encryption.EncryptedStorageCurrentKey
 import com.propertyvista.operations.domain.encryption.EncryptedStoragePublicKey;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 

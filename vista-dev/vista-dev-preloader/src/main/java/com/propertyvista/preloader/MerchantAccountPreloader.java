@@ -33,7 +33,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.preloader.ido.MerchantAccountImport;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
 

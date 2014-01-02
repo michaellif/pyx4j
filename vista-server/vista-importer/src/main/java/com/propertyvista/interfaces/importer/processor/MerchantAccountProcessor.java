@@ -39,7 +39,7 @@ import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.interfaces.importer.model.MerchantAccountFileModel;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class MerchantAccountProcessor {
 

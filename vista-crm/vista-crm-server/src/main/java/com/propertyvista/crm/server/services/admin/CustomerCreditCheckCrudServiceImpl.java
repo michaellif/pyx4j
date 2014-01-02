@@ -23,7 +23,7 @@ import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoImpl<CustomerCreditCheck, CustomerCreditCheckDTO> implements
         CustomerCreditCheckCrudService {

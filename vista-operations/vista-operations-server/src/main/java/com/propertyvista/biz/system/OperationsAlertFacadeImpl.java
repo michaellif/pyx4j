@@ -34,8 +34,8 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.operations.domain.vista2pmc.OperationsAlert;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.VistaAntiBot;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
 

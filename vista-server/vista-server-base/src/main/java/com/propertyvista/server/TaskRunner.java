@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.jobs;
+package com.propertyvista.server;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;

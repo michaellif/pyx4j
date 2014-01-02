@@ -48,7 +48,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mappers.UnitsMapper;
 import com.propertyvista.yardi.processors.YardiBuildingProcessor;

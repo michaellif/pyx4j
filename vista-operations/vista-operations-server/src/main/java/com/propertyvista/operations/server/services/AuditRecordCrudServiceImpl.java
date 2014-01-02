@@ -19,13 +19,13 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaUserType;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
-import com.propertyvista.server.common.security.VistaContext;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class AuditRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, AuditRecordOperationsDTO> implements AuditRecordCrudService {
 

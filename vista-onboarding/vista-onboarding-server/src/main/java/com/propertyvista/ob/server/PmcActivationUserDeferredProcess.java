@@ -24,9 +24,9 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
-import com.propertyvista.server.jobs.TaskRunner;
 
 @SuppressWarnings("serial")
 public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProcess {

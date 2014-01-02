@@ -26,7 +26,7 @@ import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class PmcTermsOfServiceServiceImpl implements PmcTermsOfServiceService {
 

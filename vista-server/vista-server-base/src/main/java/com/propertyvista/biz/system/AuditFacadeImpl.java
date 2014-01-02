@@ -37,9 +37,7 @@ import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.security.AuditRecord;
-import com.propertyvista.server.common.security.VistaAntiBot;
-import com.propertyvista.server.common.security.VistaContext;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.shared.VistaUserVisit;
 
 public class AuditFacadeImpl implements AuditFacade {
@@ -189,12 +187,7 @@ public class AuditFacadeImpl implements AuditFacade {
         if (Context.getRequest() == null) {
             return null;
         } else {
-            Object ip = Context.getRequest().getAttribute(VistaAntiBot.REQUEST_IP_REQUEST_ATR);
-            if (ip != null) {
-                return ip.toString();
-            } else {
-                return Context.getRequestRemoteAddr();
-            }
+            return Context.getRequestRemoteAddr();
         }
     }
 }

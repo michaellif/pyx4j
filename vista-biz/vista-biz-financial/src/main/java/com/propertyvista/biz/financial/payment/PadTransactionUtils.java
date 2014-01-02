@@ -26,7 +26,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.operations.domain.eft.caledoneft.PadTestTransactionOffset;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 /**
  * Used to enforce unique transaction number in development.

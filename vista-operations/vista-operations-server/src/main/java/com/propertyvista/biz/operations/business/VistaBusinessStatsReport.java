@@ -61,8 +61,8 @@ import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.domain.security.AuditRecord;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.security.CrmUserCredential;
-import com.propertyvista.server.jobs.TaskRunner;
 
 class VistaBusinessStatsReport {
 

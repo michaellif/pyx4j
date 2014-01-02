@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.security;
+package com.propertyvista.biz.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

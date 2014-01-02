@@ -37,7 +37,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatchProc
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 abstract class AbstractAcknowledgementProcessor {
 

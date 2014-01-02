@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceBuilding;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
@@ -38,7 +39,6 @@ import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.server.common.security.VistaContext;
 
 class PaymentMethodPersister {
 

@@ -27,8 +27,8 @@ import com.propertyvista.domain.pmc.PmcAccountNumbers;
 import com.propertyvista.domain.pmc.PmcAccountNumbers.AccountNumbersRangeType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.IdAssignmentSequence;
-import com.propertyvista.server.jobs.TaskRunner;
 
 /**
  * @see http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Account+Numbers

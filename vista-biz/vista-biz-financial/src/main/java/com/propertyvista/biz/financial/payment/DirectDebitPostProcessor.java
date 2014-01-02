@@ -43,7 +43,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecordProcessingStatus;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class DirectDebitPostProcessor {
 

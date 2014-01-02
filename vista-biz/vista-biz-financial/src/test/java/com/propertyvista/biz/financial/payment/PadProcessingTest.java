@@ -37,7 +37,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.eft.mock.efttransport.EFTTransportFacadeMock;
 import com.propertyvista.eft.mock.efttransport.ScheduledResponseAckMerchant;
 import com.propertyvista.eft.mock.efttransport.ScheduledResponseAckTransaction;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.mock.MockConfig;

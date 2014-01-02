@@ -36,7 +36,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 class ScreeningPayments {
 

@@ -26,7 +26,7 @@ public class VistaSystemFacadeImpl implements VistaSystemFacade {
     public void setCommunicationsDisabled(boolean disabled) {
         if (communicationsDisabled != disabled) {
             communicationsDisabled = disabled;
-            log.info("Comunication is now {}", communicationsDisabled ? "Disabled" : "Enabled");
+            log.info("Communication is now {}", communicationsDisabled ? "Disabled" : "Enabled");
         }
     }
 

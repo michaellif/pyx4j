@@ -32,7 +32,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxLimit;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class EquifaxEnforceLimit {
 

@@ -45,6 +45,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapChargeDTO;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -60,7 +61,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.shared.config.VistaFeatures;
 
 class AutopayAgreementMananger {

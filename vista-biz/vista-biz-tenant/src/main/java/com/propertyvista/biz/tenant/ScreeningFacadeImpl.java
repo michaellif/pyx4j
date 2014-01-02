@@ -57,7 +57,7 @@ import com.propertyvista.dto.LeaseApprovalDTO;
 import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.equifax.EquifaxCreditCheck;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class ScreeningFacadeImpl implements ScreeningFacade {
 

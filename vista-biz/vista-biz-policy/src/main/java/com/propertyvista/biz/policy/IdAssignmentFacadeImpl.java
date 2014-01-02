@@ -38,8 +38,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.IdAssignmentSequence;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
 

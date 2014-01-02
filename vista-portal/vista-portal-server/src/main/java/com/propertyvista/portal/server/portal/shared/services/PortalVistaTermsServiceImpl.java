@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 

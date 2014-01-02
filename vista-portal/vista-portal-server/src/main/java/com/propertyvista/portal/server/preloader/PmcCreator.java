@@ -45,8 +45,8 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.security.CrmUserCredential;
-import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreator {

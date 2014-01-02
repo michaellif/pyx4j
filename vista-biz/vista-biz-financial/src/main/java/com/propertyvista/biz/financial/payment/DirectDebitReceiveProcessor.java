@@ -32,7 +32,7 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecordProcessingStatus;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 class DirectDebitReceiveProcessor {
 

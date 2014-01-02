@@ -99,7 +99,7 @@ public class SftpClient implements Closeable {
         try {
             client.connect();
         } catch (JSchException e) {
-            log.error("SFTP connecton error", e);
+            log.error("SFTP connection error", e);
             IOUtils.closeQuietly(client);
             throw new SftpTransportConnectionException(e.getMessage(), e);
         }
@@ -130,7 +130,7 @@ public class SftpClient implements Closeable {
         try {
             client.connect();
         } catch (JSchException e) {
-            log.error("SFTP connecton error", e);
+            log.error("SFTP connection error", e);
             IOUtils.closeQuietly(client);
             throw new SftpTransportConnectionException(e.getMessage(), e);
         }

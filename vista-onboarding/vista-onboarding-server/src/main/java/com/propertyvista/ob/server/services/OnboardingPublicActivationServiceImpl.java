@@ -27,7 +27,7 @@ import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class OnboardingPublicActivationServiceImpl implements OnboardingPublicActivationService {
 

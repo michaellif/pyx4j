@@ -36,7 +36,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.XmlCreator;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class EquifaxSimulation {
 

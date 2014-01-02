@@ -63,9 +63,9 @@ import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.EquifaxHttpClient;
 import com.propertyvista.equifax.request.EquifaxModelMapper;
 import com.propertyvista.equifax.request.XmlCreator;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
 import com.propertyvista.server.domain.CustomerCreditCheckReportNoBackup;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class EquifaxCreditCheck {
 

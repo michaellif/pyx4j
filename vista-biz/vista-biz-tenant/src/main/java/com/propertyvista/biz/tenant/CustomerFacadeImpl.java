@@ -49,9 +49,9 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
-import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class CustomerFacadeImpl implements CustomerFacade {

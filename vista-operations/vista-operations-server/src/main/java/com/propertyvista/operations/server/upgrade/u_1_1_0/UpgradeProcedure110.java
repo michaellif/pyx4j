@@ -50,8 +50,8 @@ import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.portal.server.preloader.ReferenceDataPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class UpgradeProcedure110 implements UpgradeProcedure {
 

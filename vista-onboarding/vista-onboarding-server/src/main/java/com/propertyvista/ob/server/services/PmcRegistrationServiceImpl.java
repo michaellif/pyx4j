@@ -48,9 +48,9 @@ import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 import com.propertyvista.ob.server.PmcActivationUserDeferredProcess;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 

@@ -17,8 +17,8 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
-import com.propertyvista.server.common.security.VistaContext;
 
 public class OperationsUserAccountAccesRule implements DatasetAccessRule<OperationsUserCredential> {
 

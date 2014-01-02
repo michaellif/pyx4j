@@ -46,7 +46,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.server.upgrade.VistaUpgrade;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess<Pmc> {
 

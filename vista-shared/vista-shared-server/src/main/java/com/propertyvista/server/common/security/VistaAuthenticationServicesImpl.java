@@ -63,6 +63,7 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;

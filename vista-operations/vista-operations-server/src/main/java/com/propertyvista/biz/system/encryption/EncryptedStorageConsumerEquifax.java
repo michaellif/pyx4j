@@ -24,9 +24,9 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
 import com.propertyvista.server.domain.CustomerCreditCheckReportNoBackup;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class EncryptedStorageConsumerEquifax implements EncryptedStorageConsumer {
 

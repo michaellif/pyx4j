@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 //TODO Hide it in facade
 public class MerchantAccountManager {

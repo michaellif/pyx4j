@@ -28,7 +28,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class VistaUpgrade {
 

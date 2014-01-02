@@ -28,6 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.communication.OperationsNotificationFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
@@ -36,8 +37,7 @@ import com.propertyvista.dto.vista2pmc.AgreementDTO;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.legal.VistaTerms.Target;
-import com.propertyvista.server.common.security.VistaContext;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardService {
 

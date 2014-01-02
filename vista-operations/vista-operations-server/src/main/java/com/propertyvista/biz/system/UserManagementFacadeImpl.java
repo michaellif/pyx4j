@@ -38,7 +38,6 @@ import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 

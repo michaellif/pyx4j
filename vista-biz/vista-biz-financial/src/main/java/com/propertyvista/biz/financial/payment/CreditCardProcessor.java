@@ -51,7 +51,7 @@ import com.propertyvista.operations.domain.eft.cards.to.PaymentInstrument;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentRequest;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentResponse;
 import com.propertyvista.operations.domain.eft.cards.to.TokenPaymentInstrument;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 class CreditCardProcessor {
 

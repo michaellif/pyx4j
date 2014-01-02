@@ -36,7 +36,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSum
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordTransaction;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor {
 

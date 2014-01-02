@@ -17,9 +17,9 @@ import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.shared.adapters.CustomerSignatureAdapter;
 
 public class CustomerSignatureAdapterImpl implements CustomerSignatureAdapter {
@@ -28,7 +28,7 @@ public class CustomerSignatureAdapterImpl implements CustomerSignatureAdapter {
     public void onBeforeUpdate(CustomerSignature origEntity, CustomerSignature newEntity) {
         if (newEntity.agree().getValue(false)) {
             if ((origEntity == null) || !origEntity.agree().getValue(false)) {
-                Validate.isEquals(CustomerUser.class, VistaContext.getCurrentUser().getValueClass(), "Only Customer can signe CustomerSignature");
+                Validate.isEquals(CustomerUser.class, VistaContext.getCurrentUser().getValueClass(), "Only Customer can sign CustomerSignature");
                 newEntity.signingUser().set(VistaContext.getCurrentUser());
                 newEntity.signDate().setValue(SystemDateManager.getDate());
                 newEntity.ipAddress().setValue(Context.getRequestRemoteAddr());

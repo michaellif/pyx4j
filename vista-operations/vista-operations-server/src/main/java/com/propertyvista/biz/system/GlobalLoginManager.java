@@ -30,9 +30,9 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.GlobalCrmUserIndex;
-import com.propertyvista.server.jobs.TaskRunner;
 
 class GlobalLoginManager {
 

@@ -33,6 +33,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;

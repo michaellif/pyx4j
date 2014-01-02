@@ -17,15 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.config.server.ServerSideFactory;
 
+import com.propertyvista.biz.dashboard.DashboardCalulationsFacade;
+import com.propertyvista.biz.dashboard.DashboardCalulationsFacade.PaymentsSummarySnapshotHook;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
-import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
-import com.propertyvista.server.common.util.PaymentsSummaryHelper;
-import com.propertyvista.server.common.util.PaymentsSummaryHelper.PaymentsSummarySnapshotHook;
 
 public class PaymentsSummarySnapshotProcess implements PmcProcess {
 
@@ -46,25 +43,22 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(final PmcProcessContext context) {
-        long maxProgress = Persistence.service().count(EntityQueryCriteria.create(MerchantAccount.class)) * (long) PaymentRecord.PaymentStatus.values().length;
+        ServerSideFactory.create(DashboardCalulationsFacade.class).takePaymentsSummarySnapshots(new LogicalDate(context.getForDate()),
+                new PaymentsSummarySnapshotHook() {
 
-        PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper(new PaymentsSummarySnapshotHook() {
+                    @Override
+                    public boolean onPaymentsSummarySnapshotTaken(PaymentsSummary summmary) {
+                        context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+                        return true;
+                    }
 
-            @Override
-            public boolean onPaymentsSummarySnapshotTaken(PaymentsSummary summmary) {
-                context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
-                return true;
-            }
-
-            @Override
-            public boolean onPaymentsSummarySnapshotFailed(Throwable t) {
-                context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
-                log.error("Failed to create payments summary snapshot", t);
-                return true;
-            }
-        });
-
-        summaryHelper.takePaymentsSummarySnapshots(new LogicalDate(context.getForDate()));
+                    @Override
+                    public boolean onPaymentsSummarySnapshotFailed(Throwable t) {
+                        context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
+                        log.error("Failed to create payments summary snapshot", t);
+                        return true;
+                    }
+                });
     }
 
     @Override

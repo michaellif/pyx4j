@@ -18,9 +18,9 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.server.common.security.VistaContext;
 
 public class DashboardDatasetAccessRule implements DatasetAccessRule<DashboardMetadata> {
 

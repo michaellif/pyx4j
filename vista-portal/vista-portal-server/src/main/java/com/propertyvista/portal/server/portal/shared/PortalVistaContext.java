@@ -18,10 +18,10 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
-import com.propertyvista.server.common.security.VistaContext;
 
 public class PortalVistaContext extends VistaContext {
 

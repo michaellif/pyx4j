@@ -44,7 +44,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRec
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 abstract class AbstractReconciliationProcessor {
 

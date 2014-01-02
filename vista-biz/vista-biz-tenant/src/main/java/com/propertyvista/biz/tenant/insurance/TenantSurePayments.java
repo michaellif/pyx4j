@@ -48,7 +48,7 @@ import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 class TenantSurePayments {
 

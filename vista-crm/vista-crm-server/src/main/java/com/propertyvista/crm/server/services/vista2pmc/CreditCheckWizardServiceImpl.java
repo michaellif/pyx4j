@@ -38,7 +38,7 @@ import com.propertyvista.domain.pmc.info.PmcAddressSimple;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 import com.propertyvista.domain.pmc.info.PmcPersonalInformationDocument;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
 

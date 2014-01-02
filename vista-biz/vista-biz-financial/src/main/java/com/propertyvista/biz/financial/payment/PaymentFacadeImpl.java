@@ -44,6 +44,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.OperationsAlertFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
@@ -60,7 +61,6 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
-import com.propertyvista.server.common.security.VistaContext;
 
 public class PaymentFacadeImpl implements PaymentFacade {
 

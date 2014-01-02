@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -35,7 +36,6 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
-import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, EmployeeDTO> implements CrmUserService {

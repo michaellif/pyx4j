@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.domain.blob.operations.PmcDocumentBlob;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, PmcDocumentBlob> implements PmcDocumentFileUploadService {
 

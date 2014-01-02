@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.dev.VisaDebitRange;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class VisaDebitInternalValidator {
 

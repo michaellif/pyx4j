@@ -17,6 +17,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.InstanceAccess;
 
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.ISharedUserEntity;
 
 public class SharedUserEntityInstanceAccess implements InstanceAccess {

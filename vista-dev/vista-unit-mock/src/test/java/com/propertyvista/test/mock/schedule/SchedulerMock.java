@@ -27,10 +27,10 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.PmcProcessFactory;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class SchedulerMock {
 

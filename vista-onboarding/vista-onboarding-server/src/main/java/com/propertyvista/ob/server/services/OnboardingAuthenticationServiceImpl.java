@@ -39,7 +39,7 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
-import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.TaskRunner;
 
 public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements OnboardingAuthenticationService,
         AclRevalidator {
