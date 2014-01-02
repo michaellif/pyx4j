@@ -23,38 +23,75 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.rpc.InMemeoryListService;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipPaymentRecordDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
+import com.propertyvista.domain.financial.PaymentPostingBatch;
+import com.propertyvista.domain.financial.PaymentPostingBatch.PostingStatus;
+import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CheckInfo;
 
-public class MoneyInBatchCrudServiceImpl implements MoneyInBatchCrudService {
+public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentPostingBatch, MoneyInBatchDTO> implements MoneyInBatchCrudService {
+
+    public MoneyInBatchCrudServiceImpl() {
+        super(PaymentPostingBatch.class, MoneyInBatchDTO.class);
+    }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<MoneyInBatchDTO>> callback, EntityListCriteria<MoneyInBatchDTO> criteria) {
-        // TODO replace this stub with implementation
-        new InMemeoryListService<MoneyInBatchDTO>(makeMokupBatches()).list(callback, criteria);
+    protected void bind() {
+        bind(toProto.id(), boProto.id());
+        bind(toProto.building(), boProto.building().propertyCode());
+        bind(toProto.depositDate(), boProto.depositDate());
+    }
+
+    @Override
+    protected void enhanceListRetrieved(PaymentPostingBatch bo, MoneyInBatchDTO dto) {
+        super.enhanceListRetrieved(bo, dto);
+        Persistence.service().retrieve(bo.building());
+//        dto.building().setValue(bo.building().propertyCode().getValue());
+        dto.bankAccountName();
+        dto.bankId();
+        dto.bankTransitNumber();
+        dto.bankAccountNumber();
+        dto.depositSlipNumber().setValue((int) bo.getPrimaryKey().asLong());
+
+        dto.isPosted().setValue(bo.status().getValue() == PostingStatus.Posted);
+        Persistence.service().retrieveMember(bo.payments());
+
+        BigDecimal total = new BigDecimal("0.00");
+        for (PaymentRecord paymentRecord : bo.payments()) {
+            total = total.add(paymentRecord.amount().getValue());
+        }
+        dto.totalReceivedAmount().setValue(total);
+        dto.numberOfReceipts().setValue(bo.payments().size());
+    }
+
+    @Override
+    protected void enhanceRetrieved(PaymentPostingBatch bo, MoneyInBatchDTO to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+        this.enhanceListRetrieved(bo, to);
+        for (PaymentRecord paymentRecord : bo.payments()) {
+            DepositSlipPaymentRecordDTO paymentRecordDto = to.payments().$();
+            Persistence.service().retrieve(paymentRecord.billingAccount());
+            Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+            paymentRecordDto.unit().set(paymentRecord.billingAccount().lease().unit().info().number());
+            Persistence.service().retrieve(paymentRecord.leaseTermParticipant());
+            paymentRecordDto.tenantId().setValue(paymentRecord.leaseTermParticipant().leaseParticipant().participantId().getValue());
+            paymentRecordDto.tenantName().setValue(paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView());
+            paymentRecordDto.checkNumber().setValue(paymentRecord.paymentMethod().details().duplicate(CheckInfo.class).checkNo().getValue());
+            paymentRecordDto.amount().setValue(paymentRecord.amount().getValue());
+        }
+
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new RuntimeException("Not Implemented"); // TODO implement remove batch for not yet posted batches
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<MoneyInBatchDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        // TODO replace mockup with code
-        callback.onSuccess(makeMokupBatches().get(0));
-    }
-
-    @Override
-    public void init(AsyncCallback<MoneyInBatchDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
-        throw new RuntimeException("Operation NOT supported");
     }
 
     @Override

@@ -120,11 +120,13 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
     private PaymentPostingBatch createBatch(Building buildingIdStub, Collection<MoneyInPaymentDTO> payments) throws PaymentException {
         PaymentPostingBatch batch = EntityFactory.create(PaymentPostingBatch.class);
         batch.status().setValue(PostingStatus.Created);
+        batch.building().set(buildingIdStub);
         for (MoneyInPaymentDTO paymentDto : payments) {
             PaymentRecord paymentRecord = createPaymentRecord(paymentDto);
             batch.payments().add(paymentRecord);
         }
         Persistence.service().persist(batch);
+
         return batch;
     }
 

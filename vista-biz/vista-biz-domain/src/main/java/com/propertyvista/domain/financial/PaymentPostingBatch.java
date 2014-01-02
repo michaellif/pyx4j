@@ -81,4 +81,6 @@ public interface PaymentPostingBatch extends IEntity, HasNotesAndAttachments {
     @Detached(level = AttachLevel.Detached)
     ISet<PaymentRecord> payments();
 
+    IPrimitive<LogicalDate> depositDate();
+
 }
