@@ -32,6 +32,7 @@ import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
@@ -46,6 +47,8 @@ class TransactionContext {
     private String uncommittedChangesFrom;
 
     private List<CompensationHandler> compensationHandlers;
+
+    private List<Executable<Void, RuntimeException>> completionHandlers;
 
     private List<CompensationHandler> commitedCompensationHandlers;
 
@@ -67,6 +70,13 @@ class TransactionContext {
             compensationHandlers = new ArrayList<CompensationHandler>();
         }
         compensationHandlers.add(handler);
+    }
+
+    void addTransactionCompletionHandler(Executable<Void, RuntimeException> handler) {
+        if (completionHandlers == null) {
+            completionHandlers = new ArrayList<Executable<Void, RuntimeException>>();
+        }
+        completionHandlers.add(handler);
     }
 
     public boolean isUncommittedChanges() {
@@ -95,6 +105,11 @@ class TransactionContext {
         if (compensationHandlers != null) {
             for (CompensationHandler handler : compensationHandlers) {
                 tc.addTransactionCompensationHandler(handler);
+            }
+        }
+        if (completionHandlers != null) {
+            for (Executable<Void, RuntimeException> handler : completionHandlers) {
+                tc.addTransactionCompletionHandler(handler);
             }
         }
         if (this.uncommittedChanges) {
@@ -145,6 +160,19 @@ class TransactionContext {
             }
 
             compensationHandlers.clear();
+        }
+    }
+
+    void fireCompletionHandlers() {
+        if (completionHandlers != null) {
+
+            ListIterator<Executable<Void, RuntimeException>> li = completionHandlers.listIterator(completionHandlers.size());
+            while (li.hasPrevious()) {
+                Executable<Void, RuntimeException> handler = li.previous();
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(handler);
+            }
+
+            completionHandlers.clear();
         }
     }
 

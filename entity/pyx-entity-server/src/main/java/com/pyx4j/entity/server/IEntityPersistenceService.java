@@ -78,6 +78,8 @@ public interface IEntityPersistenceService {
      */
     public void addTransactionCompensationHandler(CompensationHandler handler);
 
+    public void addTransactionCompletionHandler(Executable<Void, RuntimeException> handler);
+
     public void setTransactionUserKey(Key currentUserKey);
 
     public interface ICursorIterator<T> extends Iterator<T>, Closeable {

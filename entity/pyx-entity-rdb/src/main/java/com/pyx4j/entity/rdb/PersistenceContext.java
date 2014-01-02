@@ -40,6 +40,7 @@ import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -349,6 +350,10 @@ public class PersistenceContext {
         }
     }
 
+    void addTransactionCompletionHandler(Executable<Void, RuntimeException> handler) {
+        transactionContexts.peek().addTransactionCompletionHandler(handler);
+    }
+
     void commit() {
         if (PersistenceContext.traceTransaction) {
             log.info("{} commit\n\tfrom:{}\t", txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
@@ -363,6 +368,7 @@ public class PersistenceContext {
                 throw new RuntimeException(e);
             }
         }
+        transactionContexts.peek().fireCompletionHandlers();
     }
 
     void rollback() {

@@ -84,6 +84,7 @@ import com.pyx4j.entity.rdb.mapping.ValueAdapterEntityPolymorphic;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -355,6 +356,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void addTransactionCompensationHandler(CompensationHandler handler) {
         assert getPersistenceContext() != null : "Transaction Context was not started";
         getPersistenceContext().addTransactionCompensationHandler(handler);
+    }
+
+    @Override
+    public void addTransactionCompletionHandler(Executable<Void, RuntimeException> handler) {
+        assert getPersistenceContext() != null : "Transaction Context was not started";
+        getPersistenceContext().addTransactionCompletionHandler(handler);
     }
 
     @Override
