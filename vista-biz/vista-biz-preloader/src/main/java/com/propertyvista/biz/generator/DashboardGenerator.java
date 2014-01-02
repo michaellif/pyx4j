@@ -89,7 +89,7 @@ public class DashboardGenerator {
 
     private DashboardMetadata makeDefaultUnitAvailabilityDashboard() {
         return makeDashboard(//@formatter:off
-                i18n.tr("Availablility"),
+                i18n.tr("Availability"),
                 i18n.tr("Contains various availability gadgets"),                
                 UnitAvailabilityGadgetMetadata.class,
                 UnitAvailabilitySummaryGadgetMetadata.class,
