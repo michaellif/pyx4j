@@ -72,7 +72,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new PersonalInfoAStep());
             addStep(new PersonalInfoBStep());
             addStep(new FinancialStep());
-            addStep(new ContactsStep());
+            if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+                addStep(new ContactsStep());
+            }
             addStep(new LegalStep());
             addStep(new SummaryStep());
         }

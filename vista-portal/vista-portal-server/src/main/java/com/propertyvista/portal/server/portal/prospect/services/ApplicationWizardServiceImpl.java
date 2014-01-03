@@ -55,6 +55,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
@@ -159,39 +160,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         switch (bo.role().getValue()) {
         case Applicant:
         case CoApplicant:
-            LeaseTermTenant tenant = ProspectPortalContext.getLeaseTermTenant();
-
-            // customer:
-            Customer customer = tenant.leaseParticipant().customer();
-            Persistence.service().retrieve(customer.picture());
-            Persistence.service().retrieve(customer.emergencyContacts());
-            //
-            to.applicant().set(to.applicant().person(), customer.person());
-            to.applicant().set(to.applicant().picture(), customer.picture());
-            to.applicant().set(to.applicant().emergencyContacts(), customer.emergencyContacts());
-
-            // screening:
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), tenant, AttachLevel.Attached);
-            CustomerScreening.CustomerScreeningV screening = tenant.effectiveScreening().version();
-            //
-            to.applicant().set(to.applicant().currentAddress(), screening.currentAddress());
-            to.applicant().set(to.applicant().previousAddress(), screening.previousAddress());
-
-            to.applicant().set(to.applicant().documents(), screening.documents());
-            to.applicant().set(
-                    to.applicant().documentsPolicy(),
-                    ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
-                            ApplicationDocumentationPolicy.class));
-            initializeRequiredDocuments(to.applicant());
-
-            to.applicant().set(to.applicant().legalQuestions(), screening.legalQuestions());
-
-            to.applicant().set(to.applicant().incomes(), screening.incomes());
-            to.applicant().set(to.applicant().assets(), screening.assets());
+            fillLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermTenant());
             break;
 
         case Guarantor:
-            // TODO process guarantor case here...
+            fillLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermGuarantor());
             break;
         }
 
@@ -211,49 +184,81 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
     }
 
+    private void fillLeaseTermParticipant(OnlineApplication bo, OnlineApplicationDTO to, LeaseTermParticipant<?> participant) {
+        // customer:
+        Customer customer = participant.leaseParticipant().customer();
+        Persistence.service().retrieve(customer.picture());
+        Persistence.service().retrieve(customer.emergencyContacts());
+        //
+        to.applicant().set(to.applicant().person(), customer.person());
+        to.applicant().set(to.applicant().picture(), customer.picture());
+        to.applicant().set(to.applicant().emergencyContacts(), customer.emergencyContacts());
+
+        // screening:
+        LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), participant, AttachLevel.Attached);
+        CustomerScreening.CustomerScreeningV screening = participant.effectiveScreening().version();
+        //
+        to.applicant().set(to.applicant().currentAddress(), screening.currentAddress());
+        to.applicant().set(to.applicant().previousAddress(), screening.previousAddress());
+
+        to.applicant().set(to.applicant().documents(), screening.documents());
+        to.applicant().set(
+                to.applicant().documentsPolicy(),
+                ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
+                        ApplicationDocumentationPolicy.class));
+        initializeRequiredDocuments(to.applicant());
+
+        to.applicant().set(to.applicant().legalQuestions(), screening.legalQuestions());
+
+        to.applicant().set(to.applicant().incomes(), screening.incomes());
+        to.applicant().set(to.applicant().assets(), screening.assets());
+    }
+
     private void saveApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
         switch (bo.role().getValue()) {
         case Applicant:
         case CoApplicant:
-            LeaseTermTenant tenant = ProspectPortalContext.getLeaseTermTenant();
-
-            // customer:
-            Customer customer = tenant.leaseParticipant().customer();
-            Persistence.service().retrieve(customer.picture());
-            Persistence.service().retrieve(customer.emergencyContacts());
-            //
-            customer.set(customer.person(), to.applicant().person());
-            customer.set(customer.picture(), to.applicant().picture());
-
-            customer.emergencyContacts().clear();
-            customer.emergencyContacts().addAll(to.applicant().emergencyContacts());
-
-            Persistence.service().merge(customer);
-
-            // screening:
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), tenant, AttachLevel.Attached);
-            CustomerScreening.CustomerScreeningV screening = tenant.effectiveScreening().version();
-            //
-            screening.set(screening.currentAddress(), to.applicant().currentAddress());
-            screening.set(screening.previousAddress(), to.applicant().previousAddress());
-            screening.set(screening.legalQuestions(), to.applicant().legalQuestions());
-
-            screening.documents().clear();
-            screening.documents().addAll(to.applicant().documents());
-
-            screening.incomes().clear();
-            screening.incomes().addAll(to.applicant().incomes());
-
-            screening.assets().clear();
-            screening.assets().addAll(to.applicant().assets());
-
-            Persistence.service().merge(screening);
+            saveLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermTenant());
             break;
 
         case Guarantor:
-            // TODO process guarantor case here...
+            saveLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermGuarantor());
             break;
         }
+    }
+
+    private void saveLeaseTermParticipant(OnlineApplication bo, OnlineApplicationDTO to, LeaseTermParticipant<?> participant) {
+        // customer:
+        Customer customer = participant.leaseParticipant().customer();
+        Persistence.service().retrieve(customer.picture());
+        Persistence.service().retrieve(customer.emergencyContacts());
+        //
+        customer.set(customer.person(), to.applicant().person());
+        customer.set(customer.picture(), to.applicant().picture());
+
+        customer.emergencyContacts().clear();
+        customer.emergencyContacts().addAll(to.applicant().emergencyContacts());
+
+        Persistence.service().merge(customer);
+
+        // screening:
+        LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), participant, AttachLevel.Attached);
+        CustomerScreening.CustomerScreeningV screening = participant.effectiveScreening().version();
+        //
+        screening.set(screening.currentAddress(), to.applicant().currentAddress());
+        screening.set(screening.previousAddress(), to.applicant().previousAddress());
+        screening.set(screening.legalQuestions(), to.applicant().legalQuestions());
+
+        screening.documents().clear();
+        screening.documents().addAll(to.applicant().documents());
+
+        screening.incomes().clear();
+        screening.incomes().addAll(to.applicant().incomes());
+
+        screening.assets().clear();
+        screening.assets().addAll(to.applicant().assets());
+
+        Persistence.service().merge(screening);
     }
 
     private void fillCoApplicants(OnlineApplication bo, OnlineApplicationDTO to) {
