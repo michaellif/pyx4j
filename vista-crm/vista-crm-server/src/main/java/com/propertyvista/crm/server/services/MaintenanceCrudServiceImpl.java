@@ -52,8 +52,8 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     @Override
     protected void enhanceRetrieved(MaintenanceRequest bo, MaintenanceRequestDTO to, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(bo.media());
-        to.media().set(bo.media());
+        Persistence.service().retrieveMember(bo.pictures());
+        to.pictures().set(bo.pictures());
         enhanceAll(to);
     }
 

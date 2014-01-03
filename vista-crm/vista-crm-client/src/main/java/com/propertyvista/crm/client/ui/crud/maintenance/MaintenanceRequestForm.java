@@ -54,7 +54,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.images.HelperImages;
 
-import com.propertyvista.common.client.PublicMediaURLBuilder;
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
@@ -65,9 +65,9 @@ import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.rpc.services.MediaUploadMaintenanceRequestService;
-import com.propertyvista.domain.MediaFile;
+import com.propertyvista.crm.rpc.services.MaintenanceRequestPictureUploadService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -192,27 +192,22 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int innerRow = -1;
         imagePanel = new TwoColumnFlexFormPanel();
         imagePanel.setH1(++innerRow, 0, 2, i18n.tr("Images"));
-        CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
-                GWT.<MediaUploadMaintenanceRequestService> create(MediaUploadMaintenanceRequestService.class), new PublicMediaURLBuilder()) {
+        CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
+                GWT.<MaintenanceRequestPictureUploadService> create(MaintenanceRequestPictureUploadService.class), new VistaFileURLBuilder(
+                        MaintenanceRequestPicture.class)) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
             }
 
             @Override
-            public Widget getImageEntryView(CEntityForm<MediaFile> entryForm) {
+            public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-                int row = -1;
-                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
-                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
-                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().visibility()), 8, 7, 16).build());
-
                 return main;
             }
         };
         imageSlider.setImageSize(240, 160);
-        imagePanel.setWidget(++innerRow, 0, 2, inject(proto().media(), imageSlider));
+        imagePanel.setWidget(++innerRow, 0, 2, inject(proto().pictures(), imageSlider));
         panel.setWidget(++row, 0, 2, imagePanel);
         // --------------------------------------------------------------------------------------------------------------------
 
@@ -390,7 +385,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         if (!isEditable()) {
-            imagePanel.setVisible(mr.media() != null && !mr.media().isNull() && !mr.media().isEmpty());
+            imagePanel.setVisible(mr.pictures() != null && !mr.pictures().isNull() && !mr.pictures().isEmpty());
         }
         // to support yardi mode with multiple interfaces
         ensureBuilding();

@@ -61,7 +61,6 @@ public class ThumbnailService {
         params.clipThumpnailBorders = 2;
         switch (imageTarget) {
         case Building:
-        case MaintenanceRequest:
             params.crop = true;
             break;
         case Floorplan:
@@ -74,7 +73,6 @@ public class ThumbnailService {
     public static void persist(Key key, String fileName, byte[] originalContent, ImageTarget imageTarget) {
         switch (imageTarget) {
         case Building:
-        case MaintenanceRequest:
             ThumbnailService.persist(key, fileName, originalContent, getDefaultResampleParams(imageTarget), ImageConsts.BUILDING_XSMALL,
                     ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE, null);
             break;
@@ -90,7 +88,6 @@ public class ThumbnailService {
     public static FileImageThumbnailBlobDTO createThumbnailBlob(String fileName, byte[] originalContent, ImageTarget imageTarget) {
         switch (imageTarget) {
         case Building:
-        case MaintenanceRequest:
             return createThumbnailBlob(fileName, originalContent, getDefaultResampleParams(imageTarget), ImageConsts.BUILDING_XSMALL,
                     ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE, null);
         case Floorplan:

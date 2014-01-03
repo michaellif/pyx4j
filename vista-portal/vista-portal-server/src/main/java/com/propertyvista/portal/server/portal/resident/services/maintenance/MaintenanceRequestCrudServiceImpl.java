@@ -62,8 +62,8 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     protected void enhanceRetrieved(MaintenanceRequest bo, MaintenanceRequestDTO to, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(bo.media());
-        to.media().set(bo.media());
+        Persistence.service().retrieveMember(bo.pictures());
+        to.pictures().set(bo.pictures());
         enhanceAll(to);
     }
 
@@ -87,7 +87,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     protected void enhanceDbo(MaintenanceRequest dbo) {
         Persistence.ensureRetrieve(dbo.building(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(dbo.media(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dbo.pictures(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dbo.reporter(), AttachLevel.Attached);
         MaintenanceRequestCategory parent = dbo.category().parent();
         while (!parent.isNull()) {

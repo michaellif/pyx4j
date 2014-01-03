@@ -16,8 +16,8 @@ package com.propertyvista.crm.rpc.services;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.domain.blob.MediaFileBlob;
+import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;
 
-public interface MediaUploadMaintenanceRequestService extends UploadService<IEntity, MediaFileBlob> {
+public interface MaintenanceRequestPictureUploadService extends UploadService<IEntity, MaintenanceRequestPictureBlob> {
 
 }

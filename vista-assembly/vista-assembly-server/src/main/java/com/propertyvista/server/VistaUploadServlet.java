@@ -17,7 +17,7 @@ import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 
 import com.propertyvista.crm.server.services.MediaUploadBuildingServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadFloorplanServiceImpl;
-import com.propertyvista.crm.server.services.MediaUploadMaintenanceRequestServiceImpl;
+import com.propertyvista.crm.server.services.MaintenanceRequestPictureUploadServiceImpl;
 import com.propertyvista.crm.server.services.NoteAttachmentUploadServiceImpl;
 import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
@@ -33,7 +33,7 @@ import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.operations.server.services.MerchantAccountFileUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.IdentificationDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.ProofOfEmploymentDocumentProspectUploadServiceImpl;
-import com.propertyvista.portal.server.portal.resident.services.maintenance.MaintenanceRequestMediaUploadPortalServiceImpl;
+import com.propertyvista.portal.server.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.services.InsuranceCertificateScanResidentUploadServiceImpl;
 import com.propertyvista.portal.server.portal.shared.services.CustomerPicturePortalUploadServiceImpl;
 
@@ -45,12 +45,12 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(UpdateUploadServiceImpl.class);
         register(MediaUploadFloorplanServiceImpl.class);
         register(MediaUploadBuildingServiceImpl.class);
-        register(MediaUploadMaintenanceRequestServiceImpl.class);
+        register(MaintenanceRequestPictureUploadServiceImpl.class);
         register(SiteImageResourceUploadServiceImpl.class);
         register(NoteAttachmentUploadServiceImpl.class);
         register(CustomerPictureCrmUploadServiceImpl.class);
         register(CustomerPicturePortalUploadServiceImpl.class);
-        register(MaintenanceRequestMediaUploadPortalServiceImpl.class);
+        register(MaintenanceRequestPictureUploadPortalServiceImpl.class);
         register(InsuranceCertificateScanCrmUploadServiceImpl.class);
         register(InsuranceCertificateScanResidentUploadServiceImpl.class);
         register(PmcDocumentFileUploadServiceImpl.class);

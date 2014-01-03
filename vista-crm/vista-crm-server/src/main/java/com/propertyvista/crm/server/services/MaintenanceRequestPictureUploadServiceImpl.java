@@ -13,14 +13,10 @@
  */
 package com.propertyvista.crm.server.services;
 
-import com.propertyvista.crm.rpc.services.MediaUploadMaintenanceRequestService;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
+import com.propertyvista.crm.rpc.services.MaintenanceRequestPictureUploadService;
+import com.propertyvista.server.common.upload.AbstractMaintenanceRequestPictureUploadServiceImpl;
 
-public class MediaUploadMaintenanceRequestServiceImpl extends MediaUploadAbstractServiceImpl implements MediaUploadMaintenanceRequestService {
-
-    @Override
-    protected ImageTarget imageResizeTarget() {
-        return ImageTarget.MaintenanceRequest;
-    }
+public class MaintenanceRequestPictureUploadServiceImpl extends AbstractMaintenanceRequestPictureUploadServiceImpl implements
+        MaintenanceRequestPictureUploadService {
 
 }

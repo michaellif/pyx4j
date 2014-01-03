@@ -34,19 +34,18 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.PublicMediaURLBuilder;
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestMediaUploadPortalService;
+import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -137,27 +136,22 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         innerRow = -1;
         imagePanel = new TwoColumnFlexFormPanel();
         imagePanel.setH1(++innerRow, 0, 1, i18n.tr("Images"));
-        CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
-                GWT.<MaintenanceRequestMediaUploadPortalService> create(MaintenanceRequestMediaUploadPortalService.class), new PublicMediaURLBuilder()) {
+        CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
+                GWT.<MaintenanceRequestPictureUploadPortalService> create(MaintenanceRequestPictureUploadPortalService.class), new VistaFileURLBuilder(
+                        MaintenanceRequestPicture.class)) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
             }
 
             @Override
-            public Widget getImageEntryView(CEntityForm<MediaFile> entryForm) {
+            public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-                int row = -1;
-                main.setWidget(++row, 0, 1, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
-                main.setWidget(++row, 0, 1, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
-                main.setWidget(++row, 0, 1, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().visibility()), 8, 7, 16).build());
-
                 return main;
             }
         };
         imageSlider.setImageSize(240, 160);
-        imagePanel.setWidget(++innerRow, 0, 1, inject(proto().media(), imageSlider));
+        imagePanel.setWidget(++innerRow, 0, 1, inject(proto().pictures(), imageSlider));
         content.setWidget(++row, 0, imagePanel);
         content.setBR(++row, 0, 1);
 
