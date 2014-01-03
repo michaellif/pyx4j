@@ -39,12 +39,13 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class))), 20).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 20).build());
 
         row = 0;
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
 
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().availableOnline()), 4).build());
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().recurring()), 4).build());
 

@@ -93,9 +93,9 @@ public class ProductCatalogGenerator {
 
     public void buildEligibilityMatrix(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (ARCode.Type.services().contains(service.code().type().getValue()) && !service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (ARCode.Type.services().contains(service.code().type().getValue()) && !service.defaultCatalogItem().isBooleanTrue()) {
                 for (Feature feature : catalog.features()) {
-                    if (!feature.isDefaultCatalogItem().isBooleanTrue()) {
+                    if (!feature.defaultCatalogItem().isBooleanTrue()) {
                         service.version().features().add(feature);
                     }
                 }
@@ -118,10 +118,12 @@ public class ProductCatalogGenerator {
     private Service createService(ProductCatalog catalog, ARCode arCode) {
         Service service = EntityFactory.create(Service.class);
         service.catalog().set(catalog);
+        service.defaultCatalogItem().setValue(false);
 
         service.code().set(arCode);
         service.version().name().setValue(RandomUtil.randomLetters(6));
         service.version().description().setValue("Service description");
+        service.version().availableOnline().setValue(RandomUtil.randomBoolean());
 
         return service;
 
@@ -130,6 +132,7 @@ public class ProductCatalogGenerator {
     private Feature createFeature(ProductCatalog catalog, ARCode arCode) {
         Feature feature = EntityFactory.create(Feature.class);
         feature.catalog().set(catalog);
+        feature.defaultCatalogItem().setValue(false);
 
         feature.code().set(arCode);
         feature.version().name().setValue(RandomUtil.randomLetters(6));
@@ -137,6 +140,7 @@ public class ProductCatalogGenerator {
 
         feature.version().recurring().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonReccuringFeatures().contains(arCode.type()));
         feature.version().mandatory().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonMandatoryFeatures().contains(arCode.type()));
+        feature.version().availableOnline().setValue(RandomUtil.randomBoolean());
 
         feature.version().items().add(createFeatureItem(arCode));
 
@@ -212,7 +216,7 @@ public class ProductCatalogGenerator {
 
     private Service getService(ProductCatalog catalog, ARCode arCode) {
         for (Service service : catalog.services()) {
-            if (service.code().equals(arCode) && !service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (service.code().equals(arCode) && !service.defaultCatalogItem().isBooleanTrue()) {
                 return service;
             }
         }

@@ -86,13 +86,13 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
         // Save services and features:
         for (Feature feature : building.productCatalog().features()) {
-            if (feature.isDefaultCatalogItem().isBooleanTrue()) {
+            if (feature.defaultCatalogItem().isBooleanTrue()) {
                 Persistence.service().persist(feature);
             }
         }
 
         for (Service service : building.productCatalog().services()) {
-            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().isBooleanTrue()) {
                 Persistence.service().persist(service);
             }
         }
@@ -105,7 +105,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
 
         for (Service service : building.productCatalog().services()) {
-            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().isBooleanTrue()) {
                 if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     ProductItem item = createUnitItem(unit, service);
                     Persistence.service().persist(item);
@@ -125,7 +125,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
 
         for (Service service : building.productCatalog().services()) {
-            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().isBooleanTrue()) {
                 if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     updateUnitItem(unit, service);
                 }
@@ -139,7 +139,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         Iterator<Service> serviceIterator = catalog.services().iterator();
         while (serviceIterator.hasNext()) {
             Service service = serviceIterator.next();
-            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().isBooleanTrue()) {
                 serviceIterator.remove();
             }
         }
@@ -160,11 +160,12 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private Service createService(ProductCatalog catalog, ARCode code) {
         Service service = EntityFactory.create(Service.class);
-        service.isDefaultCatalogItem().setValue(true);
+        service.defaultCatalogItem().setValue(true);
 
         service.catalog().set(catalog);
         service.code().set(code);
         service.version().name().setValue(code.name().getValue());
+        service.version().availableOnline().setValue(false);
 
         return service;
     }
@@ -175,7 +176,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         Iterator<Feature> featureIterator = catalog.features().iterator();
         while (featureIterator.hasNext()) {
             Feature feature = featureIterator.next();
-            if (feature.isDefaultCatalogItem().isBooleanTrue()) {
+            if (feature.defaultCatalogItem().isBooleanTrue()) {
                 featureIterator.remove();
             }
         }
@@ -194,13 +195,14 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private Feature createFeature(ProductCatalog catalog, ARCode code) {
         Feature feature = EntityFactory.create(Feature.class);
-        feature.isDefaultCatalogItem().setValue(true);
+        feature.defaultCatalogItem().setValue(true);
 
         feature.catalog().set(catalog);
         feature.code().set(code);
         feature.version().name().setValue(code.name().getValue());
         feature.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(code));
         feature.version().mandatory().setValue(false);
+        feature.version().availableOnline().setValue(false);
 
         feature.version().items().add(createFeatureItem(code));
 
@@ -220,10 +222,10 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().isBooleanTrue()) {
                 for (Feature feature : catalog.features()) {
                     Persistence.ensureRetrieve(feature, AttachLevel.Attached);
-                    if (feature.isDefaultCatalogItem().isBooleanTrue()) {
+                    if (feature.defaultCatalogItem().isBooleanTrue()) {
                         service.version().features().add(feature);
                     }
 

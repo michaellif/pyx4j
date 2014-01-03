@@ -70,7 +70,6 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
@@ -602,14 +601,15 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         criteria.eq(criteria.proto().floorplan(), floorplanId);
-
-        if (VistaFeatures.instance().yardiIntegration()) {
-            criteria.le(criteria.proto()._availableForRent(), moveIn);
-        } else {
-            criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
-            criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
-            criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
-        }
+        // correct service type:
+        criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
+        criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
+        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
+        criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
+        // availability: 
+        criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
+        criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
+        criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
 
         return Persistence.service().query(criteria);
     }
@@ -673,30 +673,25 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             }
         }
 
-        fillCatalogItems(options, (Service.ServiceV) options.selectedService().item().product().cast(), false);
+        fillCatalogItems(options, options.selectedService().item().product().<Service.ServiceV> cast(), false);
     }
 
     private void fillAvailableCatalogItems(UnitOptionsSelectionDTO options) {
         assert (!options.unit().isNull());
+        EntityQueryCriteria<ProductItem> criteria = new EntityQueryCriteria<ProductItem>(ProductItem.class);
+        // correct service type:
+        criteria.eq(criteria.proto().product().holder().catalog().building().units(), options.unit());
+        criteria.in(criteria.proto().product().holder().code().type(), ARCode.Type.Residential);
+        criteria.eq(criteria.proto().product().holder().defaultCatalogItem(), Boolean.FALSE);
+        criteria.isCurrent(criteria.proto().product().holder().version());
+        criteria.eq(criteria.proto().product().holder().version().availableOnline(), Boolean.TRUE);
+        // correct unit:
+        criteria.eq(criteria.proto().element(), options.unit());
 
-        Service service;
-        {
-            EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
-            criteria.eq(criteria.proto().catalog().building().units(), options.unit());
-            criteria.in(criteria.proto().code().type(), ARCode.Type.Residential);
-            criteria.eq(criteria.proto().isDefaultCatalogItem(), Boolean.FALSE);
-            criteria.isCurrent(criteria.proto().version());
-
-            service = Persistence.service().retrieve(criteria);
-        }
-        if (service != null) {
-            EntityQueryCriteria<ProductItem> criteria = new EntityQueryCriteria<ProductItem>(ProductItem.class);
-            criteria.eq(criteria.proto().product(), service.version());
-            criteria.eq(criteria.proto().element(), options.unit());
-
-            options.selectedService().set(createBillableItem(Persistence.service().retrieve(criteria)));
-
-            fillCatalogItems(options, service.version(), true);
+        ProductItem productItem = Persistence.service().retrieve(criteria);
+        if (productItem != null) {
+            options.selectedService().set(createBillableItem(productItem));
+            fillCatalogItems(options, productItem.product().<Service.ServiceV> cast(), true);
         }
     }
 
@@ -707,36 +702,38 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             Persistence.service().retrieveMember(feature.version().items());
 
             for (ProductItem item : feature.version().items()) {
-                switch (feature.code().type().getValue()) {
-                case AddOn:
-                case Utility:
-                    options.availableUtilities().add(item);
-                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                        options.selectedUtilities().add(createBillableItem(item));
-                    }
-                    break;
-                case Pet:
-                    options.availablePets().add(item);
-                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                        options.selectedPets().add(createBillableItem(item));
-                    }
-                    break;
-                case Parking:
-                    options.availableParking().add(item);
-                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                        options.selectedParking().add(createBillableItem(item));
-                    }
-                    break;
-                case Locker:
-                    options.availableStorage().add(item);
-                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                        options.selectedStorage().add(createBillableItem(item));
-                    }
-                    break;
-                default:
-                    options.availableOther().add(item);
-                    if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                        options.selectedOther().add(createBillableItem(item));
+                if (feature.version().availableOnline().isBooleanTrue()) {
+                    switch (feature.code().type().getValue()) {
+                    case AddOn:
+                    case Utility:
+                        options.availableUtilities().add(item);
+                        if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedUtilities().add(createBillableItem(item));
+                        }
+                        break;
+                    case Pet:
+                        options.availablePets().add(item);
+                        if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedPets().add(createBillableItem(item));
+                        }
+                        break;
+                    case Parking:
+                        options.availableParking().add(item);
+                        if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedParking().add(createBillableItem(item));
+                        }
+                        break;
+                    case Locker:
+                        options.availableStorage().add(item);
+                        if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedStorage().add(createBillableItem(item));
+                        }
+                        break;
+                    default:
+                        options.availableOther().add(item);
+                        if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
+                            options.selectedOther().add(createBillableItem(item));
+                        }
                     }
                 }
             }

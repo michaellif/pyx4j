@@ -61,7 +61,7 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     IPrimitive<Integer> orderInCatalog();
 
     @NotNull
-    IPrimitive<Boolean> isDefaultCatalogItem();
+    IPrimitive<Boolean> defaultCatalogItem();
 
     /**
      * expired date when it is no loner effective
@@ -95,5 +95,8 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
         @Caption(name = "Market Price")
         @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> price();
+
+        @NotNull
+        IPrimitive<Boolean> availableOnline();
     }
 }

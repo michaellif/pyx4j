@@ -66,7 +66,7 @@ public class YardiProductCatalogProcessor {
         List<AptUnit> units = Persistence.service().query(criteria);
 
         for (Service service : building.productCatalog().services()) {
-            if (!service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (!service.defaultCatalogItem().isBooleanTrue()) {
                 if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     updateUnitItems(service, units);
                 }
@@ -81,13 +81,13 @@ public class YardiProductCatalogProcessor {
 
         // Save services and features:
         for (Feature feature : building.productCatalog().features()) {
-            if (!feature.isDefaultCatalogItem().isBooleanTrue()) {
+            if (!feature.defaultCatalogItem().isBooleanTrue()) {
                 Persistence.service().merge(feature);
             }
         }
 
         for (Service service : building.productCatalog().services()) {
-            if (!service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (!service.defaultCatalogItem().isBooleanTrue()) {
                 Persistence.service().merge(service);
             }
         }
@@ -144,7 +144,7 @@ public class YardiProductCatalogProcessor {
 
     private void deleteServices(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (!service.isDefaultCatalogItem().isBooleanTrue() && service.expiredFrom().isNull()) {
+            if (!service.defaultCatalogItem().isBooleanTrue() && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
                 Persistence.service().merge(service);
             }
@@ -154,17 +154,18 @@ public class YardiProductCatalogProcessor {
     private Service ensureService(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.eq(criteria.proto().catalog(), catalog);
-        criteria.eq(criteria.proto().isDefaultCatalogItem(), false);
+        criteria.eq(criteria.proto().defaultCatalogItem(), false);
         criteria.eq(criteria.proto().code(), typeData.getArCode());
         criteria.eq(criteria.proto().version().name(), typeData.getItemType().getCode());
 
         Service service = Persistence.service().retrieve(criteria);
         if (service == null) {
             service = EntityFactory.create(Service.class);
-            service.isDefaultCatalogItem().setValue(false);
+            service.defaultCatalogItem().setValue(false);
             service.catalog().set(catalog);
             service.code().set(typeData.getArCode());
             service.version().name().setValue(typeData.getItemType().getCode());
+            service.version().availableOnline().setValue(true);
         } else {
             if (isServiceChanged(service, typeData)) {
                 service = Persistence.secureRetrieveDraft(Service.class, service.getPrimaryKey());
@@ -206,7 +207,7 @@ public class YardiProductCatalogProcessor {
 
     private void deleteFeatures(ProductCatalog catalog) {
         for (Feature feature : catalog.features()) {
-            if (!feature.isDefaultCatalogItem().isBooleanTrue() && feature.expiredFrom().isNull()) {
+            if (!feature.defaultCatalogItem().isBooleanTrue() && feature.expiredFrom().isNull()) {
                 feature.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
                 Persistence.service().merge(feature);
             }
@@ -216,19 +217,20 @@ public class YardiProductCatalogProcessor {
     private Feature ensureFeature(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
         EntityQueryCriteria<Feature> criteria = EntityQueryCriteria.create(Feature.class);
         criteria.eq(criteria.proto().catalog(), catalog);
-        criteria.eq(criteria.proto().isDefaultCatalogItem(), false);
+        criteria.eq(criteria.proto().defaultCatalogItem(), false);
         criteria.eq(criteria.proto().code(), typeData.getArCode());
         criteria.eq(criteria.proto().version().name(), typeData.getItemType().getCode());
 
         Feature feature = Persistence.service().retrieve(criteria);
         if (feature == null) {
             feature = EntityFactory.create(Feature.class);
-            feature.isDefaultCatalogItem().setValue(false);
+            feature.defaultCatalogItem().setValue(false);
             feature.catalog().set(catalog);
             feature.code().set(typeData.getArCode());
             feature.version().name().setValue(typeData.getItemType().getCode());
             feature.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(typeData.getArCode().type().getValue()));
             feature.version().mandatory().setValue(false);
+            feature.version().availableOnline().setValue(true);
             feature.version().items().add(createFeatureItem(typeData.getArCode()));
         } else {
             if (isFeatureChanged(feature, typeData)) {
@@ -278,10 +280,10 @@ public class YardiProductCatalogProcessor {
 
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (!service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (!service.defaultCatalogItem().isBooleanTrue()) {
                 for (Feature feature : catalog.features()) {
                     Persistence.ensureRetrieve(feature, AttachLevel.Attached);
-                    if (!feature.isDefaultCatalogItem().isBooleanTrue()) {
+                    if (!feature.defaultCatalogItem().isBooleanTrue()) {
                         service.version().features().add(feature);
                     }
 

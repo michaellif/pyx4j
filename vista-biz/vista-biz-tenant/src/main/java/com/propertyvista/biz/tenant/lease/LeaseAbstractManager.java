@@ -1149,7 +1149,7 @@ public abstract class LeaseAbstractManager {
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.eq(serviceCriteria.proto().catalog(), leaseTerm.unit().building().productCatalog());
         serviceCriteria.eq(serviceCriteria.proto().code().type(), leaseTerm.lease().type());
-        serviceCriteria.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog);
+        serviceCriteria.eq(serviceCriteria.proto().defaultCatalogItem(), useDefaultCatalog);
         serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
                 PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), termFrom));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());

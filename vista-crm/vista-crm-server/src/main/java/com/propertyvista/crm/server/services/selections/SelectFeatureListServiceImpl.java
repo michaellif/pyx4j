@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.selections;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
@@ -37,7 +38,7 @@ public class SelectFeatureListServiceImpl extends AbstractListServiceImpl<Featur
         // Load detached data:
         Persistence.service().retrieveMember(dto.version().items());
         for (ProductItem item : dto.version().items()) {
-            Persistence.service().retrieveMember(item.element());
+            Persistence.ensureRetrieve(item.element(), AttachLevel.Attached);
         }
     }
 }

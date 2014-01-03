@@ -308,7 +308,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.eq(serviceCriteria.proto().catalog(), currentValue.unit().building().productCatalog());
         serviceCriteria.eq(serviceCriteria.proto().code().type(), currentValue.lease().type());
-        serviceCriteria.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog);
+        serviceCriteria.eq(serviceCriteria.proto().defaultCatalogItem(), useDefaultCatalog);
         serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
                 PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), termFrom));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());

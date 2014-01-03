@@ -120,7 +120,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices()));
 
         for (Service service : Persistence.secureQuery(criteria)) {
-            if (!service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (!service.defaultCatalogItem().isBooleanTrue()) {
                 Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
                 for (ProductItem item : service.version().items()) {
                     if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {

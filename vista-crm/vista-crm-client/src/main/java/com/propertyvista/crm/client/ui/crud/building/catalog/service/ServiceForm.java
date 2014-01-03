@@ -43,12 +43,14 @@ public class ServiceForm extends CrmEntityForm<Service> {
         content.setH1(++row, 0, 2, i18n.tr("Information"));
         content.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class))), 20).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
-
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 20).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
+        row = 0;
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
+
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().availableOnline()), 4).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Items"));
         content.setWidget(++row, 0, 2, inject(proto().version().items(), new ServiceItemFolder(this)));

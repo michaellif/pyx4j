@@ -42,6 +42,7 @@ public class ServiceLister extends AbstractLister<Service> {
             new MemberColumnDescriptor.Builder(proto().version().name()).build(),
             new MemberColumnDescriptor.Builder(proto().version().price()).build(),
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
+            new MemberColumnDescriptor.Builder(proto().version().availableOnline(), false).build(),
             new MemberColumnDescriptor.Builder(proto().expiredFrom(), false).build()
         );//@formatter:on
     }
@@ -54,7 +55,7 @@ public class ServiceLister extends AbstractLister<Service> {
     @Override
     protected EntityListCriteria<Service> updateCriteria(EntityListCriteria<Service> criteria) {
         if (!VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
-            criteria.eq(criteria.proto().isDefaultCatalogItem(), Boolean.FALSE);
+            criteria.eq(criteria.proto().defaultCatalogItem(), Boolean.FALSE);
         }
         return super.updateCriteria(criteria);
     }
