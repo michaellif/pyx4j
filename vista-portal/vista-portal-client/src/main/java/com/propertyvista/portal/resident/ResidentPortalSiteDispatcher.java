@@ -66,7 +66,7 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
-        } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseSigningRequired)) {
+        } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
             if (newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
                 return null;
             }
