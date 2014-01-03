@@ -72,8 +72,20 @@ class NEntitySelectorLabel<E extends IEntity> extends NFocusField<E, TextBox, CE
     }
 
     @Override
+    protected void onEditorCreate() {
+        getEditor().setWidth("100%");
+        super.onEditorCreate();
+    }
+
+    @Override
     public HTML createViewer() {
         return new HTML();
+    }
+
+    @Override
+    protected void onViewerCreate() {
+        getViewer().setWidth("100%");
+        super.onViewerCreate();
     }
 
     @Override

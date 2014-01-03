@@ -76,6 +76,12 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusField<E, TextBox
     }
 
     @Override
+    protected void onEditorCreate() {
+        getEditor().setWidth("100%");
+        super.onEditorCreate();
+    }
+
+    @Override
     public Anchor createViewer() {
         Anchor anchor = new Anchor("");
         anchor.addClickHandler(new ClickHandler() {
@@ -88,6 +94,12 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusField<E, TextBox
             }
         });
         return anchor;
+    }
+
+    @Override
+    protected void onViewerCreate() {
+        getViewer().setWidth("100%");
+        super.onViewerCreate();
     }
 
     @Override
