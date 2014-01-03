@@ -354,21 +354,36 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void saveGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
         LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
+        EntityQueryCriteria<LeaseTermGuarantor> criteria = new EntityQueryCriteria<LeaseTermGuarantor>(LeaseTermGuarantor.class);
+        criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
+        criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
+
+        // find removed:
+        List<LeaseTermGuarantor> removedGuarantors = new ArrayList<LeaseTermGuarantor>();
+        for (LeaseTermGuarantor ltg : Persistence.service().query(criteria)) {
+            Boolean present = false;
+            for (GuarantorDTO grnt : to.guarantors()) {
+                if (!grnt.guarantorId().isNull() && grnt.guarantorId().getPrimaryKey().equals(ltg.getPrimaryKey())) {
+                    present = true;
+                    break;
+                }
+            }
+            if (!present) {
+                removedGuarantors.add(ltg);
+            }
+        }
+
         // clear removed:
         Iterator<LeaseTermGuarantor> it = leaseTerm.version().guarantors().iterator();
         while (it.hasNext()) {
-            Boolean present = false;
             LeaseTermGuarantor ltg = it.next();
             Persistence.ensureRetrieve(ltg, AttachLevel.Attached);
             if (!ltg.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
-                for (GuarantorDTO grnt : to.guarantors()) {
-                    if (!grnt.guarantorId().isNull() && grnt.guarantorId().getPrimaryKey().equals(ltg.getPrimaryKey())) {
-                        present = true;
+                for (LeaseTermGuarantor removed : removedGuarantors) {
+                    if (removed.getPrimaryKey().equals(ltg.getPrimaryKey())) {
+                        it.remove();
                         break;
                     }
-                }
-                if (!present) {
-                    it.remove();
                 }
             }
         }
@@ -478,13 +493,22 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         bo.masterOnlineApplication().leaseApplication().lease().set(bo.masterOnlineApplication().leaseApplication().lease().currentTerm(), leaseTerm);
         bo.masterOnlineApplication().leaseApplication().lease().currentTerm().lease().set(bo.masterOnlineApplication().leaseApplication().lease());
 
-        saveUnitSelectionData(bo, to);
+        switch (bo.role().getValue()) {
+        case Applicant:
+            saveUnitSelectionData(bo, to);
+            saveCoApplicants(bo, to);
+            saveGuarantors(bo, to);
+            break;
+
+        case CoApplicant:
+            saveGuarantors(bo, to);
+            break;
+
+        case Guarantor:
+            break;
+        }
 
         saveApplicantData(bo, to);
-
-        saveCoApplicants(bo, to);
-        saveGuarantors(bo, to);
-
         saveLegalTerms(bo, to);
 
         // do not forget to save LEASE:

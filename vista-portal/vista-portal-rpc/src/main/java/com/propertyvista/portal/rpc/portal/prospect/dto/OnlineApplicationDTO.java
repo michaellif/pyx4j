@@ -31,7 +31,8 @@ import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm
 @Transient
 public interface OnlineApplicationDTO extends IEntity {
 
-    ApplicantDTO applicant();
+    //--------------------------------------------
+    // read-only data:
 
     AptUnit unit();
 
@@ -48,13 +49,18 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IList<OptionDTO> options();
 
-    IList<CoapplicantDTO> coapplicants();
-
-    IList<GuarantorDTO> guarantors();
+    //--------------------------------------------
+    // read and update data:
 
     UnitSelectionDTO unitSelection();
 
     UnitOptionsSelectionDTO unitOptionsSelection();
+
+    ApplicantDTO applicant();
+
+    IList<CoapplicantDTO> coapplicants();
+
+    IList<GuarantorDTO> guarantors();
 
     IList<SignedOnlineApplicationLegalTerm> legalTerms();
 }
