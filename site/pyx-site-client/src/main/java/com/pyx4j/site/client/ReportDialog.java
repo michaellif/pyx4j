@@ -23,6 +23,9 @@ package com.pyx4j.site.client;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -47,6 +50,8 @@ import com.pyx4j.rpc.client.BlockingAsyncCallback;
 
 //TODO find name for that - it is used not only for reports
 public class ReportDialog extends DeferredProcessDialog {
+
+    private final static Logger log = LoggerFactory.getLogger(ReportDialog.class);
 
     private static final I18n i18n = I18n.get(ReportDialog.class);
 
@@ -108,6 +113,7 @@ public class ReportDialog extends DeferredProcessDialog {
     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
         if (result.isCompletedSuccess()) {
             downloadUrl = ((DeferredReportProcessProgressResponse) result).getDownloadLink();
+            log.debug("DownloadLink link {} {}", downloadServletPath, downloadUrl);
             if (useDownloadFrame()) {
                 new DownloadFrame(downloadServletPath + downloadUrl);
                 dialog.hide(false);
