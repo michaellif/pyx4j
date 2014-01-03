@@ -193,6 +193,10 @@ public class TenantMapper {
     }
 
     private String retrieveYardiCustomerEmail(YardiCustomer yardiCustomer) {
+        if (true) {
+            return yardiCustomer.getCustomerID() + "@pyx4j.com";
+        }
+
         if (!yardiCustomer.getAddress().isEmpty()) {
             String email = yardiCustomer.getAddress().get(0).getEmail();
             if (!CommonsStringUtils.isEmpty(email)) {
