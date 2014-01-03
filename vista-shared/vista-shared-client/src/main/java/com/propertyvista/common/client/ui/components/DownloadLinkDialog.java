@@ -21,11 +21,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.essentials.rpc.download.DownloadableService;
-import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
-
-import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class DownloadLinkDialog extends Dialog implements CancelOption {
 
@@ -36,7 +33,6 @@ public class DownloadLinkDialog extends Dialog implements CancelOption {
     public DownloadLinkDialog(String caption) {
         super(caption);
         setDialogOptions(this);
-        downloadServletPath = NavigationUri.getDeploymentBaseURL() + DeploymentConsts.downloadServletMapping;
     }
 
     public void setDownloadServletPath(String path) {

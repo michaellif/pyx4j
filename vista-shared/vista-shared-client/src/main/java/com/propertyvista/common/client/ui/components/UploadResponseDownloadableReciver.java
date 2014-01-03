@@ -13,12 +13,15 @@
  */
 package com.propertyvista.common.client.ui.components;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class UploadResponseDownloadableReciver implements UploadReceiver {
 
@@ -30,6 +33,7 @@ public class UploadResponseDownloadableReciver implements UploadReceiver {
 
     public UploadResponseDownloadableReciver(String processNameCaption) {
         this.processNameCaption = processNameCaption;
+        setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
     }
 
     public void setDownloadServletPath(String path) {

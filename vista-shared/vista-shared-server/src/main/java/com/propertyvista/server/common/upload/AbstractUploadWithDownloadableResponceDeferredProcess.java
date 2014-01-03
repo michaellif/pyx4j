@@ -13,7 +13,6 @@
  */
 package com.propertyvista.server.common.upload;
 
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
@@ -42,8 +41,8 @@ public abstract class AbstractUploadWithDownloadableResponceDeferredProcess<U ex
     @Override
     protected void onUploadProcessed(final UploadedData data, final IFile<AbstractIFileBlob> response) {
         // DO NOT Call super. the process will be Completed by execute() implementation 
-        binaryData = data.binaryContent;
-        this.response = EntityFactory.create(DownloadableUploadResponseDTO.class);
+        this.binaryData = data.binaryContent;
+        this.response = response.duplicate(DownloadableUploadResponseDTO.class);
         // Continue execution of process
         DeferredProcessRegistry.start(data.deferredCorrelationId, this, ThreadPoolNames.IMPORTS);
     }
