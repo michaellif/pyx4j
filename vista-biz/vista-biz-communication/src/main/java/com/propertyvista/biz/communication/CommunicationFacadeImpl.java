@@ -239,25 +239,33 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord) {
         MailMessage m = MessageTemplatesCustomizable.createTenantOneTimePaymentSubmitted(paymentRecord);
-        Mail.send(m);
+        if (m != null) {
+            Mail.send(m);
+        }
     }
 
     @Override
     public void sendTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF) {
         MailMessage m = MessageTemplatesCustomizable.createTenantPaymenttRejected(paymentRecord, applyNSF);
-        Mail.send(m);
+        if (m != null) {
+            Mail.send(m);
+        }
     }
 
     @Override
     public void sendTenantPaymentCleared(PaymentRecord paymentRecord) {
         MailMessage m = MessageTemplatesCustomizable.createTenantPaymentCleared(paymentRecord);
-        Mail.send(m);
+        if (m != null) {
+            Mail.send(m);
+        }
     }
 
     @Override
     public void sendTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement) {
         MailMessage m = MessageTemplatesCustomizable.createTenantAutopaySetupCompleted(autopayAgreement);
-        Mail.send(m);
+        if (m != null) {
+            Mail.send(m);
+        }
     }
 
     @Override

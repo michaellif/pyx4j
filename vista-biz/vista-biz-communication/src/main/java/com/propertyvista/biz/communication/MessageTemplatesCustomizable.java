@@ -259,6 +259,16 @@ class MessageTemplatesCustomizable {
     }
 
     private static MailMessage createTenantPayment(EmailTemplateType type, PaymentRecord paymentRecord) {
+        Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant().leaseParticipant().customer().user(), AttachLevel.Attached);
+        String customerEmail = paymentRecord.leaseTermParticipant().leaseParticipant().customer().user().email().getValue();
+        if (customerEmail == null) {
+            //Do not send payment email when there are no email in tenant profile
+            return null;
+        }
+        MailMessage email = new MailMessage();
+        email.setTo(customerEmail);
+
         EmailTemplate emailTemplate = getEmailTemplate(type, paymentRecord.billingAccount());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
@@ -269,10 +279,6 @@ class MessageTemplatesCustomizable {
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
-        MailMessage email = new MailMessage();
-
-        Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant().leaseParticipant().customer().user(), AttachLevel.Attached);
-        email.setTo(paymentRecord.leaseTermParticipant().leaseParticipant().customer().user().email().getValue());
 
         email.setSender(getSender());
         buildEmail(email, emailTemplate, data);
@@ -298,6 +304,15 @@ class MessageTemplatesCustomizable {
 
     public static MailMessage createTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement) {
         Persistence.ensureRetrieve(autopayAgreement.tenant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(autopayAgreement.tenant().customer().user(), AttachLevel.Attached);
+        String customerEmail = autopayAgreement.tenant().customer().user().email().getValue();
+        if (customerEmail == null) {
+            //Do not send payment email when there are no email in tenant profile
+            return null;
+        }
+        MailMessage email = new MailMessage();
+        email.setTo(customerEmail);
+
         EmailTemplate emailTemplate = getEmailTemplate(EmailTemplateType.AutoPaySetupConfirmation, autopayAgreement.tenant().lease());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
@@ -309,10 +324,6 @@ class MessageTemplatesCustomizable {
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(EmailTemplateType.AutoPaySetupConfirmation)) {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
-        MailMessage email = new MailMessage();
-
-        Persistence.ensureRetrieve(autopayAgreement.tenant().customer().user(), AttachLevel.Attached);
-        email.setTo(autopayAgreement.tenant().customer().user().email().getValue());
 
         email.setSender(getSender());
         buildEmail(email, emailTemplate, data);

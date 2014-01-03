@@ -314,8 +314,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
                         @Override
                         public Void execute() {
                             log.error("Unable to cancel posted Receipt Batch to Yardi; {}", paymentRecord);
-
-                            ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to cancel posted Receipt Batch to Yardi; {}",
+                            ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to cancel posted Receipt Batch to Yardi; {0}",
                                     paymentRecord);
 
                             return null;
