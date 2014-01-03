@@ -24,14 +24,14 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPositio
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 
-import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
+import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class LegalTermsFolder extends PortalBoxFolder<SignedLeaseLegalTerm> {
+public class LegalTermsFolder extends PortalBoxFolder<AgreementLegalTermSignature> {
 
     public LegalTermsFolder() {
-        super(SignedLeaseLegalTerm.class);
+        super(AgreementLegalTermSignature.class);
         setOrderable(false);
         setAddable(false);
         setRemovable(false);
@@ -39,17 +39,17 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedLeaseLegalTerm> {
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof SignedLeaseLegalTerm) {
+        if (member instanceof AgreementLegalTermSignature) {
             return new LegalTermForm();
         } else {
             return super.create(member);
         }
     }
 
-    class LegalTermForm extends CEntityForm<SignedLeaseLegalTerm> {
+    class LegalTermForm extends CEntityForm<AgreementLegalTermSignature> {
 
         public LegalTermForm() {
-            super(SignedLeaseLegalTerm.class);
+            super(AgreementLegalTermSignature.class);
         }
 
         @Override

@@ -29,7 +29,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
+import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
 
 public interface LeaseFacade {
 
@@ -124,7 +124,5 @@ public interface LeaseFacade {
      * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
      */
     void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate);
-
-    List<SignedLeaseLegalTerm> getLeaseLegalTerms(LeaseTermTenant tenant);
 
 }

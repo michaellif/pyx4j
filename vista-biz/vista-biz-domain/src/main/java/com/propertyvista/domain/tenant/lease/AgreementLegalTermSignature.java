@@ -7,29 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 20, 2013
+ * Created on Dec 12, 2013
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.dto.movein;
+package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
+import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
+import com.propertyvista.domain.security.CustomerSignature;
 
-@Transient
-public interface LeaseAgreementDTO extends IEntity {
+public interface AgreementLegalTermSignature extends IEntity {
+
+    AgreementLegalTerm term();
 
     @Owned
-    IList<AgreementLegalTermSignature> legalTerms();
-
-    AptUnit unit();
-
-    LeaseTerm leaseTerm();
+    @Detached
+    CustomerSignature signature();
 
 }

@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
+import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
 
 public class LeaseFacadeInternalImpl implements LeaseFacade {
 
@@ -206,8 +206,4 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
         new LeaseInternalManager().simpleLeaseRenew(leaseId, leaseEndDate);
     }
 
-    @Override
-    public List<SignedLeaseLegalTerm> getLeaseLegalTerms(LeaseTermTenant tenant) {
-        return new LeaseInternalManager().getLeaseTerms(tenant);
-    }
 }

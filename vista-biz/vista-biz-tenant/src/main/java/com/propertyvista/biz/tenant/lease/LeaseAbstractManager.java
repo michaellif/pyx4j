@@ -66,11 +66,10 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.AgreementLegalPolicy;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
-import com.propertyvista.domain.policy.policies.LeaseLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
-import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -93,7 +92,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.SignedLeaseLegalTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public abstract class LeaseAbstractManager {
@@ -375,6 +373,10 @@ public abstract class LeaseAbstractManager {
 
         lease.status().setValue(Lease.Status.Approved);
         lease.approvalDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        AgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
+                AgreementLegalPolicy.class);
+        lease.currentTerm().version().agreementLegalTerms().set(agreementLegalPolicy.terms());
 
         if (leaseStatus == Status.Application) {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
@@ -732,22 +734,6 @@ public abstract class LeaseAbstractManager {
         lease.currentTerm().termTo().setValue(leaseEndDate);
 
         finalize(lease);
-    }
-
-    public List<SignedLeaseLegalTerm> getLeaseTerms(LeaseTermTenant tenant) {
-        List<SignedLeaseLegalTerm> terms = new ArrayList<SignedLeaseLegalTerm>();
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$()._Leases().$().currentTerm().version().tenants(), tenant);
-        Building building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-
-        LeaseLegalPolicy leaseLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, LeaseLegalPolicy.class);
-        for (LeaseLegalTerm term : leaseLegalPolicy.terms()) {
-            SignedLeaseLegalTerm signedTerm = EntityFactory.create(SignedLeaseLegalTerm.class);
-            signedTerm.term().set(term);
-            signedTerm.signature().signatureFormat().set(term.signatureFormat());
-            terms.add(signedTerm);
-        }
-        return terms;
     }
 
     // Internals: -----------------------------------------------------------------------------------------------------

@@ -29,7 +29,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
-import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
+import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 
 public class LeaseSigningPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseSigningPolicyDTO> {
 
@@ -54,24 +54,24 @@ public class LeaseSigningPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseSign
         return container;
     }
 
-    private static class LegalTermFolder extends VistaBoxFolder<LeaseLegalTerm> {
+    private static class LegalTermFolder extends VistaBoxFolder<AgreementLegalTerm> {
 
         public LegalTermFolder(boolean isEditable) {
-            super(LeaseLegalTerm.class, isEditable);
+            super(AgreementLegalTerm.class, isEditable);
         }
 
         @Override
         public CComponent<?> create(IObject<?> member) {
-            if ((member instanceof LeaseLegalTerm)) {
+            if ((member instanceof AgreementLegalTerm)) {
                 return new LegalTermEditor();
             }
             return super.create(member);
         }
 
-        class LegalTermEditor extends CEntityForm<LeaseLegalTerm> {
+        class LegalTermEditor extends CEntityForm<AgreementLegalTerm> {
 
             public LegalTermEditor() {
-                super(LeaseLegalTerm.class);
+                super(AgreementLegalTerm.class);
             }
 
             @Override

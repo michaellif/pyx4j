@@ -16,13 +16,13 @@ package com.propertyvista.portal.server.portal.resident.services.movein;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
+import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
@@ -33,7 +33,6 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
     @Override
     public void init(AsyncCallback<LeaseAgreementDTO> callback, InitializationData initializationData) {
         LeaseAgreementDTO to = EntityFactory.create(LeaseAgreementDTO.class);
-        to.legalTerms().addAll(ServerSideFactory.create(LeaseFacade.class).getLeaseLegalTerms(ResidentPortalContext.getLeaseTermTenant()));
 
         Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit().building());
@@ -42,6 +41,13 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
 
         to.unit().set(lease.unit());
         to.leaseTerm().set(lease.currentTerm());
+
+        for (AgreementLegalTerm term : lease.currentTerm().version().agreementLegalTerms()) {
+            AgreementLegalTermSignature signedTerm = EntityFactory.create(AgreementLegalTermSignature.class);
+            signedTerm.term().set(term);
+            signedTerm.signature().signatureFormat().set(term.signatureFormat());
+            to.legalTerms().add(signedTerm);
+        }
 
         callback.onSuccess(to);
     }

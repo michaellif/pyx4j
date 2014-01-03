@@ -13,19 +13,9 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
-import com.propertyvista.domain.security.CustomerSignature;
-
-public interface SignedLeaseLegalTerm extends IEntity {
-
-    LeaseLegalTerm term();
-
-    @Owned
-    @Detached
-    CustomerSignature signature();
+@DiscriminatorValue("Ink")
+public interface AgreementInkSignatures extends AgreementSignatures {
 
 }

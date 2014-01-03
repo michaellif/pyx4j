@@ -15,11 +15,9 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -30,20 +28,11 @@ import com.propertyvista.domain.tenant.PersonRelationship;
 @DiscriminatorValue("Tenant")
 public interface LeaseTermTenant extends LeaseTermParticipant<Tenant> {
 
-    public enum SignatureType {
-        ink, digital
-    }
-
     @NotNull
     @ToString(index = 2)
     @Caption(description = "Relation to the Main Applicant")
     IPrimitive<PersonRelationship> relationship();
 
-    /**
-     * null means no signature
-     */
-    IPrimitive<SignatureType> signatureType();
+    AgreementSignatures agreementSignatures();
 
-    @Owned(cascade = {})
-    IList<SignedLeaseLegalTerm> signedLegalTerms();
 }

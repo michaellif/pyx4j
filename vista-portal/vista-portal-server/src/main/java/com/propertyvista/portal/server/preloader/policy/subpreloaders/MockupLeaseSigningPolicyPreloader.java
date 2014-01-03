@@ -16,20 +16,20 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
-import com.propertyvista.domain.policy.policies.LeaseLegalPolicy;
-import com.propertyvista.domain.policy.policies.domain.LeaseLegalTerm;
+import com.propertyvista.domain.policy.policies.AgreementLegalPolicy;
+import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
-public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<LeaseLegalPolicy> {
+public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<AgreementLegalPolicy> {
 
     public MockupLeaseSigningPolicyPreloader() {
-        super(LeaseLegalPolicy.class);
+        super(AgreementLegalPolicy.class);
     }
 
     @Override
-    protected LeaseLegalPolicy createPolicy(StringBuilder log) {
-        LeaseLegalPolicy policy = EntityFactory.create(LeaseLegalPolicy.class);
+    protected AgreementLegalPolicy createPolicy(StringBuilder log) {
+        AgreementLegalPolicy policy = EntityFactory.create(AgreementLegalPolicy.class);
 
         // add legal terms
         policy.terms().add(createTerm(SignatureFormat.None));
@@ -41,8 +41,8 @@ public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<L
         return policy;
     }
 
-    private LeaseLegalTerm createTerm(SignatureFormat format) {
-        LeaseLegalTerm term = EntityFactory.create(LeaseLegalTerm.class);
+    private AgreementLegalTerm createTerm(SignatureFormat format) {
+        AgreementLegalTerm term = EntityFactory.create(AgreementLegalTerm.class);
 
         term.signatureFormat().setValue(format);
         term.title().setValue(CommonsGenerator.lipsumShort());
