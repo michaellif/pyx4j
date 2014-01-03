@@ -21,14 +21,20 @@
 package com.pyx4j.config.server;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 
 public class ServerSideFactory {
+
+    private static final Logger log = LoggerFactory.getLogger(ServerSideFactory.class);
 
     private static Map<Class<?>, Class<?>> registeredImplementations = null;
 
@@ -96,6 +102,29 @@ public class ServerSideFactory {
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                     return null;
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Can't create " + interfaceCalss.getName(), e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T createSafeImplementation(final Class<T> interfaceCalss, final T instance) {
+        try {
+            return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[] { interfaceCalss }, new InvocationHandler() {
+
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    try {
+                        return method.invoke(instance, args);
+                    } catch (InvocationTargetException e) {
+                        log.error("failed to call {}.{}", instance.getClass(), method.getName(), e.getCause());
+                        return null;
+                    } catch (Throwable e) {
+                        log.error("failed to call {}.{}", instance.getClass(), method.getName(), e);
+                        return null;
+                    }
                 }
             });
         } catch (IllegalArgumentException e) {
