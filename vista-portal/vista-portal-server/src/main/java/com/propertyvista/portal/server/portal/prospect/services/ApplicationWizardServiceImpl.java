@@ -215,14 +215,26 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void saveApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
+        LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
+
         switch (bo.role().getValue()) {
         case Applicant:
         case CoApplicant:
-            saveLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermTenant());
+            for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
+                if (tenant.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
+                    saveLeaseTermParticipant(bo, to, tenant);
+                    break;
+                }
+            }
             break;
 
         case Guarantor:
-            saveLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermGuarantor());
+            for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
+                if (guarantor.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
+                    saveLeaseTermParticipant(bo, to, guarantor);
+                    break;
+                }
+            }
             break;
         }
     }
@@ -238,8 +250,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         customer.emergencyContacts().clear();
         customer.emergencyContacts().addAll(to.applicant().emergencyContacts());
-
-        Persistence.service().merge(customer);
 
         // screening:
         LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), participant, AttachLevel.Attached);
