@@ -7,5 +7,6 @@
     <inherits name='com.pyx4j.rpc.RPCBlacklist'/>
     <inherits name='com.pyx4j.site.SiteShared'/>
     <inherits name='com.propertyvista.Domain' />
+    <inherits name='com.propertyvista.shared.Rpc' />
          
 </module>
