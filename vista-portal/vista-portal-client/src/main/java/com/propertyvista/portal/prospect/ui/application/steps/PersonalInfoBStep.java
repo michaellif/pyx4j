@@ -81,7 +81,8 @@ public class PersonalInfoBStep extends ApplicationWizardStep {
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().filedBankruptcy())).build());
 
-        if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+        // TODO currently removed, then rethink: 
+        if (false && !SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
             panel.setH3(++row, 0, 1, i18n.tr("How Did You Hear About Us?"));
             panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().refSource()), 180).build());
         }
