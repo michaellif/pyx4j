@@ -14,10 +14,13 @@
 package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -33,6 +36,8 @@ public interface LeaseTermTenant extends LeaseTermParticipant<Tenant> {
     @Caption(description = "Relation to the Main Applicant")
     IPrimitive<PersonRelationship> relationship();
 
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
     AgreementSignatures agreementSignatures();
 
 }

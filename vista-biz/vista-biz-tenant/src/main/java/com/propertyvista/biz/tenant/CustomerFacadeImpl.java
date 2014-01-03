@@ -14,7 +14,9 @@
 package com.propertyvista.biz.tenant;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
@@ -26,6 +28,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -45,6 +48,7 @@ import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
@@ -182,9 +186,35 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
-    public PortalResidentBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease) {
-        // TODO implement TenantSecondary and Guarantor
-        return PortalResidentBehavior.ResidentPrimary;
+    public Collection<PortalResidentBehavior> getLeaseBehavior(CustomerUser customerUser, Lease lease) {
+        EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+        criteria.eq(criteria.proto().leaseParticipant().customer().user(), customerUser);
+        criteria.eq(criteria.proto().leaseParticipant().lease(), lease);
+        criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
+        criteria.isCurrent(criteria.proto().leaseTermV());
+        LeaseTermTenant leaseTermTenant = Persistence.service().retrieve(criteria);
+
+        // TODO implement Guarantor
+
+        Collection<PortalResidentBehavior> behaviors = new HashSet<PortalResidentBehavior>();
+
+        switch (leaseTermTenant.role().getValue()) {
+        case Applicant:
+            behaviors.add(PortalResidentBehavior.ResidentPrimary);
+            break;
+        case CoApplicant:
+            behaviors.add(PortalResidentBehavior.ResidentSecondary);
+            break;
+        default:
+            break;
+        }
+
+        Persistence.ensureRetrieve(leaseTermTenant.agreementSignatures(), AttachLevel.Attached);
+        if (!leaseTermTenant.agreementSignatures().hasValues()) {
+            behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
+        }
+
+        return behaviors;
     }
 
     @Override

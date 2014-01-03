@@ -22,6 +22,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
+import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
@@ -53,33 +54,33 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
     }
 
     @Override
-    public void retrieve(AsyncCallback<LeaseAgreementDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void create(AsyncCallback<Key> callback, LeaseAgreementDTO editableEntity) {
-        // TODO Auto-generated method stub
-
+        AgreementDigitalSignatures agreementSignatures = EntityFactory.create(AgreementDigitalSignatures.class);
+        agreementSignatures.leaseTermTenant().set(ResidentPortalContext.getLeaseTermTenant());
+        agreementSignatures.legalTermsSignatures().addAll(editableEntity.legalTerms());
+        Persistence.service().persist(agreementSignatures);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
     public void save(AsyncCallback<Key> callback, LeaseAgreementDTO editableEntity) {
-        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public void retrieve(AsyncCallback<LeaseAgreementDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<LeaseAgreementDTO>> callback, EntityListCriteria<LeaseAgreementDTO> criteria) {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
 }

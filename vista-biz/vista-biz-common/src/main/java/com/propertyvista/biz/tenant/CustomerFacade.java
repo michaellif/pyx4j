@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
@@ -29,7 +30,7 @@ public interface CustomerFacade {
 
     List<Lease> getActiveLeases(CustomerUser customerUserId);
 
-    PortalResidentBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease);
+    Collection<PortalResidentBehavior> getLeaseBehavior(CustomerUser customerUser, Lease lease);
 
     boolean hasToAcceptTerms(CustomerUser customerUser);
 

@@ -107,7 +107,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
                 throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
             }
         } else if (selectedLease != null) {
-            actualBehaviors.add(ServerSideFactory.create(CustomerFacade.class).getLeaseBehavior(user, selectedLease));
+            actualBehaviors.addAll(ServerSideFactory.create(CustomerFacade.class).getLeaseBehavior(user, selectedLease));
             actualBehaviors.addAll(behaviors);
             if (leases.size() > 1) {
                 actualBehaviors.add(PortalResidentBehavior.HasMultipleLeases);
@@ -128,10 +128,6 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
         // check if terms have been signed
         if (ServerSideFactory.create(CustomerFacade.class).hasToAcceptTerms(user)) {
             actualBehaviors.add(VistaBasicBehavior.VistaTermsAcceptanceRequired);
-        }
-
-        if (false) {
-            actualBehaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
         }
 
         if (selectedLease != null) {
