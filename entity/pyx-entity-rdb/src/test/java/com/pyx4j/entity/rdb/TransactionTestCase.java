@@ -22,6 +22,8 @@ package com.pyx4j.entity.rdb;
 
 import java.rmi.server.ServerNotActiveException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.Assert;
 
@@ -333,6 +335,203 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "1.0CH");
+    }
+
+    private class TestCompensationHandler implements CompensationHandler {
+
+        private final AtomicInteger counter;
+
+        private final AtomicBoolean fired;
+
+        private int fireOrder = 0;
+
+        public TestCompensationHandler(AtomicInteger counter) {
+            this.counter = counter;
+            this.fired = new AtomicBoolean();
+            this.fired.set(false);
+        }
+
+        @Override
+        public Void execute() throws RuntimeException {
+            if (fired.get()) {
+                throw new Error("Already fired");
+            }
+            fired.set(true);
+            fireOrder = counter.addAndGet(1);
+            return null;
+        }
+
+        public boolean fired() {
+            return fired.get();
+        }
+
+        public int fireOrder() {
+            return fireOrder;
+        }
+
+    }
+
+    public void testTransactionsCompensationHandlerNestedTransactions1() {
+        AtomicInteger counter = new AtomicInteger();
+        final TestCompensationHandler ch10 = new TestCompensationHandler(counter);
+        final TestCompensationHandler ch20 = new TestCompensationHandler(counter);
+        final TestCompensationHandler ch21 = new TestCompensationHandler(counter);
+        final TestCompensationHandler ch21o = new TestCompensationHandler(counter);
+        final TestCompensationHandler ch22 = new TestCompensationHandler(counter);
+
+        final String setId = uniqueString();
+        // Tx1
+        srv.startTransaction(TransactionScopeOption.Nested, ConnectionTarget.Web);
+        {
+            srv.persist(createEntity(setId, "1.0"));
+            srv.addTransactionCompensationHandler(ch10);
+
+            // Tx2
+            srv.startTransaction(TransactionScopeOption.Nested, ConnectionTarget.Web);
+            {
+                srv.persist(createEntity(setId, "2.0"));
+                srv.addTransactionCompensationHandler(ch20);
+                srv.commit();
+
+                srv.persist(createEntity(setId, "2.1"));
+                srv.addTransactionCompensationHandler(ch21);
+                srv.addTransactionCompensationHandler(ch21o);
+                srv.rollback();
+                Assert.assertTrue("2.1 fired", ch21.fired());
+
+                srv.persist(createEntity(setId, "2.2"));
+                srv.addTransactionCompensationHandler(ch22);
+                srv.commit();
+            }
+            srv.endTransaction();
+
+            srv.persist(createEntity(setId, "1.2"));
+            srv.commit();
+        }
+        srv.endTransaction();
+
+        Assert.assertFalse("1.0 fired", ch10.fired());
+
+        Assert.assertFalse("2.0 fired", ch20.fired());
+
+        Assert.assertTrue("2.1 fired", ch21.fired());
+        Assert.assertEquals(2, ch21.fireOrder());
+        Assert.assertEquals(1, ch21o.fireOrder());
+
+        Assert.assertFalse("2.2 fired", ch22.fired());
+    }
+
+    private class TestCompletionHandler implements Executable<Void, RuntimeException> {
+
+        private final AtomicInteger counter;
+
+        private final AtomicBoolean fired;
+
+        private int fireOrder = 0;
+
+        public TestCompletionHandler(AtomicInteger counter) {
+            this.counter = counter;
+            this.fired = new AtomicBoolean();
+            this.fired.set(false);
+        }
+
+        @Override
+        public Void execute() throws RuntimeException {
+            if (fired.get()) {
+                throw new Error("Already fired");
+            }
+            fired.set(true);
+            fireOrder = counter.addAndGet(1);
+            return null;
+        }
+
+        public boolean fired() {
+            return fired.get();
+        }
+
+        public int fireOrder() {
+            return fireOrder;
+        }
+
+    }
+
+    public void testTransactionsCompletionHandler() {
+        AtomicInteger counter = new AtomicInteger();
+        TestCompletionHandler ch10 = new TestCompletionHandler(counter);
+        TestCompletionHandler ch11 = new TestCompletionHandler(counter);
+
+        final String setId = uniqueString();
+        srv.endTransaction();
+
+        srv.startTransaction();
+
+        srv.persist(createEntity(setId, "1.0"));
+
+        srv.addTransactionCompletionHandler(ch10);
+
+        srv.rollback();
+
+        srv.persist(createEntity(setId, "1.1"));
+        srv.addTransactionCompletionHandler(ch11);
+
+        srv.commit();
+
+        srv.endTransaction();
+
+        assertNotExists(setId, "1.0");
+        assertExists(setId, "1.1");
+
+        Assert.assertFalse("1.0 fired", ch10.fired());
+        Assert.assertTrue("1.1 fired", ch11.fired());
+    }
+
+    public void testTransactionsCompletionHandlerNestedTransactions1() {
+        AtomicInteger counter = new AtomicInteger();
+        final TestCompletionHandler ch10 = new TestCompletionHandler(counter);
+        final TestCompletionHandler ch20 = new TestCompletionHandler(counter);
+        final TestCompletionHandler ch21 = new TestCompletionHandler(counter);
+        final TestCompletionHandler ch22 = new TestCompletionHandler(counter);
+
+        final String setId = uniqueString();
+        // Tx1
+        srv.startTransaction(TransactionScopeOption.Nested, ConnectionTarget.Web);
+        {
+            srv.persist(createEntity(setId, "1.0"));
+            srv.addTransactionCompletionHandler(ch10);
+
+            // Tx2
+            srv.startTransaction(TransactionScopeOption.Nested, ConnectionTarget.Web);
+            {
+                srv.persist(createEntity(setId, "2.0"));
+                srv.addTransactionCompletionHandler(ch20);
+                srv.commit();
+
+                srv.persist(createEntity(setId, "2.1"));
+                srv.addTransactionCompletionHandler(ch21);
+                srv.rollback();
+
+                srv.persist(createEntity(setId, "2.2"));
+                srv.addTransactionCompletionHandler(ch22);
+                srv.commit();
+            }
+            srv.endTransaction();
+            Assert.assertFalse("2.2 fired", ch22.fired());
+
+            srv.persist(createEntity(setId, "1.2"));
+            srv.commit();
+        }
+        srv.endTransaction();
+
+        Assert.assertTrue("1.0 fired", ch10.fired());
+        Assert.assertEquals(1, ch10.fireOrder());
+
+        Assert.assertTrue("2.0 fired", ch20.fired());
+        Assert.assertEquals(2, ch20.fireOrder());
+
+        Assert.assertFalse("2.1 fired", ch21.fired());
+
+        Assert.assertTrue("2.2 fired", ch22.fired());
+        Assert.assertEquals(3, ch22.fireOrder());
     }
 
     public void testUnitOfWorkNestedTransactions() {

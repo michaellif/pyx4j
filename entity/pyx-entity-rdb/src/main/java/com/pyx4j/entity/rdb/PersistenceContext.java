@@ -352,6 +352,9 @@ public class PersistenceContext {
 
     void addTransactionCompletionHandler(Executable<Void, RuntimeException> handler) {
         transactionContexts.peek().addTransactionCompletionHandler(handler);
+        if (PersistenceContext.traceTransaction) {
+            log.info("{} add CompletionHandler {}", txId(), handler.getClass().getName());
+        }
     }
 
     void commit() {
@@ -360,15 +363,17 @@ public class PersistenceContext {
         }
         assertTransactionManangementCallOrigin();
         transactionContexts.peek().commit(connection, getDialect());
-        if (isDirectTransactionControl() && connection != null) {
-            try {
-                connection.commit();
-                transactionStart = -1;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        if (isDirectTransactionControl()) {
+            if (connection != null) {
+                try {
+                    connection.commit();
+                    transactionStart = -1;
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
+            transactionContexts.peek().fireCompletionHandlers();
         }
-        transactionContexts.peek().fireCompletionHandlers();
     }
 
     void rollback() {

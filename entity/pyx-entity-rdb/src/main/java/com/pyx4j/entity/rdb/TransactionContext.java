@@ -48,9 +48,11 @@ class TransactionContext {
 
     private List<CompensationHandler> compensationHandlers;
 
+    private List<CompensationHandler> compensationHandlersCommited;
+
     private List<Executable<Void, RuntimeException>> completionHandlers;
 
-    private List<CompensationHandler> commitedCompensationHandlers;
+    private List<Executable<Void, RuntimeException>> completionHandlersCommited;
 
     TransactionContext(Connection connection, int id) {
         savepointName = "SP" + id;
@@ -97,8 +99,8 @@ class TransactionContext {
     }
 
     public void merge(TransactionContext tc) {
-        if (commitedCompensationHandlers != null) {
-            for (CompensationHandler handler : commitedCompensationHandlers) {
+        if (compensationHandlersCommited != null) {
+            for (CompensationHandler handler : compensationHandlersCommited) {
                 tc.addTransactionCompensationHandler(handler);
             }
         }
@@ -107,11 +109,19 @@ class TransactionContext {
                 tc.addTransactionCompensationHandler(handler);
             }
         }
+
+        if (completionHandlersCommited != null) {
+            for (Executable<Void, RuntimeException> handler : completionHandlersCommited) {
+                tc.addTransactionCompletionHandler(handler);
+            }
+        }
+
         if (completionHandlers != null) {
             for (Executable<Void, RuntimeException> handler : completionHandlers) {
                 tc.addTransactionCompletionHandler(handler);
             }
         }
+
         if (this.uncommittedChanges) {
             tc.uncommittedChanges = this.uncommittedChanges;
             tc.uncommittedChangesFrom = this.uncommittedChangesFrom;
@@ -148,6 +158,9 @@ class TransactionContext {
             }
         }
         uncommittedChanges = false;
+        if (completionHandlers != null) {
+            completionHandlers.clear();
+        }
     }
 
     void fireCompensationHandlers() {
@@ -164,14 +177,16 @@ class TransactionContext {
     }
 
     void fireCompletionHandlers() {
-        if (completionHandlers != null) {
-
-            ListIterator<Executable<Void, RuntimeException>> li = completionHandlers.listIterator(completionHandlers.size());
-            while (li.hasPrevious()) {
-                Executable<Void, RuntimeException> handler = li.previous();
+        if (completionHandlersCommited != null) {
+            for (Executable<Void, RuntimeException> handler : completionHandlersCommited) {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(handler);
             }
-
+            completionHandlersCommited.clear();
+        }
+        if (completionHandlers != null) {
+            for (Executable<Void, RuntimeException> handler : completionHandlers) {
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(handler);
+            }
             completionHandlers.clear();
         }
     }
@@ -196,12 +211,20 @@ class TransactionContext {
             }
         }
         uncommittedChanges = false;
-        if (commitedCompensationHandlers == null) {
-            commitedCompensationHandlers = compensationHandlers;
+        if (compensationHandlersCommited == null) {
+            compensationHandlersCommited = compensationHandlers;
             compensationHandlers = null;
         } else if (compensationHandlers != null) {
-            commitedCompensationHandlers.addAll(compensationHandlers);
+            compensationHandlersCommited.addAll(compensationHandlers);
             compensationHandlers.clear();
+        }
+
+        if (completionHandlersCommited == null) {
+            completionHandlersCommited = completionHandlers;
+            completionHandlers = null;
+        } else if (completionHandlers != null) {
+            completionHandlersCommited.addAll(completionHandlers);
+            completionHandlers.clear();
         }
     }
 
