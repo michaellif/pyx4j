@@ -109,9 +109,9 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         models.add(LeaseAdjustmentPolicyDataModel.class);
         models.add(ARPolicyDataModel.class);
         models.add(AutoPayPolicyDataModel.class);
+        models.add(AgreementLegalPolicyDataModel.class);
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(LeaseDataModel.class);
-        models.add(AgreementLegalPolicyDataModel.class);
         return models;
     }
 
