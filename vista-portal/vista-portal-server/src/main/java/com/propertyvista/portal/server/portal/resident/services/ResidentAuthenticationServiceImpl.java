@@ -131,7 +131,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
         }
 
         if (false) {
-            actualBehaviors.add(PortalResidentBehavior.LeaseSigningRequired);
+            actualBehaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
         }
 
         if (selectedLease != null) {
