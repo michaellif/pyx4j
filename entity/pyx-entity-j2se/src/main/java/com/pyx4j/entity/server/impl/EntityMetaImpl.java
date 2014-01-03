@@ -408,7 +408,7 @@ public class EntityMetaImpl implements EntityMeta {
         if (toStringMemberNames == null) {
             toStringMemberNames = new Vector<String>();
             final Map<String, ToString> sortKeys = new HashMap<String, ToString>();
-            for (String member : getMemberNames()) {
+            for (String member : getMemberNamesWithPk()) {
                 Method method;
                 try {
                     method = entityClass.getMethod(member);
