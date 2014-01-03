@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.shared;
 
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
@@ -54,9 +55,10 @@ public class EntityToStringTest extends InitializerTestBase {
         assertEquals("City StringView", cityName, city.getStringView());
 
         Task task = EntityFactory.create(Task.class);
+        task.id().setValue(new Key(10));
         task.description().setValue("Something");
         task.status().setValue(Status.DEACTIVATED);
-        assertEquals("Task StringView", "Something Deactivated", task.getStringView());
+        assertEquals("Task StringView", "10 Deactivated Something", task.getStringView());
 
         // ---
 

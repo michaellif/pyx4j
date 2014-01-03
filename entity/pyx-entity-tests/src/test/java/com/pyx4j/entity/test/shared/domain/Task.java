@@ -38,11 +38,12 @@ public interface Task extends IEntity {
 
     @Override
     @Caption(name = "Task Id")
+    @ToString(index = 0)
     IPrimitive<Key> id();
 
     IPrimitive<Boolean> finished();
 
-    @ToString
+    @ToString(index = 2)
     @BusinessEqualValue
     @Indexed
     IPrimitive<String> description();
