@@ -7,21 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
- * @author VladL
+ * Created on Dec 20, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.financial.payment;
+package com.propertyvista.portal.rpc.portal.resident.dto.movein;
 
-import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.shared.ui.IViewerView;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IEntity;
 
-public interface PaymentConfirmationView extends IViewerView<PaymentRecordDTO> {
+import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 
-    public interface PaymentConfirmationPresenter extends IViewerPresenter<PaymentRecordDTO> {
+@Transient
+public interface LeaseAgreementConfirmationDTO extends IEntity {
 
-        void goToAutoPay();
-
-        void back();
-    }
+    LeaseTermAgreementDocument agreementDocument();
 }

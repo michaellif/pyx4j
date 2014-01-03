@@ -33,6 +33,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.resident.ui.financial.payment.PaymentConfirmationView.PaymentConfirmationPresenter;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -41,7 +42,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
-    private static final String headerUndefined = i18n.tr("Payment status indefined...");
+    private static final String headerUndefined = i18n.tr("Payment status undefined...");
 
     private static final String headerSuccess = i18n.tr("Payment Submitted Successfully!");
 
@@ -82,7 +83,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
             @Override
             public void execute() {
-                ((PaymentConfirmationView.Presenter) getView().getPresenter()).goToAutoPay();
+                ((PaymentConfirmationPresenter) getView().getPresenter()).goToAutoPay();
             }
         }));
 

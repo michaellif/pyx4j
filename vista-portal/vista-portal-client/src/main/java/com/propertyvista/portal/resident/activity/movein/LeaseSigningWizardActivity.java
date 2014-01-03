@@ -16,18 +16,17 @@ package com.propertyvista.portal.resident.activity.movein;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ui.movein.LeaseSigningWizardView;
 import com.propertyvista.portal.resident.ui.movein.LeaseSigningWizardView.LeaseSigningWizardPresenter;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
 public class LeaseSigningWizardActivity extends AbstractWizardCrudActivity<LeaseAgreementDTO> implements LeaseSigningWizardPresenter {
-
-    private static final I18n i18n = I18n.get(LeaseSigningWizardActivity.class);
 
     public LeaseSigningWizardActivity(AppPlace place) {
         super(LeaseSigningWizardView.class, GWT.<LeaseSigningCrudService> create(LeaseSigningCrudService.class), LeaseAgreementDTO.class);
@@ -35,7 +34,7 @@ public class LeaseSigningWizardActivity extends AbstractWizardCrudActivity<Lease
 
     @Override
     protected void onFinish(Key result) {
-//TODO
+        getView().reset();
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation());
     }
-
 }

@@ -11,16 +11,14 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.financial.payment;
+package com.propertyvista.portal.resident.ui.movein;
 
-import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
 import com.propertyvista.portal.shared.ui.IViewerView;
 
-public interface PaymentConfirmationView extends IViewerView<PaymentRecordDTO> {
+public interface LeaseSigningConfirmationView extends IViewerView<LeaseAgreementConfirmationDTO> {
 
-    public interface PaymentConfirmationPresenter extends IViewerPresenter<PaymentRecordDTO> {
-
-        void goToAutoPay();
+    public interface LeaseSigningConfirmationPresenter extends IViewerPresenter<LeaseAgreementConfirmationDTO> {
 
         void back();
     }

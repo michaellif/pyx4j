@@ -25,6 +25,7 @@ import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -81,6 +82,12 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void retrieveLeaseAgreementDocument(AsyncCallback<LeaseTermAgreementDocument> leaseTermAgreement) {
+        // TODO Auto-generated method stub
+
     }
 
 }
