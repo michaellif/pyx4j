@@ -277,10 +277,13 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             EntityQueryCriteria<Trigger> criteria = EntityQueryCriteria.create(Trigger.class);
             criteria.eq(criteria.proto().triggerType(), processType);
             {
-                OrCriterion or = criteria.or();
-                or.left().eq(criteria.proto().populationType(), TriggerPmcSelectionType.allPmc);
-                or.right().eq(criteria.proto().populationType(), TriggerPmcSelectionType.manual);
-                or.right().eq(criteria.proto().population(), pmc);
+                OrCriterion or1 = criteria.or();
+                or1.left().eq(criteria.proto().populationType(), TriggerPmcSelectionType.allPmc);
+                OrCriterion or2 = or1.right().or();
+                or2.left().eq(criteria.proto().populationType(), TriggerPmcSelectionType.except);
+                or2.left().ne(criteria.proto().population(), pmc);
+                or2.right().eq(criteria.proto().populationType(), TriggerPmcSelectionType.manual);
+                or2.right().eq(criteria.proto().population(), pmc);
             }
 
             criteria.asc(criteria.proto().id());
