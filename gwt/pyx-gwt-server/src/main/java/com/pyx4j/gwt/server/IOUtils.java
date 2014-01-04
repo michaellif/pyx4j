@@ -29,6 +29,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class IOUtils {
 
@@ -147,7 +148,7 @@ public class IOUtils {
     }
 
     public static String getUTF8TextResource(String fileName, Class<?> clazz) throws IOException {
-        return getTextResource(resourceFileName(fileName, clazz), Charset.forName("UTF-8"));
+        return getTextResource(resourceFileName(fileName, clazz), StandardCharsets.UTF_8);
     }
 
     /**

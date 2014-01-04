@@ -22,7 +22,7 @@ package com.pyx4j.essentials.server.xml;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -54,7 +54,7 @@ public class XMLEntityParserTest extends TestCase {
 
     @SuppressWarnings("unchecked")
     protected <T extends IEntity> T xmlSerialize(T entity) {
-        XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+        XMLStringWriter xml = new XMLStringWriter(StandardCharsets.UTF_8);
         XMLEntityConverter.write(xml, entity);
         //System.out.println(xml.toString());
         try {

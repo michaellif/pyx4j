@@ -25,7 +25,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -145,7 +145,7 @@ public class ServiceNamesGenerator extends Generator {
             serviceClassesRandom.addAll(serviceClasses);
             Collections.shuffle(serviceClassesRandom, new Random(seed));
 
-            permutationId = Util.computeStrongName(b.toString().getBytes(Charset.forName("UTF-8"))) + ".";
+            permutationId = Util.computeStrongName(b.toString().getBytes(StandardCharsets.UTF_8)) + ".";
 
             serviceClasses = serviceClassesRandom;
         }

@@ -21,7 +21,7 @@
 package com.pyx4j.essentials.server.xml;
 
 import java.io.StringReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -87,7 +87,7 @@ public class XMLEntityConverterTest extends TestCase {
 
         Employee employee = createData();
 
-        XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+        XMLStringWriter xml = new XMLStringWriter(StandardCharsets.UTF_8);
 
         XMLEntityConverter.write(xml, employee);
 

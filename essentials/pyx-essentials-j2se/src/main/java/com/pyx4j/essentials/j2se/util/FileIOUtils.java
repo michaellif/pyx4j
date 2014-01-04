@@ -30,7 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import com.pyx4j.gwt.server.IOUtils;
@@ -40,7 +40,7 @@ public class FileIOUtils {
     public static void writeToFile(File file, String data) {
         Writer w = null;
         try {
-            w = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8"));
+            w = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
             w.write(data);
             w.flush();
         } catch (IOException e) {
@@ -55,7 +55,7 @@ public class FileIOUtils {
         try {
             StringBuilder sb = new StringBuilder();
             String line;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8")));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
             }

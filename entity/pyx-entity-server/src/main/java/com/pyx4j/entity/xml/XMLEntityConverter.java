@@ -26,7 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,11 +38,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.xml.XMLEntityFactory;
-import com.pyx4j.entity.xml.XMLEntityFactoryDefault;
-import com.pyx4j.entity.xml.XMLEntityParser;
-import com.pyx4j.entity.xml.XMLEntityWriter;
-import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class XMLEntityConverter {
@@ -71,7 +66,7 @@ public class XMLEntityConverter {
         FileWriter w = null;
         try {
             w = new FileWriter(file);
-            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+            XMLStringWriter xml = new XMLStringWriter(StandardCharsets.UTF_8);
             XMLEntityWriter xmlWriter = new XMLEntityWriter(xml);
             xmlWriter.setEmitId(emitId);
             xmlWriter.write(entity);

@@ -23,7 +23,7 @@ package com.pyx4j.essentials.server.dev;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
@@ -152,7 +152,7 @@ public class EntityFileLogger {
             w = new FileWriter(f);
             switch (dataType) {
             default:
-                XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+                XMLStringWriter xml = new XMLStringWriter(StandardCharsets.UTF_8);
                 DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
                 xmlWriter.setEmitAttachLevel(true);
                 xmlWriter.setEmitLogTransient(false);

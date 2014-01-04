@@ -24,13 +24,11 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class DataBuilder implements Externalizable {
 
     protected transient StringBuilder data;
-
-    private static Charset utf8_charset = Charset.forName("UTF-8");
 
     public DataBuilder() {
         data = new StringBuilder();
@@ -52,18 +50,18 @@ public class DataBuilder implements Externalizable {
         int length = in.readInt();
         byte[] b = new byte[length];
         in.readFully(b);
-        data.append(new String(b, utf8_charset));
+        data.append(new String(b, StandardCharsets.UTF_8));
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-        byte[] b = data.toString().getBytes(utf8_charset);
+        byte[] b = data.toString().getBytes(StandardCharsets.UTF_8);
         out.writeInt(b.length);
         out.write(b);
     }
 
     public byte[] getBinaryData() {
-        return data.toString().getBytes(utf8_charset);
+        return data.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     public int getBinaryDataSize() {
