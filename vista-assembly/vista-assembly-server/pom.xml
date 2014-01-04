@@ -379,7 +379,7 @@
                         </executions>
                         <configuration>
                             <poSaveLocation>true</poSaveLocation>
-                            <keysFile>vista-assembly/vista-assembly-server-keys.pot</keysFile>
+                            <keysFile>vista-server-keys.pot</keysFile>
                             <includes>
                                 <include>com.pyx4j*</include>
                                 <include>com.propertyvista*</include>
