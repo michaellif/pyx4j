@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -66,7 +66,7 @@ public class RemconParser {
         int lineNumber = 0;
         String line = null;
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("ISO-8859-1")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.ISO_8859_1));
             while ((line = reader.readLine()) != null) {
                 lineNumber++;
                 parse(line);

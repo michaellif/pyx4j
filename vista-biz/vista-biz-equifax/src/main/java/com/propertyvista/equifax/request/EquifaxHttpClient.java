@@ -14,7 +14,7 @@
 package com.propertyvista.equifax.request;
 
 import java.io.StringWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +91,7 @@ public class EquifaxHttpClient {
             int responseCode = response.getStatusLine().getStatusCode();
             if (responseCode == HttpStatus.SC_OK) {
                 HttpEntity entity = response.getEntity();
-                String xmlResponse = EntityUtils.toString(entity, Charset.forName("UTF-8"));
+                String xmlResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
                 EfxTransmit efxResponse = MarshallUtil.unmarshal(EfxTransmit.class, xmlResponse);
                 return efxResponse;
             } else {

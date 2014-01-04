@@ -14,7 +14,7 @@
 package com.propertyvista.server.oapi;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.Filter;
@@ -70,7 +70,7 @@ public class OAPIFilter implements Filter {
                 try {
                     final int index = auth.indexOf(' ');
                     if (index > 0) {
-                        final String[] credentials = StringUtils.split(new String(Base64.decodeBase64(auth.substring(index)), Charset.forName("UTF-8")), ':');
+                        final String[] credentials = StringUtils.split(new String(Base64.decodeBase64(auth.substring(index)), StandardCharsets.UTF_8), ':');
                         if (credentials.length != 3) {
                             log.warn("invalid credentials format");
                         } else {

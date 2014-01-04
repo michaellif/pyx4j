@@ -14,7 +14,7 @@
 package com.propertyvista.equifax.utils;
 
 import java.io.StringWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +94,7 @@ public class ExampleClient {
             System.out.println(response.getStatusLine());
             if (responseCode == HttpStatus.SC_OK) {
                 HttpEntity entity = response.getEntity();
-                String xmlResponse = EntityUtils.toString(entity, Charset.forName("UTF-8"));
+                String xmlResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
 
                 System.out.println(xmlResponse);
 

@@ -16,7 +16,7 @@ package com.propertyvista.interfaces.importer;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -69,7 +69,7 @@ public class BuildingExample {
         FileWriter w = null;
         try {
             w = new FileWriter(f);
-            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+            XMLStringWriter xml = new XMLStringWriter(StandardCharsets.UTF_8);
             XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityNamingConvention());
             xmlWriter.setEmitId(false);
             xmlWriter.write(importIO);

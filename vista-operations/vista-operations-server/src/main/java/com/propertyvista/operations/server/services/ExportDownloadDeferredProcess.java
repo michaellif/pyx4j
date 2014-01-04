@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.server.services;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +34,13 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.rpc.dto.PmcExportDownloadDTO;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.BuildingRetriever;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
+import com.propertyvista.operations.rpc.dto.PmcExportDownloadDTO;
 
 public class ExportDownloadDeferredProcess extends AbstractDeferredProcess {
 
@@ -110,7 +110,7 @@ public class ExportDownloadDeferredProcess extends AbstractDeferredProcess {
                 buildings.close();
             }
 
-            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+            XMLStringWriter xml = new XMLStringWriter(StandardCharsets.UTF_8);
             XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityNamingConvention());
             xmlWriter.setEmitId(false);
             xmlWriter.write(importIO);

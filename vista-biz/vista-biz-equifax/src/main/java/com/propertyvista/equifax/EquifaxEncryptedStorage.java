@@ -13,7 +13,7 @@
  */
 package com.propertyvista.equifax;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -25,11 +25,11 @@ class EquifaxEncryptedStorage {
 
     static String decrypt(CustomerCreditCheckReport report) {
         byte[] xmlData = ServerSideFactory.create(EncryptedStorageFacade.class).decrypt(report.publicKey().getValue(), report.data().getValue());
-        return new String(xmlData, Charset.forName("UTF-8"));
+        return new String(xmlData, StandardCharsets.UTF_8);
     }
 
     static void encrypt(CustomerCreditCheckReport report, String xml) {
-        byte[] xmlData = xml.getBytes(Charset.forName("UTF-8"));
+        byte[] xmlData = xml.getBytes(StandardCharsets.UTF_8);
         Key publicKeyKey = ServerSideFactory.create(EncryptedStorageFacade.class).getCurrentPublicKey();
         byte[] encryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).encrypt(publicKeyKey, xmlData);
         report.publicKey().setValue(publicKeyKey);

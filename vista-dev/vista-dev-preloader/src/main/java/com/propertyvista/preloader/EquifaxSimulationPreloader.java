@@ -14,7 +14,7 @@
 package com.propertyvista.preloader;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -29,9 +29,9 @@ public class EquifaxSimulationPreloader extends BaseVistaDevDataPreloader {
         EquifaxSimulatorConfig ec = EntityFactory.create(EquifaxSimulatorConfig.class);
 
         try {
-            ec.approve().xml().setValue(IOUtils.getTextResource("simulation/equifax/approve.xml", Charset.forName("UTF-8")));
-            ec.decline().xml().setValue(IOUtils.getTextResource("simulation/equifax/decline.xml", Charset.forName("UTF-8")));
-            ec.moreInfo().xml().setValue(IOUtils.getTextResource("simulation/equifax/moreInfo.xml", Charset.forName("UTF-8")));
+            ec.approve().xml().setValue(IOUtils.getTextResource("simulation/equifax/approve.xml", StandardCharsets.UTF_8));
+            ec.decline().xml().setValue(IOUtils.getTextResource("simulation/equifax/decline.xml", StandardCharsets.UTF_8));
+            ec.moreInfo().xml().setValue(IOUtils.getTextResource("simulation/equifax/moreInfo.xml", StandardCharsets.UTF_8));
 
         } catch (IOException e) {
             throw new Error(e);
