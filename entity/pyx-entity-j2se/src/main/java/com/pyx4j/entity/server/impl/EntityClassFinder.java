@@ -37,7 +37,7 @@ public class EntityClassFinder extends ClassFinder {
 
     private static final Logger log = LoggerFactory.getLogger(EntityClassFinder.class);
 
-    public static final String MARKER_RESOURCE_NAME = "META-INF/persistence-domain.marker";
+    public static final String MARKER_RESOURCE_NAME = "META-INF/generated-domain.marker";
 
     private static List<String> foundEntityClasses;
 
