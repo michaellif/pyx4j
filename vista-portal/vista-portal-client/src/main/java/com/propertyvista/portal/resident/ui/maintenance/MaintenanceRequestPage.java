@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.form.FormDecorator;
+import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,10 +43,10 @@ import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageVi
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
-import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequestDTO> {
+public class MaintenanceRequestPage extends CPortalEntityEditor<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestPage.class);
 
@@ -88,7 +88,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 250).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reportedForOwnUnit(), new CLabel<Boolean>()), 250).build());
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().category(), new CEntityLabel<MaintenanceRequestCategory>() {
             @Override
             public String format(MaintenanceRequestCategory value) {
@@ -111,7 +111,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().summary()), 250).build());
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 250).build());
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority(), new CEntityLabel<MaintenanceRequestPriority>()), 250).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().status().phase()), 250).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().status().phase(), new CLabel<StatusPhase>()), 250).build());
 
         int innerRow = -1;
         imagePanel = new TwoColumnFlexFormPanel();
@@ -147,8 +147,8 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     }
 
     @Override
-    protected FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> createDecorator() {
-        FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> decorator = super.createDecorator();
+    protected EditableFormDecorator<MaintenanceRequestDTO> createDecorator() {
+        EditableFormDecorator<MaintenanceRequestDTO> decorator = super.createDecorator();
 
         decorator.addHeaderToolbarWidget(btnCancel);
         decorator.addHeaderToolbarWidget(btnPrint);
@@ -164,6 +164,23 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         if (mr == null) {
             return;
         }
-        imagePanel.setVisible(mr.pictures() != null && !mr.pictures().isNull() && !mr.pictures().isEmpty());
+        imagePanel.setVisible(isEditable() || (mr.pictures() != null && !mr.pictures().isNull() && !mr.pictures().isEmpty()));
+        get(proto().reportedForOwnUnit()).inheritEnabled(false);
+        get(proto().reportedForOwnUnit()).setEnabled(false);
+        get(proto().status().phase()).inheritEnabled(false);
+        get(proto().status().phase()).setEnabled(false);
+
+        get(proto().petInstructions()).inheritVisible(false);
+        get(proto().preferredDate1()).inheritVisible(false);
+        get(proto().preferredDate2()).inheritVisible(false);
+        get(proto().preferredTime1()).inheritVisible(false);
+        get(proto().preferredTime2()).inheritVisible(false);
+
+        get(proto().petInstructions()).setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+        get(proto().preferredDate1()).setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+        get(proto().preferredDate2()).setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+        get(proto().preferredTime1()).setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+        get(proto().preferredTime2()).setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+
     }
 }
