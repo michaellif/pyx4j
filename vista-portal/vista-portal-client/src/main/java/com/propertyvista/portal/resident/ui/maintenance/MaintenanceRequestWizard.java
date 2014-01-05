@@ -38,6 +38,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
@@ -116,26 +117,8 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         accessPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
         accessPanel.setWidget(1, 0, schedulePanel);
 
-        permissionPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).mockValue(true).build());
-        permissionPanel.setWidget(1, 0, accessPanel);
-        content.setWidget(++row, 0, permissionPanel);
-        content.setBR(++row, 0, 1);
-
         int innerRow = -1;
-        statusPanel.setH1(++innerRow, 0, 1, i18n.tr("Status"));
-        statusPanel.setWidget(++innerRow, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 100).build());
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 100).build());
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 100).build());
-        statusPanel.setBR(++innerRow, 0, 1);
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 100).build());
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 100).build());
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 100).build());
-        content.setWidget(++row, 0, statusPanel);
-
-        innerRow = -1;
         imagePanel = new TwoColumnFlexFormPanel();
-        imagePanel.setH1(++innerRow, 0, 1, i18n.tr("Images"));
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadPortalService> create(MaintenanceRequestPictureUploadPortalService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
@@ -147,12 +130,31 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             @Override
             public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                main.setWidget(0, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
                 return main;
             }
         };
-        imageSlider.setImageSize(240, 160);
-        imagePanel.setWidget(++innerRow, 0, 1, inject(proto().pictures(), imageSlider));
+        imageSlider.setImageSize(360, 240);
+        imagePanel.setWidget(++innerRow, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
         content.setWidget(++row, 0, imagePanel);
+
+        permissionPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).mockValue(true).build());
+        permissionPanel.setWidget(1, 0, accessPanel);
+        content.setWidget(++row, 0, permissionPanel);
+        content.setBR(++row, 0, 1);
+
+        innerRow = -1;
+        statusPanel.setH1(++innerRow, 0, 1, i18n.tr("Status"));
+        statusPanel.setWidget(++innerRow, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 100).build());
+        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 100).build());
+        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 100).build());
+        statusPanel.setBR(++innerRow, 0, 1);
+        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 100).build());
+        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 100).build());
+        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 100).build());
+        content.setWidget(++row, 0, statusPanel);
+
         content.setBR(++row, 0, 1);
 
         // tweaks:

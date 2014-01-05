@@ -191,7 +191,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // --------------------------------------------------------------------------------------------------------------------
         int innerRow = -1;
         imagePanel = new TwoColumnFlexFormPanel();
-        imagePanel.setH1(++innerRow, 0, 2, i18n.tr("Images"));
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadService> create(MaintenanceRequestPictureUploadService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
@@ -203,11 +202,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             @Override
             public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                main.setWidget(0, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
+
                 return main;
             }
         };
-        imageSlider.setImageSize(240, 160);
-        imagePanel.setWidget(++innerRow, 0, 2, inject(proto().pictures(), imageSlider));
+        imageSlider.setImageSize(480, 320);
+        imagePanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().pictures(), imageSlider), 320, true).build());
         panel.setWidget(++row, 0, 2, imagePanel);
         // --------------------------------------------------------------------------------------------------------------------
 

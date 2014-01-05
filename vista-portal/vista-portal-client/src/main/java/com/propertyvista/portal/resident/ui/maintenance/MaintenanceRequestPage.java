@@ -34,6 +34,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
@@ -112,16 +113,8 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority(), new CEntityLabel<MaintenanceRequestPriority>()), 250).build());
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().status().phase()), 250).build());
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
-
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate1()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime1()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
-
         int innerRow = -1;
         imagePanel = new TwoColumnFlexFormPanel();
-        imagePanel.setH1(++innerRow, 0, 1, i18n.tr("Images"));
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadPortalService> create(MaintenanceRequestPictureUploadPortalService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
@@ -133,12 +126,21 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
             @Override
             public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                main.setWidget(0, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
                 return main;
             }
         };
-        imageSlider.setImageSize(240, 160);
-        imagePanel.setWidget(++innerRow, 0, 1, inject(proto().pictures(), imageSlider));
+        imageSlider.setImageSize(360, 240);
+        imagePanel.setWidget(++innerRow, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
         mainPanel.setWidget(++row, 0, imagePanel);
+
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
+
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate1()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime1()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
+
         mainPanel.setBR(++row, 0, 1);
 
         return mainPanel;
