@@ -104,7 +104,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         agreementDocumentCriteria.eq(agreementDocumentCriteria.proto().leaseTermV(), dto.currentTerm().version());
 
         dto.currentTerm().version().agreementDocument().set(Persistence.service().retrieve(agreementDocumentCriteria));
-        System.out.println(dto.currentTerm().version().agreementDocument());
     }
 
     private void loadTenantInsurance(LeaseDTO lease) {

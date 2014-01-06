@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
-import java.util.Date;
+import java.util.LinkedList;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Executable;
@@ -26,6 +26,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
+import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 
@@ -50,7 +51,15 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() {
-                saveBlob(String.valueOf(new Date()).getBytes());
+                try {
+                    LinkedList<AgreementLegalTerm> terms = new LinkedList<AgreementLegalTerm>();
+                    Persistence.service().retrieve(leaseTerm.version().agreementLegalTerms());
+                    terms.addAll(leaseTerm.version().agreementLegalTerms());
+                    byte[] agreementPdf = LeaseTermAgreementPdfCreator.createPdf(terms);
+                    saveBlob(agreementPdf);
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
                 return null;
             }
         });
@@ -60,9 +69,9 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
     private void saveBlob(byte[] bytes) {
         LeaseTermAgreementDocumentBlob blob = EntityFactory.create(LeaseTermAgreementDocumentBlob.class);
         blob.data().setValue(bytes);
-        blob.contentType().setValue(MimeMap.getContentType(DownloadFormat.TXT));
+        blob.contentType().setValue(MimeMap.getContentType(DownloadFormat.PDF));
         Persistence.service().persist(blob);
-        agreementDocument.file().fileName().setValue("agreement.txt");
+        agreementDocument.file().fileName().setValue("agreement.pdf");
         agreementDocument.file().fileSize().setValue(bytes.length);
         agreementDocument.file().blobKey().set(blob.id());
         FileUploadRegistry.register(agreementDocument.file());
