@@ -60,7 +60,7 @@ public class LeaseStep extends ApplicationWizardStep {
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             panel.setH3(++row, 0, 1, i18n.tr("People"));
 
-            panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getView())));
+            panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(null)));
         }
 
         return panel;

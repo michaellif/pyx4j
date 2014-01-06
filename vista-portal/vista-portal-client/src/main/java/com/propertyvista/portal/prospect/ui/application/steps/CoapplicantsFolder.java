@@ -35,6 +35,7 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
     public CoapplicantsFolder(ApplicationWizardView view) {
         super(CoapplicantDTO.class, i18n.tr("Occupant"));
         this.view = view;
+        setViewable(this.view == null);
     }
 
     @Override
