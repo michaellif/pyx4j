@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant.lease.print;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -26,13 +27,15 @@ public class CreateMockLeaseTermAgreementPdf {
 
     private static int currentTermNo = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         LinkedList<AgreementLegalTerm> terms = new LinkedList<AgreementLegalTerm>();
+
+        byte[] logo = org.apache.poi.util.IOUtils.toByteArray(CreateMockLeaseTermAgreementPdf.class.getResourceAsStream("logo.png"));
         terms.add(makeMockAgreementTerm(5));
         terms.add(makeMockAgreementTerm(15));
         terms.add(makeMockAgreementTerm(10));
 
-        byte[] bytes = LeaseTermAgreementPdfCreator.createPdf(terms);
+        byte[] bytes = LeaseTermAgreementPdfCreator.createPdf(terms, logo);
 
         FileOutputStream fos = null;
         try {

@@ -55,7 +55,7 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
                     LinkedList<AgreementLegalTerm> terms = new LinkedList<AgreementLegalTerm>();
                     Persistence.service().retrieve(leaseTerm.version().agreementLegalTerms());
                     terms.addAll(leaseTerm.version().agreementLegalTerms());
-                    byte[] agreementPdf = LeaseTermAgreementPdfCreator.createPdf(terms);
+                    byte[] agreementPdf = LeaseTermAgreementPdfCreator.createPdf(terms, null);
                     saveBlob(agreementPdf);
                 } catch (Throwable e) {
                     throw new RuntimeException(e);

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.xml.messaging.saaj.util.ByteInputStream;
 import com.sun.xml.messaging.saaj.util.ByteOutputStream;
 
 import com.pyx4j.entity.report.JasperFileFormat;
@@ -27,11 +28,14 @@ import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 
 public class LeaseTermAgreementPdfCreator {
 
-    public static byte[] createPdf(List<AgreementLegalTerm> agreementTerms) {
+    public static byte[] createPdf(List<AgreementLegalTerm> agreementTerms, byte[] logo) {
         Map<String, Object> params = new HashMap<String, Object>();
 
         params.put("landlordName", "SuperLandlord");
         params.put("landlordAddress", "5935 Airport Road Suite 600, Mississauga, ON. L4V 1W5");
+        if (logo != null) {
+            params.put("landlordLogo", new ByteInputStream(logo, logo.length));
+        }
 
         ByteOutputStream bos = new ByteOutputStream();
         JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreator.class.getPackage().getName() + ".LeaseTermAgreement",

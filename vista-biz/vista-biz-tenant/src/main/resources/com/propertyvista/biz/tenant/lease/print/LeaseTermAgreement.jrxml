@@ -5,6 +5,7 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="landlordName" class="java.lang.String"/>
 	<parameter name="landlordAddress" class="java.lang.String"/>
+	<parameter name="landlordLogo" class="java.io.InputStream"/>
 	<field name="body" class="java.lang.String"/>
 	<field name="title" class="java.lang.String"/>
 	<field name="orderId" class="java.lang.Integer"/>
@@ -48,12 +49,16 @@
 				<textFieldExpression><![CDATA[$P{landlordName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="0" width="286" height="31"/>
+				<reportElement x="0" y="35" width="286" height="31"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Residential Tenancy Agreement]]></text>
 			</staticText>
+			<image scaleImage="RetainShape" hAlign="Right" vAlign="Top">
+				<reportElement x="286" y="0" width="286" height="66"/>
+				<imageExpression><![CDATA[$P{landlordLogo}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
