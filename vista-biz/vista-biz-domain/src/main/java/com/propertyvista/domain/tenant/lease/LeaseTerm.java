@@ -145,7 +145,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
         IList<AgreementLegalTerm> agreementLegalTerms();
 
         @Owned(cascade = {})
-        @Detached(level = AttachLevel.Detached)
+        @Detached(level = AttachLevel.IdOnly)
         LeaseTermAgreementDocument agreementDocument();
     }
 
