@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import java.math.BigDecimal;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -175,6 +176,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
                 setupAddThisPaymentMethodToProfile(event.getValue());
+                updateVisibility(event.getValue());
             }
         });
 
@@ -295,6 +297,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     case Profiled:
                         paymentMethodEditor.setEditable(false);
                         paymentMethodEditor.setVisible(false);
+                        paymentMethodEditor.setPaymentTypesEnabled(EnumSet.allOf(PaymentType.class), false);
                         paymentMethodEditorHeader.setVisible(false);
 
                         profiledPaymentMethodsCombo.reset();
@@ -315,6 +318,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 paymentMethodEditorHeader.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
                     paymentMethodEditor.populate(event.getValue());
+                    updateVisibility(event.getValue().type().getValue());
                 }
             }
         });
@@ -349,9 +353,16 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().selectPaymentMethod()).setVisible(false);
         get(proto().storeInProfile()).setVisible(false);
-        get(proto().createdBy()).setVisible(false);
-        get(proto().convenienceFee()).setVisible(false);
-        get(proto().notes()).setVisible(false);
+
+        get(proto().id()).setVisible(true);
+        get(proto().paymentStatus()).setVisible(true);
+        get(proto().lastStatusChangeDate()).setVisible(true);
+        get(proto().finalizeDate()).setVisible(true);
+        get(proto().createdBy()).setVisible(true);
+        get(proto().convenienceFee()).setVisible(true);
+        get(proto().notes()).setVisible(true);
+
+        updateVisibility(null);
 
         noticeViewer.updateVisibility();
     }
@@ -364,13 +375,15 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         // hide some non-relevant fields:
         get(proto().id()).setVisible(!isNew);
-        get(proto().receivedDate()).setVisible(!isEditable());
-        get(proto().finalizeDate()).setVisible(!isEditable());
         get(proto().paymentStatus()).setVisible(!isNew);
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
+        get(proto().finalizeDate()).setVisible(!isEditable());
         get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
         get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());
         get(proto().notes()).setVisible(isEditable() || !getValue().notes().isNull());
+        if (!getValue().paymentMethod().isNull()) {
+            updateVisibility(getValue().paymentMethod().type().getValue());
+        }
 
         noticeViewer.updateVisibility();
 
@@ -505,6 +518,16 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 get(proto().storeInProfile()).setEnabled(false);
                 break;
             }
+        }
+    }
+
+    private void updateVisibility(PaymentType paymentType) {
+        if (paymentType == null) {
+            get(proto().receivedDate()).setVisible(true);
+            get(proto().targetDate()).setVisible(true);
+        } else {
+            get(proto().receivedDate()).setVisible(!isEditable() || paymentType.isReceiveDateEditable());
+            get(proto().targetDate()).setVisible(paymentType != PaymentType.Cash);
         }
     }
 

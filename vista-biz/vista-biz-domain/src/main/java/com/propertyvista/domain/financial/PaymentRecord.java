@@ -186,7 +186,6 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @Editor(type = EditorType.label)
     IPrimitive<Date> createdDate();
 
-    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> receivedDate();
 
     @Editor(type = EditorType.label)

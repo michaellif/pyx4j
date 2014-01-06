@@ -87,6 +87,10 @@ public enum PaymentType {
         return EnumSet.of(Echeck, CreditCard);
     }
 
+    public static EnumSet<PaymentType> receiveDateEditable() {
+        return EnumSet.of(Cash, Check);
+    }
+
     // grouping:
 
     public boolean isTransactable() {
@@ -96,4 +100,9 @@ public enum PaymentType {
     public boolean isSchedulable() {
         return schedulable().contains(this);
     }
+
+    public boolean isReceiveDateEditable() {
+        return receiveDateEditable().contains(this);
+    }
+
 }
