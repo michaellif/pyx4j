@@ -14,8 +14,8 @@
 package com.propertyvista.yardi;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -30,8 +30,8 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.InputSource;
 
+import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.server.dev.NumberInFile;
-import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.config.VistaDeployment;
@@ -73,6 +73,8 @@ public class TransactionLog {
             writer.getDomConfig().setParameter("format-pretty-print", Boolean.TRUE);
             writer.getDomConfig().setParameter("xml-declaration", true);
 
+            // this by default uses UTF-16 to convert document to String with corresponding encoding in the xml declaration
+            // <?xml version="1.0" encoding="UTF-16"?>
             return writer.writeToString(document);
         } catch (Throwable e) {
             log.warn("unable to format xml", e);
@@ -84,7 +86,6 @@ public class TransactionLog {
         if (transactionId == null) {
             return null;
         }
-        FileWriter writer = null;
         try {
             File dir = logsDir();
             long transactionGroup = transactionId / 1000;
@@ -101,14 +102,11 @@ public class TransactionLog {
             while (out.exists()) {
                 out = new File(dir, fname.toString() + "-" + (++repeat) + "." + fileExt);
             }
-            writer = new FileWriter(out);
-            writer.write(prettyXmlFormat(context));
+            FileIOUtils.writeToFile(out, prettyXmlFormat(context), StandardCharsets.UTF_16);
             return out.getAbsolutePath();
         } catch (Throwable t) {
             log.error("failed to create transaction log", t);
             return null;
-        } finally {
-            IOUtils.closeQuietly(writer);
         }
     }
 }
