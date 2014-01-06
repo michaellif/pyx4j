@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
@@ -38,9 +39,13 @@ import com.pyx4j.gwt.server.IOUtils;
 public class FileIOUtils {
 
     public static void writeToFile(File file, String data) {
+        writeToFile(file, data, StandardCharsets.UTF_8);
+    }
+
+    public static void writeToFile(File file, String data, Charset charset) {
         Writer w = null;
         try {
-            w = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+            w = new OutputStreamWriter(new FileOutputStream(file), charset);
             w.write(data);
             w.flush();
         } catch (IOException e) {
