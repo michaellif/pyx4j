@@ -130,7 +130,7 @@ public class MaintenanceRequestPage extends CPortalEntityEditor<MaintenanceReque
                 return main;
             }
         };
-        imageSlider.setImageSize(360, 240);
+        imageSlider.setImageSize(250, 240);
         imagePanel.setWidget(++innerRow, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
         mainPanel.setWidget(++row, 0, imagePanel);
 
