@@ -172,7 +172,7 @@ public class OptionsStep extends ApplicationWizardStep {
 
             public FeatureItemForm() {
                 super(BillableItem.class);
-                setViewable(true);
+                setEditable(false);
             }
 
             @Override
@@ -327,8 +327,8 @@ public class OptionsStep extends ApplicationWizardStep {
                     }
 
                     if (editor != null) {
-                        editor.setViewable(false);
-                        editor.inheritViewable(false);
+                        editor.setEditable(true);
+                        editor.inheritEditable(false);
                         this.inject(proto().extraData(), editor);
                         editor.populate(extraData.cast());
                         extraDataPanel.setWidget(editor);
