@@ -62,11 +62,12 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
     public ImageSlider(Dimension dimension, final ImageSliderDataProvider imageList) {
 
+        setStyleName(DefaultWidgetsTheme.StyleName.ImageSlider.name());
+
         this.imageList = imageList;
         this.editable = false;
 
         slideshow = new Slideshow(0, false);
-        slideshow.setStyleName(DefaultWidgetsTheme.StyleName.ImageSliderSlideshow.name());
 
         editButton = new Button(i18n.tr("Edit"));
         editButton.setStyleName(DefaultWidgetsTheme.StyleName.ImageSliderEditAction.name());

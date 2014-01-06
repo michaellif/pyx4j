@@ -55,7 +55,7 @@ public enum CSSClass {
     pyx4j_GroupBox, pyx4j_GroupBox_Caption,
 
     //Photoalbom
-    pyx4j_Photoalbom_Thumbnail, pyx4j_SlideshowPopup, pyx4j_SlideshowAction, pyx4j_Photoalbom_Caption,
+    pyx4j_Photoalbom_Thumbnail, pyx4j_SlideshowPopup, pyx4j_Photoalbom_Caption,
 
     //Banner
     pyx4j_Banner,

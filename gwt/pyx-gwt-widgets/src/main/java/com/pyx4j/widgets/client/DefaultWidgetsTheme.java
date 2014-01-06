@@ -53,11 +53,13 @@ public class DefaultWidgetsTheme extends Theme {
 
         Recaptcha,
 
-        ImageSliderSlideshow, ImageSliderEditAction;
+        Slideshow, SlideshowAction,
+
+        ImageSlider, ImageSliderEditAction;
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, readonly, disabled, active, semitransparent, singleLine
+        watermark, hover, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right
     }
 
     public DefaultWidgetsTheme() {
@@ -83,6 +85,7 @@ public class DefaultWidgetsTheme extends Theme {
         initGlassPanelStyle();
         initRecaptchaStyle();
         initImageSliderStyle();
+        initSlideshow();
     }
 
     protected void initAnchorStyle() {
@@ -316,7 +319,7 @@ public class DefaultWidgetsTheme extends Theme {
 
     }
 
-    private void initRecaptchaStyle() {
+    protected void initRecaptchaStyle() {
         Style style = new Style("#recaptcha_image");
         style.addProperty("width", "250px !important;");
         addStyle(style);
@@ -326,13 +329,8 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
     }
 
-    private void initImageSliderStyle() {
-        Style style = new Style(".", StyleName.ImageSliderSlideshow);
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.3);
-        addStyle(style);
-
-        style = new Style(".", StyleName.ImageSliderEditAction);
+    protected void initImageSliderStyle() {
+        Style style = new Style(".", StyleName.ImageSliderEditAction);
         style.addProperty("width", "100%");
         style.addProperty("line-height", "40px");
         style.addProperty("text-align", "center");
@@ -342,4 +340,44 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("cursor", "pointer");
         addStyle(style);
     }
+
+    protected void initSlideshow() {
+        Style style = new Style(".", StyleName.Slideshow);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
+        addStyle(style);
+
+        style = new Style(".", DefaultWidgetsTheme.StyleName.SlideshowAction);
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getSafeUri().asString() + "') no-repeat");
+        style.addProperty("width", "17px");
+        style.addProperty("height", "16px");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        addStyle(style);
+
+        style = new Style(".", DefaultWidgetsTheme.StyleName.SlideshowAction, "-", DefaultWidgetsTheme.StyleDependent.disabled);
+        style.addProperty("cursor", "default");
+        addStyle(style);
+
+        style = new Style(".", DefaultWidgetsTheme.StyleName.SlideshowAction, "-", DefaultWidgetsTheme.StyleDependent.left);
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowLeft().getSafeUri().asString() + "') no-repeat");
+        addStyle(style);
+
+        style = new Style(".", DefaultWidgetsTheme.StyleName.SlideshowAction, "-", DefaultWidgetsTheme.StyleDependent.right);
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowRight().getSafeUri().asString() + "') no-repeat");
+        addStyle(style);
+
+        style = new Style(".", DefaultWidgetsTheme.StyleName.SlideshowAction, "-", DefaultWidgetsTheme.StyleDependent.selected);
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowSelectedItem().getSafeUri().asString() + "') no-repeat");
+        addStyle(style);
+
+        style = new Style(".", DefaultWidgetsTheme.StyleName.SlideshowAction, "-", DefaultWidgetsTheme.StyleDependent.playing);
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPause().getSafeUri().asString() + "') no-repeat");
+        addStyle(style);
+
+        style = new Style(".", DefaultWidgetsTheme.StyleName.SlideshowAction, "-", DefaultWidgetsTheme.StyleDependent.paused);
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPlay().getSafeUri().asString() + "') no-repeat");
+        addStyle(style);
+    }
+
 }

@@ -36,7 +36,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.gwt.commons.BrowserType;
 
 public class Slideshow extends LayoutPanel {
@@ -81,6 +80,9 @@ public class Slideshow extends LayoutPanel {
         add(controlPanel);
         setWidgetHorizontalPosition(controlPanel, Alignment.END);
         setWidgetVerticalPosition(controlPanel, Alignment.END);
+
+        setStyleName(DefaultWidgetsTheme.StyleName.Slideshow.name());
+
     }
 
     public void addItem(Widget widget) {
@@ -239,7 +241,7 @@ public class Slideshow extends LayoutPanel {
         ControlPanel() {
             leftAction = new Action();
             leftAction.setTitle("Back");
-            leftAction.addStyleDependentName("left");
+            leftAction.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.left.name());
             leftAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -259,6 +261,8 @@ public class Slideshow extends LayoutPanel {
             add(itemActionsHolder);
 
             startStopAction = new Action();
+            startStopAction.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.paused.name());
+
             startStopAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -273,7 +277,7 @@ public class Slideshow extends LayoutPanel {
 
             rightAction = new Action();
             rightAction.setTitle("Next");
-            rightAction.addStyleDependentName("right");
+            rightAction.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.right.name());
             rightAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -310,12 +314,12 @@ public class Slideshow extends LayoutPanel {
 
         public void play(boolean flag) {
             if (flag) {
-                startStopAction.removeStyleDependentName("paused");
-                startStopAction.addStyleDependentName("playing");
+                startStopAction.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.paused.name());
+                startStopAction.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.playing.name());
                 startStopAction.setTitle("Stop");
             } else {
-                startStopAction.removeStyleDependentName("playing");
-                startStopAction.addStyleDependentName("paused");
+                startStopAction.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.playing.name());
+                startStopAction.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.paused.name());
                 startStopAction.setTitle("Play");
             }
         }
@@ -336,9 +340,9 @@ public class Slideshow extends LayoutPanel {
         public void setSelectedItem(int currentIndex) {
             for (int i = 0; i < itemActionList.size(); i++) {
                 if (i == currentIndex) {
-                    itemActionList.get(i).addStyleDependentName("selected");
+                    itemActionList.get(i).addStyleDependentName(DefaultWidgetsTheme.StyleDependent.selected.name());
                 } else {
-                    itemActionList.get(i).removeStyleDependentName("selected");
+                    itemActionList.get(i).removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.selected.name());
                 }
             }
         }
@@ -351,24 +355,22 @@ public class Slideshow extends LayoutPanel {
 
             private boolean enabled;
 
-            public Action(String text) {
-                super(text);
-                setStyleName(CSSClass.pyx4j_SlideshowAction.name());
-                setEnabled(true);
+            public Action() {
+                this("&nbsp;");
             }
 
-            public Action() {
-                super("&nbsp;");
-                setStyleName(CSSClass.pyx4j_SlideshowAction.name());
+            public Action(String text) {
+                super(text);
+                setStyleName(DefaultWidgetsTheme.StyleName.SlideshowAction.name());
                 setEnabled(true);
             }
 
             public void setEnabled(boolean flag) {
                 this.enabled = flag;
                 if (flag) {
-                    addStyleDependentName("enabled");
+                    removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
                 } else {
-                    removeStyleDependentName("enabled");
+                    addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
                 }
             }
 
