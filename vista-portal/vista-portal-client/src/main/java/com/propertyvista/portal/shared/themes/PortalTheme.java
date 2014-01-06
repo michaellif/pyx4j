@@ -116,6 +116,14 @@ public class PortalTheme extends Theme {
                 style.addProperty("outline", "none");
                 addStyle(style);
             }
+
+            @Override
+            protected void initImageSliderStyle() {
+                super.initImageSliderStyle();
+                Style style = new Style(".", StyleName.ImageSliderSlideshow);
+                style.addProperty("border-radius", "5px");
+                addStyle(style);
+            }
         });
 
         addTheme(new DefaultWidgetDecoratorTheme() {
