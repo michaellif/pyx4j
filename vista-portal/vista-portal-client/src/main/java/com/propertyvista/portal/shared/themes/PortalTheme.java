@@ -118,9 +118,9 @@ public class PortalTheme extends Theme {
             }
 
             @Override
-            protected void initImageSliderStyle() {
-                super.initImageSliderStyle();
-                Style style = new Style(".", StyleName.ImageSliderSlideshow);
+            protected void initSlideshow() {
+                super.initSlideshow();
+                Style style = new Style(".", StyleName.Slideshow);
                 style.addProperty("border-radius", "5px");
                 addStyle(style);
             }

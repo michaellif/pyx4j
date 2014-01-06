@@ -22,6 +22,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -497,42 +498,6 @@ public class VistaTheme extends Theme {
         style = new Style(CSSClass.pyx4j_Photoalbom_Caption);
         style.addProperty("color", "#333");
         style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-    }
-
-    protected void initSlideshowActionStyle() {
-
-        Style style = new Style(CSSClass.pyx4j_SlideshowAction);
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getSafeUri().asString() + "') no-repeat");
-        style.addProperty("width", "17px");
-        style.addProperty("height", "16px");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_SlideshowAction, "-disabled");
-        style.addProperty("cursor", "default");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_SlideshowAction, "-left");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowLeft().getSafeUri().asString() + "') no-repeat");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_SlideshowAction, "-right");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowRight().getSafeUri().asString() + "') no-repeat");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_SlideshowAction, "-selected");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowSelectedItem().getSafeUri().asString() + "') no-repeat");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_SlideshowAction, "-playing");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPause().getSafeUri().asString() + "') no-repeat");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_SlideshowAction, "-paused");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPlay().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
     }
