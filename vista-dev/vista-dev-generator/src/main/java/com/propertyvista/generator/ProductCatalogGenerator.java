@@ -124,6 +124,7 @@ public class ProductCatalogGenerator {
         service.version().name().setValue(RandomUtil.randomLetters(6));
         service.version().description().setValue("Service description");
         service.version().availableOnline().setValue(RandomUtil.randomBoolean());
+        service.version().price().setValue(new BigDecimal(1000.10));
 
         return service;
 
@@ -141,6 +142,7 @@ public class ProductCatalogGenerator {
         feature.version().recurring().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonReccuringFeatures().contains(arCode.type()));
         feature.version().mandatory().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonMandatoryFeatures().contains(arCode.type()));
         feature.version().availableOnline().setValue(RandomUtil.randomBoolean());
+        feature.version().price().setValue(new BigDecimal(100.10));
 
         feature.version().items().add(createFeatureItem(arCode));
 
