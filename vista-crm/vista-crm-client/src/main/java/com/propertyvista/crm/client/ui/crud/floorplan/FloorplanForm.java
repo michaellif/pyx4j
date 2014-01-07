@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -41,7 +42,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -49,6 +49,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
+import com.propertyvista.domain.marketing.ils.ILSSummary;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
@@ -87,9 +88,12 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().marketingName())).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().description())).build());
-        main.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().marketingName()), true).build());
+
+        if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
+            main.setH1(++row, 0, 2, proto().ilsSummary().getMeta().getCaption());
+            main.setWidget(++row, 0, 2, inject(proto().ilsSummary(), new ILSSummaryFolder()));
+        }
 
         main.setH1(++row, 0, 2, i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
@@ -144,10 +148,48 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         leftRow = rightRow = Math.max(leftRow, rightRow);
 
+        main.setWidget(++leftRow, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+
         main.setH1(++leftRow, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(++leftRow, 0, 2, inject(proto().amenities(), createAmenitiesListEditor()));
 
         return main;
+    }
+
+    private class ILSSummaryFolder extends VistaBoxFolder<ILSSummary> {
+        public ILSSummaryFolder() {
+            super(ILSSummary.class);
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof ILSSummary) {
+                return new ILSSummaryEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        private class ILSSummaryEditor extends CEntityForm<ILSSummary> {
+            public ILSSummaryEditor() {
+                super(ILSSummary.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+
+                CImage frontImage = new CImage(GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new PublicMediaURLBuilder());
+                frontImage.setImageSize(240, 160);
+
+                content.setWidget(0, 0, inject(proto().frontImage().file(), frontImage));
+                content.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().title()), 10, 50, 55).build());
+                content.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 10, 50, 55).build());
+                content.getFlexCellFormatter().setRowSpan(0, 0, 2);
+
+                return content;
+            }
+        }
     }
 
     private class ILSProfileFloorplanFolder extends VistaBoxFolder<ILSProfileFloorplan> {
@@ -195,7 +237,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
             }, EntityFactory.createIdentityStub(Floorplan.class, FloorplanForm.this.getValue().getPrimaryKey()));
         }
 
-        private class ILSProfileFloorplanEditor extends CEntityDecoratableForm<ILSProfileFloorplan> {
+        private class ILSProfileFloorplanEditor extends CEntityForm<ILSProfileFloorplan> {
             public ILSProfileFloorplanEditor() {
                 super(ILSProfileFloorplan.class);
             }
@@ -208,8 +250,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().vendor(), new CEnumLabel())).build());
                 content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().priority())).build());
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().listingTitle())).build());
-                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().description())).build());
                 content.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
                 return content;

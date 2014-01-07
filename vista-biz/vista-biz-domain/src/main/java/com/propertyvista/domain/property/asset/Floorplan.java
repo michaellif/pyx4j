@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -36,6 +37,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.marketing.ils.ILSSummary;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -65,8 +67,13 @@ public interface Floorplan extends PolicyNode, HasNotesAndAttachments {
     @Caption(watermark = "e.g. 1 Bedroom, Furnished")
     IPrimitive<String> marketingName();
 
+    @Length(4000)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
+
+    @Owned
+    @Detached
+    IList<ILSSummary> ilsSummary();
 
     @Caption(name = "Number of Storeys")
     IPrimitive<Integer> floorCount();

@@ -45,6 +45,7 @@ import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan.Priority;
+import com.propertyvista.domain.marketing.ils.ILSSummary;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -146,6 +147,13 @@ public class ILSConfigLoader {
 
             Persistence.service().retrieveMember(b.floorplans(), AttachLevel.Attached);
             for (Floorplan f : b.floorplans()) {
+                // add summary
+                if (f.ilsSummary().isEmpty()) {
+                    ILSSummary ilsSummary = EntityFactory.create(ILSSummary.class);
+                    ilsSummary.title().setValue("Gottarent test title - " + f.name().getValue());
+                    ilsSummary.description().setValue("Gottarent test description: " + f.name().getValue());
+                    f.ilsSummary().add(ilsSummary);
+                }
                 // check ils profile
                 EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
                 critFp.eq(critFp.proto().vendor(), ILSVendor.gottarent);
@@ -155,8 +163,6 @@ public class ILSConfigLoader {
                     ilsProfile.vendor().setValue(ILSVendor.gottarent);
                     ilsProfile.floorplan().set(f);
                     ilsProfile.priority().setValue(DataGenerator.randomEnum(Priority.class));
-                    ilsProfile.listingTitle().setValue("Gottarent test title - " + f.name().getValue());
-                    ilsProfile.description().setValue("Gottarent test description: " + f.name().getValue());
                     Persistence.service().persist(ilsProfile);
                 }
                 // add media

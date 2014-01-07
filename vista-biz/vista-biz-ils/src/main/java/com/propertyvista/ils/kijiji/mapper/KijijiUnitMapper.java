@@ -23,6 +23,9 @@ import com.kijiji.pint.rs.ILSUnit.IsPetsAllowed;
 import com.kijiji.pint.rs.ILSUnit.OfferedByEnum;
 import com.kijiji.pint.rs.ILSUnit.UnitTypeEnum;
 
+import com.pyx4j.essentials.server.preloader.DataGenerator;
+
+import com.propertyvista.domain.marketing.ils.ILSSummary;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSFloorplanDTO;
 
@@ -34,12 +37,18 @@ public class KijijiUnitMapper {
         to.setUnitType(UnitTypeEnum.APARTMENT_CONDO);// TODO: read it from real data
         to.setOfferedBy(OfferedByEnum.OWNER);
 
-        String title = from.profile().listingTitle().getValue();
-        if (title == null) {
+        String title = null, description = null;
+        if (from.floorplan().ilsSummary().isEmpty()) {
             title = from.floorplan().marketingName().isNull() ? from.floorplan().name().getValue() : from.floorplan().marketingName().getValue();
+            description = from.floorplan().description().getValue();
+        } else {
+            int count = from.floorplan().ilsSummary().size();
+            ILSSummary summary = from.floorplan().ilsSummary().get(DataGenerator.randomInt(count));
+            title = summary.title().getValue();
+            description = summary.description().getValue();
         }
         to.setTitle(title);
-        to.setDescription(from.profile().description().isNull() ? from.floorplan().description().getValue() : from.profile().description().getValue());
+        to.setDescription(description);
 
         to.setBedrooms(getBedrooms(from.floorplan().bedrooms().getValue()));
         to.setBathrooms(getBathrooms(from.floorplan().bathrooms().getValue(), from.floorplan().halfBath().getValue()));

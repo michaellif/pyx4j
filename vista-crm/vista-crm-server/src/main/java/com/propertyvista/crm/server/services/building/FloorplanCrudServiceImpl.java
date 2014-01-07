@@ -48,6 +48,8 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
     protected void enhanceRetrieved(Floorplan bo, FloorplanDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(bo.amenities());
         to.amenities().set(bo.amenities());
+        Persistence.ensureRetrieve(bo.ilsSummary(), AttachLevel.Attached);
+        to.ilsSummary().set(bo.ilsSummary());
         Persistence.ensureRetrieve(bo.media(), AttachLevel.Attached);
         to.media().set(bo.media());
         // ils
