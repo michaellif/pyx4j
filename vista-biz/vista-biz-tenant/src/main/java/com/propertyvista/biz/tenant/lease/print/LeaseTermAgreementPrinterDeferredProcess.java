@@ -13,7 +13,9 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Executable;
@@ -52,16 +54,22 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
             @Override
             public Void execute() {
                 try {
-                    LinkedList<AgreementLegalTerm> terms = new LinkedList<AgreementLegalTerm>();
                     Persistence.service().retrieve(leaseTerm.version().agreementLegalTerms());
-                    terms.addAll(leaseTerm.version().agreementLegalTerms());
-                    byte[] agreementPdf = LeaseTermAgreementPdfCreator.createPdf(terms, null);
+                    LinkedList<AgreementLegalTerm4Print> terms = new LinkedList<AgreementLegalTerm4Print>();
+                    terms.addAll(makeTermsForPrint(leaseTerm));
+
+                    byte[] landlordLogo = null;
+
+                    byte[] agreementPdf = LeaseTermAgreementPdfCreator.createPdf(terms, landlordLogo);
+
                     saveBlob(agreementPdf);
+
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }
                 return null;
             }
+
         });
 
     }
@@ -76,6 +84,22 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
         agreementDocument.file().blobKey().set(blob.id());
         FileUploadRegistry.register(agreementDocument.file());
         Persistence.service().persist(agreementDocument);
+    }
+
+    private Collection<? extends AgreementLegalTerm4Print> makeTermsForPrint(LeaseTerm leaseTerm) {
+        List<AgreementLegalTerm4Print> legalTerms4Print = new LinkedList<AgreementLegalTerm4Print>();
+        for (AgreementLegalTerm legalTerm : leaseTerm.version().agreementLegalTerms()) {
+            legalTerms4Print.add(makeTermForPrint(legalTerm));
+        }
+        return legalTerms4Print;
+    }
+
+    private AgreementLegalTerm4Print makeTermForPrint(AgreementLegalTerm legalTerm) {
+        AgreementLegalTerm4Print legalTerm4Print = EntityFactory.create(AgreementLegalTerm4Print.class);
+        legalTerm4Print.title().setValue(legalTerm.title().getValue());
+        legalTerm4Print.body().setValue(legalTerm.body().getValue());
+        // TODO deal with signatures
+        return legalTerm4Print;
     }
 
 }

@@ -15,25 +15,28 @@ package com.propertyvista.biz.tenant.lease.print;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.gwt.server.IOUtils;
-
-import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 
 public class CreateMockLeaseTermAgreementPdf {
 
     private static int currentTermNo = 0;
 
     public static void main(String[] args) throws IOException {
-        LinkedList<AgreementLegalTerm> terms = new LinkedList<AgreementLegalTerm>();
+        LinkedList<AgreementLegalTerm4Print> terms = new LinkedList<AgreementLegalTerm4Print>();
 
         byte[] logo = org.apache.poi.util.IOUtils.toByteArray(CreateMockLeaseTermAgreementPdf.class.getResourceAsStream("logo.png"));
-        terms.add(makeMockAgreementTerm(5));
-        terms.add(makeMockAgreementTerm(15));
-        terms.add(makeMockAgreementTerm(10));
+
+        terms.add(makeMockAgreementTerm(5, makeMockSignatures(SignatureFormat.FullName, 2), makeMockSignaturePlaceholdedrs(2)));
+        terms.add(makeMockAgreementTerm(15, makeMockSignatures(SignatureFormat.Initials, 2), makeMockSignaturePlaceholdedrs(4)));
+        terms.add(makeMockAgreementTerm(10, makeMockSignatures(SignatureFormat.AgreeBoxAndFullName, 2), null));
+        terms.add(makeMockAgreementTerm(10, null, makeMockSignaturePlaceholdedrs(3)));
 
         byte[] bytes = LeaseTermAgreementPdfCreator.createPdf(terms, logo);
 
@@ -42,18 +45,18 @@ public class CreateMockLeaseTermAgreementPdf {
             fos = new FileOutputStream("mock-lease-term-agreement.pdf");
             fos.write(bytes);
             fos.close();
+            System.out.println("DONE!");
         } catch (Throwable e) {
             e.printStackTrace();
         } finally {
             IOUtils.closeQuietly(fos);
         }
-        System.out.println("DONE!");
     }
 
-    private static AgreementLegalTerm makeMockAgreementTerm(int randomLines) {
+    private static AgreementLegalTerm4Print makeMockAgreementTerm(int randomLines, List<ISignature> signatures,
+            List<AgreementLegalTermSignaturePlaceholder> signaturePlaceholders) {
         currentTermNo += 1;
-        AgreementLegalTerm term = EntityFactory.create(AgreementLegalTerm.class);
-        term.orderId().setValue(currentTermNo);
+        AgreementLegalTerm4Print term = EntityFactory.create(AgreementLegalTerm4Print.class);
         term.title().setValue("Term number + " + currentTermNo);
         StringBuilder bodyBuilder = new StringBuilder();
         bodyBuilder
@@ -62,7 +65,37 @@ public class CreateMockLeaseTermAgreementPdf {
             bodyBuilder.append("<br>afsdfasdflsdh aslfkjdshf aslfkjsdaf ;slfkj sdfa;lsdfkjsd f;asdlfkjsdf");
         }
         term.body().setValue(bodyBuilder.toString());
-        term.signatureFormat().setValue(SignatureFormat.AgreeBox);
+        if (signatures != null) {
+            term.signatures().addAll(signatures);
+        }
+        if (signaturePlaceholders != null) {
+            term.signaturePlaceholders().addAll(signaturePlaceholders);
+        }
         return term;
+    }
+
+    private static List<ISignature> makeMockSignatures(SignatureFormat format, int singaturesCount) {
+        List<ISignature> signatures = new LinkedList<ISignature>();
+        for (int i = 0; i < singaturesCount; ++i) {
+            ISignature signature = EntityFactory.create(ISignature.class);
+            signature.signatureFormat().setValue(format);
+            signature.signDate().setValue(new Date());
+            signature.ipAddress().setValue("192.168.0.100");
+            signature.fullName().setValue("Tenant Tenantovic " + i);
+            signature.initials().setValue("T T");
+            signature.agree().setValue(true);
+            signatures.add(signature);
+        }
+        return signatures;
+    }
+
+    private static List<AgreementLegalTermSignaturePlaceholder> makeMockSignaturePlaceholdedrs(int singaturesCount) {
+        List<AgreementLegalTermSignaturePlaceholder> placeholders = new LinkedList<AgreementLegalTermSignaturePlaceholder>();
+        for (int i = 0; i < singaturesCount; ++i) {
+            AgreementLegalTermSignaturePlaceholder placeholder = EntityFactory.create(AgreementLegalTermSignaturePlaceholder.class);
+            placeholder.tenantName().setValue("Vasya Pupkin #" + i);
+            placeholders.add(placeholder);
+        }
+        return placeholders;
     }
 }

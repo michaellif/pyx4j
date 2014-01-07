@@ -24,11 +24,9 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 
-import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
-
 public class LeaseTermAgreementPdfCreator {
 
-    public static byte[] createPdf(List<AgreementLegalTerm> agreementTerms, byte[] logo) {
+    public static byte[] createPdf(List<AgreementLegalTerm4Print> agreementTerms, byte[] logo) {
         Map<String, Object> params = new HashMap<String, Object>();
 
         params.put("landlordName", "SuperLandlord");
