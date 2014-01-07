@@ -47,6 +47,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -209,9 +210,12 @@ public class CustomerFacadeImpl implements CustomerFacade {
             break;
         }
 
-        Persistence.ensureRetrieve(leaseTermTenant.agreementSignatures(), AttachLevel.Attached);
-        if (!leaseTermTenant.agreementSignatures().hasValues()) {
-            behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
+        // Do not ask existing leases to Sign Agreement (Welcome wizard)
+        if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.Approved) {
+            Persistence.ensureRetrieve(leaseTermTenant.agreementSignatures(), AttachLevel.Attached);
+            if (!leaseTermTenant.agreementSignatures().hasValues()) {
+                behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
+            }
         }
 
         return behaviors;
