@@ -74,7 +74,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
 
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.TermsAndConditions());
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.PortalTerms.TermsAndConditions());
             }
         });
 

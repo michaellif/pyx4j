@@ -23,12 +23,13 @@ public interface PortalVistaTermsService extends IService {
 
     void getResidentPortalBillingPolicy(AsyncCallback<String> callback);
 
-    void getResidentPortalCcTermsAndConditions(AsyncCallback<String> callback);
+    void getResidentPortalPadPolicy(AsyncCallback<String> callback);
+
+    void getResidentPortalCcPolicy(AsyncCallback<String> callback);
 
     void getResidentPortalConvenienceFeeTerms(AsyncCallback<String> callback);
 
     void getResidentPortalPreAuthorizationTermsAndConditions(AsyncCallback<String> callback);
 
     void getProspectPortalTerms(AsyncCallback<String> callback);
-
 }

@@ -55,6 +55,6 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
 
     @Override
     public final Class<? extends Place> getPortalTermsPlace() {
-        return ResidentPortalSiteMap.TermsAndConditions.class;
+        return ResidentPortalSiteMap.PortalTerms.TermsAndConditions.class;
     }
 }

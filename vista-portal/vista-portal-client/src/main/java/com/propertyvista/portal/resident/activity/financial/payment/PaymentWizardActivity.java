@@ -32,8 +32,8 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentWizardView;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Financial.Payment;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.PortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
@@ -77,12 +77,17 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
 
     @Override
     public Class<? extends Place> getTermsOfUsePlace() {
-        return ResidentPortalSiteMap.TermsAndConditions.class;
+        return PortalTerms.TermsAndConditions.class;
     }
 
     @Override
     public Class<? extends Place> getBillingPolicyPlace() {
-        return ResidentPortalSiteMap.PadTermsAndConditions.class;
+        return PortalTerms.PadPolicy.class;
+    }
+
+    @Override
+    public Class<? extends Place> getConvenienceFeeTermsPlace() {
+        return PortalTerms.ConvenienceFeeTerms.class;
     }
 
     @Override
@@ -93,5 +98,10 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
     @Override
     public void showBillingPolicy() {
         Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getBillingPolicyPlace()), "_blank", null);
+    }
+
+    @Override
+    public void showConvenienceFeeTerms() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getConvenienceFeeTermsPlace()), "_blank", null);
     }
 }

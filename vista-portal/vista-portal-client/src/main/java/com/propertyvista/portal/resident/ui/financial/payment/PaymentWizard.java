@@ -53,6 +53,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
@@ -76,6 +77,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
@@ -100,6 +102,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
 
     private final Anchor billingPolicyAnchor = new Anchor(i18n.tr("Billing And Refund Policy"));
+
+    private final Anchor convenienceFeeTermsAnchor = new Anchor(i18n.tr("Service Fee Terms and Conditions"));
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
@@ -155,6 +159,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         if (this.presenter != null) {
             this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getTermsOfUsePlace()));
             billingPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getBillingPolicyPlace()));
+            convenienceFeeTermsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getConvenienceFeeTermsPlace()));
         }
     }
 
@@ -263,6 +268,32 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        convenienceFeeTermsAnchor.getElement().getStyle().setDisplay(Display.INLINE);
+        convenienceFeeTermsAnchor.getElement().getStyle().setPadding(0, Unit.PX);
+        convenienceFeeTermsAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+        convenienceFeeTermsAnchor.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.showConvenienceFeeTerms();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
+            }
+        });
+        panel.setBR(++row, 0, 1);
+
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature())).customLabel("").labelPosition(LabelPosition.hidden)
+                .contentWidth("250px").componentWidth("250px").build());
+        get(proto().convenienceFeeSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
+            @Override
+            public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
+                if (!value.agree().isBooleanTrue()) {
+                    return new ValidationError(component, i18n
+                            .tr("Please agree to all applicable Tems and Conditions and our Privacy Policy in order to submit your payment."));
+                }
+                return null;
+            }
+        });
+        panel.setWidget(++row, 0, convenienceFeeTermsAnchor);
 
         panel.setHR(++row, 0, 1);
 
@@ -392,6 +423,9 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().paymentMethod()).getValue().getStringView()));
         panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
 
+        get(proto().convenienceFeeSignature()).setVisible(false);
+        convenienceFeeTermsAnchor.setVisible(false);
+
         PaymentConvenienceFeeDTO inData = EntityFactory.create(PaymentConvenienceFeeDTO.class);
         inData.paymentMethod().set(get(proto().paymentMethod()).getValue());
         inData.amount().setValue(get(proto().amount()).getValue());
@@ -401,6 +435,9 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                 if (result != null) {
                     panel.add(createDecorator(i18n.tr("Service Fee:"), result.feePercentage().getStringView()));
                     panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
+
+                    get(proto().convenienceFeeSignature()).setVisible(true);
+                    convenienceFeeTermsAnchor.setVisible(true);
 
                     getValue().convenienceFee().setValue(result.feeAmount().getValue());
                     getValue().convenienceFeeReferenceNumber().setValue(result.transactionNumber().getValue());

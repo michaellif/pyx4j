@@ -27,20 +27,26 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
     public static class Registration extends AppPlace implements PublicPlace {
     }
 
+    public static class PortalTerms {
+
+        public static class TermsAndConditions extends AppPlace implements PublicPlace {
+        }
+
+        public static class PadPolicy extends AppPlace implements PublicPlace {
+        }
+
+        public static class CreditCardPolicy extends AppPlace implements PublicPlace {
+        }
+
+        public static class ConvenienceFeeTerms extends AppPlace implements PublicPlace {
+        }
+
+        public static class BillingPolicy extends AppPlace implements PublicPlace {
+        }
+    }
+
     @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")
     public static class LeaseContextSelection extends AppPlace {
-    }
-
-    public static class TermsAndConditions extends AppPlace implements PublicPlace {
-    }
-
-    public static class PadTermsAndConditions extends AppPlace implements PublicPlace {
-    }
-
-    public static class CreditCardTermsAndConditions extends AppPlace implements PublicPlace {
-    }
-
-    public static class BillingPolicy extends AppPlace implements PublicPlace {
     }
 
     public static class Dashboard extends AppPlace {

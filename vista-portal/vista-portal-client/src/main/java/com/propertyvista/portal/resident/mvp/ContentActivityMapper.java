@@ -66,6 +66,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordReset;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordResetRequest;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.LeaseContextSelection;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.PortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
@@ -183,12 +184,12 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof NotificationPlace) {
                         activity = new NotificationPageActivity((NotificationPlace) place);
 
-// Internals/Terms
-                        // @formatter:off
-                    } else if (place instanceof ResidentPortalSiteMap.BillingPolicy 
-                            || place instanceof ResidentPortalSiteMap.CreditCardTermsAndConditions
-                            || place instanceof ResidentPortalSiteMap.PadTermsAndConditions
-                            || place instanceof ResidentPortalSiteMap.TermsAndConditions) {
+// Internals/Terms: @formatter:off
+                    } else if (place instanceof PortalTerms.BillingPolicy 
+                            || place instanceof PortalTerms.CreditCardPolicy
+                            || place instanceof PortalTerms.ConvenienceFeeTerms
+                            || place instanceof PortalTerms.PadPolicy
+                            || place instanceof PortalTerms.TermsAndConditions) {
                         activity = new ResidentTermsActivity(place);
                  // @formatter:on
 

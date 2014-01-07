@@ -39,8 +39,12 @@ public interface PaymentWizardView extends IWizardView<PaymentDTO> {
 
         Class<? extends Place> getBillingPolicyPlace();
 
+        Class<? extends Place> getConvenienceFeeTermsPlace();
+
         void showTermsOfUse();
 
         void showBillingPolicy();
+
+        void showConvenienceFeeTerms();
     }
 }
