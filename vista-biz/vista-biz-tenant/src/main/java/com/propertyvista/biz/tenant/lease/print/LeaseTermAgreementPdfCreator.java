@@ -14,7 +14,7 @@
 package com.propertyvista.biz.tenant.lease.print;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 import com.sun.xml.messaging.saaj.util.ByteInputStream;
@@ -26,18 +26,20 @@ import com.pyx4j.entity.report.JasperReportProcessor;
 
 public class LeaseTermAgreementPdfCreator {
 
-    public static byte[] createPdf(List<AgreementLegalTerm4Print> agreementTerms, byte[] logo) {
+    public static byte[] createPdf(LeaseAgreementData agreementData) {
         Map<String, Object> params = new HashMap<String, Object>();
 
-        params.put("landlordName", "SuperLandlord");
-        params.put("landlordAddress", "5935 Airport Road Suite 600, Mississauga, ON. L4V 1W5");
-        if (logo != null) {
-            params.put("landlordLogo", new ByteInputStream(logo, logo.length));
+        params.put("landlordName", agreementData.landlordName().getValue());
+        params.put("landlordAddress", agreementData.landlordAddress().getValue());
+        if (agreementData.landlordLogo().getValue() != null) {
+            params.put("landlordLogo", new ByteInputStream(agreementData.landlordLogo().getValue(), agreementData.landlordLogo().getValue().length));
         }
+
+        params.put("applicants", agreementData.applicants());
 
         ByteOutputStream bos = new ByteOutputStream();
         JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreator.class.getPackage().getName() + ".LeaseTermAgreement",
-                agreementTerms, params), JasperFileFormat.PDF, bos);
+                new LinkedList<AgreementLegalTerm4Print>(agreementData.terms()), params), JasperFileFormat.PDF, bos);
         return bos.getBytes();
     }
 }

@@ -29,16 +29,21 @@ public class CreateMockLeaseTermAgreementPdf {
     private static int currentTermNo = 0;
 
     public static void main(String[] args) throws IOException {
-        LinkedList<AgreementLegalTerm4Print> terms = new LinkedList<AgreementLegalTerm4Print>();
+        LeaseAgreementData leaseAgreementData = EntityFactory.create(LeaseAgreementData.class);
+        leaseAgreementData.landlordName().setValue("SuperLandlord");
+        leaseAgreementData.landlordAddress().setValue("5935 Airport Road Suite 600, Mississauga, ON. L4V 1W5");
+        leaseAgreementData.landlordLogo().setValue(
+                org.apache.poi.util.IOUtils.toByteArray(CreateMockLeaseTermAgreementPdf.class.getResourceAsStream("logo.png")));
 
-        byte[] logo = org.apache.poi.util.IOUtils.toByteArray(CreateMockLeaseTermAgreementPdf.class.getResourceAsStream("logo.png"));
+        leaseAgreementData.applicants().add(makeMockApplicant("Vasya Petechkin"));
+        leaseAgreementData.applicants().add(makeMockApplicant("Petya Vasechkin"));
 
-        terms.add(makeMockAgreementTerm(5, makeMockSignatures(SignatureFormat.FullName, 2), makeMockSignaturePlaceholdedrs(2)));
-        terms.add(makeMockAgreementTerm(15, makeMockSignatures(SignatureFormat.Initials, 2), makeMockSignaturePlaceholdedrs(4)));
-        terms.add(makeMockAgreementTerm(10, makeMockSignatures(SignatureFormat.AgreeBoxAndFullName, 2), null));
-        terms.add(makeMockAgreementTerm(10, null, makeMockSignaturePlaceholdedrs(3)));
+        leaseAgreementData.terms().add(makeMockAgreementTerm(5, makeMockSignatures(SignatureFormat.FullName, 2), makeMockSignaturePlaceholdedrs(2)));
+        leaseAgreementData.terms().add(makeMockAgreementTerm(15, makeMockSignatures(SignatureFormat.Initials, 2), makeMockSignaturePlaceholdedrs(4)));
+        leaseAgreementData.terms().add(makeMockAgreementTerm(10, makeMockSignatures(SignatureFormat.AgreeBoxAndFullName, 2), null));
+        leaseAgreementData.terms().add(makeMockAgreementTerm(10, null, makeMockSignaturePlaceholdedrs(3)));
 
-        byte[] bytes = LeaseTermAgreementPdfCreator.createPdf(terms, logo);
+        byte[] bytes = LeaseTermAgreementPdfCreator.createPdf(leaseAgreementData);
 
         FileOutputStream fos = null;
         try {
@@ -51,6 +56,12 @@ public class CreateMockLeaseTermAgreementPdf {
         } finally {
             IOUtils.closeQuietly(fos);
         }
+    }
+
+    private static AgreementLegalTermTenant makeMockApplicant(String fullName) {
+        AgreementLegalTermTenant tenant = EntityFactory.create(AgreementLegalTermTenant.class);
+        tenant.fullName().setValue(fullName);
+        return tenant;
     }
 
     private static AgreementLegalTerm4Print makeMockAgreementTerm(int randomLines, List<ISignature> signatures,

@@ -54,16 +54,12 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
             @Override
             public Void execute() {
                 try {
+                    LeaseAgreementData leaseAgreementData = EntityFactory.create(LeaseAgreementData.class);
                     Persistence.service().retrieve(leaseTerm.version().agreementLegalTerms());
-                    LinkedList<AgreementLegalTerm4Print> terms = new LinkedList<AgreementLegalTerm4Print>();
-                    terms.addAll(makeTermsForPrint(leaseTerm));
+                    leaseAgreementData.terms().addAll(makeTermsForPrint(leaseTerm));
 
-                    byte[] landlordLogo = null;
-
-                    byte[] agreementPdf = LeaseTermAgreementPdfCreator.createPdf(terms, landlordLogo);
-
+                    byte[] agreementPdf = LeaseTermAgreementPdfCreator.createPdf(leaseAgreementData);
                     saveBlob(agreementPdf);
-
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }

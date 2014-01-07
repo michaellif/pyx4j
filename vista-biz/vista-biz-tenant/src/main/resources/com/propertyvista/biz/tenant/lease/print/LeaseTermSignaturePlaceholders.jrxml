@@ -27,7 +27,7 @@
 		<band height="19" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="194" height="19"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tenantName}]]></textFieldExpression>
 			</textField>
 			<line>
