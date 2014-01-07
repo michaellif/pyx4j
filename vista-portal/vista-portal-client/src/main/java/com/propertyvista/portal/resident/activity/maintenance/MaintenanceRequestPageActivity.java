@@ -20,7 +20,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageView;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageView.MaintenanceRequestPagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -35,13 +34,13 @@ public class MaintenanceRequestPageActivity extends AbstractEditorActivity<Maint
     }
 
     @Override
-    public void rateRequest(SurveyResponse rate) {
+    public void rateRequest(Integer rate) {
         ((MaintenanceRequestCrudService) getService()).rateMaintenanceRequest(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                edit();
+                retreive();
             }
-        }, getEntityId(), rate.rating().getValue());
+        }, getEntityId(), rate);
     }
 
     @Override

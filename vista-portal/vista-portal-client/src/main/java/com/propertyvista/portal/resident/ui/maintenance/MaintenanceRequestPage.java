@@ -14,6 +14,8 @@
 package com.propertyvista.portal.resident.ui.maintenance;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,6 +31,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.RateIt;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.PrintUtils;
@@ -55,6 +58,10 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     private final Button btnPrint;
 
     private BasicFlexFormPanel imagePanel;
+
+    private BasicFlexFormPanel scheduledPanel;
+
+    private RateIt rateIt;
 
     public MaintenanceRequestPage(MaintenanceRequestPageViewImpl view) {
         super(MaintenanceRequestDTO.class, view, "Maintenance Request", ThemeColor.contrast5);
@@ -134,14 +141,30 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         imagePanel.setWidget(++innerRow, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
         mainPanel.setWidget(++row, 0, imagePanel);
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
+        scheduledPanel = new TwoColumnFlexFormPanel();
+        innerRow = -1;
+        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate1()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime1()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
+        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate1()), 100).build());
+        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime1()), 100).build());
+        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 100).build());
+        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
+        mainPanel.setWidget(++row, 0, scheduledPanel);
+
+        rateIt = new RateIt(5);
+        mainPanel.setWidget(++row, 0, rateIt);
 
         mainPanel.setBR(++row, 0, 1);
+
+        rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Integer> event) {
+                if (event.getValue() != null) {
+                    ((MaintenanceRequestPagePresenter) getView().getPresenter()).rateRequest(event.getValue());
+                }
+
+            }
+        });
 
         return mainPanel;
     }
@@ -165,5 +188,10 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
             return;
         }
         imagePanel.setVisible(mr.pictures() != null && !mr.pictures().isNull() && !mr.pictures().isEmpty());
+        rateIt.setVisible(StatusPhase.closed().contains(mr.status().phase().getValue()));
+        scheduledPanel.setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+        if (!mr.surveyResponse().isNull() && !mr.surveyResponse().isEmpty() && !mr.surveyResponse().rating().isNull()) {
+            rateIt.setRating(mr.surveyResponse().rating().getValue());
+        }
     }
 }

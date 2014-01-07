@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
-import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.shared.ui.IEditorView;
 
@@ -21,7 +20,7 @@ public interface MaintenanceRequestPageView extends IEditorView<MaintenanceReque
 
     public interface MaintenanceRequestPagePresenter extends IEditorPresenter<MaintenanceRequestDTO> {
 
-        void rateRequest(SurveyResponse rate);
+        void rateRequest(Integer rate);
 
         void cancelRequest();
 
