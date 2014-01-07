@@ -286,7 +286,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         get(proto().convenienceFeeSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
             public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
-                if (!value.agree().isBooleanTrue()) {
+                if (value != null && !value.agree().isBooleanTrue()) {
                     return new ValidationError(component, i18n
                             .tr("Please agree to all applicable Tems and Conditions and our Privacy Policy in order to submit your payment."));
                 }

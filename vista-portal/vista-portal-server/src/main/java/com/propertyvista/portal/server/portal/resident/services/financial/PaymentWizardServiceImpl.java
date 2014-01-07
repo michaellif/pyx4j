@@ -26,6 +26,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -100,6 +101,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         }
 
         dto.currentAutoPayments().addAll(BillingServiceImpl.retrieveCurrentAutoPayments(lease));
+
+        dto.convenienceFeeSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
 
         return dto;
     }
