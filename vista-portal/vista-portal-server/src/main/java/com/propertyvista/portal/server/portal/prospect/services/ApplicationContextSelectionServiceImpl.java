@@ -54,7 +54,7 @@ public class ApplicationContextSelectionServiceImpl implements ApplicationContex
 
     @Override
     public void setApplicationContext(AsyncCallback<AuthenticationResponse> callback, OnlineApplication applicationStub) {
-        callback.onSuccess(new ProspectAuthenticationServiceImpl().reAuthenticate(applicationStub));
+        callback.onSuccess(new ProspectAuthenticationServiceImpl().reAuthorize(applicationStub));
     }
 
 }

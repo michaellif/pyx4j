@@ -66,7 +66,6 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
     @Override
     public void setLeaseContext() {
         Lease leaseIdStub = view.getSelectedLeaseIdStub();
-
         if (leaseIdStub != null) {
             service.setLeaseContext(new DefaultAsyncCallback<AuthenticationResponse>() {
                 @Override

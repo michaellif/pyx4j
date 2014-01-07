@@ -369,11 +369,12 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         return createAuthenticationResponse(sessionToken);
     }
 
-    public final AuthenticationResponse reAuthenticate(IEntity additionalConditions) {
+    public final AuthenticationResponse reAuthorize(IEntity additionalConditions) {
         E credentials = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
         return authenticate(credentials, additionalConditions);
     }
 
+    //TODO  Change the implementation to use Authorization functions
     protected String beginSession(U user, E credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         // Only default ApplicationBehavior assigned is error. User have no roles
         if (behaviors.isEmpty() || ((behaviors.size() == 2) && (behaviors.contains(getApplicationBehavior())) && (behaviors.contains(getVistaApplication())))) {

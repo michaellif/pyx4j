@@ -53,7 +53,7 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
 
     @Override
     public void setLeaseContext(AsyncCallback<AuthenticationResponse> callback, Lease leaseStub) {
-        callback.onSuccess(new ResidentAuthenticationServiceImpl().reAuthenticate(leaseStub));
+        callback.onSuccess(new ResidentAuthenticationServiceImpl().reAuthorize(leaseStub));
     }
 
 }

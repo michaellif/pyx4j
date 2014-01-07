@@ -49,7 +49,7 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         this.credentialClass = credentialClass;
     }
 
-    protected abstract AuthenticationResponse authenticate(E credentials);
+    protected abstract AuthenticationResponse authorize(E credentials);
 
     @Override
     public void obtainPasswordResetQuestion(AsyncCallback<PasswordResetQuestion> callback) {
@@ -84,7 +84,7 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         Persistence.service().commit();
         log.info("password changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
-        callback.onSuccess(authenticate(credentials));
+        callback.onSuccess(authorize(credentials));
     }
 
 }

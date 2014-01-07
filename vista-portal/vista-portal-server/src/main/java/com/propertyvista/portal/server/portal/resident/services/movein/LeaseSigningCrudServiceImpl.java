@@ -20,6 +20,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
@@ -29,6 +31,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.portal.server.portal.resident.services.ResidentAuthenticationServiceImpl;
 
 public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
 
@@ -61,6 +64,9 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         agreementSignatures.legalTermsSignatures().addAll(editableEntity.legalTerms());
         Persistence.service().persist(agreementSignatures);
         Persistence.service().commit();
+
+        new ResidentAuthenticationServiceImpl().reAuthorize(ResidentPortalContext.getLeaseIdStub());
+        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
         callback.onSuccess(null);
     }
 

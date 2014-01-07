@@ -26,7 +26,7 @@ public class AdminPasswordResetServiceImpl extends VistaPasswordResetServiceImpl
     }
 
     @Override
-    protected AuthenticationResponse authenticate(OperationsUserCredential credentials) {
+    protected AuthenticationResponse authorize(OperationsUserCredential credentials) {
         return new OperationsAuthenticationServiceImpl().authenticate(credentials, null);
     }
 
