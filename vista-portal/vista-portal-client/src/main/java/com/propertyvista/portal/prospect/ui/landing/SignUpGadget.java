@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.prospect.ui.landing;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -38,15 +38,16 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
         setActionsToolbar(new SignUpToolbar());
 
         FlowPanel contentPanel = new FlowPanel();
+        contentPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         contentPanel
                 .add(new HTML(
-                        "TODO!!!!!!! Introduction ‘welcome’ text goes here explaining the process. Highlight the fact that after creating an account, the user can log back in to continue later if they choose to. It’s also recommended to highlight the secure factor of this online (or in-office) application (vs. filling out paperwork)."));
+                        i18n.tr("<b>Are you ready?</b><div>We have moved the entire application process online."
+                                + " You now have the ability to create an online application online in a safe and secure environment that just takes minutes to complete.</div>")));
 
-        HorizontalPanel imagesPanel = new HorizontalPanel();
-        imagesPanel.setWidth("100%");
-
-        contentPanel.add(imagesPanel);
+        contentPanel.add(new HTML(i18n
+                .tr("<br/><b>Security</b><div>This site is protected by above bank-grade security. Your information is kept safe and secure at all times."
+                        + " Please ensure you are using a newer browser to ensure the highest security protocols are met.</div>")));
 
         setContent(contentPanel);
     }
@@ -61,7 +62,7 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
 
         public SignUpToolbar() {
 
-            signUpButton = new Button(i18n.tr("CREATE ACCOUNT"), new Command() {
+            signUpButton = new Button(i18n.tr("START APPLICATION"), new Command() {
                 @Override
                 public void execute() {
                     presenter.signUp();

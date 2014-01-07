@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
-import com.google.gwt.place.shared.Place;
-
 import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
@@ -26,9 +24,6 @@ public interface SignUpView extends IsView {
 
         void signUp(ProspectSignUpDTO value);
 
-        void showVistaTerms();
-
-        Class<? extends Place> getPortalTermsPlace();
     }
 
     void setPresenter(SignUpPresenter presenter);

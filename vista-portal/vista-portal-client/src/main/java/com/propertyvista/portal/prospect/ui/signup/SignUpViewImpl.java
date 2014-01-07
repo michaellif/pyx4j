@@ -66,7 +66,7 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
 
     @Override
     public void setPresenter(SignUpPresenter presenter) {
-        gadget.setPresenter(presenter);
+
     }
 
     @Override

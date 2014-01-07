@@ -13,19 +13,15 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.WhiteSpace;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -41,17 +37,17 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
-import com.pyx4j.site.rpc.AppPlaceInfo;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
@@ -62,53 +58,56 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
     private final SignUpForm signupForm;
 
-    private final Anchor termsAndConditionsAnchor;
-
     SignUpGadget(SignUpViewImpl view) {
-        super(view, null, i18n.tr("Create Your Account"), ThemeColor.contrast2, 1);
+        super(view, null, i18n.tr("Create an Account to Begin"), ThemeColor.contrast2, 1);
         setActionsToolbar(new SignUpToolbar());
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        signupForm = new SignUpForm();
-        signupForm.initContent();
-        contentPanel.add(signupForm);
+        {
+            FlowPanel instructionsPanel = new FlowPanel();
+            instructionsPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+            instructionsPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
+            instructionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        FlowPanel loginTermsLinkPanel = new FlowPanel();
-        loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+            instructionsPanel.add(new HTML(i18n.tr("<b>Time to Complete</b><div>The online rental application will guide you through several steps."
+                    + " The process takes approximately 20 minutes to complete. Required fields are indicated with an (*).</div><br/>")));
 
-        HTML termsPrefix = new HTML(i18n.tr("By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to our "));
-        termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
-        loginTermsLinkPanel.add(termsPrefix);
+            instructionsPanel.add(new HTML(i18n
+                    .tr("<b> Don't Worry!</b><div>If you need to step away from your computer to gather information, feel free to log out."
+                            + " Upon returning, log in and you will find all your information in the same place you left it.</div><br/>")));
 
-        termsAndConditionsAnchor = new Anchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"));
-        termsAndConditionsAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        termsAndConditionsAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        termsAndConditionsAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showVistaTerms();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
-        loginTermsLinkPanel.add(termsAndConditionsAnchor);
+            contentPanel.add(instructionsPanel);
+        }
 
-        HTML suffixPrefix = new HTML(".");
-        suffixPrefix.getElement().getStyle().setDisplay(Display.INLINE);
-        loginTermsLinkPanel.add(suffixPrefix);
-        loginTermsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
-        loginTermsLinkPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        {
+            signupForm = new SignUpForm();
+            signupForm.initContent();
+            contentPanel.add(signupForm);
+        }
 
-        contentPanel.add(loginTermsLinkPanel);
+        {
+            FlowPanel loginTermsLinkPanel = new FlowPanel();
+            loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+            loginTermsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
+            loginTermsLinkPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+            loginTermsLinkPanel.add(new InlineHTML(i18n.tr("By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to the ")));
+
+            loginTermsLinkPanel.add(new TermsAnchor(i18n.tr("GENERAL RENTAL AND OCCUPANCY CRITERIA GUIDELINES"),
+                    ResidentPortalSiteMap.PortalTerms.TermsAndConditions.class));
+
+            loginTermsLinkPanel.add(new InlineHTML(i18n.tr(" and ")));
+
+            loginTermsLinkPanel.add(new TermsAnchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"), ResidentPortalSiteMap.PortalTerms.TermsAndConditions.class));
+
+            loginTermsLinkPanel.add(new InlineHTML("."));
+
+            contentPanel.add(loginTermsLinkPanel);
+        }
 
         setContent(contentPanel);
-    }
-
-    public void setPresenter(SignUpPresenter presenter) {
-        this.presenter = presenter;
-        this.termsAndConditionsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPortalTermsPlace()));
     }
 
     public void showValidationError(EntityValidationException caught) {
