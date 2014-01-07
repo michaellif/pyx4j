@@ -86,7 +86,7 @@ public class Lifecycle {
                             Set<Behavior> assignedBehaviours = SecurityController.instance().getAllBehaviors(behaviours);
                             if (!EqualsHelper.equals(assignedBehaviours, visit.getAcl().getBehaviours())) {
                                 log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), assignedBehaviours);
-                                visit.beginSession(visit.getUserVisit(), SecurityController.instance().authenticate(behaviours));
+                                visit.beginSession(visit.getUserVisit(), SecurityController.instance().authorize(behaviours));
                                 visit.setAclChanged(true);
                                 Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
                             } else {
@@ -176,17 +176,18 @@ public class Lifecycle {
         //Context.getVisit().beginAnonymousSession(JAASHelper.anonymousLogin());
     }
 
-    public static void changeSession(Behavior... behaviour) {
-        changeSession(Arrays.asList(behaviour));
+    public static void changeSessionAuthorization(Behavior... behaviour) {
+        changeSessionAuthorization(Arrays.asList(behaviour));
     }
 
-    public static void changeSession(Collection<Behavior> newBehaviours) {
+    public static void changeSessionAuthorization(Collection<Behavior> newBehaviours) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(newBehaviours);
         beginSession(Context.getVisit().getUserVisit(), behaviors);
         Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
     }
 
+    //TODO  Change the implementation to use Authorization functions
     public static String beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
         Visit currentVisit = Context.getVisit();
         if ((currentVisit != null) && (userVisit != null) && (currentVisit.isUserLoggedIn())
@@ -216,7 +217,7 @@ public class Lifecycle {
             }
             beginSession(newSession);
         }
-        Context.getVisit().beginSession(userVisit, SecurityController.instance().authenticate(behaviours));
+        Context.getVisit().beginSession(userVisit, SecurityController.instance().authorize(behaviours));
         Context.getRequest().removeAttribute(END_SESSION_ATR);
         return Context.getVisit().getSessionToken();
     }

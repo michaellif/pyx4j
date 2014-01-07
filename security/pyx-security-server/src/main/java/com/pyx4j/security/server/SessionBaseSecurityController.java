@@ -51,7 +51,7 @@ public class SessionBaseSecurityController extends SecurityController {
     }
 
     @Override
-    public Acl authenticate(Set<Behavior> behaviors) {
+    public Acl authorize(Set<Behavior> behaviors) {
         if (debugMode) {
             createAclCreator();
         }

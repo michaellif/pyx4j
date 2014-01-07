@@ -55,7 +55,7 @@ public abstract class SecurityController {
 
     public abstract Acl getAcl();
 
-    public abstract Acl authenticate(Set<Behavior> behaviours);
+    public abstract Acl authorize(Set<Behavior> behaviours);
 
     public abstract Set<Behavior> getAllBehaviors(Set<Behavior> behaviors);
 

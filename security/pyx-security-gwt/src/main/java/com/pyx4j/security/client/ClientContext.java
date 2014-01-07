@@ -274,7 +274,7 @@ public class ClientContext {
             }
             log.info("Authenticated {}", userVisit);
             attributes.clear();
-            ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
+            ClientSecurityController.instance().authorize(authenticationResponse.getBehaviors());
             ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
             if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
                 RPCManager.enableAppEngineUsageStats();
@@ -301,7 +301,7 @@ public class ClientContext {
             Cookies.removeCookie(serverSession.getSessionCookieName());
         }
         serverSession = null;
-        ClientSecurityController.instance().authenticate(null);
+        ClientSecurityController.instance().authorize(null);
         ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, null));
     }
 

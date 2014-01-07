@@ -119,7 +119,7 @@ public class ClientSecurityController extends SecurityController {
     }
 
     @Override
-    public Acl authenticate(Set<Behavior> behaviors) {
+    public Acl authorize(Set<Behavior> behaviors) {
         if (behaviors == null) {
             behaviors = Collections.emptySet();
         } else {
