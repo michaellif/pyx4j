@@ -62,7 +62,6 @@ public class WindowsTheme extends Theme {
         initButtonStyles();
         initTooltipStyle();
         initTreeStyle();
-        initCheckBoxStyle();
         initDatePickerStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
@@ -349,15 +348,6 @@ public class WindowsTheme extends Theme {
 
         style = new Style(".gwt-TreeItem-selected");
         style.addProperty("background", ThemeColor.contrast1);
-        addStyle(style);
-    }
-
-    protected void initCheckBoxStyle() {
-        Style style = new Style(CSSClass.pyx4j_CheckBox);
-        style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-
         addStyle(style);
     }
 

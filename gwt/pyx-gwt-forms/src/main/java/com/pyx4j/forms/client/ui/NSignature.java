@@ -29,7 +29,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.InlineHTML;
 
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
@@ -191,6 +190,8 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
         private final Anchor checkBoxAnchor;
 
         public SignaturePanel() {
+
+            setStyleName(CComponentTheme.StyleName.Signature.name());
 
             checkBox = new CheckBox(getCComponent().getCheckBoxText() + " ");
             add(checkBox);

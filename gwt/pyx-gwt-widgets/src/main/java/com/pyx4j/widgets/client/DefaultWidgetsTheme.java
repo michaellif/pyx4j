@@ -39,6 +39,8 @@ public class DefaultWidgetsTheme extends Theme {
 
         Label,
 
+        CheckBox,
+
         Anchor,
 
         RateIt, RateItBar,
@@ -76,6 +78,7 @@ public class DefaultWidgetsTheme extends Theme {
         initListBoxStyle();
         initLabelStyle();
         initButtonStyle();
+        initCheckBoxStyle();
         initToolbarStyle();
         initAnchorStyle();
         initStatusBarStyle();
@@ -137,6 +140,12 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
+    }
+
+    protected void initCheckBoxStyle() {
+        Style style = new Style(".", StyleName.CheckBox, " label");
+        style.addProperty("padding-left", "4px");
+        addStyle(style);
     }
 
     protected void initListBoxStyle() {

@@ -101,7 +101,6 @@ public class TesterTheme extends Theme {
         initButtonStyles();
         initTooltipStyle();
         initTreeStyle();
-        initCheckBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initPhotoalbomStyle();
@@ -557,11 +556,6 @@ public class TesterTheme extends Theme {
 
         style = new Style(".gwt-TreeItem-selected");
         style.addProperty("background", ThemeColor.contrast1);
-        addStyle(style);
-    }
-
-    protected void initCheckBoxStyle() {
-        Style style = new Style(CSSClass.pyx4j_CheckBox);
         addStyle(style);
     }
 

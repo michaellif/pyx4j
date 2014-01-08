@@ -45,9 +45,6 @@ public enum CSSClass {
     //Tooltip
     pyx4j_Tooltip, pyx4j_Tooltip_Shadow,
 
-    //CheckBox
-    pyx4j_CheckBox,
-
     //Hyperlink
     pyx4j_Reference,
 

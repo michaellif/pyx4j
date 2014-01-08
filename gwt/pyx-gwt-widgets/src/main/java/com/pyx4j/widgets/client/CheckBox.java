@@ -34,7 +34,7 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements 
 
     public CheckBox() {
         super();
-        setStyleName(CSSClass.pyx4j_CheckBox.name());
+        setStyleName(DefaultWidgetsTheme.StyleName.CheckBox.name());
     }
 
     public CheckBox(String label) {
