@@ -57,6 +57,7 @@ import com.propertyvista.portal.resident.activity.services.insurance.TenantSureO
 import com.propertyvista.portal.resident.activity.services.insurance.TenantSurePageActivity;
 import com.propertyvista.portal.resident.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateConfirmationActivity;
 import com.propertyvista.portal.resident.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateWizardActivity;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Login;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.LoginWithToken;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
@@ -189,7 +190,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             || place instanceof ResidentPortalTerms.CreditCardPolicy
                             || place instanceof ResidentPortalTerms.ConvenienceFeeTerms
                             || place instanceof ResidentPortalTerms.PadPolicy
-                            || place instanceof ResidentPortalTerms.ResidentTermsAndConditions) {
+                            || place instanceof PortalSiteMap.TermsAndConditions) {
                         activity = new ResidentTermsActivity(place);
                  // @formatter:on
 

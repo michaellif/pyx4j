@@ -32,6 +32,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentWizardView;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Financial.Payment;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
@@ -77,7 +78,7 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
 
     @Override
     public Class<? extends Place> getTermsOfUsePlace() {
-        return ResidentPortalTerms.ResidentTermsAndConditions.class;
+        return PortalSiteMap.TermsAndConditions.class;
     }
 
     @Override

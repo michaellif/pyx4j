@@ -13,13 +13,13 @@
  */
 package com.propertyvista.portal.resident.ui;
 
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractFooterView;
 
 public class FooterViewImpl extends AbstractFooterView implements FooterView {
 
     public FooterViewImpl() {
-        super(new ResidentPortalSiteMap.ResidentPortalTerms.ResidentTermsAndConditions());
+        super(new PortalSiteMap.TermsAndConditions());
     }
 
 }

@@ -41,7 +41,7 @@ public class ProspectTermsActivity extends AbstractActivity {
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
         if (place instanceof ProspectPortalSiteMap.ProspectPortalTerms.ProspectTermsAndConditions) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalTerms(new DefaultAsyncCallback<String>() {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);

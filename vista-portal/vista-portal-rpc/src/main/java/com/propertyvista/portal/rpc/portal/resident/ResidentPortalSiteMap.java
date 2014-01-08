@@ -29,9 +29,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
     public static class ResidentPortalTerms {
 
-        public static class ResidentTermsAndConditions extends AppPlace implements PublicPlace {
-        }
-
         public static class PadPolicy extends AppPlace implements PublicPlace {
         }
 

@@ -19,7 +19,9 @@ import com.pyx4j.rpc.shared.IService;
 
 public interface PortalVistaTermsService extends IService {
 
-    void getResidentPortalTerms(AsyncCallback<String> callback);
+    void getPortalTerms(AsyncCallback<String> callback);
+
+    // ============== Resident ==============
 
     void getResidentPortalBillingPolicy(AsyncCallback<String> callback);
 
@@ -31,5 +33,10 @@ public interface PortalVistaTermsService extends IService {
 
     void getResidentPortalPreAuthorizationTermsAndConditions(AsyncCallback<String> callback);
 
-    void getProspectPortalTerms(AsyncCallback<String> callback);
+    // ============== Prospect ==============
+
+    void getProspectApplicantTerms(AsyncCallback<String> callback);
+
+    void getProspectRentalCriteriaGuidelines(AsyncCallback<String> callback);
+
 }

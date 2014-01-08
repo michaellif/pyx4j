@@ -29,7 +29,7 @@ import com.propertyvista.server.TaskRunner;
 public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
-    public void getResidentPortalTerms(AsyncCallback<String> callback) {
+    public void getPortalTerms(AsyncCallback<String> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantPropertyVistaService);
     }
 
@@ -59,8 +59,14 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
     }
 
     @Override
-    public void getProspectPortalTerms(AsyncCallback<String> callback) {
+    public void getProspectApplicantTerms(AsyncCallback<String> callback) {
         //TODO implement Prospect Terms
+        getVistaTerms(callback, VistaTerms.Target.ProspectPropertyVistaService);
+    }
+
+    @Override
+    public void getProspectRentalCriteriaGuidelines(AsyncCallback<String> callback) {
+        // TODO Auto-generated method stub
         getVistaTerms(callback, VistaTerms.Target.ProspectPropertyVistaService);
     }
 

@@ -69,4 +69,6 @@ public class PortalSiteMap implements SiteMap {
 
     }
 
+    public static class TermsAndConditions extends AppPlace implements PublicPlace {
+    }
 }

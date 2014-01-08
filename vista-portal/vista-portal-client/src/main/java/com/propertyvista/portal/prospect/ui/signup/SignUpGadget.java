@@ -40,6 +40,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
@@ -96,11 +97,12 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             loginTermsLinkPanel.add(new InlineHTML(i18n.tr("By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to the ")));
 
             loginTermsLinkPanel.add(new TermsAnchor(i18n.tr("GENERAL RENTAL AND OCCUPANCY CRITERIA GUIDELINES"),
-                    ResidentPortalSiteMap.ResidentPortalTerms.ResidentTermsAndConditions.class));
+                    ProspectPortalSiteMap.ProspectPortalTerms.RentalCriteriaGuidelines.class));
 
             loginTermsLinkPanel.add(new InlineHTML(i18n.tr(" and ")));
 
-            loginTermsLinkPanel.add(new TermsAnchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"), ResidentPortalSiteMap.ResidentPortalTerms.ResidentTermsAndConditions.class));
+            loginTermsLinkPanel.add(new TermsAnchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"),
+                    ProspectPortalSiteMap.ProspectPortalTerms.ProspectTermsAndConditions.class));
 
             loginTermsLinkPanel.add(new InlineHTML("."));
 

@@ -32,6 +32,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.signup.SignUpView;
 import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
@@ -109,6 +110,6 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
 
     @Override
     public final Class<? extends Place> getPortalTermsPlace() {
-        return ResidentPortalSiteMap.ResidentPortalTerms.ResidentTermsAndConditions.class;
+        return PortalSiteMap.TermsAndConditions.class;
     }
 }

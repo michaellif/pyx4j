@@ -39,6 +39,8 @@ import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
@@ -70,13 +72,7 @@ public class AbstractFooterView extends FlowPanel {
         actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         actionsPanel.setWidth("50%");
 
-        Anchor termsAnchor = new Anchor(i18n.tr("Terms And Conditions"), new Command() {
-
-            @Override
-            public void execute() {
-                AppSite.getPlaceController().goTo(termsPlace);
-            }
-        });
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Terms And Conditions"), PortalSiteMap.TermsAndConditions.class);
 
         SimplePanel linksPanel = new SimplePanel(termsAnchor);
         linksPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);

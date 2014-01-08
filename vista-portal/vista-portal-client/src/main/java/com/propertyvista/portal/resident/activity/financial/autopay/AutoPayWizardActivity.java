@@ -32,6 +32,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ui.financial.autopay.AutoPayWizardView;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
@@ -92,7 +93,7 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
 
     @Override
     public Class<? extends Place> getTermsOfUsePlace() {
-        return ResidentPortalTerms.ResidentTermsAndConditions.class;
+        return PortalSiteMap.TermsAndConditions.class;
     }
 
     @Override
