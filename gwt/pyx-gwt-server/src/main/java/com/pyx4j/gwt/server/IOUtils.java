@@ -131,7 +131,10 @@ public class IOUtils {
         String line;
         try {
             while ((line = br.readLine()) != null) {
-                sb.append(line).append("\n");
+                if (sb.length() != 0) {
+                    sb.append("\n");
+                }
+                sb.append(line);
             }
         } finally {
             br.close();
