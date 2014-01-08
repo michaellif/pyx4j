@@ -43,10 +43,10 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html");
         createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html");
 
-        createTerms(Target.TenantPortalTermsAndConditions, "TenantVistaTerms.html");
+        createTerms(Target.TenantPortalTermsAndConditions, "TenantPortalTermsAndConditions.html");
         createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html");
-        createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "Pre-AuthorizationLegalPAD.html");
-        createTerms(Target.TenantPreAuthorizedPaymentCreditCardTerms, "Pre-AuthorizationLegalCC.html");
+        createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "TenantPreAuthorizedPaymentECheckTerms.html");
+        createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html");
         createTerms(Target.TenantPaymentConvenienceFeeTerms, "TenantPaymentConvenienceFeeTerms.html");
 
         createTerms(Target.ApplicantTermsAndConditions, "ApplicantTermsAndConditions.html");

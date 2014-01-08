@@ -192,7 +192,7 @@ public class OperationsSiteMap implements SiteMap {
         @PlaceProperties(caption = "Tenant Card Pre-Authorized Payment Terms")
         public static class TenantPreAuthorizedPaymentCreditCard extends VistaTermsAccess {
             public TenantPreAuthorizedPaymentCreditCard() {
-                super(Target.TenantPreAuthorizedPaymentCreditCardTerms);
+                super(Target.TenantPreAuthorizedPaymentCardTerms);
             }
         }
 
