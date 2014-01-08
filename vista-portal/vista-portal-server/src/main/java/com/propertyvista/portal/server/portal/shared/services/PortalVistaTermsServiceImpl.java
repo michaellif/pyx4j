@@ -54,6 +54,11 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
     }
 
     @Override
+    public void getTenantSurePreAuthorizedPaymentsAgreement(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantSurePreAuthorizedPaymentsAgreement);
+    }
+
+    @Override
     public void getProspectApplicantTerms(AsyncCallback<String> callback) {
         getVistaTerms(callback, VistaTerms.Target.ApplicantTermsAndConditions);
     }

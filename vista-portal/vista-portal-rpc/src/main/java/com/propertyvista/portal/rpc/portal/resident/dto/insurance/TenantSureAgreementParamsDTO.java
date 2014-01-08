@@ -30,6 +30,8 @@ public interface TenantSureAgreementParamsDTO extends IEntity {
 
     IPrimitiveSet<BigDecimal> deductibleOptions();
 
+    //TODO use PortalVistaTermsService
+    @Deprecated
     IPrimitive<String> preAuthorizedDebitAgreement();
 
     /**

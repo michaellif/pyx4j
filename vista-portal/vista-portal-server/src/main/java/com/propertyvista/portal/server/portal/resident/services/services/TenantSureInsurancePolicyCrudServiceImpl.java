@@ -42,7 +42,6 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
-import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -315,19 +314,9 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         params.contentsCoverageOptions().addAll(CONTENTS_COVERAGE_OPTIONS);
 
         params.deductibleOptions().addAll(getDeductibleOptions());
-        params.preAuthorizedDebitAgreement().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
+        params.preAuthorizedDebitAgreement().setValue("TODO use PortalVistaTermsService");
 
         return params;
-    }
-
-    @Override
-    public void getPreAuthorizedPaymentsAgreement(AsyncCallback<String> callback) {
-        callback.onSuccess(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
-    }
-
-    @Override
-    public void getFaq(AsyncCallback<String> callback) {
-        callback.onSuccess(ServerSideFactory.create(TenantSureTextFacade.class).getFaq());
     }
 
     @Override

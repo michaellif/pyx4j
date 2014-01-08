@@ -31,6 +31,8 @@ public interface PortalVistaTermsService extends IService {
 
     void getResidentPortalConvenienceFeeTerms(AsyncCallback<String> callback);
 
+    void getTenantSurePreAuthorizedPaymentsAgreement(AsyncCallback<String> callback);
+
     // ============== Prospect ==============
 
     void getProspectApplicantTerms(AsyncCallback<String> callback);

@@ -24,7 +24,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
-import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -40,7 +39,7 @@ public class TenantSurePaymentMethodCrudServiceImpl implements TenantSurePayment
         InsurancePaymentMethodDTO dto = EntityFactory.create(InsurancePaymentMethodDTO.class);
         dto.paymentMethod().set(EntityFactory.create(InsurancePaymentMethod.class));
         dto.paymentMethod().type().setValue(PaymentType.CreditCard);
-        dto.preauthorizedPaymentAgreement().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
+        dto.preauthorizedPaymentAgreement().setValue("TODO use PortalVistaTermsService");
         callback.onSuccess(dto);
     }
 

@@ -24,6 +24,7 @@ public interface InsurancePaymentMethodDTO extends IEntity {
 
     InsurancePaymentMethod paymentMethod();
 
+    @Deprecated
     IPrimitive<String> preauthorizedPaymentAgreement();
 
 }

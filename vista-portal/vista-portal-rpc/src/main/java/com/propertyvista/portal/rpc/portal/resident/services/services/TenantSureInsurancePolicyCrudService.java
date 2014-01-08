@@ -32,12 +32,6 @@ public interface TenantSureInsurancePolicyCrudService extends AbstractCrudServic
 
     void sendQuoteDetails(AsyncCallback<String> asyncCallback, String quoteId);
 
-    // Management related methods start here:
-
-    void getPreAuthorizedPaymentsAgreement(AsyncCallback<String> areementHtml);
-
-    void getFaq(AsyncCallback<String> faqHtml);
-
     void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, InsurancePaymentMethod paymentMethod);
 
     void cancelTenantSure(AsyncCallback<VoidSerializable> callback);
