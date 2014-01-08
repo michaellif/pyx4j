@@ -175,28 +175,28 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Tenant Payment Pre-Authorized Payment Terms")
-        public static class TenantPaymentPad extends VistaTermsAccess {
-            public TenantPaymentPad() {
-                super(Target.TenantPreAuthorizedPaymentTerms);
+        @PlaceProperties(caption = "Tenant eCheck Pre-Authorized Payment Terms")
+        public static class TenantPreAuthorizedPaymentECheck extends VistaTermsAccess {
+            public TenantPreAuthorizedPaymentECheck() {
+                super(Target.TenantPreAuthorizedPaymentECheckTerms);
             }
         }
 
-        @PlaceProperties(caption = "T&C Tenant Credit Card")
-        public static class TenantCC extends VistaTermsAccess {
-            public TenantCC() {
+        @PlaceProperties(caption = "Tenant Card Pre-Authorized Payment Terms")
+        public static class TenantPreAuthorizedPaymentCreditCard extends VistaTermsAccess {
+            public TenantPreAuthorizedPaymentCreditCard() {
                 super(Target.TenantPreAuthorizedPaymentCreditCardTerms);
             }
         }
 
-        @PlaceProperties(caption = "T&C Tenant Convenience Fee")
+        @PlaceProperties(caption = "Tenant Convenience Fee Terms")
         public static class TenantCaledonConvenienceFee extends VistaTermsAccess {
             public TenantCaledonConvenienceFee() {
                 super(Target.TenantPaymentConvenienceFeeTerms);
             }
         }
 
-        @PlaceProperties(caption = "T&C TenantSure PAP")
+        @PlaceProperties(caption = "TenantSure PreAuthorized Agreement")
         public static class TenantSurePapAgreement extends VistaTermsAccess {
             public TenantSurePapAgreement() {
                 super(Target.TenantSurePreAuthorizedPaymentsAgreement);

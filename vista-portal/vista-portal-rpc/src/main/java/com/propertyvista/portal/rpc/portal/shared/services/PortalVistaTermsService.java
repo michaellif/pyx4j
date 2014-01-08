@@ -25,9 +25,9 @@ public interface PortalVistaTermsService extends IService {
 
     void getTenantBillingTerms(AsyncCallback<String> callback);
 
-    void getTenantPreauthorizedPaymentTerms(AsyncCallback<String> callback);
+    void getTenantPreauthorizedPaymentECheckTerms(AsyncCallback<String> callback);
 
-    void getResidentPortalCcPolicy(AsyncCallback<String> callback);
+    void getTenantPreauthorizedPaymentCardTerms(AsyncCallback<String> callback);
 
     void getResidentPortalConvenienceFeeTerms(AsyncCallback<String> callback);
 

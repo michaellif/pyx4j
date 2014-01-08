@@ -58,7 +58,7 @@ public class ResidentTermsActivity extends AbstractActivity {
                 }
             });
         } else if (place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantPreauthorizedPaymentTerms(new DefaultAsyncCallback<String>() {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantPreauthorizedPaymentECheckTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);
@@ -66,7 +66,7 @@ public class ResidentTermsActivity extends AbstractActivity {
                 }
             });
         } else if (place instanceof ResidentPortalTerms.CreditCardPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalCcPolicy(new DefaultAsyncCallback<String>() {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantPreauthorizedPaymentCardTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);

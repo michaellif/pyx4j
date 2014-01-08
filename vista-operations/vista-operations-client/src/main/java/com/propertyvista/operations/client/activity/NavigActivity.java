@@ -100,8 +100,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         folder.addNavigItem(new OperationsSiteMap.Legal.TenantTerms());
         folder.addNavigItem(new OperationsSiteMap.Legal.TenantBillingTerms());
-        folder.addNavigItem(new OperationsSiteMap.Legal.TenantPaymentPad());
-        folder.addNavigItem(new OperationsSiteMap.Legal.TenantCC());
+        folder.addNavigItem(new OperationsSiteMap.Legal.TenantPreAuthorizedPaymentECheck());
+        folder.addNavigItem(new OperationsSiteMap.Legal.TenantPreAuthorizedPaymentCreditCard());
         folder.addNavigItem(new OperationsSiteMap.Legal.TenantCaledonConvenienceFee());
 
         folder.addNavigItem(new OperationsSiteMap.Legal.TenantSurePapAgreement());
