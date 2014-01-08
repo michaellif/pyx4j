@@ -49,16 +49,16 @@ public class ResidentTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof ResidentPortalTerms.BillingPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalBillingPolicy(new DefaultAsyncCallback<String>() {
+        } else if (place instanceof ResidentPortalTerms.BillingTerms) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantBillingTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof ResidentPortalTerms.PadPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalPadPolicy(new DefaultAsyncCallback<String>() {
+        } else if (place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantPreauthorizedPaymentTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);

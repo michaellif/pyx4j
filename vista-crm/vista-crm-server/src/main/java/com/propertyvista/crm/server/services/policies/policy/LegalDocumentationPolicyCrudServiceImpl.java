@@ -18,14 +18,14 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
-import com.propertyvista.domain.policy.policies.LegalDocumentation;
+import com.propertyvista.domain.policy.policies.PmcTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
-public class LegalDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudService<LegalDocumentation, LegalDocumentationPolicyDTO> {
+public class LegalDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudService<PmcTermsPolicy, LegalDocumentationPolicyDTO> {
 
     public LegalDocumentationPolicyCrudServiceImpl() {
-        super(LegalDocumentation.class, LegalDocumentationPolicyDTO.class);
+        super(PmcTermsPolicy.class, LegalDocumentationPolicyDTO.class);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class LegalDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudSe
     }
 
     @Override
-    protected void persist(LegalDocumentation dbo, LegalDocumentationPolicyDTO in) {
+    protected void persist(PmcTermsPolicy dbo, LegalDocumentationPolicyDTO in) {
         StringBuffer errors = new StringBuffer();
         if (!isValid(in, errors)) {
             throw new UserRuntimeException(errors.toString());

@@ -14,8 +14,10 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -24,7 +26,13 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @DiscriminatorValue("LegalDocumentationPolicy")
 @LowestApplicableNode(value = AptUnit.class)
-public interface LegalDocumentation extends Policy, TenantsAccessiblePolicy {
+public interface PmcTermsPolicy extends Policy, TenantsAccessiblePolicy {
+
+    @Owned
+    //@Length(20845)
+    @Editor(type = Editor.EditorType.richtextarea)
+    //TODO Blob
+    IPrimitive<String> rentalCriteriaGuidelines();
 
     @Owned
     IList<LegalTermsDescriptor> mainApplication();

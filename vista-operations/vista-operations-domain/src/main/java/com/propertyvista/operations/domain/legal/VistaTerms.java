@@ -31,7 +31,7 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
     public enum Target {
 
-        PMCPropertyVistaService,
+        PmcPropertyVistaService,
 
         PmcCaledonTemplate,
 
@@ -39,21 +39,19 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         PmcPaymentPad,
 
-        TenantPropertyVistaService,
+        ApplicantTermsAndConditions,
 
-        TenantBilling,
+        TenantPortalTermsAndConditions,
 
-        TenantPaymentPad,
+        TenantBillingTerms,
 
-        TenantPaymentCreditCard,
+        TenantPreAuthorizedPaymentTerms,
 
-        TenantPaymentConvenienceFee,
+        TenantPreAuthorizedPaymentCreditCardTerms,
 
-        TenantPreAuthorizedPaymentsAgreement,
+        TenantPaymentConvenienceFeeTerms,
 
-        TenantSurePreAuthorizedPaymentsAgreement,
-
-        ProspectPropertyVistaService;
+        TenantSurePreAuthorizedPaymentsAgreement;
     }
 
     @ToString

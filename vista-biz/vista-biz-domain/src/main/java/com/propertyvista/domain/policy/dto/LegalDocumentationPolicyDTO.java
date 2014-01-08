@@ -17,10 +17,10 @@ import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.LegalDocumentation;
+import com.propertyvista.domain.policy.policies.PmcTermsPolicy;
 
 @Transient
-@ExtendsBO(LegalDocumentation.class)
-public interface LegalDocumentationPolicyDTO extends PolicyDTOBase, LegalDocumentation {
+@ExtendsBO(PmcTermsPolicy.class)
+public interface LegalDocumentationPolicyDTO extends PolicyDTOBase, PmcTermsPolicy {
 
 }

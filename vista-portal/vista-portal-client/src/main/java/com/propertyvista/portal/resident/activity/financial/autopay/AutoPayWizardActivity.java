@@ -98,7 +98,7 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
 
     @Override
     public Class<? extends Place> getPadPolicyPlace() {
-        return ResidentPortalTerms.PadPolicy.class;
+        return ResidentPortalTerms.PreauthorizedPaymentTerms.class;
     }
 
     @Override

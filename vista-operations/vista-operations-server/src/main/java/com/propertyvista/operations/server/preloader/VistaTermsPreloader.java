@@ -38,18 +38,18 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
          * The change in policy text is not covered by DBA migration script.
          ****************/
 
-        createTerms(Target.PMCPropertyVistaService, "PmcVistaTerms.html");
+        createTerms(Target.PmcPropertyVistaService, "PmcVistaTerms.html");
         createTerms(Target.PmcCaledonTemplate, "PmcCaledonTemplateVistaTerms.html");
         createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html");
         createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html");
 
-        createTerms(Target.TenantPropertyVistaService, "TenantVistaTerms.html");
-        createTerms(Target.TenantBilling, "TenantBillingAndRefundPolicy.html");
-        createTerms(Target.TenantPreAuthorizedPaymentsAgreement, "Pre-AuthorizationLegalPAD.html");
-        createTerms(Target.TenantPaymentCreditCard, "Pre-AuthorizationLegalCC.html");
-        createTerms(Target.TenantPaymentConvenienceFee, "TenantPaymentConvenienceFee.html");
+        createTerms(Target.TenantPortalTermsAndConditions, "TenantVistaTerms.html");
+        createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html");
+        createTerms(Target.TenantPreAuthorizedPaymentTerms, "Pre-AuthorizationLegalPAD.html");
+        createTerms(Target.TenantPreAuthorizedPaymentCreditCardTerms, "Pre-AuthorizationLegalCC.html");
+        createTerms(Target.TenantPaymentConvenienceFeeTerms, "TenantPaymentConvenienceFeeTerms.html");
 
-        createTerms(Target.ProspectPropertyVistaService, "TenantVistaTerms.html");
+        createTerms(Target.ApplicantTermsAndConditions, "TenantVistaTerms.html");
 
         createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html");
 

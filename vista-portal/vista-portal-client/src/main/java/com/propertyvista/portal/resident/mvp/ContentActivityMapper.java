@@ -186,10 +186,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new NotificationPageActivity((NotificationPlace) place);
 
 // Internals/Terms: @formatter:off
-                    } else if (place instanceof ResidentPortalTerms.BillingPolicy 
+                    } else if (place instanceof ResidentPortalTerms.BillingTerms 
                             || place instanceof ResidentPortalTerms.CreditCardPolicy
                             || place instanceof ResidentPortalTerms.ConvenienceFeeTerms
-                            || place instanceof ResidentPortalTerms.PadPolicy
+                            || place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms
                             || place instanceof PortalSiteMap.TermsAndConditions) {
                         activity = new ResidentTermsActivity(place);
                  // @formatter:on

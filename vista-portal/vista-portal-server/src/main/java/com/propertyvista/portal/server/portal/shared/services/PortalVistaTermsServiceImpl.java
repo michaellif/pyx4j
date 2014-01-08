@@ -30,44 +30,38 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
     public void getPortalTerms(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPropertyVistaService);
+        getVistaTerms(callback, VistaTerms.Target.TenantPortalTermsAndConditions);
     }
 
     @Override
-    public void getResidentPortalBillingPolicy(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantBilling);
+    public void getTenantBillingTerms(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantBillingTerms);
     }
 
     @Override
-    public void getResidentPortalPadPolicy(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPaymentPad);
+    public void getTenantPreauthorizedPaymentTerms(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantPreAuthorizedPaymentTerms);
     }
 
     @Override
     public void getResidentPortalCcPolicy(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPaymentCreditCard);
-    }
-
-    @Override
-    public void getResidentPortalPreAuthorizationTermsAndConditions(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPreAuthorizedPaymentsAgreement);
+        getVistaTerms(callback, VistaTerms.Target.TenantPreAuthorizedPaymentCreditCardTerms);
     }
 
     @Override
     public void getResidentPortalConvenienceFeeTerms(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPaymentConvenienceFee);
+        getVistaTerms(callback, VistaTerms.Target.TenantPaymentConvenienceFeeTerms);
     }
 
     @Override
     public void getProspectApplicantTerms(AsyncCallback<String> callback) {
-        //TODO implement Prospect Terms
-        getVistaTerms(callback, VistaTerms.Target.ProspectPropertyVistaService);
+        getVistaTerms(callback, VistaTerms.Target.ApplicantTermsAndConditions);
     }
 
     @Override
     public void getProspectRentalCriteriaGuidelines(AsyncCallback<String> callback) {
-        // TODO Auto-generated method stub
-        getVistaTerms(callback, VistaTerms.Target.ProspectPropertyVistaService);
+        // TODO use PmcTermsPolicy
+        getVistaTerms(callback, VistaTerms.Target.ApplicantTermsAndConditions);
     }
 
     private void getVistaTerms(AsyncCallback<String> callback, final VistaTerms.Target target) {

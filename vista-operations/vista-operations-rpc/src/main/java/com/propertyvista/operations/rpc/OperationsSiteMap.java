@@ -136,7 +136,7 @@ public class OperationsSiteMap implements SiteMap {
         @PlaceProperties(caption = "T&C PMC Vista Service")
         public static class PmcTerms extends VistaTermsAccess {
             public PmcTerms() {
-                super(Target.PMCPropertyVistaService);
+                super(Target.PmcPropertyVistaService);
             }
         }
 
@@ -161,38 +161,38 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "T&C Tenant")
+        @PlaceProperties(caption = "Tenant Portal Terms And Conditions")
         public static class TenantTerms extends VistaTermsAccess {
             public TenantTerms() {
-                super(Target.TenantPropertyVistaService);
+                super(Target.TenantPortalTermsAndConditions);
             }
         }
 
-        @PlaceProperties(caption = "T&C Tenant Billing")
+        @PlaceProperties(caption = "Tenant Billing Terms")
         public static class TenantBillingTerms extends VistaTermsAccess {
             public TenantBillingTerms() {
-                super(Target.TenantBilling);
+                super(Target.TenantBillingTerms);
             }
         }
 
-        @PlaceProperties(caption = "T&C Tenant Payment Pre-Authorization")
+        @PlaceProperties(caption = "Tenant Payment Pre-Authorized Payment Terms")
         public static class TenantPaymentPad extends VistaTermsAccess {
             public TenantPaymentPad() {
-                super(Target.TenantPreAuthorizedPaymentsAgreement);
+                super(Target.TenantPreAuthorizedPaymentTerms);
             }
         }
 
         @PlaceProperties(caption = "T&C Tenant Credit Card")
         public static class TenantCC extends VistaTermsAccess {
             public TenantCC() {
-                super(Target.TenantPaymentCreditCard);
+                super(Target.TenantPreAuthorizedPaymentCreditCardTerms);
             }
         }
 
         @PlaceProperties(caption = "T&C Tenant Convenience Fee")
         public static class TenantCaledonConvenienceFee extends VistaTermsAccess {
             public TenantCaledonConvenienceFee() {
-                super(Target.TenantPaymentConvenienceFee);
+                super(Target.TenantPaymentConvenienceFeeTerms);
             }
         }
 

@@ -22,7 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.policy.policies.LegalDocumentation;
+import com.propertyvista.domain.policy.policies.PmcTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -30,16 +30,16 @@ import com.propertyvista.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class LegalDocumentationPolicyPreloader extends AbstractPolicyPreloader<LegalDocumentation> {
+public class LegalDocumentationPolicyPreloader extends AbstractPolicyPreloader<PmcTermsPolicy> {
 
     private final static I18n i18n = I18n.get(LegalDocumentationPolicyPreloader.class);
 
     public LegalDocumentationPolicyPreloader() {
-        super(LegalDocumentation.class);
+        super(PmcTermsPolicy.class);
     }
 
-    private LegalDocumentation createDefaultLeaseTermsPolicy() {
-        LegalDocumentation policy = EntityFactory.create(LegalDocumentation.class);
+    private PmcTermsPolicy createDefaultLeaseTermsPolicy() {
+        PmcTermsPolicy policy = EntityFactory.create(PmcTermsPolicy.class);
 
         String termsContentText = "failed to get lease terms during the preload phase";
         try {
@@ -121,7 +121,7 @@ public class LegalDocumentationPolicyPreloader extends AbstractPolicyPreloader<L
     }
 
     @Override
-    protected LegalDocumentation createPolicy(StringBuilder log) {
+    protected PmcTermsPolicy createPolicy(StringBuilder log) {
         return createDefaultLeaseTermsPolicy();
     }
 

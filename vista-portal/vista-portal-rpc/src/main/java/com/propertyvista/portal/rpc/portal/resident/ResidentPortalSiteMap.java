@@ -29,7 +29,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
     public static class ResidentPortalTerms {
 
-        public static class PadPolicy extends AppPlace implements PublicPlace {
+        public static class PreauthorizedPaymentTerms extends AppPlace implements PublicPlace {
         }
 
         public static class CreditCardPolicy extends AppPlace implements PublicPlace {
@@ -38,7 +38,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class ConvenienceFeeTerms extends AppPlace implements PublicPlace {
         }
 
-        public static class BillingPolicy extends AppPlace implements PublicPlace {
+        public static class BillingTerms extends AppPlace implements PublicPlace {
         }
     }
 
