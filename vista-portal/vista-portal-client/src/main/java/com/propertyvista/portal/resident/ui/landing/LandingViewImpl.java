@@ -20,7 +20,6 @@ import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -133,10 +132,6 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
     @Override
     public void setDevLogin(List<? extends DevLoginCredentials> devCredientials, String appModeName) {
         loginGadget.setDevLogin(devCredientials, appModeName);
-    }
-
-    public void setTermsAndConditions(Class<? extends Place> place) {
-        loginGadget.setTermsAndConditions(place);
     }
 
     @Override

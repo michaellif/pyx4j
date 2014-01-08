@@ -21,7 +21,6 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
 import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
-import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 
 // TODO VISTA-3598 Clean up unnecessary styles
 public class TenantSureTheme extends Theme {

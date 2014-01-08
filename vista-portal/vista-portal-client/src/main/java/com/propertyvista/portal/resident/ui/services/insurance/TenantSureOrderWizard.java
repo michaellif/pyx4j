@@ -46,7 +46,6 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCove
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 

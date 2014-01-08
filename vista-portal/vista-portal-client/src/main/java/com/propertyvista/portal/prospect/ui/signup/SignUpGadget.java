@@ -42,7 +42,6 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;

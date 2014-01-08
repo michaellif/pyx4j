@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.resident.ui.landing;
 
-import com.google.gwt.place.shared.Place;
-
 import com.propertyvista.common.client.ui.components.login.LoginView;
 
 public interface LandingView extends LoginView {
@@ -22,10 +20,6 @@ public interface LandingView extends LoginView {
     interface LandingPresenter extends LoginView.Presenter {
 
         void signUp();
-
-        void showVistaTerms();
-
-        Class<? extends Place> getPortalTermsPlace();
 
     }
 

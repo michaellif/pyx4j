@@ -17,11 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.NavigationUri;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;

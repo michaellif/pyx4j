@@ -17,17 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.NavigationUri;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.resident.ui.landing.LandingView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.PortalSite;
 
@@ -43,19 +39,10 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
     }
 
     @Override
-    public void showVistaTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPortalTermsPlace()), "_blank", null);
-    }
-
-    @Override
     protected List<? extends DevLoginCredentials> getDevLoginCredentials() {
         return Arrays.asList(//@formatter:off
                 new DevLoginCredentialsImpl(UserType.TENANT, 'T')
         );//@formatter:on
     }
 
-    @Override
-    public final Class<? extends Place> getPortalTermsPlace() {
-        return PortalSiteMap.TermsAndConditions.class;
-    }
 }

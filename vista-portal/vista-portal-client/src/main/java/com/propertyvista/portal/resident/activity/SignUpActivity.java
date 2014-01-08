@@ -33,7 +33,6 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.signup.SignUpView;
 import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;

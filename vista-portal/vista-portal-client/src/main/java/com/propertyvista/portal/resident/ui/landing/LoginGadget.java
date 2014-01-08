@@ -16,20 +16,15 @@ package com.propertyvista.portal.resident.ui.landing;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
@@ -51,15 +46,16 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.portal.resident.ui.landing.LandingView.LandingPresenter;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
@@ -96,17 +92,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
         loginTermsLinkPanel.add(termsPrefix);
 
-        termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
-        termsAndConditionsAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        termsAndConditionsAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        termsAndConditionsAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showVistaTerms();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
+        termsAndConditionsAnchor = new TermsAnchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"), PortalSiteMap.TermsAndConditions.class);
         loginTermsLinkPanel.add(termsAndConditionsAnchor);
 
         HTML suffixPrefix = new HTML(".");
@@ -150,10 +136,6 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
     public void setDevLogin(List<? extends DevLoginCredentials> devCredientials, String appModeName) {
         loginToolbar.setDevLogin(devCredientials, appModeName);
-    }
-
-    public void setTermsAndConditions(Class<? extends Place> place) {
-        termsAndConditionsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getPortalTermsPlace()));
     }
 
     class LoginForm extends CEntityForm<AuthenticationRequest> {
