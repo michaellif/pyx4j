@@ -94,7 +94,15 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         try {
             String url = configuration.cfcApiEndpointUrl();
             api = new CFCAPI(new URL(url), new QName("http://api.cfcprograms.com/", "CFC_API"));
-
+            api.setHandlerResolver(new HandlerResolver() {
+                @SuppressWarnings("rawtypes")
+                @Override
+                public List<Handler> getHandlerChain(PortInfo portInfo) {
+                    List<Handler> handlerChain = new ArrayList<Handler>();
+                    handlerChain.add(new CfcApiLogHandler());
+                    return handlerChain;
+                }
+            });
         } catch (MalformedURLException e) {
             throw new Error(e);
         }
@@ -107,16 +115,6 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         // Just in case if we will be using JDK bundled JAXWS
         requestContext.put(JAXWSProperties_CONNECT_TIMEOUT, 30 * Consts.SEC2MILLISECONDS);
         requestContext.put(JAXWSProperties_REQUEST_TIMEOUT, 80 * Consts.SEC2MILLISECONDS);
-
-        api.setHandlerResolver(new HandlerResolver() {
-            @SuppressWarnings("rawtypes")
-            @Override
-            public List<Handler> getHandlerChain(PortInfo portInfo) {
-                List<Handler> handlerChain = new ArrayList<Handler>();
-                handlerChain.add(new CfcApiLogHandler());
-                return handlerChain;
-            }
-        });
 
         return soap;
     }
