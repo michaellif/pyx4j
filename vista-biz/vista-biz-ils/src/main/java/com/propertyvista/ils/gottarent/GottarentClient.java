@@ -13,14 +13,21 @@
  */
 package com.propertyvista.ils.gottarent;
 
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.apache.axis2.AxisFault;
@@ -40,6 +47,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.occupancy.ILSGottarentIntegrationAgent;
 import com.propertyvista.ils.gottarent.mapper.GottarentDataMapper;
 import com.propertyvista.ils.gottarent.mapper.dto.ILSReportDTO;
+import com.propertyvista.misc.VistaTODO;
 
 /**
  * @author smolka
@@ -48,8 +56,6 @@ import com.propertyvista.ils.gottarent.mapper.dto.ILSReportDTO;
 public class GottarentClient {
 
     private final static Logger log = LoggerFactory.getLogger(GottarentClient.class);
-
-    private final static boolean testMode = true;
 
     public static void updateGottarentListing(ExecutionMonitor executionMonitor) {
         // TODO - use ExecutionMonitor to register state (target points, errors, etc) in the course of execution
@@ -88,7 +94,7 @@ public class GottarentClient {
 
         String generatedXml = objectToXml(requestListing, Listing.class);
         DataDump.dump("Gottarent", generatedXml);
-        if (!testMode) {
+        if (!VistaTODO.ILS_TestMode) {
             DataSource dataSource = new ByteArrayDataSource(Base64.encodeBase64(generatedXml.getBytes()));
 
             input.setBuffer(new DataHandler(dataSource));
@@ -96,6 +102,20 @@ public class GottarentClient {
             ImportResponse response = ws.importOp(new ImportOp());
             //TODO: Smolka. Gottarent response always empty. What to return?
             response = null;
+        } else {
+            // validate xml against current schema
+            Source schemaSource = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("xsd/gottarent/ILS_Gottarent.xsd"));
+            Source xmlSource = new StreamSource(new StringReader(generatedXml));
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            try {
+                Schema schema = schemaFactory.newSchema(schemaSource);
+                Validator validator = schema.newValidator();
+                validator.validate(xmlSource);
+                log.info("XML Validation Completed");
+            } catch (Exception e) {
+                log.info("XML Validation Failed: {}", e.getMessage());
+            }
+
         }
     }
 

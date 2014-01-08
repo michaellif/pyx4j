@@ -63,4 +63,5 @@ public class VistaTODO {
 
     public static boolean pendingYardiConfigPatchILS = false;
 
+    public static boolean ILS_TestMode = true;
 }
