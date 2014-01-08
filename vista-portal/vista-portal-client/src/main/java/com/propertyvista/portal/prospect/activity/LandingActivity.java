@@ -43,19 +43,10 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
     }
 
     @Override
-    public void showProspectTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPortalTermsPlace()), "_blank", null);
-    }
-
-    @Override
     protected List<? extends DevLoginCredentials> getDevLoginCredentials() {
         return Arrays.asList(//@formatter:off
                 new DevLoginCredentialsImpl(UserType.PTENANT, 'P')
         );//@formatter:on
     }
 
-    @Override
-    public final Class<? extends Place> getPortalTermsPlace() {
-        return ProspectPortalSiteMap.ProspectPortalTerms.ProspectTermsAndConditions.class;
-    }
 }

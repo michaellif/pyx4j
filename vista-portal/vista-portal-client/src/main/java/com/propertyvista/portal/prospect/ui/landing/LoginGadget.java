@@ -33,6 +33,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -51,6 +52,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -58,8 +60,10 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.portal.prospect.ui.landing.LandingView.LandingPresenter;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
@@ -96,17 +100,8 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
         loginTermsLinkPanel.add(termsPrefix);
 
-        termsAndConditionsAnchor = new Anchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"));
-        termsAndConditionsAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        termsAndConditionsAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        termsAndConditionsAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showProspectTerms();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
+        termsAndConditionsAnchor = new TermsAnchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"),
+                ProspectPortalSiteMap.ProspectPortalTerms.ProspectTermsAndConditions.class);
         loginTermsLinkPanel.add(termsAndConditionsAnchor);
 
         HTML suffixPrefix = new HTML(".");
@@ -153,7 +148,6 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     }
 
     public void setTermsAndConditions(Class<? extends Place> place) {
-        termsAndConditionsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getPortalTermsPlace()));
     }
 
     class LoginForm extends CEntityForm<AuthenticationRequest> {

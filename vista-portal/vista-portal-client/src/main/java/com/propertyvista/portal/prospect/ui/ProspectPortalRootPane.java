@@ -14,10 +14,10 @@
 package com.propertyvista.portal.prospect.ui;
 
 import com.propertyvista.portal.prospect.mvp.ContentActivityMapper;
-import com.propertyvista.portal.prospect.mvp.FooterActivityMapper;
 import com.propertyvista.portal.prospect.mvp.MenuActivityMapper;
 import com.propertyvista.portal.prospect.mvp.RentalSummaryActivityMapper;
 import com.propertyvista.portal.prospect.mvp.ToolbarActivityMapper;
+import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.shared.mvp.NotificationActivityMapper;
 import com.propertyvista.portal.shared.ui.PortalRootPane;

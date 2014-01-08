@@ -32,7 +32,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
@@ -40,14 +39,13 @@ import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
-public class AbstractFooterView extends FlowPanel {
+public class FooterViewImpl extends FlowPanel {
 
-    private static final I18n i18n = I18n.get(AbstractFooterView.class);
+    private static final I18n i18n = I18n.get(FooterViewImpl.class);
 
     private final BrandPanel brandPanel;
 
@@ -57,7 +55,7 @@ public class AbstractFooterView extends FlowPanel {
 
     private final FollowUsPanel followUsPanel;
 
-    public AbstractFooterView(final AppPlace termsPlace) {
+    public FooterViewImpl() {
 
         setStyleName(PortalRootPaneTheme.StyleName.PageFooter.name());
         getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
