@@ -13,8 +13,14 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -38,7 +44,45 @@ public interface UnitSelectionDTO extends IEntity {
 
     //---------------------------------------------
 
+    @Deprecated
     IList<Floorplan> availableFloorplans();
 
+    @Deprecated
     IList<AptUnit> availableUnits();
+
+    //---------------------------------------------
+    // new approach:
+
+    IPrimitive<Integer> bedrooms();
+
+    IPrimitive<Integer> bathrooms();
+
+    @Transient
+    public interface UnitDTO extends IEntity {
+
+        @ToString(index = 0)
+        IPrimitive<String> number();
+
+        IPrimitive<String> floorplan();
+
+        IPrimitive<Integer> floor();
+
+        @ToString(index = 1)
+        @Editor(type = Editor.EditorType.label)
+        IPrimitive<Integer> bedrooms();
+
+        @ToString(index = 2)
+        @Editor(type = Editor.EditorType.label)
+        IPrimitive<Integer> bathrooms();
+
+        @ToString(index = 3)
+        IPrimitive<LogicalDate> available();
+
+        @ToString(index = 4)
+        @Format("#,##0.00")
+        @Editor(type = EditorType.label)
+        IPrimitive<BigDecimal> price();
+    }
+
+    IList<UnitDTO> currentUnits();
 }

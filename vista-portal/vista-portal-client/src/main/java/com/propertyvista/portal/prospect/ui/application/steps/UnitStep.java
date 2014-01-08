@@ -56,7 +56,7 @@ public class UnitStep extends ApplicationWizardStep {
         };
     };
 
-    private final Button update = new Button(i18n.tr("Change Selection"), new Command() {
+    private final Button updateButton = new Button(i18n.tr("Change Selection"), new Command() {
         @Override
         public void execute() {
             MessageDialog.confirm(i18n.tr("Warning"), i18n.tr("You will lost already selected Unit Options. Do you really want to change current selection?"),
@@ -82,7 +82,7 @@ public class UnitStep extends ApplicationWizardStep {
 
 //        panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, update);
+        panel.setWidget(++row, 0, updateButton);
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
 
         return panel;
@@ -113,7 +113,7 @@ public class UnitStep extends ApplicationWizardStep {
         get(proto().unitSelection().floorplan()).setEditable(editable);
         get(proto().unitSelection().unit()).setEditable(editable);
 
-        update.setVisible(!editable);
+        updateButton.setVisible(!editable);
     }
 
     @Override
