@@ -155,6 +155,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
             statusDto.status().set(mr.status());
             statusDto.priority().set(mr.priority());
             statusDto.lastUpdated().set(mr.updated());
+            statusDto.surveyResponse().set(mr.surveyResponse());
             if (MaintenanceRequestStatus.StatusPhase.open().contains(mr.status().phase().getValue())) {
                 dto.openMaintenanceRequests().add(statusDto);
             } else {

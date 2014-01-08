@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,6 +14,8 @@
 package com.propertyvista.portal.resident.ui.maintenance;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -23,9 +25,11 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.RateIt;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView.MaintenanceDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -36,9 +40,14 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
 
     private Anchor detailsLink;
 
-    public MaintenanceRequestFolderItem() {
+    private RateIt rateIt;
+
+    private final MaintenanceDashboardPresenter presenter;
+
+    public MaintenanceRequestFolderItem(MaintenanceDashboardPresenter presenter) {
         super(MaintenanceRequestStatusDTO.class);
 
+        this.presenter = presenter;
         setViewable(true);
         inheritViewable(false);
     }
@@ -54,6 +63,16 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority().level(), new CLabel<PriorityLevel>()), 180).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastUpdated(), new CLabel<String>()), 180).build());
 
+        content.setWidget(++row, 0, rateIt = new RateIt(5));
+        rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Integer> event) {
+                if (event.getValue() != null) {
+                    presenter.rateRequest(getValue().getPrimaryKey(), event.getValue());
+                }
+            }
+        });
+
         detailsLink = new Anchor(i18n.tr("View Details"), new Command() {
 
             @Override
@@ -68,4 +87,12 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
         return content;
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        MaintenanceRequestStatusDTO mr = getValue();
+        rateIt.setVisible(StatusPhase.Resolved.equals(mr.status().phase().getValue()));
+        if (!mr.surveyResponse().isNull() && !mr.surveyResponse().isEmpty() && !mr.surveyResponse().rating().isNull()) {
+            rateIt.setRating(mr.surveyResponse().rating().getValue());
+        }
+    }
 }

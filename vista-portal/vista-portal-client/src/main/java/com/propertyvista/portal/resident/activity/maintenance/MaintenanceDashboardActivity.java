@@ -18,7 +18,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
@@ -32,6 +34,8 @@ import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 public class MaintenanceDashboardActivity extends SecurityAwareActivity implements MaintenanceDashboardPresenter {
 
     private final MaintenanceDashboardView view;
+
+    private final MaintenanceRequestCrudService maintenanceRequestCrudService = (MaintenanceRequestCrudService) GWT.create(MaintenanceRequestCrudService.class);
 
     public MaintenanceDashboardActivity(Place place) {
         this.view = ResidentPortalSite.getViewFactory().getView(MaintenanceDashboardView.class);
@@ -47,18 +51,26 @@ public class MaintenanceDashboardActivity extends SecurityAwareActivity implemen
     }
 
     private void populate() {
-        ((MaintenanceRequestCrudService) GWT.create(MaintenanceRequestCrudService.class))
-                .retreiveMaintenanceSummary(new DefaultAsyncCallback<MaintenanceSummaryDTO>() {
-                    @Override
-                    public void onSuccess(MaintenanceSummaryDTO result) {
-                        view.populateOpenMaintenanceRequests(result);
-                    }
-                });
+        maintenanceRequestCrudService.retreiveMaintenanceSummary(new DefaultAsyncCallback<MaintenanceSummaryDTO>() {
+            @Override
+            public void onSuccess(MaintenanceSummaryDTO result) {
+                view.populateOpenMaintenanceRequests(result);
+            }
+        });
     }
 
     @Override
     public void createMaintenanceRequest() {
         AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance.MaintenanceRequestWizard());
+    }
+
+    @Override
+    public void rateRequest(Key entityKey, Integer rate) {
+        maintenanceRequestCrudService.rateMaintenanceRequest(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+            }
+        }, entityKey, rate);
     }
 
 }
