@@ -136,7 +136,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 .getPrimaryKey());
 
         to.unit().set(createUnitTO(bo.masterOnlineApplication().leaseApplication().lease().unit()));
-        to.utilities().setValue(retrieveUtilities(bo.masterOnlineApplication().leaseApplication().lease().unit()));
+        to.utilities().setValue(retrieveUtilities(term));
 
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
         to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
@@ -557,13 +557,13 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         return to;
     }
 
-    private String retrieveUtilities(AptUnit unit) {
-        assert (!unit.building().isValueDetached());
+    private String retrieveUtilities(LeaseTerm term) {
+        assert (!term.isValueDetached());
 
-        Persistence.ensureRetrieve(unit.building().utilities(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.ToStringMembers);
 
         String res = new String();
-        for (BuildingUtility utility : unit.building().utilities()) {
+        for (BuildingUtility utility : term.version().utilities()) {
             if (!res.isEmpty()) {
                 res += ";";
             }
