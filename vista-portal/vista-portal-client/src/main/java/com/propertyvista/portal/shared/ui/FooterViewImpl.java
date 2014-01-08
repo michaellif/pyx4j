@@ -43,7 +43,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
-public class FooterViewImpl extends FlowPanel {
+public class FooterViewImpl extends FlowPanel implements FooterView {
 
     private static final I18n i18n = I18n.get(FooterViewImpl.class);
 
@@ -115,6 +115,7 @@ public class FooterViewImpl extends FlowPanel {
         });
     }
 
+    @Override
     public void setContent(PortalContentDTO content) {
         pmcInfoPanel.setPmcInfo(content.pmcInfo().html().getValue());
         pmcInfoPanel.setPmcLogo(MediaUtils.createSiteImageResourceUrl(content.logoSmall()));
