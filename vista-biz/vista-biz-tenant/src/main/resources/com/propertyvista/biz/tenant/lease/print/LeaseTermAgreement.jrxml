@@ -118,7 +118,7 @@
 		<band height="25" splitType="Stretch">
 			<printWhenExpression><![CDATA[!$F{signatures}.isEmpty() || !$F{signaturePlaceholders}.isEmpty()]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="104" y="0" width="428" height="25" backcolor="#CCCCCC"/>
+				<reportElement x="104" y="0" width="450" height="25" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="SansSerif" isBold="true" isUnderline="true"/>
 					<paragraph spacingAfter="5"/>

@@ -7,8 +7,8 @@
 	<columnHeader>
 		<band height="50">
 			<staticText>
-				<reportElement x="0" y="30" width="194" height="20"/>
-				<textElement/>
+				<reportElement x="0" y="30" width="182" height="20"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Tenant:]]></text>
 			</staticText>
 			<staticText>
@@ -26,7 +26,7 @@
 	<detail>
 		<band height="19" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="194" height="19"/>
+				<reportElement x="0" y="0" width="182" height="19"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tenantName}]]></textFieldExpression>
 			</textField>
