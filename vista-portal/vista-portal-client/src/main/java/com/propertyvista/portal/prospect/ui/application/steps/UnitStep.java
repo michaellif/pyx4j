@@ -22,6 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
@@ -56,6 +57,8 @@ public class UnitStep extends ApplicationWizardStep {
 
     private final AvailableUnitsFolder availableUnitsFolder = new AvailableUnitsFolder();
 
+    private Widget availableUnitsHeader;
+
     private final Button updateButton = new Button(i18n.tr("Change Selection"), new Command() {
         @Override
         public void execute() {
@@ -86,11 +89,12 @@ public class UnitStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().moveIn()), 120).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bedrooms(), bedroomSelector)).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector)).build());
-
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().selectedUnit(), selectedUnit)).build());
-        panel.setWidget(++row, 0, inject(proto().unitSelection().availableUnits(), availableUnitsFolder));
 
-//        panel.setBR(++row, 0, 1);
+        panel.setH3(++row, 0, 1, i18n.tr("Available Units"));
+        availableUnitsHeader = panel.getWidget(row, 0);
+
+        panel.setWidget(++row, 0, inject(proto().unitSelection().availableUnits(), availableUnitsFolder));
 
         panel.setWidget(++row, 0, updateButton);
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
@@ -120,8 +124,10 @@ public class UnitStep extends ApplicationWizardStep {
         get(proto().unitSelection().bedrooms()).setEditable(editable);
         get(proto().unitSelection().bathrooms()).setEditable(editable);
 
-        get(proto().unitSelection().selectedUnit()).setVisible(!editable);
-        get(proto().unitSelection().availableUnits()).setVisible(editable);
+//        selectedUnit.setVisible(!editable);
+
+        availableUnitsHeader.setVisible(editable);
+        availableUnitsFolder.setVisible(editable);
 
         updateButton.setVisible(!editable);
     }

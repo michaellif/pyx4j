@@ -81,7 +81,7 @@ public interface UnitSelectionDTO extends IEntity {
 
     IList<UnitTO> availableUnits();
 
-    @Caption(name = "Unit")
+//    @Caption(name = "Unit")
     @Editor(type = Editor.EditorType.label)
     UnitTO selectedUnit();
 }
