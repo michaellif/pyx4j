@@ -22,10 +22,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
-import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 
 public interface ApplicationWizardService extends IService {
 
@@ -36,7 +35,7 @@ public interface ApplicationWizardService extends IService {
 
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity);
 
-    void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplanId, LogicalDate moveIn);
+    void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, Integer beds, Integer baths, LogicalDate moveIn);
 
-    void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, AptUnit unitId);
+    void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId);
 }

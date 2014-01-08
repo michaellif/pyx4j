@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.portal.prospect.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -67,6 +68,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
@@ -118,12 +120,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplanId, LogicalDate moveIn) {
-        callback.onSuccess(new Vector<AptUnit>(retriveAvailableUnits(floorplanId, moveIn)));
+    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, Integer beds, Integer baths, LogicalDate moveIn) {
+        callback.onSuccess(new Vector<UnitTO>(retriveAvailableUnits(beds, baths, moveIn)));
     }
 
     @Override
-    public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, AptUnit unitId) {
+    public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId) {
         callback.onSuccess(retriveAvailableUnitOptions(Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey())));
     }
 
@@ -135,7 +137,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         LeaseTerm term = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
                 .getPrimaryKey());
 
-        to.unit().set(createUnitTO(bo.masterOnlineApplication().leaseApplication().lease().unit()));
+        to.unit().set(filterUnitData(bo.masterOnlineApplication().leaseApplication().lease().unit()));
         to.utilities().setValue(retrieveUtilities(term));
 
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
@@ -433,30 +435,32 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         MasterOnlineApplication moa = ProspectPortalContext.getMasterOnlineApplication();
         if (!moa.building().isNull() || !moa.floorplan().isNull()) {
             UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
+
             Lease lease = ProspectPortalContext.getLease();
 
             if (lease != null && !lease.unit().isNull()) {
                 Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(lease.unit().floorplan(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
 
-                unitSelection.unit().set(lease.unit());
+                unitSelection.selectedUnit().set(createUnitDTO(lease.unit()));
                 unitSelection.building().set(lease.unit().building());
                 unitSelection.floorplan().set(lease.unit().floorplan());
                 unitSelection.moveIn().setValue(lease.leaseFrom().getValue());
 
                 to.unitOptionsSelection().set(retriveCurrentUnitOptions(lease));
             } else {
+                Persistence.ensureRetrieve(moa.floorplan(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(moa.building(), AttachLevel.ToStringMembers);
+
                 unitSelection.building().set(moa.building());
                 unitSelection.floorplan().set(moa.floorplan());
                 unitSelection.moveIn().setValue(new LogicalDate(SystemDateManager.getDate()));
             }
 
-            {
-                EntityQueryCriteria<Floorplan> criteria = new EntityQueryCriteria<Floorplan>(Floorplan.class);
-                criteria.eq(criteria.proto().building(), moa.building());
-                unitSelection.availableFloorplans().addAll(Persistence.service().query(criteria));
-            }
-
             if (!unitSelection.floorplan().isNull()) {
+                unitSelection.bedrooms().setValue(unitSelection.floorplan().bedrooms().getValue());
+                unitSelection.bathrooms().setValue(unitSelection.floorplan().bathrooms().getValue());
                 unitSelection.availableUnits().addAll(retriveAvailableUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
             }
 
@@ -468,7 +472,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void saveUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
-        if (!to.unitSelection().unit().isNull() && !to.unitOptionsSelection().selectedService().isNull()) {
+        if (!to.unitSelection().selectedUnit().isNull() && !to.unitOptionsSelection().selectedService().isNull()) {
             LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
             List<BillableItem> featureItems = new ArrayList<BillableItem>();
@@ -480,8 +484,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
 
-            ServerSideFactory.create(LeaseFacade.class).setPackage(leaseTerm, to.unitSelection().unit(), to.unitOptionsSelection().selectedService(),
-                    featureItems);
+            ServerSideFactory.create(LeaseFacade.class).setPackage(leaseTerm,
+                    EntityFactory.createIdentityStub(AptUnit.class, to.unitSelection().selectedUnit().getPrimaryKey()),
+                    to.unitOptionsSelection().selectedService(), featureItems);
         }
     }
 
@@ -535,7 +540,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     // ================================================================================================================
 
-    private AptUnit createUnitTO(AptUnit unit) {
+    private AptUnit filterUnitData(AptUnit unit) {
         assert (!unit.building().isValueDetached());
         assert (!unit.floorplan().isValueDetached());
 
@@ -553,6 +558,27 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 bind(toProto.floorplan().marketingName(), boProto.floorplan().marketingName());
             }
         }.createTO(unit);
+
+        return to;
+    }
+
+    private UnitTO createUnitDTO(AptUnit unit) {
+        Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.ToStringMembers);
+
+        UnitTO to = EntityFactory.create(UnitTO.class);
+        to.setPrimaryKey(unit.getPrimaryKey());
+
+        to.number().setValue(unit.info().number().getValue());
+        to.floorplan().setValue(unit.floorplan().getStringView());
+        to.floor().setValue(unit.info().floor().getValue());
+
+        to.bedrooms().setValue(unit.info()._bedrooms().getValue());
+        to.bathrooms().setValue(unit.info()._bathrooms().getValue());
+
+        to.available().setValue(unit._availableForRent().getValue());
+        to.price().setValue(unit.financial()._marketRent().getValue());
+
+        to.display().setValue(to.getStringView());
 
         return to;
     }
@@ -594,7 +620,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
     }
 
-    private List<AptUnit> retriveAvailableUnits(Floorplan floorplanId, LogicalDate moveIn) {
+    private List<UnitTO> retriveAvailableUnits(Floorplan floorplanId, LogicalDate moveIn) {
         if (moveIn == null) {
             moveIn = new LogicalDate(SystemDateManager.getDate());
         }
@@ -611,7 +637,42 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
         criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
 
-        return Persistence.service().query(criteria);
+        List<UnitTO> availableUnits = new ArrayList<UnitTO>();
+        for (AptUnit unit : Persistence.service().query(criteria)) {
+            availableUnits.add(createUnitDTO(unit));
+        }
+
+        return availableUnits;
+    }
+
+    private Collection<? extends UnitTO> retriveAvailableUnits(Integer beds, Integer baths, LogicalDate moveIn) {
+        if (moveIn == null) {
+            moveIn = new LogicalDate(SystemDateManager.getDate());
+        }
+
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        if (beds != null) {
+            criteria.eq(criteria.proto().floorplan().bedrooms(), beds);
+        }
+        if (baths != null) {
+            criteria.eq(criteria.proto().floorplan().bathrooms(), baths);
+        }
+        // correct service type:
+        criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
+        criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
+        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
+        criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
+        // availability: 
+        criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
+        criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
+        criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
+
+        List<UnitTO> availableUnits = new ArrayList<UnitTO>();
+        for (AptUnit unit : Persistence.service().query(criteria)) {
+            availableUnits.add(createUnitDTO(unit));
+        }
+
+        return availableUnits;
     }
 
     private UnitOptionsSelectionDTO retriveCurrentUnitOptions(Lease lease) {

@@ -28,14 +28,13 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
@@ -94,12 +93,12 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<Vector<AptUnit>> callback, Floorplan floorplan, LogicalDate moveIn) {
-        service.getAvailableUnits(callback, floorplan.<Floorplan> createIdentityStub(), moveIn);
+    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, Integer beds, Integer baths, LogicalDate moveIn) {
+        service.getAvailableUnits(callback, beds, baths, moveIn);
     }
 
     @Override
-    public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, AptUnit unit) {
+    public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unit) {
         service.getAvailableUnitOptions(callback, unit/* .<AptUnit> createIdentityStub() */);
     }
 }

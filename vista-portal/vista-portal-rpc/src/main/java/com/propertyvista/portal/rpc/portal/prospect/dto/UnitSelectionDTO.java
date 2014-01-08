@@ -28,7 +28,6 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @Transient
 public interface UnitSelectionDTO extends IEntity {
@@ -37,28 +36,20 @@ public interface UnitSelectionDTO extends IEntity {
 
     Floorplan floorplan();
 
-    AptUnit unit();
-
     @Caption(name = "Move-in Date")
     IPrimitive<LogicalDate> moveIn();
 
     //---------------------------------------------
-
-    @Deprecated
-    IList<Floorplan> availableFloorplans();
-
-    @Deprecated
-    IList<AptUnit> availableUnits();
-
-    //---------------------------------------------
-    // new approach:
 
     IPrimitive<Integer> bedrooms();
 
     IPrimitive<Integer> bathrooms();
 
     @Transient
-    public interface UnitDTO extends IEntity {
+    public interface UnitTO extends IEntity {
+
+        @Editor(type = Editor.EditorType.label)
+        IPrimitive<String> display();
 
         @ToString(index = 0)
         IPrimitive<String> number();
@@ -84,5 +75,11 @@ public interface UnitSelectionDTO extends IEntity {
         IPrimitive<BigDecimal> price();
     }
 
-    IList<UnitDTO> currentUnits();
+    IList<UnitTO> currentUnits();
+
+    IList<UnitTO> availableUnits();
+
+    @Caption(name = "Unit")
+    @Editor(type = Editor.EditorType.label)
+    UnitTO selectedUnit();
 }
