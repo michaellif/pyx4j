@@ -35,7 +35,7 @@
         <xs:element minOccurs="1" maxOccurs="1" ref="ExternalBuildingId"/>
         <xs:element minOccurs="1" maxOccurs="1" ref="BuildingName"/>
         <xs:element minOccurs="0" maxOccurs="1" ref="BuildingEnabled"/>
-        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingType"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="BuildingType"/>
         <xs:element minOccurs="0" maxOccurs="1" ref="BuildingInfo"/>
         <xs:element minOccurs="0" maxOccurs="1" ref="CommunityInfo"/>
         <xs:element minOccurs="1" maxOccurs="1" ref="Address"/>
@@ -50,7 +50,35 @@
   <xs:element name="ExternalBuildingId" type="xs:string"/>
   <xs:element name="BuildingName" type="xs:string"/>
   <xs:element name="BuildingEnabled" type="xs:string"/>
-  <xs:element name="BuildingType" type="xs:string"/>
+  <xs:element name="BuildingType">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="Low rise" />
+        <xs:enumeration value="High rise" />
+        <xs:enumeration value="House" />
+        <xs:enumeration value="Townhouse" />
+        <xs:enumeration value="Condo" />
+        <xs:enumeration value="Multiunit House" />
+        <xs:enumeration value="Room" />
+        <xs:enumeration value="Student Housing" />
+        <xs:enumeration value="Adult Living" />
+        <xs:enumeration value="Basement Apartments" />
+        <xs:enumeration value="Unknown" />
+        <xs:enumeration value="Apartment" />
+        <xs:enumeration value="Vacation" />
+        <xs:enumeration value="Retail" />
+        <xs:enumeration value="Office" />
+        <xs:enumeration value="Industrial" />
+        <xs:enumeration value="Commercial" />
+        <xs:enumeration value="Hall/Lodge" />
+        <xs:enumeration value="Farm" />
+        <xs:enumeration value="Shared Accommodations" />
+        <xs:enumeration value="Short Term Rental" />
+        <xs:enumeration value="Storage" />
+        <xs:enumeration value="Mobile Home" />
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
   <xs:element name="BuildingInfo">
     <xs:complexType>
       <xs:sequence>

@@ -66,7 +66,7 @@ public class GottarentBuildingMapper {
         if (address == null || id == null || buildingName == null || rentalOffice == null) {
             return null;
         }
-        com.gottarent.rs.Building to = factory.createBuilding();
+        Building to = factory.createBuilding();
 
         to.setExternalBuildingId(id);
         to.setBuildingName(buildingName);
@@ -306,7 +306,7 @@ public class GottarentBuildingMapper {
         return result.length() > MAX_NAME_LENGTH ? result.substring(0, MAX_NAME_LENGTH) : result;
     }
 
-    private void setBuildingTypeOptionalData(com.propertyvista.domain.property.asset.building.BuildingInfo from, com.gottarent.rs.Building to) {
+    private void setBuildingTypeOptionalData(com.propertyvista.domain.property.asset.building.BuildingInfo from, Building to) {
         if (from == null) {
             return;
         }
@@ -351,11 +351,7 @@ public class GottarentBuildingMapper {
                 }
             }
         }
-        if (value != null) {
-
-            // LENGTH MUST be <= 25
-            to.setBuildingType(value);
-        }
+        to.setBuildingType(value == null ? "Apartment" : value);
     }
 
 }
