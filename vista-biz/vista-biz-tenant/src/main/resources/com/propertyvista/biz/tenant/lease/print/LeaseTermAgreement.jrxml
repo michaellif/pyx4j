@@ -100,8 +100,8 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="144" y="0" width="428" height="20"/>
-				<textElement markup="html"/>
+				<reportElement x="144" y="0" width="410" height="20"/>
+				<textElement textAlignment="Justified" markup="html"/>
 				<textFieldExpression><![CDATA[$F{body}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
@@ -110,7 +110,7 @@
 				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
-				<reportElement x="104" y="0" width="40" height="20"/>
+				<reportElement x="104" y="0" width="27" height="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{TERM_NUMBER}.toString() + "."]]></textFieldExpression>
 			</textField>
