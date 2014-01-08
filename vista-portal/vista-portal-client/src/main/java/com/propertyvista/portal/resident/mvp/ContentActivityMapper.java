@@ -66,7 +66,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordReset;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordResetRequest;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.LeaseContextSelection;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.PortalTerms;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
@@ -185,11 +185,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new NotificationPageActivity((NotificationPlace) place);
 
 // Internals/Terms: @formatter:off
-                    } else if (place instanceof PortalTerms.BillingPolicy 
-                            || place instanceof PortalTerms.CreditCardPolicy
-                            || place instanceof PortalTerms.ConvenienceFeeTerms
-                            || place instanceof PortalTerms.PadPolicy
-                            || place instanceof PortalTerms.TermsAndConditions) {
+                    } else if (place instanceof ResidentPortalTerms.BillingPolicy 
+                            || place instanceof ResidentPortalTerms.CreditCardPolicy
+                            || place instanceof ResidentPortalTerms.ConvenienceFeeTerms
+                            || place instanceof ResidentPortalTerms.PadPolicy
+                            || place instanceof ResidentPortalTerms.ResidentTermsAndConditions) {
                         activity = new ResidentTermsActivity(place);
                  // @formatter:on
 

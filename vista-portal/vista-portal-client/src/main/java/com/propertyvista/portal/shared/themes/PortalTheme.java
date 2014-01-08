@@ -302,6 +302,10 @@ public class PortalTheme extends Theme {
                 style.addProperty("overflow", "hidden");
                 addStyle(style);
 
+                style = new Style(".", StyleName.FormDecoratorMain, " ." + DefaultWidgetsTheme.StyleName.Anchor);
+                style.addProperty("color", ThemeColor.contrast2, 1);
+                addStyle(style);
+
                 super.initContentStyles();
             }
 

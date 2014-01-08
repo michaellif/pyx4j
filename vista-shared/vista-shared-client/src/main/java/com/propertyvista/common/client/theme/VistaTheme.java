@@ -443,11 +443,6 @@ public class VistaTheme extends Theme {
         addStyle(style);
     }
 
-    protected void initCheckBoxStyle() {
-        Style style = new Style(".", DefaultEntityFolderTheme.StyleName.EntityFolderRowItemDecorator, " .", CSSClass.pyx4j_CheckBox);
-        addStyle(style);
-    }
-
     protected void initHyperlinkStyle() {
     }
 

@@ -56,7 +56,7 @@ public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<Paym
 
     @Override
     public Class<? extends Place> getTermsOfUsePlace() {
-        return ResidentPortalSiteMap.PortalTerms.TermsAndConditions.class;
+        return ResidentPortalSiteMap.ResidentPortalTerms.ResidentTermsAndConditions.class;
     }
 
     @Override

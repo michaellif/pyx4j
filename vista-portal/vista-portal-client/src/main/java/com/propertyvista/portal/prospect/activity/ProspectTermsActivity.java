@@ -40,7 +40,7 @@ public class ProspectTermsActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
-        if (place instanceof ProspectPortalSiteMap.TermsAndConditions) {
+        if (place instanceof ProspectPortalSiteMap.ProspectPortalTerms.ProspectTermsAndConditions) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

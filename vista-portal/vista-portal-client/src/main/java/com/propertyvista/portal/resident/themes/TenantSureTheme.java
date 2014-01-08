@@ -116,13 +116,6 @@ public class TenantSureTheme extends Theme {
             addStyle(style);
         }
         {
-            Style style = new Style(".", TenantSureTheme.StyleName.TenantSurePresonalDisclaimer.name(), " .",
-                    NavigationAnchorTheme.StyleName.NavigationAnchor.name());
-            style.addProperty("font-size", "1em");
-            style.addProperty("padding", "0");
-            addStyle(style);
-        }
-        {
             Style style = new Style(".", TenantSureTheme.StyleName.TSUnavailableMessage.name());
             style.addProperty("text-align", "center");
             addStyle(style);

@@ -109,6 +109,6 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
 
     @Override
     public final Class<? extends Place> getPortalTermsPlace() {
-        return ResidentPortalSiteMap.PortalTerms.TermsAndConditions.class;
+        return ResidentPortalSiteMap.ResidentPortalTerms.ResidentTermsAndConditions.class;
     }
 }

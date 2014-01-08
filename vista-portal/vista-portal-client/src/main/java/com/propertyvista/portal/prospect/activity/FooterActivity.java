@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.shared.activity;
+package com.propertyvista.portal.prospect.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
@@ -21,10 +21,10 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.portal.prospect.ui.FooterView;
 import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalContentService;
 import com.propertyvista.portal.shared.PortalSite;
-import com.propertyvista.portal.shared.ui.FooterView;
 
 public class FooterActivity extends AbstractActivity {
 

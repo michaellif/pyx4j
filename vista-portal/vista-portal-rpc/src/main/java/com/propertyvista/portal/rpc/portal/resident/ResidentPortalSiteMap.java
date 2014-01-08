@@ -27,9 +27,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
     public static class Registration extends AppPlace implements PublicPlace {
     }
 
-    public static class PortalTerms {
+    public static class ResidentPortalTerms {
 
-        public static class TermsAndConditions extends AppPlace implements PublicPlace {
+        public static class ResidentTermsAndConditions extends AppPlace implements PublicPlace {
         }
 
         public static class PadPolicy extends AppPlace implements PublicPlace {

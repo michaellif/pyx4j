@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.PortalTerms;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.shared.ui.TermsView;
 
@@ -40,7 +40,7 @@ public class ResidentTermsActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
-        if (place instanceof PortalTerms.TermsAndConditions) {
+        if (place instanceof ResidentPortalTerms.ResidentTermsAndConditions) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -48,7 +48,7 @@ public class ResidentTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalTerms.BillingPolicy) {
+        } else if (place instanceof ResidentPortalTerms.BillingPolicy) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalBillingPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -56,7 +56,7 @@ public class ResidentTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalTerms.PadPolicy) {
+        } else if (place instanceof ResidentPortalTerms.PadPolicy) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalPadPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -64,7 +64,7 @@ public class ResidentTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalTerms.CreditCardPolicy) {
+        } else if (place instanceof ResidentPortalTerms.CreditCardPolicy) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalCcPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -72,7 +72,7 @@ public class ResidentTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalTerms.ConvenienceFeeTerms) {
+        } else if (place instanceof ResidentPortalTerms.ConvenienceFeeTerms) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalConvenienceFeeTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

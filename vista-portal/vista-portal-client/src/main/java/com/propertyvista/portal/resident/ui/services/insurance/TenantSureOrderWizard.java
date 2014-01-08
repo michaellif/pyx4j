@@ -108,7 +108,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal Disclaimer Terms"));
         HTMLPanel personalDisclaimer = new HTMLPanel(TenantSureResources.INSTANCE.personalDisclaimer().getText());
         Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
-        privacyPolicyAnchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         privacyPolicyAnchor.setHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
         privacyPolicyAnchor.setTarget("_blank");
         personalDisclaimer.addAndReplaceElement(privacyPolicyAnchor, TenantSureResources.PRIVACY_POLICY_ANCHOR_ID);

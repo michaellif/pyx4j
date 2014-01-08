@@ -27,7 +27,14 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
 
     public static String ARG_ILS_UNIT_ID = "unit";
 
-    public static class TermsAndConditions extends AppPlace implements PublicPlace {
+    public static class ProspectPortalTerms {
+
+        public static class ProspectTermsAndConditions extends AppPlace implements PublicPlace {
+        }
+
+        public static class RentalCriteriaGuidelines extends AppPlace implements PublicPlace {
+        }
+
     }
 
     @PlaceProperties(caption = "Prospect Registration")
