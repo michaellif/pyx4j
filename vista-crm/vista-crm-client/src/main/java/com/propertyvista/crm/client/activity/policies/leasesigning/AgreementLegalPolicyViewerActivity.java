@@ -18,15 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
-import com.propertyvista.crm.client.ui.crud.policies.leasesigning.LeaseSigningPolicyEditorView;
-import com.propertyvista.crm.rpc.services.policies.policy.LeaseSigningPolicyCrudService;
-import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.policies.leasesigning.AgreementLegalPolicyViewerView;
+import com.propertyvista.crm.rpc.services.policies.policy.AgreementLegalPolicyCrudService;
+import com.propertyvista.domain.policy.dto.AgreementLegalPolicyDTO;
 
-public class LeaseSigningPolicyEditorActivity extends PolicyEditorActivityBase<LeaseSigningPolicyDTO> {
+public class AgreementLegalPolicyViewerActivity extends CrmViewerActivity<AgreementLegalPolicyDTO> {
 
-    public LeaseSigningPolicyEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LeaseSigningPolicyEditorView.class), GWT
-                .<LeaseSigningPolicyCrudService> create(LeaseSigningPolicyCrudService.class), LeaseSigningPolicyDTO.class);
+    public AgreementLegalPolicyViewerActivity(CrudAppPlace place) {
+        super(place, CrmSite.getViewFactory().getView(AgreementLegalPolicyViewerView.class), GWT
+                .<AgreementLegalPolicyCrudService> create(AgreementLegalPolicyCrudService.class));
     }
+
 }

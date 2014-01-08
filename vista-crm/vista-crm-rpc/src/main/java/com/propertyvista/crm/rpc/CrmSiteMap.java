@@ -520,7 +520,7 @@ public class CrmSiteMap implements SiteMap {
             public static class OnlineApplication extends CrmCrudAppPlace {
             }
 
-            public static class LeaseLegalTerms extends CrmCrudAppPlace {
+            public static class AgreementLegalTerms extends CrmCrudAppPlace {
             }
 
             public static class AR extends CrmCrudAppPlace {

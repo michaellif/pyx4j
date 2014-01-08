@@ -28,15 +28,15 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
-import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
+import com.propertyvista.domain.policy.dto.AgreementLegalPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 
-public class LeaseSigningPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseSigningPolicyDTO> {
+public class AgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<AgreementLegalPolicyDTO> {
 
-    private static final I18n i18n = I18n.get(LeaseSigningPolicyForm.class);
+    private static final I18n i18n = I18n.get(AgreementLegalPolicyForm.class);
 
-    public LeaseSigningPolicyForm(IForm<LeaseSigningPolicyDTO> view) {
-        super(LeaseSigningPolicyDTO.class, view);
+    public AgreementLegalPolicyForm(IForm<AgreementLegalPolicyDTO> view) {
+        super(AgreementLegalPolicyDTO.class, view);
     }
 
     @Override

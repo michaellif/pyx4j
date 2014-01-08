@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.propertyvista.crm.rpc.services.policies.policy.LeaseSigningPolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.AgreementLegalPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
-import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
+import com.propertyvista.domain.policy.dto.AgreementLegalPolicyDTO;
 import com.propertyvista.domain.policy.policies.AgreementLegalPolicy;
 
-public class LeaseSigningPolicyCrudServiceImpl extends GenericPolicyCrudService<AgreementLegalPolicy, LeaseSigningPolicyDTO> implements
-        LeaseSigningPolicyCrudService {
+public class AgreementLegalPolicyCrudServiceImpl extends GenericPolicyCrudService<AgreementLegalPolicy, AgreementLegalPolicyDTO> implements
+        AgreementLegalPolicyCrudService {
 
-    public LeaseSigningPolicyCrudServiceImpl() {
-        super(AgreementLegalPolicy.class, LeaseSigningPolicyDTO.class);
+    public AgreementLegalPolicyCrudServiceImpl() {
+        super(AgreementLegalPolicy.class, AgreementLegalPolicyDTO.class);
     }
 }

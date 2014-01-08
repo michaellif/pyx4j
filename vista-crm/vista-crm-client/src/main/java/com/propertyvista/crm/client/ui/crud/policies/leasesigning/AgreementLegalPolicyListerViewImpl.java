@@ -15,17 +15,17 @@ package com.propertyvista.crm.client.ui.crud.policies.leasesigning;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
+import com.propertyvista.domain.policy.dto.AgreementLegalPolicyDTO;
 
-public class LeaseSigningPolicyListerViewImpl extends CrmListerViewImplBase<LeaseSigningPolicyDTO> implements LeaseSigningPolicyListerView {
+public class AgreementLegalPolicyListerViewImpl extends CrmListerViewImplBase<AgreementLegalPolicyDTO> implements AgreementLegalPolicyListerView {
 
-    public LeaseSigningPolicyListerViewImpl() {
-        setLister(new LeaseSigningPolicyLister());
+    public AgreementLegalPolicyListerViewImpl() {
+        setLister(new AgreementLegalPolicyLister());
     }
 
-    public static class LeaseSigningPolicyLister extends PolicyListerBase<LeaseSigningPolicyDTO> {
-        public LeaseSigningPolicyLister() {
-            super(LeaseSigningPolicyDTO.class);
+    public static class AgreementLegalPolicyLister extends PolicyListerBase<AgreementLegalPolicyDTO> {
+        public AgreementLegalPolicyLister() {
+            super(AgreementLegalPolicyDTO.class);
         }
     }
 }

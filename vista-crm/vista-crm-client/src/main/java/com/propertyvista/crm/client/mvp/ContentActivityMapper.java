@@ -200,9 +200,9 @@ import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjus
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseSigningPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseSigningPolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseSigningPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.AgreementLegalPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.AgreementLegalPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.AgreementLegalPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyViewerActivity;
@@ -1055,16 +1055,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Policies.LeaseLegalTerms) {
+                    } else if (crudPlace instanceof Administration.Policies.AgreementLegalTerms) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new LeaseSigningPolicyListerActivity(crudPlace);
+                            activity = new AgreementLegalPolicyListerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new LeaseSigningPolicyEditorActivity(crudPlace);
+                            activity = new AgreementLegalPolicyEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new LeaseSigningPolicyViewerActivity(crudPlace);
+                            activity = new AgreementLegalPolicyViewerActivity(crudPlace);
                             break;
                         }
 

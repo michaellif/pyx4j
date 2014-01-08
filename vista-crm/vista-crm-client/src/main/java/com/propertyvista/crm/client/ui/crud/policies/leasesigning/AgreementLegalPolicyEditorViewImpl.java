@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.leasesigning;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
-import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
+import com.propertyvista.domain.policy.dto.AgreementLegalPolicyDTO;
 
-public class LeaseSigningPolicyEditorViewImpl extends PolicyEditorViewImplBase<LeaseSigningPolicyDTO> implements LeaseSigningPolicyEditorView {
+public class AgreementLegalPolicyEditorViewImpl extends PolicyEditorViewImplBase<AgreementLegalPolicyDTO> implements AgreementLegalPolicyEditorView {
 
-    public LeaseSigningPolicyEditorViewImpl() {
-        setForm(new LeaseSigningPolicyForm(this));
+    public AgreementLegalPolicyEditorViewImpl() {
+        setForm(new AgreementLegalPolicyForm(this));
     }
 }

@@ -11,12 +11,16 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.leasesigning;
+package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.site.client.ui.prime.form.IEditor;
+import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
+import com.propertyvista.domain.policy.framework.PolicyDTOBase;
+import com.propertyvista.domain.policy.policies.AgreementLegalPolicy;
 
-public interface LeaseSigningPolicyEditorView extends IEditor<LeaseSigningPolicyDTO> {
+@Transient
+@ExtendsBO(AgreementLegalPolicy.class)
+public interface AgreementLegalPolicyDTO extends PolicyDTOBase, AgreementLegalPolicy {
 
 }

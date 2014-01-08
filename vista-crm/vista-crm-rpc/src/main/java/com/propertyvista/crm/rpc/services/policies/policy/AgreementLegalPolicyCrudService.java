@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.propertyvista.domain.policy.dto.LeaseSigningPolicyDTO;
+import com.propertyvista.domain.policy.dto.AgreementLegalPolicyDTO;
 
-public interface LeaseSigningPolicyCrudService extends AbstractPolicyCrudService<LeaseSigningPolicyDTO> {
+public interface AgreementLegalPolicyCrudService extends AbstractPolicyCrudService<AgreementLegalPolicyDTO> {
 
 }
