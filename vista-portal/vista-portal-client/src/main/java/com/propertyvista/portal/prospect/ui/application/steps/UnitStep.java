@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
@@ -215,11 +216,12 @@ public class UnitStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, inject(proto().display()));
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().display())).labelPosition(LabelPosition.hidden).build());
                 mainPanel.setWidget(++row, 0, new Button(i18n.tr("Select"), new Command() {
                     @Override
                     public void execute() {
                         selectedUnit.setValue(getValue());
+                        setEditableState(false);
                     }
                 }));
 

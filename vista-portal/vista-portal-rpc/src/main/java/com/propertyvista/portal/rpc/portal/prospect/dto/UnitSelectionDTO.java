@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -46,6 +47,7 @@ public interface UnitSelectionDTO extends IEntity {
     IPrimitive<Integer> bathrooms();
 
     @Transient
+    @ToStringFormat("{0} ({1} beds, {2} baths, Available from {3}, Price is ${4})")
     public interface UnitTO extends IEntity {
 
         @Editor(type = Editor.EditorType.label)
