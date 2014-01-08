@@ -1042,7 +1042,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Policies.OnlineApplication) {
+                    } else if (crudPlace instanceof Administration.Policies.OnlineApplicationTerms) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new OnlineApplicationPolicyListerActivity(crudPlace);
