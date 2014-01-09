@@ -90,7 +90,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
         SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
         String anchorId = HTMLPanel.createUniqueId();
-        loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to our  {0}.", "<span id=\""
+        loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to our {0}.", "<span id=\""
                 + anchorId + "\"></span>"));
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());

@@ -22,6 +22,7 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -265,8 +266,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         Anchor termsAnchor = new TermsAnchor(i18n.tr("Service Fee Terms and Conditions"), ResidentPortalTerms.ConvenienceFeeTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), new CSignature(signatureDescriptionPanel))).customLabel("")
-                .labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), new CSignature(signatureDescriptionPanel)))
+                .customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build());
         get(proto().convenienceFeeSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
             public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
@@ -507,22 +508,21 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private Widget createLegalTermsPanel() {
 
+        SafeHtmlBuilder legalTermsBuilder = new SafeHtmlBuilder();
+        final String termsOfUseAnchorId = HTMLPanel.createUniqueId();
+        final String billingPolicyAnchorId = HTMLPanel.createUniqueId();
+        legalTermsBuilder.appendHtmlConstant(i18n.tr("Be informed that you are acknowledging our {0} and {1}.", "<span id=\"" + termsOfUseAnchorId
+                + "\"></span>", "<span id=\"" + billingPolicyAnchorId + "\"></span>"));
+
+        final HTMLPanel legalTermsLinkPanel = new HTMLPanel(legalTermsBuilder.toSafeHtml());
+
         Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.TermsAndConditions.class);
+        legalTermsLinkPanel.addAndReplaceElement(termsOfUseAnchor, termsOfUseAnchorId);
 
         Anchor billingPolicyAnchor = new TermsAnchor(i18n.tr("Billing And Refund Policy"), ResidentPortalTerms.BillingTerms.class);
+        legalTermsLinkPanel.addAndReplaceElement(billingPolicyAnchor, billingPolicyAnchorId);
 
-        FlowPanel panel = new FlowPanel();
-
-        panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
-        panel.add(termsOfUseAnchor);
-
-        Widget w;
-        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        panel.add(billingPolicyAnchor);
-
-        return panel;
+        return legalTermsLinkPanel;
     }
 
     private class DirectBankingInstructionDialog extends OkDialog {

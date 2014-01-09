@@ -27,10 +27,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -367,7 +369,16 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     private Widget createLegalTermsPanel() {
 
+        SafeHtmlBuilder legalTermsBuilder = new SafeHtmlBuilder();
+        final String termsOfUseAnchorId = HTMLPanel.createUniqueId();
+        final String preAuthorizedAgreementId = HTMLPanel.createUniqueId();
+        legalTermsBuilder.appendHtmlConstant(i18n.tr("Be informed that you are acknowledging our {0} and {1}.", "<span id=\"" + termsOfUseAnchorId
+                + "\"></span>", "<span id=\"" + preAuthorizedAgreementId + "\"></span>"));
+
+        final HTMLPanel legalTermsLinkPanel = new HTMLPanel(legalTermsBuilder.toSafeHtml());
+
         Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.TermsAndConditions.class);
+        legalTermsLinkPanel.addAndReplaceElement(termsOfUseAnchor, termsOfUseAnchorId);
 
         final TermsAnchor preAuthorizedAgreementAnchor = new TermsAnchor(i18n.tr("Pre-Authorized Agreement"), null);
         preAuthorizedAgreementAnchor.addClickHandler(new ClickHandler() {
@@ -388,17 +399,8 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             }
         });
 
-        FlowPanel panel = new FlowPanel();
+        legalTermsLinkPanel.addAndReplaceElement(preAuthorizedAgreementAnchor, preAuthorizedAgreementId);
 
-        panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
-        panel.add(termsOfUseAnchor);
-
-        Widget w;
-        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        panel.add(preAuthorizedAgreementAnchor);
-
-        return panel;
+        return legalTermsLinkPanel;
     }
 }
