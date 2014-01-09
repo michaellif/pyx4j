@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -27,6 +28,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -180,24 +182,27 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
     }
 
-    class SignaturePanel extends FlowPanel implements IFocusWidget {
+    class SignaturePanel extends DockPanel implements IFocusWidget {
 
         private final CheckBox checkBox;
 
         private final TextBox textBox;
 
-        private final SimplePanel customWidgetHolder;
+        private final SimplePanel descriptionWidgetHolder;
 
         public SignaturePanel() {
 
             setStyleName(CComponentTheme.StyleName.Signature.name());
 
-            checkBox = new CheckBox(getCComponent().getCheckBoxText() + " ");
-            add(checkBox);
-            customWidgetHolder = new SimplePanel();
-            add(customWidgetHolder);
             textBox = new TextBox();
-            add(textBox);
+            add(textBox, DockPanel.SOUTH);
+
+            checkBox = new CheckBox();
+            add(checkBox, DockPanel.WEST);
+            setCellWidth(checkBox, "1px");
+
+            descriptionWidgetHolder = new SimplePanel();
+            add(descriptionWidgetHolder, DockPanel.CENTER);
 
         }
 
@@ -206,14 +211,12 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             case AgreeBox:
             case AgreeBoxAndFullName:
                 checkBox.setVisible(true);
-                customWidgetHolder.setVisible(true);
-                if (getCComponent().getCustomWidget() != null) {
-                    customWidgetHolder.setWidget(getCComponent().getCustomWidget());
-                }
+                descriptionWidgetHolder.setVisible(true);
+                descriptionWidgetHolder.setWidget(getCComponent().getDescriptionWidget());
                 break;
             default:
                 checkBox.setVisible(false);
-                customWidgetHolder.setVisible(false);
+                descriptionWidgetHolder.setVisible(false);
                 break;
             }
 

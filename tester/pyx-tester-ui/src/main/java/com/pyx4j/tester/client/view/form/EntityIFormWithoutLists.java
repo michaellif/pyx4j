@@ -25,7 +25,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -114,7 +116,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
             }
         });
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signature1(), new CSignature(i18n.tr("I Agree with"), anchor))).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signature1(), new CSignature(anchor))).build());
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().hue())).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().color())).build());

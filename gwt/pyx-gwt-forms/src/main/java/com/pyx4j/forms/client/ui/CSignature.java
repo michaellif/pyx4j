@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -31,17 +32,15 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
 
     private static final I18n i18n = I18n.get(CSignature.class);
 
-    private String checkBoxText;
+    private IsWidget descriptionWidget;
 
-    private IsWidget customWidget;
-
-    public CSignature(String checkBoxText) {
-        this(checkBoxText, null);
+    public CSignature(String text) {
+        this(new Label(text));
     }
 
-    public CSignature(String checkBoxText, IsWidget customWidget) {
+    public CSignature(IsWidget widget) {
         super();
-        setCustomWidget(customWidget);
+        descriptionWidget = widget;
         setNativeWidget(new NSignature(this));
         asWidget().setWidth("100%");
 
@@ -78,20 +77,8 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
         });
     }
 
-    public void setCheckBoxText(String checkBoxText) {
-        this.checkBoxText = checkBoxText;
-    }
-
-    public String getCheckBoxText() {
-        return checkBoxText;
-    }
-
-    public void setCustomWidget(IsWidget widget) {
-        this.customWidget = widget;
-    }
-
-    public IsWidget getCustomWidget() {
-        return customWidget;
+    public IsWidget getDescriptionWidget() {
+        return descriptionWidget;
     }
 
 }
