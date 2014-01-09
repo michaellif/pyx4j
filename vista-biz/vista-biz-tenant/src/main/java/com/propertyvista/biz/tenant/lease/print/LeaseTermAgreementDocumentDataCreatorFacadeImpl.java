@@ -23,6 +23,8 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -37,7 +39,9 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
     public LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm) {
         Persistence.service().retrieve(leaseTerm.lease());
         Persistence.service().retrieve(leaseTerm.version().tenants());
+        Persistence.service().retrieve(leaseTerm.version().guarantors());
         Persistence.service().retrieve(leaseTerm.version().agreementLegalTerms());
+        Persistence.service().retrieve(leaseTerm.version().utilities());
 
         LeaseAgreementDocumentDataDTO leaseAgreementData = EntityFactory.create(LeaseAgreementDocumentDataDTO.class);
         leaseAgreementData.landlordName().setValue("TODO Landlord Name");
@@ -96,9 +100,51 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
     private LeaseAgreementDocumentLegalTerm4PrintDTO makeRentTerm(LeaseTerm leaseTerm) {
         LeaseAgreementDocumentLegalTerm4PrintDTO term4print = EntityFactory.create(LeaseAgreementDocumentLegalTerm4PrintDTO.class);
         term4print.title().setValue("Rent");
-        term4print.body().setValue(
-                "The Tenant agrees to pay to the Landlord, at the Landlord’s office or such place as directed in writing from time to time by the Landlord:<br>"
-                        + "TODO<br>"); // TODO implement lease rent term
+
+        StringBuilder termBuilder = new StringBuilder();
+        termBuilder
+                .append("The Tenant agrees to pay to the Landlord, at the Landlord’s office or such place as directed in writing from time to time by the Landlord:<br>");
+        termBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+        termBuilder
+                .append(SimpleMessageFormat.format("Rent: ${0,number,#,##0.00}", leaseTerm.version().leaseProducts().serviceItem().agreedPrice().getValue()));
+
+        termBuilder.append("<br>");
+        if (!leaseTerm.version().leaseProducts().featureItems().isEmpty()) {
+            termBuilder.append("<br>");
+            for (BillableItem featureItem : leaseTerm.version().leaseProducts().featureItems()) {
+                termBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                termBuilder.append(SimpleMessageFormat.format("{0} {1}: ${2,number,#,##0.00}", featureItem.item().name().getValue(), featureItem.description()
+                        .getValue(), featureItem.agreedPrice().getValue()));
+
+                if (!featureItem.effectiveDate().isNull() || !featureItem.expirationDate().isNull()) {
+                    termBuilder.append(" (");
+                }
+                if (!featureItem.effectiveDate().isNull()) {
+                    termBuilder.append(SimpleMessageFormat.format("Effective Date: {0,date,dd/MM/YYYY}", featureItem.effectiveDate().getValue()));
+                }
+                if (!featureItem.expirationDate().isNull()) {
+                    if (!featureItem.expirationDate().isNull()) {
+                        termBuilder.append(", ");
+                    }
+                    termBuilder.append(SimpleMessageFormat.format("Expiration Date: {0,date,dd/MM/YYYY}", featureItem.expirationDate().getValue()));
+                }
+                if (!featureItem.effectiveDate().isNull() || !featureItem.expirationDate().isNull()) {
+                    termBuilder.append(")");
+                }
+                termBuilder.append("<br>");
+            }
+        }
+        if (!leaseTerm.version().utilities().isEmpty()) {
+            termBuilder.append("<br>");
+            termBuilder.append("Included Utilities:<br>");
+            for (BuildingUtility utility : leaseTerm.version().utilities()) {
+                termBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;").append(
+                        SimpleMessageFormat.format(SimpleMessageFormat.format("{0}: {1} ({2})<br>", utility.type().getValue(), utility.name().getValue(),
+                                utility.description().getValue())));
+            }
+        }
+        term4print.body().setValue(termBuilder.toString());
+
         return term4print;
     }
 
