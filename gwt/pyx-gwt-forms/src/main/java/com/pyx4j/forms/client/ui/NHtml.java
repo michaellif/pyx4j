@@ -22,8 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
-
 import com.pyx4j.widgets.client.Label;
 
 public class NHtml extends NField<String, Label, CHtml, Label> {
