@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.lease;
+package com.propertyvista.biz.tenant.lease.print;
 
 import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 

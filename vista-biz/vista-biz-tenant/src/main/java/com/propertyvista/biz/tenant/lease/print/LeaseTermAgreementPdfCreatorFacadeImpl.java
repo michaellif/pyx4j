@@ -24,7 +24,6 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 
-import com.propertyvista.biz.tenant.lease.LeaseTermAgreementPdfCreatorFacade;
 import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 

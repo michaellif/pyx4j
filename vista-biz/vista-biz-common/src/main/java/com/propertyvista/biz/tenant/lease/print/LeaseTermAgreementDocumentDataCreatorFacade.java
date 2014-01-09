@@ -7,15 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-01-08
+ * Created on 2014-01-09
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.lease;
+package com.propertyvista.biz.tenant.lease.print;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.essentials.rpc.report.ReportService;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 
-public interface LeaseTermAgreementDocumentDownloadService extends ReportService<IEntity> {
+public interface LeaseTermAgreementDocumentDataCreatorFacade {
+
+    LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm);
 
 }

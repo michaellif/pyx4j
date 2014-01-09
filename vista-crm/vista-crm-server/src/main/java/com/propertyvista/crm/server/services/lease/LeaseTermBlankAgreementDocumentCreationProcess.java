@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -27,9 +27,9 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
-import com.propertyvista.biz.tenant.lease.LeaseTermAgreementPdfCreatorFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementPdfCreatorFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 
 public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDeferredProcess {
 
@@ -45,20 +45,23 @@ public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDefe
 
     private volatile Throwable error;
 
+    private final Lease leaseId;
+
     public LeaseTermBlankAgreementDocumentCreationProcess(Lease leaseId) {
         this.progress = new AtomicInteger();
         this.progress.set(0);
         this.progressMax = 1;
+        this.leaseId = leaseId;
     }
 
     @Override
     public void execute() {
         try {
-            LeaseAgreementDocumentDataDTO agreementData = EntityFactory.create(LeaseAgreementDocumentDataDTO.class);
-            // TODO implement agreement data 
-            byte[] pdfBytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(agreementData);
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            byte[] pdfBytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(
+                    ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(lease.currentTerm()));
             Downloadable d = new Downloadable(pdfBytes, MimeMap.getContentType(DownloadFormat.PDF));
-            fileName = "agreement.pdf";
+            fileName = "blank-lease-agreement.pdf";
             d.save(fileName);
         } catch (Throwable e) {
             log.error("blank agreement document generation failed", e);
@@ -80,7 +83,7 @@ public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDefe
         }
         if (error != null) {
             r.setError();
-            r.setErrorStatusMessage("failed to agreement document slip printout due to " + error.getMessage());
+            r.setErrorStatusMessage("failed to agreement document printout due to " + error.getMessage());
         }
         return r;
     }

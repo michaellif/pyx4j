@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.biz.tenant.lease.LeaseTermAgreementPdfCreatorFacade;
 import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO;
