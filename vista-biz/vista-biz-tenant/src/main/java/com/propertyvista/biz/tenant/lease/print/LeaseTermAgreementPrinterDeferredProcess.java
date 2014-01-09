@@ -51,7 +51,7 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
             public Void execute() {
                 try {
                     byte[] agreementPdf = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(
-                            ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(leaseTerm));
+                            ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(leaseTerm, false));
                     saveBlob(agreementPdf);
                 } catch (Throwable e) {
                     throw new RuntimeException(e);

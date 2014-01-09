@@ -128,14 +128,14 @@
 		</band>
 		<band height="1" splitType="Stretch">
 			<subreport>
-				<reportElement x="104" y="0" width="468" height="1"/>
+				<reportElement x="104" y="0" width="450" height="1"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{signatures})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseTermSignatures")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="1" splitType="Stretch">
 			<subreport>
-				<reportElement x="104" y="0" width="468" height="1"/>
+				<reportElement x="104" y="0" width="450" height="1"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{signaturePlaceholders})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseTermSignaturePlaceholders")]]></subreportExpression>
 			</subreport>

@@ -20,6 +20,7 @@ import java.util.List;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
@@ -30,13 +31,14 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
+import com.propertyvista.dto.LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermTenantDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTermAgreementDocumentDataCreatorFacade {
 
     @Override
-    public LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm) {
+    public LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, boolean blankSignatures) {
         Persistence.service().retrieve(leaseTerm.lease());
         Persistence.service().retrieve(leaseTerm.version().tenants());
         Persistence.service().retrieve(leaseTerm.version().guarantors());
@@ -52,7 +54,8 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         leaseAgreementData.terms().add(makePremisesTerm(AddressRetriever.getUnitLegalAddress(leaseTerm.lease().unit())));
         leaseAgreementData.terms().add(makeTermTerm(leaseTerm));
         leaseAgreementData.terms().add(makeRentTerm(leaseTerm));
-        leaseAgreementData.terms().addAll(makeTermsForPrint(leaseTerm));
+        leaseAgreementData.terms().addAll(makeTermsForPrint(leaseTerm, blankSignatures));
+
         return leaseAgreementData;
     }
 
@@ -154,7 +157,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         StringBuilder occupantsTermBody = new StringBuilder();
         occupantsTermBody.append("It is understood and agreed that only the following persons shall occupy the Premises in addition to the Tenant(s):<br>");
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
-            if (tenant.role().getValue() != Role.Applicant || tenant.role().getValue() != Role.CoApplicant) {
+            if (tenant.role().getValue() != Role.Applicant && tenant.role().getValue() != Role.CoApplicant) {
                 occupantsTermBody.append(tenant.leaseParticipant().customer().person().name().getStringView());
                 occupantsTermBody.append("<br>");
             }
@@ -169,25 +172,42 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
             if (tenant.role().getValue() == Role.Applicant || tenant.role().getValue() == Role.CoApplicant) {
                 LeaseAgreementDocumentLegalTermTenantDTO agreementTenant = EntityFactory.create(LeaseAgreementDocumentLegalTermTenantDTO.class);
                 agreementTenant.fullName().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
+                agreementApplicants.add(agreementTenant);
             }
         }
         return agreementApplicants;
     }
 
-    private Collection<? extends LeaseAgreementDocumentLegalTerm4PrintDTO> makeTermsForPrint(LeaseTerm leaseTerm) {
+    private Collection<? extends LeaseAgreementDocumentLegalTerm4PrintDTO> makeTermsForPrint(LeaseTerm leaseTerm, boolean blankSignatures) {
         List<LeaseAgreementDocumentLegalTerm4PrintDTO> legalTerms4Print = new LinkedList<LeaseAgreementDocumentLegalTerm4PrintDTO>();
         for (AgreementLegalTerm legalTerm : leaseTerm.version().agreementLegalTerms()) {
-            legalTerms4Print.add(makeTermForPrint(legalTerm));
+            legalTerms4Print.add(makeTermForPrint(leaseTerm, legalTerm, blankSignatures));
         }
         return legalTerms4Print;
     }
 
-    private LeaseAgreementDocumentLegalTerm4PrintDTO makeTermForPrint(AgreementLegalTerm legalTerm) {
+    private LeaseAgreementDocumentLegalTerm4PrintDTO makeTermForPrint(LeaseTerm leaseTerm, AgreementLegalTerm legalTerm, boolean blankSignatures) {
+
         LeaseAgreementDocumentLegalTerm4PrintDTO legalTerm4Print = EntityFactory.create(LeaseAgreementDocumentLegalTerm4PrintDTO.class);
         legalTerm4Print.id().setValue(legalTerm.id().getValue());
         legalTerm4Print.title().setValue(legalTerm.title().getValue());
         legalTerm4Print.body().setValue(legalTerm.body().getValue());
+        if (blankSignatures
+                && (legalTerm.signatureFormat().getValue() == SignatureFormat.FullName || legalTerm.signatureFormat().getValue() == SignatureFormat.AgreeBoxAndFullName)) {
+            for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
+                if (shouldSign(tenant)) {
+                    LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO signaturePlaceholder = legalTerm4Print.signaturePlaceholders().$();
+                    signaturePlaceholder.tenantName().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
+                    legalTerm4Print.signaturePlaceholders().add(signaturePlaceholder);
+                }
+            }
+        }
+
         // TODO deal with signatures
         return legalTerm4Print;
+    }
+
+    private boolean shouldSign(LeaseTermTenant tenant) {
+        return tenant.role().getValue() == Role.Applicant || tenant.role().getValue() == Role.CoApplicant;
     }
 }
