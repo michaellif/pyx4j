@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+//TODO use the same way as PortalVistaTermsService
 public interface PmcTermsOfServiceService extends AbstractLegalTermsService {
 
 }

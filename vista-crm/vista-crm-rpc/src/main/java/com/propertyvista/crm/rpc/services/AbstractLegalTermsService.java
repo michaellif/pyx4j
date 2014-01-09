@@ -17,10 +17,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
+import com.propertyvista.shared.rpc.LegalTermsTO;
 
 public interface AbstractLegalTermsService extends IService {
 
-    void retrieveLegalTerms(AsyncCallback<LegalTermsContent> callback);
+    void retrieveLegalTerms(AsyncCallback<LegalTermsTO> callback);
 
 }

@@ -13,71 +13,19 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.core.EntityFactory;
-
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
-import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
-import com.propertyvista.domain.policy.policies.PmcTermsPolicy;
-import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
-import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 
-public class LegalDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudService<PmcTermsPolicy, LegalDocumentationPolicyDTO> {
+public class LegalDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudService<LegalTermsPolicy, LegalTermsPolicyDTO> {
 
     public LegalDocumentationPolicyCrudServiceImpl() {
-        super(PmcTermsPolicy.class, LegalDocumentationPolicyDTO.class);
+        super(LegalTermsPolicy.class, LegalTermsPolicyDTO.class);
     }
 
     @Override
-    protected LegalDocumentationPolicyDTO init(InitializationData initializationData) {
-        LegalDocumentationPolicyDTO policy = super.init(initializationData);
-        // load default values:
-        policy.mainApplication().add(createNewLegalTerms());
-        policy.coApplication().add(createNewLegalTerms());
-        policy.guarantorApplication().add(createNewLegalTerms());
-        policy.lease().add(createNewLegalTerms());
-        policy.paymentAuthorization().add(createNewLegalTerms());
-
-        return policy;
-    }
-
-    @Override
-    protected void persist(PmcTermsPolicy dbo, LegalDocumentationPolicyDTO in) {
-        StringBuffer errors = new StringBuffer();
-        if (!isValid(in, errors)) {
-            throw new UserRuntimeException(errors.toString());
-        }
-        super.persist(dbo, in);
-    }
-
-    private static boolean isValid(LegalDocumentationPolicyDTO in, StringBuffer errors) {
-        boolean isValid = true;
-        if (!(isValid &= !in.mainApplication().isEmpty())) {
-            errors.append("Summary terms list must not be empty; ");
-        } else {
-            for (LegalTermsDescriptor terms : in.mainApplication()) {
-                if (!(isValid &= isValid(terms))) {
-                    // TODO add message
-                }
-            }
-        }
-
-        // FIXME finish validation for lease terms
-        return isValid;
-    }
-
-    private static boolean isValid(LegalTermsDescriptor terms) {
-        // FIXME finish this
-        return true;
-    }
-
-    /** Create new empty terms descriptor with a empty content */
-    private LegalTermsDescriptor createNewLegalTerms() {
-        LegalTermsDescriptor termsDescriptor = EntityFactory.create(LegalTermsDescriptor.class);
-
-        termsDescriptor.content().add(EntityFactory.create(LegalTermsContent.class));
-
-        return termsDescriptor;
+    protected LegalTermsPolicyDTO init(InitializationData initializationData) {
+        throw new IllegalArgumentException();
     }
 
 }

@@ -7,20 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 3, 2012
+ * Created on Dec 29, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.dto;
+package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.pyx4j.entity.annotations.ExtendsBO;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.PmcTermsPolicy;
+import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-@Transient
-@ExtendsBO(PmcTermsPolicy.class)
-public interface LegalDocumentationPolicyDTO extends PolicyDTOBase, PmcTermsPolicy {
+public interface LegalTermsPolicyViewerView extends IViewer<LegalTermsPolicyDTO> {
 
 }

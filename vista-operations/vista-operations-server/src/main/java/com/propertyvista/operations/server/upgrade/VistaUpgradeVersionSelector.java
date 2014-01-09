@@ -19,6 +19,7 @@ import com.propertyvista.operations.server.upgrade.u_1_0_5.UpgradeProcedure105;
 import com.propertyvista.operations.server.upgrade.u_1_0_6.UpgradeProcedure106;
 import com.propertyvista.operations.server.upgrade.u_1_0_9.UpgradeProcedure109;
 import com.propertyvista.operations.server.upgrade.u_1_1_0.UpgradeProcedure110;
+import com.propertyvista.operations.server.upgrade.u_1_1_3.UpgradeProcedure113;
 
 class VistaUpgradeVersionSelector {
 
@@ -32,6 +33,8 @@ class VistaUpgradeVersionSelector {
             return new UpgradeProcedure109();
         } else if ("1.1.0".equals(majorVersion)) {
             return new UpgradeProcedure110();
+        } else if ("1.1.3".equals(majorVersion)) {
+            return new UpgradeProcedure113();
         } else {
             return null;
         }

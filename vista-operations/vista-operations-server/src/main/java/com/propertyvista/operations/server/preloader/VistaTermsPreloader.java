@@ -69,7 +69,7 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
             throw new Error(e);
         }
         if (termsContent == null) {
-            throw new Error("Resource " + termsSourceFile + " not found to populate document");
+            throw new Error("Resource " + termsSourceFile + " not found to populate document " + target);
         }
 
         LegalDocument legalDocument = EntityFactory.create(LegalDocument.class);

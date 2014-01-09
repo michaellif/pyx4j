@@ -19,18 +19,18 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalTermsPolicyEditorView;
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.LegalDocumentationPolicyCrudService;
-import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
+import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public class LegalDocumentationPolicyEditorActivity extends PolicyEditorActivityBase<LegalDocumentationPolicyDTO> implements
-        LegalDocumentationPolicyEditorView.Presenter {
+public class LegalTermsPolicyEditorActivity extends PolicyEditorActivityBase<LegalTermsPolicyDTO> implements
+        LegalTermsPolicyEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public LegalDocumentationPolicyEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LegalDocumentationPolicyEditorView.class),
-                (AbstractPolicyCrudService<LegalDocumentationPolicyDTO>) GWT.create(LegalDocumentationPolicyCrudService.class),
-                LegalDocumentationPolicyDTO.class);
+    public LegalTermsPolicyEditorActivity(CrudAppPlace place) {
+        super(place, CrmSite.getViewFactory().getView(LegalTermsPolicyEditorView.class),
+                (AbstractPolicyCrudService<LegalTermsPolicyDTO>) GWT.create(LegalDocumentationPolicyCrudService.class),
+                LegalTermsPolicyDTO.class);
     }
 }

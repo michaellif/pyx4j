@@ -15,18 +15,20 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
+import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public class LegalDocumentationPolicyListerViewImpl extends CrmListerViewImplBase<LegalDocumentationPolicyDTO> implements LegalDocumentationPolicyListerView {
+public class LegalTermsPolicyListerViewImpl extends CrmListerViewImplBase<LegalTermsPolicyDTO> implements LegalTermsPolicyListerView {
 
-    public LegalDocumentationPolicyListerViewImpl() {
+    public LegalTermsPolicyListerViewImpl() {
         setLister(new LegalDocumentationPolicyLister());
     }
 
-    public static class LegalDocumentationPolicyLister extends PolicyListerBase<LegalDocumentationPolicyDTO> {
+    public static class LegalDocumentationPolicyLister extends PolicyListerBase<LegalTermsPolicyDTO> {
 
         public LegalDocumentationPolicyLister() {
-            super(LegalDocumentationPolicyDTO.class);
+            super(LegalTermsPolicyDTO.class);
+            getAddButton().setVisible(false);
+            getDeleteButton().setVisible(false);
         }
     }
 }

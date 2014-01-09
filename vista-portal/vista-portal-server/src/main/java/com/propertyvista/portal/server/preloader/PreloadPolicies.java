@@ -23,7 +23,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPol
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalDocumentationPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
@@ -65,7 +65,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new LeaseAdjustmentPolicyPreloader());
             add(new LeaseBillingPolicyPreloader());
         } else {
-            add(new LegalDocumentationPolicyPreloader());
+            add(new LegalTermsPolicyPreloader());
             add(new MockupProductTaxPolicyPreloader());
             add(new MockupDepositPolicyPreloader());
             add(new MockupLeaseAdjustmentPolicyPreloader());

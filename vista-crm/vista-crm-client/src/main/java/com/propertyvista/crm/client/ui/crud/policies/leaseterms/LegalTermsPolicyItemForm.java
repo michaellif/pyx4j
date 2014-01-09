@@ -19,12 +19,12 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsPolicyItem;
 
-public class LegalTermsForm extends CEntityDecoratableForm<LegalTermsDescriptor> {
+public class LegalTermsPolicyItemForm extends CEntityDecoratableForm<LegalTermsPolicyItem> {
 
-    public LegalTermsForm(boolean isEditable) {
-        super(LegalTermsDescriptor.class);
+    public LegalTermsPolicyItemForm(boolean isEditable) {
+        super(LegalTermsPolicyItem.class);
         setEditable(isEditable);
     }
 
@@ -34,10 +34,8 @@ public class LegalTermsForm extends CEntityDecoratableForm<LegalTermsDescriptor>
 
         int row = -1;
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().name()), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
-        content.setH1(++row, 0, 2, proto().content().getMeta().getCaption());
-        content.setWidget(++row, 0, 2, inject(proto().content(), new LegalTermsContentFolder(this)));
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().caption()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().content()), true).build());
 
         return content;
     }

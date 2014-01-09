@@ -19,15 +19,15 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalTermsPolicyListerView;
 import com.propertyvista.crm.rpc.services.policies.policy.LegalDocumentationPolicyCrudService;
-import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
+import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public class LegalDocumentationPolicyListerActivity extends AbstractListerActivity<LegalDocumentationPolicyDTO> {
+public class LegalTermsPolicyListerActivity extends AbstractListerActivity<LegalTermsPolicyDTO> {
 
-    public LegalDocumentationPolicyListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(LegalDocumentationPolicyListerView.class), GWT
-                .<LegalDocumentationPolicyCrudService> create(LegalDocumentationPolicyCrudService.class), LegalDocumentationPolicyDTO.class);
+    public LegalTermsPolicyListerActivity(Place place) {
+        super(place, CrmSite.getViewFactory().getView(LegalTermsPolicyListerView.class), GWT
+                .<LegalDocumentationPolicyCrudService> create(LegalDocumentationPolicyCrudService.class), LegalTermsPolicyDTO.class);
     }
 
 }

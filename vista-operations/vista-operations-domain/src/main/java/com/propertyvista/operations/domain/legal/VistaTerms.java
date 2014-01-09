@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionData;
@@ -26,7 +27,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
-@ToStringFormat("{0}")
+@ToStringFormat("{0} {1}")
 public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
     public enum Target {
@@ -54,8 +55,12 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
         TenantSurePreAuthorizedPaymentsAgreement;
     }
 
-    @ToString
+    @ToString(index = 0)
     IPrimitive<Target> target();
+
+    @NotNull
+    @ToString(index = 1)
+    IPrimitive<String> caption();
 
     @Table(namespace = VistaNamespace.operationsNamespace)
     public interface VistaTermsV extends IVersionData<VistaTerms> {

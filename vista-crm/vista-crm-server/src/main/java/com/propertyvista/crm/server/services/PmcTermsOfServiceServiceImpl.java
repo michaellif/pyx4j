@@ -22,17 +22,18 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
-import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
-import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.server.TaskRunner;
+import com.propertyvista.shared.rpc.LegalTermsTO;
 
+//TODO use the same way as PortalVistaTermsService
 public class PmcTermsOfServiceServiceImpl implements PmcTermsOfServiceService {
 
     @Override
-    public void retrieveLegalTerms(AsyncCallback<LegalTermsContent> callback) {
-        LegalTermsContent legalTerms = EntityFactory.create(LegalTermsContent.class);
+    public void retrieveLegalTerms(AsyncCallback<LegalTermsTO> callback) {
+        LegalTermsTO legalTerms = EntityFactory.create(LegalTermsTO.class);
         String terms = TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {

@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
+import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public class LegalDocumentationPolicyViewerViewImpl extends CrmViewerViewImplBase<LegalDocumentationPolicyDTO> implements LegalDocumentationPolicyViewerView {
+public class LegalTermsPolicyViewerViewImpl extends CrmViewerViewImplBase<LegalTermsPolicyDTO> implements LegalTermsPolicyViewerView {
 
-    public LegalDocumentationPolicyViewerViewImpl() {
-        setForm(new LegalDocumentationPolicyForm(this));
+    public LegalTermsPolicyViewerViewImpl() {
+        setForm(new LegalTermsPolicyForm(this));
     }
 }

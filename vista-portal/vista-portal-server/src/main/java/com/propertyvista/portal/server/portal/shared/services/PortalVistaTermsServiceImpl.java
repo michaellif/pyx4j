@@ -65,7 +65,7 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
     public void getProspectRentalCriteriaGuidelines(AsyncCallback<String> callback) {
-        // TODO use PmcTermsPolicy
+        // TODO use LegalTermsPolicy
         getVistaTerms(callback, VistaTerms.Target.ApplicantTermsAndConditions);
     }
 

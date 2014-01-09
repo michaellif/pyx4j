@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 28, 2011
+ * Created on Dec 22, 2011
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.pyx4j.site.client.ui.prime.form.IEditor;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
+import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public interface LegalDocumentationPolicyEditorView extends IEditor<LegalDocumentationPolicyDTO> {
+public interface LegalTermsPolicyListerView extends ILister<LegalTermsPolicyDTO> {
 
 }

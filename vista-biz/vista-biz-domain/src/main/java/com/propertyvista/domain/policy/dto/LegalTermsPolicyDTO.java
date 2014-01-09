@@ -7,30 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 10, 2012
+ * Created on Jan 3, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.moveinwizardmockup;
+package com.propertyvista.domain.policy.dto;
 
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.policy.framework.PolicyDTOBase;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 
 @Transient
-public interface TenantInsuranceDTO extends IEntity {
-
-    public enum InsuranceStatus {
-
-        unknown, tenantSure, independant;
-
-    }
-
-    IPrimitive<InsuranceStatus> status();
-
-    InsuranceDTO newInsuranceRequest();
-
-    ExistingInsurance independant();
+@ExtendsBO(LegalTermsPolicy.class)
+public interface LegalTermsPolicyDTO extends PolicyDTOBase, LegalTermsPolicy {
 
 }
