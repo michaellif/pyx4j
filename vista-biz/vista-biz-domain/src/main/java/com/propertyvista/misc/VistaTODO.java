@@ -61,7 +61,7 @@ public class VistaTODO {
 
     public static boolean VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED = false;
 
-    public static boolean pendingYardiConfigPatchILS = false;
+    public static boolean pendingYardiConfigPatchILS = true;
 
     public static boolean ILS_TestMode = true;
 }
