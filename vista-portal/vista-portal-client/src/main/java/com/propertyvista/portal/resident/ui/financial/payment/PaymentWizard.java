@@ -25,12 +25,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -254,14 +256,17 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         panel.setBR(++row, 0, 1);
 
-        Anchor termsAnchor = new TermsAnchor(i18n.tr("Service Fee Terms and Conditions"), ResidentPortalTerms.ConvenienceFeeTerms.class);
+        SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();
+        String anchorId = HTMLPanel.createUniqueId();
+        signatureDescriptionBuilder.appendHtmlConstant(i18n.tr("I agree to the service fee being charged and have read the {0}.", "<span id=\"" + anchorId
+                + "\"></span>"));
 
-        panel.setWidget(
-                ++row,
-                0,
-                new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(),
-                        new CSignature(i18n.tr("I agree to the service fee being charged and have read the"), termsAnchor))).customLabel("")
-                        .labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build());
+        HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Service Fee Terms and Conditions"), ResidentPortalTerms.ConvenienceFeeTerms.class);
+        signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
+
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), new CSignature(signatureDescriptionPanel))).customLabel("")
+                .labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build());
         get(proto().convenienceFeeSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
             public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
