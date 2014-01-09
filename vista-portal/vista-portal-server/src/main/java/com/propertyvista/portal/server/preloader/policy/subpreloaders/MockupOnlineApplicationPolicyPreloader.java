@@ -46,7 +46,7 @@ public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloa
         OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
 
         term.signatureFormat().setValue(format);
-        term.applyToRole().setValue(TargetRole.Any);
+        term.applyToRole().setValue(TargetRole.All);
         term.title().setValue(CommonsGenerator.lipsumShort());
         term.body().setValue(CommonsGenerator.lipsum() + " <i>" + CommonsGenerator.lipsumShort() + "</i> " + CommonsGenerator.lipsum());
 
