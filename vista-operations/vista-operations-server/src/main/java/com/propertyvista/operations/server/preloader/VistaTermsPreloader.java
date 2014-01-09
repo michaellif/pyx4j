@@ -68,6 +68,9 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         } catch (IOException e) {
             throw new Error(e);
         }
+        if (termsContent == null) {
+            throw new Error("Resource " + termsSourceFile + " not found to populate document");
+        }
 
         LegalDocument legalDocument = EntityFactory.create(LegalDocument.class);
         legalDocument.locale().setValue(CompiledLocale.en);
