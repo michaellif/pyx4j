@@ -27,6 +27,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Reside
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.TermsView;
+import com.propertyvista.shared.rpc.LegalTermsTO;
 
 public class PortalTermsActivity extends AbstractActivity {
 
@@ -42,10 +43,10 @@ public class PortalTermsActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
-        DefaultAsyncCallback<String> callback = new DefaultAsyncCallback<String>() {
+        DefaultAsyncCallback<LegalTermsTO> callback = new DefaultAsyncCallback<LegalTermsTO>() {
             @Override
-            public void onSuccess(String result) {
-                view.populate("TODO!!! TITLE TITLE TITLE", result);
+            public void onSuccess(LegalTermsTO result) {
+                view.populate(result.caption().getValue(), result.content().getValue());
                 panel.setWidget(view);
             }
         };

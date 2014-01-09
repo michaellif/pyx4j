@@ -38,7 +38,9 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
 
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-        main.setWidget(0, 0, 2, inject(proto().version().document(), new VistaTermsDocumentFolder()));
+        int row = -1;
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().version().caption()), 10, true).build());
+        main.setWidget(++row, 0, 2, inject(proto().version().document(), new VistaTermsDocumentFolder()));
 
         setTabBarVisible(false);
         selectTab(addTab(main));

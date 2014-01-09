@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
@@ -25,55 +26,56 @@ import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.server.TaskRunner;
+import com.propertyvista.shared.rpc.LegalTermsTO;
 
 public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
-    public void getPortalTerms(AsyncCallback<String> callback) {
+    public void getPortalTerms(AsyncCallback<LegalTermsTO> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantPortalTermsAndConditions);
     }
 
     @Override
-    public void getTenantBillingTerms(AsyncCallback<String> callback) {
+    public void getTenantBillingTerms(AsyncCallback<LegalTermsTO> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantBillingTerms);
     }
 
     @Override
-    public void getTenantPreauthorizedPaymentECheckTerms(AsyncCallback<String> callback) {
+    public void getTenantPreauthorizedPaymentECheckTerms(AsyncCallback<LegalTermsTO> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantPreAuthorizedPaymentECheckTerms);
     }
 
     @Override
-    public void getTenantPreauthorizedPaymentCardTerms(AsyncCallback<String> callback) {
+    public void getTenantPreauthorizedPaymentCardTerms(AsyncCallback<LegalTermsTO> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantPreAuthorizedPaymentCardTerms);
     }
 
     @Override
-    public void getResidentPortalConvenienceFeeTerms(AsyncCallback<String> callback) {
+    public void getResidentPortalConvenienceFeeTerms(AsyncCallback<LegalTermsTO> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantPaymentConvenienceFeeTerms);
     }
 
     @Override
-    public void getTenantSurePreAuthorizedPaymentsAgreement(AsyncCallback<String> callback) {
+    public void getTenantSurePreAuthorizedPaymentsAgreement(AsyncCallback<LegalTermsTO> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantSurePreAuthorizedPaymentsAgreement);
     }
 
     @Override
-    public void getProspectApplicantTerms(AsyncCallback<String> callback) {
+    public void getProspectApplicantTerms(AsyncCallback<LegalTermsTO> callback) {
         getVistaTerms(callback, VistaTerms.Target.ApplicantTermsAndConditions);
     }
 
     @Override
-    public void getProspectRentalCriteriaGuidelines(AsyncCallback<String> callback) {
+    public void getProspectRentalCriteriaGuidelines(AsyncCallback<LegalTermsTO> callback) {
         // TODO use LegalTermsPolicy
         getVistaTerms(callback, VistaTerms.Target.ApplicantTermsAndConditions);
     }
 
-    private void getVistaTerms(AsyncCallback<String> callback, final VistaTerms.Target target) {
-        String terms = TaskRunner.runInOperationsNamespace(new Callable<String>() {
+    private void getVistaTerms(AsyncCallback<LegalTermsTO> callback, final VistaTerms.Target target) {
+        LegalTermsTO terms = TaskRunner.runInOperationsNamespace(new Callable<LegalTermsTO>() {
             @Override
-            public String call() {
-                String result = null;
+            public LegalTermsTO call() {
+                LegalTermsTO result = null;
                 EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
                 criteria.eq(criteria.proto().target(), target);
                 List<VistaTerms> list = Persistence.service().query(criteria);
@@ -81,7 +83,9 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
                     VistaTerms terms = list.get(0);
                     for (LegalDocument doc : terms.version().document()) {
                         if (doc.locale().getValue().getLanguage().startsWith("en")) {
-                            result = doc.content().getValue();
+                            result = EntityFactory.create(LegalTermsTO.class);
+                            result.caption().setValue(terms.version().caption().getValue());
+                            result.content().setValue(doc.content().getValue());
                             break;
                         }
                     }

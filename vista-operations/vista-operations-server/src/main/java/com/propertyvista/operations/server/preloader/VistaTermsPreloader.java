@@ -38,20 +38,20 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
          * The change in policy text is not covered by DBA migration script.
          ****************/
 
-        createTerms(Target.PmcPropertyVistaService, "PmcVistaTerms.html");
-        createTerms(Target.PmcCaledonTemplate, "PmcCaledonTemplateVistaTerms.html");
-        createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html");
-        createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html");
+        createTerms(Target.PmcPropertyVistaService, "PmcVistaTerms.html", "TODO name it PMC terms");
+        createTerms(Target.PmcCaledonTemplate, "PmcCaledonTemplateVistaTerms.html", "TODO name it CaledonTemplate");
+        createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html", "TODO name it SoleProprietorship");
+        createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html", "TODO name it PaymentPad");
 
-        createTerms(Target.TenantPortalTermsAndConditions, "TenantPortalTermsAndConditions.html");
-        createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html");
-        createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "TenantPreAuthorizedPaymentECheckTerms.html");
-        createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html");
-        createTerms(Target.TenantPaymentConvenienceFeeTerms, "TenantPaymentConvenienceFeeTerms.html");
+        createTerms(Target.TenantPortalTermsAndConditions, "TenantPortalTermsAndConditions.html", "TODO name it portal");
+        createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html", "TODO name it billing");
+        createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "TenantPreAuthorizedPaymentECheckTerms.html", "TODO name it, ECheck");
+        createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html", "TODO name it, Cards");
+        createTerms(Target.TenantPaymentConvenienceFeeTerms, "TenantPaymentConvenienceFeeTerms.html", "TODO ConvenienceFee");
 
-        createTerms(Target.ApplicantTermsAndConditions, "ApplicantTermsAndConditions.html");
+        createTerms(Target.ApplicantTermsAndConditions, "ApplicantTermsAndConditions.html", "TODO Applicant T&C");
 
-        createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html");
+        createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html", "TODO TenantSure");
 
         return null;
     }
@@ -61,7 +61,7 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         return null;
     }
 
-    public void createTerms(VistaTerms.Target target, String termsSourceFile) {
+    public void createTerms(VistaTerms.Target target, String termsSourceFile, String caption) {
         String termsContent;
         try {
             termsContent = IOUtils.getUTF8TextResource(termsSourceFile, VistaTermsPreloader.class);
@@ -78,6 +78,7 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
 
         VistaTerms vistaTerms = EntityFactory.create(VistaTerms.class);
         vistaTerms.target().setValue(target);
+        vistaTerms.version().caption().setValue(caption);
         vistaTerms.version().document().add(legalDocument);
         vistaTerms.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(vistaTerms);

@@ -58,12 +58,12 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
     @ToString(index = 0)
     IPrimitive<Target> target();
 
-    @NotNull
-    @ToString(index = 1)
-    IPrimitive<String> caption();
-
     @Table(namespace = VistaNamespace.operationsNamespace)
     public interface VistaTermsV extends IVersionData<VistaTerms> {
+
+        @NotNull
+        @ToString(index = 1)
+        IPrimitive<String> caption();
 
         @Owned
         IList<LegalDocument> document();

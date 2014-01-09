@@ -17,26 +17,28 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.shared.rpc.LegalTermsTO;
+
 public interface PortalVistaTermsService extends IService {
 
-    void getPortalTerms(AsyncCallback<String> callback);
+    void getPortalTerms(AsyncCallback<LegalTermsTO> callback);
 
     // ============== Resident ==============
 
-    void getTenantBillingTerms(AsyncCallback<String> callback);
+    void getTenantBillingTerms(AsyncCallback<LegalTermsTO> callback);
 
-    void getTenantPreauthorizedPaymentECheckTerms(AsyncCallback<String> callback);
+    void getTenantPreauthorizedPaymentECheckTerms(AsyncCallback<LegalTermsTO> callback);
 
-    void getTenantPreauthorizedPaymentCardTerms(AsyncCallback<String> callback);
+    void getTenantPreauthorizedPaymentCardTerms(AsyncCallback<LegalTermsTO> callback);
 
-    void getResidentPortalConvenienceFeeTerms(AsyncCallback<String> callback);
+    void getResidentPortalConvenienceFeeTerms(AsyncCallback<LegalTermsTO> callback);
 
-    void getTenantSurePreAuthorizedPaymentsAgreement(AsyncCallback<String> callback);
+    void getTenantSurePreAuthorizedPaymentsAgreement(AsyncCallback<LegalTermsTO> callback);
 
     // ============== Prospect ==============
 
-    void getProspectApplicantTerms(AsyncCallback<String> callback);
+    void getProspectApplicantTerms(AsyncCallback<LegalTermsTO> callback);
 
-    void getProspectRentalCriteriaGuidelines(AsyncCallback<String> callback);
+    void getProspectRentalCriteriaGuidelines(AsyncCallback<LegalTermsTO> callback);
 
 }
