@@ -373,4 +373,22 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         ImageResource active();
     }
 
+    SelectIconButtonImages selectButton();
+
+    public interface SelectIconButtonImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("select.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("select_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("select.png")
+        ImageResource active();
+    }
 }

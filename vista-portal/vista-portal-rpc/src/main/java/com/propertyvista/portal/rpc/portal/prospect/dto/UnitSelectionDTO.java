@@ -54,10 +54,13 @@ public interface UnitSelectionDTO extends IEntity {
         IPrimitive<String> display();
 
         @ToString(index = 0)
+        @Editor(type = Editor.EditorType.label)
         IPrimitive<String> number();
 
+        @Editor(type = Editor.EditorType.label)
         IPrimitive<String> floorplan();
 
+        @Editor(type = Editor.EditorType.label)
         IPrimitive<Integer> floor();
 
         @ToString(index = 1)
@@ -69,6 +72,7 @@ public interface UnitSelectionDTO extends IEntity {
         IPrimitive<Integer> bathrooms();
 
         @ToString(index = 3)
+        @Editor(type = Editor.EditorType.label)
         IPrimitive<LogicalDate> available();
 
         @ToString(index = 4)

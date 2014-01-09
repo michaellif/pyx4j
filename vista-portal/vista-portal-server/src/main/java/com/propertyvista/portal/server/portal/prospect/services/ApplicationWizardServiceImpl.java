@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.portal.prospect.services;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -621,31 +620,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private List<UnitTO> retriveAvailableUnits(Floorplan floorplanId, LogicalDate moveIn) {
-        if (moveIn == null) {
-            moveIn = new LogicalDate(SystemDateManager.getDate());
-        }
+        Floorplan floorplan = Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey());
 
-        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        criteria.eq(criteria.proto().floorplan(), floorplanId);
-        // correct service type:
-        criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
-        criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
-        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
-        criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
-        // availability: 
-        criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
-        criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
-        criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
-
-        List<UnitTO> availableUnits = new ArrayList<UnitTO>();
-        for (AptUnit unit : Persistence.service().query(criteria)) {
-            availableUnits.add(createUnitDTO(unit));
-        }
-
-        return availableUnits;
+        return retriveAvailableUnits(floorplan.bedrooms().getValue(), floorplan.bathrooms().getValue(), moveIn);
     }
 
-    private Collection<? extends UnitTO> retriveAvailableUnits(Integer beds, Integer baths, LogicalDate moveIn) {
+    private List<UnitTO> retriveAvailableUnits(Integer beds, Integer baths, LogicalDate moveIn) {
         if (moveIn == null) {
             moveIn = new LogicalDate(SystemDateManager.getDate());
         }

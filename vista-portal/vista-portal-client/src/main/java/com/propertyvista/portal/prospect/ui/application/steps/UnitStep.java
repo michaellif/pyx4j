@@ -30,7 +30,10 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
@@ -42,6 +45,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -87,8 +91,8 @@ public class UnitStep extends ApplicationWizardStep {
 
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().building(), new CEntityLabel<Building>())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().moveIn()), 120).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bedrooms(), bedroomSelector)).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector)).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bedrooms(), bedroomSelector), 50).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector), 50).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().selectedUnit(), selectedUnit)).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Available Units"));
@@ -203,6 +207,26 @@ public class UnitStep extends ApplicationWizardStep {
         }
 
         @Override
+        public IFolderItemDecorator<UnitTO> createItemDecorator() {
+            BoxFolderItemDecorator<UnitTO> decor = (BoxFolderItemDecorator<UnitTO>) super.createItemDecorator();
+            decor.setExpended(false);
+            return decor;
+        }
+
+        @Override
+        protected CEntityFolderItem<UnitTO> createItem(boolean first) {
+            final CEntityFolderItem<UnitTO> item = super.createItem(first);
+            item.addAction(ActionType.Cust1, i18n.tr("Select Unit"), PortalImages.INSTANCE.selectButton(), new Command() {
+                @Override
+                public void execute() {
+                    selectedUnit.setValue(item.getValue());
+                    setEditableState(false);
+                }
+            });
+            return item;
+        }
+
+        @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof UnitTO) {
                 return new AvailableUnitForm();
@@ -222,14 +246,12 @@ public class UnitStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().display())).labelPosition(LabelPosition.hidden).build());
-                mainPanel.setWidget(++row, 0, new Button(i18n.tr("Select"), new Command() {
-                    @Override
-                    public void execute() {
-                        selectedUnit.setValue(getValue());
-                        setEditableState(false);
-                    }
-                }));
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().number())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().floor())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().bedrooms())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().bathrooms())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().available())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().price())).build());
 
                 return mainPanel;
             }
