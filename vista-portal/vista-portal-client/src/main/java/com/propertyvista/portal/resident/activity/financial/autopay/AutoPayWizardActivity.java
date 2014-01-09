@@ -91,33 +91,4 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
         AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted(result));
     }
 
-    @Override
-    public Class<? extends Place> getTermsOfUsePlace() {
-        return PortalSiteMap.TermsAndConditions.class;
-    }
-
-    @Override
-    public Class<? extends Place> getPadPolicyPlace() {
-        return ResidentPortalTerms.PreauthorizedPaymentTerms.class;
-    }
-
-    @Override
-    public Class<? extends Place> getCcPolicyPlace() {
-        return ResidentPortalTerms.CreditCardPolicy.class;
-    }
-
-    @Override
-    public void showTermsOfUse() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
-    }
-
-    @Override
-    public void showPaymentPreAuthorizationTermsConditions() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPadPolicyPlace()), "_blank", null);
-    }
-
-    @Override
-    public void showPaymentCcTermsConditions() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getCcPolicyPlace()), "_blank", null);
-    }
 }

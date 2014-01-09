@@ -15,7 +15,6 @@ package com.propertyvista.portal.resident.ui.financial.payment;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressSimple;
@@ -35,16 +34,5 @@ public interface PaymentWizardView extends IWizardView<PaymentDTO> {
 
         void getConvenienceFee(AsyncCallback<ConvenienceFeeCalculationResponseTO> callback, PaymentConvenienceFeeDTO inData);
 
-        Class<? extends Place> getTermsOfUsePlace();
-
-        Class<? extends Place> getBillingPolicyPlace();
-
-        Class<? extends Place> getConvenienceFeeTermsPlace();
-
-        void showTermsOfUse();
-
-        void showBillingPolicy();
-
-        void showConvenienceFeeTerms();
     }
 }

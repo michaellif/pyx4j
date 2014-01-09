@@ -24,7 +24,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.activity.LandingActivity;
 import com.propertyvista.portal.resident.activity.LeaseContextSelectionActivity;
-import com.propertyvista.portal.resident.activity.ResidentTermsActivity;
 import com.propertyvista.portal.resident.activity.SignUpActivity;
 import com.propertyvista.portal.resident.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayActivity;
@@ -70,6 +69,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.LeaseC
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Registration;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
+import com.propertyvista.portal.shared.activity.PortalTermsActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.shared.activity.login.LogoutActivity;
 import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
@@ -191,7 +191,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             || place instanceof ResidentPortalTerms.ConvenienceFeeTerms
                             || place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms
                             || place instanceof PortalSiteMap.TermsAndConditions) {
-                        activity = new ResidentTermsActivity(place);
+                        activity = new PortalTermsActivity(place);
                  // @formatter:on
 
                     } else if (place instanceof ResidentPortalSiteMap.Offers) {

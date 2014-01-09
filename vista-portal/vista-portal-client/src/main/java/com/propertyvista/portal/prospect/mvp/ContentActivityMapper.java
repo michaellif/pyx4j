@@ -31,8 +31,11 @@ import com.propertyvista.portal.prospect.activity.application.ApplicationWizardA
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ApplicationContextSelection;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ProspectPortalTerms;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
+import com.propertyvista.portal.shared.activity.PortalTermsActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.shared.activity.login.LogoutActivity;
 import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
@@ -81,6 +84,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ApplicationWizardActivity(appPlace);
                     } else if (appPlace instanceof ProspectPortalSiteMap.ApplicationConfirmation) {
                         activity = new ApplicationConfirmationActivity(appPlace);
+
+                        // Internals/Terms: @formatter:off
+                    } else if (place instanceof ProspectPortalTerms.ApplicantTermsAndConditions 
+                            || place instanceof ProspectPortalTerms.RentalCriteriaGuidelines
+                            || place instanceof PortalSiteMap.TermsAndConditions) {
+                        activity = new PortalTermsActivity(place);
+                 // @formatter:on
 
                     }
 

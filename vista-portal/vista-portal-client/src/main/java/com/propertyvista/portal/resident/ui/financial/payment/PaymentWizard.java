@@ -17,19 +17,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -64,7 +60,6 @@ import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -81,11 +76,14 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.PortalPaymentTypesUtil;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
@@ -99,10 +97,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
-
-    private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
-
-    private final Anchor billingPolicyAnchor = new Anchor(i18n.tr("Billing And Refund Policy"));
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
@@ -150,15 +144,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
         confirmationStep = addStep(createConfirmationStep());
-    }
-
-    public void setPresenter(PaymentWizardView.Presenter presenter) {
-        this.presenter = presenter;
-
-        if (this.presenter != null) {
-            this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getTermsOfUsePlace()));
-            billingPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getBillingPolicyPlace()));
-        }
     }
 
     private BasicFlexFormPanel createDetailsStep() {
@@ -269,17 +254,14 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         panel.setBR(++row, 0, 1);
 
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Service Fee Terms and Conditions"), ResidentPortalTerms.ConvenienceFeeTerms.class);
+
         panel.setWidget(
                 ++row,
                 0,
                 new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(),
-                        new CSignature(i18n.tr("I agree to the service fee being charged and have read the"), i18n.tr("Service Fee Terms and Conditions"),
-                                new Command() {
-                                    @Override
-                                    public void execute() {
-                                        presenter.showConvenienceFeeTerms();
-                                    }
-                                }))).customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build());
+                        new CSignature(i18n.tr("I agree to the service fee being charged and have read the"), termsAnchor))).customLabel("")
+                        .labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build());
         get(proto().convenienceFeeSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
             public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
@@ -519,34 +501,17 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     }
 
     private Widget createLegalTermsPanel() {
-        termsOfUseAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        termsOfUseAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        termsOfUseAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        termsOfUseAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showTermsOfUse();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
 
-        billingPolicyAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        billingPolicyAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        billingPolicyAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        billingPolicyAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showBillingPolicy();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
+        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.TermsAndConditions.class);
 
-        Widget w;
+        Anchor billingPolicyAnchor = new TermsAnchor(i18n.tr("Billing And Refund Policy"), ResidentPortalTerms.BillingTerms.class);
+
         FlowPanel panel = new FlowPanel();
 
         panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
         panel.add(termsOfUseAnchor);
 
+        Widget w;
         panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 

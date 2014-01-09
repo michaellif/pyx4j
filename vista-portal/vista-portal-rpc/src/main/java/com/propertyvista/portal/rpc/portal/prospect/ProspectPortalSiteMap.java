@@ -29,7 +29,7 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
 
     public static class ProspectPortalTerms {
 
-        public static class ProspectTermsAndConditions extends AppPlace implements PublicPlace {
+        public static class ApplicantTermsAndConditions extends AppPlace implements PublicPlace {
         }
 
         public static class RentalCriteriaGuidelines extends AppPlace implements PublicPlace {

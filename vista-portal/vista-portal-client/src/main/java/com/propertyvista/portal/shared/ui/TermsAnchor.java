@@ -34,15 +34,21 @@ public class TermsAnchor extends Anchor {
         getElement().getStyle().setDisplay(Display.INLINE);
         getElement().getStyle().setPadding(0, Unit.PX);
         getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, placeClass));
-        addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, placeClass), "_blank", null);
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
+
+        if (placeClass != null) {
+            setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, placeClass));
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    openTerm(placeClass, event);
+                }
+            });
+        }
 
     }
 
+    public void openTerm(Class<? extends Place> placeClass, ClickEvent event) {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, placeClass), "_blank", null);
+        DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
+    }
 }

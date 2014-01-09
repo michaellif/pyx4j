@@ -15,7 +15,6 @@ package com.propertyvista.portal.resident.ui.financial.autopay;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressSimple;
@@ -34,16 +33,5 @@ public interface AutoPayWizardView extends IWizardView<AutoPayDTO> {
 
         void preview(AsyncCallback<AutopayAgreement> callback, AutoPayDTO currentValue);
 
-        Class<? extends Place> getTermsOfUsePlace();
-
-        Class<? extends Place> getPadPolicyPlace();
-
-        Class<? extends Place> getCcPolicyPlace();
-
-        void showTermsOfUse();
-
-        void showPaymentPreAuthorizationTermsConditions();
-
-        void showPaymentCcTermsConditions();
     }
 }

@@ -76,33 +76,4 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
         AppSite.getPlaceController().goTo(new Payment.PaymentSubmitting(result));
     }
 
-    @Override
-    public Class<? extends Place> getTermsOfUsePlace() {
-        return PortalSiteMap.TermsAndConditions.class;
-    }
-
-    @Override
-    public Class<? extends Place> getBillingPolicyPlace() {
-        return ResidentPortalTerms.BillingTerms.class;
-    }
-
-    @Override
-    public Class<? extends Place> getConvenienceFeeTermsPlace() {
-        return ResidentPortalTerms.ConvenienceFeeTerms.class;
-    }
-
-    @Override
-    public void showTermsOfUse() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
-    }
-
-    @Override
-    public void showBillingPolicy() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getBillingPolicyPlace()), "_blank", null);
-    }
-
-    @Override
-    public void showConvenienceFeeTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getConvenienceFeeTermsPlace()), "_blank", null);
-    }
 }

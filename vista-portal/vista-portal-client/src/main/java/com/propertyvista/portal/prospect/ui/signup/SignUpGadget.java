@@ -101,7 +101,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             loginTermsLinkPanel.add(new InlineHTML(i18n.tr(" and ")));
 
             loginTermsLinkPanel.add(new TermsAnchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"),
-                    ProspectPortalSiteMap.ProspectPortalTerms.ProspectTermsAndConditions.class));
+                    ProspectPortalSiteMap.ProspectPortalTerms.ApplicantTermsAndConditions.class));
 
             loginTermsLinkPanel.add(new InlineHTML("."));
 

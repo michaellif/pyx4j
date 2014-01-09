@@ -68,8 +68,11 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
+import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
@@ -86,10 +89,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     private final SimplePanel confirmationTotalHolder = new SimplePanel();
 
     private final SimplePanel detailsTotalHolder = new SimplePanel();
-
-    private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
-
-    private final Anchor preAuthorizedAgreementAnchor = new Anchor(i18n.tr("Pre-Authorized Agreement"));
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
@@ -132,14 +131,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         detailsStep = addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
-    }
-
-    public void setPresenter(AutoPayWizardView.Presenter presenter) {
-        this.presenter = presenter;
-
-        if (this.presenter != null) {
-            this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getTermsOfUsePlace()));
-        }
     }
 
     private BasicFlexFormPanel createDetailsStep() {
@@ -375,31 +366,19 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     private Widget createLegalTermsPanel() {
-        termsOfUseAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        termsOfUseAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        termsOfUseAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        termsOfUseAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showTermsOfUse();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
 
-        preAuthorizedAgreementAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        preAuthorizedAgreementAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        preAuthorizedAgreementAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.TermsAndConditions.class);
+
+        final TermsAnchor preAuthorizedAgreementAnchor = new TermsAnchor(i18n.tr("Pre-Authorized Agreement"), null);
         preAuthorizedAgreementAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 switch (get(proto().paymentMethod()).getValue().type().getValue()) {
                 case Echeck:
-                    preAuthorizedAgreementAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPadPolicyPlace()));
-                    presenter.showPaymentPreAuthorizationTermsConditions();
+                    preAuthorizedAgreementAnchor.openTerm(ResidentPortalTerms.PreauthorizedPaymentTerms.class, event);
                     break;
                 case CreditCard:
-                    preAuthorizedAgreementAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getCcPolicyPlace()));
-                    presenter.showPaymentCcTermsConditions();
+                    preAuthorizedAgreementAnchor.openTerm(ResidentPortalTerms.CreditCardPolicy.class, event);
                     break;
                 default:
                     assert false : "Illegal payment method type!";
@@ -409,12 +388,12 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             }
         });
 
-        Widget w;
         FlowPanel panel = new FlowPanel();
 
         panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
         panel.add(termsOfUseAnchor);
 
+        Widget w;
         panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 

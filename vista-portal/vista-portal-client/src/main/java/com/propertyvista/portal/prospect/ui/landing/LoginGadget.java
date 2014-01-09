@@ -94,7 +94,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         loginTermsLinkPanel.add(termsPrefix);
 
         termsAndConditionsAnchor = new TermsAnchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"),
-                ProspectPortalSiteMap.ProspectPortalTerms.ProspectTermsAndConditions.class);
+                ProspectPortalSiteMap.ProspectPortalTerms.ApplicantTermsAndConditions.class);
         loginTermsLinkPanel.add(termsAndConditionsAnchor);
 
         HTML suffixPrefix = new HTML(".");
