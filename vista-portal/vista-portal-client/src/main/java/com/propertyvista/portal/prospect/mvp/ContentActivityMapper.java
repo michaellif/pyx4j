@@ -33,7 +33,6 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ApplicationContextSelection;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ProspectPortalTerms;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
 import com.propertyvista.portal.shared.activity.PortalTermsActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;

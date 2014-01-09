@@ -345,6 +345,15 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         ImageResource regular();
     }
 
+    SelectMenuImages selectMenu();
+
+    interface SelectMenuImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_ApplicationIcon.png")
+        ImageResource regular();
+    }
+
     EditIconButtonImages editButton();
 
     public interface EditIconButtonImages extends ButtonImages {

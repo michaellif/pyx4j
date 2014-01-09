@@ -191,7 +191,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             || place instanceof ResidentPortalTerms.CreditCardPolicy
                             || place instanceof ResidentPortalTerms.ConvenienceFeeTerms
                             || place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms
-                            || place instanceof TenantSurePreAuthorizedPaymentTerms
+                            || place instanceof ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms
                             || place instanceof PortalSiteMap.TermsAndConditions) {
                         activity = new PortalTermsActivity(place);
                  // @formatter:on

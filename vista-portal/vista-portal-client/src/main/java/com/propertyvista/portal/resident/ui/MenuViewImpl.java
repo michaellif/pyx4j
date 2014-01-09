@@ -86,7 +86,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
         footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
 
-        leaseSelectionMenu = new MenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background);
+        leaseSelectionMenu = new MenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.selectMenu(), ThemeColor.background);
         footerHolder.addMenuItem(leaseSelectionMenu);
 
         footerHolder.addMenuItem(new MenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));

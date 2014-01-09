@@ -71,7 +71,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        applicationSelectionMenu = new MenuItem(new ProspectPortalSiteMap.ApplicationContextSelection(), PortalImages.INSTANCE.accountMenu(),
+        applicationSelectionMenu = new MenuItem(new ProspectPortalSiteMap.ApplicationContextSelection(), PortalImages.INSTANCE.selectMenu(),
                 ThemeColor.background);
         footerHolder.addMenuItem(applicationSelectionMenu);
 
