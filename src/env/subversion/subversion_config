@@ -152,7 +152,7 @@ Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Dat
 *.csv = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.ora = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.version = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
-*.xml = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.xml = svn:mime-type=text/xml;;charset=utf-8;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.launch = svn:mime-type=text/xml;svn:eol-style=native
 *.ent = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.dtd = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
@@ -160,7 +160,7 @@ Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Dat
 *.xsl = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.wsdl = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.htm = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Author Date Id Revision
-*.html = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.html = svn:mime-type=text/html;;charset=utf-8;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.xhtml = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.css = svn:mime-type=text/css;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.jfig = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
