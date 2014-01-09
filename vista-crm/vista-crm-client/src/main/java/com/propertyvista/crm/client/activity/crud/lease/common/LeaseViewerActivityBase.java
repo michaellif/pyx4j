@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.lease.common;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -24,6 +25,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity.ReturnBehaviour;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
@@ -32,6 +34,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudServic
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -71,5 +74,17 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
         AppSite.getPlaceController().goTo(
                 new CrmSiteMap.Tenants.LeaseTerm().formEditorPlace(leaseTermId.getPrimaryKey()).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
                         returnBehaviour.name()));
+    }
+
+    @Override
+    public void downloadBlankAgreement() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void downloadSignedAgreement(LeaseTermAgreementDocument doc) {
+        String downloadUrl = new VistaFileURLBuilder(LeaseTermAgreementDocument.class).getUrl(doc.file());
+        Window.open(downloadUrl, "_blank", "");
     }
 }

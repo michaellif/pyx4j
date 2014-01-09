@@ -24,9 +24,14 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 
-public class LeaseTermAgreementPdfCreator {
+import com.propertyvista.biz.tenant.lease.LeaseTermAgreementPdfCreatorFacade;
+import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
+import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 
-    public static byte[] createPdf(LeaseAgreementData agreementData) {
+public class LeaseTermAgreementPdfCreatorFacadeImpl implements LeaseTermAgreementPdfCreatorFacade {
+
+    @Override
+    public byte[] createPdf(LeaseAgreementDocumentDataDTO agreementData) {
         Map<String, Object> params = new HashMap<String, Object>();
 
         params.put("landlordName", agreementData.landlordName().getValue());
@@ -38,8 +43,8 @@ public class LeaseTermAgreementPdfCreator {
         params.put("applicants", agreementData.applicants());
 
         ByteOutputStream bos = new ByteOutputStream();
-        JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreator.class.getPackage().getName() + ".LeaseTermAgreement",
-                new LinkedList<AgreementLegalTerm4Print>(agreementData.terms()), params), JasperFileFormat.PDF, bos);
+        JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreatorFacadeImpl.class.getPackage().getName() + ".LeaseTermAgreement",
+                new LinkedList<LeaseAgreementDocumentLegalTerm4PrintDTO>(agreementData.terms()), params), JasperFileFormat.PDF, bos);
         return bos.getBytes();
     }
 }

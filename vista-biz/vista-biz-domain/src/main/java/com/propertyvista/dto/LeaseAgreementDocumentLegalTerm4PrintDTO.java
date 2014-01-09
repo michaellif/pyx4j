@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.lease.print;
+package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.ISignature;
 
 @Transient
-public interface AgreementLegalTerm4Print extends IEntity {
+public interface LeaseAgreementDocumentLegalTerm4PrintDTO extends IEntity {
 
     IPrimitive<String> title();
 
@@ -29,5 +29,5 @@ public interface AgreementLegalTerm4Print extends IEntity {
 
     IList<ISignature> signatures();
 
-    IList<AgreementLegalTermSignaturePlaceholder> signaturePlaceholders();
+    IList<LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO> signaturePlaceholders();
 }

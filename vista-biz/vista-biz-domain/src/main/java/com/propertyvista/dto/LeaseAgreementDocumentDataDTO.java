@@ -11,15 +11,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.lease.print;
+package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface AgreementLegalTermTenant extends IEntity {
+public interface LeaseAgreementDocumentDataDTO extends IEntity {
 
-    IPrimitive<String> fullName();
+    IPrimitive<String> landlordName();
 
+    IPrimitive<String> landlordAddress();
+
+    IPrimitive<byte[]> landlordLogo();
+
+    IList<LeaseAgreementDocumentLegalTermTenantDTO> applicants();
+
+    IList<LeaseAgreementDocumentLegalTerm4PrintDTO> terms();
 }

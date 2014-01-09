@@ -16,21 +16,19 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
-import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -48,7 +46,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final MenuItem viewHistoricTerms;
 
-    protected final Button downloadAgreementButton;
+    private MenuItem downloadAgreementItem;
 
     public LeaseViewerViewImplBase() {
         super(true);
@@ -99,14 +97,26 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         papsButton.setMenu(papsMenu = papsButton.createMenu());
         addHeaderToolbarItem(papsButton.asWidget());
 
-        downloadAgreementButton = new Button(i18n.tr("Download Agreement"), new Command() {
+        Button downloadAgreementButton = new Button(i18n.tr("Download"));
+
+        ButtonMenuBar downloadAgreementMenu = downloadAgreementButton.createMenu();
+        MenuItem downloadBlankAgreementItem = new MenuItem(i18n.tr("Download Bank Agreement"), new Command() {
             @Override
             public void execute() {
-                String downloadUrl = new VistaFileURLBuilder(LeaseTermAgreementDocument.class).getUrl(getForm().getValue().currentTerm().version()
-                        .agreementDocument().file());
-                Window.open(downloadUrl, "_blank", "");
+                ((LeaseViewerViewBase.Presenter) getPresenter()).downloadBlankAgreement();
             }
         });
+        downloadAgreementMenu.addItem(downloadBlankAgreementItem);
+
+        downloadAgreementItem = new MenuItem(i18n.tr("Download Signed Agreement"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).downloadSignedAgreement(getForm().getValue().currentTerm().version().agreementDocument());
+            }
+        });
+        downloadAgreementMenu.addItem(downloadAgreementItem);
+
+        downloadAgreementButton.setMenu(downloadAgreementMenu);
         addHeaderToolbarItem(downloadAgreementButton);
 
     }
@@ -126,6 +136,8 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
         viewHistoricTerms.setVisible(value.historyPresent().isBooleanTrue());
+
+        downloadAgreementItem.setVisible(!value.currentTerm().version().agreementDocument().isNull());
 
         setupPapsMenu(value);
     }

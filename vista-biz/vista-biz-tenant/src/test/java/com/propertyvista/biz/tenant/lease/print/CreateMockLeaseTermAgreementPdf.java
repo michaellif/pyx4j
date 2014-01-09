@@ -19,17 +19,24 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.gwt.server.IOUtils;
+
+import com.propertyvista.biz.tenant.lease.LeaseTermAgreementPdfCreatorFacade;
+import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
+import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
+import com.propertyvista.dto.LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO;
+import com.propertyvista.dto.LeaseAgreementDocumentLegalTermTenantDTO;
 
 public class CreateMockLeaseTermAgreementPdf {
 
     private static int currentTermNo = 0;
 
     public static void main(String[] args) throws IOException {
-        LeaseAgreementData leaseAgreementData = EntityFactory.create(LeaseAgreementData.class);
+        LeaseAgreementDocumentDataDTO leaseAgreementData = EntityFactory.create(LeaseAgreementDocumentDataDTO.class);
         leaseAgreementData.landlordName().setValue("SuperLandlord");
         leaseAgreementData.landlordAddress().setValue("5935 Airport Road Suite 600, Mississauga, ON. L4V 1W5");
         leaseAgreementData.landlordLogo().setValue(
@@ -43,7 +50,7 @@ public class CreateMockLeaseTermAgreementPdf {
         leaseAgreementData.terms().add(makeMockAgreementTerm(10, makeMockSignatures(SignatureFormat.AgreeBoxAndFullName, 2), null));
         leaseAgreementData.terms().add(makeMockAgreementTerm(10, null, makeMockSignaturePlaceholdedrs(3)));
 
-        byte[] bytes = LeaseTermAgreementPdfCreator.createPdf(leaseAgreementData);
+        byte[] bytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(leaseAgreementData);
 
         FileOutputStream fos = null;
         try {
@@ -58,16 +65,16 @@ public class CreateMockLeaseTermAgreementPdf {
         }
     }
 
-    private static AgreementLegalTermTenant makeMockApplicant(String fullName) {
-        AgreementLegalTermTenant tenant = EntityFactory.create(AgreementLegalTermTenant.class);
+    private static LeaseAgreementDocumentLegalTermTenantDTO makeMockApplicant(String fullName) {
+        LeaseAgreementDocumentLegalTermTenantDTO tenant = EntityFactory.create(LeaseAgreementDocumentLegalTermTenantDTO.class);
         tenant.fullName().setValue(fullName);
         return tenant;
     }
 
-    private static AgreementLegalTerm4Print makeMockAgreementTerm(int randomLines, List<ISignature> signatures,
-            List<AgreementLegalTermSignaturePlaceholder> signaturePlaceholders) {
+    private static LeaseAgreementDocumentLegalTerm4PrintDTO makeMockAgreementTerm(int randomLines, List<ISignature> signatures,
+            List<LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO> signaturePlaceholders) {
         currentTermNo += 1;
-        AgreementLegalTerm4Print term = EntityFactory.create(AgreementLegalTerm4Print.class);
+        LeaseAgreementDocumentLegalTerm4PrintDTO term = EntityFactory.create(LeaseAgreementDocumentLegalTerm4PrintDTO.class);
         term.title().setValue("Term number + " + currentTermNo);
         StringBuilder bodyBuilder = new StringBuilder();
         bodyBuilder
@@ -100,10 +107,11 @@ public class CreateMockLeaseTermAgreementPdf {
         return signatures;
     }
 
-    private static List<AgreementLegalTermSignaturePlaceholder> makeMockSignaturePlaceholdedrs(int singaturesCount) {
-        List<AgreementLegalTermSignaturePlaceholder> placeholders = new LinkedList<AgreementLegalTermSignaturePlaceholder>();
+    private static List<LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO> makeMockSignaturePlaceholdedrs(int singaturesCount) {
+        List<LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO> placeholders = new LinkedList<LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO>();
         for (int i = 0; i < singaturesCount; ++i) {
-            AgreementLegalTermSignaturePlaceholder placeholder = EntityFactory.create(AgreementLegalTermSignaturePlaceholder.class);
+            LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO placeholder = EntityFactory
+                    .create(LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO.class);
             placeholder.tenantName().setValue("Vasya Pupkin #" + i);
             placeholders.add(placeholder);
         }

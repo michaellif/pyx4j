@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -32,5 +33,9 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewer<DTO> 
         void viewTerm(LeaseTerm leaseTermId);
 
         void editTerm(LeaseTerm leaseTermId);
+
+        void downloadBlankAgreement();
+
+        void downloadSignedAgreement(LeaseTermAgreementDocument doc);
     }
 }

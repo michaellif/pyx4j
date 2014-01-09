@@ -26,9 +26,9 @@ import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.crm.rpc.services.MaintenanceRequestPictureUploadService;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
-import com.propertyvista.crm.rpc.services.MaintenanceRequestPictureUploadService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
@@ -116,6 +116,7 @@ import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.crm.rpc.services.lease.IdentificationDocumentCrmUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.ProofOfEmploymentDocumentCrmUploadService;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
@@ -404,6 +405,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseApplicationViewerCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ProofOfEmploymentDocumentCrmUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(IdentificationDocumentCrmUploadService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermAgreementDocumentDownloadService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTerm.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermCrudService.class));
