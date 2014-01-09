@@ -29,21 +29,21 @@ BEGIN
         ALTER TABLE charges DROP CONSTRAINT charges_one_time_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_payment_split_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_prorated_charges_fk;
-        -- ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_person_fk;
-        -- ALTER TABLE identification_document DROP CONSTRAINT identification_document_id_type_fk;
+        ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_person_fk;
+        ALTER TABLE identification_document DROP CONSTRAINT identification_document_id_type_fk;
         -- ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_certificate_fk;
         -- ALTER TABLE insurance_certificate_scan DROP CONSTRAINT insurance_certificate_scan_certificate_doc_fk;
-        -- ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_owner_fk;
-        -- ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_value_fk;
+        ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_owner_fk;
+        ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_value_fk;
         ALTER TABLE online_application$steps DROP CONSTRAINT online_application$steps_owner_fk;
         ALTER TABLE online_application$steps DROP CONSTRAINT online_application$steps_value_fk;
-        -- ALTER TABLE payment_information DROP CONSTRAINT payment_information_application_fk;
-        -- ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_address_country_fk;
-        -- ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_address_province_fk;
-        -- ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_customer_fk;
-        -- ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_details_fk;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_application_fk;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_address_country_fk;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_address_province_fk;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_customer_fk;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_details_fk;
         -- ALTER TABLE product_item DROP CONSTRAINT product_item_code_fk;
-        -- ALTER TABLE property_phone DROP CONSTRAINT property_phone_provider_fk;
+        ALTER TABLE property_phone DROP CONSTRAINT property_phone_provider_fk;
         ALTER TABLE summary DROP CONSTRAINT summary_application_fk;
         ALTER TABLE tenant_charge_list$charges DROP CONSTRAINT tenant_charge_list$charges_owner_fk;
         ALTER TABLE tenant_charge_list$charges DROP CONSTRAINT tenant_charge_list$charges_value_fk;
@@ -99,17 +99,17 @@ BEGIN
         ALTER TABLE application_wizard_substep DROP CONSTRAINT application_wizard_substep_pk;
         ALTER TABLE application_wizard_step DROP CONSTRAINT application_wizard_step_pk;
         ALTER TABLE charges DROP CONSTRAINT charges_pk;
-        --ALTER TABLE custom_skin_resource_blob DROP CONSTRAINT custom_skin_resource_blob_pk;
-        --ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_pk;
-        --ALTER TABLE file_blob DROP CONSTRAINT file_blob_pk;
+        ALTER TABLE custom_skin_resource_blob DROP CONSTRAINT custom_skin_resource_blob_pk;
+        ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_pk;
+        ALTER TABLE file_blob DROP CONSTRAINT file_blob_pk;
         --ALTER TABLE general_insurance_policy_blob DROP CONSTRAINT general_insurance_policy_blob_pk;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_pk;
         --ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_pk;
-        --ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_pk;
-        --ALTER TABLE online_application$steps DROP CONSTRAINT online_application$steps_pk;
+        ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_pk;
+        ALTER TABLE online_application$steps DROP CONSTRAINT online_application$steps_pk;
         --ALTER TABLE payment_information DROP CONSTRAINT payment_information_pk;
         --ALTER TABLE proof_of_employment_document DROP CONSTRAINT proof_of_employment_document_pk;
-        --ALTER TABLE property_phone DROP CONSTRAINT property_phone_pk;
+        ALTER TABLE property_phone DROP CONSTRAINT property_phone_pk;
         ALTER TABLE summary DROP CONSTRAINT summary_pk;
         ALTER TABLE tenant_charge_list$charges DROP CONSTRAINT tenant_charge_list$charges_pk;
         ALTER TABLE tenant_charge_list DROP CONSTRAINT tenant_charge_list_pk;
@@ -183,6 +183,13 @@ BEGIN
         ALTER TABLE employee_signature RENAME COLUMN file_size TO file_file_size;
         ALTER TABLE employee_signature RENAME COLUMN updated_timestamp TO file_updated_timestamp;
         
+        
+        -- file_blob
+        
+        ALTER TABLE file_blob RENAME TO media_file_blob;
+        ALTER TABLE media_file_blob RENAME COLUMN content TO data;
+        
+        
         -- floorplan
         
         ALTER TABLE floorplan ADD COLUMN code VARCHAR(500);
@@ -196,6 +203,12 @@ BEGIN
         ALTER TABLE legal_letter RENAME COLUMN file_name TO file_file_name;
         ALTER TABLE legal_letter RENAME COLUMN file_size TO file_file_size;
         ALTER TABLE legal_letter RENAME COLUMN updated_timestamp TO file_updated_timestamp;
+        
+        -- legal_letter_blob
+        
+        ALTER TABLE legal_letter_blob RENAME COLUMN content TO data;
+        ALTER TABLE legal_letter_blob ADD COLUMN created TIMESTAMP;
+        
         
         -- marketing
         
@@ -281,10 +294,37 @@ BEGIN
                                                         DROP COLUMN address_street_number_suffix,
                                                         DROP COLUMN address_street_type,
                                                         DROP COLUMN address_suite_number;
+                                                        
+        -- digital_signature
+        
+        DROP TABLE digital_signature;
         
         -- identification_document
         
         DROP TABLE identification_document;
+        
+        
+        -- online_application$signatures
+        
+        DROP TABLE online_application$signatures;
+        
+        
+        -- online_application$steps
+        
+        DROP TABLE online_application$steps;
+        
+        
+        -- payment_information
+        
+        DROP TABLE payment_information;
+        
+        -- proof_of_employment_document
+        
+        DROP TABLE proof_of_employment_document;
+        
+        -- property_phone
+        
+        DROP TABLE property_phone;
         
         -- summary
         
@@ -297,6 +337,10 @@ BEGIN
         -- tenant_charge
         
         DROP TABLE tenant_charge;
+        
+        -- tenant_charge_list
+        
+        DROP TABLE tenant_charge_list;
                  
         /**
         ***     ======================================================================================================
