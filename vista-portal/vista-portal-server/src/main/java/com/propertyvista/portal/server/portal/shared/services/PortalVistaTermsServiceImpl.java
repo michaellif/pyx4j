@@ -18,10 +18,14 @@ import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
@@ -67,8 +71,13 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
     public void getProspectRentalCriteriaGuidelines(AsyncCallback<LegalTermsTO> callback) {
-        // TODO use LegalTermsPolicy
-        getVistaTerms(callback, VistaTerms.Target.ApplicantTermsAndConditions);
+        LegalTermsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), LegalTermsPolicy.class);
+
+        LegalTermsTO result = EntityFactory.create(LegalTermsTO.class);
+        result.caption().setValue(policy.rentalCriteriaGuidelines().caption().getValue());
+        result.content().setValue(policy.rentalCriteriaGuidelines().content().getValue());
+        callback.onSuccess(result);
     }
 
     private void getVistaTerms(AsyncCallback<LegalTermsTO> callback, final VistaTerms.Target target) {
