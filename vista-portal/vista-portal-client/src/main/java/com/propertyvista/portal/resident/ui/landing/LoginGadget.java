@@ -24,12 +24,14 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -53,6 +55,7 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.portal.resident.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
@@ -85,19 +88,15 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         loginForm.initContent();
         contentPanel.add(loginForm);
 
-        FlowPanel loginTermsLinkPanel = new FlowPanel();
+        SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
+        String anchorId = HTMLPanel.createUniqueId();
+        loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to our  {0}.", "<span id=\""
+                + anchorId + "\"></span>"));
+
+        HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
         loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-
-        HTML termsPrefix = new HTML(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to our "));
-        termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
-        loginTermsLinkPanel.add(termsPrefix);
-
-        termsAndConditionsAnchor = new TermsAnchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"), PortalSiteMap.TermsAndConditions.class);
-        loginTermsLinkPanel.add(termsAndConditionsAnchor);
-
-        HTML suffixPrefix = new HTML(".");
-        suffixPrefix.getElement().getStyle().setDisplay(Display.INLINE);
-        loginTermsLinkPanel.add(suffixPrefix);
+        termsAndConditionsAnchor = new TermsAnchor(i18n.tr("RESIDENT TERMS AND CONDITIONS"), PortalSiteMap.TermsAndConditions.class);
+        loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, anchorId);
 
         contentPanel.add(loginTermsLinkPanel);
 
