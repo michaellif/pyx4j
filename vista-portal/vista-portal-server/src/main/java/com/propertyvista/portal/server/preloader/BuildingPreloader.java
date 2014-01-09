@@ -266,7 +266,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 for (AptUnit unit : units) {
                     SystemDateManager.setDate(RandomUtil.randomLogicalDate(2010, 2012));
                     ServerSideFactory.create(BuildingFacade.class).persist(unit);
-                    productCatalogGenerator.createAptUnitServices(building.productCatalog(), unit);
+                    productCatalogGenerator.fillUnitServices(building.productCatalog(), unit);
                 }
             } finally {
                 SystemDateManager.resetDate();

@@ -66,7 +66,8 @@ public class ProductCatalogGenerator {
         for (ARCode.Type type : ARCode.Type.services()) {
             List<ARCode> arCodes = getARCodes(type);
             for (ARCode arCode : arCodes) {
-                items.add(createService(catalog, arCode));
+                items.add(createService(catalog, arCode, false));
+                items.add(createService(catalog, arCode, true));
             }
         }
         return items;
@@ -115,7 +116,7 @@ public class ProductCatalogGenerator {
         return Persistence.service().query(criteria);
     }
 
-    private Service createService(ProductCatalog catalog, ARCode arCode) {
+    private Service createService(ProductCatalog catalog, ARCode arCode, boolean onlineUse) {
         Service service = EntityFactory.create(Service.class);
         service.catalog().set(catalog);
         service.defaultCatalogItem().setValue(false);
@@ -123,8 +124,8 @@ public class ProductCatalogGenerator {
         service.code().set(arCode);
         service.version().name().setValue(RandomUtil.randomLetters(6));
         service.version().description().setValue("Service description");
-        service.version().availableOnline().setValue(RandomUtil.randomBoolean());
         service.version().price().setValue(new BigDecimal(1000.10));
+        service.version().availableOnline().setValue(onlineUse);
 
         return service;
 
@@ -213,16 +214,40 @@ public class ProductCatalogGenerator {
 
         item.version().effectiveDate().setValue(DataGenerator.randomDateInLastYearMonthShifted(2));
         item.version().expirationDate().setValue(DataGenerator.randomDateInLastYearMonthShifted(4));
+
         return item;
     }
 
-    private Service getService(ProductCatalog catalog, ARCode arCode) {
+    public void fillUnitServices(ProductCatalog catalog, AptUnit unit) {
+        for (ARCode.Type type : ARCode.Type.unitRelatedServices()) {
+            fillBuildingElementServices(catalog, unit, RandomUtil.random(getARCodes(type)), createUnitMarketRent(unit));
+        }
+    }
+
+    private void fillBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, ARCode arCode, BigDecimal price) {
+        for (Service service : getServices(catalog, arCode)) {
+            ProductItem item = EntityFactory.create(ProductItem.class);
+
+            item.element().set(buildingElement);
+            item.name().setValue(arCode.name().getValue());
+            item.description().setValue(arCode.type().getStringView() + " description");
+            item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
+
+            Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
+            service.version().items().add(item);
+        }
+    }
+
+    private List<Service> getServices(ProductCatalog catalog, ARCode arCode) {
+        List<Service> services = new ArrayList<Service>();
+
         for (Service service : catalog.services()) {
             if (service.code().equals(arCode) && !service.defaultCatalogItem().isBooleanTrue()) {
-                return service;
+                services.add(service);
             }
         }
-        throw new Error("Service with ARCode = " + arCode + " not found");
+
+        return services;
     }
 
     private static BigDecimal createUnitMarketRent(AptUnit unit) {
@@ -230,31 +255,5 @@ public class ProductCatalogGenerator {
         base = base.add(new BigDecimal(unit.info()._bedrooms().getValue() * 150));
         base = base.add(new BigDecimal(unit.info()._bathrooms().getValue() * 50));
         return base.add(new BigDecimal(RandomUtil.randomInt(200)));
-    }
-
-    public List<ProductItem> createAptUnitServices(ProductCatalog catalog, AptUnit unit) {
-        List<ProductItem> serviceItems = new ArrayList<ProductItem>();
-
-        for (ARCode.Type type : ARCode.Type.unitRelatedServices()) {
-            serviceItems.add(createBuildingElementServices(catalog, unit, RandomUtil.random(getARCodes(type)), createUnitMarketRent(unit)));
-        }
-
-        return serviceItems;
-    }
-
-    private ProductItem createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, ARCode arCode, BigDecimal price) {
-        Service service = getService(catalog, arCode);
-
-        ProductItem item = EntityFactory.create(ProductItem.class);
-
-        item.name().setValue(arCode.name().getValue());
-        item.description().setValue(arCode.type().getStringView() + " description");
-        item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
-        item.element().set(buildingElement);
-
-        Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
-        service.version().items().add(item);
-
-        return item;
     }
 }

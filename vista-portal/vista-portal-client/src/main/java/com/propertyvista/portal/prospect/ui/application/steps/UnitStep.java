@@ -124,7 +124,7 @@ public class UnitStep extends ApplicationWizardStep {
         get(proto().unitSelection().bedrooms()).setEditable(editable);
         get(proto().unitSelection().bathrooms()).setEditable(editable);
 
-//        selectedUnit.setVisible(!editable);
+        selectedUnit.setVisible(!editable);
 
         availableUnitsHeader.setVisible(editable);
         availableUnitsFolder.setVisible(editable);
