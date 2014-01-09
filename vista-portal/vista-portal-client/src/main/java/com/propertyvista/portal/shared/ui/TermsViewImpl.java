@@ -13,28 +13,66 @@
  */
 package com.propertyvista.portal.shared.ui;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public class TermsViewImpl extends Composite implements TermsView {
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.widgets.client.Button;
 
-    private final Label terms;
+import com.propertyvista.portal.shared.themes.DashboardTheme;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
+import com.propertyvista.portal.shared.ui.NotificationPageView.NotificationPagePresenter;
+import com.propertyvista.portal.shared.ui.NotificationPageViewImpl.NotificationGadget;
+import com.propertyvista.portal.shared.ui.NotificationPageViewImpl.NotificationGadget.NotificationToolbar;
+
+public class TermsViewImpl extends SimplePanel implements TermsView {
+
+    private HTML termsHtml;
+
+    private NotificationPagePresenter presenter;
 
     public TermsViewImpl() {
-        terms = new Label();
-        terms.setSize("100%", "100%");
 
-        ScrollPanel scrollPanel = new ScrollPanel(terms);
-        scrollPanel.getElement().getStyle().setPadding(20, Unit.PX);
+        setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        initWidget(scrollPanel);
     }
 
     @Override
-    public void populate(String tenantSureFaqHtml) {
-        terms.getElement().setInnerHTML(tenantSureFaqHtml);
+    public void populate(String termsText) {
+
+        TermsGadget notificationGadget = new TermsGadget(this);
+        notificationGadget.asWidget().setWidth("100%");
+        setWidget(notificationGadget);
+
+        termsHtml.setHTML(termsText);
+
     }
 
+    class TermsGadget extends AbstractGadget<TermsViewImpl> {
+
+        TermsGadget(TermsViewImpl viewer) {
+            super(viewer, null, "", ThemeColor.foreground, 0.3);
+
+            addStyleName(PortalRootPaneTheme.StyleName.NotificationGadget.name());
+
+            FlowPanel viewPanel = new FlowPanel();
+            viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
+            termsHtml = new HTML();
+            viewPanel.add(termsHtml);
+
+            setContent(viewPanel);
+
+        }
+
+    }
 }
