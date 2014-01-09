@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -33,18 +33,15 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
 
     private String checkBoxText;
 
-    private String checkBoxAnchorText;
-
-    private Command checkBoxAnchorCommand;
+    private IsWidget customWidget;
 
     public CSignature(String checkBoxText) {
-        this(checkBoxText, null, null);
+        this(checkBoxText, null);
     }
 
-    public CSignature(String checkBoxText, String checkBoxAnchorText, Command checkBoxAnchorCommand) {
+    public CSignature(String checkBoxText, IsWidget customWidget) {
         super();
-        setCheckBoxText(checkBoxText);
-        setCheckBoxAnchor(checkBoxAnchorText, checkBoxAnchorCommand);
+        setCustomWidget(customWidget);
         setNativeWidget(new NSignature(this));
         asWidget().setWidth("100%");
 
@@ -89,17 +86,12 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
         return checkBoxText;
     }
 
-    public void setCheckBoxAnchor(String checkBoxAnchorText, Command checkBoxAnchorCommand) {
-        this.checkBoxAnchorText = checkBoxAnchorText;
-        this.checkBoxAnchorCommand = checkBoxAnchorCommand;
+    public void setCustomWidget(IsWidget widget) {
+        this.customWidget = widget;
     }
 
-    public String getCheckBoxAnchorText() {
-        return checkBoxAnchorText;
-    }
-
-    public Command getCheckBoxAnchorCommand() {
-        return checkBoxAnchorCommand;
+    public IsWidget getCustomWidget() {
+        return customWidget;
     }
 
 }

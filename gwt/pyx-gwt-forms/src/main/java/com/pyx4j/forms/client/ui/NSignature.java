@@ -27,14 +27,13 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.ui.NSignature.SignaturePanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.Label;
@@ -187,7 +186,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
         private final TextBox textBox;
 
-        private final Anchor checkBoxAnchor;
+        private final SimplePanel customWidgetHolder;
 
         public SignaturePanel() {
 
@@ -195,16 +194,8 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
             checkBox = new CheckBox(getCComponent().getCheckBoxText() + " ");
             add(checkBox);
-            checkBoxAnchor = new Anchor(null, new Command() {
-
-                @Override
-                public void execute() {
-                    if (getCComponent().getCheckBoxAnchorCommand() != null) {
-                        getCComponent().getCheckBoxAnchorCommand().execute();
-                    }
-                }
-            });
-            add(checkBoxAnchor);
+            customWidgetHolder = new SimplePanel();
+            add(customWidgetHolder);
             textBox = new TextBox();
             add(textBox);
 
@@ -215,14 +206,14 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             case AgreeBox:
             case AgreeBoxAndFullName:
                 checkBox.setVisible(true);
-                checkBoxAnchor.setVisible(true);
-                if (getCComponent().getCheckBoxAnchorText() != null) {
-                    checkBoxAnchor.setText(getCComponent().getCheckBoxAnchorText());
+                customWidgetHolder.setVisible(true);
+                if (getCComponent().getCustomWidget() != null) {
+                    customWidgetHolder.setWidget(getCComponent().getCustomWidget());
                 }
                 break;
             default:
                 checkBox.setVisible(false);
-                checkBoxAnchor.setVisible(false);
+                customWidgetHolder.setVisible(false);
                 break;
             }
 

@@ -58,6 +58,7 @@ import com.pyx4j.tester.client.domain.test.EntityI.Enum1;
 import com.pyx4j.tester.client.domain.test.EntityIII;
 import com.pyx4j.tester.client.domain.test.EntityV;
 import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
 public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
@@ -104,15 +105,16 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
                 new FormDecoratorBuilder(inject(proto().personalId(), new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class,
                         "XXX-XXX-xxx;XX-XX-xxxx"))).build());
 
-        main.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().signature1(), new CSignature(i18n.tr("I Agree with"), i18n.tr("Terms and Conditions"), new Command() {
+        Anchor anchor = new Anchor(i18n.tr("Terms and Conditions"), new Command() {
 
-                    @Override
-                    public void execute() {
-                        // TODO Auto-generated method stub
+            @Override
+            public void execute() {
+                // TODO Auto-generated method stub
 
-                    }
-                }))).build());
+            }
+        });
+
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signature1(), new CSignature(i18n.tr("I Agree with"), anchor))).build());
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().hue())).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().color())).build());

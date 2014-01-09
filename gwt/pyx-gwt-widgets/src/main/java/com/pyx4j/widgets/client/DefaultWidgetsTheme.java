@@ -145,6 +145,7 @@ public class DefaultWidgetsTheme extends Theme {
     protected void initCheckBoxStyle() {
         Style style = new Style(".", StyleName.CheckBox, " label");
         style.addProperty("padding-left", "4px");
+        style.addProperty("float", "right");
         addStyle(style);
     }
 
