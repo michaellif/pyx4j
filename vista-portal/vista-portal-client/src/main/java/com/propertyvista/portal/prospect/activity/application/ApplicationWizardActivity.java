@@ -93,6 +93,14 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     }
 
     @Override
+    public String mayStop() {
+        if (getView().isDirty()) {
+            return i18n.tr("");
+        }
+        return null;
+    }
+
+    @Override
     public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, Integer beds, Integer baths, LogicalDate moveIn) {
         service.getAvailableUnits(callback, beds, baths, moveIn);
     }

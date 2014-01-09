@@ -95,7 +95,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
             if (CommonsStringUtils.isEmpty(entityName)) {
                 return i18n.tr("Changes to {0} were not saved", view.getValue().getEntityMeta().getCaption());
             } else {
-                return i18n.tr("Changes to {0} ''{1}'' were not saved", view.getValue().getEntityMeta().getCaption(), entityName);
+                return i18n.tr("Changes to {0} ''{1}'' were not saved.", view.getValue().getEntityMeta().getCaption(), entityName);
             }
         } else {
             return null;
