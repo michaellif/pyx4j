@@ -30,10 +30,6 @@ public interface TenantSureAgreementParamsDTO extends IEntity {
 
     IPrimitiveSet<BigDecimal> deductibleOptions();
 
-    //TODO use PortalVistaTermsService
-    @Deprecated
-    IPrimitive<String> preAuthorizedDebitAgreement();
-
     /**
      * @returns <code>true</code> if the tenant in context has already been registered as a client registered in CFC API (which means we don't need to validate
      *          name and phone), or <code>false</code> otherwise.

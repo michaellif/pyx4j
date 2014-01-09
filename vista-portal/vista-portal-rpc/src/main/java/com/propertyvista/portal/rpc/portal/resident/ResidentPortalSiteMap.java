@@ -40,6 +40,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
         public static class BillingTerms extends AppPlace implements PublicPlace {
         }
+
+        public static class TenantSurePreAuthorizedPaymentTerms extends AppPlace implements PublicPlace {
+        }
     }
 
     @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")

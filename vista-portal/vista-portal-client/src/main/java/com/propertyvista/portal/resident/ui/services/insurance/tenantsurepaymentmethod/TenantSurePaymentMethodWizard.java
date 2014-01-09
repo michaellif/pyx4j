@@ -55,12 +55,6 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
         paymentMethodForm.setValue(paymentMethod);
     }
 
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-        paymentMethodForm.setPreAuthorizedAgreement(getValue().preauthorizedPaymentAgreement().getValue());
-    }
-
     private BasicFlexFormPanel createPaymentMethodStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
 

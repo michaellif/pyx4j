@@ -68,6 +68,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.LeaseContextSelection;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Registration;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
 import com.propertyvista.portal.shared.activity.PortalTermsActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
@@ -190,6 +191,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             || place instanceof ResidentPortalTerms.CreditCardPolicy
                             || place instanceof ResidentPortalTerms.ConvenienceFeeTerms
                             || place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms
+                            || place instanceof TenantSurePreAuthorizedPaymentTerms
                             || place instanceof PortalSiteMap.TermsAndConditions) {
                         activity = new PortalTermsActivity(place);
                  // @formatter:on

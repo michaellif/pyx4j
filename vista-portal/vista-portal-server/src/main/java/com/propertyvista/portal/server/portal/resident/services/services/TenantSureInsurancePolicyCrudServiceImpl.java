@@ -314,7 +314,6 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         params.contentsCoverageOptions().addAll(CONTENTS_COVERAGE_OPTIONS);
 
         params.deductibleOptions().addAll(getDeductibleOptions());
-        params.preAuthorizedDebitAgreement().setValue("TODO use PortalVistaTermsService");
 
         return params;
     }

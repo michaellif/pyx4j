@@ -87,7 +87,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         ((TenantSureCoverageRequestForm) get(proto().tenantSureCoverageRequest())).setCoverageParams(getValue().agreementParams());
-        paymentMethodForm.setPreAuthorizedAgreement(getValue().agreementParams().preAuthorizedDebitAgreement().getValue());
 
         get(proto().tenantSureCoverageRequest().tenantName()).setViewable(getValue().agreementParams().isTenantInitializedInCfc().isBooleanTrue());
         get(proto().tenantSureCoverageRequest().tenantPhone()).setViewable(getValue().agreementParams().isTenantInitializedInCfc().isBooleanTrue());
