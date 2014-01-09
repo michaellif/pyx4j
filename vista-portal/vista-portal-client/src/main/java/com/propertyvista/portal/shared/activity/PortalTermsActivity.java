@@ -45,7 +45,7 @@ public class PortalTermsActivity extends AbstractActivity {
         DefaultAsyncCallback<String> callback = new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                view.populate(result);
+                view.populate("TODO!!! TITLE TITLE TITLE", result);
                 panel.setWidget(view);
             }
         };

@@ -34,7 +34,7 @@ public class TenantSureFaqActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         // TODO VISTA-3596: consider getting the FAQ text from server
-        view.populate(TenantSureResources.INSTANCE.faq().getText());
+        view.populate("TenantSure Frequently asked questions", TenantSureResources.INSTANCE.faq().getText());
         panel.setWidget(view);
     }
 

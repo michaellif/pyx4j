@@ -17,6 +17,6 @@ import com.pyx4j.site.client.IsView;
 
 public interface TermsView extends IsView {
 
-    void populate(String tenantSureFaqHtml);
+    void populate(String title, String content);
 
 }
