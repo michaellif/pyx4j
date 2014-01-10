@@ -259,7 +259,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         String anchorId = HTMLPanel.createUniqueId();
         signatureDescriptionBuilder
                 .appendHtmlConstant(i18n
-                        .tr("I agree to the web payment fee being charged and have read the applicable terms and conditions. The fee will appear as CCS*Web Payment Fee on your credit card statement. {0}.",
+                        .tr("I agree to the Web Payment Fee being charged and have read the applicable terms and conditions. The fee will appear as CCS*Web Payment Fee on your credit card statement. {0}.",
                                 "<span id=\"" + anchorId + "\"></span>"));
 
         HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
