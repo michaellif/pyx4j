@@ -9,7 +9,7 @@
 **/
 
 -- Adjust for the database in use
-USE sl_1205;
+USE sl_0107;
 
 DROP VIEW tenant_EFT_charges;
 
@@ -51,7 +51,7 @@ JOIN tenstatus ts ON (t.ISTATUS = ts.istatus)
 LEFT JOIN	LISTPROP lp ON (p.HMY = lp.HPROPERTY)
 LEFT JOIN	PROPERTY pl ON (lp.HPROPLIST = pl.HMY)
 LEFT JOIN PERSON r ON (e.hRoommate = r.HMY)
-WHERE	(ISNULL(c.dtto,'01-JAN-2020') >= '01-NOV-2013' AND c.DTFROM <= '01-NOV-2013')
+WHERE	(ISNULL(c.dtto,'01-JAN-2020') >= '01-FEB-2014' AND c.DTFROM <= '01-FEB-2014')
 AND		ts.status IN ('Current','Notice')
 AND		pl.SADDR1 LIKE '%Vista%'
 AND		e.SACCT NOT IN ('0','1')
