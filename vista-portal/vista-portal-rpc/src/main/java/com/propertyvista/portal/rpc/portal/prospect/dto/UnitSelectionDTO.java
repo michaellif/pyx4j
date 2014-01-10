@@ -158,10 +158,10 @@ public interface UnitSelectionDTO extends IEntity {
         IPrimitive<BigDecimal> price();
     }
 
-    IList<UnitTO> currentUnits();
+    @Editor(type = Editor.EditorType.label)
+    UnitTO selectedUnit();
 
     IList<UnitTO> availableUnits();
 
-    @Editor(type = Editor.EditorType.label)
-    UnitTO selectedUnit();
+    IList<UnitTO> potentialUnits();
 }

@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
@@ -43,6 +44,7 @@ import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -121,8 +123,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
-        callback.onSuccess(new Vector<UnitTO>(retriveAvailableUnits(beds, baths, moveIn)));
+    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, UnitSelectionDTO editableEntity) {
+        callback.onSuccess(new Vector<UnitTO>(retriveAvailableUnits(editableEntity.building(), editableEntity.bedrooms().getValue(), editableEntity.bathrooms()
+                .getValue(), editableEntity.moveIn().getValue())));
     }
 
     @Override
@@ -462,6 +465,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             if (!unitSelection.floorplan().isNull()) {
                 updateBedsDensBaths(unitSelection);
                 unitSelection.availableUnits().addAll(retriveAvailableUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
+//                unitSelection.potentialUnits().addAll(retrivePotentialUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
             }
 
             to.unitSelection().set(unitSelection);
@@ -690,10 +694,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         unitSelection.floorplan().set(Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey()));
         updateBedsDensBaths(unitSelection);
 
-        return retriveAvailableUnits(unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), moveIn);
+        return retriveAvailableUnits(unitSelection.floorplan().building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), moveIn);
     }
 
-    private List<UnitTO> retriveAvailableUnits(BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
+    private List<UnitTO> retriveAvailableUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
         if (moveIn == null) {
             moveIn = new LogicalDate(SystemDateManager.getDate());
         }
@@ -771,6 +775,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
         }
 
+        // allow no more then 20 days available units:
+        LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -20);
+
+        // building
+        criteria.eq(criteria.proto().building(), building);
         // correct service type:
         criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
         criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
@@ -780,6 +789,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
         criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
         criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
+        criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityDeadline);
 
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {

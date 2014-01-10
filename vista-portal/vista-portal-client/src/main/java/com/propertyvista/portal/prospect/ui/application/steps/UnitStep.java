@@ -45,6 +45,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BathroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
@@ -146,21 +147,21 @@ public class UnitStep extends ApplicationWizardStep {
         get(proto().unitSelection().moveIn()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
             public void onValueChange(final ValueChangeEvent<LogicalDate> event) {
-                updateAvailableUnits(event.getValue());
+                updateAvailableUnits();
             }
         });
 
         bedroomSelector.addValueChangeHandler(new ValueChangeHandler<BedroomNumber>() {
             @Override
             public void onValueChange(final ValueChangeEvent<BedroomNumber> event) {
-                updateAvailableUnits(null);
+                updateAvailableUnits();
             }
         });
 
         bathroomSelector.addValueChangeHandler(new ValueChangeHandler<BathroomNumber>() {
             @Override
             public void onValueChange(final ValueChangeEvent<BathroomNumber> event) {
-                updateAvailableUnits(null);
+                updateAvailableUnits();
             }
         });
 
@@ -172,17 +173,17 @@ public class UnitStep extends ApplicationWizardStep {
         });
     }
 
-    private void updateAvailableUnits(LogicalDate moveIn) {
-        if (moveIn == null) {
-            moveIn = get(proto().unitSelection().moveIn()).getValue();
-        }
+    private void updateAvailableUnits() {
+        UnitSelectionDTO current = getValue().unitSelection().<UnitSelectionDTO> duplicate();
+        current.availableUnits().clear();
+        current.potentialUnits().clear();
 
         getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<Vector<UnitTO>>() {
             @Override
             public void onSuccess(Vector<UnitTO> result) {
                 setAvailableUnits(result);
             }
-        }, get(proto().unitSelection().bedrooms()).getValue(), get(proto().unitSelection().bathrooms()).getValue(), moveIn);
+        }, current);
     }
 
     private void updateUnitOptions(UnitTO unit) {
@@ -200,7 +201,7 @@ public class UnitStep extends ApplicationWizardStep {
         getValue().unitSelection().availableUnits().clear();
         getValue().unitSelection().availableUnits().addAll(result);
 
-        availableUnitsFolder.setValue(getValue().unitSelection().availableUnits());
+        availableUnitsFolder.populate(getValue().unitSelection().availableUnits());
     }
 
     private class AvailableUnitsFolder extends PortalBoxFolder<UnitTO> {
