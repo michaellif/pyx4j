@@ -61,6 +61,7 @@ import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWi
 import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseAgreementService;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentAccountCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
@@ -172,6 +173,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseSigningCrudService.class));
+
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(LeaseAgreementService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));

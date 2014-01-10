@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.services.movein;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
+import com.pyx4j.rpc.shared.IService;
 
-public interface LeaseSigningCrudService extends AbstractCrudService<LeaseAgreementDTO> {
+import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 
+public interface LeaseAgreementService extends IService {
+
+    void retrieveLeaseAgreementDocument(AsyncCallback<LeaseTermAgreementDocument> leaseTermAgreement);
 }

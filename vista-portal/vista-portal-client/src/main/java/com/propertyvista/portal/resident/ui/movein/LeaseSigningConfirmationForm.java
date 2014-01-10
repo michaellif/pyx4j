@@ -13,22 +13,12 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
@@ -39,7 +29,7 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
     private static final I18n i18n = I18n.get(LeaseSigningConfirmationForm.class);
 
     public LeaseSigningConfirmationForm(AbstractFormView<LeaseAgreementConfirmationDTO> view) {
-        super(LeaseAgreementConfirmationDTO.class, view, "", ThemeColor.contrast4);
+        super(LeaseAgreementConfirmationDTO.class, view, i18n.tr("Thank you. We have received your signed Lease Agreement."), ThemeColor.contrast4);
     }
 
     @Override
@@ -49,29 +39,7 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
 
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreementDocument())).build());
 
-        content.setHR(++row, 0, 1);
-
-        content.setWidget(++row, 0, createInsurancePanel());
-
         return content;
-    }
-
-    private Widget createInsurancePanel() {
-        VerticalPanel text = new VerticalPanel();
-        text.add(new HTML(i18n.tr("Buy Home Insurance or provide proof of existing Insurance")));
-        text.add(new HTML(i18n.tr("Let us manage your monthly payments for you.")));
-        text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
-            @Override
-            public void execute() {
-                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyWizard());
-            }
-        }));
-
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.add(new Image(VistaImages.INSTANCE.recurringCredit()));
-        panel.add(text);
-
-        return panel;
     }
 
 }

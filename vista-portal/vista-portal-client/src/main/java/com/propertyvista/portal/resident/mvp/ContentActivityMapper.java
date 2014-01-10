@@ -41,6 +41,7 @@ import com.propertyvista.portal.resident.activity.financial.paymentmethod.Paymen
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
+import com.propertyvista.portal.resident.activity.movein.LeaseSigningConfirmationActivity;
 import com.propertyvista.portal.resident.activity.movein.LeaseSigningWizardActivity;
 import com.propertyvista.portal.resident.activity.movein.NewResidentWelcomePageActivity;
 import com.propertyvista.portal.resident.activity.offers.dashboard.OffersDashboardActivity;
@@ -68,7 +69,6 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.LeaseContextSelection;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Registration;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
 import com.propertyvista.portal.shared.activity.PortalTermsActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
@@ -165,6 +165,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new NewResidentWelcomePageActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
                         activity = new LeaseSigningWizardActivity(appPlace);
+                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation) {
+                        activity = new LeaseSigningConfirmationActivity(appPlace);
 
 // Internals
                     } else if (place instanceof Login) {

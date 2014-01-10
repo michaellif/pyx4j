@@ -26,7 +26,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.movein.LeaseSigningConfirmationView;
 import com.propertyvista.portal.resident.ui.movein.LeaseSigningConfirmationView.LeaseSigningConfirmationPresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseAgreementService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class LeaseSigningConfirmationActivity extends SecurityAwareActivity implements LeaseSigningConfirmationPresenter {
@@ -43,15 +43,14 @@ public class LeaseSigningConfirmationActivity extends SecurityAwareActivity impl
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        GWT.<LeaseSigningCrudService> create(LeaseSigningCrudService.class).retrieveLeaseAgreementDocument(
-                new DefaultAsyncCallback<LeaseTermAgreementDocument>() {
-                    @Override
-                    public void onSuccess(LeaseTermAgreementDocument result) {
-                        LeaseAgreementConfirmationDTO confirmatioin = EntityFactory.create(LeaseAgreementConfirmationDTO.class);
-                        confirmatioin.agreementDocument().set(result);
-                        view.populate(confirmatioin);
-                    }
-                });
+        GWT.<LeaseAgreementService> create(LeaseAgreementService.class).retrieveLeaseAgreementDocument(new DefaultAsyncCallback<LeaseTermAgreementDocument>() {
+            @Override
+            public void onSuccess(LeaseTermAgreementDocument result) {
+                LeaseAgreementConfirmationDTO confirmatioin = EntityFactory.create(LeaseAgreementConfirmationDTO.class);
+                confirmatioin.agreementDocument().set(result);
+                view.populate(confirmatioin);
+            }
+        });
     }
 
     @Override
