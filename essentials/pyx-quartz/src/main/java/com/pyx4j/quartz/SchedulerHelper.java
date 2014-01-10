@@ -39,6 +39,7 @@ import org.quartz.impl.jdbcjobstore.JobStoreTX;
 import org.quartz.impl.jdbcjobstore.PostgreSQLDelegate;
 import org.quartz.impl.jdbcjobstore.StdJDBCDelegate;
 import org.quartz.impl.jdbcjobstore.oracle.OracleDelegate;
+import org.quartz.utils.PoolingConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,13 +112,13 @@ public class SchedulerHelper {
         String dataSourceName = "main";
         quartzProperties.put(StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".dataSource", dataSourceName);
         String dsConfigPrefix = StdSchedulerFactory.PROP_DATASOURCE_PREFIX + "." + dataSourceName + ".";
-        quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_DRIVER, rdbConfiguration.driverClass());
-        quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_URL, rdbConfiguration.connectionUrl());
-        quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_USER, rdbConfiguration.userName());
-        quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_PASSWORD, rdbConfiguration.password());
-        quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_MAX_CONNECTIONS, "4");
+        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_DRIVER, rdbConfiguration.driverClass());
+        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_URL, rdbConfiguration.connectionUrl());
+        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_USER, rdbConfiguration.userName());
+        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_PASSWORD, rdbConfiguration.password());
+        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_MAX_CONNECTIONS, "4");
         if (rdbConfiguration.connectionValidationQuery() != null) {
-            quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_VALIDATION_QUERY, rdbConfiguration.connectionValidationQuery());
+            quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_VALIDATION_QUERY, rdbConfiguration.connectionValidationQuery());
         }
 
         log.debug("use DB configuration {}", rdbConfiguration);
