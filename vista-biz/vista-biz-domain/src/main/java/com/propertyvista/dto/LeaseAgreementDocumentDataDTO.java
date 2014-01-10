@@ -30,4 +30,5 @@ public interface LeaseAgreementDocumentDataDTO extends IEntity {
     IList<LeaseAgreementDocumentLegalTermTenantDTO> applicants();
 
     IList<LeaseAgreementDocumentLegalTerm4PrintDTO> terms();
+
 }
