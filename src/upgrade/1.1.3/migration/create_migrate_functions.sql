@@ -31,8 +31,21 @@ BEGIN
         ALTER TABLE charges DROP CONSTRAINT charges_prorated_charges_fk;
         ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_person_fk;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_id_type_fk;
-        -- ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_certificate_fk;
-        -- ALTER TABLE insurance_certificate_scan DROP CONSTRAINT insurance_certificate_scan_certificate_doc_fk;
+        ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_certificate_fk;
+        ALTER TABLE insurance_certificate_scan DROP CONSTRAINT insurance_certificate_scan_certificate_doc_fk;
+        ALTER TABLE legal_documentation$co_application DROP CONSTRAINT legal_documentation$co_application_owner_fk;
+        ALTER TABLE legal_documentation$co_application DROP CONSTRAINT legal_documentation$co_application_value_fk;
+        ALTER TABLE legal_documentation$guarantor_application DROP CONSTRAINT legal_documentation$guarantor_application_owner_fk;
+        ALTER TABLE legal_documentation$guarantor_application DROP CONSTRAINT legal_documentation$guarantor_application_value_fk;
+        ALTER TABLE legal_documentation$lease DROP CONSTRAINT legal_documentation$lease_owner_fk;
+        ALTER TABLE legal_documentation$lease DROP CONSTRAINT legal_documentation$lease_value_fk;
+        ALTER TABLE legal_documentation$main_application DROP CONSTRAINT legal_documentation$main_application_owner_fk;
+        ALTER TABLE legal_documentation$main_application DROP CONSTRAINT legal_documentation$main_application_value_fk;
+        ALTER TABLE legal_documentation$payment_authorization DROP CONSTRAINT legal_documentation$payment_authorization_owner_fk;
+        ALTER TABLE legal_documentation$payment_authorization DROP CONSTRAINT legal_documentation$payment_authorization_value_fk;
+        ALTER TABLE legal_terms_content DROP CONSTRAINT legal_terms_content_locale_fk;
+        ALTER TABLE legal_terms_descriptor$content DROP CONSTRAINT legal_terms_descriptor$content_owner_fk;
+        ALTER TABLE legal_terms_descriptor$content DROP CONSTRAINT legal_terms_descriptor$content_value_fk;
         ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_owner_fk;
         ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_value_fk;
         ALTER TABLE online_application$steps DROP CONSTRAINT online_application$steps_owner_fk;
@@ -102,13 +115,22 @@ BEGIN
         ALTER TABLE custom_skin_resource_blob DROP CONSTRAINT custom_skin_resource_blob_pk;
         ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_pk;
         ALTER TABLE file_blob DROP CONSTRAINT file_blob_pk;
-        --ALTER TABLE general_insurance_policy_blob DROP CONSTRAINT general_insurance_policy_blob_pk;
+        ALTER TABLE general_insurance_policy_blob DROP CONSTRAINT general_insurance_policy_blob_pk;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_pk;
         --ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_pk;
+        ALTER TABLE legal_documentation$co_application DROP CONSTRAINT legal_documentation$co_application_pk;
+        ALTER TABLE legal_documentation$guarantor_application DROP CONSTRAINT legal_documentation$guarantor_application_pk;
+        ALTER TABLE legal_documentation$lease DROP CONSTRAINT legal_documentation$lease_pk;
+        ALTER TABLE legal_documentation$main_application DROP CONSTRAINT legal_documentation$main_application_pk;
+        ALTER TABLE legal_documentation$payment_authorization DROP CONSTRAINT legal_documentation$payment_authorization_pk;
+        ALTER TABLE legal_documentation DROP CONSTRAINT legal_documentation_pk;
+        ALTER TABLE legal_terms_content DROP CONSTRAINT legal_terms_content_pk;
+        ALTER TABLE legal_terms_descriptor$content DROP CONSTRAINT legal_terms_descriptor$content_pk;
+        ALTER TABLE legal_terms_descriptor DROP CONSTRAINT legal_terms_descriptor_pk;
         ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_pk;
         ALTER TABLE online_application$steps DROP CONSTRAINT online_application$steps_pk;
         --ALTER TABLE payment_information DROP CONSTRAINT payment_information_pk;
-        --ALTER TABLE proof_of_employment_document DROP CONSTRAINT proof_of_employment_document_pk;
+        ALTER TABLE proof_of_employment_document DROP CONSTRAINT proof_of_employment_document_pk;
         ALTER TABLE property_phone DROP CONSTRAINT property_phone_pk;
         ALTER TABLE summary DROP CONSTRAINT summary_pk;
         ALTER TABLE tenant_charge_list$charges DROP CONSTRAINT tenant_charge_list$charges_pk;
@@ -130,7 +152,7 @@ BEGIN
         ***    ======================================================================================================
         ***
         ***             Very special case for billing_arrears_snapshot_from_date_to_date_idx
-        ***             This index doesn''t exist in new schemas, and might bloated for schemas
+        ***             This index doesn''t exist in new schemas, and may be bloated for schemas
         ***             where it does exists due to removal of extra rows from billing_arrears_snapshot table 
         ***             So I''ll just drop and recreate it
         ***
@@ -193,7 +215,12 @@ BEGIN
         -- floorplan
         
         ALTER TABLE floorplan ADD COLUMN code VARCHAR(500);
+        ALTER TABLE floorplan ALTER COLUMN description TYPE VARCHAR(4000);
         
+        
+        -- general_insurance_policy_blob
+        
+        ALTER TABLE general_insurance_policy_blob RENAME TO insurance_certificate_scan_blob;
         
         -- legal_letter
         
@@ -208,6 +235,19 @@ BEGIN
         
         ALTER TABLE legal_letter_blob RENAME COLUMN content TO data;
         ALTER TABLE legal_letter_blob ADD COLUMN created TIMESTAMP;
+        
+        
+        -- insurance_certificate_scan
+        
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN blob_key TO file_blob_key;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN cache_version TO file_cache_version;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN content_mime_type TO file_content_mime_type;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN file_name TO file_file_name;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN file_size TO file_file_size;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN updated_timestamp TO file_updated_timestamp;
+        
+        ALTER TABLE insurance_certificate_scan  ADD COLUMN certificate BIGINT,
+                                                ADD COLUMN certificate_descriminator VARCHAR(50);
         
         
         -- marketing
@@ -244,7 +284,13 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- insurance_certificate_scan
         
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_scan AS s '
+                ||'SET  certificate = d.certificate, '
+                ||'     certificate_discriminator = d.certificate_discriminator '
+                ||'FROM '||v_schema_name||'.insurance_certificate_doc AS d '
+                ||'WHERE a.certificate_doc = d.id ';
         
         
         /**
@@ -271,6 +317,10 @@ BEGIN
         
         DROP TABLE application_wizard_substep;
         
+        -- billing_account
+        
+        ALTER TABLE billing_account DROP COLUMN billing_cycle_start_day;
+        
         -- charges
         
         DROP TABLE charges;
@@ -295,13 +345,81 @@ BEGIN
                                                         DROP COLUMN address_street_type,
                                                         DROP COLUMN address_suite_number;
                                                         
+                                                        
         -- digital_signature
         
         DROP TABLE digital_signature;
         
+        
+        -- employee_signature
+        
+        ALTER TABLE employee_signature  DROP COLUMN caption,
+                                        DROP COLUMN description; 
+        
         -- identification_document
         
         DROP TABLE identification_document;
+        
+        
+        -- insurance_certificate_doc
+        
+        DROP TABLE insurance_certificate_doc;
+        
+        
+        -- insurance_certificate_scan
+        
+        ALTER TABLE insurance_certificate_scan DROP COLUMN certificate_doc;
+        
+        
+        -- legal_documentation
+        
+        DROP TABLE legal_documentation;
+        
+        
+        -- legal_documentation$co_application
+        
+        DROP TABLE legal_documentation$co_application;
+        
+        
+        -- legal_documentation$guarantor_application
+        
+        DROP TABLE legal_documentation$guarantor_application;
+        
+        
+        -- legal_documentation$lease
+        
+        DROP TABLE legal_documentation$lease;
+        
+        
+        -- legal_documentation$main_application
+        
+        DROP TABLE legal_documentation$main_application;
+        
+        
+        -- legal_documentation$payment_authorization
+        
+        DROP TABLE legal_documentation$payment_authorization;
+        
+        
+        -- legal_letter
+        
+        ALTER TABLE legal_letter        DROP COLUMN caption,
+                                        DROP COLUMN description;
+                                        
+                                        
+        -- legal_terms_content
+        
+        DROP TABLE legal_terms_content;
+        
+        
+        -- legal_terms_descriptor
+        
+        DROP TABLE legal_terms_descriptor;
+        
+        
+        -- legal_terms_descriptor$content
+        
+        DROP TABLE legal_terms_descriptor$content;
         
         
         -- online_application$signatures

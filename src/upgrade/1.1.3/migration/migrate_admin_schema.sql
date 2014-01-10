@@ -78,8 +78,16 @@ SET search_path = '_admin_';
         ***     ======================================================================================================
         **/
         
-        
-        
+        DROP INDEX pad_batch_pad_file_idx;
+        DROP INDEX pad_batch_pmc_merchant_account_key_idx;
+        DROP INDEX pad_debit_record_pad_batch_idx;
+        DROP INDEX pad_debit_record_transaction_id_idx;
+        DROP INDEX pad_debit_record_transaction_pad_debit_record_idx;
+        DROP INDEX pad_file_creation_number_funds_transfer_type_company_id_idx;
+        DROP INDEX pad_reconciliation_debit_record_reconciliation_summary_idx;
+        DROP INDEX pad_reconciliation_summary_merchant_account_idx;
+        DROP INDEX pad_reconciliation_summary_reconciliation_file_idx;
+
         /**
         ***     =======================================================================================================
         ***
@@ -199,6 +207,11 @@ SET search_path = '_admin_';
         
         ALTER TABLE pmc_document_file   DROP COLUMN caption,
                                         DROP COLUMN description;
+                                        
+                                        
+        -- vista_terms_v
+        
+        ALTER TABLE vista_terms_v ADD COLUMN caption VARCHAR(500);
        
        
         /**
@@ -219,17 +232,30 @@ SET search_path = '_admin_';
         -- vista_terms
         
         UPDATE  vista_terms
-        SET     target = 'PMCPropertyVistaService'
+        SET     target = 'PmcPropertyVistaService'
         WHERE   target = 'PMC';
         
         UPDATE  vista_terms
-        SET     target = 'TenantPropertyVistaService'
+        SET     target = 'TenantPortalTermsAndConditions'
         WHERE   target = 'Tenant';
         
         UPDATE  vista_terms
-        SET     target = 'ProspectPropertyVistaService'
-        WHERE   target = 'Prospect';
+        SET     target = 'TenantBillingTerms'
+        WHERE   target = 'TenantBilling';
         
+        UPDATE  vista_terms
+        SET     target = 'TenantPreAuthorizedPaymentECheckTerms'
+        WHERE   target = 'TenantPaymentPad';
+        
+        UPDATE  vista_terms
+        SET     target = 'TenantPreAuthorizedPaymentCardTerms'
+        WHERE   target = 'TenantPaymentCreditCard';
+        
+        UPDATE  vista_terms
+        SET     target = 'TenantPreAuthorizedPaymentCardTerms'
+        WHERE   target = 'TenantPaymentCreditCard';
+        
+
         
         
         
@@ -309,9 +335,10 @@ SET search_path = '_admin_';
                 'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 
                 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
         ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
-                CHECK ((target) IN ('PMCPropertyVistaService', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'ProspectPropertyVistaService', 
-                'TenantBilling', 'TenantPaymentConvenienceFee', 'TenantPaymentCreditCard', 'TenantPaymentPad', 'TenantPreAuthorizedPaymentsAgreement', 'TenantPropertyVistaService', 
-                'TenantSurePreAuthorizedPaymentsAgreement'));
+                CHECK ((target) IN ('ApplicantTermsAndConditions', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'PmcPropertyVistaService', 
+                'TenantBillingTerms', 'TenantPaymentConvenienceFeeTerms', 'TenantPortalTermsAndConditions', 'TenantPreAuthorizedPaymentCardTerms', 
+                'TenantPreAuthorizedPaymentECheckTerms', 'TenantSurePreAuthorizedPaymentsAgreement'));
+
         
 
         -- Not null
@@ -326,11 +353,16 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        CREATE INDEX funds_reconciliation_record_record_reconciliation_summary_idx ON funds_reconciliation_record_record USING btree (reconciliation_summary);
+        CREATE INDEX funds_reconciliation_summary_merchant_account_idx ON funds_reconciliation_summary USING btree (merchant_account);
+        CREATE INDEX funds_reconciliation_summary_reconciliation_file_idx ON funds_reconciliation_summary USING btree (reconciliation_file);
+        CREATE INDEX funds_transfer_batch_pad_file_idx ON funds_transfer_batch USING btree (pad_file);
+        CREATE INDEX funds_transfer_batch_pmc_merchant_account_key_idx ON funds_transfer_batch USING btree (pmc, merchant_account_key);
+        CREATE UNIQUE INDEX funds_transfer_file_creation_number_company_id_idx ON funds_transfer_file USING btree (file_creation_number, funds_transfer_type, company_id);
+        CREATE INDEX funds_transfer_record_pad_batch_idx ON funds_transfer_record USING btree (pad_batch);
+        CREATE INDEX funds_transfer_record_transaction_id_idx ON funds_transfer_record USING btree (transaction_id);
+        CREATE INDEX funds_transfer_record_transaction_pad_debit_record_idx ON funds_transfer_record_transaction USING btree (pad_debit_record);
         
-
-
-       
-
 
 COMMIT;
 
