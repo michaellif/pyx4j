@@ -45,11 +45,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -159,6 +159,9 @@ public class TenantPadProcessor {
                 padFileModel._processorInformation().status().setValue(PadProcessingStatus.ignoredByRequest);
                 continue;
             }
+            trimValue(padFileModel.tenantId());
+            trimValue(padFileModel.leaseId());
+            trimValue(padFileModel.property());
 
             if (!padFileModel.tenantId().isNull()) {
                 String tenantId = padFileModel.tenantId().getValue().trim();
