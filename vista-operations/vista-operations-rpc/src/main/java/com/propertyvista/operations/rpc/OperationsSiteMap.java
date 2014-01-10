@@ -199,7 +199,7 @@ public class OperationsSiteMap implements SiteMap {
         @PlaceProperties(caption = "Tenant Convenience Fee Terms")
         public static class TenantCaledonConvenienceFee extends VistaTermsAccess {
             public TenantCaledonConvenienceFee() {
-                super(Target.TenantPaymentConvenienceFeeTerms);
+                super(Target.TenantPaymentWebPaymentFeeTerms);
             }
         }
 

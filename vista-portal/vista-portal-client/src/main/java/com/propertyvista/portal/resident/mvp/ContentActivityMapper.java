@@ -191,7 +191,7 @@ public class ContentActivityMapper implements AppActivityMapper {
 // Internals/Terms: @formatter:off
                     } else if (place instanceof ResidentPortalTerms.BillingTerms 
                             || place instanceof ResidentPortalTerms.CreditCardPolicy
-                            || place instanceof ResidentPortalTerms.ConvenienceFeeTerms
+                            || place instanceof ResidentPortalTerms.WebPaymentFeeTerms
                             || place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms
                             || place instanceof ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms
                             || place instanceof PortalSiteMap.TermsAndConditions) {

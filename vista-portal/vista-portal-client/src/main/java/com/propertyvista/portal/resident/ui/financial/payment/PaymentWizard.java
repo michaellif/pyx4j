@@ -263,7 +263,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                                 "<span id=\"" + anchorId + "\"></span>"));
 
         HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
-        Anchor termsAnchor = new TermsAnchor(i18n.tr("Web Payment Fee Terms and Conditions"), ResidentPortalTerms.ConvenienceFeeTerms.class);
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Web Payment Fee Terms and Conditions"), ResidentPortalTerms.WebPaymentFeeTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
 
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), new CSignature(signatureDescriptionPanel)))

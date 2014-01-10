@@ -47,7 +47,7 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html", "TODO name it billing");
         createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "TenantPreAuthorizedPaymentECheckTerms.html", "TODO name it, ECheck");
         createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html", "TODO name it, Cards");
-        createTerms(Target.TenantPaymentConvenienceFeeTerms, "TenantPaymentConvenienceFeeTerms.html", "TODO ConvenienceFee");
+        createTerms(Target.TenantPaymentWebPaymentFeeTerms, "TenantPaymentWebPaymentFeeTerms.html", "Web Payment Fee - Terms and Conditions");
 
         createTerms(Target.ApplicantTermsAndConditions, "ApplicantTermsAndConditions.html", "TODO Applicant T&C");
 

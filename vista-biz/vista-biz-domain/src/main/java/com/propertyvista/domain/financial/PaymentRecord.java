@@ -208,11 +208,11 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    @Caption(name = "Service Fee")
+    @Caption(name = "Web Payment Fee")
     IPrimitive<BigDecimal> convenienceFee();
 
     @Length(30)
-    @Caption(name = "Service Fee Reference Number")
+    @Caption(name = "Fee Reference Number")
     IPrimitive<String> convenienceFeeReferenceNumber();
 
     LeasePaymentMethod paymentMethod();
