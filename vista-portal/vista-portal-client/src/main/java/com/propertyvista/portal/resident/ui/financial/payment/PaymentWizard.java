@@ -18,11 +18,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -259,11 +257,13 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();
         String anchorId = HTMLPanel.createUniqueId();
-        signatureDescriptionBuilder.appendHtmlConstant(i18n.tr("I agree to the service fee being charged and have read the {0}.", "<span id=\"" + anchorId
-                + "\"></span>"));
+        signatureDescriptionBuilder
+                .appendHtmlConstant(i18n
+                        .tr("I agree to the web payment fee being charged and have read the applicable terms and conditions. The fee will appear as CCS*Web Payment Fee on your credit card statement. {0}.",
+                                "<span id=\"" + anchorId + "\"></span>"));
 
         HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
-        Anchor termsAnchor = new TermsAnchor(i18n.tr("Service Fee Terms and Conditions"), ResidentPortalTerms.ConvenienceFeeTerms.class);
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Web Payment Fee Terms and Conditions"), ResidentPortalTerms.ConvenienceFeeTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
 
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), new CSignature(signatureDescriptionPanel)))
@@ -416,7 +416,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             @Override
             public void onSuccess(ConvenienceFeeCalculationResponseTO result) {
                 if (result != null) {
-                    panel.add(createDecorator(i18n.tr("Service Fee:"), result.feePercentage().getStringView()));
+                    panel.add(createDecorator(i18n.tr("Web Payment Fee:"), result.feeAmount().getStringView()));
                     panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
 
                     get(proto().convenienceFeeSignature()).setVisible(true);
