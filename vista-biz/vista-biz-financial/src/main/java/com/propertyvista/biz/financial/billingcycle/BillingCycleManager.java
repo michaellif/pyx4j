@@ -19,6 +19,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -31,6 +34,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -48,6 +52,7 @@ import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.shared.config.VistaFeatures;
 
 class BillingCycleManager {
+    private final Logger log = LoggerFactory.getLogger(BillingCycleManager.class);
 
     private final I18n i18n = I18n.get(BillingCycleManager.class);
 
@@ -83,14 +88,14 @@ class BillingCycleManager {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycle.billingCycleEndDate().getValue());
         calendar.add(Calendar.DAY_OF_MONTH, 1);
-        return ensureBillingCycle(billingCycle.building(), billingCycle.billingType(), new LogicalDate(calendar.getTime()));
+        return ensureBillingCycleForDate(billingCycle.building(), billingCycle.billingType(), new LogicalDate(calendar.getTime()));
     }
 
     protected BillingCycle getPriorBillingCycle(BillingCycle billingCycle) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycle.billingCycleStartDate().getValue());
         calendar.add(Calendar.DAY_OF_MONTH, -1);
-        return ensureBillingCycle(billingCycle.building(), billingCycle.billingType(), new LogicalDate(calendar.getTime()));
+        return ensureBillingCycleForDate(billingCycle.building(), billingCycle.billingType(), new LogicalDate(calendar.getTime()));
     }
 
     protected BillingCycle getLeaseFirstBillingCycle(Lease lease) {
@@ -135,21 +140,34 @@ class BillingCycleManager {
     /** Find/Create required BillingType - utility method */
     private BillingType ensureBillingType(final BillingPeriod billingPeriod, final int billingCycleStartDay) {
         // Try to find existing billing type
+        BillingType billingType = retrieveBillingType(billingPeriod, billingCycleStartDay);
+
+        if (billingType == null) {
+            // not found - create new one; handle possible concurrent creation attempts
+            try {
+                billingType = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<BillingType, RuntimeException>() {
+                    @Override
+                    public BillingType execute() {
+                        return createBillingType(billingPeriod, billingCycleStartDay);
+                    }
+                });
+            } catch (UniqueConstraintUserRuntimeException e) {
+                billingType = retrieveBillingType(billingPeriod, billingCycleStartDay);
+                if (billingType == null) {
+                    throw new UserRuntimeException("Failed to ensure BillingType for start day: " + billingCycleStartDay);
+                }
+                log.info("BillingType SUCCESSFULLY retrieved after failed concurrent creation attempt.");
+            }
+
+        }
+        return billingType;
+    }
+
+    private BillingType retrieveBillingType(final BillingPeriod billingPeriod, final int billingCycleStartDay) {
         EntityQueryCriteria<BillingType> criteria = EntityQueryCriteria.create(BillingType.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriod(), billingPeriod));
         criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDay(), billingCycleStartDay));
-        BillingType billingType = Persistence.service().retrieve(criteria);
-
-        if (billingType == null) {
-            billingType = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<BillingType, RuntimeException>() {
-
-                @Override
-                public BillingType execute() {
-                    return createBillingType(billingPeriod, billingCycleStartDay);
-                }
-            });
-        }
-        return billingType;
+        return Persistence.service().retrieve(criteria);
     }
 
     /**
@@ -204,42 +222,49 @@ class BillingCycleManager {
     /** Find/Create BillingCycle for a new lease based on the BillingType policy for the given building */
     BillingCycle ensureBillingCycle(final Building building, final BillingPeriod billingPeriod, final LogicalDate billingPeriodStartDate) {
         BillingType billingType = ensureBillingType(building, billingPeriod, billingPeriodStartDate);
-        return ensureBillingCycle(building, billingType, billingPeriodStartDate);
+        return ensureBillingCycleForDate(building, billingType, billingPeriodStartDate);
     }
 
     /** Find/Create BillingCycle for an existing lease */
     BillingCycle ensureBillingCycle(final Lease lease, final LogicalDate billingPeriodStartDate) {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
         Persistence.ensureRetrieve(lease.billingAccount().billingType(), AttachLevel.Attached);
-        return ensureBillingCycle(lease.unit().building(), lease.billingAccount().billingType(), billingPeriodStartDate);
+        return ensureBillingCycleForDate(lease.unit().building(), lease.billingAccount().billingType(), billingPeriodStartDate);
     }
 
     /** Find/Create BillingCycle of the given type - utility method */
-    private BillingCycle ensureBillingCycle(final Building building, final BillingType billingType, final LogicalDate billingPeriodStartDate) {
+    private BillingCycle ensureBillingCycleForDate(final Building building, final BillingType billingType, final LogicalDate date) {
         // Try to find existing billing cycle
-        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
-        criteria.add(PropertyCriterion.le(criteria.proto().billingCycleStartDate(), billingPeriodStartDate));
-        criteria.add(PropertyCriterion.ge(criteria.proto().billingCycleEndDate(), billingPeriodStartDate));
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-        List<BillingCycle> cycles = Persistence.service().query(criteria);
-
-        BillingCycle billingCycle = null;
-        if (cycles.size() == 1) {
-            billingCycle = cycles.get(0);
-        } else if (cycles.size() == 0) {
-
-            billingCycle = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<BillingCycle, RuntimeException>() {
-                @Override
-                public BillingCycle execute() {
-                    return createBillingCycle(building, billingType.billingPeriod().getValue(), billingPeriodStartDate);
+        BillingCycle billingCycle = retrieveBillingCycleForDate(building, billingType, date);
+        if (billingCycle == null) {
+            // not found - create new one; handle possible concurrent creation attempts
+            try {
+                billingCycle = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<BillingCycle, RuntimeException>() {
+                    @Override
+                    public BillingCycle execute() {
+                        return createBillingCycle(building, billingType.billingPeriod().getValue(), date);
+                    }
+                });
+            } catch (UniqueConstraintUserRuntimeException e) {
+                billingCycle = retrieveBillingCycleForDate(building, billingType, date);
+                if (billingCycle == null) {
+                    throw new UserRuntimeException("Failed to ensure BillingCycle for date: " + date);
                 }
-            });
-        } else {
-            throw new Error("Duplication of Billing Cycles");
+                log.info("BillingCycle SUCCESSFULLY retrieved after failed concurrent creation attempt.");
+            }
         }
 
         return billingCycle;
+    }
+
+    private BillingCycle retrieveBillingCycleForDate(final Building building, final BillingType billingType, final LogicalDate date) {
+        // Try to find existing billing cycle that the given date falls on
+        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
+        criteria.add(PropertyCriterion.le(criteria.proto().billingCycleStartDate(), date));
+        criteria.add(PropertyCriterion.ge(criteria.proto().billingCycleEndDate(), date));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+        return Persistence.service().retrieve(criteria);
     }
 
     void onLeaseBillingPolicyDelete(List<Building> affectedBuildings) {
