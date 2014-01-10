@@ -20,8 +20,6 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolder;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -62,7 +60,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private final FlowPanel container;
 
-    private final SimplePanel emptyFolderMessage;
+    private final SimplePanel noDataMessage;
 
     private boolean orderable = true;
 
@@ -80,13 +78,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     public CEntityFolder(Class<E> rowClass) {
         this.rowClass = rowClass;
-        asWidget().setStyleName(EntityFolder.name());
+        asWidget().setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolder.name());
         itemsList = new ArrayList<CEntityFolderItem<E>>();
 
         container = new FlowPanel();
 
-        emptyFolderMessage = new SimplePanel();
-        emptyFolderMessage.setWidget(new Label(i18n.tr("No Data")));
+        noDataMessage = new SimplePanel();
+        noDataMessage.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderNoDataMessage.name());
+        noDataMessage.setWidget(new Label(i18n.tr("No Data")));
 
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
@@ -155,7 +154,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(emptyFolderMessage);
+        contentPanel.add(noDataMessage);
         contentPanel.add(container);
         return contentPanel;
     }
@@ -337,7 +336,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         component.setDebugIdSuffix(rowDebugId);
         currentRowDebugId++;
 
-        emptyFolderMessage.setVisible(getItemCount() <= 0);
+        noDataMessage.setVisible(getItemCount() <= 0);
 
         super.adopt(component);
 
@@ -349,7 +348,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         container.remove(component);
         itemsList.remove(component);
 
-        emptyFolderMessage.setVisible(getItemCount() <= 0);
+        noDataMessage.setVisible(getItemCount() <= 0);
 
     }
 

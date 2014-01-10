@@ -36,6 +36,8 @@ public abstract class DefaultEntityFolderTheme extends Theme {
 
         EntityFolderRemoveButton, EntityFolderUpButton, EntityFolderDownButton, EntityFolderCustomButton,
 
+        EntityFolderNoDataMessage,
+
         //Box
         EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxDecoratorAddButtonHolder,
 
@@ -159,6 +161,11 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolder, "-", StyleDependent.readOnly, " .", StyleName.EntityFolderTableHeaderLabel);
+        style.addProperty("color", ThemeColor.foreground, 0.5);
+        addStyle(style);
+
+        style = new Style(".", StyleName.EntityFolderNoDataMessage);
+        style.addProperty("font-style", "italic");
         style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
