@@ -21,5 +21,7 @@ public interface LeaseSigningConfirmationView extends IViewerView<LeaseAgreement
     public interface LeaseSigningConfirmationPresenter extends IViewerPresenter<LeaseAgreementConfirmationDTO> {
 
         void back();
+
+        void downloadAgreement();
     }
 }

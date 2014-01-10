@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease;
+package com.propertyvista.server.common.lease;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

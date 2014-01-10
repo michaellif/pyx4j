@@ -11,28 +11,25 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease;
+package com.propertyvista.portal.server.portal.resident.services.movein;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.config.ThreadPoolNames;
-import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.lease.LeaseTermBlankAgreementDocumentCreationProcess;
 
 public class LeaseTermBlankAgreementDocumentDownloadServiceImpl extends ReportServiceImpl<IEntity> implements LeaseTermBlankAgreementDocumentDownloadService {
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        Lease leaseId = EntityFactory.createIdentityStub(Lease.class,
-                (Key) reportRequest.getParameters().get(LeaseTermBlankAgreementDocumentDownloadService.LEASE_ID_PARAM_KEY));
-        callback.onSuccess(DeferredProcessRegistry.fork(new LeaseTermBlankAgreementDocumentCreationProcess(leaseId), ThreadPoolNames.DOWNLOADS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new LeaseTermBlankAgreementDocumentCreationProcess(ResidentPortalContext.getLeaseIdStub()),
+                ThreadPoolNames.DOWNLOADS));
     }
 }

@@ -20,6 +20,11 @@ public class LeaseSigningConfirmationViewImpl extends AbstractFormView<LeaseAgre
 
     public LeaseSigningConfirmationViewImpl() {
         super();
-        setForm(new LeaseSigningConfirmationForm(this));
+        setForm(new LeaseSigningConfirmationForm(this) {
+            @Override
+            public void onDownloadAgreement() {
+                ((LeaseSigningConfirmationPresenter) getPresenter()).downloadAgreement();
+            }
+        });
     }
 }

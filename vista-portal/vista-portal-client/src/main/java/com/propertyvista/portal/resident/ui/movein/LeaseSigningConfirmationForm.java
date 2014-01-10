@@ -13,16 +13,17 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreementConfirmationDTO> {
 
@@ -37,9 +38,17 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreementDocument())).build());
-
+        content.setWidget(++row, 0, new Button(i18n.tr("Download Agreement"), new Command() {
+            @Override
+            public void execute() {
+                onDownloadAgreement();
+            }
+        }));
         return content;
+    }
+
+    public void onDownloadAgreement() {
+
     }
 
 }

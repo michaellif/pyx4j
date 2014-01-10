@@ -18,18 +18,25 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.movein.LeaseSigningConfirmationView;
 import com.propertyvista.portal.resident.ui.movein.LeaseSigningConfirmationView.LeaseSigningConfirmationPresenter;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseAgreementService;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class LeaseSigningConfirmationActivity extends SecurityAwareActivity implements LeaseSigningConfirmationPresenter {
+
+    private static final I18n i18n = I18n.get(LeaseSigningConfirmationActivity.class);
 
     private final LeaseSigningConfirmationView view;
 
@@ -56,6 +63,15 @@ public class LeaseSigningConfirmationActivity extends SecurityAwareActivity impl
     @Override
     public void back() {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void downloadAgreement() {
+        ReportDialog reportDialog = new ReportDialog(i18n.tr("Creating Lease Agreement Document"), "");
+        reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+
+        ReportRequest request = new ReportRequest();
+        reportDialog.start(GWT.<LeaseTermBlankAgreementDocumentDownloadService> create(LeaseTermBlankAgreementDocumentDownloadService.class), request);
     }
 
 }
