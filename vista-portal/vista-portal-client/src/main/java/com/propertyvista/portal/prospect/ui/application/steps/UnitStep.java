@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Vector;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -44,6 +44,8 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BathroomNumber;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
@@ -53,9 +55,9 @@ public class UnitStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(UnitStep.class);
 
-    private final CComboBox<Integer> bedroomSelector = new CComboBox<Integer>();
+    private final CComboBox<BedroomNumber> bedroomSelector = new CComboBox<BedroomNumber>(true);
 
-    private final CComboBox<Integer> bathroomSelector = new CComboBox<Integer>();
+    private final CComboBox<BathroomNumber> bathroomSelector = new CComboBox<BathroomNumber>(true);
 
     private final CEntityLabel<UnitTO> selectedUnit = new CEntityLabel<UnitTO>();
 
@@ -79,8 +81,8 @@ public class UnitStep extends ApplicationWizardStep {
     public UnitStep() {
         Integer[] opt = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        bedroomSelector.setOptions(Arrays.asList(opt));
-        bathroomSelector.setOptions(Arrays.asList(opt));
+        bedroomSelector.setOptions(EnumSet.allOf(BedroomNumber.class));
+        bathroomSelector.setOptions(EnumSet.allOf(BathroomNumber.class));
     }
 
     @Override
@@ -147,16 +149,16 @@ public class UnitStep extends ApplicationWizardStep {
             }
         });
 
-        bedroomSelector.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+        bedroomSelector.addValueChangeHandler(new ValueChangeHandler<BedroomNumber>() {
             @Override
-            public void onValueChange(final ValueChangeEvent<Integer> event) {
+            public void onValueChange(final ValueChangeEvent<BedroomNumber> event) {
                 updateAvailableUnits(null);
             }
         });
 
-        bathroomSelector.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+        bathroomSelector.addValueChangeHandler(new ValueChangeHandler<BathroomNumber>() {
             @Override
-            public void onValueChange(final ValueChangeEvent<Integer> event) {
+            public void onValueChange(final ValueChangeEvent<BathroomNumber> event) {
                 updateAvailableUnits(null);
             }
         });
@@ -249,11 +251,19 @@ public class UnitStep extends ApplicationWizardStep {
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().number())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().floor())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().bedrooms())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dens())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().bathrooms())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().available())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().price())).build());
 
                 return mainPanel;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                get(proto().dens()).setVisible(!getValue().dens().isNull());
             }
         }
     }

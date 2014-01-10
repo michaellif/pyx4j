@@ -67,6 +67,8 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BathroomNumber;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
@@ -119,7 +121,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, Integer beds, Integer baths, LogicalDate moveIn) {
+    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
         callback.onSuccess(new Vector<UnitTO>(retriveAvailableUnits(beds, baths, moveIn)));
     }
 
@@ -458,8 +460,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             }
 
             if (!unitSelection.floorplan().isNull()) {
-                unitSelection.bedrooms().setValue(unitSelection.floorplan().bedrooms().getValue());
-                unitSelection.bathrooms().setValue(unitSelection.floorplan().bathrooms().getValue());
+                updateBedsDensBaths(unitSelection);
                 unitSelection.availableUnits().addAll(retriveAvailableUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
             }
 
@@ -467,6 +468,70 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             Persistence.ensureRetrieve(unitSelection.building(), AttachLevel.ToStringMembers);
             Persistence.ensureRetrieve(unitSelection.floorplan(), AttachLevel.ToStringMembers);
+        }
+    }
+
+    private void updateBedsDensBaths(UnitSelectionDTO unitSelection) {
+
+        switch (unitSelection.floorplan().bedrooms().getValue()) {
+        case 0:
+            unitSelection.bedrooms().setValue(BedroomNumber.Any);
+            break;
+
+        case 1:
+            unitSelection.bedrooms().setValue(BedroomNumber.One);
+            if (!unitSelection.floorplan().dens().isNull()) {
+                unitSelection.bedrooms().setValue(BedroomNumber.OneAndHalf);
+            }
+            break;
+        case 2:
+            unitSelection.bedrooms().setValue(BedroomNumber.Two);
+            if (!unitSelection.floorplan().dens().isNull()) {
+                unitSelection.bedrooms().setValue(BedroomNumber.TwoAndHalf);
+            }
+            break;
+        case 3:
+            unitSelection.bedrooms().setValue(BedroomNumber.Three);
+            if (!unitSelection.floorplan().dens().isNull()) {
+                unitSelection.bedrooms().setValue(BedroomNumber.ThreeAndHalf);
+            }
+            break;
+        case 4:
+            unitSelection.bedrooms().setValue(BedroomNumber.Four);
+            if (!unitSelection.floorplan().dens().isNull()) {
+                unitSelection.bedrooms().setValue(BedroomNumber.FourAndHalf);
+            }
+            break;
+        case 5:
+            unitSelection.bedrooms().setValue(BedroomNumber.Five);
+            if (!unitSelection.floorplan().dens().isNull()) {
+                unitSelection.bedrooms().setValue(BedroomNumber.FiveAndHalf);
+            }
+            break;
+
+        default:
+            unitSelection.bedrooms().setValue(BedroomNumber.More);
+            break;
+        }
+
+        switch (unitSelection.floorplan().bathrooms().getValue()) {
+        case 0:
+            unitSelection.bathrooms().setValue(BathroomNumber.Any);
+            break;
+
+        case 1:
+            unitSelection.bathrooms().setValue(BathroomNumber.One);
+            break;
+        case 2:
+            unitSelection.bathrooms().setValue(BathroomNumber.Two);
+            break;
+        case 3:
+            unitSelection.bathrooms().setValue(BathroomNumber.Three);
+            break;
+
+        default:
+            unitSelection.bathrooms().setValue(BathroomNumber.More);
+            break;
         }
     }
 
@@ -562,7 +627,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private UnitTO createUnitDTO(AptUnit unit) {
-        Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.Attached);
 
         UnitTO to = EntityFactory.create(UnitTO.class);
         to.setPrimaryKey(unit.getPrimaryKey());
@@ -571,8 +636,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.floorplan().setValue(unit.floorplan().getStringView());
         to.floor().setValue(unit.info().floor().getValue());
 
-        to.bedrooms().setValue(unit.info()._bedrooms().getValue());
-        to.bathrooms().setValue(unit.info()._bathrooms().getValue());
+        to.bedrooms().setValue(unit.floorplan().bedrooms().getValue());
+        to.bathrooms().setValue(unit.floorplan().bathrooms().getValue());
+        to.dens().setValue(unit.floorplan().dens().getValue());
 
         to.available().setValue(unit._availableForRent().getValue());
         to.price().setValue(unit.financial()._marketRent().getValue());
@@ -620,23 +686,91 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private List<UnitTO> retriveAvailableUnits(Floorplan floorplanId, LogicalDate moveIn) {
-        Floorplan floorplan = Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey());
+        UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
+        unitSelection.floorplan().set(Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey()));
+        updateBedsDensBaths(unitSelection);
 
-        return retriveAvailableUnits(floorplan.bedrooms().getValue(), floorplan.bathrooms().getValue(), moveIn);
+        return retriveAvailableUnits(unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), moveIn);
     }
 
-    private List<UnitTO> retriveAvailableUnits(Integer beds, Integer baths, LogicalDate moveIn) {
+    private List<UnitTO> retriveAvailableUnits(BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
         if (moveIn == null) {
             moveIn = new LogicalDate(SystemDateManager.getDate());
         }
 
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        if (beds != null) {
-            criteria.eq(criteria.proto().floorplan().bedrooms(), beds);
+
+        switch (beds) {
+        case Any:
+            break;
+
+        case One:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 1);
+            criteria.eq(criteria.proto().floorplan().dens(), 0);
+            break;
+        case OneAndHalf:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 1);
+            criteria.ne(criteria.proto().floorplan().dens(), 0);
+            break;
+
+        case Two:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 2);
+            criteria.eq(criteria.proto().floorplan().dens(), 0);
+            break;
+        case TwoAndHalf:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 2);
+            criteria.ne(criteria.proto().floorplan().dens(), 0);
+            break;
+
+        case Three:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 3);
+            criteria.eq(criteria.proto().floorplan().dens(), 0);
+            break;
+        case ThreeAndHalf:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 3);
+            criteria.ne(criteria.proto().floorplan().dens(), 0);
+            break;
+
+        case Four:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 4);
+            criteria.eq(criteria.proto().floorplan().dens(), 0);
+            break;
+        case FourAndHalf:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 4);
+            criteria.ne(criteria.proto().floorplan().dens(), 0);
+            break;
+
+        case Five:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 5);
+            criteria.eq(criteria.proto().floorplan().dens(), 0);
+            break;
+        case FiveAndHalf:
+            criteria.eq(criteria.proto().floorplan().bedrooms(), 5);
+            criteria.ne(criteria.proto().floorplan().dens(), 0);
+            break;
+
+        case More:
+            criteria.gt(criteria.proto().floorplan().bedrooms(), 5);
+            break;
         }
-        if (baths != null) {
-            criteria.eq(criteria.proto().floorplan().bathrooms(), baths);
+
+        switch (baths) {
+        case Any:
+            break;
+        case One:
+            criteria.eq(criteria.proto().floorplan().bathrooms(), 1);
+            break;
+        case Two:
+            criteria.eq(criteria.proto().floorplan().bathrooms(), 2);
+            break;
+        case Three:
+            criteria.eq(criteria.proto().floorplan().bathrooms(), 3);
+            break;
+        case More:
+            criteria.gt(criteria.proto().floorplan().bathrooms(), 3);
+            break;
         }
+
         // correct service type:
         criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
         criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);

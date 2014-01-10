@@ -15,6 +15,8 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -26,6 +28,9 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -42,9 +47,78 @@ public interface UnitSelectionDTO extends IEntity {
 
     //---------------------------------------------
 
-    IPrimitive<Integer> bedrooms();
+    @I18n(context = "Bedroom Number")
+    @XmlType(name = "BedroomNumber")
+    public enum BedroomNumber {
 
-    IPrimitive<Integer> bathrooms();
+        Any,
+
+        @Translate("1")
+        One,
+
+        @Translate("1 + den")
+        OneAndHalf,
+
+        @Translate("2")
+        Two,
+
+        @Translate("2 + den")
+        TwoAndHalf,
+
+        @Translate("3")
+        Three,
+
+        @Translate("3 + den")
+        ThreeAndHalf,
+
+        @Translate("4")
+        Four,
+
+        @Translate("4 + den")
+        FourAndHalf,
+
+        @Translate("5")
+        Five,
+
+        @Translate("5 + den")
+        FiveAndHalf,
+
+        @Translate("More then 5")
+        More;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @I18n(context = "Bathroom Number")
+    @XmlType(name = "BathroomNumber")
+    public enum BathroomNumber {
+
+        Any,
+
+        @Translate("1")
+        One,
+
+        @Translate("2")
+        Two,
+
+        @Translate("3")
+        Three,
+
+        @Translate("More then 3")
+        More;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    IPrimitive<BedroomNumber> bedrooms();
+
+    IPrimitive<BathroomNumber> bathrooms();
 
     @Transient
     @ToStringFormat("{0} ({1} beds, {2} baths, Available from {3}, Price is ${4})")
@@ -67,6 +141,9 @@ public interface UnitSelectionDTO extends IEntity {
         @Editor(type = Editor.EditorType.label)
         IPrimitive<Integer> bedrooms();
 
+        @Editor(type = Editor.EditorType.label)
+        IPrimitive<Integer> dens();
+
         @ToString(index = 2)
         @Editor(type = Editor.EditorType.label)
         IPrimitive<Integer> bathrooms();
@@ -85,7 +162,6 @@ public interface UnitSelectionDTO extends IEntity {
 
     IList<UnitTO> availableUnits();
 
-//    @Caption(name = "Unit")
     @Editor(type = Editor.EditorType.label)
     UnitTO selectedUnit();
 }

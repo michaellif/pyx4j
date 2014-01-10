@@ -34,6 +34,8 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.Ap
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BathroomNumber;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
@@ -101,7 +103,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, Integer beds, Integer baths, LogicalDate moveIn) {
+    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
         service.getAvailableUnits(callback, beds, baths, moveIn);
     }
 
