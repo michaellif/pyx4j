@@ -35,6 +35,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -46,6 +48,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 /**
@@ -55,7 +58,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
-    private FlowPanel container;
+    private static final I18n i18n = I18n.get(CEntityFolder.class);
+
+    private final FlowPanel container;
+
+    private final SimplePanel emptyFolderMessage;
 
     private boolean orderable = true;
 
@@ -75,6 +82,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         this.rowClass = rowClass;
         asWidget().setStyleName(EntityFolder.name());
         itemsList = new ArrayList<CEntityFolderItem<E>>();
+
+        container = new FlowPanel();
+
+        emptyFolderMessage = new SimplePanel();
+        emptyFolderMessage.setWidget(new Label(i18n.tr("No Data")));
+
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
         } else {
@@ -141,7 +154,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     public IsWidget createContent() {
-        return container = new FlowPanel();
+        FlowPanel contentPanel = new FlowPanel();
+        contentPanel.add(emptyFolderMessage);
+        contentPanel.add(container);
+        return contentPanel;
     }
 
     protected abstract IFolderItemDecorator<E> createItemDecorator();
@@ -219,6 +235,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         if (item.getDecorator() instanceof BoxFolderItemDecorator) {
             ((BoxFolderItemDecorator<E>) item.getDecorator()).setExpended(true);
         }
+
     }
 
     protected void removeItem(CEntityFolderItem<E> item) {
@@ -226,6 +243,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         getValue().remove(item.getValue());
         revalidate();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
+
     }
 
     protected void moveUpItem(CEntityFolderItem<E> item) {
@@ -319,6 +337,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         component.setDebugIdSuffix(rowDebugId);
         currentRowDebugId++;
 
+        emptyFolderMessage.setVisible(getItemCount() <= 0);
+
         super.adopt(component);
 
     }
@@ -328,6 +348,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         super.abandon(component);
         container.remove(component);
         itemsList.remove(component);
+
+        emptyFolderMessage.setVisible(getItemCount() <= 0);
+
     }
 
     @Override
