@@ -97,7 +97,8 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     @Override
     public String mayStop() {
         if (getView().isDirty()) {
-            return i18n.tr("");
+            return i18n
+                    .tr("Leaving this page will SAVE all your latest changes. You can continue from the point you left anytime by Login into the application again.");
         }
         return null;
     }
