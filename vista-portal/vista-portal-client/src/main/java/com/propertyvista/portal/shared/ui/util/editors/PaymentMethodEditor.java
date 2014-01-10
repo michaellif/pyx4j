@@ -161,7 +161,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
 
             private void decorateConvienceFeeApplicableCard(CreditCardType type) {
                 if (type != null && getConvienceFeeApplicableCardTypes().contains(type)) {
-                    get(proto().cardType()).setNote(i18n.tr("*Service Fee will apply"), NoteStyle.Warn);
+                    get(proto().cardType()).setNote(i18n.tr("*Web Payment Fee will apply"), NoteStyle.Warn);
                 } else {
                     get(proto().cardType()).setNote(null);
                 }
