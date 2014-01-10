@@ -78,7 +78,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
             searchBy = parentID;
         }
 
-        parentFiltering = new PropertyCriterion(new Path(entityClass, ownerMemberName).toString(), Restriction.EQUAL, searchBy);
+        parentFiltering = new PropertyCriterion(new Path(entityClass, ownerMemberName), Restriction.EQUAL, searchBy);
     }
 
     public void clearParentFiltering() {
