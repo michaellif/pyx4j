@@ -366,7 +366,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
             case EntityList:
             case EntitySet: {
                 IObject<?> member = root.getMember(memberName);
-                if (member.getAttachLevel() != AttachLevel.Detached) {
+                if (!member.isValueDetached()) {
                     Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
                     while (lit.hasNext()) {
                         IEntity listMember = lit.next();
