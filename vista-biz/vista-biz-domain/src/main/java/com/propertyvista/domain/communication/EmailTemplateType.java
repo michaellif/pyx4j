@@ -60,7 +60,7 @@ public enum EmailTemplateType {
 
     PaymentReceipt,
 
-    PaymentReceiptWithConvenienceFee,
+    PaymentReceiptWithWebPaymentFee,
 
     PaymentReturned;
 

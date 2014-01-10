@@ -117,7 +117,7 @@ public class EmailTemplateManager {
             break;
         case OneTimePaymentSubmitted:
         case PaymentReceipt:
-        case PaymentReceiptWithConvenienceFee:
+        case PaymentReceiptWithWebPaymentFee:
         case PaymentReturned:
             values.add(EntityFactory.create(PaymentT.class));
             values.add(EntityFactory.create(TenantT.class));

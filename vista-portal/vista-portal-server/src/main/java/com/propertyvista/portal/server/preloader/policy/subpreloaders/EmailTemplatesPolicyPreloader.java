@@ -82,7 +82,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         policy.templates().add(defaultEmailTemplateAutoPaySetupConfirmation());
         policy.templates().add(defaultEmailTemplateOneTimePaymentSubmitted());
         policy.templates().add(defaultEmailTemplatePaymentReceipt());
-        policy.templates().add(defaultEmailTemplatePaymentReceiptWithConvenienceFee());
+        policy.templates().add(defaultEmailTemplatePaymentReceiptWithWebPaymentFee());
         policy.templates().add(defaultEmailTemplatePaymentReturned());
 
         return policy;
@@ -972,8 +972,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         return template;
     }
 
-    private EmailTemplate defaultEmailTemplatePaymentReceiptWithConvenienceFee() {
-        EmailTemplateType type = EmailTemplateType.PaymentReceiptWithConvenienceFee;
+    private EmailTemplate defaultEmailTemplatePaymentReceiptWithWebPaymentFee() {
+        EmailTemplateType type = EmailTemplateType.PaymentReceiptWithWebPaymentFee;
 
         PaymentT paymentT = EmailTemplateManager.getProto(type, PaymentT.class);
         TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
@@ -988,7 +988,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
                 "Your payment of <b>{1}</b> and your convenience fee of <b>{2}</b> were submitted successfully on <b>{3}</b>. " + 
-                "You will see two transaction lines for the payments above from your payment provider. The convenience fee will be shown as TBD<br/><br/>" +
+                "You will see two transaction lines for the payments above from your payment provider. The fee will appear as CCS*Web Payment Fee on your credit card statement<br/><br/>" +
                 "Your Payment Identification Reference Number for these payments is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{4}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{5}|here]]</b><br/><br/>" +

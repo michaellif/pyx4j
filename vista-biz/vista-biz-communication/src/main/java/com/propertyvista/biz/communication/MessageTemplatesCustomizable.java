@@ -298,7 +298,7 @@ class MessageTemplatesCustomizable {
         if (paymentRecord.convenienceFee().isNull()) {
             return createTenantPayment(EmailTemplateType.PaymentReceipt, paymentRecord);
         } else {
-            return createTenantPayment(EmailTemplateType.PaymentReceiptWithConvenienceFee, paymentRecord);
+            return createTenantPayment(EmailTemplateType.PaymentReceiptWithWebPaymentFee, paymentRecord);
         }
     }
 
