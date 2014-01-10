@@ -35,6 +35,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -79,8 +80,6 @@ public class UnitStep extends ApplicationWizardStep {
     });
 
     public UnitStep() {
-        Integer[] opt = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
         bedroomSelector.setOptions(EnumSet.allOf(BedroomNumber.class));
         bathroomSelector.setOptions(EnumSet.allOf(BathroomNumber.class));
     }
@@ -136,6 +135,8 @@ public class UnitStep extends ApplicationWizardStep {
         availableUnitsFolder.setVisible(editable);
 
         updateButton.setVisible(!editable);
+
+        ((WizardDecorator<?>) getWizard().getDecorator()).getFooterPanel().asWidget().setVisible(!editable);
     }
 
     @Override
