@@ -53,7 +53,7 @@ public interface LatestActivitiesDTO extends IEntity {
 
         @Format("#,##0.00")
         @Editor(type = EditorType.money)
-        @Caption(name = "Service Fee")
+        @Caption(name = "Web Payment Fee")
         IPrimitive<BigDecimal> convenienceFee();
 
         @ToString(index = 2)
