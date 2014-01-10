@@ -14,14 +14,12 @@
 package com.propertyvista.portal.prospect.ui;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 
 public interface MenuView extends IsView {
 
     public interface MenuPresenter {
-        public void navigTo(AppPlace place);
 
     }
 

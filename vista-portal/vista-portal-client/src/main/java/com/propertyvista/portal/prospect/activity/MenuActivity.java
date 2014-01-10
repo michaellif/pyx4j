@@ -22,7 +22,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
@@ -63,11 +62,6 @@ public class MenuActivity extends AbstractActivity implements MenuPresenter {
         });
 
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-    }
-
-    @Override
-    public void navigTo(AppPlace place) {
-        AppSite.getPlaceController().goTo(place);
     }
 
 }
