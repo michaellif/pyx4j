@@ -136,6 +136,14 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public final void selectStep(int index) {
+        if (getSelectedIndex() > -1 && getSelectedIndex() < index) {
+            ValidationResults validationResults = getSelectedStep().getValidationResults();
+            if (!validationResults.isValid()) {
+                getSelectedStep().showErrors(true);
+                MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
+                return;
+            }
+        }
         WizardStep step = wizardPanel.getStep(index);
         step.showErrors(false);
         wizardPanel.selectStep(step);
@@ -156,21 +164,15 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public final void nextStep() {
-        WizardStep step = wizardPanel.getSelectedStep();
-        step.showErrors(true);
+        WizardStep step = getSelectedStep();
 
-        ValidationResults validationResults = step.getValidationResults();
-        if (validationResults.isValid()) {
-            int index = wizardPanel.getSelectedIndex();
-            do {
-                step = wizardPanel.getStep(++index);
-            } while (!step.isStepVisible() && index < wizardPanel.size() - 1);
+        int index = getSelectedIndex();
+        do {
+            step = wizardPanel.getStep(++index);
+        } while (!step.isStepVisible() && index < wizardPanel.size() - 1);
 
-            if (step.isStepVisible() && index < wizardPanel.size()) {
-                selectStep(index);
-            }
-        } else {
-            MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
+        if (step.isStepVisible() && index < wizardPanel.size()) {
+            selectStep(index);
         }
     }
 
