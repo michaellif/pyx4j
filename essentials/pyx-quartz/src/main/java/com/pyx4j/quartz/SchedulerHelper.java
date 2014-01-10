@@ -43,6 +43,7 @@ import org.quartz.utils.PoolingConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
@@ -116,7 +117,10 @@ public class SchedulerHelper {
         quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_URL, rdbConfiguration.connectionUrl());
         quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_USER, rdbConfiguration.userName());
         quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_PASSWORD, rdbConfiguration.password());
-        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_MAX_CONNECTIONS, "4");
+        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_MAX_CONNECTIONS, 4);
+        quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_VALIDATE_ON_CHECKOUT, true);
+        // PoolingConnectionProvider.DB_DISCARD_IDLE_CONNECTIONS_SECONDS
+        quartzProperties.put(dsConfigPrefix + "discardIdleConnectionsSeconds", 20 * Consts.MIN2SEC);
         if (rdbConfiguration.connectionValidationQuery() != null) {
             quartzProperties.put(dsConfigPrefix + PoolingConnectionProvider.DB_VALIDATION_QUERY, rdbConfiguration.connectionValidationQuery());
         }
