@@ -24,7 +24,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.shared.ui.util.decorators.PortalWidgetDecorator;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecorator;
 
 public abstract class AbstractPortalPanel extends SimplePanel {
 
@@ -70,8 +70,8 @@ public abstract class AbstractPortalPanel extends SimplePanel {
     }
 
     private void updateDecoratorsLayout(Widget widget, LabelPosition layout) {
-        if (widget instanceof PortalWidgetDecorator) {
-            PortalWidgetDecorator decorator = (PortalWidgetDecorator) widget;
+        if (widget instanceof FormWidgetDecorator) {
+            FormWidgetDecorator decorator = (FormWidgetDecorator) widget;
             if (decorator.getLabelPosition() != LabelPosition.hidden) {
                 decorator.setLabelPosition(layout);
             }

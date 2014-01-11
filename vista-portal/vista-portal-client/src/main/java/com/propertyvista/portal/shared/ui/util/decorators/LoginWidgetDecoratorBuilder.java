@@ -31,7 +31,7 @@ public class LoginWidgetDecoratorBuilder extends FormWidgetDecoratorBuilder {
     }
 
     @Override
-    public PortalWidgetDecorator build() {
+    public FormWidgetDecorator build() {
 
         String text = watermark != null ? watermark : getComponent().getTitle();
         if (getComponent() instanceof CTextFieldBase) {

@@ -17,7 +17,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 
-public class FormWidgetDecoratorBuilder extends PortalWidgetDecorator.Builder {
+public class FormWidgetDecoratorBuilder extends FormWidgetDecorator.Builder {
 
     // default sizes (in pixels): 
     public static final int LABEL_WIDTH = 220;
@@ -49,8 +49,8 @@ public class FormWidgetDecoratorBuilder extends PortalWidgetDecorator.Builder {
     }
 
     @Override
-    public PortalWidgetDecorator build() {
-        return new PortalWidgetDecorator(this) {
+    public FormWidgetDecorator build() {
+        return new FormWidgetDecorator(this) {
             @Override
             protected void updateViewable() {
                 if (getLabelPosition() != LabelPosition.top) {

@@ -19,9 +19,9 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPositio
 
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 
-public class PortalWidgetDecorator extends WidgetDecorator {
+public class FormWidgetDecorator extends WidgetDecorator {
 
-    protected PortalWidgetDecorator(Builder builder) {
+    protected FormWidgetDecorator(Builder builder) {
         super(builder);
     }
 
@@ -33,7 +33,7 @@ public class PortalWidgetDecorator extends WidgetDecorator {
 
         @Override
         public WidgetDecorator build() {
-            return new PortalWidgetDecorator(this) {
+            return new FormWidgetDecorator(this) {
                 @Override
                 protected void onLoad() {
                     if (getLabelPosition() != LabelPosition.hidden) {

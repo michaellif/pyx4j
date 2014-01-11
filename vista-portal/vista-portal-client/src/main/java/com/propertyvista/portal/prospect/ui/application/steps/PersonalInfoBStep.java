@@ -38,7 +38,7 @@ import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
-import com.propertyvista.portal.shared.ui.util.decorators.PortalWidgetDecorator;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
 
 public class PersonalInfoBStep extends ApplicationWizardStep {
@@ -165,7 +165,7 @@ public class PersonalInfoBStep extends ApplicationWizardStep {
         });
     }
 
-    class LegalQuestionWidgetDecoratorBuilder extends PortalWidgetDecorator.Builder {
+    class LegalQuestionWidgetDecoratorBuilder extends FormWidgetDecorator.Builder {
 
         public LegalQuestionWidgetDecoratorBuilder(CComponent<?> component) {
             super(component);
