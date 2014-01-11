@@ -166,7 +166,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
 
         style = new Style(".", StyleName.EntityFolderNoDataMessage);
         style.addProperty("font-style", "italic");
-        style.addProperty("color", ThemeColor.foreground, 0.5);
+        style.addProperty("color", ThemeColor.foreground, 0.7);
         addStyle(style);
 
     }

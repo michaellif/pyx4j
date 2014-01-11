@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -60,7 +61,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private final FlowPanel container;
 
-    private final SimplePanel noDataMessage;
+    private final SimplePanel noDataNotificationHolder;
 
     private boolean orderable = true;
 
@@ -83,9 +84,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         container = new FlowPanel();
 
-        noDataMessage = new SimplePanel();
-        noDataMessage.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderNoDataMessage.name());
-        noDataMessage.setWidget(new Label(i18n.tr("No Data")));
+        noDataNotificationHolder = new SimplePanel();
+        noDataNotificationHolder.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderNoDataMessage.name());
+        noDataNotificationHolder.setWidget(new Label(i18n.tr("No Data")));
 
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
@@ -154,7 +155,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(noDataMessage);
+        contentPanel.add(noDataNotificationHolder);
         contentPanel.add(container);
         return contentPanel;
     }
@@ -336,7 +337,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         component.setDebugIdSuffix(rowDebugId);
         currentRowDebugId++;
 
-        noDataMessage.setVisible(getItemCount() <= 0);
+        noDataNotificationHolder.setVisible(getItemCount() <= 0);
 
         super.adopt(component);
 
@@ -348,7 +349,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         container.remove(component);
         itemsList.remove(component);
 
-        noDataMessage.setVisible(getItemCount() <= 0);
+        noDataNotificationHolder.setVisible(getItemCount() <= 0);
 
     }
 
@@ -385,5 +386,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public boolean isVisited() {
         return false;
+    }
+
+    public void setNoDataNotificationWidget(IsWidget widget) {
+        noDataNotificationHolder.setWidget(widget);
     }
 }
