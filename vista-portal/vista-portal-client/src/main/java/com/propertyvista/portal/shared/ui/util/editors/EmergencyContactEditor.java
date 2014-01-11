@@ -46,7 +46,7 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().workPhone()), 180).build());
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email()), 250).build());
 
-        main.setHR(++row, 0, 1);
+        main.setH3(++row, 0, 1, i18n.tr("Address"));
         main.setWidget(++row, 0, 1, inject(proto().address(), new AddressSimpleEditor()));
 
         return main;
