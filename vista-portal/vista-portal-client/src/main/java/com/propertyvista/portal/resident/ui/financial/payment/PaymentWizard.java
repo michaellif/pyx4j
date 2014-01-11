@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -266,8 +267,18 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         Anchor termsAnchor = new TermsAnchor(i18n.tr("terms and conditions"), ResidentPortalTerms.WebPaymentFeeTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), new CSignature(signatureDescriptionPanel)))
-                .customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build());
+        CSignature cSignature = new CSignature(signatureDescriptionPanel);
+        cSignature.setSignatureCompletionValidator(new EditableValueValidator<ISignature>() {
+            @Override
+            public ValidationError isValid(CComponent<ISignature> component, ISignature value) {
+                return (value == null || !value.agree().isBooleanTrue() ? new ValidationError(component, i18n
+                        .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
+            }
+        });
+
+        panel.setWidget(++row, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), cSignature)).customLabel("").labelPosition(LabelPosition.hidden)
+                        .contentWidth("250px").componentWidth("250px").build());
         get(proto().convenienceFeeSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
             public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
