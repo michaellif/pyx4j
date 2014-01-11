@@ -417,6 +417,18 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         label.setText(caption);
     }
 
+    @Override
+    public void setComponent(CComponent<?> component) {
+        this.component = component;
+
+    }
+
+    @Override
+    public void onSetDebugId(IDebugId parentDebugId) {
+        // TODO Auto-generated method stub
+
+    }
+
     protected Builder getBuilder() {
         return builder;
     }
@@ -536,18 +548,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             this.mockValue = mockValue;
             return this;
         }
-
-    }
-
-    @Override
-    public void setComponent(CComponent<?> component) {
-        this.component = component;
-
-    }
-
-    @Override
-    public void onSetDebugId(IDebugId parentDebugId) {
-        // TODO Auto-generated method stub
 
     }
 
