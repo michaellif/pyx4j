@@ -34,6 +34,8 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
 
     private IsWidget descriptionWidget;
 
+    private EditableValueValidator<ISignature> signatureComplitionsValidator;
+
     public CSignature(String text) {
         this(new Label(text));
     }
@@ -44,7 +46,7 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
         setNativeWidget(new NSignature(this));
         asWidget().setWidth("100%");
 
-        addValueValidator(new EditableValueValidator<ISignature>() {
+        setSignatureCompletionValidator(new EditableValueValidator<ISignature>() {
             @Override
             public ValidationError isValid(CComponent<ISignature> component, ISignature value) {
                 if (value != null) {
@@ -75,6 +77,13 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
                 return null;
             }
         });
+
+    }
+
+    public void setSignatureCompletionValidator(EditableValueValidator<ISignature> validator) {
+        removeValueValidator(signatureComplitionsValidator);
+        signatureComplitionsValidator = validator;
+        addValueValidator(signatureComplitionsValidator);
     }
 
     public IsWidget getDescriptionWidget() {
