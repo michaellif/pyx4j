@@ -48,25 +48,4 @@ public class FormWidgetDecoratorBuilder extends FormWidgetDecorator.Builder {
         this(component, CONTENT_WIDTH);
     }
 
-    @Override
-    public FormWidgetDecorator build() {
-        return new FormWidgetDecorator(this) {
-            @Override
-            protected void updateViewable() {
-                if (getLabelPosition() != LabelPosition.top) {
-                    if (getComnponent().isViewable()) {
-                        labelAlignment(Alignment.left);
-                        useLabelSemicolon(false);
-                    } else {
-                        labelAlignment(Alignment.right);
-                        useLabelSemicolon(true);
-                    }
-                }
-                updateCaption();
-                updateLabelAlignment();
-                super.updateViewable();
-            }
-        };
-    }
-
 }

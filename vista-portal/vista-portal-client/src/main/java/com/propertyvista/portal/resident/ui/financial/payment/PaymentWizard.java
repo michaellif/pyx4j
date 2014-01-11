@@ -88,6 +88,7 @@ import com.propertyvista.portal.shared.ui.IWizardView;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.PortalPaymentTypesUtil;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
 public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
@@ -276,9 +277,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             }
         });
 
-        panel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), cSignature)).customLabel("").labelPosition(LabelPosition.hidden)
-                        .contentWidth("250px").componentWidth("250px").build());
+        panel.setWidget(++row, 0, new SignatureDecorator(inject(proto().convenienceFeeSignature(), cSignature)));
         get(proto().convenienceFeeSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
             public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {

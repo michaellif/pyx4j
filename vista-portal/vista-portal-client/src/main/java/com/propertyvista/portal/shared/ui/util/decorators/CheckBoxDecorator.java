@@ -20,7 +20,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -30,7 +29,7 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.Label;
 
-public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox> {
+public class CheckBoxDecorator extends FlowPanel implements IDecorator<CCheckBox> {
 
     private final SimplePanel componentHolder;
 
@@ -39,22 +38,19 @@ public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox
     private final Label label;
 
     public CheckBoxDecorator(CCheckBox component) {
-        FlowPanel decoratorPanel = new FlowPanel();
+
         componentHolder = new SimplePanel();
         componentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         componentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         componentHolder.getElement().getStyle().setWidth(1.5, Unit.EM);
-
-        decoratorPanel.add(componentHolder);
+        add(componentHolder);
 
         label = new Label();
         label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         label.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
-        decoratorPanel.add(label);
-
-        initWidget(decoratorPanel);
+        add(label);
 
         setComponent(component);
     }

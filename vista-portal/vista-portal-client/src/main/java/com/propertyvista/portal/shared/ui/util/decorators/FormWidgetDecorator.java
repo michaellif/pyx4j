@@ -32,7 +32,7 @@ public class FormWidgetDecorator extends WidgetDecorator {
         }
 
         @Override
-        public WidgetDecorator build() {
+        public FormWidgetDecorator build() {
             return new FormWidgetDecorator(this) {
                 @Override
                 protected void onLoad() {
@@ -41,6 +41,23 @@ public class FormWidgetDecorator extends WidgetDecorator {
                         updateLabelPosition();
                     }
                 };
+
+                @Override
+                protected void updateViewable() {
+                    if (getLabelPosition() != LabelPosition.top) {
+                        if (getComnponent().isViewable()) {
+                            labelAlignment(Alignment.left);
+                            useLabelSemicolon(false);
+                        } else {
+                            labelAlignment(Alignment.right);
+                            useLabelSemicolon(true);
+                        }
+                    }
+                    updateCaption();
+                    updateLabelAlignment();
+                    super.updateViewable();
+                }
+
             };
         }
     }
