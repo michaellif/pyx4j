@@ -259,11 +259,11 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         String anchorId = HTMLPanel.createUniqueId();
         signatureDescriptionBuilder
                 .appendHtmlConstant(i18n
-                        .tr("I agree to the Web Payment Fee being charged and have read the applicable terms and conditions. The fee will appear as CCS*Web Payment Fee on your credit card statement. {0}.",
+                        .tr("I agree to the Web Payment Fee being charged and have read the applicable {0}. I further acknowledge and accept that the fee will appear as 'CCS*Web Payment Fee' on my card/bank statement.",
                                 "<span id=\"" + anchorId + "\"></span>"));
 
         HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
-        Anchor termsAnchor = new TermsAnchor(i18n.tr("Web Payment Fee Terms and Conditions"), ResidentPortalTerms.WebPaymentFeeTerms.class);
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("terms and conditions"), ResidentPortalTerms.WebPaymentFeeTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
 
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFeeSignature(), new CSignature(signatureDescriptionPanel)))
@@ -273,7 +273,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
                 if (value != null && !value.agree().isBooleanTrue()) {
                     return new ValidationError(component, i18n
-                            .tr("Please agree to all applicable Tems and Conditions and our Privacy Policy in order to submit your payment."));
+                            .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment."));
                 }
                 return null;
             }

@@ -110,7 +110,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         main.setWidget(++row, 0, 2, cashEquivalent);
         main.setHR(++row, 0, 2);
         main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, new HTML(i18n.tr("Note: If card is disabled, Convenience Fee will apply for Portal payments.")));
+        main.setWidget(++row, 0, 2, new HTML(i18n.tr("Note: If card is disabled, Web Payment Fee will apply for Portal payments.")));
         main.getWidget(row, 0).setStyleName(VistaTheme.StyleName.infoMessage.name());
 
         return main;
