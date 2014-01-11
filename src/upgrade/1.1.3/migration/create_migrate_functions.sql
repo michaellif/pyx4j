@@ -178,6 +178,93 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- agreement_legal_policy
+        
+        CREATE TABLE agreement_legal_policy
+        (
+                id                              BIGINT                  NOT NULL,
+                node_discriminator              VARCHAR(50),
+                node                            BIGINT,
+                updated                         TIMESTAMP,
+                        CONSTRAINT agreement_legal_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE agreement_legal_policy OWNER TO vista;
+        
+        
+        -- agreement_legal_term
+        
+        CREATE TABLE agreement_legal_term
+        (
+                id                              BIGINT                  NOT NULL,
+                policy                          BIGINT                  NOT NULL,
+                title                           VARCHAR(500),
+                body                            VARCHAR(48000),
+                signature_format                VARCHAR(50),
+                order_id                        INT,
+                        CONSTRAINT agreement_legal_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE agreement_legal_term OWNER TO vista;
+        
+        -- agreement_legal_term_signature
+        
+        CREATE TABLE agreement_legal_term_signature
+        (
+                id                              BIGINT                  NOT NULL,
+                term                            BIGINT,
+                signature                       BIGINT,
+                        CONSTRAINT agreement_legal_term_signature_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE agreement_legal_term_signature OWNER TO vista;
+        
+        
+        -- agreement_signatures
+        
+        CREATE TABLE agreement_signatures
+        (
+                id                              BIGINT                  NOT NULL,
+                id_discriminator                VARCHAR(64)             NOT NULL,
+                lease_term_tenant_discriminator VARCHAR(50)             NOT NULL,
+                lease_term_tenant               BIGINT                  NOT NULL,
+                        CONSTRAINT agreement_signatures_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE agreement_signatures OWNER TO vista;
+        
+        
+        -- agreement_signatures$legal_terms_signatures
+        
+        CREATE TABLE agreement_signatures$legal_terms_signatures
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT agreement_signatures$legal_terms_signatures_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE agreement_signatures$legal_terms_signatures OWNER TO vista;
+        
+        
+        -- building$posting_batches
+        
+        CREATE TABLE building$posting_batches
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                        CONSTRAINT building$posting_batches_pk PRIMARY KEY(id)
+        );
+        
+        
+        -- building_utility
+        
+        ALTER TABLE building_utility ADD COLUMN is_deleted BOOLEAN;
+        
+        ALTER TABLE building$posting_batches OWNER TO vista;
+        
         -- company_logo
         
         ALTER TABLE company_logo RENAME COLUMN blob_key TO file_blob_key;
@@ -196,6 +283,29 @@ BEGIN
         ALTER TABLE customer_picture RENAME COLUMN file_size TO file_file_size;
         ALTER TABLE customer_picture RENAME COLUMN updated_timestamp TO file_updated_timestamp;
         
+        -- customer_screening_income_info
+        
+        ALTER TABLE customer_screening_income_info      ADD COLUMN address_street1 VARCHAR(500),
+                                                        ADD COLUMN address_street2 VARCHAR(500);
+                                                        
+        -- customer_signature
+        
+        CREATE TABLE customer_signature
+        (
+                id                              BIGINT                  NOT NULL,
+                sign_date                       TIMESTAMP,
+                ip_address                      VARCHAR(39),
+                signature_format                VARCHAR(50),
+                full_name                       VARCHAR(500),
+                initials                        VARCHAR(500),
+                agree                           BOOLEAN,
+                signing_user                    BIGINT,
+                        CONSTRAINT customer_signature_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE customer_signature OWNER TO vista;
+      
+        
         -- employee_signature
         
         ALTER TABLE employee_signature RENAME COLUMN blob_key TO file_blob_key;
@@ -206,10 +316,16 @@ BEGIN
         ALTER TABLE employee_signature RENAME COLUMN updated_timestamp TO file_updated_timestamp;
         
         
+        -- employee_signature_blob
+        
+        ALTER TABLE employee_signature_blob     ADD COLUMN name VARCHAR(500),
+                                                ADD COLUMN updated TIMESTAMP;
+        
         -- file_blob
         
         ALTER TABLE file_blob RENAME TO media_file_blob;
         ALTER TABLE media_file_blob RENAME COLUMN content TO data;
+        ALTER TABLE media_file_blob ADD COLUMN created TIMESTAMP;
         
         
         -- floorplan
@@ -218,11 +334,191 @@ BEGIN
         ALTER TABLE floorplan ALTER COLUMN description TYPE VARCHAR(4000);
         
         
+        -- floorplan$ils_summary
+        
+        CREATE TABLE floorplan$ils_summary
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT floorplan$ils_summary_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE floorplan$ils_summary OWNER TO vista;
+        
+        
         -- general_insurance_policy_blob
         
         ALTER TABLE general_insurance_policy_blob RENAME TO insurance_certificate_scan_blob;
         
-        -- legal_letter
+        -- identification_document_blob
+        
+        CREATE TABLE identification_document_blob
+        (
+                id                              BIGINT                  NOT NULL,
+                name                            VARCHAR(500),
+                data                            bytea,
+                content_type                    VARCHAR(500),
+                updated                         TIMESTAMP,
+                created                         TIMESTAMP,
+                        CONSTRAINT identification_document_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE identification_document_blob OWNER TO vista;
+        
+        -- identification_document_file
+        
+        CREATE TABLE identification_document_file
+        (
+                id                              BIGINT                  NOT NULL,
+                file_file_name                  VARCHAR(500),
+                file_updated_timestamp          BIGINT,
+                file_cache_version              INT,
+                file_file_size                  INT,
+                file_content_mime_type          VARCHAR(500),
+                file_blob_key                   BIGINT,
+                owner                           BIGINT,
+                order_in_owner                  INT,
+                        CONSTRAINT identification_document_file_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE identification_document_file OWNER TO vista;
+        
+        -- identification_document_folder
+        
+        CREATE TABLE identification_document_folder
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT                  NOT NULL,
+                id_type                         BIGINT,
+                donot_have                      BOOLEAN,
+                id_number                       VARCHAR(500),
+                notes                           VARCHAR(500),
+                        CONSTRAINT identification_document_folder_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE identification_document_folder OWNER TO vista;
+        
+        -- identification_document_type
+        
+        ALTER TABLE identification_document_type ADD COLUMN required BOOLEAN;
+        
+        
+        -- ilsemail_config
+        
+        CREATE TABLE ilsemail_config
+        (
+                id                              BIGINT                  NOT NULL,
+                config                          BIGINT                  NOT NULL,
+                frequency                       VARCHAR(50),
+                email                           VARCHAR(500),
+                max_daily_ads                   INT,
+                        CONSTRAINT ilsemail_config_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE ilsemail_config OWNER TO vista;
+        
+        -- ilsprofile_building
+        
+        ALTER TABLE ilsprofile_building         ADD COLUMN description VARCHAR(4000),
+                                                ADD COLUMN listing_title VARCHAR(500);
+       
+        -- ilssummary
+        
+        CREATE TABLE ilssummary
+        (
+                id                              BIGINT                  NOT NULL,
+                title                           VARCHAR(500),
+                description                     VARCHAR(4000),
+                front_image                     BIGINT,
+                        CONSTRAINT ilssummary_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE ilssummary OWNER TO vista;   
+        
+        -- insurance_certificate_scan
+        
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN blob_key TO file_blob_key;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN cache_version TO file_cache_version;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN content_mime_type TO file_content_mime_type;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN file_name TO file_file_name;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN file_size TO file_file_size;
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN updated_timestamp TO file_updated_timestamp;
+        
+        ALTER TABLE insurance_certificate_scan  ADD COLUMN certificate BIGINT,
+                                                ADD COLUMN certificate_discriminator VARCHAR(50);                                   
+       
+        -- insurance_policy
+        
+        ALTER TABLE insurance_policy ADD COLUMN signature BIGINT;
+                
+        
+        -- lease_application
+        
+        ALTER TABLE lease_application ADD COLUMN created_by BIGINT;
+        
+        
+        -- lease_term_agreement_document
+        
+        CREATE TABLE lease_term_agreement_document
+        (
+                id                              BIGINT                  NOT NULL,
+                file_file_name                  VARCHAR(500),
+                file_updated_timestamp          BIGINT,
+                file_cache_version              INT,
+                file_file_size                  INT,
+                file_content_mime_type          VARCHAR(500),
+                file_blob_key                   BIGINT,
+                lease_term_v                    BIGINT                  NOT NULL,
+                        CONSTRAINT lease_term_agreement_document_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_term_agreement_document OWNER TO vista;
+        
+        
+        -- lease_term_agreement_document_blob
+        
+        CREATE TABLE lease_term_agreement_document_blob
+        (
+                id                              BIGINT                  NOT NULL,
+                name                            VARCHAR(500),
+                data                            bytea,
+                content_type                    VARCHAR(500),
+                updated                         TIMESTAMP,
+                created                         TIMESTAMP,
+                        CONSTRAINT lease_term_agreement_document_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_term_agreement_document_blob OWNER TO vista;
+        
+        -- lease_term_v$agreement_legal_terms
+        
+        CREATE TABLE lease_term_v$agreement_legal_terms
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT lease_term_v$agreement_legal_terms_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_term_v$agreement_legal_terms OWNER TO vista;
+        
+        -- lease_term_v$utilities
+        
+        CREATE TABLE lease_term_v$utilities
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT lease_term_v$utilities_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_term_v$utilities OWNER TO vista;
+        
+         -- legal_letter
         
         ALTER TABLE legal_letter RENAME COLUMN blob_key TO file_blob_key;
         ALTER TABLE legal_letter RENAME COLUMN cache_version TO file_cache_version;
@@ -237,22 +533,77 @@ BEGIN
         ALTER TABLE legal_letter_blob ADD COLUMN created TIMESTAMP;
         
         
-        -- insurance_certificate_scan
+        -- legal_terms_policy
         
-        ALTER TABLE insurance_certificate_scan RENAME COLUMN blob_key TO file_blob_key;
-        ALTER TABLE insurance_certificate_scan RENAME COLUMN cache_version TO file_cache_version;
-        ALTER TABLE insurance_certificate_scan RENAME COLUMN content_mime_type TO file_content_mime_type;
-        ALTER TABLE insurance_certificate_scan RENAME COLUMN file_name TO file_file_name;
-        ALTER TABLE insurance_certificate_scan RENAME COLUMN file_size TO file_file_size;
-        ALTER TABLE insurance_certificate_scan RENAME COLUMN updated_timestamp TO file_updated_timestamp;
+        CREATE TABLE legal_terms_policy
+        (
+                id                              BIGINT                  NOT NULL,
+                node_discriminator              VARCHAR(50),
+                node                            BIGINT,
+                updated                         TIMESTAMP,
+                rental_criteria_guidelines      BIGINT,
+                        CONSTRAINT legal_terms_policy_pk PRIMARY KEY(id)
+        );
         
-        ALTER TABLE insurance_certificate_scan  ADD COLUMN certificate BIGINT,
-                                                ADD COLUMN certificate_descriminator VARCHAR(50);
+        ALTER TABLE legal_terms_policy OWNER TO vista;
         
+        -- legal_terms_policy_item
+        
+        CREATE TABLE legal_terms_policy_item
+        (
+                id                              BIGINT                  NOT NULL,
+                caption                         VARCHAR(500),
+                content                         VARCHAR(20845),
+                        CONSTRAINT legal_terms_policy_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE legal_terms_policy_item OWNER TO vista;
+        
+        -- maintenance_request_category
+        
+        ALTER TABLE maintenance_request_category ADD COLUMN type VARCHAR(50);
+        
+        -- maintenance_request_picture
+        
+        CREATE TABLE maintenance_request_picture
+        (
+                id                              BIGINT                  NOT NULL,
+                file_file_name                  VARCHAR(500),
+                file_updated_timestamp          BIGINT,
+                file_cache_version              INT,
+                file_file_size                  INT,
+                file_content_mime_type          VARCHAR(500),
+                file_blob_key                   BIGINT,
+                maintenance_request             BIGINT,
+                        CONSTRAINT maintenance_request_picture_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_picture OWNER TO vista; 
+        
+        
+        -- maintenance_request_picture_blob
+        
+        CREATE TABLE maintenance_request_picture_blob
+        (
+                id                              BIGINT                  NOT NULL,
+                name                            VARCHAR(500),
+                data                            bytea,
+                content_type                    VARCHAR(500),
+                updated                         TIMESTAMP,
+                created                         TIMESTAMP,
+                        CONSTRAINT maintenance_request_picture_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_picture_blob OWNER TO vista;
         
         -- marketing
         
         ALTER TABLE marketing ALTER COLUMN description TYPE VARCHAR(4000);
+        
+        -- master_online_application
+        
+        ALTER TABLE master_online_application   ADD COLUMN building BIGINT,
+                                                ADD COLUMN floorplan BIGINT;
         
         
         -- media_file
@@ -264,6 +615,10 @@ BEGIN
         ALTER TABLE media_file RENAME COLUMN file_size TO file_file_size;
         ALTER TABLE media_file RENAME COLUMN updated_timestamp TO file_updated_timestamp;
         
+        
+        --  merchant_account
+        
+        ALTER TABLE  merchant_account ADD COLUMN operations_notes VARCHAR(500);
         
         
         -- site_image_resource
@@ -290,8 +645,12 @@ BEGIN
                 ||'SET  certificate = d.certificate, '
                 ||'     certificate_discriminator = d.certificate_discriminator '
                 ||'FROM '||v_schema_name||'.insurance_certificate_doc AS d '
-                ||'WHERE a.certificate_doc = d.id ';
+                ||'WHERE s.certificate_doc = d.id ';
         
+        
+        -- policy tables
+        
+        PERFORM * FROM _dba_.update_policy_tables(v_schema_name);
         
         /**
         ***     ==========================================================================================================
@@ -361,6 +720,11 @@ BEGIN
         DROP TABLE identification_document;
         
         
+        -- ilsprofile_floorplan
+        
+        ALTER TABLE ilsprofile_floorplan        DROP COLUMN description,
+                                                DROP COLUMN listing_title;
+        
         -- insurance_certificate_doc
         
         DROP TABLE insurance_certificate_doc;
@@ -368,9 +732,14 @@ BEGIN
         
         -- insurance_certificate_scan
         
-        ALTER TABLE insurance_certificate_scan DROP COLUMN certificate_doc;
+        ALTER TABLE insurance_certificate_scan  DROP COLUMN certificate_doc,
+                                                DROP COLUMN caption;
         
         
+        -- lease_term_participant
+        
+        ALTER TABLE lease_term_participant DROP COLUMN take_ownership;       
+               
         -- legal_documentation
         
         DROP TABLE legal_documentation;
