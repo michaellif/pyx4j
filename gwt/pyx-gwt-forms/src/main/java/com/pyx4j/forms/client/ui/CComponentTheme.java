@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class CComponentTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        FieldPanel, FieldEditorPanel, FieldViewerPanel, ValidationLabel, NoteLabel,
+        FieldPanel, FieldEditorPanel, FieldViewerPanel, ValidationLabel, NoteLabel, Signature,
 
         TabbedFormTab,
 
@@ -60,6 +60,13 @@ public class CComponentTheme extends Theme {
         initNoteStyle();
         initTabbedFormStyle();
         initImageHolderStyle();
+        initCheckBoxStyle();
+    }
+
+    private void initCheckBoxStyle() {
+        Style style = new Style(".", StyleName.FieldEditorPanel, " .", StyleName.Signature);
+        style.addProperty("line-height", "20px");
+        addStyle(style);
     }
 
     protected void initTextBoxStyle() {
