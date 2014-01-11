@@ -261,11 +261,11 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         String anchorId = HTMLPanel.createUniqueId();
         signatureDescriptionBuilder
                 .appendHtmlConstant(i18n
-                        .tr("I agree to the Web Payment Fee being charged and have read the applicable {0}. I further acknowledge and accept that the fee will appear as ''CCS*Web Payment Fee'' on my card/bank statement.",
+                        .tr("I agree to the Web Payment Fee being charged and have read the {0}. I further acknowledge and accept that the fee will appear as ''CCS*Web Payment Fee'' on my card/bank statement.",
                                 "<span id=\"" + anchorId + "\"></span>"));
 
         HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
-        Anchor termsAnchor = new TermsAnchor(i18n.tr("terms and conditions"), ResidentPortalTerms.WebPaymentFeeTerms.class);
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Web Payment Fee Terms And Conditions"), ResidentPortalTerms.WebPaymentFeeTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
 
         CSignature cSignature = new CSignature(signatureDescriptionPanel);
