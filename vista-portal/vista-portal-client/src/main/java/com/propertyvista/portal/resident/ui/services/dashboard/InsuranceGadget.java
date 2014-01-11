@@ -15,6 +15,7 @@ package com.propertyvista.portal.resident.ui.services.dashboard;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -81,11 +82,10 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
     class InsuranceStatusViewer extends CEntityForm<InsuranceStatusDTO> {
 
-        private final Label message;
+        private InsuranceCertificatesFolder folder;
 
         public InsuranceStatusViewer() {
             super(InsuranceStatusDTO.class);
-            message = new Label();
         }
 
         @Override
@@ -96,9 +96,7 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
             main.setH4(++row, 0, 1, i18n.tr("Certificates"));
 
-            main.setWidget(++row, 0, inject(proto().certificates(), new InsuranceCertificatesFolder()));
-
-            main.setWidget(++row, 0, message);
+            main.setWidget(++row, 0, inject(proto().certificates(), folder = new InsuranceCertificatesFolder()));
 
             return main;
 
@@ -110,12 +108,13 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
             switch (getValue().status().getValue()) {
             case noInsurance:
-                message.setHTML("<b>" + InsuranceGadgetMessages.noInsuranceStatusMessage + "</b><br/>"
-                        + InsuranceGadgetMessages.noInsuranceTenantSureInvitation);
+                folder.setNoDataNotificationWidget(new HTML("<b>" + InsuranceGadgetMessages.noInsuranceStatusMessage + "</b><br/>"
+                        + InsuranceGadgetMessages.noInsuranceTenantSureInvitation));
                 break;
             case hasOtherInsurance:
-                message.setHTML(SimpleMessageFormat.format(InsuranceGadgetMessages.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue())
-                        + "<br/>" + InsuranceGadgetMessages.otherInsuranceTenantSureInvitation);
+                folder.setNoDataNotificationWidget(new HTML(SimpleMessageFormat.format(InsuranceGadgetMessages.hasInsuranceStatusMessage, getValue()
+                        .coverageExpiryDate().getValue())
+                        + "<br/>" + InsuranceGadgetMessages.otherInsuranceTenantSureInvitation));
                 break;
             case hasTenantSure:
                 break;
@@ -175,8 +174,8 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                     public void execute() {
                         if (getValue() instanceof GeneralInsuranceCertificateSummaryDTO) {
                             AppSite.getPlaceController().goTo(
-                                    new ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue()
-                                            .insurancePolicy().getPrimaryKey()));
+                                    new ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue().insurancePolicy()
+                                            .getPrimaryKey()));
                         } else if (getValue() instanceof TenantSureCertificateSummaryDTO) {
                             AppSite.getPlaceController().goTo(
                                     new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage().formPlace(getValue()

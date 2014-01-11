@@ -15,8 +15,6 @@ package com.propertyvista.portal.shared.ui.util.decorators;
 
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -25,8 +23,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -44,7 +42,6 @@ public class SignatureDecorator extends FlowPanel implements IDecorator<CSignatu
     public SignatureDecorator(CSignature component) {
 
         componentHolder = new SimplePanel();
-        componentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         componentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         add(componentHolder);
 
