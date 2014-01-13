@@ -24,6 +24,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -83,14 +84,18 @@ public class MerchantAccountProcessor {
         return counters;
     }
 
-    private void processOneRow(final MerchantAccountFileModel model) {
-        model.accountNumber().setValue(model.accountNumber().getValue().replaceAll("\\D", "").trim());
-        model.bankId().setValue(model.bankId().getValue().replaceAll("\\D", "").trim());
-        model.transitNumber().setValue(model.transitNumber().getValue().replaceAll("\\D", "").trim());
-        model.terminalId().setValue(model.terminalId().getValue().trim());
-        if (!model.propertyCode().isNull()) {
-            model.propertyCode().setValue(model.propertyCode().getValue().trim());
+    private void trimValue(IPrimitive<String> value) {
+        if (!value.isNull()) {
+            value.setValue(value.getValue().replace("\\D", "").trim());
         }
+    }
+
+    private void processOneRow(final MerchantAccountFileModel model) {
+        trimValue(model.accountNumber());
+        trimValue(model.bankId());
+        trimValue(model.transitNumber());
+        trimValue(model.terminalId());
+        trimValue(model.propertyCode());
 
         // TODO validate the records
         String validationMessage = getValidationMessage(model);
@@ -125,6 +130,42 @@ public class MerchantAccountProcessor {
             }
         }
 
+        if (!model.accountNumber().isNull()) {
+            validationMessage = getAccountNumberValidationMessage(model);
+            if (validationMessage != null) {
+                addStatus(model, validationMessage);
+                counters.invalid++;
+                return;
+            }
+            processUpdateByAccountNumber(pmc, model);
+        } else {
+            processUpdateByTerminalId(pmc, model);
+        }
+    }
+
+    private void processUpdateByTerminalId(Pmc pmc, final MerchantAccountFileModel model) {
+        final MerchantAccount retrievedAccount = TaskRunner.runInTargetNamespace(pmc, new Callable<MerchantAccount>() {
+            @Override
+            public MerchantAccount call() {
+                EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+                criteria.eq(criteria.proto().merchantTerminalId(), model.terminalId());
+                return Persistence.service().retrieve(criteria);
+            }
+        });
+
+        if (retrievedAccount.merchantTerminalIdConvenienceFee().getValue().equals(model.merchantTerminalIdConvenienceFee().getValue())) {
+            retrievedAccount.merchantTerminalIdConvenienceFee().setValue(model.merchantTerminalIdConvenienceFee().getValue());
+            retrievedAccount.setup().acceptedCreditCardConvenienceFee().setValue(!retrievedAccount.merchantTerminalIdConvenienceFee().isNull());
+            ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, retrievedAccount);
+            addStatus(model, "Terminal ID Convenience Fee value updated.");
+            counters.updated++;
+        } else {
+            addStatus(model, "Terminal ID Record is not updated.");
+            counters.notChanged++;
+        }
+    }
+
+    private void processUpdateByAccountNumber(Pmc pmc, final MerchantAccountFileModel model) {
         List<PmcMerchantAccountIndex> indexes = new ArrayList<PmcMerchantAccountIndex>();
         {
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
@@ -177,15 +218,25 @@ public class MerchantAccountProcessor {
             if (!retrievedAccount.merchantTerminalId().isNull()) {
                 if (retrievedAccount.merchantTerminalId().getValue().equals(model.terminalId().getValue())) {
                     addStatus(model, "Terminal ID Record is not updated.");
+
+                    if (retrievedAccount.merchantTerminalIdConvenienceFee().getValue().equals(model.merchantTerminalIdConvenienceFee().getValue())) {
+                        retrievedAccount.merchantTerminalIdConvenienceFee().setValue(model.merchantTerminalIdConvenienceFee().getValue());
+                        addStatus(model, "Terminal ID Convenience Fee value updated.");
+                        ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, retrievedAccount);
+                    } else {
+                        counters.notChanged++;
+                    }
+
                     setAccountInBuilding(model, retrievedAccount, pmc);
-                    counters.notChanged++;
                 } else {
                     addStatus(model, "The account already exists in the database with a terminal ID {0}. Please make sure your information is correct.",
                             retrievedAccount.merchantTerminalId());
                 }
             } else {
                 retrievedAccount.merchantTerminalId().setValue(model.terminalId().getValue());
+                retrievedAccount.merchantTerminalIdConvenienceFee().setValue(model.merchantTerminalIdConvenienceFee().getValue());
                 addStatus(model, "Terminal ID value updated.");
+                ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, retrievedAccount);
 
                 setAccountInBuilding(model, retrievedAccount, pmc);
 
@@ -198,14 +249,16 @@ public class MerchantAccountProcessor {
             account.bankId().setValue(model.bankId().getValue());
             account.branchTransitNumber().setValue(model.transitNumber().getValue());
             account.merchantTerminalId().setValue(model.terminalId().getValue());
+            account.merchantTerminalIdConvenienceFee().setValue(model.merchantTerminalIdConvenienceFee().getValue());
             account.status().setValue(MerchantAccountActivationStatus.Active);
-            ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
 
             account.setup().acceptedEcheck().setValue(true);
             account.setup().acceptedDirectBanking().setValue(true);
             account.setup().acceptedCreditCard().setValue(true);
-            account.setup().acceptedCreditCardConvenienceFee().setValue(true);
+            account.setup().acceptedCreditCardConvenienceFee().setValue(!account.merchantTerminalIdConvenienceFee().isNull());
             account.setup().acceptedInterac().setValue(true);
+
+            ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
 
             setAccountInBuilding(model, account, pmc);
 
@@ -217,7 +270,13 @@ public class MerchantAccountProcessor {
         if (model.pmc().isNull()) {
             return "PMC is required";
         }
+        if (model.terminalId().isNull()) {
+            return "Terminal ID is required";
+        }
+        return null;
+    }
 
+    private String getAccountNumberValidationMessage(MerchantAccountFileModel model) {
         if (model.accountNumber().isNull()) {
             return "Account Number is required";
         }

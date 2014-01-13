@@ -41,6 +41,9 @@ public interface MerchantAccountFileModel extends IEntity {
     @NotNull
     IPrimitive<String> terminalId();
 
+    @ImportColumn(names = { "Terminal ID Convenience Fee", "MID Convenience Fee" })
+    IPrimitive<String> merchantTerminalIdConvenienceFee();
+
     @ImportColumn(names = { "Bank ID", "Institution" })
     @NotNull
     IPrimitive<String> bankId();
