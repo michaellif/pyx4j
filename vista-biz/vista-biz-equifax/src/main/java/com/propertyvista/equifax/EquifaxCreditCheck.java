@@ -138,6 +138,7 @@ public class EquifaxCreditCheck {
 
         if (equifaxInfo.reportType().getValue() == CreditCheckReportType.FullCreditReport) {
             if (!ServerSideFactory.create(EncryptedStorageFacade.class).isStorageAvalable()) {
+                log.warn("Encrypted Storage not available -> Credit Check will not work");
                 throw new UserRuntimeException(i18n.tr("Credit Check is not available at this time"));
             }
         }
