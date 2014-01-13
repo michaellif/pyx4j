@@ -57,6 +57,10 @@ public class MerchantAccountManager {
             pmcMerchantAccountIndex.pmc().set(pmc);
         }
 
+        if (merchantAccount.merchantTerminalIdConvenienceFee().isNull()) {
+            merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(false);
+        }
+
         TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
             @Override
             public Void call() {

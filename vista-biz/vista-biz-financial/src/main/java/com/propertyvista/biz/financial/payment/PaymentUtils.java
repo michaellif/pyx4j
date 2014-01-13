@@ -77,11 +77,14 @@ class PaymentUtils {
         return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
-    public static ElectronicPaymentSetup getElectronicPaymentsSetup(BillingAccount billingAccountId) {
+    private static ElectronicPaymentSetup getElectronicPaymentsSetup(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
         MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
         if (isElectronicPaymentsSetup(merchantAccount)) {
+            if (merchantAccount.merchantTerminalIdConvenienceFee().isNull()) {
+                merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(false);
+            }
             return merchantAccount.setup();
         } else {
             return EntityFactory.create(ElectronicPaymentSetup.class);

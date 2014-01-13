@@ -83,7 +83,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().paymentsStatus())).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().merchantTerminalIdConvenienceFee())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalIdConvenienceFee())).build());
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().bankId()), 5).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().invalid())).build());
@@ -122,7 +122,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
     @Override
     public void addValidations() {
         super.addValidations();
-        get(proto().merchantAccount().merchantTerminalIdConvenienceFee()).addValueChangeHandler(new ValueChangeHandler<String>() {
+        get(proto().merchantTerminalIdConvenienceFee()).addValueChangeHandler(new ValueChangeHandler<String>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
@@ -145,8 +145,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
     }
 
     private void updateConvenienceFeeValability() {
-        get(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).setEnabled(
-                !getValue().merchantAccount().merchantTerminalIdConvenienceFee().isNull());
+        get(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).setEnabled(!getValue().merchantTerminalIdConvenienceFee().isNull());
     }
 
     private void devGenerateAccount() {

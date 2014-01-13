@@ -41,7 +41,13 @@ class PaymentCreditCard {
     private final static Logger log = LoggerFactory.getLogger(PaymentCreditCard.class);
 
     static void processPayment(final PaymentRecord paymentRecord) {
-        final MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
+        MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
+        final String merchantTerminalId;
+        if (paymentRecord.convenienceFeeReferenceNumber().isNull()) {
+            merchantTerminalId = account.merchantTerminalId().getValue();
+        } else {
+            merchantTerminalId = account.merchantTerminalIdConvenienceFee().getValue();
+        }
 
         final CardTransactionRecord transactionRecord = TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew,
                 new Executable<CardTransactionRecord, RuntimeException>() {
@@ -52,7 +58,7 @@ class PaymentCreditCard {
                             transactionRecord = EntityFactory.create(CardTransactionRecord.class);
                             transactionRecord.amount().setValue(paymentRecord.amount().getValue());
                             transactionRecord.cardType().setValue(paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue());
-                            transactionRecord.merchantTerminalId().setValue(account.merchantTerminalId().getValue());
+                            transactionRecord.merchantTerminalId().setValue(merchantTerminalId);
                         } else {
                             transactionRecord = Persistence.service().retrieve(
                                     CardTransactionRecord.class,
@@ -69,7 +75,7 @@ class PaymentCreditCard {
                 });
 
         final CreditCardTransactionResponse saleResponse = ServerSideFactory.create(CreditCardFacade.class).realTimeSale(
-                account.merchantTerminalId().getValue(), //
+                merchantTerminalId, //
                 paymentRecord.amount().getValue(),
                 paymentRecord.convenienceFee().getValue(), //
                 ReferenceNumberPrefix.RentPayments, paymentRecord.id(), paymentRecord.convenienceFeeReferenceNumber().getValue(),
@@ -105,8 +111,7 @@ class PaymentCreditCard {
                 @Override
                 public Void execute() {
                     try {
-                        CreditCardTransactionResponse voidResponse = ServerSideFactory.create(CreditCardFacade.class).voidTransaction(
-                                account.merchantTerminalId().getValue(), //
+                        CreditCardTransactionResponse voidResponse = ServerSideFactory.create(CreditCardFacade.class).voidTransaction(merchantTerminalId, //
                                 paymentRecord.amount().getValue(), paymentRecord.convenienceFee().getValue(),//
                                 ReferenceNumberPrefix.RentPayments, paymentRecord.id(), paymentRecord.convenienceFeeReferenceNumber().getValue());
 
@@ -122,7 +127,7 @@ class PaymentCreditCard {
                             Persistence.service().persist(record);
                         } else {
                             log.error("Unable to void Card transaction {} {} {}; response {} {}", //
-                                    account.merchantTerminalId(), //
+                                    merchantTerminalId, //
                                     paymentRecord.id(), //
                                     paymentRecord.amount(), //
                                     voidResponse.code(), //
@@ -130,18 +135,18 @@ class PaymentCreditCard {
 
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
                                     "Unable to void Card transaction {0} {1} {2}; response {3} {4}",//
-                                    account.merchantTerminalId(), //
+                                    merchantTerminalId, //
                                     paymentRecord.id(), // 
                                     paymentRecord.amount(), //
                                     voidResponse.code(), //
                                     voidResponse.message());
                         }
                     } catch (Throwable e) {
-                        log.error("Unable to void Card transaction {} {} {}", account.merchantTerminalId(), paymentRecord.id(), paymentRecord.amount(), e);
+                        log.error("Unable to void Card transaction {} {} {}", merchantTerminalId, paymentRecord.id(), paymentRecord.amount(), e);
 
                         ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
                                 "Unable to void Card transaction {0} {1} {2}; response {3}",//
-                                account.merchantTerminalId(), //
+                                merchantTerminalId, //
                                 paymentRecord.id(), //
                                 paymentRecord.amount(), //
                                 e);
