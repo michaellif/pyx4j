@@ -69,10 +69,12 @@ public class ILSEmailFeedIntegrationAgent {
 
         // create floorplan profile map
         floorplanMap = new HashMap<Floorplan, ILSProfileFloorplan>();
-        EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
-        critFp.in(critFp.proto().floorplan().building(), buildingMap.keySet());
-        for (ILSProfileFloorplan profile : Persistence.service().query(critFp)) {
-            floorplanMap.put(profile.floorplan(), profile);
+        if (buildingMap.size() > 0) {
+            EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
+            critFp.in(critFp.proto().floorplan().building(), buildingMap.keySet());
+            for (ILSProfileFloorplan profile : Persistence.service().query(critFp)) {
+                floorplanMap.put(profile.floorplan(), profile);
+            }
         }
 
         // generate priority map
@@ -87,10 +89,15 @@ public class ILSEmailFeedIntegrationAgent {
      */
     public Map<ILSBuildingDTO, List<ILSFloorplanDTO>> getUnitListing() {
         // get available units
-        EntityQueryCriteria<AptUnit> critUnit = EntityQueryCriteria.create(AptUnit.class);
-        critUnit.in(critUnit.proto().floorplan(), floorplanMap.keySet());
-        critUnit.isNotNull(critUnit.proto()._availableForRent());
-        List<AptUnit> units = Persistence.service().query(critUnit);
+        List<AptUnit> units = null;
+        if (floorplanMap.size() > 0) {
+            EntityQueryCriteria<AptUnit> critUnit = EntityQueryCriteria.create(AptUnit.class);
+            critUnit.in(critUnit.proto().floorplan(), floorplanMap.keySet());
+            critUnit.isNotNull(critUnit.proto()._availableForRent());
+            units = Persistence.service().query(critUnit);
+        } else {
+            units = new ArrayList<AptUnit>();
+        }
 
         // extract floorplans and build availability map
         Map<Floorplan, ILSFloorplanDTO> fpDtoMap = new HashMap<Floorplan, ILSFloorplanDTO>();
@@ -185,6 +192,7 @@ public class ILSEmailFeedIntegrationAgent {
         if (!floorplan.ilsSummary().isEmpty()) {
             int count = floorplan.ilsSummary().size();
             dto.ilsSummary().set(floorplan.ilsSummary().get(DataGenerator.randomInt(count)));
+            Persistence.ensureRetrieve(dto.ilsSummary(), AttachLevel.Attached);
         }
         dto.profile().set(profile);
         return dto;

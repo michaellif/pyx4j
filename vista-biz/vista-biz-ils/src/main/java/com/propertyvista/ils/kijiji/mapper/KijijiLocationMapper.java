@@ -89,7 +89,8 @@ public class KijijiLocationMapper {
                 address.streetType().getValue(),
                 address.streetDirection().getValue()
         }; // @formatter:on
-        return SimpleMessageFormat.format("{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}", args);
+        return SimpleMessageFormat.format(
+                "{0,choice,null#|!null#{0}-}{1}{2,choice,null#|!null# {2}} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}", args);
     }
 
 }

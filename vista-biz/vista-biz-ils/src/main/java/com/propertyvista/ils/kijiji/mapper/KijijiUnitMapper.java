@@ -35,7 +35,7 @@ public class KijijiUnitMapper {
         to.setOfferedBy(OfferedByEnum.OWNER);
 
         String title = null, description = null;
-        if (from.ilsSummary().isEmpty()) {
+        if (from.ilsSummary().isNull()) {
             title = from.floorplan().marketingName().isNull() ? from.floorplan().name().getValue() : from.floorplan().marketingName().getValue();
             description = from.floorplan().description().getValue();
         } else {
