@@ -26,18 +26,18 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInBatchView;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInBatchViewerView;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDTO> implements MoneyInBatchView.Presenter {
+public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDTO> implements MoneyInBatchViewerView.Presenter {
 
     private static final I18n i18n = I18n.get(MoneyInBatchViewerActivity.class);
 
     public MoneyInBatchViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(MoneyInBatchView.class), GWT.<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(MoneyInBatchViewerView.class), GWT.<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
     }
 
     @Override

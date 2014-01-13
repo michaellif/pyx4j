@@ -59,20 +59,19 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
     private volatile Throwable error;
 
     public MoneyInBatchCreateDeferredProcess(LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments) {
-        progressMax = 100;
+        progressMax = payments.size();
         progress = 0;
         this.payments = payments;
     }
 
     @Override
     public void execute() {
-        // TODO implement
+        // TODO implement progress
         try {
             Map<Building, Collection<MoneyInPaymentDTO>> batchesMap = partitionPayments();
             for (Entry<Building, Collection<MoneyInPaymentDTO>> buildingPayments : batchesMap.entrySet()) {
                 createBatch(buildingPayments.getKey(), buildingPayments.getValue());
             }
-            ++progress;
         } catch (Throwable e) {
             log.error("Failed to create MoneyIn Batches", e);
             this.error = e;
@@ -124,6 +123,8 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
         for (MoneyInPaymentDTO paymentDto : payments) {
             PaymentRecord paymentRecord = createPaymentRecord(paymentDto);
             batch.payments().add(paymentRecord);
+
+            progress += 1;
         }
         Persistence.service().persist(batch);
 

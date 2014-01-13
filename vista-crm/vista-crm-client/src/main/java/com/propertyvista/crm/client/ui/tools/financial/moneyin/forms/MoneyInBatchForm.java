@@ -65,14 +65,29 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().building())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().bankAccountName())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().depositSlipNumber())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().depositDate())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().totalReceivedAmount())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().numberOfReceipts())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().isPosted())).build());
+
+        row = -1;
+        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().depositSlipNumber())).build());
+        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().depositDate())).build());
+        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().bankAccountName())).build());
+        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().bankId())).build());
+        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().bankTransitNumber())).build());
+        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().bankAccountNumber())).build());
+
+        ++row;
         panel.setH2(++row, 0, 2, i18n.tr("Payments"));
         panel.setWidget(++row, 0, 2, inject(proto().payments(), new DepositSlipPaymentRecordFolder()));
+
+        get(proto().building()).setViewable(true);
+        get(proto().depositSlipNumber()).setViewable(true);
+        get(proto().totalReceivedAmount()).setViewable(true);
+        get(proto().numberOfReceipts()).setViewable(true);
+        get(proto().isPosted()).setViewable(true);
+        get(proto().payments()).setViewable(true);
+
         return panel;
     }
 }

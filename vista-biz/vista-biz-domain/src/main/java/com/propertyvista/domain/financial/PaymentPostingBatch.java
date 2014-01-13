@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -81,6 +82,6 @@ public interface PaymentPostingBatch extends IEntity, HasNotesAndAttachments {
     @Detached(level = AttachLevel.Detached)
     ISet<PaymentRecord> payments();
 
-    IPrimitive<LogicalDate> depositDate();
-
+    @EmbeddedEntity
+    PaymentBatchBankDepositDetails depositDetails();
 }

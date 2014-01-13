@@ -17,7 +17,7 @@ import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
-public interface MoneyInBatchView extends IViewer<MoneyInBatchDTO> {
+public interface MoneyInBatchViewerView extends IViewer<MoneyInBatchDTO> {
 
     interface Presenter extends IViewer.Presenter {
 

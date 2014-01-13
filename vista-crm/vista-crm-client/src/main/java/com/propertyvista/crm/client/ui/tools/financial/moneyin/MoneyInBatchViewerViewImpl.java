@@ -22,17 +22,17 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInBatchForm;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
-public class MoneyInBatchViewImpl extends CrmViewerViewImplBase<MoneyInBatchDTO> implements MoneyInBatchView {
+public class MoneyInBatchViewerViewImpl extends CrmViewerViewImplBase<MoneyInBatchDTO> implements MoneyInBatchViewerView {
 
-    private static final I18n i18n = I18n.get(MoneyInBatchViewImpl.class);
+    private static final I18n i18n = I18n.get(MoneyInBatchViewerViewImpl.class);
 
-    public MoneyInBatchViewImpl() {
+    public MoneyInBatchViewerViewImpl() {
         setBreadcrumbsBar(null);
         setForm(new MoneyInBatchForm(this));
         addHeaderToolbarItem(new Button(i18n.tr("Create Deposit Slip"), new Command() {
             @Override
             public void execute() {
-                MoneyInBatchViewImpl.this.createDepositSlip();
+                MoneyInBatchViewerViewImpl.this.createDepositSlip();
             }
         }));
     }
@@ -43,6 +43,6 @@ public class MoneyInBatchViewImpl extends CrmViewerViewImplBase<MoneyInBatchDTO>
     }
 
     private void createDepositSlip() {
-        ((MoneyInBatchView.Presenter) getPresenter()).createDownloadableDepositSlipPrintout();
+        ((MoneyInBatchViewerView.Presenter) getPresenter()).createDownloadableDepositSlipPrintout();
     }
 }
