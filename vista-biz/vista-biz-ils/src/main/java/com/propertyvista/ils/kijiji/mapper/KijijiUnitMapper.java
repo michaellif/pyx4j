@@ -23,9 +23,6 @@ import com.kijiji.pint.rs.ILSUnit.IsPetsAllowed;
 import com.kijiji.pint.rs.ILSUnit.OfferedByEnum;
 import com.kijiji.pint.rs.ILSUnit.UnitTypeEnum;
 
-import com.pyx4j.essentials.server.preloader.DataGenerator;
-
-import com.propertyvista.domain.marketing.ils.ILSSummary;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSFloorplanDTO;
 
@@ -38,14 +35,12 @@ public class KijijiUnitMapper {
         to.setOfferedBy(OfferedByEnum.OWNER);
 
         String title = null, description = null;
-        if (from.floorplan().ilsSummary().isEmpty()) {
+        if (from.ilsSummary().isEmpty()) {
             title = from.floorplan().marketingName().isNull() ? from.floorplan().name().getValue() : from.floorplan().marketingName().getValue();
             description = from.floorplan().description().getValue();
         } else {
-            int count = from.floorplan().ilsSummary().size();
-            ILSSummary summary = from.floorplan().ilsSummary().get(DataGenerator.randomInt(count));
-            title = summary.title().getValue();
-            description = summary.description().getValue();
+            title = from.ilsSummary().title().getValue();
+            description = from.ilsSummary().description().getValue();
         }
         to.setTitle(title);
         to.setDescription(description);

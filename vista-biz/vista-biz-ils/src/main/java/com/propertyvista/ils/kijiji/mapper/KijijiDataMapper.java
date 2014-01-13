@@ -54,6 +54,10 @@ public class KijijiDataMapper {
         // add media urls
         Persistence.service().retrieveMember(fpDto.floorplan().media(), AttachLevel.Attached);
         ilsUnit.setImages(createImages(fpDto.floorplan().media()));
+        // insert frontImage if available
+        if (!fpDto.ilsSummary().frontImage().isNull()) {
+            ilsUnit.getImages().getImage().add(0, createImage(fpDto.ilsSummary().frontImage()));
+        }
 
         return ilsUnit;
     }

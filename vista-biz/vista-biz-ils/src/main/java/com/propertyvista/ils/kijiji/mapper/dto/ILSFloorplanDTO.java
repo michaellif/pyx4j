@@ -20,12 +20,15 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
+import com.propertyvista.domain.marketing.ils.ILSSummary;
 import com.propertyvista.domain.property.asset.Floorplan;
 
 @Transient
 public interface ILSFloorplanDTO extends IEntity {
 
     Floorplan floorplan();
+
+    ILSSummary ilsSummary();
 
     ILSProfileFloorplan profile();
 
