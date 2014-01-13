@@ -39,6 +39,7 @@ import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
@@ -103,16 +104,7 @@ public class OAPIFilter implements Filter {
                 try {
                     chain.doFilter(httpRequest, httpResponse);
                 } finally {
-                    LocalService.create(CrmAuthenticationService.class).logout(new AsyncCallback<AuthenticationResponse>() {
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            log.error("logout error", caught);
-                        }
-
-                        @Override
-                        public void onSuccess(AuthenticationResponse result) {
-                        }
-                    });
+                    Lifecycle.endSession();
                 }
             } else {
                 httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Vista Realm\"");
