@@ -31,6 +31,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<PaymentTypeSelectionPolicyDTO> {
 
@@ -110,7 +111,11 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         main.setWidget(++row, 0, 2, cashEquivalent);
         main.setHR(++row, 0, 2);
         main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, new HTML(i18n.tr("Note: If card is disabled, Web Payment Fee will apply for Portal payments.")));
+        if (VistaTODO.visaDebitHasConvenienceFee) {
+            main.setWidget(++row, 0, 2, new HTML(i18n.tr("Note: If card is disabled, Web Payment Fee will apply for Portal payments.")));
+        } else {
+            main.setWidget(++row, 0, 2, new HTML(i18n.tr("Note: If card is disabled, Web Payment Fee will apply for Portal Credit Card payments.")));
+        }
         main.getWidget(row, 0).setStyleName(VistaTheme.StyleName.infoMessage.name());
 
         return main;

@@ -322,9 +322,15 @@ public class PaymentAcceptanceUtils {
                 or(p.residentPortalCreditCardVisa(), p.setup().acceptedCreditCardConvenienceFee()). // 
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardVisa()));
 
-        require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.acceptedVisaDebit()).// 
-                or(p.residentPortalVisaDebit(), p.setup().acceptedCreditCardConvenienceFee()). // 
-                or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
+        if (VistaTODO.visaDebitHasConvenienceFee) {
+            require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.acceptedVisaDebit()).// 
+                    or(p.residentPortalVisaDebit(), p.setup().acceptedCreditCardConvenienceFee()). //
+                    or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
+        } else {
+            require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.acceptedVisaDebit()).// 
+                    and(p.residentPortalVisaDebit()). //
+                    or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
+        }
 
         return require;
     }
@@ -342,9 +348,12 @@ public class PaymentAcceptanceUtils {
                 not(p.residentPortalCreditCardVisa()). //
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardVisa()));
 
-        require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.setup().acceptedCreditCardConvenienceFee()).// 
-                not(p.residentPortalVisaDebit()). //
-                or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
+        // VISTA-3995
+        if (VistaTODO.visaDebitHasConvenienceFee) {
+            require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.setup().acceptedCreditCardConvenienceFee()).// 
+                    not(p.residentPortalVisaDebit()). //
+                    or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
+        }
 
         return require;
     }

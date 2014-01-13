@@ -64,4 +64,7 @@ public class VistaTODO {
     public static boolean pendingYardiConfigPatchILS = true;
 
     public static boolean ILS_TestMode = true;
+
+    //VISTA-3995  this is temporary regulation in Canada;  TODO change when going to US
+    public static boolean visaDebitHasConvenienceFee = false;
 }

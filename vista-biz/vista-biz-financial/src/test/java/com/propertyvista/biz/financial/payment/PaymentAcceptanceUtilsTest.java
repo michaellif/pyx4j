@@ -27,6 +27,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category({ FunctionalTests.class })
@@ -217,7 +218,11 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
             selectionPolicy.acceptedVisaDebit().setValue(true);
 
             for (CreditCardType creditCardType : CreditCardType.values()) {
-                assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, creditCardType, Expect.Fee);
+                if (CreditCardType.VisaDebit == creditCardType && !VistaTODO.visaDebitHasConvenienceFee) {
+                    assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, creditCardType, Expect.Disable);
+                } else {
+                    assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, creditCardType, Expect.Fee);
+                }
                 assertAllowed(VistaApplication.crm, setup, false, selectionPolicy, creditCardType, Expect.NoFee);
                 // On CashEquivalent
                 assertAllowed(VistaApplication.resident, setup, true, selectionPolicy, creditCardType, Expect.Disable);
@@ -242,7 +247,11 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
             selectionPolicy.cashEquivalentCreditCardMasterCard().setValue(true);
 
             for (CreditCardType creditCardType : CreditCardType.values()) {
-                assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, creditCardType, Expect.Fee);
+                if (CreditCardType.VisaDebit == creditCardType && !VistaTODO.visaDebitHasConvenienceFee) {
+                    assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, creditCardType, Expect.Disable);
+                } else {
+                    assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, creditCardType, Expect.Fee);
+                }
                 assertAllowed(VistaApplication.crm, setup, false, selectionPolicy, creditCardType, Expect.NoFee);
             }
             // On CashEquivalent
@@ -263,7 +272,11 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
 
             assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, CreditCardType.MasterCard, Expect.NoFee);
             assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, CreditCardType.Visa, Expect.Fee);
-            assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, CreditCardType.VisaDebit, Expect.Fee);
+            if (!VistaTODO.visaDebitHasConvenienceFee) {
+                assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, CreditCardType.VisaDebit, Expect.Disable);
+            } else {
+                assertAllowed(VistaApplication.resident, setup, false, selectionPolicy, CreditCardType.VisaDebit, Expect.Fee);
+            }
 
             assertAllowed(VistaApplication.crm, setup, false, selectionPolicy, CreditCardType.MasterCard, Expect.NoFee);
             assertAllowed(VistaApplication.crm, setup, false, selectionPolicy, CreditCardType.Visa, Expect.NoFee);
