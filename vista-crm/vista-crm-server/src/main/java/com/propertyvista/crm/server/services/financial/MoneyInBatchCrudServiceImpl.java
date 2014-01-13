@@ -22,7 +22,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
-import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipPaymentRecordDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipCheckDetailsRecordDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.domain.financial.PaymentPostingBatch;
@@ -70,7 +70,7 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         super.enhanceRetrieved(bo, to, retrieveTarget);
         this.enhanceListRetrieved(bo, to);
         for (PaymentRecord paymentRecord : bo.payments()) {
-            DepositSlipPaymentRecordDTO paymentRecordDto = to.payments().$();
+            DepositSlipCheckDetailsRecordDTO paymentRecordDto = to.payments().$();
             Persistence.service().retrieve(paymentRecord.billingAccount());
             Persistence.service().retrieve(paymentRecord.billingAccount().lease());
             paymentRecordDto.unit().set(paymentRecord.billingAccount().lease().unit().info().number());
@@ -79,7 +79,7 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
             paymentRecordDto.tenantName().setValue(paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView());
             paymentRecordDto.checkNumber().setValue(paymentRecord.paymentMethod().details().duplicate(CheckInfo.class).checkNo().getValue());
             paymentRecordDto.amount().setValue(paymentRecord.amount().getValue());
-
+            paymentRecordDto.date().setValue(paymentRecord.targetDate().getValue());
             to.payments().add(paymentRecordDto);
         }
 

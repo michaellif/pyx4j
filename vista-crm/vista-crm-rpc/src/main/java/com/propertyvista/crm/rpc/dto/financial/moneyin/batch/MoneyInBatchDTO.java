@@ -48,7 +48,7 @@ public interface MoneyInBatchDTO extends IEntity {
     @Caption(name = "Posted")
     IPrimitive<Boolean> isPosted();
 
-    IList<DepositSlipPaymentRecordDTO> payments();
+    IList<DepositSlipCheckDetailsRecordDTO> payments();
 
     IPrimitive<LogicalDate> depositDate();
 

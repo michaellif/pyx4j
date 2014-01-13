@@ -26,19 +26,19 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipPaymentRecordDTO;
+import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipCheckDetailsRecordDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 
 public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
 
     private static final I18n i18n = I18n.get(MoneyInBatchForm.class);
 
-    public static class DepositSlipPaymentRecordFolder extends VistaTableFolder<DepositSlipPaymentRecordDTO> {
+    public static class DepositSlipPaymentRecordFolder extends VistaTableFolder<DepositSlipCheckDetailsRecordDTO> {
 
         private final List<EntityFolderColumnDescriptor> columns;
 
         public DepositSlipPaymentRecordFolder() {
-            super(DepositSlipPaymentRecordDTO.class);
+            super(DepositSlipCheckDetailsRecordDTO.class);
             columns = Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().unit(), "50px"),
                     new EntityFolderColumnDescriptor(proto().tenantId(), "100px"),

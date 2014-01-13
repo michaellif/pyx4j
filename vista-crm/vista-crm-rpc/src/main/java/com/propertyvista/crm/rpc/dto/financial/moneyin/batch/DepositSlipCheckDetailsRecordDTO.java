@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc.dto.financial.moneyin.batch;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
@@ -22,7 +23,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface DepositSlipPaymentRecordDTO extends IEntity {
+public interface DepositSlipCheckDetailsRecordDTO extends IEntity {
 
     IPrimitive<String> unit();
 
@@ -34,5 +35,8 @@ public interface DepositSlipPaymentRecordDTO extends IEntity {
 
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
+
+    /** this is date of the check: what is called in wikipedia 'date of issue' */
+    IPrimitive<LogicalDate> date();
 
 }
