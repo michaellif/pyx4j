@@ -14,6 +14,7 @@
 package com.propertyvista.domain.pmc;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -41,6 +42,7 @@ public interface PmcMerchantAccountIndex extends IEntity {
 
     @Length(8)
     @Indexed(uniqueConstraint = true)
+    @Caption(name = "Merchant Terminal Id Main")
     IPrimitive<String> merchantTerminalId();
 
     IPrimitive<Key> merchantAccountKey();

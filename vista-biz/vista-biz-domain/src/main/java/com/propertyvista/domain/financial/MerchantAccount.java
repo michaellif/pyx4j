@@ -22,8 +22,10 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -91,6 +93,10 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
             return I18nEnum.toString(this);
         }
     };
+
+    @Length(8)
+    @RpcTransient
+    IPrimitive<String> merchantTerminalIdConvenienceFee();
 
     IPrimitive<MerchantAccountActivationStatus> status();
 

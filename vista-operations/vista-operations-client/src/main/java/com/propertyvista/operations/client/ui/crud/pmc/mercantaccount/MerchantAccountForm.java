@@ -16,6 +16,9 @@ package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
@@ -80,6 +83,8 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().paymentsStatus())).build());
 
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().merchantTerminalIdConvenienceFee())).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().bankId()), 5).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().invalid())).build());
 
@@ -88,7 +93,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().accountNumber()), 15).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().operationsNotes()), 15).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().merchantAccount().operationsNotes()), 15, true).build());
 
         content.setH2(++row, 0, 2, i18n.tr("Payment Types Activation"));
 
@@ -111,11 +116,20 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         get(proto().merchantAccount().paymentsStatus()).setVisible(!getValue().id().isNull());
+        updateConvenienceFeeValability();
     }
 
     @Override
     public void addValidations() {
         super.addValidations();
+        get(proto().merchantAccount().merchantTerminalIdConvenienceFee()).addValueChangeHandler(new ValueChangeHandler<String>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                updateConvenienceFeeValability();
+            }
+        });
+
         if (ApplicationMode.isDevelopment()) {
             this.addDevShortcutHandler(new DevShortcutHandler() {
                 @Override
@@ -128,6 +142,11 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
             });
         }
+    }
+
+    private void updateConvenienceFeeValability() {
+        get(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).setEnabled(
+                !getValue().merchantAccount().merchantTerminalIdConvenienceFee().isNull());
     }
 
     private void devGenerateAccount() {

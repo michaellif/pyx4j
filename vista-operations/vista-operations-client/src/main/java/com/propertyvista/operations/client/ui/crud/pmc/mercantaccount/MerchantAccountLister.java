@@ -29,6 +29,7 @@ public class MerchantAccountLister extends AbstractLister<PmcMerchantAccountDTO>
                 new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().merchantTerminalIdConvenienceFee()).searchable(false).sortable(false).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().status()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().paymentsStatus()).searchable(false).sortable(false).build(),
