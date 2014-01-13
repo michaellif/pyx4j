@@ -46,7 +46,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private static final String headerSuccess = i18n.tr("Payment Submitted Successfully!");
 
-    private static final String headerFailed = i18n.tr("Payment Submittion Failed!");
+    private static final String headerFailed = i18n.tr("Payment Submission Failed!");
 
     private Widget autoPaySignupPanel;
 
