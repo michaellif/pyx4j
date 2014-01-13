@@ -775,7 +775,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
         }
 
-        // allow no more then 20 days available units:
+        // TODO: allow no more then 20 days (create policy!) available units:
         LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -20);
 
         // building
