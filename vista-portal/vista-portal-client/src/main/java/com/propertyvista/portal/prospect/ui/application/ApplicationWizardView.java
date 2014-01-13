@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
@@ -27,7 +25,7 @@ public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO>
 
     public interface ApplicationWizardPresenter extends IWizardFormPresenter<OnlineApplicationDTO> {
 
-        void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, UnitSelectionDTO editableEntity);
+        void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO editableEntity);
 
         void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unit);
     }

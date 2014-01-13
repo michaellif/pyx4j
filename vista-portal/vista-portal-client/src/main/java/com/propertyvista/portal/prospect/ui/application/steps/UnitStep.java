@@ -13,9 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Vector;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -65,7 +63,9 @@ public class UnitStep extends ApplicationWizardStep {
 
     private final AvailableUnitsFolder availableUnitsFolder = new AvailableUnitsFolder();
 
-    private Widget availableUnitsHeader;
+    private final AvailableUnitsFolder potentialUnitsFolder = new AvailableUnitsFolder();
+
+    private Widget availableUnitsHeader, potentialUnitsHeader;
 
     private final Button updateButton = new Button(i18n.tr("Change Selection"), new Command() {
         @Override
@@ -99,8 +99,11 @@ public class UnitStep extends ApplicationWizardStep {
 
         panel.setH3(++row, 0, 1, i18n.tr("Available Units"));
         availableUnitsHeader = panel.getWidget(row, 0);
-
         panel.setWidget(++row, 0, inject(proto().unitSelection().availableUnits(), availableUnitsFolder));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Potential Units"));
+        potentialUnitsHeader = panel.getWidget(row, 0);
+        panel.setWidget(++row, 0, inject(proto().unitSelection().potentialUnits(), potentialUnitsFolder));
 
         panel.setWidget(++row, 0, updateButton);
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
@@ -134,6 +137,9 @@ public class UnitStep extends ApplicationWizardStep {
 
         availableUnitsHeader.setVisible(editable);
         availableUnitsFolder.setVisible(editable);
+
+        potentialUnitsHeader.setVisible(editable);
+        potentialUnitsFolder.setVisible(editable);
 
         updateButton.setVisible(!editable);
 
@@ -178,9 +184,9 @@ public class UnitStep extends ApplicationWizardStep {
         current.availableUnits().clear();
         current.potentialUnits().clear();
 
-        getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<Vector<UnitTO>>() {
+        getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<UnitSelectionDTO>() {
             @Override
-            public void onSuccess(Vector<UnitTO> result) {
+            public void onSuccess(UnitSelectionDTO result) {
                 setAvailableUnits(result);
             }
         }, current);
@@ -197,11 +203,14 @@ public class UnitStep extends ApplicationWizardStep {
         }
     }
 
-    private void setAvailableUnits(Collection<UnitTO> result) {
+    private void setAvailableUnits(UnitSelectionDTO result) {
         getValue().unitSelection().availableUnits().clear();
-        getValue().unitSelection().availableUnits().addAll(result);
-
+        getValue().unitSelection().availableUnits().addAll(result.availableUnits());
         availableUnitsFolder.populate(getValue().unitSelection().availableUnits());
+
+        getValue().unitSelection().potentialUnits().clear();
+        getValue().unitSelection().potentialUnits().addAll(result.potentialUnits());
+        potentialUnitsFolder.populate(getValue().unitSelection().potentialUnits());
     }
 
     private class AvailableUnitsFolder extends PortalBoxFolder<UnitTO> {

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -35,7 +33,7 @@ public interface ApplicationWizardService extends IService {
 
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity);
 
-    void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, UnitSelectionDTO editableEntity);
+    void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO editableEntity);
 
     void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId);
 }

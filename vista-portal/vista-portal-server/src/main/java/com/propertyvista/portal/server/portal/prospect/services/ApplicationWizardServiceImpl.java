@@ -16,7 +16,6 @@ package com.propertyvista.portal.server.portal.prospect.services;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -123,9 +122,20 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, UnitSelectionDTO editableEntity) {
-        callback.onSuccess(new Vector<UnitTO>(retriveAvailableUnits(editableEntity.building(), editableEntity.bedrooms().getValue(), editableEntity.bathrooms()
-                .getValue(), editableEntity.moveIn().getValue())));
+    public void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO editableEntity) {
+        editableEntity.availableUnits().clear();
+        editableEntity.availableUnits().addAll(
+                retriveAvailableUnits(editableEntity.building(), editableEntity.bedrooms().getValue(), editableEntity.bathrooms().getValue(), editableEntity
+                        .moveIn().getValue()));
+
+        editableEntity.potentialUnits().clear();
+        editableEntity.potentialUnits().addAll(
+                retrivePotentialUnits(editableEntity.building(), editableEntity.bedrooms().getValue(), editableEntity.bathrooms().getValue(), editableEntity
+                        .moveIn().getValue()));
+
+        excludeAvailbleFromPotential(editableEntity);
+
+        callback.onSuccess(editableEntity);
     }
 
     @Override
@@ -465,7 +475,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             if (!unitSelection.floorplan().isNull()) {
                 updateBedsDensBaths(unitSelection);
                 unitSelection.availableUnits().addAll(retriveAvailableUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
-//                unitSelection.potentialUnits().addAll(retrivePotentialUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
+                unitSelection.potentialUnits().addAll(retrivePotentialUnits(unitSelection.floorplan(), unitSelection.moveIn().getValue()));
+                excludeAvailbleFromPotential(unitSelection);
             }
 
             to.unitSelection().set(unitSelection);
@@ -797,6 +808,57 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         return availableUnits;
+    }
+
+    private List<UnitTO> retrivePotentialUnits(Floorplan floorplanId, LogicalDate moveIn) {
+        UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
+        unitSelection.floorplan().set(Persistence.service().retrieve(Floorplan.class, floorplanId.getPrimaryKey()));
+        updateBedsDensBaths(unitSelection);
+
+        return retrivePotentialUnits(unitSelection.floorplan().building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), moveIn);
+    }
+
+    private List<UnitTO> retrivePotentialUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
+        if (moveIn == null) {
+            moveIn = new LogicalDate(SystemDateManager.getDate());
+        }
+
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+
+        LogicalDate availabilityLeftBound = DateUtils.monthAdd(moveIn, -1);
+        LogicalDate availabilityRightBound = DateUtils.monthAdd(moveIn, 1);
+
+        // TODO: allow no more then 20 days (create policy!) available units:
+        LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -20);
+
+        // building
+        criteria.eq(criteria.proto().building(), building);
+        // correct service type:
+        criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
+        criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
+        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
+        criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
+        // availability: 
+        criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
+        criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
+        criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityLeftBound);
+        criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityRightBound);
+
+        List<UnitTO> availableUnits = new ArrayList<UnitTO>();
+        for (AptUnit unit : Persistence.service().query(criteria)) {
+            availableUnits.add(createUnitDTO(unit));
+        }
+
+        return availableUnits;
+    }
+
+    private void excludeAvailbleFromPotential(UnitSelectionDTO unitSelection) {
+        List<UnitTO> potential = new ArrayList<UnitTO>(unitSelection.potentialUnits());
+    
+        potential.removeAll(unitSelection.availableUnits());
+    
+        unitSelection.potentialUnits().clear();
+        unitSelection.potentialUnits().addAll(potential);
     }
 
     private UnitOptionsSelectionDTO retriveCurrentUnitOptions(Lease lease) {

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.prospect.activity.application;
 
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -102,7 +100,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<Vector<UnitTO>> callback, UnitSelectionDTO editableEntity) {
+    public void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO editableEntity) {
         service.getAvailableUnits(callback, editableEntity);
     }
 
