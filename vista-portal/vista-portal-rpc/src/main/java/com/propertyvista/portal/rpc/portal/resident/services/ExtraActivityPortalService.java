@@ -7,24 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 23, 2013
- * @author michaellif
+ * Created on Jan 9, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.extra;
+package com.propertyvista.portal.rpc.portal.resident.services;
 
-import com.pyx4j.site.client.IsView;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 
-public interface ExtraView extends IsView {
+public interface ExtraActivityPortalService extends IService {
+    void retreiveWheather(AsyncCallback<WeatherGadgetDTO> callback);
 
-    public interface ExtraPresenter {
-
-    }
-
-    void populateWeather(WeatherGadgetDTO notification);
-
-    void populateCommunityEvents(CommunityEventsGadgetDTO notification);
+    void retreiveCommunityEvents(AsyncCallback<CommunityEventsGadgetDTO> callback);
 }

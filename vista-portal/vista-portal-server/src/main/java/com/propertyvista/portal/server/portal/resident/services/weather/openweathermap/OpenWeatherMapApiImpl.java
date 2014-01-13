@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -58,9 +58,10 @@ public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
                 c.addFilter(new LoggingFilter());
             }
             //@formatter:off
-            WebResource r = c.resource("http://api.openweathermap.com/data/2.5/forecast")
+            WebResource r = c.resource("http://api.openweathermap.org/data/2.5/forecast")
                              .queryParam("q", cityName + "," + countryName)
-                             .queryParam("mode", "xml");
+                             .queryParam("mode", "xml")
+                             .queryParam("units", "metric");
             //@formatter:on
 
             if (apiKey != null) {
@@ -100,4 +101,5 @@ public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
             return response;
         }
     }
+
 }

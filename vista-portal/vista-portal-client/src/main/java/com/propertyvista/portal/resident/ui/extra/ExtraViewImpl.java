@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,18 +13,19 @@
  */
 package com.propertyvista.portal.resident.ui.extra;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.propertyvista.portal.resident.ui.extra.events.CommunityEventsGadget;
 import com.propertyvista.portal.resident.ui.extra.weather.WeatherGadget;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.ExtraGadgetDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class ExtraViewImpl extends FlowPanel implements ExtraView {
+
+    private WeatherGadget weatherGadget = null;
+
+    private CommunityEventsGadget communityEventsGadget = null;
 
     private final FlowPanel contentPanel;
 
@@ -33,28 +34,40 @@ public class ExtraViewImpl extends FlowPanel implements ExtraView {
         setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
 
         contentPanel = new FlowPanel();
-
         add(contentPanel);
-
     }
 
-    @Override
-    public void populate(List<ExtraGadgetDTO> gadgets) {
+    public void populate() {
         contentPanel.clear();
-        if (gadgets.size() == 0) {
+        if (weatherGadget == null && communityEventsGadget == null) {
             setVisible(false);
         } else {
             setVisible(true);
-            for (final ExtraGadgetDTO gadget : gadgets) {
-                if (gadget.isInstanceOf(WeatherGadgetDTO.class)) {
-                    contentPanel.add(new WeatherGadget((WeatherGadgetDTO) gadget));
-                } else if (gadget.isInstanceOf(CommunityEventsGadgetDTO.class)) {
-                    contentPanel.add(new CommunityEventsGadget((CommunityEventsGadgetDTO) gadget));
-                }
+            if (weatherGadget != null) {
+                contentPanel.add(weatherGadget);
+            }
+            if (communityEventsGadget != null) {
+                contentPanel.add(communityEventsGadget);
 
             }
 
         }
+    }
 
+    @Override
+    public void populateWeather(WeatherGadgetDTO notification) {
+        if (notification != null) {
+            weatherGadget = new WeatherGadget(notification);
+            populate();
+        }
+
+    }
+
+    @Override
+    public void populateCommunityEvents(CommunityEventsGadgetDTO notification) {
+        if (notification != null) {
+            communityEventsGadget = new CommunityEventsGadget(notification);
+            populate();
+        }
     }
 }
