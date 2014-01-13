@@ -108,9 +108,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                     CrmImages.INSTANCE.tenantsActive());
             folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
             folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
-            }
+            folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
             folder.addNavigItem(new CrmSiteMap.Tenants.MaintenanceRequest());
             if (!VistaFeatures.instance().yardiIntegration()) {
                 folder.addNavigItem(new CrmSiteMap.Tenants.FormerTenant());
@@ -121,16 +119,14 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         }
 
         //Marketing
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            folder = new NavigFolder(i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(),
-                    CrmImages.INSTANCE.marketingActive());
-            folder.addNavigItem(new CrmSiteMap.Marketing.Lead());
-            if (VistaFeatures.instance().leases()) {
-                folder.addNavigItem(new CrmSiteMap.Tenants.LeaseApplication());
-                folder.addNavigItem(new CrmSiteMap.Marketing.PotentialTenant());
-            }
-            list.add(folder);
+        folder = new NavigFolder(i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(),
+                CrmImages.INSTANCE.marketingActive());
+        folder.addNavigItem(new CrmSiteMap.Marketing.Lead());
+        if (VistaFeatures.instance().leases()) {
+            folder.addNavigItem(new CrmSiteMap.Tenants.LeaseApplication());
+            folder.addNavigItem(new CrmSiteMap.Marketing.PotentialTenant());
         }
+        list.add(folder);
 
         //LegalAndCollections
         folder = new NavigFolder(i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalNormal(), CrmImages.INSTANCE.legalHover(),
