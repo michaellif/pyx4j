@@ -235,6 +235,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     IPrimitive<String> transactionAuthorizationNumber();
 
     @Detached(level = AttachLevel.IdOnly)
+    @JoinColumn
     PaymentPostingBatch batch();
 
     interface PaidOrRejectedAggregatedTransferId extends ColumnId {

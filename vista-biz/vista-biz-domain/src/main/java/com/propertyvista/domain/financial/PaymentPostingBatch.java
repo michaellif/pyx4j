@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -82,6 +83,7 @@ public interface PaymentPostingBatch extends IEntity, HasNotesAndAttachments {
     AbstractPmcUser createdBy();
 
     @Detached(level = AttachLevel.Detached)
+    @JoinTable(PaymentRecord.class)
     ISet<PaymentRecord> payments();
 
     @EmbeddedEntity
