@@ -24,6 +24,9 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -39,6 +42,7 @@ import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
@@ -52,6 +56,8 @@ import com.propertyvista.portal.shared.ui.util.editors.VehicleDataEditor;
 public class OptionsStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(OptionsStep.class);
+
+    private final BasicFlexFormPanel depositPanel = new BasicFlexFormPanel();
 
     private final BasicFlexFormPanel chargedPanel = new BasicFlexFormPanel();
 
@@ -99,6 +105,13 @@ public class OptionsStep extends ApplicationWizardStep {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
+            content.setWidget(++row, 0,
+                    new FormWidgetDecoratorBuilder(inject(proto().selectedService().agreedPrice(), new CMoneyLabel())).customLabel(i18n.tr("Unit Price"))
+                            .build());
+            content.setWidget(++row, 0, depositPanel);
+            depositPanel.setH3(0, 0, 1, i18n.tr("Unit Deposits"));
+            depositPanel.setWidget(1, 0, 1, inject(proto().selectedService().deposits(), new DepositFolder()));
+
             petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
             petsPanel.setWidget(1, 0, inject(proto().selectedPets(), petFolder = new FeatureExFolder(ARCode.Type.Pet)));
             content.setWidget(++row, 0, petsPanel);
@@ -126,6 +139,7 @@ public class OptionsStep extends ApplicationWizardStep {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
+            depositPanel.setVisible(!getValue().selectedService().deposits().isEmpty());
             petsPanel.setVisible(!getValue().selectedPets().isEmpty() || !getValue().availablePets().isEmpty());
             parkingPanel.setVisible(!getValue().selectedParking().isEmpty() || !getValue().availableParking().isEmpty());
             storagePanel.setVisible(!getValue().selectedStorage().isEmpty() || !getValue().availableStorage().isEmpty());
@@ -170,6 +184,8 @@ public class OptionsStep extends ApplicationWizardStep {
 
         class FeatureItemForm extends CEntityForm<BillableItem> {
 
+            private final BasicFlexFormPanel depositPanel = new BasicFlexFormPanel();
+
             public FeatureItemForm() {
                 super(BillableItem.class);
                 setEditable(false);
@@ -180,9 +196,13 @@ public class OptionsStep extends ApplicationWizardStep {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().name())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreedPrice())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().description())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().name(), new CLabel<String>())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreedPrice(), new CMoneyLabel())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().description(), new CLabel<String>())).build());
+
+                content.setWidget(++row, 0, depositPanel);
+                depositPanel.setH3(0, 0, 1, proto().deposits().getMeta().getCaption());
+                depositPanel.setWidget(1, 0, 1, inject(proto().deposits(), new DepositFolder()));
 
                 return content;
             }
@@ -194,6 +214,8 @@ public class OptionsStep extends ApplicationWizardStep {
                 @SuppressWarnings("unchecked")
                 CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
                 item.setRemovable(!isMandatoryFeature(getValue().item().product()));
+
+                depositPanel.setVisible(!getValue().deposits().isEmpty());
             }
 
             private boolean isMandatoryFeature(Product.ProductV product) {
@@ -276,10 +298,14 @@ public class OptionsStep extends ApplicationWizardStep {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().name())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreedPrice())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().description())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().name(), new CLabel<String>())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreedPrice(), new CMoneyLabel())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().description(), new CLabel<String>())).build());
                 content.setWidget(++row, 0, extraDataPanel);
+                content.setWidget(++row, 0, depositPanel);
+
+                depositPanel.setH3(0, 0, 1, proto().deposits().getMeta().getCaption());
+                depositPanel.setWidget(1, 0, 1, inject(proto().deposits(), new DepositFolder()));
 
                 return content;
             }
@@ -334,6 +360,47 @@ public class OptionsStep extends ApplicationWizardStep {
                         extraDataPanel.setWidget(editor);
                     }
                 }
+            }
+        }
+    }
+
+    private class DepositFolder extends PortalBoxFolder<Deposit> {
+
+        public DepositFolder() {
+            super(Deposit.class, false);
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof Deposit) {
+                return new DepositEditor();
+            }
+            return super.create(member);
+        }
+
+        private class DepositEditor extends CEntityForm<Deposit> {
+
+            public DepositEditor() {
+                super(Deposit.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                BasicFlexFormPanel content = new BasicFlexFormPanel();
+
+                int row = -1;
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount(), new CMoneyLabel())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>())).build());
+
+                return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                // disable editing of finalized deposits:
+                setEditable(getValue().lifecycle().isNull());
             }
         }
     }
