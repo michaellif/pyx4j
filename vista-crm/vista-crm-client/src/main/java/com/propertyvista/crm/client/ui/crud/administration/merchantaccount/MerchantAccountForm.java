@@ -40,6 +40,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId(), new CLabel<String>()), 5).build());
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber(), new CLabel<String>()), 5).build());
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber(), new CLabel<String>()), 15).build());
+        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountName())).build());
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().chargeDescription()), 40).build());
 
         selectTab(addTab(general));

@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -40,7 +41,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@ToStringFormat("{1}-{0}: {2}")
+@ToStringFormat("{1}-{0}: {2} {3}")
 @DiscriminatorValue("MerchantAccount")
 public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAttachments {
 
@@ -102,6 +103,9 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
 
     @Editor(type = EditorType.textarea)
     IPrimitive<String> operationsNotes();
+
+    @ToString
+    IPrimitive<String> accountName();
 
     /**
      * Calculated base on terminal_id before sending it to GWT

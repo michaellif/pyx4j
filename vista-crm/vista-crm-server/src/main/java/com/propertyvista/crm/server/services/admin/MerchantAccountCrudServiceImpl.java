@@ -36,6 +36,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
         bind(toProto.accountNumber(), boProto.accountNumber());
         bind(toProto.bankId(), boProto.bankId());
         bind(toProto.branchTransitNumber(), boProto.branchTransitNumber());
+        bind(toProto.accountName(), boProto.accountName());
         bind(toProto.chargeDescription(), boProto.chargeDescription());
     }
 
