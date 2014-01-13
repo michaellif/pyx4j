@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -63,6 +64,7 @@ public interface PaymentPostingBatch extends IEntity, HasNotesAndAttachments {
     @ReadOnly
     @Detached
     @Indexed
+    @JoinColumn
     Building building();
 
     IPrimitive<PostingStatus> status();
