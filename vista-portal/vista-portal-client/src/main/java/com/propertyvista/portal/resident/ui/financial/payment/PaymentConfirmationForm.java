@@ -42,7 +42,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
-    private static final String headerUndefined = i18n.tr("Payment status undefined...");
+    private static final String headerUndefined = i18n.tr("Payment Status Undefined...");
 
     private static final String headerSuccess = i18n.tr("Payment Submitted Successfully!");
 
