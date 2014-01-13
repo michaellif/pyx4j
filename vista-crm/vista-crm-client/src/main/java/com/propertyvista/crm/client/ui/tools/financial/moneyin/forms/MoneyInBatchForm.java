@@ -88,6 +88,11 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         get(proto().isPosted()).setViewable(true);
         get(proto().payments()).setViewable(true);
 
+        get(proto().bankId()).setViewable(true);
+        get(proto().bankTransitNumber()).setViewable(true);
+        get(proto().bankAccountNumber()).setViewable(true);
+        get(proto().bankAccountName()).setViewable(true);
+
         return panel;
     }
 }

@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -23,12 +24,7 @@ public interface PaymentBatchBankDepositDetails extends IEntity {
 
     IPrimitive<LogicalDate> depositDate();
 
-    IPrimitive<String> bankAccountName();
-
-    IPrimitive<String> bankId();
-
-    IPrimitive<String> bankTransitNumber();
-
-    IPrimitive<String> bankAccountNumber();
-
+    /** should be the same as merchantAccount of each payment record included in the batch these details belong to */
+    @Detached
+    MerchantAccount merchantAccount();
 }

@@ -41,10 +41,10 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         bind(toProto.id(), boProto.id());
         bind(toProto.building(), boProto.building().propertyCode());
         bind(toProto.depositDate(), boProto.depositDetails().depositDate());
-        bind(toProto.bankAccountName(), boProto.depositDetails().bankAccountName());
-        bind(toProto.bankId(), boProto.depositDetails().bankId());
-        bind(toProto.bankTransitNumber(), boProto.depositDetails().bankTransitNumber());
-        bind(toProto.bankAccountNumber(), boProto.depositDetails().bankAccountNumber());
+        bind(toProto.bankId(), boProto.depositDetails().merchantAccount().bankId());
+        bind(toProto.bankTransitNumber(), boProto.depositDetails().merchantAccount().branchTransitNumber());
+        bind(toProto.bankAccountNumber(), boProto.depositDetails().merchantAccount().accountNumber());
+        // TODO account name
     }
 
     @Override
@@ -101,10 +101,6 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         PaymentPostingBatch postingBatch = Persistence.secureRetrieve(PaymentPostingBatch.class, editableEntity.getPrimaryKey());
 
         postingBatch.depositDetails().depositDate().setValue(editableEntity.depositDate().getValue());
-        postingBatch.depositDetails().bankAccountName().setValue(editableEntity.bankAccountName().getValue());
-        postingBatch.depositDetails().bankId().setValue(editableEntity.bankId().getValue());
-        postingBatch.depositDetails().bankTransitNumber().setValue(editableEntity.bankTransitNumber().getValue());
-        postingBatch.depositDetails().bankAccountNumber().setValue(editableEntity.bankAccountNumber().getValue());
 
         Persistence.secureSave(postingBatch);
         Persistence.service().commit();
