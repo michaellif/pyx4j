@@ -16,6 +16,7 @@ package com.propertyvista.preloader.ido;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.essentials.rpc.ImportColumn;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.financial.AbstractMerchantAccount;
@@ -29,6 +30,9 @@ public interface MerchantAccountImport extends AbstractMerchantAccount {
     @Override
     @Caption(name = "Terminal Id")
     IPrimitive<String> merchantTerminalId();
+
+    @ImportColumn(names = "Terminal Id Convenience Fee")
+    IPrimitive<String> merchantTerminalIdConvenienceFee();
 
     @Override
     IPrimitive<String> bankId();

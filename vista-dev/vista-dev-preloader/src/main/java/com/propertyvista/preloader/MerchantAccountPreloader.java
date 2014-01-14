@@ -85,6 +85,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                             MerchantAccountImport imp = companyImport.get(lineN);
                             MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
                             merchantAccount.merchantTerminalId().setValue(imp.merchantTerminalId().getValue());
+                            merchantAccount.merchantTerminalIdConvenienceFee().setValue(imp.merchantTerminalIdConvenienceFee().getValue());
                             merchantAccount.bankId().setValue(imp.bankId().getValue());
                             merchantAccount.branchTransitNumber().setValue(imp.branchTransitNumber().getValue());
                             merchantAccount.accountNumber().setValue(imp.accountNumber().getValue());
@@ -136,6 +137,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                     for (int n = 0; n <= internalAccounts; n++) {
                         MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
                         merchantAccount.merchantTerminalId().setValue("tD" + String.valueOf(offsetNumber) + String.valueOf(n));
+                        merchantAccount.merchantTerminalIdConvenienceFee().setValue("tC" + String.valueOf(offsetNumber) + String.valueOf(n));
                         merchantAccount.bankId().setValue("001");
                         merchantAccount.branchTransitNumber().setValue("3" + String.valueOf(offsetNumber));
                         merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
