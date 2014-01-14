@@ -87,9 +87,6 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         // marketing
         assertEquals(buildingIO.marketing.name, buildingIO2.marketing.name);
         assertEquals(buildingIO.marketing.description.getValue(), buildingIO2.marketing.description.getValue());
-        for (int i = 0; i < buildingIO.marketing.blurbs.size(); i++) {
-            assertEquals(buildingIO.marketing.blurbs.get(i).content.getValue(), buildingIO2.marketing.blurbs.get(i).content.getValue());
-        }
 
         // amenities
         for (int i = 0; i < buildingIO.amenities.size(); i++) {
