@@ -14,6 +14,8 @@
 package com.propertyvista.crm.server.services.building;
 
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityBinder;
@@ -61,4 +63,25 @@ public class LandlordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Landlord
         Persistence.ensureRetrieve(bo.signature(), AttachLevel.Attached);
     }
 
+    @Override
+    protected void persist(Landlord bo, LandlordDTO to) {
+        super.persist(bo, to);
+
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().landlord(), bo));
+        for (Building building : Persistence.service().query(criteria)) {
+            if (!to.buildings().contains(building)) {
+                building.landlord().set(null);
+                Persistence.service().persist(building);
+            }
+        }
+
+        for (Building dto : to.buildings()) {
+            if (!dto.landlord().equals(bo)) {
+                Building building = Persistence.service().retrieve(Building.class, dto.getPrimaryKey());
+                building.landlord().set(bo);
+                Persistence.service().persist(building);
+            }
+        }
+    }
 }
