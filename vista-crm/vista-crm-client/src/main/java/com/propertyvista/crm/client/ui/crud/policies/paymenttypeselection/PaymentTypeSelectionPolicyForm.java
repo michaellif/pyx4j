@@ -58,14 +58,16 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         accepted.setH4(0, ++col, 1, i18n.tr("Accepted:"));
         accepted.getWidget(0, col).setWidth(hdrW);
 
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCash()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCheck()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedEcheck()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedDirectBanking()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCreditCardMasterCard()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCreditCardVisa()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedVisaDebit()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedInterac()));
+        accepted.setWidget(0, ++col, aligned(proto().acceptedCash()).build());
+        accepted.setWidget(0, ++col, aligned(proto().acceptedCheck()).build());
+        accepted.setWidget(0, ++col, aligned(proto().acceptedEcheck()).build());
+        accepted.setWidget(0, ++col, aligned(proto().acceptedDirectBanking()).build());
+        accepted.setWidget(0, ++col, aligned(proto().acceptedCreditCardMasterCard()).build());
+        accepted.setWidget(0, ++col, aligned(proto().acceptedCreditCardVisa()).build());
+        accepted.setWidget(0, ++col, aligned(proto().acceptedVisaDebit()).build());
+        accepted.setWidget(0, ++col, aligned(proto().acceptedInterac()).build());
+
+        final String convenienceMarker = " *";
 
         BasicFlexFormPanel residentPortal = new BasicFlexFormPanel();
         col = -1;
@@ -76,12 +78,22 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         residentPortal.getWidget(0, col).setWidth(lblW);
         residentPortal.setWidget(0, ++col, new HTML()); // fill empty cell
         residentPortal.getWidget(0, col).setWidth(lblW);
-        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalEcheck()));
-        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalDirectBanking()));
-        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalCreditCardMasterCard()));
-        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalCreditCardVisa()));
-        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalVisaDebit()));
-        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalInterac()));
+        residentPortal.setWidget(0, ++col, aligned(proto().residentPortalEcheck()).build());
+        residentPortal.setWidget(0, ++col, aligned(proto().residentPortalDirectBanking()).build());
+        residentPortal.setWidget(
+                0,
+                ++col,
+                aligned(proto().residentPortalCreditCardMasterCard()).customLabel(
+                        proto().residentPortalCreditCardMasterCard().getMeta().getCaption() + convenienceMarker).build());
+        residentPortal.setWidget(0, ++col,
+                aligned(proto().residentPortalCreditCardVisa()).customLabel(proto().residentPortalCreditCardVisa().getMeta().getCaption() + convenienceMarker)
+                        .build());
+        residentPortal.setWidget(
+                0,
+                ++col,
+                aligned(proto().residentPortalVisaDebit()).customLabel(
+                        proto().residentPortalVisaDebit().getMeta().getCaption() + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : "")).build());
+        residentPortal.setWidget(0, ++col, aligned(proto().residentPortalInterac()).build());
 
 //        residentPortal.setWidget(1, 0, col, new HTML(i18n.tr("Note: If card is disabled, Convenience Fee will apply for Portal payments.")));
 //        residentPortal.getWidget(1, 0).setStyleName(VistaTheme.StyleName.infoMessage.name());
@@ -91,14 +103,14 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         cashEquivalent.setH4(0, ++col, 1, i18n.tr("Cash Equivalent:"));
         cashEquivalent.getWidget(0, col).setWidth(hdrW);
 
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCash()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCheck()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentEcheck()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentDirectBanking()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCreditCardMasterCard()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCreditCardVisa()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentVisaDebit()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentInterac()));
+        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentCash()).build());
+        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentCheck()).build());
+        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentEcheck()).build());
+        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentDirectBanking()).build());
+        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentCreditCardMasterCard()).build());
+        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentCreditCardVisa()).build());
+        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentVisaDebit()).build());
+        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentInterac()).build());
 
         // put all together:
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Selection"));
@@ -111,18 +123,15 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         main.setWidget(++row, 0, 2, cashEquivalent);
         main.setHR(++row, 0, 2);
         main.setBR(++row, 0, 2);
-        if (VistaTODO.visaDebitHasConvenienceFee) {
-            main.setWidget(++row, 0, 2, new HTML(i18n.tr("Note: If card is disabled, Web Payment Fee will apply for Portal payments.")));
-        } else {
-            main.setWidget(++row, 0, 2, new HTML(i18n.tr("Note: If card is disabled, Web Payment Fee will apply for Portal Credit Card payments.")));
-        }
+        main.setWidget(++row, 0, 2,
+                new HTML(i18n.tr("Note: If payment marked with {0} is not selected, a Web Payment Fee will apply to the Resident.", convenienceMarker)));
         main.getWidget(row, 0).setStyleName(VistaTheme.StyleName.infoMessage.name());
 
         return main;
     }
 
-    private WidgetDecorator alignedToCenter(IPrimitive<Boolean> check) {
+    private WidgetDecorator.Builder aligned(IPrimitive<Boolean> check) {
         return new FormDecoratorBuilder(inject(check), lblW, contW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center)
-                .useLabelSemicolon(false).componentAlignment(Alignment.center).build();
+                .useLabelSemicolon(false).componentAlignment(Alignment.center);
     }
 }
