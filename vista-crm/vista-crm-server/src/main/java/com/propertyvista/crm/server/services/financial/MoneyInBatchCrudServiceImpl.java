@@ -44,7 +44,7 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         bind(toProto.bankId(), boProto.depositDetails().merchantAccount().bankId());
         bind(toProto.bankTransitNumber(), boProto.depositDetails().merchantAccount().branchTransitNumber());
         bind(toProto.bankAccountNumber(), boProto.depositDetails().merchantAccount().accountNumber());
-        // TODO account name
+        bind(toProto.bankAccountName(), boProto.depositDetails().merchantAccount().accountName());
     }
 
     @Override
