@@ -24,6 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
+import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -63,9 +64,16 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
 
         Persistence.ensureRetrieve(leaseTerm.lease().unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord().logo(), AttachLevel.Attached);
 
         leaseAgreementData.landlordName().setValue(leaseTerm.lease().unit().building().landlord().name().getValue());
         leaseAgreementData.landlordAddress().setValue(leaseTerm.lease().unit().building().landlord().address().getStringView());
+        if (!leaseTerm.lease().unit().building().landlord().logo().isEmpty()) {
+            Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord().logo().file(), AttachLevel.Attached);
+            LandlordMediaBlob blob = Persistence.service().retrieve(LandlordMediaBlob.class,
+                    leaseTerm.lease().unit().building().landlord().logo().file().blobKey().getValue());
+            leaseAgreementData.landlordLogo().setValue((blob.data().getValue()));
+        }
 
         leaseAgreementData.applicants().addAll(makeApplicants(leaseTerm));
         leaseAgreementData.terms().add(makeOccupantsTerm(leaseTerm));
