@@ -47,7 +47,7 @@ public class NavigStepList implements IsWidget {
         NavigStepItem menuItem = new NavigStepItem(new Command() {
             @Override
             public void execute() {
-                applicationWizard.selectStep(stepIndex);
+                applicationWizard.showStep(stepIndex);
             }
         }, stepTitle, stepIndex, stepStatus);
         items.add(menuItem);
