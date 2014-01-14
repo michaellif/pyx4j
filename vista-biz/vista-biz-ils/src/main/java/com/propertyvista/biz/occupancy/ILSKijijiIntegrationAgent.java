@@ -29,6 +29,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
@@ -80,7 +81,7 @@ public class ILSKijijiIntegrationAgent {
         buildingSummaryMap = new HashMap<Building, List<ILSSummaryBuilding>>();
         EntityQueryCriteria<ILSProfileBuilding> critBld = EntityQueryCriteria.create(ILSProfileBuilding.class);
         critBld.eq(critBld.proto().vendor(), vendor);
-        critBld.ne(critBld.proto().disabled(), true);
+        critBld.or(PropertyCriterion.isNull(critBld.proto().disabled()), PropertyCriterion.eq(critBld.proto().disabled(), false));
         for (ILSProfileBuilding profile : Persistence.service().query(critBld)) {
             buildingProfileMap.put(profile.building(), profile);
             // add ils summary

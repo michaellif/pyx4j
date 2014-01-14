@@ -12,6 +12,7 @@
  */
 package com.propertyvista.ils.kijiji.mapper;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -47,17 +48,23 @@ public class KijijiDataMapper {
         factory = newFactory;
     }
 
-    private ILSUnit createUnit(ILSFloorplanDTO fpDto) {
+    private ILSUnit createUnit(ILSFloorplanDTO fpDto, ILSBuildingDTO bldDto) {
         ILSUnit ilsUnit = factory.createILSUnit();
         // map unit data
         new KijijiUnitMapper().convert(fpDto, ilsUnit);
         // add media urls
-        Persistence.service().retrieveMember(fpDto.floorplan().media(), AttachLevel.Attached);
-        ilsUnit.setImages(createImages(fpDto.floorplan().media()));
-        // insert frontImage if available
+        Images images = factory.createILSUnitImages();
+        ilsUnit.setImages(images);
+        // add frontImage if available
         if (!fpDto.ilsSummary().frontImage().isNull()) {
-            ilsUnit.getImages().getImage().add(0, createImage(fpDto.ilsSummary().frontImage()));
+            ilsUnit.getImages().getImage().add(createImage(fpDto.ilsSummary().frontImage()));
         }
+        // add building images
+        Persistence.service().retrieveMember(bldDto.building().media(), AttachLevel.Attached);
+        ilsUnit.getImages().getImage().addAll(createImages(bldDto.building().media()));
+        // add floorplan images
+        Persistence.service().retrieveMember(fpDto.floorplan().media(), AttachLevel.Attached);
+        ilsUnit.getImages().getImage().addAll(createImages(fpDto.floorplan().media()));
 
         return ilsUnit;
     }
@@ -71,13 +78,13 @@ public class KijijiDataMapper {
         return image;
     }
 
-    private Images createImages(List<MediaFile> media) {
-        Images images = factory.createILSUnitImages();
+    private List<Image> createImages(List<MediaFile> media) {
+        List<Image> images = new ArrayList<Image>();
         for (MediaFile item : media) {
             if (PublicVisibilityType.global.equals(item.visibility().getValue())) {
                 Image image = createImage(item);
                 if (image != null) {
-                    images.getImage().add(image);
+                    images.add(image);
                 }
             }
         }
@@ -85,10 +92,10 @@ public class KijijiDataMapper {
         return images;
     }
 
-    private ILSUnits createUnits(Collection<ILSFloorplanDTO> fpList) {
+    private ILSUnits createUnits(Collection<ILSFloorplanDTO> fpList, ILSBuildingDTO bldDto) {
         ILSUnits ilsUnits = factory.createILSUnits();
         for (ILSFloorplanDTO fpDto : fpList) {
-            ilsUnits.getUnit().add(createUnit(fpDto));
+            ilsUnits.getUnit().add(createUnit(fpDto, bldDto));
         }
 
         return ilsUnits;
@@ -110,7 +117,7 @@ public class KijijiDataMapper {
         // logo
         location.setLogo(createLogo());
         // add units
-        location.getUnits().add(createUnits(fpList));
+        location.getUnits().add(createUnits(fpList, bldDto));
 
         return location;
     }
