@@ -41,6 +41,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
@@ -81,15 +82,15 @@ public class UnitStep extends ApplicationWizardStep {
     });
 
     public UnitStep() {
+        super(OnlineApplicationWizardStepMeta.Unit);
         bedroomSelector.setOptions(EnumSet.allOf(BedroomNumber.class));
         bathroomSelector.setOptions(EnumSet.allOf(BathroomNumber.class));
     }
 
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Selection"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().building(), new CEntityLabel<Building>())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().moveIn()), 120).build());

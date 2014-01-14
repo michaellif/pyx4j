@@ -34,11 +34,12 @@ import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecorator;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
 
 public class PersonalInfoBStep extends ApplicationWizardStep {
@@ -53,11 +54,14 @@ public class PersonalInfoBStep extends ApplicationWizardStep {
         }
     };
 
+    public PersonalInfoBStep() {
+        super(OnlineApplicationWizardStepMeta.AdditionalInfo);
+    }
+
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Additional Info"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setH3(++row, 0, 1, i18n.tr("Current Address"));
         panel.setWidget(++row, 0, inject(proto().applicant().currentAddress(), new PriorAddressEditor()));

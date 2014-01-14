@@ -102,6 +102,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillLegalTerms(bo, to);
 
+        fillStepsStatuses(bo, to);
+
         callback.onSuccess(to);
     }
 
@@ -573,9 +575,18 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
     }
 
+    private void fillStepsStatuses(OnlineApplication bo, OnlineApplicationDTO to) {
+        to.stepsStatuses().addAll(bo.stepsStatuses());
+    }
+
     private void saveLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
         bo.legalTerms().clear();
         bo.legalTerms().addAll(bo.legalTerms());
+    }
+
+    private void saveStepsStatuses(OnlineApplication bo, OnlineApplicationDTO to) {
+        bo.stepsStatuses().clear();
+        bo.stepsStatuses().addAll(bo.stepsStatuses());
     }
 
     private void saveApplicationData(OnlineApplicationDTO to, boolean submit) {
@@ -608,6 +619,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         saveApplicantData(bo, to);
         saveLegalTerms(bo, to);
+
+        saveStepsStatuses(bo, to);
 
         // do not forget to save LEASE:
         ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease(), submit);
@@ -854,9 +867,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void excludeAvailbleFromPotential(UnitSelectionDTO unitSelection) {
         List<UnitTO> potential = new ArrayList<UnitTO>(unitSelection.potentialUnits());
-    
+
         potential.removeAll(unitSelection.availableUnits());
-    
+
         unitSelection.potentialUnits().clear();
         unitSelection.potentialUnits().addAll(potential);
     }

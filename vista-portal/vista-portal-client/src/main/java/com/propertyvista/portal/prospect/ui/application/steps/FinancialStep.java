@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
@@ -29,11 +30,14 @@ public class FinancialStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(FinancialStep.class);
 
+    public FinancialStep() {
+        super(OnlineApplicationWizardStepMeta.Financial);
+    }
+
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Financial"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setH3(++row, 0, 1, i18n.tr("Income"));
         panel.setWidget(++row, 0, inject(proto().applicant().incomes(), new PersonalIncomeFolder()));

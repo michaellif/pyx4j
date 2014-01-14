@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -35,11 +36,14 @@ public class PersonalInfoAStep extends ApplicationWizardStep {
 
     private final IdUploaderFolder fileUpload = new IdUploaderFolder();
 
+    public PersonalInfoAStep() {
+        super(OnlineApplicationWizardStepMeta.AboutYou);
+    }
+
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("About You"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
 
         CImage imageHolder = new CImage(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder(
                 CustomerPicture.class));

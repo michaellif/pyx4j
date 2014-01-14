@@ -101,4 +101,6 @@ public interface OnlineApplication extends IEntity {
      */
     IPrimitive<BigDecimal> progress();
 
+    IList<OnlineApplicationWizardStepStatus> stepsStatuses();
+
 }

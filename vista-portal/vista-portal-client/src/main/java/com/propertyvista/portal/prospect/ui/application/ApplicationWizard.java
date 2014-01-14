@@ -18,6 +18,7 @@ import java.util.HashMap;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
@@ -50,7 +51,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private ApplicationWizardPresenter presenter;
 
     public ApplicationWizard(ApplicationWizardViewImpl view) {
-        super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast2);
+        super(OnlineApplicationDTO.class, view, null, i18n.tr("Submit"), ThemeColor.contrast2);
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             if (SecurityController.checkBehavior(PortalProspectBehavior.CanEditLeaseTerms)) {
@@ -82,7 +83,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     public void setPresenter(ApplicationWizardPresenter presenter) {
         this.presenter = presenter;
-        updateProgress();
     }
 
     public ApplicationWizardPresenter getPresenter() {
@@ -120,6 +120,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         for (ApplicationWizardStep step : steps.values()) {
             step.onValueSet();
         }
+
     }
 
     @Override
@@ -132,9 +133,10 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     @Override
-    public void updateProgress() {
-        super.updateProgress();
+    public void updateProgress(WizardStep currentStep, WizardStep previousStep) {
+        super.updateProgress(currentStep, previousStep);
         ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(this, ApplicationWizardStateChangeEvent.ChangeType.stepChange));
+        ((ApplicationWizardDecorator) getDecorator()).setCaption(currentStep.getStepTitle());
     }
 
     class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {

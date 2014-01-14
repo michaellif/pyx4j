@@ -22,20 +22,24 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 
 public abstract class ApplicationWizardStep extends WizardStep {
 
     private ApplicationWizard wizard;
 
-    public ApplicationWizardStep() {
+    private final OnlineApplicationWizardStepMeta name;
+
+    public ApplicationWizardStep(OnlineApplicationWizardStepMeta name) {
+        this.name = name;
     }
 
     public void init(ApplicationWizard wizard) {
         this.wizard = wizard;
         BasicFlexFormPanel content = createStepContent();
         setStepContent(content);
-        setStepTitle(content.getTitle());
+        setStepTitle(name.toString());
     }
 
     public ApplicationWizard getWizard() {

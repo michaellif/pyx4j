@@ -46,6 +46,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
@@ -75,11 +76,14 @@ public class OptionsStep extends ApplicationWizardStep {
 
     private FeatureExFolder parkingFolder;
 
+    public OptionsStep() {
+        super(OnlineApplicationWizardStepMeta.Options);
+    }
+
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Options"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setWidget(++row, 0, inject(proto().unitOptionsSelection(), new StepDataForm()));
 

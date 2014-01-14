@@ -14,19 +14,20 @@
 package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 
 public class PaymentStep extends ApplicationWizardStep {
 
-    private static final I18n i18n = I18n.get(PaymentStep.class);
+    public PaymentStep() {
+        super(OnlineApplicationWizardStepMeta.Payment);
+    }
 
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
 
         return panel;
     }

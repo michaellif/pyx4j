@@ -24,6 +24,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationOptionsFolder;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -32,11 +33,14 @@ public class LeaseStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(LeaseStep.class);
 
+    public LeaseStep() {
+        super(OnlineApplicationWizardStepMeta.Lease);
+    }
+
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Information"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setH3(++row, 0, 1, i18n.tr("Unit"));
 
