@@ -27,7 +27,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
-import com.propertyvista.portal.prospect.ui.application.steps.ConfirmationStep;
 import com.propertyvista.portal.prospect.ui.application.steps.ContactsStep;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
@@ -66,9 +65,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new FinancialStep());
             addStep(new ContactsStep());
             addStep(new LegalStep());
-            addStep(new SummaryStep());
             addStep(new PaymentStep());
-            addStep(new ConfirmationStep());
+            addStep(new SummaryStep());
         } else {
             addStep(new LeaseStep());
             addStep(new PersonalInfoAStep());
