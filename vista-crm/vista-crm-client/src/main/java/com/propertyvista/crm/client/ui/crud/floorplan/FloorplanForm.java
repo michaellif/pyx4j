@@ -49,7 +49,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
-import com.propertyvista.domain.marketing.ils.ILSSummary;
+import com.propertyvista.domain.marketing.ils.ILSSummaryFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
@@ -156,23 +156,23 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         return main;
     }
 
-    private class ILSSummaryFolder extends VistaBoxFolder<ILSSummary> {
+    private class ILSSummaryFolder extends VistaBoxFolder<ILSSummaryFloorplan> {
         public ILSSummaryFolder() {
-            super(ILSSummary.class);
+            super(ILSSummaryFloorplan.class);
         }
 
         @Override
         public CComponent<?> create(IObject<?> member) {
-            if (member instanceof ILSSummary) {
+            if (member instanceof ILSSummaryFloorplan) {
                 return new ILSSummaryEditor();
             } else {
                 return super.create(member);
             }
         }
 
-        private class ILSSummaryEditor extends CEntityForm<ILSSummary> {
+        private class ILSSummaryEditor extends CEntityForm<ILSSummaryFloorplan> {
             public ILSSummaryEditor() {
-                super(ILSSummary.class);
+                super(ILSSummaryFloorplan.class);
             }
 
             @Override

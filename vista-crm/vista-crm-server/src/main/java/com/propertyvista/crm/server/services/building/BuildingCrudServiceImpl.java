@@ -14,7 +14,6 @@
 package com.propertyvista.crm.server.services.building;
 
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -47,6 +46,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
+import com.propertyvista.domain.marketing.ils.ILSSummaryBuilding;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.settings.ILSConfig;
@@ -99,8 +99,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieve(to.productCatalog());
         Persistence.service().retrieve(to.contacts().propertyContacts());
         Persistence.service().retrieve(to.contacts().organizationContacts());
-        Persistence.service().retrieve(to.marketing().adBlurbs());
-        Persistence.service().retrieve(to.marketing().openHouseSchedule());
 
         if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
@@ -143,10 +141,16 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         }
 
         // ils
-        EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
-        criteria.eq(criteria.proto().building(), bo);
-        to.ilsProfile().addAll(Persistence.service().query(criteria));
-
+        {
+            EntityQueryCriteria<ILSSummaryBuilding> criteria = EntityQueryCriteria.create(ILSSummaryBuilding.class);
+            criteria.eq(criteria.proto().building(), bo);
+            to.ilsSummary().addAll(Persistence.service().query(criteria));
+        }
+        {
+            EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
+            criteria.eq(criteria.proto().building(), bo);
+            to.ilsProfile().addAll(Persistence.service().query(criteria));
+        }
     }
 
     @Override
@@ -212,15 +216,30 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         // ils marketing
         {
+            EntityQueryCriteria<ILSSummaryBuilding> criteria = EntityQueryCriteria.create(ILSSummaryBuilding.class);
+            criteria.eq(criteria.proto().building(), to);
+            for (ILSSummaryBuilding summary : Persistence.service().query(criteria)) {
+                if (!to.ilsSummary().contains(summary)) {
+                    Persistence.service().delete(summary);
+                }
+            }
+            for (ILSSummaryBuilding summary : to.ilsSummary()) {
+                summary.building().set(bo);
+                Persistence.service().merge(summary);
+            }
+        }
+        {
             EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
             criteria.eq(criteria.proto().building(), to);
-            List<ILSProfileBuilding> ilsData = Persistence.service().query(criteria);
-            ilsData.clear();
+            for (ILSProfileBuilding profile : Persistence.service().query(criteria)) {
+                if (!to.ilsProfile().contains(profile)) {
+                    Persistence.service().delete(profile);
+                }
+            }
             for (ILSProfileBuilding profile : to.ilsProfile()) {
                 profile.building().set(bo);
-                ilsData.add(profile);
+                Persistence.service().merge(profile);
             }
-            Persistence.service().persist(ilsData);
         }
 
         saveUtilities(bo);

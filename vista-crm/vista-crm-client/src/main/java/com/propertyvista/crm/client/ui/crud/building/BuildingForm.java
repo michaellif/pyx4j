@@ -38,6 +38,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -58,13 +59,12 @@ import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
-import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
-import com.propertyvista.common.client.ui.components.editors.MarketingEditor.MarketingContactEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.building.MarketingEditor.MarketingContactEditor;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -72,6 +72,7 @@ import com.propertyvista.domain.marketing.MarketingContactEmail;
 import com.propertyvista.domain.marketing.MarketingContactPhone;
 import com.propertyvista.domain.marketing.MarketingContactUrl;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
+import com.propertyvista.domain.marketing.ils.ILSSummaryBuilding;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.Landlord;
@@ -351,6 +352,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
         flexPanel.setWidget(++row, 0, 2, inject(proto().marketing(), new MarketingEditor(this)));
 
+        if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
+            flexPanel.setH1(++row, 0, 2, proto().ilsSummary().getMeta().getCaption());
+            flexPanel.setWidget(++row, 0, 2, inject(proto().ilsSummary(), new ILSSummaryFolder()));
+        }
+
         flexPanel.setH1(++row, 0, 2, i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
                 GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder()) {
@@ -459,6 +465,42 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
             columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
             return columns;
+        }
+    }
+
+    private class ILSSummaryFolder extends VistaBoxFolder<ILSSummaryBuilding> {
+        public ILSSummaryFolder() {
+            super(ILSSummaryBuilding.class);
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof ILSSummaryBuilding) {
+                return new ILSSummaryEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        private class ILSSummaryEditor extends CEntityForm<ILSSummaryBuilding> {
+            public ILSSummaryEditor() {
+                super(ILSSummaryBuilding.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+
+                CImage frontImage = new CImage(GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder());
+                frontImage.setImageSize(240, 160);
+
+                content.setWidget(0, 0, inject(proto().frontImage().file(), frontImage));
+                content.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().title()), 10, 50, 55).build());
+                content.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 10, 50, 55).build());
+                content.getFlexCellFormatter().setRowSpan(0, 0, 2);
+
+                return content;
+            }
         }
     }
 

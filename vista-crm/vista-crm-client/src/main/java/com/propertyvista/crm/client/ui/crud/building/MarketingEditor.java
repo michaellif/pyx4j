@@ -11,10 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.editors;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.propertyvista.crm.client.ui.crud.building;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -25,16 +22,12 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
+import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.MarketingContact;
 import com.propertyvista.domain.marketing.MarketingContactEmail;
@@ -95,27 +88,6 @@ public class MarketingEditor extends CEntityForm<Marketing> {
         main.setWidget(++row, 0, 2, inject(proto().marketingContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
         main.setWidget(++row, 0, 2, inject(proto().marketingContacts().email(), new MarketingContactEditor<MarketingContactEmail>(MarketingContactEmail.class)));
         main.setWidget(++row, 0, 2, inject(proto().marketingContacts().phone(), new MarketingContactEditor<MarketingContactPhone>(MarketingContactPhone.class)));
-
-        main.setH1(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().adBlurbs(), new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, isEditable()) {
-            @Override
-            public List<EntityFolderColumnDescriptor> columns() {
-                List<EntityFolderColumnDescriptor> columns;
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().content(), "60em"));
-                return columns;
-            }
-
-            @Override
-            protected IFolderDecorator<AdvertisingBlurb> createFolderDecorator() {
-                TableFolderDecorator<AdvertisingBlurb> decor = (TableFolderDecorator<AdvertisingBlurb>) super.createFolderDecorator();
-                decor.setShowHeader(false);
-                return decor;
-            }
-        }));
-
-        main.setH1(++row, 0, 2, proto().openHouseSchedule().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().openHouseSchedule(), new OpenHouseScheduleFolder()));
 
         return main;
     }

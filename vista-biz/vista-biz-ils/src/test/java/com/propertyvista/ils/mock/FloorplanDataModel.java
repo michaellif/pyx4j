@@ -144,7 +144,6 @@ public class FloorplanDataModel extends MockDataModel<Floorplan> {
 
         unit.floorplan().set(floorplan);
 
-        unit.marketing().name().set(floorplan.marketingName()); // copy floorplan marketing here?!..
         return unit;
     }
 

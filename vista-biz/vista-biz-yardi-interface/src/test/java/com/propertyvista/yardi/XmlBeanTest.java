@@ -40,7 +40,6 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -161,10 +160,6 @@ public class XmlBeanTest {
                 Assert.assertFalse(info.area().isNull());
                 Assert.assertFalse(info.areaUnits().isNull());
                 Assert.assertFalse(info.economicStatus().isNull());
-
-                // marketing
-                Marketing marketing = aptUnit.marketing();
-                Assert.assertFalse(marketing.name().isNull());
 
                 // financial
                 AptUnitFinancial financial = aptUnit.financial();

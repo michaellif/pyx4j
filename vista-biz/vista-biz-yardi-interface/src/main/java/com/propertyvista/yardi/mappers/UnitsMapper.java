@@ -82,9 +82,6 @@ public class UnitsMapper {
         }
         unitTo.info().economicStatusDescription().setValue(info.getUnitEconomicStatusDescription());
 
-        // marketing
-        unitTo.marketing().name().setValue(unit.getMarketingName());
-
         // financial
         unitTo.financial()._marketRent().setValue(info.getMarketRent());
 

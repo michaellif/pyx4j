@@ -59,7 +59,5 @@ public class BuildingConverter extends EntityBinder<Building, BuildingIO> {
         bind(toProto.marketing().visibility(), boProto.marketing().visibility());
         bind(toProto.marketing().name(), boProto.marketing().name());
         bind(toProto.marketing().description(), boProto.marketing().description());
-
-        bind(toProto.marketing().blurbs(), boProto.marketing().adBlurbs(), new AdvertisingBlurbConverter());
     }
 }

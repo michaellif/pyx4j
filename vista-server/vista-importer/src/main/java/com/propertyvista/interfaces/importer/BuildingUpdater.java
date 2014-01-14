@@ -145,9 +145,6 @@ public class BuildingUpdater extends ImportPersister {
                 throw new UserRuntimeException("More then one building '" + buildingIO.propertyCode().getValue() + "' found");
             } else {
                 building = buildings.get(0);
-                if (building.marketing().adBlurbs().getMeta().isDetached()) {
-                    Persistence.service().retrieve(building.marketing().adBlurbs());
-                }
                 if (building.contacts().propertyContacts().getMeta().isDetached()) {
                     Persistence.service().retrieve(building.contacts().propertyContacts());
                 }

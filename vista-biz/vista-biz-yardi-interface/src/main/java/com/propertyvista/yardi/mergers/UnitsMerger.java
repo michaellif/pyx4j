@@ -79,10 +79,6 @@ public class UnitsMerger {
             //info
             merge(imported.info(), merged.info());
 
-            // marketing
-            Persistence.service().retrieve(merged.marketing());
-            merged.marketing().name().setValue(imported.marketing().name().getValue());
-
             // financial
             // Update only marketRent when it is coming from yardi and value not set in Vista,
             if (merged.financial()._marketRent().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) == 0) {

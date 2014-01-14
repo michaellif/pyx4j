@@ -14,7 +14,6 @@
 package com.propertyvista.oapi.marshaling;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.oapi.model.MarketingIO;
@@ -43,9 +42,6 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
 
         marketingIO.description = MarshallerUtils.createIo(StringIO.class, marketing.description());
 
-        Persistence.service().retrieveMember(marketing.adBlurbs());
-        marketingIO.blurbs = AdvertisingBlurbMarshaller.getInstance().marshal(marketing.adBlurbs());
-
         return marketingIO;
     }
 
@@ -54,7 +50,6 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
         Marketing marketing = EntityFactory.create(Marketing.class);
         marketing.name().setValue(marketingIO.name);
         MarshallerUtils.setValue(marketing.description(), marketingIO.description);
-        marketing.adBlurbs().addAll(AdvertisingBlurbMarshaller.getInstance().unmarshal(marketingIO.blurbs));
 
         return marketing;
     }

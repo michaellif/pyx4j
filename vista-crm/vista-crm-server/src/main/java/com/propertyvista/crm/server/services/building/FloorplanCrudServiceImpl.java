@@ -28,6 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
+import com.propertyvista.domain.marketing.ils.ILSSummaryFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
@@ -48,14 +49,19 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
     protected void enhanceRetrieved(Floorplan bo, FloorplanDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(bo.amenities());
         to.amenities().set(bo.amenities());
-        Persistence.ensureRetrieve(bo.ilsSummary(), AttachLevel.Attached);
-        to.ilsSummary().set(bo.ilsSummary());
         Persistence.ensureRetrieve(bo.media(), AttachLevel.Attached);
         to.media().set(bo.media());
         // ils
-        EntityQueryCriteria<ILSProfileFloorplan> criteria = EntityQueryCriteria.create(ILSProfileFloorplan.class);
-        criteria.eq(criteria.proto().floorplan(), bo);
-        to.ilsProfile().addAll(Persistence.service().query(criteria));
+        {
+            EntityQueryCriteria<ILSSummaryFloorplan> criteria = EntityQueryCriteria.create(ILSSummaryFloorplan.class);
+            criteria.eq(criteria.proto().floorplan(), bo);
+            to.ilsSummary().addAll(Persistence.service().query(criteria));
+        }
+        {
+            EntityQueryCriteria<ILSProfileFloorplan> criteria = EntityQueryCriteria.create(ILSProfileFloorplan.class);
+            criteria.eq(criteria.proto().floorplan(), bo);
+            to.ilsProfile().addAll(Persistence.service().query(criteria));
+        }
     }
 
     @Override
@@ -90,15 +96,30 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
         }
         // ils marketing
         {
+            EntityQueryCriteria<ILSSummaryFloorplan> criteria = EntityQueryCriteria.create(ILSSummaryFloorplan.class);
+            criteria.eq(criteria.proto().floorplan(), in);
+            for (ILSSummaryFloorplan summary : Persistence.service().query(criteria)) {
+                if (!in.ilsSummary().contains(summary)) {
+                    Persistence.service().delete(summary);
+                }
+            }
+            for (ILSSummaryFloorplan summary : in.ilsSummary()) {
+                summary.floorplan().set(dbo);
+                Persistence.service().merge(summary);
+            }
+        }
+        {
             EntityQueryCriteria<ILSProfileFloorplan> criteria = EntityQueryCriteria.create(ILSProfileFloorplan.class);
             criteria.eq(criteria.proto().floorplan(), in);
-            List<ILSProfileFloorplan> ilsData = Persistence.service().query(criteria);
-            ilsData.clear();
+            for (ILSProfileFloorplan profile : Persistence.service().query(criteria)) {
+                if (!in.ilsProfile().contains(profile)) {
+                    Persistence.service().delete(profile);
+                }
+            }
             for (ILSProfileFloorplan profile : in.ilsProfile()) {
                 profile.floorplan().set(dbo);
-                ilsData.add(profile);
+                Persistence.service().merge(profile);
             }
-            Persistence.service().persist(ilsData);
         }
     }
 

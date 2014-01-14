@@ -34,6 +34,8 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
+import com.propertyvista.domain.marketing.ils.ILSSummaryBuilding;
+import com.propertyvista.domain.marketing.ils.ILSSummaryFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -50,9 +52,13 @@ public class ILSKijijiIntegrationAgent {
 
     private ILSVendorConfig ilsCfg;
 
-    private Map<Building, ILSProfileBuilding> buildingMap;
+    private Map<Building, ILSProfileBuilding> buildingProfileMap;
 
-    private Map<Floorplan, ILSProfileFloorplan> floorplanMap;
+    private Map<Building, List<ILSSummaryBuilding>> buildingSummaryMap;
+
+    private Map<Floorplan, ILSProfileFloorplan> floorplanProfileMap;
+
+    private Map<Floorplan, List<ILSSummaryFloorplan>> floorplanSummaryMap;
 
     private Map<Floorplan, ILSProfileFloorplan.Priority> priorityMap;
 
@@ -70,28 +76,37 @@ public class ILSKijijiIntegrationAgent {
         }
 
         // create building profile map
-        buildingMap = new HashMap<Building, ILSProfileBuilding>();
+        buildingProfileMap = new HashMap<Building, ILSProfileBuilding>();
+        buildingSummaryMap = new HashMap<Building, List<ILSSummaryBuilding>>();
         EntityQueryCriteria<ILSProfileBuilding> critBld = EntityQueryCriteria.create(ILSProfileBuilding.class);
         critBld.eq(critBld.proto().vendor(), vendor);
         critBld.ne(critBld.proto().disabled(), true);
         for (ILSProfileBuilding profile : Persistence.service().query(critBld)) {
-            buildingMap.put(profile.building(), profile);
+            buildingProfileMap.put(profile.building(), profile);
+            // add ils summary
+            EntityQueryCriteria<ILSSummaryBuilding> crit = EntityQueryCriteria.create(ILSSummaryBuilding.class);
+            crit.eq(crit.proto().building(), profile.building());
+            buildingSummaryMap.put(profile.building(), Persistence.service().query(crit));
         }
 
         // create floorplan profile map
-        floorplanMap = new HashMap<Floorplan, ILSProfileFloorplan>();
-        if (buildingMap.size() > 0) {
+        floorplanProfileMap = new HashMap<Floorplan, ILSProfileFloorplan>();
+        floorplanSummaryMap = new HashMap<Floorplan, List<ILSSummaryFloorplan>>();
+        if (buildingProfileMap.size() > 0) {
             EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
             critFp.eq(critFp.proto().vendor(), vendor);
-            critFp.in(critFp.proto().floorplan().building(), buildingMap.keySet());
+            critFp.in(critFp.proto().floorplan().building(), buildingProfileMap.keySet());
             for (ILSProfileFloorplan profile : Persistence.service().query(critFp)) {
-                floorplanMap.put(profile.floorplan(), profile);
+                floorplanProfileMap.put(profile.floorplan(), profile);
+                EntityQueryCriteria<ILSSummaryFloorplan> crit = EntityQueryCriteria.create(ILSSummaryFloorplan.class);
+                crit.eq(crit.proto().floorplan(), profile.floorplan());
+                floorplanSummaryMap.put(profile.floorplan(), Persistence.service().query(crit));
             }
         }
 
         // generate priority map
         priorityMap = new HashMap<Floorplan, ILSProfileFloorplan.Priority>();
-        for (ILSProfileFloorplan profile : floorplanMap.values()) {
+        for (ILSProfileFloorplan profile : floorplanProfileMap.values()) {
             priorityMap.put(profile.floorplan(), profile.priority().getValue());
         }
     }
@@ -102,9 +117,9 @@ public class ILSKijijiIntegrationAgent {
     public Map<ILSBuildingDTO, List<ILSFloorplanDTO>> getUnitListing() {
         // get available units
         List<AptUnit> units = null;
-        if (floorplanMap.size() > 0) {
+        if (floorplanProfileMap.size() > 0) {
             EntityQueryCriteria<AptUnit> critUnit = EntityQueryCriteria.create(AptUnit.class);
-            critUnit.in(critUnit.proto().floorplan(), floorplanMap.keySet());
+            critUnit.in(critUnit.proto().floorplan(), floorplanProfileMap.keySet());
             critUnit.isNotNull(critUnit.proto()._availableForRent());
             units = Persistence.service().query(critUnit);
         } else {
@@ -184,28 +199,37 @@ public class ILSKijijiIntegrationAgent {
     }
 
     private ILSBuildingDTO createDto(Building building) {
-        ILSProfileBuilding profile = buildingMap.get(building);
+        ILSProfileBuilding profile = buildingProfileMap.get(building);
         if (profile == null) {
             return null;
         }
         ILSBuildingDTO dto = EntityFactory.create(ILSBuildingDTO.class);
         dto.building().set(building);
+        // set ils summary
+        List<ILSSummaryBuilding> summary = buildingSummaryMap.get(building);
+        if (summary != null && summary.size() > 0) {
+            dto.ilsSummary().set(summary.get(DataGenerator.randomInt(summary.size())));
+            Persistence.ensureRetrieve(dto.ilsSummary(), AttachLevel.Attached);
+        }
+        // set ils profile
         dto.profile().set(profile);
         return dto;
     }
 
     private ILSFloorplanDTO createDto(Floorplan floorplan) {
-        ILSProfileFloorplan profile = floorplanMap.get(floorplan);
+        ILSProfileFloorplan profile = floorplanProfileMap.get(floorplan);
         if (profile == null) {
             return null;
         }
         ILSFloorplanDTO dto = EntityFactory.create(ILSFloorplanDTO.class);
         dto.floorplan().set(floorplan);
-        if (!floorplan.ilsSummary().isEmpty()) {
-            int count = floorplan.ilsSummary().size();
-            dto.ilsSummary().set(floorplan.ilsSummary().get(DataGenerator.randomInt(count)));
+        // set ils summary
+        List<ILSSummaryFloorplan> summary = floorplanSummaryMap.get(floorplan);
+        if (summary != null && summary.size() > 0) {
+            dto.ilsSummary().set(summary.get(DataGenerator.randomInt(summary.size())));
             Persistence.ensureRetrieve(dto.ilsSummary(), AttachLevel.Attached);
         }
+        // set ils profile
         dto.profile().set(profile);
         return dto;
     }

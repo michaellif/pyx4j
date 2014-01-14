@@ -55,11 +55,6 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
     @Override
     protected void enhanceRetrieved(AptUnit in, AptUnitDTO to, RetrieveTarget retrieveTarget) {
-        // load detached entities:
-        if (!to.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
-            Persistence.service().retrieve(to.marketing().adBlurbs());
-        }
-
         // find corresponding lease:
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
@@ -102,10 +97,6 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         //Persistence.service().retrieve(dto.floorplan().name());
         //Persistence.service().retrieve(dto.floorplan().marketingName());
 
-        // just clear unnecessary data before serialization:
-        if (!dto.marketing().isValueDetached()) {
-            dto.marketing().description().setValue(null);
-        }
         dto.info().economicStatusDescription().setValue(null);
     }
 

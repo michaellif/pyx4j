@@ -18,12 +18,14 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
+import com.propertyvista.domain.marketing.ils.ILSSummaryFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
 
 @Transient
 @ExtendsBO
 public interface FloorplanDTO extends Floorplan {
 
-    IList<ILSProfileFloorplan> ilsProfile();
+    IList<ILSSummaryFloorplan> ilsSummary();
 
+    IList<ILSProfileFloorplan> ilsProfile();
 }

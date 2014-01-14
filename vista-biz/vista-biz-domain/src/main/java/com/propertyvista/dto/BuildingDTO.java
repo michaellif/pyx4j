@@ -24,6 +24,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
+import com.propertyvista.domain.marketing.ils.ILSSummaryBuilding;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -40,6 +41,8 @@ public interface BuildingDTO extends Building {
     IList<DashboardMetadata> dashboards();
 
     IPrimitive<Boolean> merchantAccountPresent();
+
+    IList<ILSSummaryBuilding> ilsSummary();
 
     IList<ILSProfileBuilding> ilsProfile();
 }

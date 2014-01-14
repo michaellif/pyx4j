@@ -30,7 +30,6 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
@@ -189,11 +188,6 @@ public class ILSEmailFeedIntegrationAgent {
         }
         ILSFloorplanDTO dto = EntityFactory.create(ILSFloorplanDTO.class);
         dto.floorplan().set(floorplan);
-        if (!floorplan.ilsSummary().isEmpty()) {
-            int count = floorplan.ilsSummary().size();
-            dto.ilsSummary().set(floorplan.ilsSummary().get(DataGenerator.randomInt(count)));
-            Persistence.ensureRetrieve(dto.ilsSummary(), AttachLevel.Attached);
-        }
         dto.profile().set(profile);
         return dto;
     }

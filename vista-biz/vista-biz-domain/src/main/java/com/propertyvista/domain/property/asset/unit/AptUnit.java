@@ -37,7 +37,6 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ISet;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -75,15 +74,6 @@ public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachm
 
     @EmbeddedEntity
     AptUnitFinancial financial();
-
-    //WAS @EmbeddedEntity
-    // VladS: This is not used, remains just in case. @Detached and  @Owned added to change the way we retrieve it,
-    // By removing it improved portal performance by 15% in profiler. This should not affect the real life application.
-    // Check perfomace metrics before enabling it again!
-    @Owned
-    @Detached
-    @Deprecated
-    Marketing marketing();
 
     @Timestamp
     IPrimitive<Date> updated();

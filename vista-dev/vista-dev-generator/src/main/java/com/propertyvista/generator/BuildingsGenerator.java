@@ -26,7 +26,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
@@ -135,11 +134,6 @@ public class BuildingsGenerator {
         building.marketing().visibility().setValue(PublicVisibilityType.global);
         building.marketing().name().setValue(building.info().name().getStringView() + " mkt" + RandomUtil.randomLetters(2));
         building.marketing().description().setValue(CommonsGenerator.lipsum());
-        for (int i = 0; i < RandomUtil.randomInt(3); i++) {
-            AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
-            item.content().setValue(CommonsGenerator.lipsum());
-            building.marketing().adBlurbs().add(item);
-        }
 
         Set<PropertyContactType> created = new HashSet<PropertyContactType>();
         for (int i = 0; i <= 1 + RandomUtil.randomInt(3); i++) {
@@ -535,13 +529,6 @@ public class BuildingsGenerator {
         }
 
         unit.floorplan().set(floorplan);
-
-        unit.marketing().name().set(floorplan.marketingName()); // copy floorplan marketing here?!..
-        for (int i = 0; 1 < RandomUtil.randomInt(3); ++i) {
-            AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
-            item.content().setValue(CommonsGenerator.lipsum());
-            unit.marketing().adBlurbs().add(item);
-        }
 
         return unit;
     }

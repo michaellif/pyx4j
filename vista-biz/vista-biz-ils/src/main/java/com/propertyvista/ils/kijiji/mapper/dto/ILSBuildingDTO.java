@@ -17,12 +17,15 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
+import com.propertyvista.domain.marketing.ils.ILSSummaryBuilding;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 public interface ILSBuildingDTO extends IEntity {
 
     Building building();
-    
+
+    ILSSummaryBuilding ilsSummary();
+
     ILSProfileBuilding profile();
 }
