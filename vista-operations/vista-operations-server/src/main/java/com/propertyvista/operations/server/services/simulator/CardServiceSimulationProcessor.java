@@ -117,20 +117,11 @@ public class CardServiceSimulationProcessor {
     private static BigDecimal feeCalulation(CardServiceSimulationMerchantAccount merchantAccount, String cardProduct, BigDecimal amount) {
         BigDecimal feePercent = new BigDecimal(".10");
         if (cardProduct.equals(CaledonCardProduct.VisaCredit.getIntrfaceValue())) {
-            feePercent = new BigDecimal(".03");
-            if (!merchantAccount.visaCreditConvenienceFee().isNull()) {
-                feePercent = merchantAccount.visaCreditConvenienceFee().getValue();
-            }
+            feePercent = merchantAccount.visaCreditConvenienceFee().getValue();
         } else if (cardProduct.equals(CaledonCardProduct.VisaDebit.getIntrfaceValue())) {
-            feePercent = new BigDecimal(".01");
-            if (!merchantAccount.visaDebitConvenienceFee().isNull()) {
-                feePercent = merchantAccount.visaDebitConvenienceFee().getValue();
-            }
+            feePercent = merchantAccount.visaDebitConvenienceFee().getValue();
         } else if (cardProduct.equals(CaledonCardProduct.MasterCardCredit.getIntrfaceValue())) {
-            feePercent = new BigDecimal(".02");
-            if (!merchantAccount.masterCardConvenienceFee().isNull()) {
-                feePercent = merchantAccount.masterCardConvenienceFee().getValue();
-            }
+            feePercent = merchantAccount.masterCardConvenienceFee().getValue();
         }
         return amount.multiply(feePercent).setScale(2, RoundingMode.HALF_UP);
     }
@@ -229,6 +220,11 @@ public class CardServiceSimulationProcessor {
             merchantAccount = EntityFactory.create(CardServiceSimulationMerchantAccount.class);
             merchantAccount.terminalID().setValue(terminalID);
             merchantAccount.balance().setValue(BigDecimal.ZERO);
+
+            merchantAccount.visaDebitConvenienceFee().setValue(new BigDecimal(".01"));
+            merchantAccount.visaCreditConvenienceFee().setValue(new BigDecimal(".03"));
+            merchantAccount.masterCardConvenienceFee().setValue(new BigDecimal(".02"));
+
             Persistence.service().persist(merchantAccount);
         }
         return merchantAccount;
@@ -242,7 +238,6 @@ public class CardServiceSimulationProcessor {
 
         EntityQueryCriteria<CardServiceSimulationToken> criteria = EntityQueryCriteria.create(CardServiceSimulationToken.class);
         criteria.eq(criteria.proto().token(), caledonRequest.token);
-        criteria.eq(criteria.proto().card().merchant(), merchantAccount);
         CardServiceSimulationToken token = Persistence.service().retrieve(criteria);
 
         CaledonTokenAction tokenAction = CardServiceSimulationUtils.toCaledonTokenAction(caledonRequest.tokenAction);
@@ -253,7 +248,7 @@ public class CardServiceSimulationProcessor {
                 caledonResponse.text = "TOKEN ALREADY EXISTS";
             } else {
                 token = EntityFactory.create(CardServiceSimulationToken.class);
-                CardServiceSimulationCard card = findOrEnsureCard(merchantAccount, caledonRequest);
+                CardServiceSimulationCard card = findOrEnsureCard(caledonRequest);
                 if (card.cardType().isNull()) {
                     caledonResponse.code = "1020";
                     caledonResponse.text = "CARD NUMBER INVALID";
@@ -328,7 +323,7 @@ public class CardServiceSimulationProcessor {
                 card = prevTransaction.card();
             }
         } else {
-            card = ensureCard(merchantAccount, caledonRequest);
+            card = ensureCard(caledonRequest);
             if (card == null) {
                 caledonResponse.code = "1101";
                 caledonResponse.text = "TOKEN NOT FOUND";
@@ -346,6 +341,7 @@ public class CardServiceSimulationProcessor {
             caledonResponse.code = createdTransaction.responseCode().getValue();
             caledonResponse.text = "Simulated Tx code '" + createdTransaction.responseCode().getStringView() + "'";
 
+            createdTransaction.merchant().set(merchantAccount);
             createdTransaction.amount().setValue(CardServiceSimulationUtils.parsAmount(caledonRequest.amount));
             createdTransaction.reference().setValue(caledonRequest.referenceNumber);
             createdTransaction.transactionType().setValue(CardServiceSimulationUtils.toSimTransactionType(transactionType));
@@ -356,6 +352,7 @@ public class CardServiceSimulationProcessor {
 
         CardServiceSimulationTransaction transaction = EntityFactory.create(CardServiceSimulationTransaction.class);
         transaction.card().set(card);
+        transaction.merchant().set(merchantAccount);
         transaction.amount().setValue(CardServiceSimulationUtils.parsAmount(caledonRequest.amount));
         transaction.reference().setValue(caledonRequest.referenceNumber);
         transaction.transactionType().setValue(CardServiceSimulationUtils.toSimTransactionType(transactionType));
@@ -519,7 +516,7 @@ public class CardServiceSimulationProcessor {
 
     private static CardServiceSimulationTransaction findTransaction(CardServiceSimulationMerchantAccount merchantAccount, String referenceNumber) {
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
-        criteria.eq(criteria.proto().card().merchant(), merchantAccount);
+        criteria.eq(criteria.proto().merchant(), merchantAccount);
         criteria.eq(criteria.proto().reference(), referenceNumber);
         criteria.eq(criteria.proto().voided(), false);
         return Persistence.service().retrieve(criteria);
@@ -535,9 +532,8 @@ public class CardServiceSimulationProcessor {
         Persistence.service().persist(merchantAccount);
     }
 
-    private static CardServiceSimulationCard createCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
+    private static CardServiceSimulationCard createCard(CaledonRequest caledonRequest) {
         CardServiceSimulationCard card = EntityFactory.create(CardServiceSimulationCard.class);
-        card.merchant().set(merchantAccount);
         card.number().setValue(caledonRequest.creditCardNumber);
         card.cardType().setValue(CardServiceSimulationUtils.detectCardType(caledonRequest.creditCardNumber));
         card.expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
@@ -547,25 +543,22 @@ public class CardServiceSimulationProcessor {
         return card;
     }
 
-    private static CardServiceSimulationCard findOrEnsureCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
+    private static CardServiceSimulationCard findOrEnsureCard(CaledonRequest caledonRequest) {
         CardServiceSimulationCard card;
         {
             EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
             criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
-            criteria.isNull(criteria.proto().merchant());
             card = Persistence.service().retrieve(criteria);
         }
         if (card == null) {
             EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
             criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
-            criteria.eq(criteria.proto().merchant(), merchantAccount);
             //criteria.notExists(criteria.proto().tokens());
             card = Persistence.service().retrieve(criteria);
         }
         if (card == null) {
-            card = createCard(merchantAccount, caledonRequest);
+            card = createCard(caledonRequest);
         }
-        card.merchant().set(merchantAccount);
         card.expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
         if (card.creditLimit().isNull()) {
             card.creditLimit().setValue(new BigDecimal("-10000.00"));
@@ -580,11 +573,10 @@ public class CardServiceSimulationProcessor {
         return card;
     }
 
-    private static CardServiceSimulationCard ensureCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
+    private static CardServiceSimulationCard ensureCard(CaledonRequest caledonRequest) {
         if (CommonsStringUtils.isStringSet(caledonRequest.token)) {
             EntityQueryCriteria<CardServiceSimulationToken> criteria = EntityQueryCriteria.create(CardServiceSimulationToken.class);
             criteria.eq(criteria.proto().token(), caledonRequest.token);
-            criteria.eq(criteria.proto().card().merchant(), merchantAccount);
             CardServiceSimulationToken token = Persistence.service().retrieve(criteria);
             if (token != null) {
                 return token.card();
@@ -592,7 +584,7 @@ public class CardServiceSimulationProcessor {
                 return null;
             }
         } else {
-            return findOrEnsureCard(merchantAccount, caledonRequest);
+            return findOrEnsureCard(caledonRequest);
         }
     }
 }

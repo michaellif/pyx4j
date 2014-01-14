@@ -13,12 +13,15 @@
  */
 package com.propertyvista.operations.server.services.simulator;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 
-public class CardServiceSimulationCardCrudServiceImpl extends AbstractCrudServiceImpl<CardServiceSimulationCard> implements CardServiceSimulationCardCrudService {
+public class CardServiceSimulationCardCrudServiceImpl extends AbstractCrudServiceImpl<CardServiceSimulationCard> implements
+        CardServiceSimulationCardCrudService {
 
     public CardServiceSimulationCardCrudServiceImpl() {
         super(CardServiceSimulationCard.class);
@@ -27,6 +30,11 @@ public class CardServiceSimulationCardCrudServiceImpl extends AbstractCrudServic
     @Override
     protected void bind() {
         bindCompleteObject();
+    }
+
+    @Override
+    protected void retrievedSingle(CardServiceSimulationCard bo, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        Persistence.ensureRetrieve(bo.transactions(), AttachLevel.Attached);
     }
 
 }

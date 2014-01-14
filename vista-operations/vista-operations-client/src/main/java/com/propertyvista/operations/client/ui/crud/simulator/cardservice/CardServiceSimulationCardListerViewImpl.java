@@ -27,7 +27,6 @@ public class CardServiceSimulationCardListerViewImpl extends OperationsListerVie
         public CardServiceSimulationLister() {
             super(CardServiceSimulationCard.class, true, true);
             setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().merchant()).build(),
                     new MemberColumnDescriptor.Builder(proto().cardType()).build(),
                     new MemberColumnDescriptor.Builder(proto().number()).build(),
                     new MemberColumnDescriptor.Builder(proto().expiryDate()).build(),

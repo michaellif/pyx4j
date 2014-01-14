@@ -23,9 +23,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -46,10 +44,6 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface CardServiceSimulationCard extends IEntity {
-
-    @Owner
-    @JoinColumn
-    CardServiceSimulationMerchantAccount merchant();
 
     @ToString
     IPrimitive<CreditCardType> cardType();

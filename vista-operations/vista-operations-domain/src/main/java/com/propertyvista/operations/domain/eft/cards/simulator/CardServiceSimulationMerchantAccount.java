@@ -23,9 +23,9 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -78,7 +78,7 @@ public interface CardServiceSimulationMerchantAccount extends IEntity {
     @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> created();
 
-    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    ISet<CardServiceSimulationCard> cards();
+    @JoinTable(value = CardServiceSimulationTransaction.class)
+    ISet<CardServiceSimulationTransaction> transactions();
 }

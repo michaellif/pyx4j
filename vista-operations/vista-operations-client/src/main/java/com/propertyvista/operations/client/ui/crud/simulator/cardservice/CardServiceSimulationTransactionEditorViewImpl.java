@@ -38,7 +38,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), // 
                     OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class)), 18).build());
 
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card().merchant(), //
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchant(), //
                     OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class)), 18).build());
 
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionType())).build());

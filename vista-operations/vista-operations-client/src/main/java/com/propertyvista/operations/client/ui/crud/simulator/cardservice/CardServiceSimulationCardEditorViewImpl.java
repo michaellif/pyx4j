@@ -93,13 +93,11 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
         @Override
         public IsWidget createContent(ISet<CardServiceSimulationTransaction> transactions) {
             FlowPanel panel = new FlowPanel();
-            if (transactions != null) {
-                for (CardServiceSimulationTransaction t : transactions) {
-                    CEntityCrudHyperlink<CardServiceSimulationTransaction> hyperLink = OperationsEditorsComponentFactory
-                            .createEntityHyperlink(CardServiceSimulationTransaction.class);
-                    hyperLink.populate(t);
-                    panel.add(hyperLink);
-                }
+            for (CardServiceSimulationTransaction t : transactions) {
+                CEntityCrudHyperlink<CardServiceSimulationTransaction> hyperLink = OperationsEditorsComponentFactory
+                        .createEntityHyperlink(CardServiceSimulationTransaction.class);
+                hyperLink.populate(t);
+                panel.add(hyperLink);
             }
             return panel;
         }
@@ -112,28 +110,30 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
 
             TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
-            int row = -1;
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchant())).build());
-            contentPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().created())).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType())).build());
-            contentPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().updated())).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().number())).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate())).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditLimit())).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().balance())).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reserved())).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
+            int row = 0;
+            contentPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().created())).build());
+            contentPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().updated())).build());
 
-            contentPanel.setH2(++row, 0, 2, "Tokens");
-            contentPanel.setWidget(++row, 0, 2, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));
+            row = 0;
+            contentPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().cardType())).build());
+            contentPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().number())).build());
+            contentPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().expiryDate())).build());
+            contentPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().creditLimit())).build());
+            contentPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().balance())).build());
+            contentPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().reserved())).build());
+            contentPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
 
-            contentPanel.setH2(++row, 0, 2, "Transactions");
+            contentPanel.setH2(row++, 0, 2, "Tokens");
+            contentPanel.setWidget(row++, 0, 2, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));
 
+            contentPanel.setH2(row++, 0, 2, "Transactions");
+
+            // TODO transactions 
             if (false) {
-                // TODO transactions are detached
-                contentPanel.setWidget(++row, 0, 2, inject(proto().transactions(), new CardServiceSimulationTransactionsViewer()));
+                contentPanel.setWidget(row++, 0, 2, inject(proto().transactions(), new CardServiceSimulationTransactionsViewer()));
             }
-            contentPanel.setWidget(++row, 0, 2, new Button("Add New Transaction...", new Command() {
+
+            contentPanel.setWidget(row++, 0, 2, new Button("Add New Transaction...", new Command() {
                 @Override
                 public void execute() {
                     if (getValue().getPrimaryKey() == null) {

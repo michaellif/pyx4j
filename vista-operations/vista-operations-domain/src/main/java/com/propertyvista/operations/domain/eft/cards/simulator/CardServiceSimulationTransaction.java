@@ -60,6 +60,9 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @JoinColumn
     CardServiceSimulationCard card();
 
+    @JoinColumn
+    CardServiceSimulationMerchantAccount merchant();
+
     @MemberColumn(name = "tp")
     IPrimitive<SimpulationTransactionType> transactionType();
 
