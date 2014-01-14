@@ -34,10 +34,6 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     private boolean current = false;
 
-    private boolean enabled = true;
-
-    private boolean visible = true;
-
     private boolean complete = false;
 
     private String warning = null;
@@ -70,22 +66,6 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     public boolean isStepCurrent() {
         return current;
-    }
-
-    public void setStepVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public boolean isStepVisible() {
-        return visible;
-    }
-
-    public void setStepEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isStepEnabled() {
-        return enabled;
     }
 
     public void setStepComplete(boolean complete) {

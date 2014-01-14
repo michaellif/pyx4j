@@ -53,7 +53,7 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
         insert(step, beforeIndex);
     }
 
-    public void selectStep(WizardStep step) {
+    public void showStep(WizardStep step) {
 
         BeforeSelectionEvent<?> event = BeforeSelectionEvent.fire(this, step);
         if (event != null && event.isCanceled()) {
@@ -71,8 +71,8 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
         SelectionEvent.fire(this, getSelectedStep());
     }
 
-    public void selectStep(int index) {
-        selectStep((WizardStep) getWidget(index));
+    public void showStep(int index) {
+        showStep((WizardStep) getWidget(index));
     }
 
     public int getSelectedIndex() {

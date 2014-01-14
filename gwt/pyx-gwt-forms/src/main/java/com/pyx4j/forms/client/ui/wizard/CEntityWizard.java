@@ -130,12 +130,12 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     @Override
     public void onReset() {
         if (wizardPanel.size() > 0) {
-            selectStep(0);
+            showStep(0);
         }
         super.onReset();
     }
 
-    public final void selectStep(int index) {
+    public final void showStep(int index) {
         if (getSelectedIndex() > -1 && getSelectedIndex() < index) {
             ValidationResults validationResults = getSelectedStep().getValidationResults();
             if (!validationResults.isValid()) {
@@ -146,33 +146,21 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         }
         WizardStep step = wizardPanel.getStep(index);
         step.showErrors(false);
-        wizardPanel.selectStep(step);
+        wizardPanel.showStep(step);
         updateProgress();
     }
 
     public final void previousStep() {
-        int index = wizardPanel.getSelectedIndex();
-
-        WizardStep step;
-        do {
-            step = wizardPanel.getStep(--index);
-        } while (!step.isStepVisible() && index > 0);
-
+        int index = wizardPanel.getSelectedIndex() - 1;
         if (index >= 0) {
-            selectStep(index);
+            showStep(index);
         }
     }
 
     public final void nextStep() {
-        WizardStep step = getSelectedStep();
-
-        int index = getSelectedIndex();
-        do {
-            step = wizardPanel.getStep(++index);
-        } while (!step.isStepVisible() && index < wizardPanel.size() - 1);
-
-        if (step.isStepVisible() && index < wizardPanel.size()) {
-            selectStep(index);
+        int index = getSelectedIndex() + 1;
+        if (index < wizardPanel.size()) {
+            showStep(index);
         }
     }
 
