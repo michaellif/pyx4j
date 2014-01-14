@@ -61,15 +61,16 @@ import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.LeaseTerminationPolicy;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
+import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -109,6 +110,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Building.class, Properties.Building.class, CrmImages.INSTANCE.propertiesNormal());
         AppPlaceEntityMapper.register(AptUnit.class, Properties.Unit.class, CrmImages.INSTANCE.unitsNormal());
         AppPlaceEntityMapper.register(AptUnitItem.class, Properties.UnitItem.class, CrmImages.INSTANCE.unitsNormal());
+        AppPlaceEntityMapper.register(Landlord.class, Properties.Landlord.class, defaultImage);
 
         AppPlaceEntityMapper.register(Roof.class, Properties.Roof.class, defaultImage);
         AppPlaceEntityMapper.register(Boiler.class, Properties.Boiler.class, defaultImage);

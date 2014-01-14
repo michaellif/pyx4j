@@ -74,6 +74,7 @@ import com.propertyvista.domain.marketing.MarketingContactUrl;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -203,6 +204,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                             new FormDecoratorBuilder(inject(proto().complex(),
                                     new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15).build());
         }
+
+        flexPanel.setWidget(row++, 0,
+                new FormDecoratorBuilder(inject(proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))), 15)
+                        .build());
+
         if (VistaFeatures.instance().productCatalog() /* && !VistaFeatures.instance().yardiIntegration() */) {
             flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().defaultProductCatalog()), 5).build());
         }

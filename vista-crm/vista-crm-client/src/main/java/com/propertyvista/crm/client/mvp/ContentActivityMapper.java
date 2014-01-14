@@ -137,6 +137,9 @@ import com.propertyvista.crm.client.activity.crud.financial.paps.PapListerActivi
 import com.propertyvista.crm.client.activity.crud.financial.paps.PapViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
+import com.propertyvista.crm.client.activity.crud.landlord.LandlordEditorActivity;
+import com.propertyvista.crm.client.activity.crud.landlord.LandlordListerActivity;
+import com.propertyvista.crm.client.activity.crud.landlord.LandlordViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.FormerLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity;
@@ -309,6 +312,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new ComplexListerActivity(crudPlace);
+                            break;
+                        }
+                    } else if (crudPlace instanceof Properties.Landlord) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new LandlordEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new LandlordViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new LandlordListerActivity(crudPlace);
                             break;
                         }
 

@@ -145,6 +145,10 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(navigLabel = "Utilities")
         public static class Utility extends CrmCrudAppPlace {
         }
+
+        @PlaceProperties(navigLabel = "Landlords")
+        public static class Landlord extends CrmCrudAppPlace {
+        }
     }
 
     public static class Tenants extends AppPlace {

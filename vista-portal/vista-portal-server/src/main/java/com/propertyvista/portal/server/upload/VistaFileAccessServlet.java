@@ -17,6 +17,7 @@ import com.propertyvista.domain.blob.CustomerPictureBlob;
 import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
+import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;
@@ -30,6 +31,7 @@ import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
+import com.propertyvista.domain.property.LandlordMedia;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
@@ -46,6 +48,7 @@ public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
         register(IdentificationDocumentFile.class, IdentificationDocumentBlob.class);
         register(LegalLetter.class, LegalLetterBlob.class);
         register(LeaseTermAgreementDocument.class, LeaseTermAgreementDocumentBlob.class);
+        register(LandlordMedia.class, LandlordMediaBlob.class);
 
         register(NoteAttachment.class, NoteAttachmentBlob.class);
 

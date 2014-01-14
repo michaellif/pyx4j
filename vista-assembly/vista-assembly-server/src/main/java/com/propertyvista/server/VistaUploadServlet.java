@@ -15,13 +15,14 @@ package com.propertyvista.server;
 
 import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 
+import com.propertyvista.crm.server.services.MaintenanceRequestPictureUploadServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadBuildingServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadFloorplanServiceImpl;
-import com.propertyvista.crm.server.services.MaintenanceRequestPictureUploadServiceImpl;
 import com.propertyvista.crm.server.services.NoteAttachmentUploadServiceImpl;
 import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
 import com.propertyvista.crm.server.services.admin.SiteImageResourceUploadServiceImpl;
+import com.propertyvista.crm.server.services.building.LandlordMediaUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.CustomerPictureCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.InsuranceCertificateScanCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.TenantPadFileUploadServiceImpl;
@@ -58,6 +59,7 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(TenantPadFileUploadServiceImpl.class);
         register(MerchantAccountFileUploadServiceImpl.class);
         register(EmployeeSignatureUploadServiceImpl.class);
+        register(LandlordMediaUploadServiceImpl.class);
 
         register(ProofOfEmploymentDocumentCrmUploadServiceImpl.class);
         register(IdentificationDocumentCrmUploadServiceImpl.class);
