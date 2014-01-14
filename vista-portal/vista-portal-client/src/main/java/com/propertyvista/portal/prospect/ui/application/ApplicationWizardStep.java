@@ -29,17 +29,17 @@ public abstract class ApplicationWizardStep extends WizardStep {
 
     private ApplicationWizard wizard;
 
-    private final OnlineApplicationWizardStepMeta name;
+    private final OnlineApplicationWizardStepMeta meta;
 
     public ApplicationWizardStep(OnlineApplicationWizardStepMeta name) {
-        this.name = name;
+        this.meta = name;
     }
 
     public void init(ApplicationWizard wizard) {
         this.wizard = wizard;
         BasicFlexFormPanel content = createStepContent();
         setStepContent(content);
-        setStepTitle(name.toString());
+        setStepTitle(meta.toString());
     }
 
     public ApplicationWizard getWizard() {
@@ -89,5 +89,9 @@ public abstract class ApplicationWizardStep extends WizardStep {
 
     public <T> CComponent<T> get(IObject<T> member) {
         return getWizard().get(member);
+    }
+
+    public OnlineApplicationWizardStepMeta getOnlineApplicationWizardStepMeta() {
+        return meta;
     }
 }

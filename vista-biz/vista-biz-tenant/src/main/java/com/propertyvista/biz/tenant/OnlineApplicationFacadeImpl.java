@@ -52,6 +52,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
@@ -241,7 +242,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             status.role().set(app.role());
 
             // calculate progress:
-            status.progress().setValue(app.progress().getValue());
+            status.progress().setValue(calculateProgress(app));
 
             moaStatus.individualApplications().add(status);
 
@@ -256,6 +257,22 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     // implementation internals
+
+    private BigDecimal calculateProgress(OnlineApplication app) {
+        if (app.stepsStatuses().isNull()) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal sum = BigDecimal.ZERO;
+        for (OnlineApplicationWizardStepStatus stepStatus : app.stepsStatuses()) {
+            if (stepStatus.complete().isBooleanTrue()) {
+                sum.add(new BigDecimal(1));
+            } else if (stepStatus.visited().isBooleanTrue()) {
+                sum.add(new BigDecimal(0.5));
+            }
+        }
+
+        return sum.divide(new BigDecimal(app.stepsStatuses().size()));
+    }
 
     private void inviteCoApplicants(Lease lease) {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
@@ -298,7 +315,6 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         app.masterOnlineApplication().set(masterOnlineApplication);
         app.customer().set(participant.leaseParticipant().customer());
         app.role().setValue(role);
-        app.progress().setValue(BigDecimal.ZERO);
 
         Persistence.service().persist(app);
         return app;

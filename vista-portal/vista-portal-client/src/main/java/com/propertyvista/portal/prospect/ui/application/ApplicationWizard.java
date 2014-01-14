@@ -117,6 +117,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        //TODO Set WizardStep visited flag
+
         for (ApplicationWizardStep step : steps.values()) {
             step.onValueSet();
         }

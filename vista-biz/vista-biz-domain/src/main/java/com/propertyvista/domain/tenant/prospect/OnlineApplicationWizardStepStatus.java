@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.prospect;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.core.IEntity;
@@ -22,11 +23,12 @@ public interface OnlineApplicationWizardStepStatus extends IEntity {
 
     @Owner
     @JoinColumn
+    @Detached
     OnlineApplication onlineApplication();
 
     IPrimitive<OnlineApplicationWizardStepMeta> step();
 
-    IPrimitive<Boolean> completed();
+    IPrimitive<Boolean> complete();
 
     IPrimitive<Boolean> visited();
 

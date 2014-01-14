@@ -19,13 +19,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
+import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
@@ -63,6 +67,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
 
     @Override
     public void finish() {
+        updateStepProgressInfo();
         service.submit(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
@@ -76,6 +81,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     protected void onDiscard() {
         OnlineApplicationDTO currentValue = getView().getValue();
         if (currentValue != null) {
+            updateStepProgressInfo();
             // save current value state:
             service.save(new DefaultAsyncCallback<Key>() {
                 @Override
@@ -88,6 +94,18 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
         // call super AFTER! 
         super.onDiscard();
         ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(null, ApplicationWizardStateChangeEvent.ChangeType.discard));
+    }
+
+    private void updateStepProgressInfo() {
+        getView().getValue().stepsStatuses().clear();
+        for (WizardStep step : ((ApplicationWizardView) getView()).getApplicationWizard().getAllSteps()) {
+            ApplicationWizardStep appStep = (ApplicationWizardStep) step;
+            OnlineApplicationWizardStepStatus status = EntityFactory.create(OnlineApplicationWizardStepStatus.class);
+            status.step().setValue(appStep.getOnlineApplicationWizardStepMeta());
+            status.complete().setValue(appStep.isStepComplete());
+            status.visited().setValue(appStep.isStepVisited());
+            getView().getValue().stepsStatuses().add(status);
+        }
     }
 
     @Override
