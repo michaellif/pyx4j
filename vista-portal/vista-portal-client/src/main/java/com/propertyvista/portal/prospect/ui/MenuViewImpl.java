@@ -103,8 +103,12 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
                 if (step.isStepCurrent()) {
                     stepStatus = StepStatus.current;
+                } else if (i == steps.size() - 1) {// Last step stays not-completed. 
+                    stepStatus = StepStatus.notComplete;
                 } else if (step.isStepComplete()) {
                     stepStatus = StepStatus.complete;
+                } else if (step.isStepVisited()) {
+                    stepStatus = StepStatus.invalid;
                 }
 
                 mainHolder.addStepItem(step.getStepTitle(), i, stepStatus);

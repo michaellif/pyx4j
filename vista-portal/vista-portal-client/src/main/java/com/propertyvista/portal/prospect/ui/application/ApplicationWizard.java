@@ -135,8 +135,14 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     @Override
     public void updateProgress(WizardStep currentStep, WizardStep previousStep) {
         super.updateProgress(currentStep, previousStep);
+
         ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(this, ApplicationWizardStateChangeEvent.ChangeType.stepChange));
         ((ApplicationWizardDecorator) getDecorator()).setCaption(currentStep.getStepTitle());
+    }
+
+    @Override
+    protected boolean allowLeavingCurrentStep() {
+        return true;
     }
 
     class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {
