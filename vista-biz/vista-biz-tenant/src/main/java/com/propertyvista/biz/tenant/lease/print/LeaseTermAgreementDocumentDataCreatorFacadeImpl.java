@@ -60,8 +60,12 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         Persistence.service().retrieve(leaseTerm.version().utilities());
 
         LeaseAgreementDocumentDataDTO leaseAgreementData = EntityFactory.create(LeaseAgreementDocumentDataDTO.class);
-        leaseAgreementData.landlordName().setValue("TODO Landlord Name");
-        leaseAgreementData.landlordAddress().setValue("TODO Landlord Address");
+
+        Persistence.ensureRetrieve(leaseTerm.lease().unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord(), AttachLevel.Attached);
+
+        leaseAgreementData.landlordName().setValue(leaseTerm.lease().unit().building().landlord().name().getValue());
+        leaseAgreementData.landlordAddress().setValue(leaseTerm.lease().unit().building().landlord().address().getStringView());
 
         leaseAgreementData.applicants().addAll(makeApplicants(leaseTerm));
         leaseAgreementData.terms().add(makeOccupantsTerm(leaseTerm));
