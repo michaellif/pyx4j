@@ -136,20 +136,29 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public final void showStep(int index) {
-        int previousStepIndex = getSelectedIndex();
-        WizardStep previousStep = getSelectedStep();
-        if (previousStepIndex > -1 && previousStepIndex < index) {
-            ValidationResults validationResults = previousStep.getValidationResults();
+        if (allowLeavingCurrentStep()) {
+            WizardStep previousStep = getSelectedStep();
+            WizardStep step = wizardPanel.getStep(index);
+            step.showErrors(false);
+            wizardPanel.showStep(step);
+            updateProgress(step, previousStep);
+        }
+    }
+
+    protected boolean allowLeavingCurrentStep() {
+        int currentStepIndex = getSelectedIndex();
+        WizardStep currentStep = getSelectedStep();
+
+        if (currentStepIndex > -1) {
+            ValidationResults validationResults = currentStep.getValidationResults();
             if (!validationResults.isValid()) {
-                previousStep.showErrors(true);
+                currentStep.showErrors(true);
                 MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
-                return;
+                return false;
             }
         }
-        WizardStep step = wizardPanel.getStep(index);
-        step.showErrors(false);
-        wizardPanel.showStep(step);
-        updateProgress(step, previousStep);
+
+        return true;
     }
 
     public final void previousStep() {
@@ -195,5 +204,12 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public void updateProgress(WizardStep currentStep, WizardStep previousStep) {
+        currentStep.setStepVisited(true);
+        if (previousStep != null) {
+            ValidationResults validationResults = previousStep.getValidationResults();
+            previousStep.setStepComplete(validationResults.isValid());
+            previousStep.setStepWarning(validationResults.getValidationShortMessage());
+
+        }
     }
 }

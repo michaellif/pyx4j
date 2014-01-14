@@ -36,6 +36,8 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     private boolean complete = false;
 
+    private boolean visited = false;
+
     private String warning = null;
 
     public WizardStep() {
@@ -74,6 +76,14 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     public boolean isStepComplete() {
         return complete;
+    }
+
+    public void setStepVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public boolean isStepVisited() {
+        return visited;
     }
 
     public void setStepWarning(String message) {
