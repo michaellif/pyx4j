@@ -581,12 +581,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void saveLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
         bo.legalTerms().clear();
-        bo.legalTerms().addAll(bo.legalTerms());
+        bo.legalTerms().addAll(to.legalTerms());
     }
 
     private void saveStepsStatuses(OnlineApplication bo, OnlineApplicationDTO to) {
         bo.stepsStatuses().clear();
-        bo.stepsStatuses().addAll(bo.stepsStatuses());
+        bo.stepsStatuses().addAll(to.stepsStatuses());
     }
 
     private void saveApplicationData(OnlineApplicationDTO to, boolean submit) {
