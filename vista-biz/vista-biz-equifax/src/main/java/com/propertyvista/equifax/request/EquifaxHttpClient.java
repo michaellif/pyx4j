@@ -58,7 +58,7 @@ public class EquifaxHttpClient {
         HttpPost httpPost = new HttpPost(serverUrl);
 
         log.debug("Connect to: {}", serverUrl);
-        ProxyConfig proxy = SystemConfig.instance().getCaledonProxy();
+        ProxyConfig proxy = SystemConfig.instance().getEquifaxProxy();
         if (proxy != null) {
             log.debug("use proxy {}", proxy.getHost());
             if (proxy.getUser() != null) {

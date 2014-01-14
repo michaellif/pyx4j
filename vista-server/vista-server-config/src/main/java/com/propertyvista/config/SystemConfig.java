@@ -28,7 +28,11 @@ public class SystemConfig extends HostConfig {
     private static List<String> noCaledonProxyHost = Arrays.asList("dev", "dev.birchwoodsoftwaregroup.com", "prod03a", "prod03b", "qa",
             "qa.birchwoodsoftwaregroup.com");
 
+    private static List<String> noEquifaxProxyHost = Arrays.asList("dev", "dev.birchwoodsoftwaregroup.com", "prod03a", "prod03b");
+
     protected ProxyConfig caledonProxy;
+
+    protected ProxyConfig equifaxProxy;
 
     private static SystemConfig instance;
 
@@ -63,19 +67,30 @@ public class SystemConfig extends HostConfig {
         if (!noCaledonProxyHost.contains(hostName)) {
             setVistaCaledonProxy();
         }
+        if (!noEquifaxProxyHost.contains(hostName)) {
+            setVistaEquifaxProxy();
+        }
+    }
+
+    private ProxyConfig defaultProxy() {
+        return new ProxyConfig("dev.birchwoodsoftwaregroup.com", 8888, "sys-dev-env", "he8rEcr9");
     }
 
     private void setVistaCaledonProxy() {
-        setCaledonProxy("dev.birchwoodsoftwaregroup.com", 8888, "sys-dev-env", "he8rEcr9");
-        log.info("caledon proxy defined {}:{} ", this.getCaledonProxy().getHost(), this.getCaledonProxy().getPort());
-    }
-
-    private void setCaledonProxy(String proxyHost, int proxyPort, String user, String password) {
-        this.caledonProxy = new ProxyConfig(proxyHost, proxyPort, user, password);
+        this.caledonProxy = defaultProxy();
+        log.info("Caledon proxy defined {}:{} ", this.getCaledonProxy().getHost(), this.getCaledonProxy().getPort());
     }
 
     public ProxyConfig getCaledonProxy() {
         return caledonProxy;
     }
 
+    private void setVistaEquifaxProxy() {
+        this.equifaxProxy = defaultProxy();
+        log.info("Equifax proxy defined {}:{} ", this.getEquifaxProxy().getHost(), this.getEquifaxProxy().getPort());
+    }
+
+    public ProxyConfig getEquifaxProxy() {
+        return equifaxProxy;
+    }
 }
