@@ -378,17 +378,17 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     public interface SelectIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("select.png")
+        @Source("MyApplication-Button-SelectUnit-Active.png")
         ImageResource regular();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("select_hover.png")
+        @Source("MyApplication-Button-SelectUnit-Active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("select.png")
+        @Source("MyApplication-Button-SelectUnit-Active.png")
         ImageResource active();
     }
 }

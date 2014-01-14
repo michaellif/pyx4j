@@ -20,6 +20,7 @@ public class ProspectPortalTheme extends PortalTheme {
     public ProspectPortalTheme() {
         super();
         addTheme(new RentalSummaryTheme());
+        addTheme(new ApplicationWizardTheme());
     }
 
 }

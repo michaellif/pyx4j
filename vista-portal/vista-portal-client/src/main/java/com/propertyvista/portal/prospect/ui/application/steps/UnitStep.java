@@ -42,6 +42,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
+import com.propertyvista.portal.prospect.themes.ApplicationWizardTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
@@ -230,6 +231,7 @@ public class UnitStep extends ApplicationWizardStep {
         @Override
         protected CEntityFolderItem<UnitTO> createItem(boolean first) {
             final CEntityFolderItem<UnitTO> item = super.createItem(first);
+            item.asWidget().addStyleName(ApplicationWizardTheme.StyleName.SelectUnitToobar.name());
             item.addAction(ActionType.Cust1, i18n.tr("Select Unit"), PortalImages.INSTANCE.selectButton(), new Command() {
                 @Override
                 public void execute() {
