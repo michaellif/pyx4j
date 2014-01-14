@@ -197,6 +197,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                 private Anchor btnCancel;
 
+                private AttachmentsEditorFolder attachmentsFolder;
+
                 public NoteEditor(boolean viewable) {
                     super(NotesAndAttachments.class);
 
@@ -218,7 +220,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().user(), new CEntityLabel<CrmUser>()), 25).build());
 
                     content.setH3(++row, 0, 2, i18n.tr("Attachments"));
-                    content.setWidget(++row, 0, 2, inject(proto().attachments(), new AttachmentsEditorFolder()));
+                    content.setWidget(++row, 0, 2, inject(proto().attachments(), attachmentsFolder = new AttachmentsEditorFolder()));
 
                     content.setWidget(++row, 0, createLowerToolbar());
                     content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
@@ -320,6 +322,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     }
                     setButtonsVisible(!isViewable);
                     setViewable(isViewable);
+                    attachmentsFolder.setViewableMode(isViewable);
                 }
             }
 
@@ -327,7 +330,15 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                 public AttachmentsEditorFolder() {
                     super(NoteAttachment.class);
+                    setOrderable(false);
+                    setAddable(false);
+                    setViewable(true);
+                }
 
+                public void setViewableMode(boolean isViewable) {
+                    setOrderable(!isViewable);
+                    setAddable(!isViewable);
+                    setViewable(isViewable);
                 }
 
                 @Override
