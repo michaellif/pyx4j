@@ -136,10 +136,12 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public final void showStep(int index) {
-        if (getSelectedIndex() > -1 && getSelectedIndex() < index) {
-            ValidationResults validationResults = getSelectedStep().getValidationResults();
+        int previousStepIndex = getSelectedIndex();
+        WizardStep previousStep = getSelectedStep();
+        if (previousStepIndex > -1 && previousStepIndex < index) {
+            ValidationResults validationResults = previousStep.getValidationResults();
             if (!validationResults.isValid()) {
-                getSelectedStep().showErrors(true);
+                previousStep.showErrors(true);
                 MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
                 return;
             }
@@ -147,7 +149,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         WizardStep step = wizardPanel.getStep(index);
         step.showErrors(false);
         wizardPanel.showStep(step);
-        updateProgress();
+        updateProgress(step, previousStep);
     }
 
     public final void previousStep() {
@@ -192,6 +194,6 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         return wizardPanel.getSelectedIndex() == wizardPanel.size() - 1;
     }
 
-    public void updateProgress() {
+    public void updateProgress(WizardStep currentStep, WizardStep previousStep) {
     }
 }
