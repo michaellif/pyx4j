@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import org.apache.commons.lang.math.RandomUtils;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -82,6 +84,9 @@ public class ILSMarketingDevPreloader extends BaseVistaDevDataPreloader {
         ILSProfileBuilding profile = EntityFactory.create(ILSProfileBuilding.class);
         profile.vendor().setValue(vendor);
         profile.building().set(building);
+        if (vendor == ILSVendor.kijiji) {
+            profile.maxAds().setValue(RandomUtils.nextInt(5));
+        }
         return profile;
     }
 

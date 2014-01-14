@@ -149,13 +149,9 @@ public class ILSKijijiIntegrationAgent {
             }
         }
 
-        // order by floorplan priorities and truncate if allowed size is exceeded
-        List<Floorplan> floorplans = new ArrayList<Floorplan>(fpDtoMap.keySet());
-        floorplans = truncateList(floorplans, availMap);
-
         // rearrange listing by building
         Map<Building, List<ILSFloorplanDTO>> _listing = new HashMap<Building, List<ILSFloorplanDTO>>();
-        for (Floorplan floorplan : floorplans) {
+        for (Floorplan floorplan : fpDtoMap.keySet()) {
             ILSFloorplanDTO fpDto = fpDtoMap.get(floorplan);
             if (fpDto == null) {
                 log.info("ILS Profile missing for floorplan: {}", floorplan.name().getValue());
@@ -187,13 +183,22 @@ public class ILSKijijiIntegrationAgent {
 
         // create final listing object
         Map<ILSBuildingDTO, List<ILSFloorplanDTO>> listing = new HashMap<ILSBuildingDTO, List<ILSFloorplanDTO>>();
+        int availSize = ilsCfg.maxDailyAds().getValue(0);
         for (Building building : _listing.keySet()) {
+            // order by floorplan priorities and truncate if allowed size is exceeded
+            int bldMaxAds = buildingProfileMap.get(building).maxAds().getValue(0);
+            List<ILSFloorplanDTO> floorplans = truncateList(_listing.get(building), availMap, bldMaxAds, availSize);
+            if (floorplans == null || floorplans.size() == 0) {
+                continue;
+            }
+
             ILSBuildingDTO bldDto = createDto(building);
             if (bldDto == null) {
                 log.info("ILS Profile missing for building: {}", building.propertyCode().getValue());
                 continue;
             }
-            listing.put(bldDto, _listing.get(building));
+            listing.put(bldDto, floorplans);
+            availSize -= floorplans.size();
         }
 
         return listing;
@@ -235,18 +240,18 @@ public class ILSKijijiIntegrationAgent {
         return dto;
     }
 
-    private List<Floorplan> truncateList(List<Floorplan> list, final Map<Floorplan, LogicalDate> availMap) {
-        int maxSize = ilsCfg.maxDailyAds().getValue();
+    private List<ILSFloorplanDTO> truncateList(List<ILSFloorplanDTO> list, final Map<Floorplan, LogicalDate> availMap, int maxAds, int availSize) {
+        int maxSize = Math.min(maxAds, Math.max(0, availSize));
         if (list.size() <= maxSize) {
             return list;
         }
 
         // sort by total score, highest first
-        Collections.sort(list, new Comparator<Floorplan>() {
+        Collections.sort(list, new Comparator<ILSFloorplanDTO>() {
             @Override
-            public int compare(Floorplan f1, Floorplan f2) {
-                int score2 = getTotalScore(priorityMap.get(f2), availMap.get(f2));
-                int score1 = getTotalScore(priorityMap.get(f1), availMap.get(f1));
+            public int compare(ILSFloorplanDTO dto1, ILSFloorplanDTO dto2) {
+                int score2 = getTotalScore(priorityMap.get(dto2.floorplan()), availMap.get(dto2.floorplan()));
+                int score1 = getTotalScore(priorityMap.get(dto1.floorplan()), availMap.get(dto1.floorplan()));
                 return score2 - score1;
             }
         });

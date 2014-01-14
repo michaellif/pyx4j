@@ -36,7 +36,7 @@ public class KijijiLocationMapper {
         // identification
         to.setClientLocationId((int) from.building().getPrimaryKey().asLong());
         to.setSalesforceId(SALES_FORCE_ID);
-        to.setBuildingName(from.profile().listingTitle().isNull() ? info.name().getValue() : from.profile().listingTitle().getValue());
+        to.setBuildingName(from.ilsSummary().isNull() ? info.name().getValue() : from.ilsSummary().title().getValue());
         // address
         AddressStructured address = info.marketingAddress();
         if (address.isEmpty()) {

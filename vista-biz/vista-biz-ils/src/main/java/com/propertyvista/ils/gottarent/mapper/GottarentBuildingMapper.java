@@ -211,8 +211,7 @@ public class GottarentBuildingMapper {
     }
 
     private void setBuildingInfoOptionalData(ILSBuildingDTO bldDto, com.gottarent.rs.Building to) {
-        String description = bldDto.profile().description().isNull() ? bldDto.building().marketing().description().getValue() : bldDto.profile().description()
-                .getValue();
+        String description = bldDto.building().marketing().description().getValue();
         if (description == null || description.trim().isEmpty()) {
             return;
         }
@@ -293,7 +292,7 @@ public class GottarentBuildingMapper {
     }
 
     private String generateBuildingName(ILSBuildingDTO bldDto) {
-        String result = bldDto.profile().listingTitle().isNull() ? bldDto.building().marketing().name().getValue() : bldDto.profile().listingTitle().getValue();
+        String result = bldDto.building().marketing().name().getValue();
 
         if (result == null) {
             return null;

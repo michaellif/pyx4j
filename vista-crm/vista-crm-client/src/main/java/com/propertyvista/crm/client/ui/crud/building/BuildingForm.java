@@ -23,7 +23,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
@@ -559,12 +558,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().vendor(), new CEnumLabel())).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().vendor(), new CEnumLabel()), true).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxAds()), 5).build());
                 content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().disabled())).build());
-
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().listingTitle())).build());
-                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().description())).build());
-                content.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
                 content.setH1(++row, 0, 2, proto().preferredContacts().getMeta().getCaption());
                 content.setWidget(++row, 0, 2,
