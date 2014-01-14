@@ -87,7 +87,9 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         loadUtilities(bo);
 
         //TODO count only
-        Persistence.service().retrieveMember(bo.floorplans(), AttachLevel.IdOnly);
+        Persistence.service().retrieveMember(bo.floorplans(), AttachLevel.CollectionSizeOnly);
+
+        Persistence.ensureRetrieve(bo.landlord(), AttachLevel.ToStringMembers);
     }
 
     @Override

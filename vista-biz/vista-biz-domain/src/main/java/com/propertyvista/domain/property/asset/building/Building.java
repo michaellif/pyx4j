@@ -106,6 +106,7 @@ public interface Building extends PolicyNode, HasNotesAndAttachments {
     @Reference(adapter = PropertyManagerReferenceAdapter.class)
     PropertyManager propertyManager();
 
+    @Detached
     Landlord landlord();
 
     @ToString(index = 1)
