@@ -30,7 +30,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -164,9 +163,9 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().insuranceProvider(), new CLabel<String>()), 180).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().insuranceCertificateNumber(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().liabilityCoverage(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().inceptionDate(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().expiryDate(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().liabilityCoverage()), 180).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().inceptionDate()), 180).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().expiryDate()), 180).build());
 
                 detailsAnchor = new Anchor(i18n.tr("View Details"), new Command() {
 
