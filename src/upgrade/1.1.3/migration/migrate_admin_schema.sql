@@ -34,6 +34,7 @@ SET search_path = '_admin_';
         **/
         
         -- foreign keys
+        ALTER TABLE dev_card_service_simulation_card DROP CONSTRAINT dev_card_service_simulation_card_merchant_fk;
         ALTER TABLE pad_batch DROP CONSTRAINT pad_batch_pad_file_fk;
         ALTER TABLE pad_batch DROP CONSTRAINT pad_batch_pmc_fk;
         ALTER TABLE pad_debit_record DROP CONSTRAINT pad_debit_record_pad_batch_fk;
@@ -160,6 +161,11 @@ SET search_path = '_admin_';
         ALTER TABLE admin_pmc_yardi_credential ADD COLUMN ils_guest_card20_service_url VARCHAR(500);
         
         
+        -- dev_card_service_simulation_transaction
+        
+        ALTER TABLE dev_card_service_simulation_transaction ADD COLUMN merchant BIGINT;
+        
+        
         -- dev_card_service_simulator_config
         
         ALTER TABLE dev_card_service_simulator_config RENAME COLUMN delay TO response_delay;
@@ -267,6 +273,10 @@ SET search_path = '_admin_';
         ***     ==========================================================================================================
         **/
        
+       
+        -- dev_card_service_simulation_card
+        
+        ALTER TABLE dev_card_service_simulation_card DROP COLUMN merchant;
         
         /**
         ***     ========================================================================================================
@@ -288,6 +298,8 @@ SET search_path = '_admin_';
        
         
         -- foreign keys
+        ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_merchant_fk FOREIGN KEY(merchant) 
+                REFERENCES dev_card_service_simulation_merchant_account(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE funds_reconciliation_record_record ADD CONSTRAINT funds_reconciliation_record_record_reconciliation_summary_fk FOREIGN KEY(reconciliation_summary) 
                 REFERENCES funds_reconciliation_summary(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE funds_reconciliation_summary ADD CONSTRAINT funds_reconciliation_summary_merchant_account_fk FOREIGN KEY(merchant_account) 
@@ -335,9 +347,9 @@ SET search_path = '_admin_';
                 'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 
                 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
         ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
-                CHECK ((target) IN ('ApplicantTermsAndConditions', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'PmcPropertyVistaService', 
-                'TenantBillingTerms', 'TenantPaymentConvenienceFeeTerms', 'TenantPortalTermsAndConditions', 'TenantPreAuthorizedPaymentCardTerms', 
-                'TenantPreAuthorizedPaymentECheckTerms', 'TenantSurePreAuthorizedPaymentsAgreement'));
+                CHECK ((target) IN ('ApplicantTermsAndConditions', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 
+                'PmcPropertyVistaService', 'TenantBillingTerms', 'TenantPaymentWebPaymentFeeTerms', 'TenantPortalTermsAndConditions', 
+                'TenantPreAuthorizedPaymentCardTerms', 'TenantPreAuthorizedPaymentECheckTerms', 'TenantSurePreAuthorizedPaymentsAgreement'));
 
         
 
