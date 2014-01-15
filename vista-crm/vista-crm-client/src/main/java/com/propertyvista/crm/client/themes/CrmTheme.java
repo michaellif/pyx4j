@@ -924,7 +924,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + PapReviewFolder.Styles.AutoPaySelected.name());
-        style.addProperty("background", ThemeColor.object1, 0.7);
+        style.addProperty("background", ThemeColor.object1, 0.4);
         addStyle(style);
 
         style = new Style("." + PapReviewFolder.Styles.AutoPayChargesFolder.name() + " .EntityContainerDecorator");
