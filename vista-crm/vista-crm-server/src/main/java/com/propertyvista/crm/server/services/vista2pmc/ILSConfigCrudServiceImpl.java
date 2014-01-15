@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.vista2pmc;
 
-import java.util.List;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -40,17 +38,12 @@ public class ILSConfigCrudServiceImpl extends AbstractCrudServiceDtoImpl<ILSConf
 
     @Override
     public void retrieve(AsyncCallback<Key> callback) {
-        Key result = null;
-        EntityQueryCriteria<ILSConfig> criteria = EntityQueryCriteria.create(ILSConfig.class);
-        List<Key> list = Persistence.service().queryKeys(criteria);
-        if (list.isEmpty()) {
-            ILSConfig config = EntityFactory.create(ILSConfig.class);
+        ILSConfig config = Persistence.service().retrieve(EntityQueryCriteria.create(ILSConfig.class));
+        if (config == null) {
+            config = EntityFactory.create(ILSConfig.class);
             Persistence.service().persist(config);
             Persistence.service().commit();
-            result = config.getPrimaryKey();
-        } else {
-            result = list.get(0);
         }
-        callback.onSuccess(result);
+        callback.onSuccess(config.getPrimaryKey());
     }
 }

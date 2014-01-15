@@ -43,11 +43,10 @@ public class ILSMarketingDevPreloader extends BaseVistaDevDataPreloader {
     public String create() {
         int numCreated = 0;
 
+        ILSConfig ilsConfig = EntityFactory.create(ILSConfig.class);
         // add vendors
         for (ILSVendor vendor : new ILSVendor[] { ILSVendor.kijiji, ILSVendor.gottarent }) {
-            ILSConfig ilsConfig = EntityFactory.create(ILSConfig.class);
             ilsConfig.vendors().add(createVendorConfig(vendor, 10));
-            Persistence.service().persist(ilsConfig);
 
             // configure buildings/floorplans
             int i = 0;
@@ -60,6 +59,7 @@ public class ILSMarketingDevPreloader extends BaseVistaDevDataPreloader {
             }
             numCreated++;
         }
+        Persistence.service().persist(ilsConfig);
 
         // add available units
         for (AptUnit unit : Persistence.service().query(EntityQueryCriteria.create(AptUnit.class))) {

@@ -29,10 +29,13 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
+import com.propertyvista.domain.marketing.ils.ILSProfileEmail;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
+import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan.Priority;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -46,11 +49,7 @@ public class ILSEmailFeedIntegrationAgent {
 
     private ILSEmailConfig ilsEmailCfg;
 
-    private Map<Building, ILSProfileBuilding> buildingMap;
-
-    private Map<Floorplan, ILSProfileFloorplan> floorplanMap;
-
-    private Map<Floorplan, ILSProfileFloorplan.Priority> priorityMap;
+    private Map<Building, ILSProfileEmail> buildingMap;
 
     public ILSEmailFeedIntegrationAgent(ILSEmailConfig ilsEmailCfg) {
         if (ilsEmailCfg == null) {
@@ -60,26 +59,11 @@ public class ILSEmailFeedIntegrationAgent {
         this.ilsEmailCfg = ilsEmailCfg;
 
         // create building profile map
-        buildingMap = new HashMap<Building, ILSProfileBuilding>();
-        EntityQueryCriteria<ILSProfileBuilding> critBld = EntityQueryCriteria.create(ILSProfileBuilding.class);
-        for (ILSProfileBuilding profile : Persistence.service().query(critBld)) {
+        buildingMap = new HashMap<Building, ILSProfileEmail>();
+        EntityQueryCriteria<ILSProfileEmail> critBld = EntityQueryCriteria.create(ILSProfileEmail.class);
+        critBld.or(PropertyCriterion.isNull(critBld.proto().disabled()), PropertyCriterion.eq(critBld.proto().disabled(), false));
+        for (ILSProfileEmail profile : Persistence.service().query(critBld)) {
             buildingMap.put(profile.building(), profile);
-        }
-
-        // create floorplan profile map
-        floorplanMap = new HashMap<Floorplan, ILSProfileFloorplan>();
-        if (buildingMap.size() > 0) {
-            EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
-            critFp.in(critFp.proto().floorplan().building(), buildingMap.keySet());
-            for (ILSProfileFloorplan profile : Persistence.service().query(critFp)) {
-                floorplanMap.put(profile.floorplan(), profile);
-            }
-        }
-
-        // generate priority map
-        priorityMap = new HashMap<Floorplan, ILSProfileFloorplan.Priority>();
-        for (ILSProfileFloorplan profile : floorplanMap.values()) {
-            priorityMap.put(profile.floorplan(), profile.priority().getValue());
         }
     }
 
@@ -89,9 +73,9 @@ public class ILSEmailFeedIntegrationAgent {
     public Map<ILSBuildingDTO, List<ILSFloorplanDTO>> getUnitListing() {
         // get available units
         List<AptUnit> units = null;
-        if (floorplanMap.size() > 0) {
+        if (buildingMap.size() > 0) {
             EntityQueryCriteria<AptUnit> critUnit = EntityQueryCriteria.create(AptUnit.class);
-            critUnit.in(critUnit.proto().floorplan(), floorplanMap.keySet());
+            critUnit.in(critUnit.proto().floorplan().building(), buildingMap.keySet());
             critUnit.isNotNull(critUnit.proto()._availableForRent());
             units = Persistence.service().query(critUnit);
         } else {
@@ -120,13 +104,9 @@ public class ILSEmailFeedIntegrationAgent {
             }
         }
 
-        // order by floorplan priorities and truncate if allowed size is exceeded
-        List<Floorplan> floorplans = new ArrayList<Floorplan>(fpDtoMap.keySet());
-        floorplans = truncateList(floorplans, availMap);
-
         // rearrange listing by building
         Map<Building, List<ILSFloorplanDTO>> _listing = new HashMap<Building, List<ILSFloorplanDTO>>();
-        for (Floorplan floorplan : floorplans) {
+        for (Floorplan floorplan : fpDtoMap.keySet()) {
             ILSFloorplanDTO fpDto = fpDtoMap.get(floorplan);
             if (fpDto == null) {
                 log.info("ILS Profile missing for floorplan: {}", floorplan.name().getValue());
@@ -158,52 +138,58 @@ public class ILSEmailFeedIntegrationAgent {
 
         // create final listing object
         Map<ILSBuildingDTO, List<ILSFloorplanDTO>> listing = new HashMap<ILSBuildingDTO, List<ILSFloorplanDTO>>();
+        int availSize = ilsEmailCfg.maxDailyAds().getValue(0);
         for (Building building : _listing.keySet()) {
+            // order by floorplan priorities and truncate if allowed size is exceeded
+            int bldMaxAds = buildingMap.get(building).maxAds().getValue(0);
+            List<ILSFloorplanDTO> floorplans = truncateList(_listing.get(building), availMap, bldMaxAds, availSize);
+            if (floorplans == null || floorplans.size() == 0) {
+                continue;
+            }
+
             ILSBuildingDTO bldDto = createDto(building);
             if (bldDto == null) {
                 log.info("ILS Profile missing for building: {}", building.propertyCode().getValue());
                 continue;
             }
-            listing.put(bldDto, _listing.get(building));
+            listing.put(bldDto, floorplans);
+            availSize -= floorplans.size();
         }
 
         return listing;
     }
 
     private ILSBuildingDTO createDto(Building building) {
-        ILSProfileBuilding profile = buildingMap.get(building);
+        ILSProfileEmail profile = buildingMap.get(building);
         if (profile == null) {
             return null;
         }
         ILSBuildingDTO dto = EntityFactory.create(ILSBuildingDTO.class);
         dto.building().set(building);
-        dto.profile().set(profile);
+        ILSProfileBuilding bldProfile = EntityFactory.create(ILSProfileBuilding.class);
+        bldProfile.maxAds().set(profile.maxAds());
+        dto.profile().set(bldProfile);
         return dto;
     }
 
     private ILSFloorplanDTO createDto(Floorplan floorplan) {
-        ILSProfileFloorplan profile = floorplanMap.get(floorplan);
-        if (profile == null) {
-            return null;
-        }
         ILSFloorplanDTO dto = EntityFactory.create(ILSFloorplanDTO.class);
         dto.floorplan().set(floorplan);
-        dto.profile().set(profile);
         return dto;
     }
 
-    private List<Floorplan> truncateList(List<Floorplan> list, final Map<Floorplan, LogicalDate> availMap) {
-        int maxSize = ilsEmailCfg.maxDailyAds().getValue();
+    private List<ILSFloorplanDTO> truncateList(List<ILSFloorplanDTO> list, final Map<Floorplan, LogicalDate> availMap, int maxAds, int availSize) {
+        int maxSize = Math.min(maxAds, Math.max(0, availSize));
         if (list.size() <= maxSize) {
             return list;
         }
 
         // sort by total score, highest first
-        Collections.sort(list, new Comparator<Floorplan>() {
+        Collections.sort(list, new Comparator<ILSFloorplanDTO>() {
             @Override
-            public int compare(Floorplan f1, Floorplan f2) {
-                int score2 = getTotalScore(priorityMap.get(f2), availMap.get(f2));
-                int score1 = getTotalScore(priorityMap.get(f1), availMap.get(f1));
+            public int compare(ILSFloorplanDTO dto1, ILSFloorplanDTO dto2) {
+                int score2 = getTotalScore(Priority.Normal, availMap.get(dto2.floorplan()));
+                int score1 = getTotalScore(Priority.Normal, availMap.get(dto1.floorplan()));
                 return score2 - score1;
             }
         });

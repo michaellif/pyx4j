@@ -24,6 +24,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
+import com.propertyvista.domain.marketing.ils.ILSProfileEmail;
 import com.propertyvista.domain.marketing.ils.ILSSummaryBuilding;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -45,4 +46,8 @@ public interface BuildingDTO extends Building {
     IList<ILSSummaryBuilding> ilsSummary();
 
     IList<ILSProfileBuilding> ilsProfile();
+
+    ILSProfileEmail ilsEmail();
+
+    IPrimitive<Boolean> ilsEmailConfigured();
 }

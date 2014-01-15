@@ -94,6 +94,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private Tab catalogTab = null;
 
+    private TwoColumnFlexFormPanel ilsEmailProfilePanel;
+
     public BuildingForm(IForm<BuildingDTO> view) {
         super(BuildingDTO.class, view);
 
@@ -161,6 +163,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         fillMerchantAccountStatus(getValue().merchantAccount());
+
+        ilsEmailProfilePanel.setVisible(getValue() != null && getValue().ilsEmailConfigured().isBooleanTrue());
     }
 
     @Override
@@ -379,9 +383,12 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         imageSlider.setImageSize(240, 160);
         flexPanel.setWidget(++row, 0, 2, inject(proto().media(), imageSlider));
 
+        ilsEmailProfilePanel = createILSEmailProfilePanel();
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
-            flexPanel.setH1(++row, 0, 2, i18n.tr("ILS Profile"));
+            flexPanel.setH1(++row, 0, 2, i18n.tr("ILS Vendor Profile"));
             flexPanel.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
+
+            flexPanel.setWidget(++row, 0, 2, ilsEmailProfilePanel);
         }
 
         return flexPanel;
@@ -501,6 +508,16 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 return content;
             }
         }
+    }
+
+    private TwoColumnFlexFormPanel createILSEmailProfilePanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        int row = -1;
+
+        panel.setH1(++row, 0, 2, i18n.tr("ILS Email Profile"));
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ilsEmail().maxAds()), 5).build());
+        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ilsEmail().disabled())).build());
+        return panel;
     }
 
     private class ILSProfileBuildingFolder extends VistaBoxFolder<ILSProfileBuilding> {

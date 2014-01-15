@@ -46,11 +46,13 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
+import com.propertyvista.domain.marketing.ils.ILSProfileEmail;
 import com.propertyvista.domain.marketing.ils.ILSSummaryBuilding;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.settings.ILSConfig;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
+import com.propertyvista.domain.settings.ILSEmailConfig;
 import com.propertyvista.domain.settings.ILSVendorConfig;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -153,6 +155,12 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             criteria.eq(criteria.proto().building(), bo);
             to.ilsProfile().addAll(Persistence.service().query(criteria));
         }
+        {
+            EntityQueryCriteria<ILSProfileEmail> criteria = EntityQueryCriteria.create(ILSProfileEmail.class);
+            criteria.eq(criteria.proto().building(), bo);
+            to.ilsEmail().set(Persistence.service().retrieve(criteria));
+        }
+        to.ilsEmailConfigured().setValue(Persistence.service().count(EntityQueryCriteria.create(ILSEmailConfig.class)) > 0);
     }
 
     @Override
@@ -243,6 +251,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
                 Persistence.service().merge(profile);
             }
         }
+        to.ilsEmail().building().set(bo);
+        Persistence.service().merge(to.ilsEmail());
 
         saveUtilities(bo);
 
