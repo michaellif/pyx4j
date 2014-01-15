@@ -13,11 +13,12 @@ AS
 $$
 DECLARE
         v_table_name            VARCHAR(64);
+        v_column_name           VARCHAR(64);
 BEGIN
-        FOR v_table_name IN
-        SELECT  table_name 
+        FOR v_table_name, v_column_name IN
+        SELECT  table_name, column_name
         FROM    information_schema.columns
-        WHERE   column_name = 'node_discriminator'
+        WHERE   column_name ~ 'node_discriminator'
         AND     table_name ~ 'policy'
         AND     table_schema = v_schema_name
         --('agreement_legal_policy','application_documentation_policy','arpolicy',
@@ -28,28 +29,28 @@ BEGIN
         --'product_tax_policy','restrictions_policy','tenant_insurance_policy','yardi_interface_policy')
         LOOP
                 EXECUTE 'UPDATE '||v_schema_name||'.'||v_table_name||' '
-                        ||'SET  node_discriminator = ''AptUnit'' '
-                        ||'WHERE node_discriminator = ''Unit_BuildingElement'' ';
+                        ||'SET  '||v_column_name||' = ''AptUnit'' '
+                        ||'WHERE '||v_column_name||' = ''Unit_BuildingElement'' ';
                         
                 EXECUTE 'UPDATE '||v_schema_name||'.'||v_table_name||' '
-                        ||'SET  node_discriminator = ''Building'' '
-                        ||'WHERE node_discriminator = ''Disc_Building'' ';
+                        ||'SET  '||v_column_name||' = ''Building'' '
+                        ||'WHERE '||v_column_name||' = ''Disc_Building'' ';
                         
                 EXECUTE 'UPDATE '||v_schema_name||'.'||v_table_name||' '
-                        ||'SET  node_discriminator = ''Complex'' '
-                        ||'WHERE node_discriminator = ''Disc Complex'' ';
+                        ||'SET  '||v_column_name||' = ''Complex'' '
+                        ||'WHERE '||v_column_name||' = ''Disc Complex'' ';
                         
                 EXECUTE 'UPDATE '||v_schema_name||'.'||v_table_name||' '
-                        ||'SET  node_discriminator = ''Country'' '
-                        ||'WHERE node_discriminator = ''Disc_Country'' ';
+                        ||'SET  '||v_column_name||' = ''Country'' '
+                        ||'WHERE '||v_column_name||' = ''Disc_Country'' ';
                         
                 EXECUTE 'UPDATE '||v_schema_name||'.'||v_table_name||' '
-                        ||'SET  node_discriminator = ''Floorplan'' '
-                        ||'WHERE node_discriminator = ''Disc_Floorplan'' ';
+                        ||'SET  '||v_column_name||' = ''Floorplan'' '
+                        ||'WHERE '||v_column_name||' = ''Disc_Floorplan'' ';
                         
                 EXECUTE 'UPDATE '||v_schema_name||'.'||v_table_name||' '
-                        ||'SET  node_discriminator = ''Province'' '
-                        ||'WHERE node_discriminator = ''Disc_Province'' ';
+                        ||'SET  '||v_column_name||' = ''Province'' '
+                        ||'WHERE '||v_column_name||' = ''Disc_Province'' ';
                         
         END LOOP;
 END;
