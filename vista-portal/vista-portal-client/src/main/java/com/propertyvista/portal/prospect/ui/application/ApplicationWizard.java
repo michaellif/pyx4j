@@ -18,7 +18,6 @@ import java.util.HashMap;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
-import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
@@ -120,7 +119,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         //TODO Set WizardStep visited flag
 
         for (ApplicationWizardStep step : steps.values()) {
-            step.onValueSet();
+            step.onValueSet(populate);
         }
 
     }

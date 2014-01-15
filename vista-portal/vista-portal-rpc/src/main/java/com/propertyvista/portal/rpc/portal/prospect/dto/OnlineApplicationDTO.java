@@ -26,8 +26,8 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
+import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 
 @Transient
 public interface OnlineApplicationDTO extends IEntity {
@@ -66,4 +66,6 @@ public interface OnlineApplicationDTO extends IEntity {
     IList<SignedOnlineApplicationLegalTerm> legalTerms();
 
     IList<OnlineApplicationWizardStepStatus> stepsStatuses();
+
+    PaymentDTO payment();
 }

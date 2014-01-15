@@ -13,31 +13,43 @@
  */
 package com.propertyvista.portal.server.portal.prospect.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.payment.PaymentException;
+import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
@@ -47,6 +59,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -66,6 +79,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BathroomNumber;
@@ -73,9 +87,14 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.Bedroom
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.server.common.util.AddressConverter;
+import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
+
+    private static final I18n i18n = I18n.get(ApplicationWizardServiceImpl.class);
 
     public ApplicationWizardServiceImpl() {
     }
@@ -104,6 +123,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillStepsStatuses(bo, to);
 
+        fillPaymentData(bo, to);
+
         callback.onSuccess(to);
     }
 
@@ -124,25 +145,32 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO editableEntity) {
-        editableEntity.availableUnits().clear();
-        editableEntity.availableUnits().addAll(
-                retriveAvailableUnits(editableEntity.building(), editableEntity.bedrooms().getValue(), editableEntity.bathrooms().getValue(), editableEntity
+    public void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO unitSelection) {
+        unitSelection.availableUnits().clear();
+        unitSelection.availableUnits().addAll(
+                retriveAvailableUnits(unitSelection.building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), unitSelection
                         .moveIn().getValue()));
 
-        editableEntity.potentialUnits().clear();
-        editableEntity.potentialUnits().addAll(
-                retrivePotentialUnits(editableEntity.building(), editableEntity.bedrooms().getValue(), editableEntity.bathrooms().getValue(), editableEntity
+        unitSelection.potentialUnits().clear();
+        unitSelection.potentialUnits().addAll(
+                retrivePotentialUnits(unitSelection.building(), unitSelection.bedrooms().getValue(), unitSelection.bathrooms().getValue(), unitSelection
                         .moveIn().getValue()));
 
-        excludeAvailbleFromPotential(editableEntity);
+        excludeAvailbleFromPotential(unitSelection);
 
-        callback.onSuccess(editableEntity);
+        callback.onSuccess(unitSelection);
     }
 
     @Override
     public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId) {
         callback.onSuccess(retriveAvailableUnitOptions(Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey())));
+    }
+
+    @Override
+    public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
+        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
+                ProspectPortalContext.getLeaseTermTenant(), PaymentMethodUsage.OneTimePayments, VistaApplication.prospect);
+        callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 
     // internals: -----------------------------------------------------------------------------------------------------
@@ -575,18 +603,98 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
     }
 
-    private void fillStepsStatuses(OnlineApplication bo, OnlineApplicationDTO to) {
-        to.stepsStatuses().addAll(bo.stepsStatuses());
-    }
-
     private void saveLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
         bo.legalTerms().clear();
         bo.legalTerms().addAll(to.legalTerms());
     }
 
+    private void fillStepsStatuses(OnlineApplication bo, OnlineApplicationDTO to) {
+        to.stepsStatuses().addAll(bo.stepsStatuses());
+    }
+
     private void saveStepsStatuses(OnlineApplication bo, OnlineApplicationDTO to) {
         bo.stepsStatuses().clear();
         bo.stepsStatuses().addAll(to.stepsStatuses());
+    }
+
+    private void fillPaymentData(OnlineApplication bo, OnlineApplicationDTO to) {
+        Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
+
+        PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
+
+        dto.billingAccount().set(lease.billingAccount());
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
+        dto.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.resident));
+        dto.convenienceFeeApplicableCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
+
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+
+        dto.propertyCode().set(lease.unit().building().propertyCode());
+        dto.unitNumber().set(lease.unit().info().number());
+
+        dto.leaseId().set(lease.leaseId());
+        dto.leaseStatus().set(lease.status());
+
+        dto.leaseTermParticipant().set(ProspectPortalContext.getLeaseTermTenant());
+
+        // some default values:
+        dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        // calculate current balance:
+        // TODO get application fee amount somewhere!!!
+        dto.amount().setValue(new BigDecimal(20.0));
+        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
+            dto.amount().setValue(new BigDecimal("0.00"));
+        }
+
+        dto.convenienceFeeSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
+
+        to.payment().set(dto);
+    }
+
+    private void savePaymentData(OnlineApplication bo, OnlineApplicationDTO to) {
+        Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
+        PaymentDTO pto = to.payment();
+        PaymentRecord pbo = new EntityBinder<PaymentRecord, PaymentDTO>(PaymentRecord.class, PaymentDTO.class) {
+            @Override
+            protected void bind() {
+                bindCompleteObject();
+            }
+        }.createBO(pto);
+
+        pbo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
+        pbo.billingAccount().set(lease.billingAccount());
+
+        // Do not change profile methods
+        if (pbo.paymentMethod().id().isNull()) {
+            if (pto.storeInProfile().isBooleanTrue() && PaymentType.availableInProfile().contains(pto.paymentMethod().type().getValue())) {
+                pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+            } else {
+                pbo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
+            }
+
+            // some corrections for particular method types:
+            if (pto.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+            }
+        }
+
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), pbo.paymentMethod(), VistaApplication.prospect);
+        ServerSideFactory.create(PaymentFacade.class).validatePayment(pbo, VistaApplication.prospect);
+
+        ServerSideFactory.create(PaymentFacade.class).persistPayment(pbo);
+
+        Persistence.service().commit(); // this commit is necessary (before processing next)
+
+        try {
+            ServerSideFactory.create(PaymentFacade.class).processPayment(pbo, null);
+        } catch (PaymentException e) {
+            throw new UserRuntimeException(i18n.tr("Payment processing has been Failed!"), e);
+        }
     }
 
     private void saveApplicationData(OnlineApplicationDTO to, boolean submit) {

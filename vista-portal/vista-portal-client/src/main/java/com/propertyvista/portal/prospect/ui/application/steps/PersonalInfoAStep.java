@@ -69,8 +69,8 @@ public class PersonalInfoAStep extends ApplicationWizardStep {
     }
 
     @Override
-    public void onValueSet() {
-        super.onValueSet();
+    public void onValueSet(boolean populate) {
+        super.onValueSet(populate);
         if (getWizard().isEditable()) {
             fileUpload.setDocumentsPolicy(getValue().applicant().documentsPolicy());
         }

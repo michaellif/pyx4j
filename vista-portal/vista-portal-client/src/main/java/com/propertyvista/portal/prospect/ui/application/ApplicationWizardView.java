@@ -13,8 +13,11 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
@@ -28,6 +31,8 @@ public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO>
         void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO editableEntity);
 
         void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unit);
+
+        void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
     }
 
     ApplicationWizard getApplicationWizard();

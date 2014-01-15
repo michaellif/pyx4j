@@ -13,12 +13,15 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
@@ -33,7 +36,9 @@ public interface ApplicationWizardService extends IService {
 
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity);
 
-    void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO editableEntity);
+    void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO unitSelection);
 
     void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId);
+
+    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 }

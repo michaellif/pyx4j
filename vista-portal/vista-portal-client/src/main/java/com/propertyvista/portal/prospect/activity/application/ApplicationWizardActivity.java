@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.prospect.activity.application;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,6 +30,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
@@ -118,12 +122,22 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     }
 
     @Override
-    public void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO editableEntity) {
-        service.getAvailableUnits(callback, editableEntity);
+    public void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO unitSelection) {
+        service.getAvailableUnits(callback, unitSelection);
     }
 
     @Override
     public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unit) {
         service.getAvailableUnitOptions(callback, unit/* .<AptUnit> createIdentityStub() */);
+    }
+
+    @Override
+    public void getProfiledPaymentMethods(final AsyncCallback<List<LeasePaymentMethod>> callback) {
+        service.getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<LeasePaymentMethod>>() {
+            @Override
+            public void onSuccess(Vector<LeasePaymentMethod> result) {
+                callback.onSuccess(result);
+            }
+        });
     }
 }

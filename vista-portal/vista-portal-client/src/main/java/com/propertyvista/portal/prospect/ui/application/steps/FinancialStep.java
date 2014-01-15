@@ -58,10 +58,12 @@ public class FinancialStep extends ApplicationWizardStep {
         getWizard().addValueValidator(new EditableValueValidator<OnlineApplicationDTO>() {
             @Override
             public ValidationError isValid(CComponent<OnlineApplicationDTO> component, OnlineApplicationDTO value) {
-                return (value.applicant().assets().size() > 0) || (value.applicant().incomes().size() > 0) ? null : new ValidationError(component, i18n
-                        .tr("At least one source of income or one asset is required"));
+                if (value != null) {
+                    return (value.applicant().assets().size() > 0) || (value.applicant().incomes().size() > 0) ? null : new ValidationError(component, i18n
+                            .tr("At least one source of income or one asset is required"));
+                }
+                return null;
             }
         });
     }
-
 }

@@ -51,7 +51,7 @@ public abstract class ApplicationWizardStep extends WizardStep {
     public void addValidations() {
     }
 
-    public void onValueSet() {
+    public void onValueSet(boolean populate) {
     }
 
     public void onStepSelected(WizardStep selectedStep) {

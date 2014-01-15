@@ -65,6 +65,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
     protected Class<E> paymentEntityClass;
 
+    private boolean displaySameAsCurrent = true;
+
     public PaymentMethodEditor(Class<E> clazz) {
         super(clazz);
         this.paymentEntityClass = clazz;
@@ -323,16 +325,24 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
     public void setBillingAddressVisible(boolean visible) {
         get(proto().billingAddress()).setVisible(visible);
-        get(proto().sameAsCurrent()).setVisible(visible);
+        get(proto().sameAsCurrent()).setVisible(visible && displaySameAsCurrent);
         billingAddressHeader.setVisible(visible);
+    }
+
+    public void setBillingAddressAsCurrentDisplay(boolean display) {
+        displaySameAsCurrent = display;
     }
 
     public boolean isBillingAddressVisible() {
         return get(proto().billingAddress()).isVisible();
     }
 
-    public void setBillingAddressAsCurrentEnabled(boolean visible) {
-        get(proto().sameAsCurrent()).setEnabled(visible);
+    public boolean isBillingAddressAsCurrentVisible() {
+        return get(proto().sameAsCurrent()).isVisible();
+    }
+
+    public void setBillingAddressAsCurrentEnabled(boolean enabled) {
+        get(proto().sameAsCurrent()).setEnabled(enabled);
     }
 
     public boolean isBillingAddressAsCurrentEnabled() {

@@ -161,7 +161,9 @@ public interface UnitSelectionDTO extends IEntity {
     @Editor(type = Editor.EditorType.label)
     UnitTO selectedUnit();
 
+    @Caption(name = "Exact match:")
     IList<UnitTO> availableUnits();
 
+    @Caption(name = "Partial match:")
     IList<UnitTO> potentialUnits();
 }

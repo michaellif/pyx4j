@@ -95,8 +95,8 @@ public class PersonalInfoBStep extends ApplicationWizardStep {
     }
 
     @Override
-    public void onValueSet() {
-        super.onValueSet();
+    public void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         enablePreviousAddress();
     }

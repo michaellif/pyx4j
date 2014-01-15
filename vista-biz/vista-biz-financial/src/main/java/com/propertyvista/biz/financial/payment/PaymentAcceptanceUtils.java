@@ -173,6 +173,8 @@ public class PaymentAcceptanceUtils {
 
         Collection<PaymentTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
+        case prospect:
+            // TODO process independently
         case resident:
             requireAcceptance = residentPortalPaymentTypeRequire;
             break;
@@ -201,6 +203,8 @@ public class PaymentAcceptanceUtils {
             boolean requireCashEquivalent, PaymentTypeSelectionPolicy paymentMethodSelectionPolicy, boolean forConvenienceFeeOnly) {
         Collection<CardTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
+        case prospect:
+            // TODO process independently
         case resident:
             if (forConvenienceFeeOnly) {
                 requireAcceptance = residentPortalCardWithConvenienceFee;

@@ -114,8 +114,8 @@ public class UnitStep extends ApplicationWizardStep {
     }
 
     @Override
-    public void onValueSet() {
-        super.onValueSet();
+    public void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         setEditableState(getValue().unitSelection().selectedUnit().isNull());
     }
