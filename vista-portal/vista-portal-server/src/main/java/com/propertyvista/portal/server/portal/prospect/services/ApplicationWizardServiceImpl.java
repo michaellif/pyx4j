@@ -907,7 +907,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
         }
 
-        // TODO: allow no more then 20 days (create policy!) available units:
+        // TODO: allow no more then 20 days (policy!?) available units:
         LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -20);
 
         // building
@@ -923,9 +923,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
         criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityDeadline);
 
+        // TODO: max presented unit value (policy!?)
+        final int maxUnits = 3;
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
             availableUnits.add(createUnitDTO(unit));
+            if (availableUnits.size() > maxUnits) {
+                break; // list no more
+            }
         }
 
         return availableUnits;
@@ -965,9 +970,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityLeftBound);
         criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityRightBound);
 
+        // TODO: max presented unit value (policy!?)
+        final int maxUnits = 3;
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
             availableUnits.add(createUnitDTO(unit));
+            if (availableUnits.size() > maxUnits) {
+                break; // list no more
+            }
         }
 
         return availableUnits;
