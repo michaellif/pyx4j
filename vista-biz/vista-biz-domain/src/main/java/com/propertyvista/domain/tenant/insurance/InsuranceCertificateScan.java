@@ -17,11 +17,14 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.InsuranceCertificateScanBlob;
 
+@ToStringFormat("Scanned Document {0,choice,null#(No Description)|!null#({0})}")
 public interface InsuranceCertificateScan extends IHasFile<InsuranceCertificateScanBlob> {
 
     @Owner
@@ -30,6 +33,7 @@ public interface InsuranceCertificateScan extends IHasFile<InsuranceCertificateS
     @ReadOnly
     InsuranceCertificate<?> certificate();
 
+    @ToString(index = 0)
     IPrimitive<String> description();
 
 }
