@@ -681,7 +681,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     MemberMeta memberMeta = member.getMemberMeta();
                     @SuppressWarnings("unchecked")
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                    if (iCollectionMember.getAttachLevel() == AttachLevel.Detached) {
+                    if (!TableModelCollections.isUpdatableMember(iCollectionMember)) {
                         // Do not update Detached collections.
                         continue;
                     }
@@ -769,7 +769,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     MemberMeta memberMeta = member.getMemberMeta();
                     @SuppressWarnings("unchecked")
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                    if (iCollectionMember.getAttachLevel() == AttachLevel.Detached) {
+                    if (!TableModelCollections.isUpdatableMember(iCollectionMember)) {
                         // Do not update Detached collections.
                         continue;
                     }
@@ -1164,7 +1164,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     // Special case for child collections update. Collection itself is the same and in the same order.
                     ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                    if (collectionMember.getAttachLevel() == AttachLevel.Detached) {
+                    if (!TableModelCollections.isUpdatableMember(collectionMember)) {
                         // Ignore Detached collections.
                         continue;
                     }
