@@ -99,11 +99,11 @@ public class UnitStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector), 50).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().selectedUnit(), selectedUnit)).build());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Available Units"));
+        panel.setH3(++row, 0, 1, i18n.tr("Exact match:"));
         availableUnitsHeader = panel.getWidget(row, 0);
         panel.setWidget(++row, 0, inject(proto().unitSelection().availableUnits(), availableUnitsFolder));
 
-        panel.setH3(++row, 0, 1, i18n.tr("Potential Units"));
+        panel.setH3(++row, 0, 1, i18n.tr("Partial match:"));
         potentialUnitsHeader = panel.getWidget(row, 0);
         panel.setWidget(++row, 0, inject(proto().unitSelection().potentialUnits(), potentialUnitsFolder));
 
