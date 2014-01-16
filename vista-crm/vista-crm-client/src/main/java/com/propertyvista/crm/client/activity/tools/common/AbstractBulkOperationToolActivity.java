@@ -40,9 +40,9 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
 
     private static final I18n i18n = I18n.get(AbstractBulkOperationToolActivity.class);
 
-    private final BulkOperationToolView<Settings, Item> view;
+    protected List<Item> items;
 
-    private List<Item> items;
+    private final BulkOperationToolView<Settings, Item> view;
 
     private final AbstractBulkOperationService<Settings, Item, AcceptedItems> service;
 
@@ -141,7 +141,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
         getView().setSearchEnabled(true);
     }
 
-    private void populateItems() {
+    protected void populateItems() {
         int start = getView().getVisibleRange().getStart();
         int end = Math.min(items.size(), start + getView().getVisibleRange().getLength());
 

@@ -37,10 +37,14 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -68,7 +72,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     private static final Logger log = LoggerFactory.getLogger(N4ManagementFacadeImpl.class);
 
     @Override
-    public List<LegalNoticeCandidate> getN4Candidates(BigDecimal minAmountOwed, List<Building> buildingIds) {
+    public List<LegalNoticeCandidate> getN4Candidates(BigDecimal minAmountOwed, List<Building> buildingIds, ExecutionMonitor executionMonitor) {
         if (minAmountOwed == null) {
             minAmountOwed = BigDecimal.ZERO;
         }
@@ -87,50 +91,42 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         criteria.asc(criteria.proto().unit().building().propertyCode());
         criteria.asc(criteria.proto().unit().info().number());
 
-        List<Lease> leases = Persistence.secureQuery(criteria);
+        executionMonitor.setExpectedTotal((long) Persistence.service().count(criteria));
 
-        List<LegalNoticeCandidate> candidates = new LinkedList<LegalNoticeCandidate>();
-        LogicalDate today = SystemDateManager.getLogicalDate();
-        for (Lease lease : leases) {
-            BigDecimal amountOwed = amountOwed(lease.billingAccount(), acceptableArCodes, today);
+        ICursorIterator<Lease> leases = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
+        try {
+            List<LegalNoticeCandidate> candidates = new LinkedList<LegalNoticeCandidate>();
+            LogicalDate today = SystemDateManager.getLogicalDate();
+            while (leases.hasNext() && !executionMonitor.isTerminationRequested()) {
+                Lease lease = leases.next();
+                BigDecimal amountOwed = amountOwed(lease.billingAccount(), acceptableArCodes, today);
 
-            if (amountOwed.compareTo(minAmountOwed) > 0) {
-                LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
-                candidate.leaseId().set(lease.createIdentityStub());
-                candidate.amountOwed().setValue(amountOwed);
-                candidates.add(candidate);
+                if (amountOwed.compareTo(minAmountOwed) > 0) {
+                    LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
+                    candidate.leaseId().set(lease.createIdentityStub());
+                    candidate.amountOwed().setValue(amountOwed);
+                    candidates.add(candidate);
+                }
+                executionMonitor.addProcessedEvent("Check lease for N4");
             }
+
+            return candidates;
+        } finally {
+            IOUtils.closeQuietly(leases);
         }
-        return candidates;
+
     }
 
     @Override
     public void issueN4(N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException {
-
-        N4BatchData batchData = EntityFactory.create(N4BatchData.class);
-        batchData.noticeDate().setValue(batchRequest.noticeDate().getValue());
-        batchData.deliveryMethod().setValue(batchRequest.deliveryMethod().getValue());
-        batchData.buildingOwnerLegalName().setValue(batchRequest.buildingOwnerName().getValue());
-        batchData.buildingOwnerAddress().set(batchRequest.buildingOwnerMailingAddress());
-        batchData.companyLegalName().setValue(batchRequest.companyName().getValue());
-        batchData.signingEmployee().set(Persistence.service().retrieve(Employee.class, batchRequest.agent().getPrimaryKey()));
-        batchData.companyAddress().set(batchRequest.mailingAddress());
-
-        batchData.companyPhoneNumber().setValue(batchRequest.phoneNumber().getValue());
-        batchData.companyFaxNumber().setValue(batchRequest.faxNumber().getValue());
-        batchData.companyEmailAddress().setValue(batchRequest.emailAddress().getValue());
-
-        batchData.isLandlord().setValue(false); // TODO right now we always assume it's agent
-        batchData.signatureDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        batchData.signature().setValue(retrieveSignature(batchData.signingEmployee()));
-
         // TODO fix this: policy should be applied on lease level, right now n4 policy can be set up for Organization so it should be fine        
         N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
-
+        Collection<ARCode> relevantArCodes = new HashSet<ARCode>(n4policy.relevantARCodes());
         Date batchGenerationDate = SystemDateManager.getDate();
+
         for (Lease leaseId : batchRequest.targetDelinquentLeases()) {
-            generateN4ForLease(leaseId, batchData, new HashSet<ARCode>(n4policy.relevantARCodes()), batchGenerationDate);
+            generateN4ForLease(leaseId, makeBatchData(batchRequest), relevantArCodes, batchGenerationDate);
             progress.set(progress.get() + 1);
         }
 
@@ -203,6 +199,24 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         } else {
             return null;
         }
+    }
+
+    private N4BatchData makeBatchData(N4BatchRequestDTO batchRequest) {
+        N4BatchData batchData = EntityFactory.create(N4BatchData.class);
+        batchData.noticeDate().setValue(batchRequest.noticeDate().getValue());
+        batchData.deliveryMethod().setValue(batchRequest.deliveryMethod().getValue());
+        batchData.companyLegalName().setValue(batchRequest.companyName().getValue());
+        batchData.signingEmployee().set(Persistence.service().retrieve(Employee.class, batchRequest.agent().getPrimaryKey()));
+        batchData.companyAddress().set(batchRequest.mailingAddress());
+
+        batchData.companyPhoneNumber().setValue(batchRequest.phoneNumber().getValue());
+        batchData.companyFaxNumber().setValue(batchRequest.faxNumber().getValue());
+        batchData.companyEmailAddress().setValue(batchRequest.emailAddress().getValue());
+
+        batchData.isLandlord().setValue(false); // TODO right now we always assume it's agent
+        batchData.signatureDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        batchData.signature().setValue(retrieveSignature(batchData.signingEmployee()));
+        return batchData;
     }
 
 }

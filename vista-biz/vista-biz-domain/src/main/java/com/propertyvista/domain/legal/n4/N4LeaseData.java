@@ -28,6 +28,10 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 @Transient
 public interface N4LeaseData extends IEntity {
 
+    IPrimitive<String> landlordName();
+
+    AddressStructured landlordAddress();
+
     IList<Tenant> leaseTenants();
 
     AddressStructured rentalUnitAddress();

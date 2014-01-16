@@ -18,11 +18,17 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
 
 public interface N4CreateBatchService extends AbstractBulkOperationService<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchRequestDTO> {
+
+    /** Returns deferred process correlation ID */
+    void searchForItems(AsyncCallback<String> callback, N4CandidateSearchCriteriaDTO searchCriteria);
+
+    /** Returns found candidates */
+    void getFoundItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback);
 
     @Override
     void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4CandidateSearchCriteriaDTO settings);

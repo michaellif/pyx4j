@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.tools.legal.n4.forms;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -30,14 +29,12 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.n4.N4PolicyForm;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.contact.AddressSimple;
 
 public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
 
@@ -82,13 +79,6 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
 
         panel.setWidget(++row, 0, 2, new HTML("&nbsp;"));
 
-        panel.setH1(++row, 0, 2, i18n.tr("Building Owner Contact Information:"));
-        panel.setWidget(++row, 0, new Button(i18n.tr("Use Agent/Company's Address"), new Command() {//@formatter:off
-            @Override public void execute() { setBuildingOwnerSameAsCompany(); };
-        }));//@formatter:on
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().buildingOwnerName())).build());
-        panel.setWidget(++row, 0, inject(proto().buildingOwnerMailingAddress(), new AddressSimpleEditor(true)));
-
         panel.setH1(++row, 0, 2, i18n.tr("Agent/Company Contact Information:"));
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().companyName())).build());
         CPhoneField phoneNumberField = inject(proto().phoneNumber(), new CPhoneField() {
@@ -118,12 +108,6 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
 
     public void setAgents(List<Employee> agents) {
         agentComboBox.setOptions(agents);
-    }
-
-    private void setBuildingOwnerSameAsCompany() {
-        get(proto().buildingOwnerMailingAddress()).setValue(get(proto().mailingAddress()).getValue().duplicate(AddressSimple.class));
-        get(proto().buildingOwnerMailingAddress()).setValue(get(proto().mailingAddress()).getValue().duplicate(AddressSimple.class));
-        get(proto().buildingOwnerName()).setValue(get(proto().companyName()).getValue());
     }
 
     private CComboBox<Employee> createAgentComboBox() {

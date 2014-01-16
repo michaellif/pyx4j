@@ -1,0 +1,125 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2013-12-16
+ * @author ArtyomB
+ * @version $Id$
+ */
+package com.propertyvista.crm.server.services.legal;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
+
+import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.legal.N4ManagementFacade;
+import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.legal.LegalNoticeCandidate;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.util.AddressConverter;
+import com.propertyvista.server.common.util.AddressRetriever;
+
+public class N4CandidateSearcher {
+
+    private final N4CandidateSearchCriteriaDTO searchCriteria;
+
+    private volatile Vector<LegalNoticeCandidateDTO> candidates;
+
+    private final ExecutionMonitor progressMonitor;
+
+    public N4CandidateSearcher(N4CandidateSearchCriteriaDTO searchCriteria, ExecutionMonitor progressMonitor) {
+        this.searchCriteria = searchCriteria;
+        this.progressMonitor = progressMonitor;
+    }
+
+    public void searchForCandidates() {
+        List<Building> buildingsFilter = queryBuildingsFilter(searchCriteria);
+        Vector<LegalNoticeCandidateDTO> dtoCandidates = new Vector<LegalNoticeCandidateDTO>();
+        if (!buildingsFilter.isEmpty()) {
+            List<LegalNoticeCandidate> n4Candidates = ServerSideFactory.create(N4ManagementFacade.class).getN4Candidates(
+                    searchCriteria.minAmountOwed().getValue(), buildingsFilter, this.progressMonitor);
+
+            dtoCandidates = new Vector<LegalNoticeCandidateDTO>(n4Candidates.size());
+            this.progressMonitor.setExpectedTotal(this.progressMonitor.getExpectedTotal() + n4Candidates.size());
+
+            Iterator<LegalNoticeCandidate> n4CandidatesIterator = n4Candidates.iterator();
+            while (n4CandidatesIterator.hasNext() && !progressMonitor.isTerminationRequested()) {
+                LegalNoticeCandidate candidate = n4CandidatesIterator.next();
+                dtoCandidates.add(makeLegalNoticeCandidateDto(candidate));
+                progressMonitor.addProcessedEvent("Load N4 candidate details");
+
+            }
+        }
+        if (!progressMonitor.isTerminationRequested()) {
+            this.candidates = dtoCandidates;
+        }
+    }
+
+    public Vector<LegalNoticeCandidateDTO> legalNoticeCandidates() {
+        return this.candidates;
+    }
+
+    private List<Building> queryBuildingsFilter(N4CandidateSearchCriteriaDTO settings) {
+        Set<Building> buildingsFilter = new HashSet<Building>();
+        if (!settings.filterByBuildings().isBooleanTrue() && !settings.filterByPortfolios().isBooleanTrue()) {
+            buildingsFilter.addAll(Persistence.secureQuery(EntityQueryCriteria.create(Building.class)));
+        }
+        if (settings.filterByBuildings().isBooleanTrue()) {
+            Portfolio virtualPortfolio = EntityFactory.create(Portfolio.class);
+            virtualPortfolio.buildings().addAll(settings.buildings());
+            if (!settings.filterByPortfolios().isBooleanTrue()) {
+                settings.portfolios().clear();
+                settings.filterByPortfolios().setValue(true);
+            }
+            settings.portfolios().add(virtualPortfolio);
+        }
+        if (settings.filterByPortfolios().isBooleanTrue()) {
+            for (Portfolio portfolio : settings.portfolios()) {
+                if (portfolio.isValueDetached()) {
+                    portfolio = Persistence.service().retrieve(Portfolio.class, portfolio.getPrimaryKey());
+                }
+                if (!portfolio.buildings().isEmpty()) {
+                    EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                    criteria.in(criteria.proto().id(), portfolio.buildings());
+                    buildingsFilter.addAll(Persistence.secureQuery(criteria));
+                }
+            }
+        }
+        return new ArrayList<Building>(buildingsFilter);
+    }
+
+    private LegalNoticeCandidateDTO makeLegalNoticeCandidateDto(LegalNoticeCandidate candidate) {
+        LegalNoticeCandidateDTO dto = candidate.duplicate(LegalNoticeCandidateDTO.class);
+        Lease lease = Persistence.service().retrieve(Lease.class, dto.leaseId().getPrimaryKey());
+        Persistence.service().retrieve(lease.unit());
+        Persistence.service().retrieve(lease.unit().building());
+        dto.building().setValue(lease.unit().building().propertyCode().getValue());
+
+        dto.address().setValue(
+                new AddressConverter.StructuredToSimpleAddressConverter().createTO(AddressRetriever.getUnitLegalAddress(lease.unit())).getStringView());
+        dto.unit().setValue(lease.unit().info().number().getValue());
+        dto.leaseIdString().setValue(lease.leaseId().getValue());
+        dto.moveIn().setValue(lease.expectedMoveIn().getValue());
+        dto.moveOut().setValue(lease.expectedMoveOut().getValue());
+        dto.n4Issued().setValue(N4Utils.pastN4sCount(lease));
+        return dto;
+    }
+
+}

@@ -31,13 +31,13 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -80,8 +80,9 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
         fieldsData.to().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", formatTenants(leaseData.leaseTenants()), formatRentalAddress(leaseData.rentalUnitAddress())));
+
         fieldsData.from().setValue(
-                SimpleMessageFormat.format("{0}\n{1}", batchData.buildingOwnerLegalName().getValue(), formatBuildingOwnerAddress(batchData.buildingOwnerAddress())));
+                SimpleMessageFormat.format("{0}\n{1}", leaseData.landlordName().getValue(), formatBuildingOwnerAddress(leaseData.landlordAddress())));
 
         // TODO review this: refactor to eliminate unnecessary code duplication
         fieldsData.rentalUnitAddress().streetNumber()
@@ -144,6 +145,10 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         }
         n4LeaseData.totalRentOwning().setValue(totalRentOwning);
 
+        Persistence.ensureRetrieve(lease.unit().building().landlord(), AttachLevel.Attached);
+        n4LeaseData.landlordName().setValue(lease.unit().building().landlord().name().getValue());
+        n4LeaseData.landlordAddress().setValue(lease.unit().building().landlord().address().getValue());
+
         return n4LeaseData;
     }
 
@@ -161,7 +166,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return address.getStringView();
     }
 
-    private String formatBuildingOwnerAddress(AddressSimple address) {
+    private String formatBuildingOwnerAddress(AddressStructured address) {
         return address.getStringView();
     }
 

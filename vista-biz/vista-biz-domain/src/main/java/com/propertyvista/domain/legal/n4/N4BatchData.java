@@ -29,10 +29,6 @@ public interface N4BatchData extends IEntity {
 
     IPrimitive<N4DeliveryMethod> deliveryMethod();
 
-    IPrimitive<String> buildingOwnerLegalName();
-
-    AddressSimple buildingOwnerAddress();
-
     IPrimitive<String> companyLegalName();
 
     AddressSimple companyAddress();

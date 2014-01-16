@@ -59,12 +59,4 @@ public interface N4BatchRequestDTO extends IEntity {
     @Editor(type = EditorType.email)
     IPrimitive<String> emailAddress();
 
-    @NotNull
-    IPrimitive<String> buildingOwnerName();
-
-    @NotNull
-    AddressSimple buildingOwnerMailingAddress();
-
-    IPrimitive<Boolean> useSameAddressAsCompany();
-
 }

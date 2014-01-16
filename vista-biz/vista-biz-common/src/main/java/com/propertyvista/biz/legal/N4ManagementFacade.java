@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
@@ -31,7 +32,7 @@ public interface N4ManagementFacade {
     /**
      * Searches for leases that require N4.
      */
-    List<LegalNoticeCandidate> getN4Candidates(BigDecimal minAmountOwed, List<Building> buildingIds);
+    List<LegalNoticeCandidate> getN4Candidates(BigDecimal minAmountOwed, List<Building> buildingIds, ExecutionMonitor progressMonitor);
 
     /**
      * Prepare N4 letters for <code>delinguqentLeases</code> as if signed by the given <code>employee</code>.
