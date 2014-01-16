@@ -105,7 +105,8 @@ public class InitializationServletContextListener implements ServletContextListe
     public void contextDestroyed(ServletContextEvent sce) {
         PersistenceServicesFactory.deregister();
         EntityImplGenerator.release();
-        LoggerFactory.getLogger(InitializationServletContextListener.class).info("contextDestroyed");
+        Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
+        log.info("contextDestroyed");
         LoggerConfig.shutdown();
     }
 }
