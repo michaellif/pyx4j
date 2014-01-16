@@ -51,6 +51,7 @@ import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationFacadeImpl implements N4GenerationFacade {
@@ -108,8 +109,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.landlordsContactInfo().lastName().setValue(batchData.signingEmployee().name().lastName().getStringView());
         fieldsData.landlordsContactInfo().companyName().setValue(batchData.companyLegalName().getStringView());
 
-        fieldsData.landlordsContactInfo().mailingAddress().setValue(batchData.companyAddress().street1().getValue());
-        fieldsData.landlordsContactInfo().unit().setValue(batchData.companyAddress().street2().getValue());
+        fieldsData.landlordsContactInfo().mailingAddress().setValue(getStreetAddress(batchData.companyAddress()));
+        fieldsData.landlordsContactInfo().unit().setValue(batchData.companyAddress().suiteNumber().getValue());
         fieldsData.landlordsContactInfo().municipality().setValue(batchData.companyAddress().city().getValue());
         fieldsData.landlordsContactInfo().province().setValue(batchData.companyAddress().province().code().getStringView());
         fieldsData.landlordsContactInfo().postalCode().setValue(batchData.companyAddress().postalCode().getValue());
@@ -202,6 +203,10 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     private int terminationAdvanceDaysForLeaseType(Lease leaseId) {
         // TODO this is value for Yearly or Month-to-Month lease (we don't have other kinds of leases therefore it's fine now, but later can become a problem)
         return 14;
+    }
+
+    private String getStreetAddress(AddressStructured companyAddress) {
+        return new AddressConverter.StructuredToSimpleAddressConverter().getStreetAddress(companyAddress);
     }
 
 }

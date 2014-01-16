@@ -37,7 +37,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
@@ -125,9 +125,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         signaturePanel.setWidget(++row, 0, 1, companyNameAndPhones);
         signaturePanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
-        AddressSimpleEditor addressSimpleEditor = new AddressSimpleEditor();
-        row = 1;
-        signaturePanel.setWidget(++row, 1, 1, inject(proto().mailingAddress(), addressSimpleEditor));
+        AddressStructuredEditor addressEditor = new AddressStructuredEditor();
+        signaturePanel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), addressEditor));
 
         TwoColumnFlexFormPanel arCodesPanel = new TwoColumnFlexFormPanel(i18n.tr("AR Codes"));
         row = -1;

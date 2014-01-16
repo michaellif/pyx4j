@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -42,7 +42,7 @@ public interface N4Policy extends Policy {
     IPrimitive<String> companyName();
 
     @EmbeddedEntity
-    AddressSimple mailingAddress();
+    AddressStructured mailingAddress();
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phoneNumber();

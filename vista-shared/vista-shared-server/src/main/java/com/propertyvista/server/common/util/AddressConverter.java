@@ -44,23 +44,28 @@ public class AddressConverter {
             super.copyBOtoTO(dbo, dto);
 
             //@formatter:off
-            StringBuilder address = new StringBuilder();            
-            address.append(val(dbo.streetNumber())).append(val(dbo.streetNumberSuffix()))
-                .append(' ')
-                .append(val(dbo.streetName()));
-            
-            String streetType = valenum(dbo.streetType());
-            if (!"".equals(streetType) && dbo.streetType().getValue() != StreetType.other) {
-                address.append(' ').append(streetType);
-            }
-            String streetDirection = valenum(dbo.streetDirection());
-            if (!"".equals(streetDirection)) {
-                address.append(' ').append(streetDirection);
-            }
-            
+            StringBuilder address = new StringBuilder(getStreetAddress(dbo));
             address.append(", ").append(i18n.tr("Suite")).append(' ').append(val(dbo.suiteNumber()));
             dto.street1().setValue(address.toString());
             //@formatter:on
+        }
+
+        public String getStreetAddress(AddressStructured addressToConvert) {
+            //@formatter:off
+            StringBuilder address = new StringBuilder();            
+            address.append(val(addressToConvert.streetNumber())).append(val(addressToConvert.streetNumberSuffix()))
+                .append(' ')
+                .append(val(addressToConvert.streetName()));
+            
+            String streetType = valenum(addressToConvert.streetType());
+            if (!"".equals(streetType) && addressToConvert.streetType().getValue() != StreetType.other) {
+                address.append(' ').append(streetType);
+            }
+            String streetDirection = valenum(addressToConvert.streetDirection());
+            if (!"".equals(streetDirection)) {
+                address.append(' ').append(streetDirection);
+            }
+            return address.toString();
         }
 
         private String val(IPrimitive<String> property) {

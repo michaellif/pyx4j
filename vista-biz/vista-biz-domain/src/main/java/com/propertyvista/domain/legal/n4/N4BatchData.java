@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.AddressStructured;
 
 /** This is data common to all N4 forms filled in a single batch */
 @Transient
@@ -31,7 +31,7 @@ public interface N4BatchData extends IEntity {
 
     IPrimitive<String> companyLegalName();
 
-    AddressSimple companyAddress();
+    AddressStructured companyAddress();
 
     /** must have the following format: (XXX) XXX-XXXX */
     IPrimitive<String> companyPhoneNumber();

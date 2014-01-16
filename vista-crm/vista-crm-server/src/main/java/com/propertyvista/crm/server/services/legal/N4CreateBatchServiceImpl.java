@@ -43,7 +43,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
@@ -102,7 +102,7 @@ public class N4CreateBatchServiceImpl implements N4CreateBatchService {
             N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                     N4Policy.class);
             defaults.batchRequest().companyName().setValue(n4policy.companyName().getValue());
-            defaults.batchRequest().mailingAddress().set(n4policy.mailingAddress().duplicate(AddressSimple.class));
+            defaults.batchRequest().mailingAddress().set(n4policy.mailingAddress().duplicate(AddressStructured.class));
             defaults.batchRequest().phoneNumber().setValue(n4policy.phoneNumber().getValue());
             defaults.batchRequest().faxNumber().setValue(n4policy.faxNumber().getValue());
             defaults.batchRequest().emailAddress().setValue(n4policy.emailAddress().getValue());

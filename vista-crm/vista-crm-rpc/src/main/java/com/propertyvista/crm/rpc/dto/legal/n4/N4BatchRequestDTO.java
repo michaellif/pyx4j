@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -45,7 +45,7 @@ public interface N4BatchRequestDTO extends IEntity {
 
     // this is filled from N4Policy can can be overridden by user
     @NotNull
-    AddressSimple mailingAddress();
+    AddressStructured mailingAddress();
 
     // this is filled from N4Policy can can be overridden by user
     @Editor(type = EditorType.phone)

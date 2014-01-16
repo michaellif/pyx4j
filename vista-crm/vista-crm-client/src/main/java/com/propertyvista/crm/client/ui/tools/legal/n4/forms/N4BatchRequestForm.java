@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.n4.N4PolicyForm;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
@@ -101,7 +101,7 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
         faxNumberField.setFormat(N4PolicyForm.PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
         panel.setWidget(++row, 0, new FormDecoratorBuilder(faxNumberField).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
-        panel.setWidget(++row, 0, inject(proto().mailingAddress(), new AddressSimpleEditor(true)));
+        panel.setWidget(++row, 0, inject(proto().mailingAddress(), new AddressStructuredEditor(true)));
 
         return panel;
     }
