@@ -409,6 +409,21 @@ BEGIN
         -- ilsprofile_building
         
         ALTER TABLE ilsprofile_building ADD COLUMN max_ads INT;
+        
+        
+        -- ilsprofile_email
+        
+        CREATE TABLE ilsprofile_email
+        (
+                id                              BIGINT                  NOT NULL,
+                building                        BIGINT                  NOT NULL,
+                max_ads                         INT,
+                disabled                        BOOLEAN,
+                        CONSTRAINT ilsprofile_email_pk PRIMARY KEY(id)
+        );
+        
+        
+        ALTER TABLE ilsprofile_email OWNER TO vista;
                                                 
        
         -- ilssummary_building
@@ -1183,6 +1198,7 @@ BEGIN
         ALTER TABLE identification_document_folder ADD CONSTRAINT identification_document_folder_owner_fk FOREIGN KEY(owner) 
                 REFERENCES customer_screening_v(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilsemail_config ADD CONSTRAINT ilsemail_config_config_fk FOREIGN KEY(config) REFERENCES ilsconfig(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE ilsprofile_email ADD CONSTRAINT ilsprofile_email_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilssummary_building ADD CONSTRAINT ilssummary_building_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilssummary_building ADD CONSTRAINT ilssummary_building_front_image_fk FOREIGN KEY(front_image) REFERENCES media_file(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilssummary_floorplan ADD CONSTRAINT ilssummary_floorplan_floorplan_fk FOREIGN KEY(floorplan) REFERENCES floorplan(id)  DEFERRABLE INITIALLY DEFERRED;
