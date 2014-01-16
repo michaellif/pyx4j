@@ -54,6 +54,17 @@ import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.MadeReadyDate;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.ils.VacateDate;
+import com.yardi.entity.leaseapp30.AccountingData;
+import com.yardi.entity.leaseapp30.Charge;
+import com.yardi.entity.leaseapp30.ChargeSet;
+import com.yardi.entity.leaseapp30.ChargeType;
+import com.yardi.entity.leaseapp30.Frequency;
+import com.yardi.entity.leaseapp30.LALease;
+import com.yardi.entity.leaseapp30.LeaseApplication;
+import com.yardi.entity.leaseapp30.Name;
+import com.yardi.entity.leaseapp30.PropertyType;
+import com.yardi.entity.leaseapp30.ResidentType;
+import com.yardi.entity.leaseapp30.Tenant;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -144,17 +155,21 @@ public class YardiNewGuestWorkflowTest {
             guestProcessor = new YardiGuestProcessor(agentName, sourceName);
 
             // retrieve guests
-            LeadManagement guestActivity = stub.getGuestActivity(yc, yc.propertyListCodes().getValue());
             Map<String, Prospect> guests = new HashMap<String, Prospect>();
-            for (Prospect guest : guestActivity.getProspects().getProspect()) {
-                Customer c = guest.getCustomers().getCustomer().get(0);
-                if (EnumSet.of(CustomerInfo.CURRENT_RESIDENT, CustomerInfo.FORMER_RESIDENT, CustomerInfo.FUTURE_RESIDENT, CustomerInfo.OTHER).contains(
-                        c.getType())) {
-                    // drop residents
-                    continue;
+            try {
+                LeadManagement guestActivity = stub.getGuestActivity(yc, yc.propertyListCodes().getValue());
+                for (Prospect guest : guestActivity.getProspects().getProspect()) {
+                    Customer c = guest.getCustomers().getCustomer().get(0);
+                    if (EnumSet.of(CustomerInfo.CURRENT_RESIDENT, CustomerInfo.FORMER_RESIDENT, CustomerInfo.FUTURE_RESIDENT, CustomerInfo.OTHER).contains(
+                            c.getType())) {
+                        // drop residents
+                        continue;
+                    }
+                    NameType name = c.getName();
+                    guests.put(name.getFirstName() + " " + name.getLastName(), guest);
                 }
-                NameType name = c.getName();
-                guests.put(name.getFirstName() + " " + name.getLastName(), guest);
+            } catch (Exception ignore) {
+                // service throws exception if no records found - ignore
             }
             if (guests.size() > 0) {
                 // update rentable items
@@ -165,6 +180,7 @@ public class YardiNewGuestWorkflowTest {
 //                    allocateUnit(guest);
                     updateRentableItems(guest);
                     executeEvents(guest);
+                    importApplication(guest);
                     System.out.println("Done - Exit.");
                     return;
                 }
@@ -232,8 +248,86 @@ public class YardiNewGuestWorkflowTest {
             holdUnit(guest, ilsUnit);
 
             System.out.println("Guest Import Complete.");
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
 
-            // Import Application
+    static void importApplication(Prospect guest) {
+        String typeStr = readLine("Add Deposit Amount: ");
+        BigDecimal amount = null;
+        try {
+            amount = new BigDecimal(typeStr);
+            if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+                System.out.println("Invalid amount: '" + amount + "' - Exit.");
+                return;
+            }
+            amount.setScale(2);
+        } catch (Throwable t) {
+            System.out.println("Invalid amount: '" + amount + "' - Exit.");
+            return;
+        }
+        try {
+            LeaseApplication app = new LeaseApplication();
+            Tenant tenant = new Tenant();
+            tenant.setResidentType(ResidentType.INDIVIDUAL);
+            System.out.println("Checking Prospect ids: ");
+            for (Identification id : guest.getCustomers().getCustomer().get(0).getIdentification()) {
+                System.out.print(id.getIDType() + ", ");
+                if (id.getIDType().equals("ProspectID")) {
+                    System.out.println("found prospect");
+                    com.yardi.entity.leaseapp30.Identification tId = new com.yardi.entity.leaseapp30.Identification();
+                    tId.setIDType("prospect");
+//                    tId.setIDScopeType("sender");
+//                    tId.setIDRank("primary");
+                    tId.setIDValue(id.getIDValue());
+                    tenant.getIdentification().add(tId);
+                    break;
+                }
+            }
+            NameType guestName = guest.getCustomers().getCustomer().get(0).getName();
+            Name name = new Name();
+            name.setFirstName(guestName.getFirstName());
+            name.setLastName(guestName.getLastName());
+            tenant.setName(name);
+            AccountingData charges = new AccountingData();
+            ChargeSet chargeSet = new ChargeSet();
+            chargeSet.setFrequency(Frequency.ONE_TIME);
+            chargeSet.setStart(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
+            chargeSet.setEnd(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
+            Charge charge = new Charge();
+            com.yardi.entity.leaseapp30.Identification chargeId = new com.yardi.entity.leaseapp30.Identification();
+            if (false) {
+                // deposit
+                charge.setChargeType(ChargeType.SECURITY_DEPOSIT);
+                charge.setLabel("deposit");
+                chargeId.setIDValue("0");
+                chargeId.setOrganizationName("Move-In Security Deposit");
+            } else {
+                // app fee
+                charge.setChargeType(ChargeType.APPLICATION_FEE);
+                charge.setLabel("fees");
+                chargeId.setIDValue("");
+                chargeId.setOrganizationName("Application Processing Fee");
+            }
+            charge.getIdentification().add(chargeId);
+            charge.setAmount(amount.toPlainString());
+            chargeSet.getCharge().add(charge);
+            charges.getChargeSet().add(chargeSet);
+            tenant.setAccountingData(charges);
+            app.getTenant().add(tenant);
+            // add lease
+            LALease lease = new LALease();
+            lease.getIdentification().add(tenant.getIdentification().get(0));
+            PropertyType property = new PropertyType();
+            com.yardi.entity.leaseapp30.Identification propId = new com.yardi.entity.leaseapp30.Identification();
+            propId.setIDValue(yc.propertyListCodes().getValue());
+            property.getIdentification().add(propId);
+            property.setMarketingName("");
+            lease.setProperty(property);
+            app.getLALease().add(lease);
+
+            stub.importApplication(yc, app);
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
