@@ -52,7 +52,7 @@ public class CBigDecimalField extends CNumberField<BigDecimal> {
                 try {
                     return new BigDecimal(string);
                 } catch (NumberFormatException e) {
-                    throw new ParseException(i18n.tr("Should Be A Decimal"), 0);
+                    throw new ParseException(i18n.tr("Should be a Decimal"), 0);
                 }
             }
 

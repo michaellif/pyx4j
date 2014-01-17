@@ -51,7 +51,7 @@ public class CDoubleField extends CNumberField<Double> {
                 try {
                     return getNumberFormat().parse(string);
                 } catch (NumberFormatException e) {
-                    throw new ParseException(i18n.tr("Should Be A Numeric Value"), 0);
+                    throw new ParseException(i18n.tr("Should be a Numeric Value"), 0);
                 }
             }
 

@@ -51,7 +51,7 @@ public class CIntegerField extends CNumberField<Integer> {
                 try {
                     return new Double(getNumberFormat().parse(string)).intValue();
                 } catch (NumberFormatException e) {
-                    throw new ParseException(i18n.tr("Should Be An Integer"), 0);
+                    throw new ParseException(i18n.tr("Should be an Integer"), 0);
                 }
             }
 
