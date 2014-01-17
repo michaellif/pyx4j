@@ -51,8 +51,9 @@ public class PortalTermsActivity extends AbstractActivity {
             }
         };
 
-        if (place instanceof PortalSiteMap.TermsAndConditions) {
+        if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalTerms(callback);
+// Resident:            
         } else if (place instanceof ResidentPortalTerms.BillingTerms) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantBillingTerms(callback);
         } else if (place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms) {
@@ -63,6 +64,7 @@ public class PortalTermsActivity extends AbstractActivity {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalWebPaymentFeeTerms(callback);
         } else if (place instanceof ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantSurePreAuthorizedPaymentsAgreement(callback);
+// Prospect:            
         } else if (place instanceof ProspectPortalTerms.ApplicantTermsAndConditions) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getProspectApplicantTerms(callback);
         } else if (place instanceof ProspectPortalTerms.RentalCriteriaGuidelines) {

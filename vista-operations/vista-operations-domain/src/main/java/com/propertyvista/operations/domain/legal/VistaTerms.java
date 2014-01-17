@@ -40,9 +40,9 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         PmcPaymentPad,
 
-        ApplicantTermsAndConditions,
+        VistaPortalTermsAndConditions,
 
-        TenantPortalTermsAndConditions,
+        ApplicantTermsAndConditions,
 
         TenantBillingTerms,
 

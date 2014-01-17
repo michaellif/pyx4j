@@ -526,7 +526,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         final HTMLPanel legalTermsLinkPanel = new HTMLPanel(legalTermsBuilder.toSafeHtml());
 
-        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.TermsAndConditions.class);
+        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.PortalTermsAndConditions.class);
         legalTermsLinkPanel.addAndReplaceElement(termsOfUseAnchor, termsOfUseAnchorId);
 
         Anchor billingPolicyAnchor = new TermsAnchor(i18n.tr("Billing And Refund Policy"), ResidentPortalTerms.BillingTerms.class);

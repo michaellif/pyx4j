@@ -36,7 +36,7 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
     public void getPortalTerms(AsyncCallback<LegalTermsTO> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPortalTermsAndConditions);
+        getVistaTerms(callback, VistaTerms.Target.VistaPortalTermsAndConditions);
     }
 
     @Override

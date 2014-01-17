@@ -70,7 +70,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         actionsPanel.setWidth("50%");
 
-        Anchor termsAnchor = new TermsAnchor(i18n.tr("Terms And Conditions"), PortalSiteMap.TermsAndConditions.class);
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Terms And Conditions"), PortalSiteMap.PortalTermsAndConditions.class);
 
         SimplePanel linksPanel = new SimplePanel(termsAnchor);
         linksPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);

@@ -84,13 +84,12 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof ProspectPortalSiteMap.ApplicationConfirmation) {
                         activity = new ApplicationConfirmationActivity(appPlace);
 
-                        // Internals/Terms: @formatter:off
+// Internals/Terms: @formatter:off
                     } else if (place instanceof ProspectPortalTerms.ApplicantTermsAndConditions 
                             || place instanceof ProspectPortalTerms.RentalCriteriaGuidelines
-                            || place instanceof PortalSiteMap.TermsAndConditions) {
+                            || place instanceof PortalSiteMap.PortalTermsAndConditions) {
                         activity = new PortalTermsActivity(place);
                  // @formatter:on
-
                     }
 
                     callback.onSuccess(activity);

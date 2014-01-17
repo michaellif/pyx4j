@@ -377,7 +377,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
         final HTMLPanel legalTermsLinkPanel = new HTMLPanel(legalTermsBuilder.toSafeHtml());
 
-        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.TermsAndConditions.class);
+        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.PortalTermsAndConditions.class);
         legalTermsLinkPanel.addAndReplaceElement(termsOfUseAnchor, termsOfUseAnchorId);
 
         final TermsAnchor preAuthorizedAgreementAnchor = new TermsAnchor(i18n.tr("Pre-Authorized Agreement"), null);

@@ -168,10 +168,10 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Tenant Portal Terms And Conditions")
+        @PlaceProperties(caption = "Vista Portal Terms And Conditions")
         public static class TenantTerms extends VistaTermsAccess {
             public TenantTerms() {
-                super(Target.TenantPortalTermsAndConditions);
+                super(Target.VistaPortalTermsAndConditions);
             }
         }
 
