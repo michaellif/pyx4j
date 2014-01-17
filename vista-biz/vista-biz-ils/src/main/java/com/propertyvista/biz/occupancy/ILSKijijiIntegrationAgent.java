@@ -35,6 +35,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
+import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan.Priority;
 import com.propertyvista.domain.marketing.ils.ILSSummaryBuilding;
 import com.propertyvista.domain.marketing.ils.ILSSummaryFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -96,6 +97,7 @@ public class ILSKijijiIntegrationAgent {
         if (buildingProfileMap.size() > 0) {
             EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
             critFp.eq(critFp.proto().vendor(), vendor);
+            critFp.ne(critFp.proto().priority(), Priority.Disabled);
             critFp.in(critFp.proto().floorplan().building(), buildingProfileMap.keySet());
             for (ILSProfileFloorplan profile : Persistence.service().query(critFp)) {
                 floorplanProfileMap.put(profile.floorplan(), profile);
@@ -288,12 +290,15 @@ public class ILSKijijiIntegrationAgent {
     private static int getAvailabilityScore(LogicalDate availableFrom) {
         int availabilityScore = 0;
         int MAX_DAYS = 100;
-        int days = (int) ((SystemDateManager.getTimeMillis() - availableFrom.getTime()) / (24 * 3600 * 1000));
+        int days = (int) ((availableFrom.getTime() - SystemDateManager.getTimeMillis()) / (24 * 3600 * 1000));
         if (days < 0) {
+            // avail now
             availabilityScore = 10;
         } else if (days > MAX_DAYS) {
+            // not avail within MAX_DAYS
             availabilityScore = 0;
         } else {
+            // avail within MAX_DAYS - the sooner the better
             availabilityScore = (int) Math.round((MAX_DAYS - days) / 10.0);
         }
         return availabilityScore;

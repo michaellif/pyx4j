@@ -34,8 +34,6 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileEmail;
-import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
-import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan.Priority;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -188,8 +186,8 @@ public class ILSEmailFeedIntegrationAgent {
         Collections.sort(list, new Comparator<ILSFloorplanDTO>() {
             @Override
             public int compare(ILSFloorplanDTO dto1, ILSFloorplanDTO dto2) {
-                int score2 = getTotalScore(Priority.Normal, availMap.get(dto2.floorplan()));
-                int score1 = getTotalScore(Priority.Normal, availMap.get(dto1.floorplan()));
+                int score2 = getAvailabilityScore(availMap.get(dto2.floorplan()));
+                int score1 = getAvailabilityScore(availMap.get(dto1.floorplan()));
                 return score2 - score1;
             }
         });
@@ -198,35 +196,10 @@ public class ILSEmailFeedIntegrationAgent {
         return list.subList(0, maxSize);
     }
 
-    /** Returns total score 0-10 */
-    public static int getTotalScore(ILSProfileFloorplan.Priority priority, LogicalDate availableFrom) {
-        // each specific score can range 0-10; the result is the normalized product of scores
-        return (int) Math.round(10.0 * (getPriorityScore(priority) / 10.0) * (getAvailabilityScore(availableFrom) / 10.0));
-    }
-
-    private static int getPriorityScore(ILSProfileFloorplan.Priority priority) {
-        int priorityScore = 0;
-        switch (priority) {
-        case High:
-            priorityScore = 10;
-            break;
-        case Normal:
-            priorityScore = 5;
-            break;
-        case Low:
-            priorityScore = 2;
-            break;
-        case Disabled:
-        default:
-            priorityScore = 0;
-        }
-        return priorityScore;
-    }
-
     private static int getAvailabilityScore(LogicalDate availableFrom) {
         int availabilityScore = 0;
         int MAX_DAYS = 100;
-        int days = (int) ((SystemDateManager.getTimeMillis() - availableFrom.getTime()) / (24 * 3600 * 1000));
+        int days = (int) ((availableFrom.getTime() - SystemDateManager.getTimeMillis()) / (24 * 3600 * 1000));
         if (days < 0) {
             availabilityScore = 10;
         } else if (days > MAX_DAYS) {
