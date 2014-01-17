@@ -13,14 +13,18 @@
  */
 package com.propertyvista.crm.server.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
+import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -43,7 +47,7 @@ public final class BuildingsCriteriaNormalizer {
      * @return <code>null</code> if there's no selection or list filled with buildings populated with ids
      */
     public List<Building> normalize(List<Portfolio> portfolios, List<Building> buildings) {
-        List<Building> selectedBuildings = new Vector<Building>();
+        List<Building> selectedBuildings = new ArrayList<Building>();
         if (portfolios != null) {
             selectedBuildings.addAll(getPortfoliosBuildings(portfolios));
         }
@@ -55,6 +59,19 @@ public final class BuildingsCriteriaNormalizer {
         } else {
             return selectedBuildings;
         }
+    }
+
+    public List<Building> normalizeDto(List<PortfolioForSelectionDTO> portfolioDtos, List<BuildingForSelectionDTO> buildingDtos) {
+        // TODO this function should probably exist on server side, client should send identity stubs, these DTO objects are for selection and contain a lot of data that is not required
+        List<Portfolio> portfolios = new ArrayList<Portfolio>(portfolioDtos.size());
+        for (PortfolioForSelectionDTO dto : portfolioDtos) {
+            portfolios.add(EntityFactory.createIdentityStub(Portfolio.class, dto.getPrimaryKey()));
+        }
+        List<Building> buildings = new ArrayList<Building>(buildingDtos.size());
+        for (BuildingForSelectionDTO dto : buildingDtos) {
+            buildings.add(EntityFactory.createIdentityStub(Building.class, dto.getPrimaryKey()));
+        }
+        return normalize(portfolios, buildings);
     }
 
     private Vector<Building> getPortfoliosBuildings(List<Portfolio> portfolios) {

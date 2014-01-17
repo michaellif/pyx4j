@@ -13,12 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.tools.legal.n4.forms;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -26,35 +24,47 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityListBox;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
+import com.propertyvista.crm.client.ui.tools.common.selectors.CSuperSelector;
+import com.propertyvista.crm.client.ui.tools.common.selectors.PortfolioSelector;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
-import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
+import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
 public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearchCriteriaDTO> {
 
-    private final ValueChangeHandler<Boolean> visibilityChangeHandler;
+    private static class SearchCriteriaFormDecoratorBuilder extends FormDecoratorBuilder {
+
+        public SearchCriteriaFormDecoratorBuilder(CComponent<?> component) {
+            super(component);
+            labelPosition(LabelPosition.top);
+        }
+
+        @Override
+        public Builder componentWidth(String componentWidth) {
+            labelWidth(componentWidth);
+            contentWidth(componentWidth);
+            return super.componentWidth(componentWidth);
+        }
+    }
 
     private CLabel<String> policyErrorsLabel;
 
-    private BasicFlexFormPanel searchCriteriaPanel;
+    private FlowPanel searchCriteriaPanel;
+
+    private PortfolioSelector portfolioSelector;
+
+    private BuildingSelector buildingSelector;
 
     public N4CandidateSearchCriteriaForm() {
         super(N4CandidateSearchCriteriaDTO.class);
-        visibilityChangeHandler = new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                updateComponentsVisibility();
-            }
-        };
     }
 
     @Override
@@ -76,24 +86,15 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
 
         int row = 0;
 
-        searchCriteriaPanel = new BasicFlexFormPanel();
-        searchCriteriaPanel.setWidget(row, 0, 1, new MyDecoratorBuilder(inject(proto().minAmountOwed())).componentWidth("150px").contentWidth("200px").build());
-        searchCriteriaPanel.setWidget(row, 1, 1, new MyDecoratorBuilder(inject(proto().filterByBuildings())).componentWidth("150px").contentWidth("200px")
-                .build());
-        searchCriteriaPanel.setWidget(++row, 1, 1,
-                new MyDecoratorBuilder(inject(proto().buildings(), new CEntityListBox<Building>(Building.class, SelectionMode.SINGLE_PANEL)))
-                        .useLabelSemicolon(false).customLabel("").componentWidth("200px").contentWidth("200px").build());
+        searchCriteriaPanel = new FlowPanel();
 
-        searchCriteriaPanel.setWidget(++row, 1, 1, new MyDecoratorBuilder(inject(proto().filterByPortfolios())).componentWidth("150px").contentWidth("200px")
-                .build());
-        searchCriteriaPanel.setWidget(++row, 1, 1,
-                new MyDecoratorBuilder(inject(proto().portfolios(), new CEntityListBox<Portfolio>(Portfolio.class, SelectionMode.SINGLE_PANEL)))
-                        .useLabelSemicolon(false).customLabel("").componentWidth("200px").contentWidth("200px").build());
+        searchCriteriaPanel
+                .add(new SearchCriteriaFormDecoratorBuilder(inject(proto().portfolios(), createPortfolioSelector())).componentWidth("300px").build());
+        searchCriteriaPanel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().buildings(), createBuildingSelector())).componentWidth("300px").build());
+        searchCriteriaPanel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().minAmountOwed())).componentWidth("200px").build());
 
         panel.setWidget(1, 0, 2, searchCriteriaPanel);
 
-        get(proto().filterByBuildings()).addValueChangeHandler(visibilityChangeHandler);
-        get(proto().filterByPortfolios()).addValueChangeHandler(visibilityChangeHandler);
         return panel;
     }
 
@@ -117,24 +118,53 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
         updateComponentsVisibility();
     }
 
+    protected void onSuperSelectorResized() {
+
+    }
+
     private void updateComponentsVisibility() {
-        get(proto().buildings()).setVisible(getValue().filterByBuildings().isBooleanTrue());
-        get(proto().portfolios()).setVisible(getValue().filterByPortfolios().isBooleanTrue());
         policyErrorsLabel.setVisible(!CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
         searchCriteriaPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
     }
 
-    private static class MyDecoratorBuilder extends FormDecoratorBuilder {
-
-        public MyDecoratorBuilder(CComponent<?> component) {
-            super(component);
-        }
-
-        @Override
-        public WidgetDecorator build() {
-            WidgetDecorator d = super.build();
-            d.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            return d;
-        };
+    private CSuperSelector<PortfolioForSelectionDTO> createPortfolioSelector() {
+        return new CSuperSelector<PortfolioForSelectionDTO>(portfolioSelector = new PortfolioSelector() {//@formatter:off
+            @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
+                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
+                searchCriteria.portfolios().add(item);
+                N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);                
+            }
+            @Override
+            protected void onItemRemoved(PortfolioForSelectionDTO item) {
+                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
+                searchCriteria.portfolios().remove(item);
+                N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);            
+            }
+            
+            @Override protected void onRedraw() {
+                super.onRedraw();
+                N4CandidateSearchCriteriaForm.this.onSuperSelectorResized();
+            }
+        });//@formatter:on
     }
+
+    private CSuperSelector<BuildingForSelectionDTO> createBuildingSelector() {
+        return new CSuperSelector<BuildingForSelectionDTO>(buildingSelector = new BuildingSelector() {//@formatter:off
+            @Override protected void onItemAdded(BuildingForSelectionDTO item) {
+                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
+                searchCriteria.buildings().add(item);
+                N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
+            }            
+            @Override protected void onItemRemoved(BuildingForSelectionDTO item) {
+                N4CandidateSearchCriteriaDTO  searchCriteria = N4CandidateSearchCriteriaForm.this.getValue();
+                searchCriteria.buildings().remove(item);
+                N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
+            }
+            @Override protected void onRedraw() {
+                super.onRedraw();
+                N4CandidateSearchCriteriaForm.this.onSuperSelectorResized();
+            }
+        });//@formatter:on
+    }
+
 }

@@ -23,19 +23,15 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
+import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
 @Transient
 public interface N4CandidateSearchCriteriaDTO extends IEntity {
 
-    IPrimitive<Boolean> filterByBuildings();
+    IList<BuildingForSelectionDTO> buildings();
 
-    IList<Building> buildings();
-
-    IPrimitive<Boolean> filterByPortfolios();
-
-    IList<Portfolio> portfolios();
+    IList<PortfolioForSelectionDTO> portfolios();
 
     @Caption(name = "Minimum Amount Owed")
     @Editor(type = EditorType.money)

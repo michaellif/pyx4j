@@ -113,11 +113,12 @@ class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsPro
      */
     // TODO find a better name
     protected int evaluate(BuildingForSelectionDTO buiding, String suggestion) {//@formatter:off
-        if (buiding.propertyCode().getValue().toLowerCase().contains(suggestion)) {
+        String normalizedSuggestion = suggestion.toLowerCase(); // TODO optimize: move normalize outside of the loop, but make it a protected method
+        if (buiding.propertyCode().getValue().toLowerCase().contains(normalizedSuggestion)) {
             return 2;
-        } else if (buiding.name().getValue().toLowerCase().contains(suggestion)) {
+        } else if (buiding.name().getValue().toLowerCase().contains(normalizedSuggestion)) {
             return 2;
-        } else if (buiding.address().getValue().toLowerCase().contains(suggestion)) {
+        } else if (buiding.address().getValue().toLowerCase().contains(normalizedSuggestion)) {
             return 1;
         } else {
             return 0;
