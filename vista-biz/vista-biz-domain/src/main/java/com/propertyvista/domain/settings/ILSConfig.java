@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface ILSConfig extends IEntity {
     public enum ILSVendor {
@@ -30,4 +31,9 @@ public interface ILSConfig extends IEntity {
     @Owned
     @OrderBy(PrimaryKey.class)
     IList<ILSEmailConfig> emailFeeds();
+
+    // --- work-around to avoid SQL errors on an empty entity
+    // --- remove ONLY if other IPrimitive added
+    @Deprecated
+    IPrimitive<String> x();
 }
