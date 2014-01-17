@@ -52,6 +52,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -907,8 +908,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
         }
 
-        // TODO: allow no more then 20 days (policy!?) available units:
-        LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -20);
+        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
+        LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -policy.unitAvailabilitySpan().getValue());
 
         // building
         criteria.eq(criteria.proto().building(), building);
@@ -922,13 +923,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
         criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
         criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityDeadline);
+//      criteria.sort(new Sort(criteria.proto().unitOccupancySegments().$().dateFrom(), false));
 
-        // TODO: max presented unit value (policy!?)
-        final int maxUnits = 3;
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
             availableUnits.add(createUnitDTO(unit));
-            if (availableUnits.size() > maxUnits) {
+            if (availableUnits.size() > policy.maxExactMatchUnits().getValue()) {
                 break; // list no more
             }
         }
@@ -951,11 +951,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
 
-        LogicalDate availabilityLeftBound = DateUtils.monthAdd(moveIn, -1);
-        LogicalDate availabilityRightBound = DateUtils.monthAdd(moveIn, 1);
-
-        // TODO: allow no more then 20 days (create policy!) available units:
-        LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -20);
+        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
+        LogicalDate availabilityDeadline = DateUtils.daysAdd(moveIn, -policy.unitAvailabilitySpan().getValue());
+        LogicalDate availabilityRightBound = DateUtils.monthAdd(moveIn, 2);
 
         // building
         criteria.eq(criteria.proto().building(), building);
@@ -967,15 +965,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         // availability: 
         criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
         criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
-        criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityLeftBound);
+        criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityDeadline);
         criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityRightBound);
+//        criteria.sort(new Sort(criteria.proto().unitOccupancySegments().$().dateFrom(), false));
 
-        // TODO: max presented unit value (policy!?)
-        final int maxUnits = 3;
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
             availableUnits.add(createUnitDTO(unit));
-            if (availableUnits.size() > maxUnits) {
+            if (availableUnits.size() > policy.maxPartialMatchUnits().getValue()) {
                 break; // list no more
             }
         }

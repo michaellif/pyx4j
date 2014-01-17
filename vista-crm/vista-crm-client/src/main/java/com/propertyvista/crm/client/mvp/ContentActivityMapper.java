@@ -230,6 +230,9 @@ import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivit
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.prospectportal.ProspectPortalPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.prospectportal.ProspectPortalPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.prospectportal.ProspectPortalPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyViewerActivity;
@@ -1316,7 +1319,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new YardiInterfacePolicyViewerActivity(crudPlace);
                             break;
                         }
-
+                    } else if (crudPlace instanceof Administration.Policies.ProspectPortal) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new ProspectPortalPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new ProspectPortalPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ProspectPortalPolicyViewerActivity(crudPlace);
+                            break;
+                        }
 // - Security          
                     } else if (crudPlace instanceof Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {

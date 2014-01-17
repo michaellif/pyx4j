@@ -521,13 +521,13 @@ public class CrmSiteMap implements SiteMap {
             public static class ApplicationDocumentation extends CrmCrudAppPlace {
             }
 
-            public static class OnlineApplicationTerms extends CrmCrudAppPlace {
-            }
-
             public static class AgreementLegalTerms extends CrmCrudAppPlace {
             }
 
             public static class AR extends CrmCrudAppPlace {
+            }
+
+            public static class AutoPay extends CrmCrudAppPlace {
             }
 
             public static class BackgroundCheck extends CrmCrudAppPlace {
@@ -568,6 +568,9 @@ public class CrmSiteMap implements SiteMap {
             public static class N4 extends CrmCrudAppPlace {
             }
 
+            public static class OnlineApplicationTerms extends CrmCrudAppPlace {
+            }
+
             public static class PaymentTypeSelection extends CrmCrudAppPlace {
             }
 
@@ -577,13 +580,13 @@ public class CrmSiteMap implements SiteMap {
             public static class ProductTax extends CrmCrudAppPlace {
             }
 
+            public static class ProspectPortal extends CrmCrudAppPlace {
+            }
+
             public static class Restrictions extends CrmCrudAppPlace {
             }
 
             public static class TenantInsurance extends CrmCrudAppPlace {
-            }
-
-            public static class AutoPay extends CrmCrudAppPlace {
             }
 
             public static class YardiInterface extends CrmCrudAppPlace {

@@ -43,7 +43,7 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
     }
 
     private TwoColumnFlexFormPanel createMiscPoliciesTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Misc Settings"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Misc. Settings"));
         int row = -1;
 
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().yearRangeStart()), 5, true).build());

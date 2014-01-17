@@ -67,6 +67,7 @@ import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
@@ -182,6 +183,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(PaymentTypeSelectionPolicy.class, Administration.Policies.PaymentTypeSelection.class, defaultImage);
         AppPlaceEntityMapper.register(PetPolicy.class, Administration.Policies.Pet.class, defaultImage);
         AppPlaceEntityMapper.register(ProductTaxPolicy.class, Administration.Policies.ProductTax.class, defaultImage);
+        AppPlaceEntityMapper.register(ProspectPortalPolicy.class, Administration.Policies.ProspectPortal.class, defaultImage);
         AppPlaceEntityMapper.register(ARPolicy.class, Administration.Policies.AR.class, defaultImage);
         AppPlaceEntityMapper.register(TenantInsurancePolicy.class, Administration.Policies.TenantInsurance.class, defaultImage);
         AppPlaceEntityMapper.register(AutoPayPolicy.class, Administration.Policies.AutoPay.class, defaultImage);

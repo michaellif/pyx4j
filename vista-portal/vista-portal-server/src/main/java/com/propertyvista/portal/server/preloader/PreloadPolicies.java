@@ -30,6 +30,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeas
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseSigningPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupOnlineApplicationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProspectPortalPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.N4PolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PreloadRestrictionsPolicies;
@@ -72,6 +73,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new MockupLeaseBillingPolicyPreloader());
             add(new MockupOnlineApplicationPolicyPreloader());
             add(new MockupLeaseSigningPolicyPreloader());
+            add(new MockupProspectPortalPolicyPreloader());
         }
     }
 
