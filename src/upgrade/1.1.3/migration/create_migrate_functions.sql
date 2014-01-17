@@ -700,6 +700,17 @@ BEGIN
                                         ADD COLUMN account_name VARCHAR(500);
                                         
                                         
+        -- n4_policy
+        
+        ALTER TABLE n4_policy   ADD COLUMN mailing_address_suite_number VARCHAR(500),
+                                ADD COLUMN mailing_address_street_number VARCHAR(500),
+                                ADD COLUMN mailing_address_street_number_suffix VARCHAR(500),
+                                ADD COLUMN mailing_address_street_name VARCHAR(500),
+                                ADD COLUMN mailing_address_street_type VARCHAR(50),
+                                ADD COLUMN mailing_address_street_direction VARCHAR(50),
+                                ADD COLUMN mailing_address_county VARCHAR(500);
+                                        
+                                        
         -- note_attachment
         
         CREATE TABLE note_attachment
@@ -1051,7 +1062,7 @@ BEGIN
         
         -- ilsconfig
         
-        ALTER TABLE ilsconfig DROP COLUMN x;
+        -- ALTER TABLE ilsconfig DROP COLUMN x;
         
         
         -- ilsprofile_floorplan
@@ -1129,6 +1140,12 @@ BEGIN
         
         DROP TABLE marketing$ad_blurbs;
         
+        
+        -- n4_policy
+        
+        ALTER TABLE n4_policy   DROP COLUMN mailing_address_street1,
+                                DROP COLUMN mailing_address_street2;
+        
         -- online_application$signatures
         
         DROP TABLE online_application$signatures;
@@ -1142,6 +1159,18 @@ BEGIN
         -- payment_information
         
         DROP TABLE payment_information;
+        
+        -- product
+        
+        ALTER TABLE product     DROP COLUMN code_type,
+                                DROP COLUMN is_default_catalog_item;
+                                
+                                
+        -- product_item
+        
+        ALTER TABLE product_item        DROP COLUMN code,
+                                        DROP COLUMN is_default;
+        
         
         -- proof_of_employment_document
         
@@ -1313,6 +1342,14 @@ BEGIN
                 CHECK ((status) IN ('Approved', 'Cancelled', 'Incomplete', 'InformationRequested', 'Submitted'));
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_mailing_address_street_direction_e_ck 
+                CHECK ((mailing_address_street_direction) IN ('east', 'north', 'northEast', 'northWest', 'south', 'southEast', 'southWest', 'west'));
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_mailing_address_street_type_e_ck 
+                CHECK ((mailing_address_street_type) IN ('alley', 'approach', 'arcade', 'avenue', 'boulevard', 'brow', 'bypass', 'causeway', 'circle', 
+                'circuit', 'circus', 'close', 'copse', 'corner', 'court', 'cove', 'crescent', 'drive', 'end', 'esplanande', 'flat', 'freeway', 'frontage', 
+                'gardens', 'glade', 'glen', 'green', 'grove', 'heights', 'highway', 'lane', 'line', 'link', 'loop', 'mall', 'mews', 'other', 'packet', 
+                'parade', 'park', 'parkway', 'place', 'promenade', 'reserve', 'ridge', 'rise', 'road', 'row', 'square', 'street', 'strip', 'tarn', 'terrace', 
+                'thoroughfaree', 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
         ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('ARPolicy', 'AggregatedTransfer', 'AgreementLegalPolicy', 'ApplicationDocumentationPolicy', 'AptUnit', 
                 'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'Complex', 'DatesPolicy', 'DepositPolicy', 'EmailTemplatesPolicy', 
@@ -1360,6 +1397,7 @@ BEGIN
         **/
         
         CREATE INDEX agreement_signatures$legal_terms_signatures_owner_idx ON agreement_signatures$legal_terms_signatures USING btree (owner);
+        CREATE INDEX ilsprofile_email_building_idx ON ilsprofile_email USING btree (building);
         CREATE INDEX lease_term_v$agreement_legal_terms_owner_idx ON lease_term_v$agreement_legal_terms USING btree (owner);
         CREATE INDEX lease_term_v$utilities_owner_idx ON lease_term_v$utilities USING btree (owner);
         CREATE INDEX online_application$legal_terms_owner_idx ON online_application$legal_terms USING btree (owner);
