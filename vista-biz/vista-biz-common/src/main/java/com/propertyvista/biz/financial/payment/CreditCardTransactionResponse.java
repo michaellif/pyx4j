@@ -30,4 +30,6 @@ public interface CreditCardTransactionResponse extends IEntity {
 
     IPrimitive<String> authorizationNumber();
 
+    IPrimitive<String> convenienceFeeAuthorizationNumber();
+
 }

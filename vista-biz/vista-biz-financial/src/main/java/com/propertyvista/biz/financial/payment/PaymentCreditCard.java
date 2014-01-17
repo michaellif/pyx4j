@@ -96,6 +96,7 @@ class PaymentCreditCard {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             paymentRecord.transactionAuthorizationNumber().setValue(saleResponse.authorizationNumber().getValue());
+            paymentRecord.convenienceFeeTransactionAuthorizationNumber().setValue(saleResponse.convenienceFeeAuthorizationNumber().getValue());
             ServerSideFactory.create(NotificationFacade.class).paymentCleared(paymentRecord);
         } else {
             log.debug("ccTransaction rejected {}", saleResponse.code(), saleResponse.message());

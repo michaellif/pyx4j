@@ -234,6 +234,9 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @Caption(name = "Transaction Authorization #")
     IPrimitive<String> transactionAuthorizationNumber();
 
+    @Caption(name = "Web Payment Fee Authorization #")
+    IPrimitive<String> convenienceFeeTransactionAuthorizationNumber();
+
     @Detached(level = AttachLevel.IdOnly)
     @JoinColumn
     PaymentPostingBatch batch();
