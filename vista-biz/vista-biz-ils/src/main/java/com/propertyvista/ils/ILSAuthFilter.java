@@ -94,6 +94,7 @@ public class ILSAuthFilter implements Filter {
                                 @Override
                                 public void onSuccess(AuthenticationResponse result) {
                                     rc.set(SecurityController.checkBehavior(VistaCrmBehavior.ILS));
+                                    Lifecycle.endSession();
                                 }
                             }, new ClientSystemInfo(), authenticationRequest);
                         }
@@ -104,11 +105,7 @@ public class ILSAuthFilter implements Filter {
             }
 
             if (rc.get()) {
-                try {
-                    chain.doFilter(httpRequest, httpResponse);
-                } finally {
-                    Lifecycle.endSession();
-                }
+                chain.doFilter(httpRequest, httpResponse);
             } else {
                 httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Vista Realm\"");
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
