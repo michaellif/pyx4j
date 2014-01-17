@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -59,7 +60,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().id())).customLabel(i18n.tr("Reference Number")).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().id(), new CNumberLabel())).customLabel(i18n.tr("Reference Number")).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>())).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount())).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().transactionAuthorizationNumber())).build());

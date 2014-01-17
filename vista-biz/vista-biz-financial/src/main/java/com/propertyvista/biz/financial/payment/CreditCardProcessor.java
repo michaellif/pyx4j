@@ -265,6 +265,7 @@ class CreditCardProcessor {
         response.code().setValue(cresponse.code().getValue());
         response.message().setValue(cresponse.message().getValue());
         response.authorizationNumber().setValue(cresponse.authorizationNumber().getValue());
+        response.convenienceFeeAuthorizationNumber().setValue(cresponse.convenienceFeeAuthorizationNumber().getValue());
         return response;
     }
 

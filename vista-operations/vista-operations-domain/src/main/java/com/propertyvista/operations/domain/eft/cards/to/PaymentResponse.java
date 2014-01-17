@@ -29,4 +29,6 @@ public interface PaymentResponse extends IEntity {
     IPrimitive<String> message();
 
     IPrimitive<String> authorizationNumber();
+
+    IPrimitive<String> convenienceFeeAuthorizationNumber();
 }

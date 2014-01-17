@@ -154,7 +154,8 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
         response.message().setValue(cresponse.responsePaymentAuthorization);
 
         if (response.success().getValue()) {
-            response.authorizationNumber().setValue(cresponse.responsePaymentAuthorization + " " + cresponse.responseFeeAuthorization);
+            response.authorizationNumber().setValue(cresponse.responsePaymentAuthorization);
+            response.convenienceFeeAuthorizationNumber().setValue(cresponse.responseFeeAuthorization);
 
             //Validate the values returned by caledon
             if ((cresponse.terminalID == null) || (merchant.terminalID().getValue().compareTo(cresponse.terminalID) != 0)) {

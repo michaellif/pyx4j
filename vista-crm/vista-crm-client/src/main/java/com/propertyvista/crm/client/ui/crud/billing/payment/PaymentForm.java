@@ -248,6 +248,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().paymentStatus()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().convenienceFeeTransactionAuthorizationNumber()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().transactionErrorMessage()), 22).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().notes()), 22).build());
 
@@ -423,6 +424,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
 
             get(proto().transactionAuthorizationNumber()).setVisible(false);
+            get(proto().convenienceFeeTransactionAuthorizationNumber()).setVisible(false);
             get(proto().transactionErrorMessage()).setVisible(false);
 
         } else { // view mode:
@@ -436,6 +438,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             boolean transactionResult = (getValue().paymentMethod().isNull() ? false : getValue().paymentMethod().type().getValue().isTransactable());
 
             get(proto().transactionAuthorizationNumber()).setVisible(transactionResult && !getValue().transactionAuthorizationNumber().isNull());
+            get(proto().convenienceFeeTransactionAuthorizationNumber()).setVisible(
+                    transactionResult && !getValue().convenienceFeeTransactionAuthorizationNumber().isNull());
             get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
 
             get(proto().preauthorizedPayment()).setVisible(!getValue().preauthorizedPayment().isNull());
