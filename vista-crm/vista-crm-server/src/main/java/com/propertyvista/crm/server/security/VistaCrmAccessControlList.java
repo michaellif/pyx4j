@@ -180,7 +180,6 @@ import com.propertyvista.crm.rpc.services.vista2pmc.ILSConfigCrudService;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
@@ -600,8 +599,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new MaintenanceRequestDatasetAccessRule(), MaintenanceRequest.class);
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), AggregatedTransfer.class);
-
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new EmployeeSignatureDatasetAccessRule(), EmployeeSignature.class);
 
         // Data Access for Gadgets & Reports
         grant(VistaDataAccessBehavior.BuildingsAssigned, new AptUnitDatasetAccessRule(), AptUnit.class);
