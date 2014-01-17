@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -102,7 +103,9 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
                     AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(item.getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));                    
                 }
             })
-            .init();//@formatter:on       
+            .init();//@formatter:on    
+
+        lister.setSorting(Arrays.asList(new Sort(EntityFactory.getEntityPrototype(BuildingDTO.class).propertyCode(), false)));
         return lister;
     }
 
