@@ -66,6 +66,7 @@ import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.MaintenanceRequestPictureUploadService;
+import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
@@ -177,6 +178,30 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().unit(), unitSelector), 20, true).build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().reporter(), reporterSelector), 20, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().reporterPhone()), 20, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().phoneType()), 20, true).build());
+        get(proto().reporter()).addValueChangeHandler(new ValueChangeHandler<Tenant>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Tenant> event) {
+                String phone = null;
+                ContactPhoneType type = null;
+                Tenant reporter = event.getValue();
+                if (reporter != null) {
+                    phone = reporter.customer().person().mobilePhone().getStringView();
+                    type = ContactPhoneType.mobile;
+                    if (phone == null) {
+                        phone = reporter.customer().person().homePhone().getStringView();
+                        type = ContactPhoneType.home;
+                        if (phone == null) {
+                            phone = reporter.customer().person().workPhone().getStringView();
+                            type = ContactPhoneType.work;
+                        }
+                    }
+                }
+                get(proto().reporterPhone()).setValue(phone);
+                get(proto().phoneType()).setValue(type);
+            }
+        });
 
         // category panel
         mrCategory = new MaintenanceRequestCategoryChoice();

@@ -49,6 +49,9 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 @DiscriminatorValue("MaintenanceRequest")
 public interface MaintenanceRequest extends IEntity, HasNotesAndAttachments {
+    public enum ContactPhoneType {
+        mobile, home, work
+    }
 
     @Owner
     @Detached
@@ -70,6 +73,8 @@ public interface MaintenanceRequest extends IEntity, HasNotesAndAttachments {
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> reporterPhone();
+
+    IPrimitive<ContactPhoneType> phoneType();
 
     @Editor(type = EditorType.email)
     IPrimitive<String> reporterEmail();

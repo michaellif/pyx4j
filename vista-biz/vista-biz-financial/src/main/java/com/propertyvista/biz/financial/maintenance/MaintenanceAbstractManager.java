@@ -26,11 +26,13 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -42,6 +44,8 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 public abstract class MaintenanceAbstractManager {
     private final static Logger log = LoggerFactory.getLogger(MaintenanceAbstractManager.class);
+
+    private final static I18n i18n = I18n.get(MaintenanceAbstractManager.class);
 
     public MaintenanceRequest createNewRequest(Building building) {
         MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
@@ -76,6 +80,12 @@ public abstract class MaintenanceAbstractManager {
         request.unit().set(tenant.lease().unit());
         request.reporter().set(tenant);
 
+        if (!request.reporter().isNull()) {
+            request.reporterName().setValue(request.reporter().customer().person().name().getStringView());
+            request.reporterEmail().setValue(request.reporter().customer().person().email().getStringView());
+            setReporterPhone(request);
+        }
+
         return request;
     }
 
@@ -88,17 +98,11 @@ public abstract class MaintenanceAbstractManager {
             if (request.reporterEmail().isNull()) {
                 request.reporterEmail().setValue(request.reporter().customer().person().email().getStringView());
             }
-            if (request.reporterPhone().isNull()) {
-                String phone = request.reporter().customer().person().mobilePhone().getStringView();
-                if (phone == null) {
-                    phone = request.reporter().customer().person().homePhone().getStringView();
-                }
-                if (phone == null) {
-                    phone = request.reporter().customer().person().workPhone().getStringView();
-                }
-                request.reporterPhone().setValue(phone);
+            if (request.reporterPhone().isNull() || request.phoneType().isNull()) {
+                setReporterPhone(request);
             }
         }
+
         boolean isNewRequest = false;
         if (request.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(request);
@@ -170,5 +174,24 @@ public abstract class MaintenanceAbstractManager {
             }
         }
         return null;
+    }
+
+    private void setReporterPhone(MaintenanceRequest request) {
+        if (request.reporter().isNull()) {
+            return;
+        }
+        // check if phone number is available - use mobile first
+        String phone = request.reporter().customer().person().mobilePhone().getStringView();
+        ContactPhoneType type = ContactPhoneType.mobile;
+        if (phone == null) {
+            phone = request.reporter().customer().person().homePhone().getStringView();
+            type = ContactPhoneType.home;
+            if (phone == null) {
+                phone = request.reporter().customer().person().workPhone().getStringView();
+                type = ContactPhoneType.work;
+            }
+        }
+        request.reporterPhone().setValue(phone);
+        request.phoneType().setValue(type);
     }
 }

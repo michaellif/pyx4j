@@ -103,21 +103,14 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().summary()), 250).mockValue("Maintenance Request Summary").build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 250).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority(), prioritySelector), 250).build());
+
+        // phone is mandatory
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reporterPhone()), 250).customLabel(i18n.tr("Contact Phone")).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().phoneType()), 250).build());
+        get(proto().phoneType()).setMandatory(true);
+        get(proto().reporterPhone()).setMandatory(true);
         content.setBR(++row, 0, 1);
 
-        TwoColumnFlexFormPanel schedulePanel = new TwoColumnFlexFormPanel();
-        schedulePanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate1()), 120).build());
-        schedulePanel.setWidget(1, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime1()), 120).build());
-        schedulePanel.setWidget(2, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 120).build());
-        schedulePanel.setWidget(3, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 120).build());
-        // past dates not allowed
-        ((CDatePicker) get(proto().preferredDate1())).setPastDateSelectionAllowed(false);
-        ((CDatePicker) get(proto().preferredDate2())).setPastDateSelectionAllowed(false);
-
-        accessPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
-        accessPanel.setWidget(1, 0, schedulePanel);
-
-        int innerRow = -1;
         imagePanel = new TwoColumnFlexFormPanel();
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadPortalService> create(MaintenanceRequestPictureUploadPortalService.class), new VistaFileURLBuilder(
@@ -135,24 +128,36 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             }
         };
         imageSlider.setImageSize(250, 240);
-        imagePanel.setWidget(++innerRow, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
+        imagePanel.setWidget(0, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
         content.setWidget(++row, 0, imagePanel);
 
-        permissionPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).mockValue(true).build());
-        permissionPanel.setWidget(1, 0, accessPanel);
+        accessPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
+        // schedule panel
+        TwoColumnFlexFormPanel schedulePanel = new TwoColumnFlexFormPanel();
+        schedulePanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate1()), 120).build());
+        schedulePanel.setWidget(1, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime1()), 120).build());
+        schedulePanel.setWidget(2, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 120).build());
+        schedulePanel.setWidget(3, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 120).build());
+        // past dates not allowed
+        ((CDatePicker) get(proto().preferredDate1())).setPastDateSelectionAllowed(false);
+        ((CDatePicker) get(proto().preferredDate2())).setPastDateSelectionAllowed(false);
+        accessPanel.setWidget(1, 0, schedulePanel);
+
+        permissionPanel.setWidget(2, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).mockValue(true).build());
+        permissionPanel.setWidget(3, 0, accessPanel);
         content.setWidget(++row, 0, permissionPanel);
         content.setBR(++row, 0, 1);
 
-        innerRow = -1;
-        statusPanel.setH1(++innerRow, 0, 1, i18n.tr("Status"));
-        statusPanel.setWidget(++innerRow, 0,
+        int panelRow = -1;
+        statusPanel.setH1(++panelRow, 0, 1, i18n.tr("Status"));
+        statusPanel.setWidget(++panelRow, 0,
                 new FormWidgetDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 100).build());
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 100).build());
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 100).build());
-        statusPanel.setBR(++innerRow, 0, 1);
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 100).build());
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 100).build());
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 100).build());
+        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 100).build());
+        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 100).build());
+        statusPanel.setBR(++panelRow, 0, 1);
+        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 100).build());
+        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 100).build());
+        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 100).build());
         content.setWidget(++row, 0, statusPanel);
 
         content.setBR(++row, 0, 1);
