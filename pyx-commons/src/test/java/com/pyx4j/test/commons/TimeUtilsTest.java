@@ -57,4 +57,13 @@ public class TimeUtilsTest extends TestCase {
         assertTrue(">=", new LogicalDate(2000, 1, 3).ge(new LogicalDate(2000, 1, 3)));
         assertFalse(">=", new LogicalDate(2000, 1, 3).ge(new LogicalDate(2000, 1, 4)));
     }
+
+    public void testDurationParse() {
+        assertEquals(100, TimeUtils.durationParseSeconds("100"));
+        assertEquals(10, TimeUtils.durationParseSeconds("10 sec"));
+        assertEquals(10, TimeUtils.durationParseSeconds("10 seconds"));
+
+        assertEquals(60, TimeUtils.durationParseSeconds("1 min"));
+        assertEquals(70, TimeUtils.durationParseSeconds("1 min 10 sec"));
+    }
 }

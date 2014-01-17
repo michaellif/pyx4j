@@ -20,6 +20,7 @@
  */
 package com.pyx4j.commons;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -131,8 +132,6 @@ public class TimeUtils {
     }
 
     public static int durationParseSeconds(String value) {
-        int multiplier = 1;
-
         Map<String, Integer> timeUnits = new LinkedHashMap<String, Integer>();
         timeUnits.put("months:month", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
         timeUnits.put("seconds:second:sec:s", 1);
@@ -140,19 +139,30 @@ public class TimeUtils {
         timeUnits.put("hours:hour:h", Consts.HOURS2SEC);
         timeUnits.put("days:day:d", Consts.DAY2HOURS * Consts.HOURS2SEC);
 
-        String text = value.trim();
+        int seconds = 0;
 
-        for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
-            for (String unit : me.getKey().split(":")) {
-                if (text.endsWith(unit)) {
-                    text = text.substring(0, text.length() - unit.length()).trim();
-                    multiplier = me.getValue();
-                    break;
+        Collection<String> texts = SimpleRegExp.matches(value, "\\d+\\s*[a-zA-Z]*\\s*");
+        for (String text : texts) {
+            String fragment = text.trim().toLowerCase();
+            boolean parsed = false;
+            units: for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
+                for (String unit : me.getKey().split(":")) {
+                    if (fragment.endsWith(unit)) {
+                        String unitValue = fragment.substring(0, fragment.length() - unit.length()).trim();
+                        int multiplier = me.getValue();
+                        seconds += Integer.valueOf(unitValue).intValue() * multiplier;
+                        parsed = true;
+                        break units;
+                    }
                 }
+            }
+            // No units found
+            if (!parsed) {
+                seconds += Integer.valueOf(fragment).intValue();
             }
         }
 
-        return Integer.valueOf(text.trim()).intValue() * multiplier;
+        return seconds;
     }
 
     public static String durationFormatSeconds(int seconds) {
