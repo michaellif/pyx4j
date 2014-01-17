@@ -157,6 +157,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
         this.itemsHolderForm.setVisited(false);
         this.itemsHolderForm.populateNew();
+        this.itemsHolderForm.toggleSelectAll(false);
     }
 
     @Override

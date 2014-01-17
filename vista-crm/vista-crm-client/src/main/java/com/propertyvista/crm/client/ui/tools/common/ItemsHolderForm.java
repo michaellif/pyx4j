@@ -87,6 +87,17 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         this.onMoreClicked = command;
     }
 
+    public void toggleSelectAll(boolean selectAll) {
+        isSelectAllSet = selectAll;
+
+        checkAllVisibleItems.setValue(isSelectAllSet);
+        checkAllVisibleItems.setEditable(!isSelectAllSet);
+        setEditable(!isSelectAllSet);
+        checkAll(isSelectAllSet);
+
+        renderStatsPanel();
+    }
+
     protected abstract Widget createHeaderPanel();
 
     protected abstract CEntityFolder<Item> createItemsFolder();
@@ -123,7 +134,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         toggleSelectEverythingAnchor = new Anchor("", new Command() {
             @Override
             public void execute() {
-                toggleSelectAll();
+                toggleSelectAll(!isSelectAllSet);
             }
         });
         statsPanel.add(toggleSelectEverythingAnchor);
@@ -175,17 +186,6 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         CComponent<?> c = get(proto().items());
         BulkItemsFolder<Item> folder = (BulkItemsFolder<Item>) c;
         folder.checkAll(isChecked);
-    }
-
-    private void toggleSelectAll() {
-        isSelectAllSet = !isSelectAllSet;
-
-        checkAllVisibleItems.setValue(isSelectAllSet);
-        checkAllVisibleItems.setEditable(!isSelectAllSet);
-        setEditable(!isSelectAllSet);
-        checkAll(isSelectAllSet);
-
-        renderStatsPanel();
     }
 
     private void renderStatsPanel() {
