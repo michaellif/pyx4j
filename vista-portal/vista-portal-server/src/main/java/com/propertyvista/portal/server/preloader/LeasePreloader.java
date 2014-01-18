@@ -160,20 +160,20 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     {
                         Calendar leaseToCal = new GregorianCalendar();
                         leaseToCal.setTime(new LogicalDate());
-                        int month;
-
-                        if (config().mockupData) {
-                            month = DataGenerator.randomInt(11);
-                        } else {
-                            month = DataGenerator.randomInt(4);
-                        }
-                        if (i % 2 != 0) {
-                            // produce lease completed by the day of the preload run
-                            leaseToCal.add(Calendar.MONTH, -1 - month);
-                        } else {
-                            // produce a lease that ends after the day of the preload run
-                            leaseToCal.add(Calendar.MONTH, 1 + month);
-                        }
+//                        int month = 0;
+//                        
+//                        if (config().mockupData) {
+//                            month = DataGenerator.randomInt(11);
+//                        } else {
+//                            month = DataGenerator.randomInt(4);
+//                        }
+//                        if (i % 2 != 0) {
+//                            // produce lease completed by the day of the preload run
+//                            leaseToCal.add(Calendar.MONTH, -1 - month);
+//                        } else {
+//                            // produce a lease that ends after the day of the preload run
+//                            leaseToCal.add(Calendar.MONTH, 1 + month);
+//                        }
                         simBuilder.leaseTo(new LogicalDate(leaseToCal.getTime()));
                     }
 
