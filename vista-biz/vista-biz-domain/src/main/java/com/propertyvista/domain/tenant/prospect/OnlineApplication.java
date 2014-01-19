@@ -14,7 +14,6 @@
 package com.propertyvista.domain.tenant.prospect;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -95,6 +94,7 @@ public interface OnlineApplication extends IEntity {
 
     IPrimitive<Status> status();
 
+    @Owned
     IList<OnlineApplicationWizardStepStatus> stepsStatuses();
 
 }
