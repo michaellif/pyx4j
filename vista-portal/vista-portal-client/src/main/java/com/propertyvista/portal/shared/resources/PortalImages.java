@@ -362,7 +362,7 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     interface SelectMenuImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Nav_ApplicationIcon.png")
+        @Source("Nav-Icon-SelectLease.png")
         ImageResource regular();
     }
 
