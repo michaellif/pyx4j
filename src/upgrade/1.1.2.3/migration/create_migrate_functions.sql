@@ -72,6 +72,9 @@ BEGIN
         ALTER TABLE merchant_account ADD COLUMN merchant_terminal_id_convenience_fee VARCHAR(8);
         
        
+        -- payment_record
+        
+        ALTER TABLE payment_record ADD COLUMN convenience_fee_transaction_authorization_number VARCHAR(500);
        
         
         /**
