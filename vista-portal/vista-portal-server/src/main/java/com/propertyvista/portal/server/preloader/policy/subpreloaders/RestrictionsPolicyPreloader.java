@@ -32,7 +32,7 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
 
     private static final int MAX_PARKING_SPOTS = 3;
 
-    private static final boolean OCCUPANTS_OVER_18_ARE_APPLICANTS = false;
+    private static final boolean OCCUPANTS_OVER_18_ARE_APPLICANTS = true;
 
     private Integer ageOfMajority;
 

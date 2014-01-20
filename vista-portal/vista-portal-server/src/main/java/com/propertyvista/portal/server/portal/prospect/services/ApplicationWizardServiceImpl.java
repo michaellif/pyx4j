@@ -754,9 +754,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
                 RestrictionsPolicy.class);
+
         if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
             to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
         }
+
+        to.occupantsOver18areApplicants().setValue(restrictionsPolicy.occupantsOver18areApplicants().getValue());
     }
 
     // ================================================================================================================

@@ -40,6 +40,10 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
         setViewable(this.view == null);
     }
 
+    public boolean isOccupantsOver18areApplicants() {
+        return view.getValue().occupantsOver18areApplicants().isBooleanTrue();
+    }
+
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof CoapplicantDTO) {
@@ -69,10 +73,16 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
 
             // tweaks:
+            get(proto().dependent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    updateBirthDateVisibility();
+                }
+            });
             get(proto().matured()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    get(proto().birthDate()).setVisible(!event.getValue());
+                    updateBirthDateVisibility();
                 }
             });
 
@@ -83,7 +93,16 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            get(proto().birthDate()).setVisible(!getValue().matured().isBooleanTrue());
+            get(proto().matured()).setVisible(isOccupantsOver18areApplicants());
+            updateBirthDateVisibility();
+        }
+
+        private void updateBirthDateVisibility() {
+            if (isOccupantsOver18areApplicants()) {
+                get(proto().birthDate()).setVisible(getValue().dependent().getValue() && !getValue().matured().getValue());
+            } else {
+                get(proto().birthDate()).setVisible(getValue().dependent().getValue());
+            }
         }
     }
 }
