@@ -636,6 +636,11 @@ BEGIN
         
         ALTER TABLE legal_terms_policy_item OWNER TO vista;
         
+        -- maintenance_request
+        
+        ALTER TABLE maintenance_request ADD COLUMN phone_type VARCHAR(50);
+        
+        
         -- maintenance_request_category
         
         ALTER TABLE maintenance_request_category ADD COLUMN type VARCHAR(50);
@@ -756,18 +761,6 @@ BEGIN
         ALTER TABLE online_application$legal_terms OWNER TO vista;
         
         
-        -- online_application$steps_statuses
-        
-        CREATE TABLE online_application$steps_statuses
-        (
-                id                              BIGINT                  NOT NULL,
-                owner                           BIGINT,
-                value                           BIGINT,
-                seq                             INT,
-                        CONSTRAINT online_application$steps_statuses_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE online_application$steps_statuses OWNER TO vista;
         
         -- online_application_legal_policy
         
@@ -934,6 +927,25 @@ BEGIN
         );
         
         ALTER TABLE proof_of_employment_document_folder OWNER TO vista;
+        
+        -- prospect_portal_policy
+        
+        CREATE TABLE prospect_portal_policy
+        (
+                id                              BIGINT                  NOT NULL,
+                node_discriminator              VARCHAR(50),
+                node                            BIGINT,
+                updated                         TIMESTAMP,
+                unit_availability_span          INT,
+                max_exact_match_units           INT,
+                max_partial_match_units         INT,
+                fee_payment                     VARCHAR(50),
+                fee_amount                      NUMERIC(18,2),
+                        CONSTRAINT prospect_portal_policy_pk PRIMARY KEY(id)
+        );
+        
+        
+        ALTER TABLE prospect_portal_policy OWNER TO vista;
         
         -- signed_online_application_legal_term
         
@@ -1259,10 +1271,6 @@ BEGIN
                 REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application$legal_terms ADD CONSTRAINT online_application$legal_terms_value_fk FOREIGN KEY(value) 
                 REFERENCES signed_online_application_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE online_application$steps_statuses ADD CONSTRAINT online_application$steps_statuses_owner_fk FOREIGN KEY(owner) 
-                REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE online_application$steps_statuses ADD CONSTRAINT online_application$steps_statuses_value_fk FOREIGN KEY(value) 
-                REFERENCES online_application_wizard_step_status(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application_legal_term ADD CONSTRAINT online_application_legal_term_policy_fk FOREIGN KEY(policy) 
                 REFERENCES online_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application_wizard_step_status ADD CONSTRAINT online_application_wizard_step_status_online_application_fk FOREIGN KEY(online_application) 
@@ -1337,6 +1345,7 @@ BEGIN
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_phone_type_e_ck CHECK ((phone_type) IN ('home', 'mobile', 'work'));
         ALTER TABLE maintenance_request_category ADD CONSTRAINT maintenance_request_category_type_e_ck CHECK ((type) IN ('Amenities', 'ApartmentUnit', 'Exterior'));
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_status_e_ck 
                 CHECK ((status) IN ('Approved', 'Cancelled', 'Incomplete', 'InformationRequested', 'Submitted'));
@@ -1353,10 +1362,10 @@ BEGIN
         ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('ARPolicy', 'AggregatedTransfer', 'AgreementLegalPolicy', 'ApplicationDocumentationPolicy', 'AptUnit', 
                 'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'Complex', 'DatesPolicy', 'DepositPolicy', 'EmailTemplatesPolicy', 
-                'Employee', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 'LeaseAdjustmentPolicy', 'LeaseBillingPolicy', 
-                'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 'MerchantAccount', 'N4Policy', 'OnlineAppPolicy', 'PaymentPostingBatch', 
-                'PaymentRecord', 'PaymentTransactionsPolicy', 'PaymentTypeSelectionPolicy', 'PetPolicy', 'ProductTaxPolicy', 'RestrictionsPolicy', 
-                'Tenant', 'TenantInsurancePolicy', 'YardiInterfacePolicy', 'feature', 'service'));
+                'Employee', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 'LeaseAdjustmentPolicy', 'LeaseBillingPolicy', 'LegalTermsPolicy', 
+                'Locker', 'MaintenanceRequest', 'MerchantAccount', 'N4Policy', 'OnlineAppPolicy', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 
+                'PaymentTypeSelectionPolicy', 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 
+                'YardiInterfacePolicy', 'feature', 'service'));
         ALTER TABLE online_application_legal_policy ADD CONSTRAINT online_application_legal_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE online_application_legal_term ADD CONSTRAINT online_application_legal_term_apply_to_role_e_ck CHECK ((apply_to_role) IN ('All', 'Applicant', 'Guarantor'));
@@ -1375,6 +1384,9 @@ BEGIN
         ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_tp_e_ck CHECK (tp = 'administrator');
         --ALTER TABLE product_item ADD CONSTRAINT product_item_element_discriminator_d_ck CHECK ((element_discriminator) IN ('AptUnit', 'LockerArea', 'Parking', 'Roof'));
         ALTER TABLE product_tax_policy ADD CONSTRAINT product_tax_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE prospect_portal_policy ADD CONSTRAINT prospect_portal_policy_fee_payment_e_ck CHECK ((fee_payment) IN ('none', 'perApplicant', 'perLease'));
+        ALTER TABLE prospect_portal_policy ADD CONSTRAINT prospect_portal_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE restrictions_policy ADD CONSTRAINT restrictions_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
@@ -1401,7 +1413,6 @@ BEGIN
         CREATE INDEX lease_term_v$agreement_legal_terms_owner_idx ON lease_term_v$agreement_legal_terms USING btree (owner);
         CREATE INDEX lease_term_v$utilities_owner_idx ON lease_term_v$utilities USING btree (owner);
         CREATE INDEX online_application$legal_terms_owner_idx ON online_application$legal_terms USING btree (owner);
-        CREATE INDEX online_application$steps_statuses_owner_idx ON online_application$steps_statuses USING btree (owner);
         CREATE INDEX agreement_signatures_lease_term_tenant_discriminator_idx ON agreement_signatures USING btree (lease_term_tenant_discriminator);
         CREATE INDEX agreement_signatures_lease_term_tenant_idx ON agreement_signatures USING btree (lease_term_tenant);
         CREATE INDEX ilssummary_building_building_idx ON ilssummary_building USING btree (building);

@@ -89,7 +89,7 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE online_application$legal_terms_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application_legal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        CREATE SEQUENCE online_application$steps_statuses_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        -- CREATE SEQUENCE online_application$steps_statuses_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application_wizard_step_status_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE payment_posting_batch_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE pmc_company_info_contact_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -97,6 +97,7 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE proof_of_employment_document_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE proof_of_employment_document_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE proof_of_employment_document_folder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE prospect_portal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE signed_online_application_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
         -- Change owner to vista
@@ -138,7 +139,7 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE online_application$legal_terms_seq OWNER TO vista ;
         ALTER SEQUENCE online_application_legal_policy_seq OWNER TO vista ;
         ALTER SEQUENCE online_application_legal_term_seq OWNER TO vista ;
-        ALTER SEQUENCE online_application$steps_statuses_seq OWNER TO vista ;
+        -- ALTER SEQUENCE online_application$steps_statuses_seq OWNER TO vista ;
         ALTER SEQUENCE online_application_wizard_step_status_seq OWNER TO vista ;
         ALTER SEQUENCE payment_posting_batch_seq OWNER TO vista ;
         ALTER SEQUENCE pmc_company_info_contact_seq OWNER TO vista ;
@@ -146,6 +147,7 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE proof_of_employment_document_blob_seq OWNER TO vista ;
         ALTER SEQUENCE proof_of_employment_document_file_seq OWNER TO vista ;
         ALTER SEQUENCE proof_of_employment_document_folder_seq OWNER TO vista ;
+        ALTER SEQUENCE prospect_portal_policy_seq OWNER TO vista ;
         ALTER SEQUENCE signed_online_application_legal_term_seq OWNER TO vista ;
 
        
