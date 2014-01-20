@@ -134,6 +134,14 @@ public class YardiBuildingProcessor {
             log.info("Property PrimaryID={}, SecondaryID={}: Address was imported successfully", propertyId.getIdentification().getPrimaryID(), propertyId
                     .getIdentification().getSecondaryID());
         }
+
+        if (building.info().address().province().isNull()) {
+            String errorMsg = SimpleMessageFormat.format(
+                    "Property PrimaryID={0,choice,null#null|!null#{0}}, SecondaryID={1,choice,null#null|!null#{1}}: has no property code.", propertyId
+                            .getIdentification().getPrimaryID(), propertyId.getIdentification().getSecondaryID());
+            throw new RuntimeException(errorMsg);
+        }
+
         return building;
     }
 
