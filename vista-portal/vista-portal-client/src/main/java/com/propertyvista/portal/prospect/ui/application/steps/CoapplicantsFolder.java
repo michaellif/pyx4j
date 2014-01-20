@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
+import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -32,16 +32,15 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
 
     private static final I18n i18n = I18n.get(CoapplicantsFolder.class);
 
-    private final ApplicationWizardView view;
+    private final ApplicationWizard wizard;
 
-    public CoapplicantsFolder(ApplicationWizardView view) {
+    public CoapplicantsFolder(ApplicationWizard applicationWizard) {
         super(CoapplicantDTO.class, i18n.tr("Occupant"));
-        this.view = view;
-        setViewable(this.view == null);
+        this.wizard = applicationWizard;
     }
 
     public boolean isOccupantsOver18areApplicants() {
-        return view.getValue().occupantsOver18areApplicants().isBooleanTrue();
+        return wizard.getValue().occupantsOver18areApplicants().isBooleanTrue();
     }
 
     @Override

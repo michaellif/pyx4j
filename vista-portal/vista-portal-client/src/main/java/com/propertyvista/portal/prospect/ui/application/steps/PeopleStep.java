@@ -39,7 +39,7 @@ public class PeopleStep extends ApplicationWizardStep {
         int row = -1;
 
         panel.setH3(++row, 0, 1, i18n.tr("People Living with You"));
-        panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getView())));
+        panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getWizard())));
 
         panel.setWidget(++row, 0, warningMessage);
         warningMessage.setStyleName(StyleName.warningMessage.name());
