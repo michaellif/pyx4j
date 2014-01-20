@@ -414,7 +414,18 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             return;
         }
 
-        log.info("    assign Legal Address: {}", address.getAddress1());
+        StringBuilder importedAddressToString = new StringBuilder();
+        importedAddressToString.append("(");
+        importedAddressToString.append("address1: ").append(address.getAddress1()).append(", ");
+        importedAddressToString.append("address2: ").append(address.getAddress2()).append(", ");
+        importedAddressToString.append("city: ").append(address.getCity()).append(", ");
+        importedAddressToString.append("state: ").append(address.getState()).append(", ");
+        importedAddressToString.append("province: ").append(address.getProvince()).append(", ");
+        importedAddressToString.append("postalCode: ").append(address.getPostalCode()).append(", ");
+        importedAddressToString.append("country: ").append(address.getCountry()).append(", ");
+        importedAddressToString.append("countyName: ").append(address.getCountyName()).append("");
+        importedAddressToString.append(")");
+        log.info("Unit pk={}: Trying to assign legal address: '{}'", unit.getPrimaryKey(), importedAddressToString);
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
@@ -422,9 +433,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 StringBuilder addrErr = new StringBuilder();
                 unit.info().legalAddress().set(MappingUtils.getAddress(address, addrErr));
                 if (addrErr.length() > 0) {
-                    String msg = SimpleMessageFormat.format("    invalid address: {0}", addrErr);
-                    log.info(msg);
+                    String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
+                    log.warn(msg);
                     executionMonitor.addInfoEvent("ParseAddress", msg);
+                } else {
+                    log.info("Unit pk={}: legal address has been assigned successfully", unit.getPrimaryKey());
                 }
 
                 ServerSideFactory.create(BuildingFacade.class).persist(unit);

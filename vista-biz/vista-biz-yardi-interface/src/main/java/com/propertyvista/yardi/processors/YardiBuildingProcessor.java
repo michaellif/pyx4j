@@ -106,17 +106,33 @@ public class YardiBuildingProcessor {
         Building building = new BuildingsMapper().map(propertyId);
 
         Address address = propertyId.getAddress().get(0);
-        log.info("    assign Building Address: {}", address.getAddress1());
+        StringBuilder importedAddressToString = new StringBuilder();
+        importedAddressToString.append("(");
+        importedAddressToString.append("address1: ").append(address.getAddress1()).append(", ");
+        importedAddressToString.append("address2: ").append(address.getAddress2()).append(", ");
+        importedAddressToString.append("city: ").append(address.getCity()).append(", ");
+        importedAddressToString.append("state: ").append(address.getState()).append(", ");
+        importedAddressToString.append("province: ").append(address.getProvince()).append(", ");
+        importedAddressToString.append("postalCode: ").append(address.getPostalCode()).append(", ");
+        importedAddressToString.append("country: ").append(address.getCountry()).append(", ");
+        importedAddressToString.append("countyName: ").append(address.getCountyName()).append("");
+        importedAddressToString.append(")");
+        log.info("Property PrimaryID={}, SecondaryID={}: Trying to import building address: '{}'", propertyId.getIdentification().getPrimaryID(), propertyId
+                .getIdentification().getSecondaryID(), importedAddressToString.toString());
 
         StringBuilder addrErr = new StringBuilder();
         building.info().address().set(MappingUtils.getAddress(address, addrErr));
         if (addrErr.length() > 0) {
-            String msg = SimpleMessageFormat.format("      invalid address: {0}", addrErr);
-            log.info(msg);
+            String msg = SimpleMessageFormat.format(
+                    "Property PrimaryID={0,choice,null#null|!null#{0}}, SecondaryID={1,choice,null#null|!null#{1}}: Got invalid address: {2}", propertyId
+                            .getIdentification().getPrimaryID(), propertyId.getIdentification().getSecondaryID(), addrErr);
+            log.warn(msg);
             if (executionMonitor != null) {
                 executionMonitor.addInfoEvent("ParseAddress", msg);
             }
-
+        } else {
+            log.info("Property PrimaryID={}, SecondaryID={}: Address was imported successfully", propertyId.getIdentification().getPrimaryID(), propertyId
+                    .getIdentification().getSecondaryID());
         }
         return building;
     }

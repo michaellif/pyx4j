@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.util;
 
-public class CnadianPostalCodeValidator {
+public class CanadianPostalCodeValidator {
 
     private final String original;
 
@@ -23,11 +23,17 @@ public class CnadianPostalCodeValidator {
 
     private final boolean valid;
 
-    public CnadianPostalCodeValidator(String postalCode) {
+    public CanadianPostalCodeValidator(String postalCode) {
         original = postalCode;
-        normalized = original.replaceAll("\\s", "").toUpperCase();
-        valid = normalized.matches("^([A-Z][0-9]){3}$");
-        formatted = valid ? normalized.replaceFirst("^(...)", "$1 ") : original;
+        if (postalCode != null) {
+            normalized = original.replaceAll("\\s", "").toUpperCase();
+            valid = normalized.matches("^([A-Z][0-9]){3}$");
+            formatted = valid ? normalized.replaceFirst("^(...)", "$1 ") : original;
+        } else {
+            normalized = null;
+            formatted = null;
+            valid = false;
+        }
     }
 
     public String original() {
