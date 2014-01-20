@@ -34,7 +34,7 @@ public interface CoapplicantDTO extends IEntity {
 
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Is age 18 or over?")
-    IPrimitive<Boolean> isMature();
+    IPrimitive<Boolean> matured();
 
     IPrimitive<String> firstName();
 

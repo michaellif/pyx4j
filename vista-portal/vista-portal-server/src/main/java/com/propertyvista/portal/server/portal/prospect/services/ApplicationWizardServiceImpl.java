@@ -328,6 +328,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             CoapplicantDTO cap = EntityFactory.create(CoapplicantDTO.class);
 
             cap.dependent().setValue(ltt.role().getValue() == Role.Dependent);
+            cap.matured().setValue(false);
 
             cap.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
             cap.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
@@ -336,6 +337,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             cap.relationship().setValue(ltt.relationship().getValue());
 
             cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
+
+            if (!cap.birthDate().isNull()) {
+                Integer ageOfMajority = (to.ageOfMajority().isNull() ? 18 : to.ageOfMajority().getValue());
+                cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority));
+            }
 
             // remember corresponding tenant: 
             cap.set(cap.tenantId(), ltt);

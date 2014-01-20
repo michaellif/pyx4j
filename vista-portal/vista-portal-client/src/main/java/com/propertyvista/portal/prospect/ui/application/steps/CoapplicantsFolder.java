@@ -60,8 +60,8 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().isMature())).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).useLabelSemicolon(false).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().matured())).useLabelSemicolon(false).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
@@ -69,7 +69,7 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
 
             // tweaks:
-            get(proto().isMature()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            get(proto().matured()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     get(proto().birthDate()).setVisible(!event.getValue());
@@ -83,7 +83,7 @@ public class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            get(proto().birthDate()).setVisible(!getValue().isMature().isBooleanTrue());
+            get(proto().birthDate()).setVisible(!getValue().matured().isBooleanTrue());
         }
     }
 }
