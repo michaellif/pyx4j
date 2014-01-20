@@ -66,22 +66,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         {
-            FlowPanel instructionsPanel = new FlowPanel();
-            instructionsPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            instructionsPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
-            instructionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-            instructionsPanel.add(new HTML(i18n.tr("<b>Time to Complete</b><div>The online rental application will guide you through several steps."
-                    + " The process takes approximately 20 minutes to complete. Required fields are indicated with an (*).</div><br/>")));
-
-            instructionsPanel.add(new HTML(i18n
-                    .tr("<b> Don't Worry!</b><div>If you need to step away from your computer to gather information, feel free to log out."
-                            + " Upon returning, log in and you will find all your information in the same place you left it.</div><br/>")));
-
-            contentPanel.add(instructionsPanel);
-        }
-
-        {
             signupForm = new SignUpForm();
             signupForm.initContent();
             contentPanel.add(signupForm);
@@ -124,10 +108,12 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         case phonePortrait:
         case phoneLandscape:
             signupForm.signUpPersonalImage.setVisible(false);
+            signupForm.signUpTimeImage.setVisible(false);
             break;
 
         default:
             signupForm.signUpPersonalImage.setVisible(true);
+            signupForm.signUpTimeImage.setVisible(true);
             break;
         }
     }
@@ -159,6 +145,8 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         private EntityValidationException entityValidationError;
 
+        private Image signUpTimeImage;
+
         private Image signUpPersonalImage;
 
         public SignUpForm() {
@@ -172,6 +160,20 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             flexPanel.getColumnFormatter().setWidth(0, "50px");
             flexPanel.getColumnFormatter().setWidth(1, "300px");
             int row = -1;
+
+            signUpTimeImage = new Image(PortalImages.INSTANCE.signUpTime());
+            flexPanel.setWidget(++row, 0, signUpTimeImage);
+            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 2);
+            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+
+            flexPanel.setWidget(row, 1, new HTML(i18n.tr("<b>Time to Complete</b><div>The online rental application will guide you through several steps."
+                    + " The process takes approximately 20 minutes to complete. Required fields are indicated with an (*).</div><br/>")));
+            flexPanel.getFlexCellFormatter().getElement(row, 1).getStyle().setTextAlign(TextAlign.LEFT);
+
+            flexPanel.setWidget(++row, 0, new HTML(i18n
+                    .tr("<b> Don't Worry!</b><div>If you need to step away from your computer to gather information, feel free to log out."
+                            + " Upon returning, log in and you will find all your information in the same place you left it.</div><br/>")));
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             signUpPersonalImage = new Image(PortalImages.INSTANCE.signUpPersonal());
             flexPanel.setWidget(++row, 0, signUpPersonalImage);

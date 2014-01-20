@@ -178,6 +178,10 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     ImageResource signUpBuilding();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("MyApplication-Icon-Time.png")
+    ImageResource signUpTime();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("SignUp-Personal.png")
     ImageResource signUpPersonal();
 
