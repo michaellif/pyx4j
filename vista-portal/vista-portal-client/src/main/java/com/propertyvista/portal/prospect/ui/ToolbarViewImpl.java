@@ -141,9 +141,9 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         brandImage.getElement().getStyle().setCursor(Cursor.POINTER);
         brandImage.setTitle("Home");
 
-        brandLabel = new Image(PortalImages.INSTANCE.myCommunityHeaderLogoLabel());
+        brandLabel = new Image(PortalImages.INSTANCE.myApplicationHeaderLogoLabel());
         brandLabel.getElement().getStyle().setFloat(Float.RIGHT);
-        brandLabel.getElement().getStyle().setProperty("margin", "10px 0 0 0");
+        brandLabel.getElement().getStyle().setProperty("margin", "0 0 0 10px");
         brandLabel.getElement().getStyle().setCursor(Cursor.POINTER);
         brandLabel.setTitle("Home");
 
