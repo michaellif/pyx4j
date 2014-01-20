@@ -44,6 +44,7 @@ public class YardiSubsequentLeasesTest extends YardiTestBase {
             PropertyUpdater updater = new PropertyUpdater("prop123").
             set(PropertyUpdater.ADDRESS.Address1, "11 prop123 str").
             set(PropertyUpdater.ADDRESS.PostalCode, "A1B 2C3").
+            set(PropertyUpdater.ADDRESS.State, "ON").
             set(PropertyUpdater.ADDRESS.Country, "Canada");        
             // @formatter:on
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));

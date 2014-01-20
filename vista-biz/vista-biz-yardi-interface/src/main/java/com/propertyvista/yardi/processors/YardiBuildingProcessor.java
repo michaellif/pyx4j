@@ -137,7 +137,7 @@ public class YardiBuildingProcessor {
 
         if (building.info().address().province().isNull()) {
             String errorMsg = SimpleMessageFormat.format(
-                    "Property PrimaryID={0,choice,null#null|!null#{0}}, SecondaryID={1,choice,null#null|!null#{1}}: has no property code.", propertyId
+                    "Property PrimaryID={0,choice,null#null|!null#{0}}, SecondaryID={1,choice,null#null|!null#{1}}: has no province.", propertyId
                             .getIdentification().getPrimaryID(), propertyId.getIdentification().getSecondaryID());
             throw new RuntimeException(errorMsg);
         }

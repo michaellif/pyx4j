@@ -20,7 +20,7 @@ public class PropertyUpdater extends Updater<ChargeDetail, PropertyUpdater> {
     private final String propertyID;
 
     public enum ADDRESS implements com.propertyvista.yardi.mock.updater.Name {
-        Address1, PostalCode, Country;
+        Address1, PostalCode, Country, State;
     }
 
     public enum MockFeatures implements com.propertyvista.yardi.mock.updater.Name {
