@@ -792,6 +792,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         persistImpl(iEntity, true);
     }
 
+    @Override
+    public <T extends IEntity> int update(EntityQueryCriteria<T> criteria, T entityTemplate) {
+        throw new RuntimeException("Unsupported");
+    }
+
     private boolean isBidirectionalReferenceRequired(IEntity iEntity) {
         EntityMeta entityMeta = iEntity.getEntityMeta();
         for (String memberName : entityMeta.getMemberNames()) {

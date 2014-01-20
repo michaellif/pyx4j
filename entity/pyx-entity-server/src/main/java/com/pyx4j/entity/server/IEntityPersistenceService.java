@@ -103,6 +103,15 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> void merge(Iterable<T> entityIterable);
 
+    /**
+     * Update only members set in entityTemplate
+     * 
+     * @param criteria
+     * @param entityTemplate
+     * @return
+     */
+    public <T extends IEntity> int update(EntityQueryCriteria<T> criteria, T entityTemplate);
+
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey);
 
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel, boolean forUpdate);

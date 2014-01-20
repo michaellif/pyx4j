@@ -894,6 +894,26 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    @Override
+    public <T extends IEntity> int update(EntityQueryCriteria<T> criteria, T entityTemplate) {
+        //TODO proper implementation
+        int count = 0;
+        ICursorIterator<T> it = query(null, criteria, AttachLevel.Attached);
+        try {
+            while (it.hasNext()) {
+                T entity = it.next();
+                for (Map.Entry<String, Serializable> me : entityTemplate.getValue().entrySet()) {
+                    entity.setMemberValue(me.getKey(), me.getValue());
+                }
+                persist(entity);
+                count++;
+            }
+        } finally {
+            it.close();
+        }
+        return count;
+    }
+
     private <T extends IEntity> void persist(TableModel tm, Iterable<T> entityIterable, boolean returnId) {
         //TODO  //for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) { ... }
         /*
