@@ -15,6 +15,7 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import java.util.Date;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
@@ -22,6 +23,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -72,18 +76,25 @@ public class PersonalInfoBStep extends ApplicationWizardStep {
 
         panel.setH3(++row, 0, 1, i18n.tr("General Questions"));
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForRent())).build());
+        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForDamages())).build());
+        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().everEvicted())).build());
+        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().defaultedOnLease())).build());
+        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().convictedOfFelony())).build());
+        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().legalTroubles())).build());
+        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().filedBankruptcy())).build());
+        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
         // TODO currently removed, then rethink: 
         if (false && !SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
@@ -169,16 +180,17 @@ public class PersonalInfoBStep extends ApplicationWizardStep {
         });
     }
 
-    class LegalQuestionWidgetDecoratorBuilder extends FormWidgetDecorator.Builder {
+    class LegalQuestionWidgetDecoratorBuilder extends WidgetDecorator.Builder {
 
         public LegalQuestionWidgetDecoratorBuilder(CComponent<?> component) {
             super(component);
-            labelWidth(300 + "px");
+            labelWidth("100%");
             contentWidth(70 + "px");
             componentWidth(70 + "px");
-            labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
+            labelPosition(LabelPosition.top);
             useLabelSemicolon(false);
             labelAlignment(Alignment.left);
         }
+
     }
 }
