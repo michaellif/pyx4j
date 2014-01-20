@@ -172,7 +172,7 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ListBox, "-", StyleDependent.disabled);
-        style.addProperty("background-color", ThemeColor.foreground, 0.3);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         style = new Style(".", StyleName.ListBox, "-", StyleDependent.singleLine);
@@ -304,7 +304,7 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addProperty("color", ThemeColor.foreground, 0.3);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
     }
