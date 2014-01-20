@@ -41,11 +41,11 @@ public class FeatureLister extends AbstractLister<Feature> {
             new MemberColumnDescriptor.Builder(proto().code(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().price()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
+            new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
-            new MemberColumnDescriptor.Builder(proto().version().availableOnline(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().expiredFrom(), false).build()
+            new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
+            new MemberColumnDescriptor.Builder(proto().expiredFrom()).build()
         );//@formatter:on
     }
 

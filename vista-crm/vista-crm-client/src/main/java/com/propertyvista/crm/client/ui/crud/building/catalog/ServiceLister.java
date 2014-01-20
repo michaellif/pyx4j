@@ -42,8 +42,8 @@ public class ServiceLister extends AbstractLister<Service> {
             new MemberColumnDescriptor.Builder(proto().version().name()).build(),
             new MemberColumnDescriptor.Builder(proto().version().price()).build(),
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
-            new MemberColumnDescriptor.Builder(proto().version().availableOnline(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().expiredFrom(), false).build()
+            new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
+            new MemberColumnDescriptor.Builder(proto().expiredFrom()).build()
         );//@formatter:on
     }
 

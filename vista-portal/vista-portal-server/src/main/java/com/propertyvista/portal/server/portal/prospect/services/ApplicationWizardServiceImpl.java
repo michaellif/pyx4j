@@ -111,6 +111,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         OnlineApplicationDTO to = EntityFactory.create(OnlineApplicationDTO.class);
 
+        loadRestrictions(bo, to);
+
         fillLeaseData(bo, to);
 
         fillUnitSelectionData(bo, to);
@@ -329,6 +331,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             cap.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
             cap.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
+            cap.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
+
+            cap.relationship().setValue(ltt.relationship().getValue());
 
             cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
 
@@ -481,7 +486,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         if (!moa.building().isNull() || !moa.floorplan().isNull()) {
             UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
 
-            Lease lease = ProspectPortalContext.getLease();
+            Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
 
             if (lease != null && !lease.unit().isNull()) {
                 Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
@@ -736,6 +741,15 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         if (submit) {
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(bo);
+        }
+    }
+
+    private void loadRestrictions(OnlineApplication bo, OnlineApplicationDTO to) {
+        Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
+                RestrictionsPolicy.class);
+        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+            to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
         }
     }
 

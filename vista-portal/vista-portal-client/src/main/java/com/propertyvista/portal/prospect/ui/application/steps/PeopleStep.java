@@ -13,15 +13,21 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import com.google.gwt.user.client.ui.HTML;
+
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 
 public class PeopleStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(PeopleStep.class);
+
+    private static final String warningMessage = i18n
+            .tr("Each additional tenant that is 18 or older is required to complete an additional application form. Access details will be emailed to them upon completion of this form.");
 
     public PeopleStep() {
         super(OnlineApplicationWizardStepMeta.People);
@@ -34,6 +40,9 @@ public class PeopleStep extends ApplicationWizardStep {
 
         panel.setH3(++row, 0, 1, i18n.tr("People Living with You"));
         panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getView())));
+
+        panel.setWidget(++row, 0, new HTML(warningMessage));
+        panel.getWidget(row, 0).setStyleName(StyleName.warningMessage.name());
 
         return panel;
     }

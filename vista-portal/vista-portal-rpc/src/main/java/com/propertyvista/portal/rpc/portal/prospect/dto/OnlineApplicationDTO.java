@@ -50,6 +50,9 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IList<OptionDTO> options();
 
+    /** Sets the age of majority for validation, null if no validation is required */
+    IPrimitive<Integer> ageOfMajority();
+
     //--------------------------------------------
     // read and update data:
 

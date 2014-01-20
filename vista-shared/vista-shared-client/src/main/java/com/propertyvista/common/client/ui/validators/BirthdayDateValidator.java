@@ -24,7 +24,7 @@ public class BirthdayDateValidator extends PastDateIncludeTodayValidator {
 
     private static final String message1 = i18n.tr("The date must be earlier than or equal to today's date");
 
-    private static final String message2 = i18n.tr("This date is too far in the past. Please enter your birthdate.");
+    private static final String message2 = i18n.tr("This date is too far in the past. Please enter your birth date.");
 
     public BirthdayDateValidator() {
         super(message1);
