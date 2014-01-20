@@ -24,11 +24,11 @@ import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.PersonalIdentityFormatter;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.validators.RegexValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 
 /**
@@ -54,22 +54,21 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         this(entityClass, null);
     }
 
-    public CPersonalIdentityField(Class<T> entityClass, String pattern) {
-        this(entityClass, pattern, false);
+    public CPersonalIdentityField(Class<T> entityClass, PersonalIdentityFormatter formatter) {
+        this(entityClass, formatter, false);
     }
 
-    public CPersonalIdentityField(Class<T> entityClass, String pattern, boolean mandatory) {
+    public CPersonalIdentityField(Class<T> entityClass, PersonalIdentityFormatter formatter, boolean mandatory) {
         super();
         this.entityClass = entityClass;
         setMandatory(mandatory);
-        setPersonalIdentityFormat(pattern == null ? "" : pattern);
+        setPersonalIdentityFormatter(formatter);
         setNativeWidget(new NPersonalIdentityField<T>(this));
         asWidget().setWidth("100%");
     }
 
-    // Possible formats - 'XXX-XXX-xxx', 'XXXX XXXX XXXX xxxx', 'xxx XXX XXX xxx'
-    public void setPersonalIdentityFormat(String pattern) {
-        setFormat(new PersonalIdentityFormat<T>(this, pattern));
+    public void setPersonalIdentityFormatter(PersonalIdentityFormatter formatter) {
+        setFormat(new PersonalIdentityFormat<T>(this, formatter));
         addValueValidator(new TextBoxParserValidator<T>());
     }
 
@@ -146,40 +145,11 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
         private final CPersonalIdentityField<E> component;
 
-        private final char FORMAT_CLEAR = 'x';
+        private final PersonalIdentityFormatter formatter;
 
-        private final char FORMAT_HIDDEN = 'X';
-
-        private final String FORMAT_DELIM = ";";
-
-        private final String[] patternArr;
-
-        private final int[] dataLengthArr;
-
-        private int patternIdx = -1;
-
-        public PersonalIdentityFormat(CPersonalIdentityField<E> component, String pattern) {
+        public PersonalIdentityFormat(CPersonalIdentityField<E> component, PersonalIdentityFormatter formatter) {
             this.component = component;
-            // pattern is interpreted as follows:
-            //   X - input character in this position will be translated to 'X' (hidden data)
-            //   x - input character in this position will not be modified (open data)
-            //   no other alphanumeric chars is allowed
-            //   any non-alphanumeric chars will be treated as decorators and will not be modified
-            // multiple applicable formats can be specified using ';' as a delimiter
-            if (!isPatternValid(pattern)) {
-                throw new UnrecoverableClientError("Invalid identity format: " + pattern);
-            }
-            patternArr = pattern.split(FORMAT_DELIM);
-            dataLengthArr = new int[patternArr.length];
-            for (int idx = 0; idx < patternArr.length; idx++) {
-                String pat = patternArr[idx];
-                for (int pos = 0; pos < pat.length(); pos++) {
-                    char c = pat.charAt(pos);
-                    if (c == FORMAT_CLEAR || c == FORMAT_HIDDEN) {
-                        dataLengthArr[idx] += 1;
-                    }
-                }
-            }
+            this.formatter = formatter;
         }
 
         @Override
@@ -187,9 +157,14 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
             if (value == null) {
                 return "";
             }
-            boolean clearText = !value.newNumber().isNull();
-            String input = clearText ? value.newNumber().getValue() : value.obfuscatedNumber().getValue();
-            return format(input, clearText);
+            boolean obfuscate = value.newNumber().isNull();
+            String input = obfuscate ? value.obfuscatedNumber().getValue() : value.newNumber().getValue();
+            return formatter.format(input, obfuscate);
+        }
+
+        @Override
+        public String obfuscate(String data) {
+            return formatter.obfuscate(data);
         }
 
         @Override
@@ -201,8 +176,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
                 return value;
             } else {
                 // non-empty string could be either new user input or obfuscated value (formatted) of existing entity
-                String data = dataFilter(string);
-                if (getPatternIdx(data) == -1) {
+                if (!formatter.isValidInput(string)) {
                     throw new ParseException(i18n.tr("Identity value is invalid for the given format."), 0);
                 }
                 // check if we are parsing user input or obfuscated value
@@ -212,6 +186,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
                     // this should never happen
                     throw new Error("Value is null");
                 }
+                String data = formatter.inputFilter(string);
                 if (userInput) {
                     // if no obfuscated value then we are getting new user input
                     value.newNumber().setValue(data);
@@ -222,74 +197,6 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
                 }
                 return value;
             }
-        }
-
-        private int getPatternIdx(String data) {
-            int dataLength = data.length();
-            patternIdx = -1;
-            for (int idx = 0; idx < patternArr.length; idx++) {
-                if (dataLength == dataLengthArr[idx]) {
-                    patternIdx = idx;
-                    break;
-                }
-            }
-            return patternIdx;
-        }
-
-        private String format(String input, boolean clearText) {
-            if (input == null) {
-                return "";
-            }
-            String data = dataFilter(input);
-
-            // search for pattern based on user input
-            if (getPatternIdx(data) == -1) {
-                return "";
-            }
-
-            String pattern = patternArr[patternIdx];
-            StringBuilder output = new StringBuilder();
-            for (int pos = 0, dataPos = 0; pos < pattern.length(); pos++) {
-                char c = pattern.charAt(pos);
-                if (c == FORMAT_CLEAR) {
-                    output.append(data.charAt(dataPos++));
-                } else if (c == FORMAT_HIDDEN) {
-                    output.append(clearText ? data.charAt(dataPos) : FORMAT_HIDDEN);
-                    dataPos++;
-                } else {
-                    output.append(c);
-                }
-            }
-            return output.toString();
-        }
-
-        @Override
-        public String obfuscate(String data) {
-            if (patternIdx == -1) {
-                return "";
-            }
-            String pattern = patternArr[patternIdx];
-            StringBuilder output = new StringBuilder();
-            for (int pos = 0, dataPos = 0; pos < pattern.length(); pos++) {
-                char c = pattern.charAt(pos);
-                if (c == FORMAT_CLEAR) {
-                    output.append(data.charAt(dataPos++));
-                } else if (c == FORMAT_HIDDEN) {
-                    output.append(FORMAT_HIDDEN);
-                    dataPos++;
-                }
-            }
-            return output.toString();
-        }
-
-        protected String dataFilter(String input) {
-            // only alphanumeric chars allowed in user input
-            return input.replaceAll("[\\W_]", "");
-        }
-
-        protected boolean isPatternValid(String pattern) {
-            // check for not allowed chars in the formatting pattern
-            return pattern.matches("^[\\W_" + FORMAT_CLEAR + FORMAT_HIDDEN + "]*$");
         }
     }
 

@@ -25,15 +25,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.PersonalIdentityFormatter;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
-import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -105,7 +103,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
                 ++row,
                 0,
                 new FormDecoratorBuilder(inject(proto().personalId(), new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class,
-                        "XXX-XXX-xxx;XX-XX-xxxx"))).build());
+                        new PersonalIdentityFormatter("XXX-XXX-xxx;XX-XX-xxxx")))).build());
 
         Anchor anchor = new Anchor(i18n.tr("Terms and Conditions"), new Command() {
 
