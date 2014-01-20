@@ -171,15 +171,11 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     @Source("Phone.gif")
     ImageResource phone();
 
-    //=============== Devices ====================
+    //=============== Forms ====================
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("SignUp-Building.png")
     ImageResource signUpBuilding();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("MyApplication-Icon-Time.png")
-    ImageResource signUpTime();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("SignUp-Personal.png")
@@ -188,6 +184,18 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("SignUp-Security.png")
     ImageResource signUpSecurity();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("MyApplication-Icon-Time.png")
+    ImageResource signUpTime();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("MyApplication-Icon-Ready.png")
+    ImageResource signUpReady();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("MyApplication-Icon-Security.png")
+    ImageResource signUpSec();
 
     //=============== Menu ====================
 
