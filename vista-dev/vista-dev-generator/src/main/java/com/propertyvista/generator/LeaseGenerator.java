@@ -35,10 +35,10 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.shared.util.AccountNumberFormatter;
 
 public class LeaseGenerator extends DataGenerator {
 
@@ -142,7 +142,7 @@ public class LeaseGenerator extends DataGenerator {
         details.bankId().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(999), 3));
         details.branchTransitNumber().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(99999), 5));
         details.accountNo().number().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
-        details.accountNo().obfuscatedNumber().setValue(DomainUtil.obfuscateAccountNumber(details.accountNo().number().getValue()));
+        details.accountNo().obfuscatedNumber().setValue(new AccountNumberFormatter().obfuscate(details.accountNo().number().getValue()));
         m.details().set(details);
 
         m.customer().set(tenant.leaseParticipant().customer());

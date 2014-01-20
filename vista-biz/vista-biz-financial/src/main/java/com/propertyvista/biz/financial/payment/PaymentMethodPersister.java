@@ -38,7 +38,8 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
-import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.shared.util.AccountNumberFormatter;
+import com.propertyvista.shared.util.CreditCardFormatter;
 
 class PaymentMethodPersister {
 
@@ -201,7 +202,7 @@ class PaymentMethodPersister {
             EcheckInfo eci = paymentMethod.details().cast();
             if (!eci.accountNo().newNumber().isNull()) {
                 eci.accountNo().number().setValue(eci.accountNo().newNumber().getValue());
-                eci.accountNo().obfuscatedNumber().setValue(DomainUtil.obfuscateAccountNumber(eci.accountNo().number().getValue()));
+                eci.accountNo().obfuscatedNumber().setValue(new AccountNumberFormatter().obfuscate(eci.accountNo().number().getValue()));
             } else {
                 Validate.isTrue(!paymentMethod.details().id().isNull(), "Account number is required when creating Echeck");
                 EcheckInfo origeci = origPaymentMethod.details().cast();
@@ -241,7 +242,7 @@ class PaymentMethodPersister {
             CreditCardInfo cc = paymentMethod.details().cast();
             if (!cc.card().newNumber().isNull()) {
                 cc.card().number().setValue(cc.card().newNumber().getValue());
-                cc.card().obfuscatedNumber().setValue(DomainUtil.obfuscateCreditCardNumber(cc.card().newNumber().getValue()));
+                cc.card().obfuscatedNumber().setValue(new CreditCardFormatter().obfuscate(cc.card().newNumber().getValue()));
             }
             // Allow to update expiryDate or create token
             boolean needUpdate = (origPaymentMethod == null);

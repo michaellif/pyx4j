@@ -53,6 +53,7 @@ import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.shared.util.CreditCardFormatter;
 
 public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
 
@@ -68,7 +69,7 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
     protected final CComboBox<CreditCardType> typeSelector = new CComboBox<CreditCardType>();
 
     protected final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(
-            CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx");
+            CreditCardNumberIdentity.class, new CreditCardFormatter());
 
     public CreditCardInfoEditor() {
         super(CreditCardInfo.class);

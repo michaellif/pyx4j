@@ -37,13 +37,14 @@ import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidato
 import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.shared.util.EcheckFormatter;
 
 public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
 
     private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
 
     protected final CPersonalIdentityField<AccountNumberIdentity> accountEditor = new CPersonalIdentityField<AccountNumberIdentity>(
-            AccountNumberIdentity.class, "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx");
+            AccountNumberIdentity.class, new EcheckFormatter());
 
     public EcheckInfoEditor() {
         super(EcheckInfo.class);

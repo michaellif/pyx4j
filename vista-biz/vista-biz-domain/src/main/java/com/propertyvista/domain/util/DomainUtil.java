@@ -46,16 +46,6 @@ public class DomainUtil {
         }
     }
 
-    // TODO move to format of the object
-    public static String obfuscateCreditCardNumber(String value) {
-        return "XXXXXXXXXXXX" + DomainUtil.last4Numbers(value);
-    }
-
-    // TODO move to format of the object
-    public static String obfuscateAccountNumber(String value) {
-        return "XXXXXXXX" + DomainUtil.last4Numbers(value);
-    }
-
     public static ChargeLine createChargeLine(String label, BigDecimal money) {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
         cl.amount().setValue(money);

@@ -21,11 +21,12 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.AccountNumberIdentity;
+import com.propertyvista.shared.util.AccountNumberFormatter;
 
 public abstract class AccountNumberField extends CPersonalIdentityField<AccountNumberIdentity> {
 
     public AccountNumberField() {
-        super(AccountNumberIdentity.class, "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx");
+        super(AccountNumberIdentity.class, new AccountNumberFormatter());
 
         NPersonalIdentityField<AccountNumberIdentity> field = new NPersonalIdentityField<AccountNumberIdentity>(this);
 
