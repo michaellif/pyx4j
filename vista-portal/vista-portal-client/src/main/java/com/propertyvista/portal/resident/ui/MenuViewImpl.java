@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
@@ -30,7 +29,6 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -41,8 +39,6 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class MenuViewImpl extends DockPanel implements MenuView {
 
-    private static final I18n i18n = I18n.get(MenuViewImpl.class);
-
     private MenuPresenter presenter;
 
     private final HeaderHolder headerHolder;
@@ -52,6 +48,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
     private final MenuList footerHolder;
 
     private final MenuItem leaseSelectionMenu;
+
+    private boolean mainMenuVisible = true;
 
     public MenuViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
@@ -72,9 +70,6 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
         mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
-        if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
-            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
-        }
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
@@ -104,6 +99,12 @@ public class MenuViewImpl extends DockPanel implements MenuView {
     }
 
     @Override
+    public void setMenuVisible(boolean visible) {
+        mainMenuVisible = visible;
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+    }
+
+    @Override
     public void setPresenter(MenuPresenter presenter) {
         this.presenter = presenter;
         AppPlace currentPlace = AppSite.getPlaceController().getWhere();
@@ -125,6 +126,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             removeStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(true);
             headerHolder.setVisible(true);
+            mainHolder.setVisible(mainMenuVisible);
+            setVisible(true);
             break;
         case tabletPortrait:
         case tabletLandscape:
@@ -132,6 +135,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             addStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
             headerHolder.setVisible(false);
+            mainHolder.setVisible(true);
+            setVisible(mainMenuVisible);
             break;
         case monitor:
         case huge:
@@ -139,6 +144,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             removeStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
             headerHolder.setVisible(false);
+            mainHolder.setVisible(true);
+            setVisible(mainMenuVisible);
             break;
         }
     }

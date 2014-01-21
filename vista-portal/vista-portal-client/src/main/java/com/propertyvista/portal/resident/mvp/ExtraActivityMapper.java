@@ -20,6 +20,8 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.portal.resident.activity.ExtraActivity;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
 public class ExtraActivityMapper implements ActivityMapper {
 
@@ -28,7 +30,7 @@ public class ExtraActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (ClientContext.isAuthenticated()) {
+        if (ClientContext.isAuthenticated() && !(place instanceof Logout) && !(place instanceof ResidentPortalSiteMap.LeaseContextSelection)) {
             return new ExtraActivity(place);
         } else {
             return null;

@@ -27,12 +27,16 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.MenuView;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
 public class MenuActivity extends AbstractActivity implements MenuView.MenuPresenter {
 
     private final MenuView view;
 
+    private final Place place;
+
     public MenuActivity(Place place) {
+        this.place = place;
         this.view = ResidentPortalSite.getViewFactory().getView(MenuView.class);
         view.setPresenter(this);
     }
@@ -42,6 +46,8 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
         view.setLeasesSelectorEnabled(SecurityController.checkAnyBehavior(PortalResidentBehavior.HasMultipleLeases));
+        view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard)
+                && !(place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage) && !(place instanceof ResidentPortalSiteMap.LeaseContextSelection));
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 

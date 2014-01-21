@@ -25,6 +25,8 @@ public interface MenuView extends IsView {
 
     public void setPresenter(MenuPresenter presenter);
 
+    public void setMenuVisible(boolean visible);
+
     void setLeasesSelectorEnabled(boolean enabled);
 
 }

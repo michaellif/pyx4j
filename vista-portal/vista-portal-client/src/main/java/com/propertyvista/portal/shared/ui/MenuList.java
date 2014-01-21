@@ -45,6 +45,11 @@ public class MenuList implements IsWidget {
         contentPanel.addNavigItem(menuItem);
     }
 
+    public void clear() {
+        items.clear();
+        contentPanel.clear();
+    }
+
     public List<MenuItem> getMenuItems() {
         return items;
     }
@@ -85,6 +90,10 @@ public class MenuList implements IsWidget {
         public void addNavigItem(MenuItem menuItem) {
             add(menuItem.asWidget(), getElement());
         }
+    }
+
+    public boolean isEmpty() {
+        return items.size() == 0;
     }
 
 }

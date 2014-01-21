@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.portal.resident.activity.MenuActivity;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
 
 public class MenuActivityMapper implements ActivityMapper {
 
@@ -28,7 +29,7 @@ public class MenuActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (ClientContext.isAuthenticated()) {
+        if (ClientContext.isAuthenticated() && !(place instanceof Logout)) {
             return new MenuActivity(place);
         } else {
             return null;
