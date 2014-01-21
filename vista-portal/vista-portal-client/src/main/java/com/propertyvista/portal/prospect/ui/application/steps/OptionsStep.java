@@ -30,8 +30,8 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.prospect.ui.application.steps.Common.DepositFolder;
-import com.propertyvista.portal.prospect.ui.application.steps.Common.FeatureFolder;
+import com.propertyvista.portal.prospect.ui.application.steps.common.DepositFolder;
+import com.propertyvista.portal.prospect.ui.application.steps.common.FeatureFolder;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 

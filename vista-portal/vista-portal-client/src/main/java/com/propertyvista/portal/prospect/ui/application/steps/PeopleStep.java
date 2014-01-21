@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.prospect.ui.application.steps.Common.CoapplicantsFolder;
+import com.propertyvista.portal.prospect.ui.application.steps.common.CoapplicantsFolder;
 
 public class PeopleStep extends ApplicationWizardStep {
 
