@@ -19,7 +19,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @I18n
 public enum OnlineApplicationWizardStepMeta {
 
-    Unit, Options, Lease, People, AboutYou, AdditionalInfo, Financial, Contacts, Legal, Payment, Summary;
+    Unit, Options, Lease, People, AboutYou, AdditionalInfo, Financial, Contacts, Legal, Summary, Payment, Confirmation;
 
     @Override
     public String toString() {

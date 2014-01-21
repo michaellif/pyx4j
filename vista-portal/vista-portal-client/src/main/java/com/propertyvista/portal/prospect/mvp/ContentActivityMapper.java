@@ -85,7 +85,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ApplicationConfirmationActivity(appPlace);
 
 // Internals/Terms: @formatter:off
-                    } else if (place instanceof ProspectPortalTerms.ApplicantTermsAndConditions 
+                    } else if (place instanceof PortalSiteMap.BillingTerms 
+                            || place instanceof ProspectPortalTerms.ApplicantTermsAndConditions 
                             || place instanceof ProspectPortalTerms.RentalCriteriaGuidelines
                             || place instanceof PortalSiteMap.PortalTermsAndConditions) {
                         activity = new PortalTermsActivity(place);
