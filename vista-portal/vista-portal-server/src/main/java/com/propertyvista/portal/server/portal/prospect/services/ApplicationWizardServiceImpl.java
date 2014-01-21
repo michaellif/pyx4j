@@ -1092,6 +1092,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             Persistence.service().retrieveMember(feature.version().items());
 
             for (ProductItem item : feature.version().items()) {
+                Persistence.service().retrieve(item.product());
                 if (feature.version().availableOnline().isBooleanTrue()) {
                     switch (feature.code().type().getValue()) {
                     case AddOn:
