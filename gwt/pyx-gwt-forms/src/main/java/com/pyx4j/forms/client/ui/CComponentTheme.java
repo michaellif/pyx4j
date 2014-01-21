@@ -94,7 +94,7 @@ public class CComponentTheme extends Theme {
         style.addProperty("color", "red");
         style.addProperty("text-align", "left");
         style.addProperty("white-space", "normal");
-        style.addProperty("padding-top", "3px");
+        style.addProperty("padding", "3px 0 0 10px");
         addStyle(style);
     }
 
