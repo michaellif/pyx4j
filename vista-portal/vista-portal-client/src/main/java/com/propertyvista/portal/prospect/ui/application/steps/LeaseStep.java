@@ -22,6 +22,8 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -29,6 +31,8 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.steps.Common.DepositFolder;
@@ -71,11 +75,25 @@ public class LeaseStep extends ApplicationWizardStep {
 
         panel.setWidget(++row, 0, depositPanel);
         depositPanel.setH4(0, 0, 1, i18n.tr("Unit Deposits"));
-        depositPanel.setWidget(1, 0, 1, inject(proto().selectedService().deposits(), new DepositFolder()));
+        depositPanel.setWidget(1, 0, 1, inject(proto().selectedService().deposits(), new DepositFolder() {
+            @Override
+            public IFolderItemDecorator<Deposit> createItemDecorator() {
+                BoxFolderItemDecorator<Deposit> decor = (BoxFolderItemDecorator<Deposit>) super.createItemDecorator();
+                decor.setExpended(false);
+                return decor;
+            }
+        }));
 
         panel.setWidget(++row, 0, featurePanel);
         featurePanel.setH3(0, 0, 1, i18n.tr("Features"));
-        featurePanel.setWidget(++row, 0, inject(proto().selectedFeatures(), new FeatureFolder()));
+        featurePanel.setWidget(++row, 0, inject(proto().selectedFeatures(), new FeatureFolder() {
+            @Override
+            public IFolderItemDecorator<BillableItem> createItemDecorator() {
+                BoxFolderItemDecorator<BillableItem> decor = (BoxFolderItemDecorator<BillableItem>) super.createItemDecorator();
+                decor.setExpended(false);
+                return decor;
+            }
+        }));
         get(proto().selectedFeatures()).setEditable(false);
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
