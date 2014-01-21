@@ -753,6 +753,10 @@ public class TableModel {
         }
     }
 
+    public boolean isExternalMember(IEntity entity, IEntity entityMember) {
+        return entityOperationsMeta.getMember(new Path(entity.getValueClass(), entityMember.getFieldName()).toString()) instanceof MemberExternalOperationsMeta;
+    }
+
     public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, IEntity entityMember) {
         MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), entityMember.getFieldName()).toString());
         assert (member != null) : "Member " + entityMember.getFieldName() + " not found";

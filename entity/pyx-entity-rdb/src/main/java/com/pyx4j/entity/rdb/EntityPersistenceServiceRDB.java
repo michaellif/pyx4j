@@ -1370,7 +1370,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             startCallContext(ConnectionReason.forRead);
             try {
                 TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
-                tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
+                if (tm.isExternalMember(entityMember.getOwner(), entityMember)) {
+                    tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
+                } else {
+                    tm.retrieve(getPersistenceContext(), entityMember.getOwner().getPrimaryKey(), entityMember.getOwner(), AttachLevel.Attached, false);
+                }
                 if (entityMember.getPrimaryKey() != null) {
                     if (cascadeRetrieve(entityMember, attachLevel, false) == null) {
                         throw new RuntimeException("Entity '" + entityMember.getEntityMeta().getCaption() + "' " + entityMember.getPrimaryKey() + " "
