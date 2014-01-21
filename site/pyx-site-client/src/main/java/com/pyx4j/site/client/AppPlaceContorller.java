@@ -26,7 +26,9 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceChangeRequestEvent;
-import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
+import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -38,7 +40,7 @@ import com.pyx4j.widgets.client.PopupPanel;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public final class AppPlaceContorller extends PlaceController {
+public final class AppPlaceContorller {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlaceContorller.class);
 
@@ -53,13 +55,18 @@ public final class AppPlaceContorller extends PlaceController {
     private final AppPlaceDispatcher dispatcher;
 
     public AppPlaceContorller(EventBus eventBus, AppPlaceDispatcher dispatcher) {
-        super(eventBus);
         this.eventBus = eventBus;
         this.dispatcher = dispatcher;
+        Window.addWindowClosingHandler(new ClosingHandler() {
 
+            @Override
+            public void onWindowClosing(ClosingEvent event) {
+                event.setMessage(confirmGoTo(AppPlace.NOWHERE));
+            }
+
+        });
     }
 
-    @Override
     public AppPlace getWhere() {
         return where;
     }
@@ -99,7 +106,6 @@ public final class AppPlaceContorller extends PlaceController {
     /**
      * Shouldn't be called by application. Use goTo(AppPlace) instead
      */
-    @Override
     public void goTo(final Place newPlace) {
         //TODO external request - handle unstable tokens. If stable counterpart exists - execute, otherwise go to NOWHERE
         goTo((AppPlace) newPlace);
