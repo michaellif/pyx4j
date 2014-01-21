@@ -105,7 +105,6 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>> decorator = ((FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>>) getDecorator());
         decorator.setCaption(headerUndefined);
 
-        decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.infoMessage.name());
         decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.errorMessage.name());
 
         get(proto().transactionErrorMessage()).setVisible(false);
@@ -129,7 +128,6 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
             autoPaySignupPanel.setVisible(false);
         } else {
             decorator.setCaption(headerSuccess);
-            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.infoMessage.name());
 
             get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
             get(proto().convenienceFeeTransactionAuthorizationNumber()).setVisible(!getValue().convenienceFeeTransactionAuthorizationNumber().isNull());
