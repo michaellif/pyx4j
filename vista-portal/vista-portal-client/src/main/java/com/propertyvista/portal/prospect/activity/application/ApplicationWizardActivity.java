@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -54,6 +57,14 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
         super(ApplicationWizardView.class);
 
         this.service = GWT.<ApplicationWizardService> create(ApplicationWizardService.class);
+
+        Window.addCloseHandler(new CloseHandler<Window>() {
+
+            @Override
+            public void onClose(CloseEvent<Window> event) {
+                onDiscard();
+            }
+        });
     }
 
     @Override
