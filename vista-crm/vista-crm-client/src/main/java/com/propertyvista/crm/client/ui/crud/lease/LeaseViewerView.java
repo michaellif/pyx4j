@@ -33,6 +33,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
@@ -87,6 +88,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
     ILister<PaymentRecordDTO> getPaymentListerView();
 
     ILister<LeaseAdjustment> getLeaseAdjustmentListerView();
+
+    ILister<MaintenanceRequestDTO> getMaintenanceListerView();
 
     void reportSendMailActionResult(String message);
 

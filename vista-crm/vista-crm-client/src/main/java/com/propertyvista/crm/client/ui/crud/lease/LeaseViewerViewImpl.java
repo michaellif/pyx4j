@@ -63,6 +63,7 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.N4GenerationQueryDialog;
+import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
@@ -78,6 +79,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -93,6 +95,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final ILister<PaymentRecordDTO> paymentLister;
 
     private final ILister<LeaseAdjustment> adjustmentLister;
+
+    private final ILister<MaintenanceRequestDTO> maintenanceLister;
 
     private final MenuItem viewApplication;
 
@@ -139,6 +143,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
         paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
         adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
+        maintenanceLister = new ListerInternalViewImplBase<MaintenanceRequestDTO>(new MaintenanceRequestLister());
 
         // set main form here:
         setForm(new LeaseForm(this) {
@@ -533,6 +538,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     @Override
     public ILister<LeaseAdjustment> getLeaseAdjustmentListerView() {
         return adjustmentLister;
+    }
+
+    @Override
+    public ILister<MaintenanceRequestDTO> getMaintenanceListerView() {
+        return maintenanceLister;
     }
 
     @Override

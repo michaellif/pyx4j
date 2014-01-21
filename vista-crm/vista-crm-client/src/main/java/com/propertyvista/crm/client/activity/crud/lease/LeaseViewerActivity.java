@@ -23,6 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
@@ -62,6 +63,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
@@ -75,6 +77,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     private final ILister.Presenter<PaymentRecordDTO> paymentLister;
 
     private final ILister.Presenter<LeaseAdjustment> leaseAdjustmentLister;
+
+    private final ILister.Presenter<MaintenanceRequestDTO> maintenanceLister;
 
     private LeaseDTO currentValue;
 
@@ -96,6 +100,9 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
         leaseAdjustmentLister = new ListerController<LeaseAdjustment>(((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
                 GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
+
+        maintenanceLister = new ListerController<MaintenanceRequestDTO>(((LeaseViewerView) getView()).getMaintenanceListerView(),
+                GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class), MaintenanceRequestDTO.class);
     }
 
     @Override
@@ -108,6 +115,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         populateBills(result);
         populatePayments(result);
         populateLeaseAdjustments(result);
+        populateMaintenance(result);
     }
 
     protected void populateDeposits(Lease result) {
@@ -132,6 +140,12 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     protected void populateLeaseAdjustments(Lease result) {
         leaseAdjustmentLister.setParent(result.billingAccount().getPrimaryKey());
         leaseAdjustmentLister.populate();
+    }
+
+    protected void populateMaintenance(Lease result) {
+        maintenanceLister.clearPreDefinedFilters();
+        maintenanceLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).unit(), result.unit()));
+        maintenanceLister.populate();
     }
 
     // Actions:
