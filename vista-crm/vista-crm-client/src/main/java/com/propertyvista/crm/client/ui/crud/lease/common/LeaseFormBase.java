@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
@@ -109,7 +108,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         CComponent<?> comp = get(proto().currentTerm().version().tenants());
         ((TenantInLeaseFolder) comp).setAgeOfMajority(getValue().ageOfMajority().getValue());
 
-        get(proto().legalStatus()).setVisible(!CommonsStringUtils.isEmpty(getValue().legalStatus().getValue()));
+        get(proto().currentLegalStatus()).setVisible(!(getValue().currentLegalStatus().isNull()));
+
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
@@ -143,7 +143,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
                 new FormDecoratorBuilder(
                         inject(proto().currentTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 25).build());
 
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().legalStatus())).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().currentLegalStatus())).build());
 
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
 

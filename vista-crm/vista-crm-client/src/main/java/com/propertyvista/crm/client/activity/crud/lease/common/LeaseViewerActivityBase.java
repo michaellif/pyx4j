@@ -103,4 +103,15 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
         String downloadUrl = new VistaFileURLBuilder(LeaseTermAgreementDocument.class).getUrl(doc.file());
         Window.open(downloadUrl, "_blank", "");
     }
+
+    @Override
+    public void setLegalStatus() {
+        // TODO Auto-generated method stub       
+    }
+
+    @Override
+    public void clearLegalStatus() {
+        // TODO Auto-generated method stub
+
+    }
 }

@@ -119,6 +119,23 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         downloadAgreementButton.setMenu(downloadAgreementMenu);
         addHeaderToolbarItem(downloadAgreementButton);
 
+        Button legalStatusButton = new Button(i18n.tr("Legal"));
+
+        ButtonMenuBar legalStatusMenu = downloadAgreementButton.createMenu();
+        MenuItem setLegalStatus = new MenuItem(i18n.tr("Set Legal Status"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).setLegalStatus();
+            }
+        });
+        MenuItem clearLegalStatus = new MenuItem(i18n.tr("clearLegalStatus"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).clearLegalStatus();
+            }
+        });
+        downloadAgreementMenu.addItem(downloadBlankAgreementItem);
+
     }
 
     @Override

@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -48,6 +49,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 import com.propertyvista.domain.blob.LegalLetterBlob;
@@ -57,6 +59,8 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
+import com.propertyvista.domain.legal.LegalStatus;
+import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4BatchData;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
@@ -65,6 +69,7 @@ import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class N4ManagementFacadeImpl implements N4ManagementFacade {
@@ -174,6 +179,16 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             n4Letter.file().fileSize().setValue(n4LetterBinary.length);
             n4Letter.file().fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
             Persistence.service().persist(n4Letter);
+
+            LegalStatus legalStatus = EntityFactory.create(LegalStatus.class);
+            legalStatus.lease().set(leaseId);
+            legalStatus.status().setValue(Status.N4);
+            legalStatus.details().setValue(SimpleMessageFormat.format("termination date: {0,date,short}", n4LeaseData.terminationDate().getValue()));
+            legalStatus.notes().setValue("created via issuing N4 letter");
+            legalStatus.setOn().setValue(generationTime);
+            legalStatus.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
+            Persistence.service().persist(legalStatus);
+
         } catch (Throwable error) {
             log.error("Failed to generate n4 for lease pk='" + leaseId.getPrimaryKey() + "'", error);
 

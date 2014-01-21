@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -61,5 +62,7 @@ public interface LeaseDTO extends Lease {
 
     IList<N4LegalLetter> letters();
 
-    IPrimitive<String> legalStatus();
+    IPrimitive<String> currentLegalStatus();
+
+    IList<LegalStatus> legalStatusHistory();
 }

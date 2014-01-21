@@ -37,5 +37,9 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewer<DTO> 
         void downloadBlankAgreement();
 
         void downloadSignedAgreement(LeaseTermAgreementDocument doc);
+
+        void setLegalStatus();
+
+        void clearLegalStatus();
     }
 }

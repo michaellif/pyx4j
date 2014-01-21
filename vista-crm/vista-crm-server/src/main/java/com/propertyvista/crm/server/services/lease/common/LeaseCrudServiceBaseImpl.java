@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -29,6 +30,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
+import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -71,6 +73,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         loadTenantInsurance(to);
         loadRestrictions(to);
         loadCommunicationLetters(to);
+        loadLegalStatus(to); // MUST be after load communications letters
     }
 
     @Override
@@ -122,9 +125,22 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey());
         Map<Lease, List<N4LegalLetter>> n4s = ServerSideFactory.create(N4ManagementFacade.class).getN4(Arrays.asList(leaseId), null);
         lease.letters().addAll(n4s.get(leaseId));
+    }
 
-        if (!n4s.get(leaseId).isEmpty()) {
-            lease.legalStatus().setValue(i18n.tr("{0} N4''s issued", n4s.get(leaseId).size()));
+    private void loadLegalStatus(LeaseDTO lease) {
+        // TODO should be in a facade
+        EntityQueryCriteria<LegalStatus> criteria = EntityQueryCriteria.create(LegalStatus.class);
+        criteria.eq(criteria.proto().lease(), lease.getPrimaryKey());
+        criteria.desc(criteria.proto().setOn());
+
+        List<LegalStatus> statusesHistory = Persistence.service().query(criteria);
+        for (LegalStatus status : statusesHistory) {
+            Persistence.ensureRetrieve(status.setBy(), AttachLevel.Attached);
+        }
+        lease.legalStatusHistory().addAll(statusesHistory);
+        if (!statusesHistory.isEmpty()) {
+            LegalStatus current = statusesHistory.get(0);
+            lease.currentLegalStatus().setValue(SimpleMessageFormat.format("{0} ({1})", current.status().getValue().toString(), current.details().getValue()));
         }
     }
 
