@@ -183,7 +183,10 @@ public class EmailTemplateRootObjectLoader {
             if (context.lease().isNull()) {
                 Persistence.ensureRetrieve(app.masterOnlineApplication(), AttachLevel.Attached);
                 context.lease().set(app.masterOnlineApplication().leaseApplication().lease());
-                context.lease().currentTerm().set(Persistence.retrieveDraftForEdit(LeaseTerm.class, context.lease().currentTerm().getPrimaryKey()));
+                // TODO Fix unit tests
+                if (!context.lease().currentTerm().isNull()) {
+                    context.lease().currentTerm().set(Persistence.retrieveDraftForEdit(LeaseTerm.class, context.lease().currentTerm().getPrimaryKey()));
+                }
             }
             if (context.leaseTermParticipant().role().getValue() == Role.Applicant) {
                 t.Applicant().Name().setValue(customer.person().name().getStringView());
