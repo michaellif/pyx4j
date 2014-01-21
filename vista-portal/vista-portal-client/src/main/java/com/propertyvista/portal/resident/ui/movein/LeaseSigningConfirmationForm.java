@@ -13,7 +13,9 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -30,7 +32,7 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
     private static final I18n i18n = I18n.get(LeaseSigningConfirmationForm.class);
 
     public LeaseSigningConfirmationForm(AbstractFormView<LeaseAgreementConfirmationDTO> view) {
-        super(LeaseAgreementConfirmationDTO.class, view, i18n.tr("Thank you. We have received your signed Lease Agreement."), ThemeColor.contrast4);
+        super(LeaseAgreementConfirmationDTO.class, view, i18n.tr("Lease Agreement Submitted"), ThemeColor.contrast4);
     }
 
     @Override
@@ -38,12 +40,23 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
+        content.setH4(++row, 0, 1, i18n.tr("Thank you. We have received your signed Lease Agreement."));
+
         content.setWidget(++row, 0, new Button(i18n.tr("Download Agreement"), new Command() {
             @Override
             public void execute() {
                 onDownloadAgreement();
             }
         }));
+
+        content.setBR(++row, 0, 1);
+
+        HTML helpText = new HTML(
+                i18n.tr("You now have access to the mycommunity portal. From the dashboard you can manage your payments, submit maintenance requests, view special offers and more."));
+        //" Please use the links below to continue with the setup of your tenant services, then continue on to the mycommunity dashboard."
+        helpText.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        content.setWidget(++row, 0, helpText);
+
         return content;
     }
 
