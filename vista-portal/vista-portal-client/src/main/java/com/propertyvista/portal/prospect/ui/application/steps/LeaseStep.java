@@ -30,8 +30,9 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.portal.prospect.ui.application.ApplicationOptionsFolder;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.prospect.ui.application.steps.Common.DepositFolder;
+import com.propertyvista.portal.prospect.ui.application.steps.Common.FeatureFolder;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -39,6 +40,10 @@ import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBui
 public class LeaseStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(LeaseStep.class);
+
+    private final BasicFlexFormPanel depositPanel = new BasicFlexFormPanel();
+
+    private final BasicFlexFormPanel featurePanel = new BasicFlexFormPanel();
 
     public LeaseStep() {
         super(OnlineApplicationWizardStepMeta.Lease);
@@ -50,7 +55,6 @@ public class LeaseStep extends ApplicationWizardStep {
         int row = -1;
 
         panel.setH3(++row, 0, 1, i18n.tr("Unit"));
-
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().info().number(), new CLabel<String>())).build());
         panel.setWidget(++row, 0,
                 new FormWidgetDecoratorBuilder(inject(proto().unit().building().info().address(), new CEntityLabel<AddressStructured>())).build());
@@ -58,23 +62,37 @@ public class LeaseStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().utilities(), new CLabel<String>())).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
-
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseFrom(), new CDateLabel())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseTo(), new CDateLabel())).build());
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leasePrice(), new CMoneyLabel())).build());
-
         panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
+        panel.setWidget(++row, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().selectedService().agreedPrice(), new CMoneyLabel())).customLabel(i18n.tr("Unit Price")).build());
 
-        panel.setWidget(++row, 0, inject(proto().options(), new ApplicationOptionsFolder(getView())));
+        panel.setWidget(++row, 0, depositPanel);
+        depositPanel.setH4(0, 0, 1, i18n.tr("Unit Deposits"));
+        depositPanel.setWidget(1, 0, 1, inject(proto().selectedService().deposits(), new DepositFolder()));
+
+        panel.setWidget(++row, 0, featurePanel);
+        featurePanel.setH3(0, 0, 1, i18n.tr("Features"));
+        featurePanel.setWidget(++row, 0, inject(proto().selectedFeatures(), new FeatureFolder()));
+        get(proto().selectedFeatures()).setEditable(false);
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             panel.setH3(++row, 0, 1, i18n.tr("People"));
-
             panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder()));
         }
 
         return panel;
+    }
+
+    @Override
+    public void onValueSet(boolean populate) {
+        // TODO Auto-generated method stub
+        super.onValueSet(populate);
+
+        depositPanel.setVisible(!getValue().selectedService().deposits().isEmpty());
+        featurePanel.setVisible(!getValue().selectedFeatures().isEmpty());
     }
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {

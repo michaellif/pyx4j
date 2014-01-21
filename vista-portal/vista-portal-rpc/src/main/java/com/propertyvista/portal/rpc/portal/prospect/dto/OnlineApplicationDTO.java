@@ -13,19 +13,15 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 
@@ -44,11 +40,9 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IPrimitive<LogicalDate> leaseTo();
 
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> leasePrice();
+    BillableItem selectedService();
 
-    IList<OptionDTO> options();
+    IList<BillableItem> selectedFeatures();
 
     /** Sets the age of majority for validation, null if no validation is required */
     IPrimitive<Integer> ageOfMajority();

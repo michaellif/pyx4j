@@ -79,7 +79,6 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
-import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
@@ -190,16 +189,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
         to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
 
-        to.leasePrice().setValue(term.version().leaseProducts().serviceItem().agreedPrice().getValue());
-
-        for (BillableItem bi : term.version().leaseProducts().featureItems()) {
-            OptionDTO oto = EntityFactory.create(OptionDTO.class);
-
-            oto.item().set(bi.item());
-            oto.price().setValue(bi.agreedPrice().getValue());
-
-            to.options().add(oto);
-        }
+        to.selectedService().set(term.version().leaseProducts().serviceItem());
+        to.selectedFeatures().addAll(term.version().leaseProducts().featureItems());
     }
 
     private void fillApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
