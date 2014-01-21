@@ -261,6 +261,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         switch (bo.role().getValue()) {
         case Applicant:
         case CoApplicant:
+            Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
             for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
                 if (tenant.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
                     saveLeaseTermParticipant(bo, to, tenant);
@@ -270,6 +271,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             break;
 
         case Guarantor:
+            Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
             for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
                 if (guarantor.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
                     saveLeaseTermParticipant(bo, to, guarantor);
@@ -754,7 +756,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease(), submit);
 
         if (submit) {
-            savePaymentData(bo, to);
+            if (bo.role().getValue() == OnlineApplication.Role.Applicant) {
+                savePaymentData(bo, to);
+            }
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(bo);
         }
     }
