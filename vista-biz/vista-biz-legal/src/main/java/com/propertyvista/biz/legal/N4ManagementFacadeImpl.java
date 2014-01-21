@@ -100,8 +100,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             while (leases.hasNext() && !executionMonitor.isTerminationRequested()) {
                 Lease lease = leases.next();
                 BigDecimal amountOwed = amountOwed(lease.billingAccount(), acceptableArCodes, today);
+                boolean hasActiveN4 = hasActiveN4(lease);
 
-                if (amountOwed.compareTo(minAmountOwed) > 0) {
+                if (!hasActiveN4 && amountOwed.compareTo(minAmountOwed) > 0) {
                     LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
                     candidate.leaseId().set(lease.createIdentityStub());
                     candidate.amountOwed().setValue(amountOwed);
@@ -165,6 +166,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
             n4Letter.lease().set(leaseId);
             n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
+            n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+            n4Letter.cancellationThreshold().setValue(new BigDecimal("0.00")); // TODO should be defined by user input
+            n4Letter.isActive().setValue(true);
             n4Letter.generatedOn().setValue(generationTime);
             n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
             n4Letter.file().fileSize().setValue(n4LetterBinary.length);
@@ -188,6 +192,16 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
         }
         return amountOwed;
+    }
+
+    private boolean hasActiveN4(Lease lease) {
+        List<N4LegalLetter> existingN4s = getN4(java.util.Arrays.asList(lease), null).get(lease);
+        for (N4LegalLetter existingN4 : existingN4s) {
+            if (existingN4.isActive().isBooleanTrue()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Retrieves Employee's signature image from the db or returns <code>null</code> if the employee hasn't uploaded a signature image */

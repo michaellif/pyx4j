@@ -15,7 +15,10 @@ package com.propertyvista.domain.legal.n4;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.legal.LegalLetter;
@@ -23,6 +26,14 @@ import com.propertyvista.domain.legal.LegalLetter;
 @DiscriminatorValue("N4LegalLetter")
 public interface N4LegalLetter extends LegalLetter {
 
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amountOwed();
+
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> cancellationThreshold();
+
+    IPrimitive<Boolean> isActive();
+
+    IPrimitive<LogicalDate> terminationDate();
 
 }
