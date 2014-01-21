@@ -17,7 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -25,6 +24,7 @@ import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.client.AppPlaceContorller;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -62,7 +62,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     }
 
     @Override
-    public PlaceController getPlaceController() {
+    public AppPlaceContorller getPlaceController() {
         return AppSite.getPlaceController();
     }
 
