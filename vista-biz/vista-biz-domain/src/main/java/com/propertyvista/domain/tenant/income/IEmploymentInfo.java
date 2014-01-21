@@ -43,6 +43,7 @@ public interface IEmploymentInfo extends CustomerScreeningIncomeInfo {
     IPrimitive<String> name();
 
     @EmbeddedEntity
+    @Caption(name = "Employer Address")
     AddressSimple address();
 
     //TODO: either one of starts/ends,  may be optional/hidden ?
