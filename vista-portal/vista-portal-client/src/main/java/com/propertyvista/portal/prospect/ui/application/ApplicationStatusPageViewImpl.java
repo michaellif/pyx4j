@@ -33,8 +33,8 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
-import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
@@ -120,7 +120,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                     progressGadget.setVisible(true);
                 }
 
-                if (OnlineApplication.Role.Applicant.equals(userAppStatus.role().getValue())) {
+                if (LeaseTermParticipant.Role.Applicant.equals(userAppStatus.role().getValue())) {
                     sendUpdateButton.setVisible(true);
                 }
 

@@ -29,7 +29,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
-import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @ToStringFormat("{0}")
 public interface OnlineApplicationLegalTerm extends IEntity {
@@ -37,7 +37,7 @@ public interface OnlineApplicationLegalTerm extends IEntity {
     public enum TargetRole {
         Applicant, Guarantor, All;
 
-        public boolean matchesApplicationRole(OnlineApplication.Role appRole) {
+        public boolean matchesApplicationRole(LeaseTermParticipant.Role appRole) {
             if (this == TargetRole.All) {
                 return true;
             }

@@ -207,6 +207,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         case Guarantor:
             fillLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermGuarantor());
             break;
+        default:
+            throw new IllegalArgumentException();
         }
 
         // TO optimizations
@@ -745,6 +747,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         case Guarantor:
             break;
+        default:
+            throw new IllegalArgumentException();
+
         }
 
         saveApplicantData(bo, to);
@@ -756,7 +761,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease(), submit);
 
         if (submit) {
-            if (bo.role().getValue() == OnlineApplication.Role.Applicant) {
+            if (bo.role().getValue() == LeaseTermParticipant.Role.Applicant) {
                 savePaymentData(bo, to);
             }
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(bo);

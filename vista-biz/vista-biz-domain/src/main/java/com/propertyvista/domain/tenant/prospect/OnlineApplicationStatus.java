@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @Transient
 public interface OnlineApplicationStatus extends IEntity {
@@ -33,7 +34,7 @@ public interface OnlineApplicationStatus extends IEntity {
     /**
      * Applicant, Co-Applicant or Guarantor
      */
-    IPrimitive<OnlineApplication.Role> role();
+    IPrimitive<LeaseTermParticipant.Role> role();
 
     /**
      * Completed steps/total steps in %

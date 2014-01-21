@@ -53,7 +53,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
-import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
@@ -76,7 +75,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 if (tenant.leaseParticipant().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Primary applicant must have an e-mail to start Online Application."));
                 }
-                tenant.application().set(createOnlineApplication(masterOnlineApplication, tenant, Role.Applicant));
+                tenant.application().set(createOnlineApplication(masterOnlineApplication, tenant, LeaseTermParticipant.Role.Applicant));
 
                 if (masterOnlineApplication.leaseApplication().lease().unit().isNull()) {
                     ServerSideFactory.create(CommunicationFacade.class).sendProspectWelcome(tenant);
@@ -287,7 +286,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 if (tenant.leaseParticipant().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Co-Applicant must have an e-mail to start Online Application."));
                 }
-                tenant.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), tenant, Role.CoApplicant));
+                tenant.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), tenant, LeaseTermParticipant.Role.CoApplicant));
                 ServerSideFactory.create(CommunicationFacade.class).sendCoApplicantApplicationInvitation(tenant);
                 Persistence.service().persist(tenant);
             }
@@ -301,14 +300,16 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 if (guarantor.leaseParticipant().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Guarantor must have an e-mail to start Online Application."));
                 }
-                guarantor.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), guarantor, Role.Guarantor));
+                guarantor.application().set(
+                        createOnlineApplication(lease.leaseApplication().onlineApplication(), guarantor, LeaseTermParticipant.Role.Guarantor));
                 ServerSideFactory.create(CommunicationFacade.class).sendGuarantorApplicationInvitation(guarantor);
                 Persistence.service().persist(guarantor);
             }
         }
     }
 
-    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterOnlineApplication, LeaseTermParticipant<?> participant, Role role) {
+    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterOnlineApplication, LeaseTermParticipant<?> participant,
+            LeaseTermParticipant.Role role) {
         OnlineApplication app = EntityFactory.create(OnlineApplication.class);
         app.status().setValue(OnlineApplication.Status.Invited);
 
