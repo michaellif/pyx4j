@@ -34,6 +34,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.common.client.ui.components.login.LoginView;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class LandingViewImpl extends FlowPanel implements LandingView {
@@ -46,6 +47,8 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
 
     private final SimplePanel orHolder;
 
+    private final HTML orLabel;
+
     public LandingViewImpl() {
 
         setStyleName(DashboardTheme.StyleName.LandingPage.name());
@@ -54,7 +57,7 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
         signUpGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         signUpGadget.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        HTML orLabel = new HTML("OR");
+        orLabel = new HTML("OR");
         orLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         orLabel.getElement().getStyle().setLineHeight(50, Unit.PX);
         orLabel.setPixelSize(50, 50);
@@ -88,6 +91,7 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
             }
 
         });
+
     }
 
     private void doLayout(LayoutType layoutType) {
@@ -114,6 +118,9 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
     public void setPresenter(LoginView.Presenter presenter) {
         loginGadget.setPresenter((LandingPresenter) presenter);
         signUpGadget.setPresenter((LandingPresenter) presenter);
+
+        setSignUpGadgetVisible(Window.Location.getParameter(ProspectPortalSiteMap.ARG_ILS_BUILDING_ID) != null);
+
     }
 
     @Override
@@ -139,5 +146,15 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
     @Override
     public void reset(String email, boolean rememberUser) {
         loginGadget.reset(email, rememberUser);
+    }
+
+    private void setSignUpGadgetVisible(boolean visible) {
+        if (visible) {
+            signUpGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            orLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        } else {
+            signUpGadget.getElement().getStyle().setDisplay(Display.NONE);
+            orLabel.getElement().getStyle().setDisplay(Display.NONE);
+        }
     }
 }

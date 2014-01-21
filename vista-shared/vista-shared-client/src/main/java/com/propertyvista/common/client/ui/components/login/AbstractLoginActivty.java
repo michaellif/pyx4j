@@ -84,6 +84,10 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
         this.loginView = loginView;
     }
 
+    public LoginView getLoginView() {
+        return loginView;
+    }
+
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         loginView.setPresenter(this);

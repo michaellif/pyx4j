@@ -24,11 +24,12 @@ import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.prospect.ui.landing.LandingView;
+import com.propertyvista.portal.prospect.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.PortalSite;
 
-public class LandingActivity extends AbstractLoginActivty implements LandingView.LandingPresenter {
+public class LandingActivity extends AbstractLoginActivty implements LandingPresenter {
 
     public LandingActivity(Place place) {
         super(place, PortalSite.getViewFactory().getView(LandingView.class), new PortalSiteMap.PasswordResetRequest());

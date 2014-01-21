@@ -17,7 +17,7 @@ import com.propertyvista.common.client.ui.components.login.LoginView;
 
 public interface LandingView extends LoginView {
 
-    interface LandingPresenter extends LoginView.Presenter {
+    public interface LandingPresenter extends LoginView.Presenter {
 
         void signUp();
 
