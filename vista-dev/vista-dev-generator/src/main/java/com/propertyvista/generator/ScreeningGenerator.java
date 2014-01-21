@@ -55,6 +55,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
+import com.propertyvista.misc.CreditCardNumberGenerator;
 
 public class ScreeningGenerator {
 
@@ -251,11 +252,15 @@ public class ScreeningGenerator {
 
     private IdentificationDocumentFolder createIdentificationDocument() {
         IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
-        document.idNumber().setValue(RandomUtil.randomLetters(10));
         if (identificationDocumentTypes == null) {
             identificationDocumentTypes = Persistence.service().query(EntityQueryCriteria.create(IdentificationDocumentType.class));
         }
         document.idType().set(RandomUtil.random(identificationDocumentTypes));
+        if (document.idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) {
+            document.idNumber().setValue(CreditCardNumberGenerator.generateCanadianSin());
+        } else {
+            document.idNumber().setValue(RandomUtil.randomLetters(10));
+        }
         document.files().add(createDocumentPage(IdentificationDocumentFile.class, "doc-security" + RandomUtil.randomInt(3) + ".jpg"));
         return document;
     }
