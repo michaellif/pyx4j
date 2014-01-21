@@ -32,19 +32,30 @@ public class ARCodesGenerator {
             createARCode(type.toString(), type, 5110, false);
         }
 
-        createARCode("Regular Parking", ARCode.Type.Parking, 5110, false);
-        createARCode("Wide Parking", ARCode.Type.Parking, 5110, false);
-        createARCode("Narrow Parking", ARCode.Type.Parking, 5110, false);
-        createARCode("Disabled Parking", ARCode.Type.Parking, 5110, false);
-        createARCode("Cat", ARCode.Type.Pet, 5930, false);
-        createARCode("Dog", ARCode.Type.Pet, 5930, false);
-        createARCode("Small Locker", ARCode.Type.Locker, 5110, false);
-        createARCode("Medium Locker", ARCode.Type.Locker, 5110, false);
-        createARCode("Large Locker", ARCode.Type.Locker, 5110, false);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            createARCode("Indoor Parking", ARCode.Type.Parking, 5110, false, "rinpark");
+            createARCode("Outdoor Parking", ARCode.Type.Parking, 5110, false, "routpark");
+        } else {
+            createARCode("Regular Parking", ARCode.Type.Parking, 5110, false);
+            createARCode("Wide Parking", ARCode.Type.Parking, 5110, false);
+            createARCode("Narrow Parking", ARCode.Type.Parking, 5110, false);
+            createARCode("Disabled Parking", ARCode.Type.Parking, 5110, false);
+        }
+        createARCode("Cat", ARCode.Type.Pet, 5930, false, "petf");
+        createARCode("Dog", ARCode.Type.Pet, 5930, false, "rpet");
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            createARCode("Large Locker", ARCode.Type.Locker, 5110, false, "storoth");
+            createARCode("Small Locker", ARCode.Type.Locker, 5110, false, "rstorage");
+        } else {
+            createARCode("Small Locker", ARCode.Type.Locker, 5110, false);
+            createARCode("Medium Locker", ARCode.Type.Locker, 5110, false);
+            createARCode("Large Locker", ARCode.Type.Locker, 5110, false);
+        }
         createARCode("Fitness", ARCode.Type.AddOn, 5110, false);
         createARCode("Pool", ARCode.Type.AddOn, 5110, false);
         createARCode("Furnished", ARCode.Type.AddOn, 5110, false);
-        createARCode("Key", ARCode.Type.OneTime, 6240, false);
+        createARCode("Key", ARCode.Type.OneTime, 6240, false, "rkeydep");
         createARCode("Access Card", ARCode.Type.OneTime, 6240, false);
         createARCode("Cable", ARCode.Type.AddOn, 5110, false);
         createARCode("Water", ARCode.Type.Utility, 5999, false);
@@ -69,10 +80,7 @@ public class ARCodesGenerator {
 
         // create Yardi rrent code if necessary:
         if (VistaFeatures.instance().yardiIntegration()) {
-            ARCode code = createARCode("Yardi Residential Rent", ARCode.Type.Residential, 0, false);
-            YardiChargeCode yardiCode = EntityFactory.create(YardiChargeCode.class);
-            yardiCode.yardiChargeCode().setValue("rrent");
-            code.yardiChargeCodes().add(yardiCode);
+            createARCode("Yardi Residential Rent", ARCode.Type.Residential, 0, false, "rrent");
         }
     }
 
@@ -81,12 +89,23 @@ public class ARCodesGenerator {
     }
 
     private ARCode createARCode(String name, ARCode.Type type, int glCode, boolean reserved) {
+        return createARCode(name, type, glCode, reserved, null);
+    }
+
+    private ARCode createARCode(String name, ARCode.Type type, int glCode, boolean reserved, String yardiChargeCodeName) {
         ARCode code = EntityFactory.create(ARCode.class);
 
         code.name().setValue(name);
         code.type().setValue(type);
         code.glCode().codeId().setValue(glCode);
         code.reserved().setValue(reserved);
+
+        // map Yardi charge code:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            YardiChargeCode yardiChargeCode = EntityFactory.create(YardiChargeCode.class);
+            yardiChargeCode.yardiChargeCode().setValue(yardiChargeCodeName);
+            code.yardiChargeCodes().add(yardiChargeCode);
+        }
 
         codes.add(code);
         return code;
