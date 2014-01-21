@@ -85,7 +85,7 @@ public interface MasterOnlineApplication extends IEntity {
 
     // -----------------------------------------------
 
-    @Owned
+    @Owned(cascade = {})
     @Detached
     ISet<OnlineApplication> applications();
 

@@ -46,15 +46,16 @@ import com.propertyvista.domain.tenant.ProspectSignUp;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
-import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
@@ -178,6 +179,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         MasterOnlineApplication ma = application.masterOnlineApplication();
         Persistence.service().retrieve(ma);
         Persistence.service().retrieve(ma.leaseApplication().lease());
+        ma.leaseApplication().lease().currentTerm()
+                .set(Persistence.service().retrieve(LeaseTerm.class, ma.leaseApplication().lease().currentTerm().getPrimaryKey().asDraftKey()));
 
         // Invite customers:
         switch (application.role().getValue()) {
@@ -193,8 +196,11 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
 
         // check application completeness:
+        // Load again since new applications may have been added.
+        Persistence.service().retrieve(ma);
         boolean allApplicationsSubmited = true;
         Persistence.service().retrieve(ma.applications());
+
         for (OnlineApplication app : ma.applications()) {
             if (app.status().getValue() != OnlineApplication.Status.Submitted) {
                 allApplicationsSubmited = false;

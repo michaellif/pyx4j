@@ -163,11 +163,7 @@ class MessageTemplatesCustomizable {
     }
 
     public static MailMessage createTenantInvitationEmail(LeaseTermParticipant<?> leaseParticipant, EmailTemplateType emailType, String token) {
-        Persistence.service().retrieve(leaseParticipant.leaseTermV());
-        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease());
-        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit());
-        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit().building());
-
+        Persistence.ensureRetrieve(leaseParticipant.leaseTermV().holder().lease().unit().building(), AttachLevel.Attached);
         Persistence.service().retrieve(leaseParticipant.leaseParticipant().customer().user());
 
         EmailTemplate emailTemplate = getEmailTemplate(emailType, leaseParticipant.leaseTermV().holder().lease().unit().building());
@@ -211,10 +207,8 @@ class MessageTemplatesCustomizable {
         // TODO Fix this!
         LeaseTermTenant til = Persistence.service().retrieve(criteria);
         if (til != null) {
-            Persistence.service().retrieve(til.leaseTermV());
-            Persistence.service().retrieve(til.leaseTermV().holder().lease());
-            Persistence.service().retrieve(til.leaseTermV().holder().lease().unit());
-            Persistence.service().retrieve(til.leaseTermV().holder().lease().unit().building());
+            Persistence.ensureRetrieve(til.leaseTermV().holder().lease().unit().building(), AttachLevel.Attached);
+
             if (!til.leaseTermV().holder().lease().unit().building().isNull()) {
                 policyNode = til.leaseTermV().holder().lease().unit().building();
             }

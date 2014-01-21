@@ -60,6 +60,7 @@ import com.propertyvista.domain.settings.PmcCompanyInfoContact.CompanyInfoContac
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -179,7 +180,11 @@ public class EmailTemplateRootObjectLoader {
             } else {
                 throw new Error("LeaseTermParticipant should be provided in context");
             }
-            Lease lease = app.masterOnlineApplication().leaseApplication().lease();
+            if (context.lease().isNull()) {
+                Persistence.ensureRetrieve(app.masterOnlineApplication(), AttachLevel.Attached);
+                context.lease().set(app.masterOnlineApplication().leaseApplication().lease());
+                context.lease().currentTerm().set(Persistence.retrieveDraftForEdit(LeaseTerm.class, context.lease().currentTerm().getPrimaryKey()));
+            }
             if (context.leaseTermParticipant().role().getValue() == Role.Applicant) {
                 t.Applicant().Name().setValue(customer.person().name().getStringView());
                 t.Applicant().FirstName().setValue(customer.person().name().firstName().getStringView());
@@ -199,19 +204,19 @@ public class EmailTemplateRootObjectLoader {
                 t.GuarantorRequester().LastName().setValue(leaseTermGuarantor.tenant().customer().person().name().lastName().getStringView());
             }
             if (t.Applicant().isNull()) {
-                Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
-                t.Applicant().Name().setValue(lease._applicant().customer().person().name().getStringView());
-                t.Applicant().FirstName().setValue(lease._applicant().customer().person().name().firstName().getStringView());
-                t.Applicant().LastName().setValue(lease._applicant().customer().person().name().lastName().getStringView());
+                Persistence.ensureRetrieve(context.lease()._applicant(), AttachLevel.Attached);
+                t.Applicant().Name().setValue(context.lease()._applicant().customer().person().name().getStringView());
+                t.Applicant().FirstName().setValue(context.lease()._applicant().customer().person().name().firstName().getStringView());
+                t.Applicant().LastName().setValue(context.lease()._applicant().customer().person().name().lastName().getStringView());
             }
             Collection<String> applicantsNames = new ArrayList<String>();
             Collection<String> applicantsAndGuarantorsNames = new ArrayList<String>();
 
-            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+            for (LeaseTermTenant tenant : context.lease().currentTerm().version().tenants()) {
                 applicantsNames.add(tenant.leaseParticipant().customer().person().name().getStringView());
                 applicantsAndGuarantorsNames.add(tenant.leaseParticipant().customer().person().name().getStringView());
             }
-            for (LeaseTermGuarantor guarantor : lease.currentTerm().version().guarantors()) {
+            for (LeaseTermGuarantor guarantor : context.lease().currentTerm().version().guarantors()) {
                 applicantsAndGuarantorsNames.add(guarantor.leaseParticipant().customer().person().name().getStringView());
             }
 
@@ -224,7 +229,7 @@ public class EmailTemplateRootObjectLoader {
             } else {
                 t.SignUpUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
             }
-            AddressStructured address = AddressRetriever.getLeaseLegalAddress(lease);
+            AddressStructured address = AddressRetriever.getLeaseLegalAddress(context.lease());
             t.UnitAddress().setValue(address.getStringView());
         } else if (tObj instanceof TenantT) {
             TenantT t = (TenantT) tObj;
