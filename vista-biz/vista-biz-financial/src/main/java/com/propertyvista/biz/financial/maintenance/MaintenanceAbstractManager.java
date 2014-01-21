@@ -23,6 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
@@ -157,10 +158,20 @@ public abstract class MaintenanceAbstractManager {
 
     public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter) {
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), statuses));
+        criteria.in(criteria.proto().status().phase(), statuses);
         if (reporter != null) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().reporter(), reporter));
+            Persistence.ensureRetrieve(reporter.lease(), AttachLevel.Attached);
+            criteria.or( //
+                    // everything opened by this tenant
+                    PropertyCriterion.eq(criteria.proto().reporter(), reporter),
+                    // everything opened for his unit during his lease
+                    new AndCriterion( //
+                            PropertyCriterion.eq(criteria.proto().unit(), reporter.lease().unit()), //
+                            PropertyCriterion.ge(criteria.proto().submitted(), reporter.lease().leaseFrom()) //
+                    ) //
+            );
         }
+
         return Persistence.service().query(criteria.desc(criteria.proto().updated()));
     }
 
