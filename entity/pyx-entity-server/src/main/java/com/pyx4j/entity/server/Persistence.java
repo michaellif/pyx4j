@@ -223,6 +223,10 @@ public class Persistence {
     }
 
     public static <T extends IEntity> void ensureRetrieve(T entityMember, AttachLevel attachLevel) {
+        if ((entityMember.getAttachLevel() == AttachLevel.Detached) && (entityMember.getOwner() != null)
+                && (entityMember.getOwner().getAttachLevel() == AttachLevel.Detached)) {
+            ensureRetrieve(entityMember.getOwner(), AttachLevel.Attached);
+        }
         if (entityMember.getAttachLevel() == AttachLevel.Detached) {
             service().retrieveMember(entityMember, attachLevel);
         } else {
