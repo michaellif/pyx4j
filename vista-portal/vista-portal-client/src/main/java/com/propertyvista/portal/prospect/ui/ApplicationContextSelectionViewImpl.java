@@ -62,11 +62,6 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
         lister.obtain(0);
     }
 
-    @Override
-    public OnlineApplication getSelectedApplication() {
-        return lister.getSelectedItem().onlineApplication().duplicate();
-    }
-
     class ApplicationContextSelectionGadget extends AbstractGadget<ApplicationContextSelectionViewImpl> {
 
         ApplicationContextSelectionGadget(ApplicationLister lister) {
@@ -89,7 +84,7 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
                     public void execute() {
                         OnlineApplicationContextChoiceDTO choice = lister.getSelectedItem();
                         if (choice != null) {
-                            presenter.setApplicationContext();
+                            presenter.setApplicationContext((OnlineApplication) choice.onlineApplication().duplicate());
                         }
                     }
                 });

@@ -61,9 +61,8 @@ public class ApplicationContextSelectionActivity extends AbstractActivity implem
     }
 
     @Override
-    public void setApplicationContext() {
-        OnlineApplication application = view.getSelectedApplication();
-        if (application != null) {
+    public void setApplicationContext(OnlineApplication onlineApplication) {
+        if (onlineApplication != null) {
             service.setApplicationContext(new DefaultAsyncCallback<AuthenticationResponse>() {
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
@@ -73,7 +72,7 @@ public class ApplicationContextSelectionActivity extends AbstractActivity implem
 
                 }
 
-            }, application);
+            }, onlineApplication);
         } else {
             throw new Error("Application wasn't selected");
         }

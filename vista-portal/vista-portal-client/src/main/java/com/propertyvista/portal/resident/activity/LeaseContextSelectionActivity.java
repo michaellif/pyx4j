@@ -20,7 +20,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -34,8 +33,6 @@ import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 
 public class LeaseContextSelectionActivity extends AbstractActivity implements LeaseContextSelectionView.Presenter {
-
-    private static final I18n i18n = I18n.get(LeaseContextSelectionActivity.class);
 
     private final LeaseContextSelectionView view;
 
@@ -53,7 +50,6 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
         populate();
     }
 
-    @Override
     public void populate() {
         service.getLeaseContextChoices(new DefaultAsyncCallback<Vector<LeaseContextChoiceDTO>>() {
             @Override
@@ -64,9 +60,8 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
     }
 
     @Override
-    public void setLeaseContext() {
-        Lease leaseIdStub = view.getSelectedLeaseIdStub();
-        if (leaseIdStub != null) {
+    public void setLeaseContext(Lease lease) {
+        if (lease != null) {
             service.setLeaseContext(new DefaultAsyncCallback<AuthenticationResponse>() {
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
@@ -74,9 +69,9 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
                 }
 
-            }, leaseIdStub);
+            }, lease);
         } else {
-            view.showMessage(i18n.tr("Please choose a lease"));
+            throw new Error("Lease wasn't selected");
         }
     }
 

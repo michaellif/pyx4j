@@ -27,9 +27,7 @@ public interface LeaseContextSelectionView extends IsView {
 
     interface Presenter {
 
-        void populate();
-
-        void setLeaseContext();
+        void setLeaseContext(Lease lease);
 
     }
 
@@ -37,7 +35,4 @@ public interface LeaseContextSelectionView extends IsView {
 
     void populate(List<LeaseContextChoiceDTO> leaseChoices);
 
-    Lease getSelectedLeaseIdStub();
-
-    void showMessage(String message);
 }

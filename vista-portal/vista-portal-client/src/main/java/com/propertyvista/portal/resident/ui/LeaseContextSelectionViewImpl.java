@@ -15,72 +15,41 @@ package com.propertyvista.portal.resident.ui;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
+import com.propertyvista.portal.shared.themes.DashboardTheme;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView {
+public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseContextSelectionView {
 
     private final static I18n i18n = I18n.get(LeaseContextSelectionViewImpl.class);
 
-    private final BasicFlexFormPanel content;
-
-    private final LeaseContextChoicesLister lister;
+    private final LeaseLister lister;
 
     private Presenter presenter;
 
     public LeaseContextSelectionViewImpl() {
-        lister = new LeaseContextChoicesLister();
-        lister.setSize("100%", "100%");
-        lister.showColumnSelector(false);
+        setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        content = new BasicFlexFormPanel();
-        content.setSize("100%", "100%");
+        lister = new LeaseLister();
+        LeaseContextSelectionGadget gadget = new LeaseContextSelectionGadget(lister);
+        setWidget(gadget);
 
-        int row = -1;
-        content.setH1(++row, 0, 2, i18n.tr("Please select the lease you want to manage and click ''Continue'':"));
-        content.setWidget(++row, 0, 2, lister);
-
-        final Button chooseButton = new Button(i18n.tr("Continue"), new Command() {
-            @Override
-            public void execute() {
-                LeaseContextChoiceDTO choice = lister.getSelectedItem();
-                if (choice != null) {
-                    presenter.setLeaseContext();
-                }
-            }
-        });
-        chooseButton.setEnabled(false);
-        lister.addItemSelectionHandler(new ItemSelectionHandler<LeaseContextChoiceDTO>() {
-            @Override
-            public void onSelect(LeaseContextChoiceDTO selectedItem) {
-                chooseButton.setEnabled(selectedItem != null);
-            }
-        });
-
-        content.setWidget(++row, 0, chooseButton);
-        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        content.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(0.5, Unit.EM);
-
-    }
-
-    @Override
-    public Widget asWidget() {
-        return content;
     }
 
     @Override
@@ -90,35 +59,63 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
 
     @Override
     public void populate(List<LeaseContextChoiceDTO> leaseChoices) {
-        lister.setDataSource(new LeaseContextChoicesDataSource(leaseChoices));
+        lister.setDataSource(new LeaseDataSource(leaseChoices));
         lister.obtain(0);
     }
 
-    @Override
-    public Lease getSelectedLeaseIdStub() {
-        return lister.getSelectedItem().leaseId().duplicate();
-    }
+    class LeaseContextSelectionGadget extends AbstractGadget<LeaseContextSelectionViewImpl> {
 
-    @Override
-    public void showMessage(String message) {
-        MessageDialog.info(message);
-    }
+        LeaseContextSelectionGadget(LeaseLister lister) {
+            super(LeaseContextSelectionViewImpl.this, null, i18n.tr("Select a Lease"), ThemeColor.foreground, 0.3);
 
-    private static class LeaseContextChoicesLister extends EntityDataTablePanel<LeaseContextChoiceDTO> {
+            lister.setWidth("100%");
 
-        public LeaseContextChoicesLister() {
-            super(LeaseContextChoiceDTO.class, false, false);
-            setSelectable(true);
-            getDataTablePanel().setFilteringEnabled(false);
-            setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().leasedUnitAddress()).build()
-            );//@formatter:on
+            lister.showColumnSelector(false);
+            lister.addActionItem(new Label(i18n.tr("Please select the Lease you want to manage and click \"Continue\"")));
+            setContent(lister);
+            setActionsToolbar(new ApplicationContextSelectionToolbar());
+        }
+
+        class ApplicationContextSelectionToolbar extends GadgetToolbar {
+            public ApplicationContextSelectionToolbar() {
+
+                final Button continueButton = new Button("Continue", new Command() {
+
+                    @Override
+                    public void execute() {
+                        LeaseContextChoiceDTO choice = lister.getSelectedItem();
+                        if (choice != null) {
+                            presenter.setLeaseContext((Lease) choice.leaseId().duplicate());
+                        }
+                    }
+                });
+
+                continueButton.setEnabled(false);
+                lister.addItemSelectionHandler(new ItemSelectionHandler<LeaseContextChoiceDTO>() {
+                    @Override
+                    public void onSelect(LeaseContextChoiceDTO selectedItem) {
+                        continueButton.setEnabled(selectedItem != null);
+                    }
+                });
+                continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
+                addItem(continueButton);
+            }
         }
     }
 
-    private static class LeaseContextChoicesDataSource extends ListerDataSource<LeaseContextChoiceDTO> {
+    private static class LeaseLister extends EntityDataTablePanel<LeaseContextChoiceDTO> {
 
-        public LeaseContextChoicesDataSource(List<LeaseContextChoiceDTO> leaseChoices) {
+        public LeaseLister() {
+            super(LeaseContextChoiceDTO.class, false, false);
+            setSelectable(true);
+            getDataTablePanel().setFilteringEnabled(false);
+            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().leasedUnitAddress()).build());
+        }
+    }
+
+    private static class LeaseDataSource extends ListerDataSource<LeaseContextChoiceDTO> {
+
+        public LeaseDataSource(List<LeaseContextChoiceDTO> leaseChoices) {
             super(LeaseContextChoiceDTO.class, new InMemeoryListService<LeaseContextChoiceDTO>(leaseChoices));
         }
 

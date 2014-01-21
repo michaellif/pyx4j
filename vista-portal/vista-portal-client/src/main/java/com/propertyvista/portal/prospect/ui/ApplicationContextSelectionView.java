@@ -27,14 +27,12 @@ public interface ApplicationContextSelectionView extends IsView {
 
     public interface ApplicationContextSelectionPresenter {
 
-        void setApplicationContext();
+        void setApplicationContext(OnlineApplication onlineApplication);
 
     }
 
     void setPresenter(ApplicationContextSelectionPresenter presenter);
 
     void populate(List<OnlineApplicationContextChoiceDTO> leaseChoices);
-
-    OnlineApplication getSelectedApplication();
 
 }
