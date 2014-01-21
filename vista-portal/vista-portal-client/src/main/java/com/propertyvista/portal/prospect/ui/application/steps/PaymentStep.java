@@ -37,6 +37,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.prospect.ui.application.steps.common.DepositFolder;
 import com.propertyvista.portal.shared.ui.util.PortalPaymentTypesUtil;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
@@ -81,7 +82,8 @@ public class PaymentStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().amount(), new CMoneyLabel())).build());
+        panel.setWidget(++row, 0, inject(proto().payment().deposits(), new DepositFolder()));
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().applicationFee(), new CMoneyLabel())).build());
 
         panel.setHR(++row, 0, 1);
 
