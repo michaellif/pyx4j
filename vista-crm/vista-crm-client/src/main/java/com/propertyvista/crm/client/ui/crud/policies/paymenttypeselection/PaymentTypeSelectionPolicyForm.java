@@ -95,8 +95,28 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
                         proto().residentPortalVisaDebit().getMeta().getCaption() + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : "")).build());
         residentPortal.setWidget(0, ++col, aligned(proto().residentPortalInterac()).build());
 
-//        residentPortal.setWidget(1, 0, col, new HTML(i18n.tr("Note: If card is disabled, Convenience Fee will apply for Portal payments.")));
-//        residentPortal.getWidget(1, 0).setStyleName(VistaTheme.StyleName.infoMessage.name());
+        BasicFlexFormPanel prospectPortal = new BasicFlexFormPanel();
+        col = -1;
+        prospectPortal.setH4(0, ++col, 1, i18n.tr("Prospect Portal:"));
+        prospectPortal.getWidget(0, col).setWidth(hdrW);
+
+        prospectPortal.setWidget(0, ++col, new HTML()); // fill empty cell
+        prospectPortal.getWidget(0, col).setWidth(lblW);
+        prospectPortal.setWidget(0, ++col, new HTML()); // fill empty cell
+        prospectPortal.getWidget(0, col).setWidth(lblW);
+        prospectPortal.setWidget(0, ++col, aligned(proto().prospectEcheck()).build());
+        prospectPortal.setWidget(0, ++col, aligned(proto().prospectDirectBanking()).build());
+        prospectPortal.setWidget(0, ++col,
+                aligned(proto().prospectCreditCardMasterCard()).customLabel(proto().prospectCreditCardMasterCard().getMeta().getCaption() + convenienceMarker)
+                        .build());
+        prospectPortal.setWidget(0, ++col,
+                aligned(proto().prospectCreditCardVisa()).customLabel(proto().prospectCreditCardVisa().getMeta().getCaption() + convenienceMarker).build());
+        prospectPortal.setWidget(
+                0,
+                ++col,
+                aligned(proto().prospectVisaDebit()).customLabel(
+                        proto().prospectVisaDebit().getMeta().getCaption() + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : "")).build());
+        prospectPortal.setWidget(0, ++col, aligned(proto().prospectInterac()).build());
 
         BasicFlexFormPanel cashEquivalent = new BasicFlexFormPanel();
         col = -1;
@@ -119,6 +139,8 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         main.setWidget(++row, 0, 2, accepted);
         main.setHR(++row, 0, 2);
         main.setWidget(++row, 0, 2, residentPortal);
+        main.setHR(++row, 0, 2);
+        main.setWidget(++row, 0, 2, prospectPortal);
         main.setHR(++row, 0, 2);
         main.setWidget(++row, 0, 2, cashEquivalent);
         main.setHR(++row, 0, 2);

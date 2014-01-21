@@ -38,13 +38,21 @@ public class PaymentMethodSelectionPolicyPreloader extends AbstractPolicyPreload
         policy.acceptedVisaDebit().setValue(Boolean.TRUE);
         policy.acceptedInterac().setValue(Boolean.TRUE);
 
-        // -- Accepted In residentPortal
+        // -- Accepted In resident Portal
         policy.residentPortalEcheck().setValue(Boolean.TRUE);
         policy.residentPortalDirectBanking().setValue(Boolean.TRUE);
         policy.residentPortalCreditCardMasterCard().setValue(Boolean.TRUE);
         policy.residentPortalCreditCardVisa().setValue(Boolean.TRUE);
         policy.residentPortalVisaDebit().setValue(Boolean.TRUE);
         policy.residentPortalInterac().setValue(Boolean.TRUE);
+
+        // -- Accepted In prospect Portal
+        policy.prospectEcheck().setValue(Boolean.TRUE);
+        policy.prospectDirectBanking().setValue(Boolean.TRUE);
+        policy.prospectCreditCardMasterCard().setValue(Boolean.TRUE);
+        policy.prospectCreditCardVisa().setValue(Boolean.TRUE);
+        policy.prospectVisaDebit().setValue(Boolean.TRUE);
+        policy.prospectInterac().setValue(Boolean.TRUE);
 
         // -- Accepted when cashEquivalent flag on BillingAccount.paymentAccepted is set to CashEquivalent
         policy.cashEquivalentCash().setValue(Boolean.TRUE);

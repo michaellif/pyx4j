@@ -160,13 +160,19 @@ public class PaymentAcceptanceUtils {
 
     private static Collection<PaymentTypeAcceptance> crmPaymentTypeRequire = buildPaymentAcceptanceMatrixCrm();
 
-    private static Collection<PaymentTypeAcceptance> residentPortalPaymentTypeRequire = buildPaymentAcceptanceMatrixPortal();
+    private static Collection<PaymentTypeAcceptance> residentPortalPaymentTypeRequire = buildPaymentAcceptanceMatrixResident();
+
+    private static Collection<PaymentTypeAcceptance> prospectPortalPaymentTypeRequire = buildPaymentAcceptanceMatrixProspect();
 
     private static Collection<CardTypeAcceptance> crmCardRequire = buildCardAcceptanceMatrixCrm();
 
-    private static Collection<CardTypeAcceptance> residentPortalCardRequire = buildCardAcceptanceMatrixPortal();
+    private static Collection<CardTypeAcceptance> residentPortalCardRequire = buildCardAcceptanceMatrixResident();
 
-    private static Collection<CardTypeAcceptance> residentPortalCardWithConvenienceFee = buildCardAcceptanceMatrixWithConvenienceFeePortal();
+    private static Collection<CardTypeAcceptance> residentPortalCardWithConvenienceFee = buildCardAcceptanceMatrixWithConvenienceFeeResident();
+
+    private static Collection<CardTypeAcceptance> prospectPortalCardRequire = buildCardAcceptanceMatrixProspect();
+
+    private static Collection<CardTypeAcceptance> prospectPortalCardWithConvenienceFee = buildCardAcceptanceMatrixWithConvenienceFeeProspect();
 
     static Collection<PaymentType> getAllowedPaymentTypes(VistaApplication vistaApplication, ElectronicPaymentSetup setup, boolean requireCashEquivalent,
             PaymentTypeSelectionPolicy paymentMethodSelectionPolicy) {
@@ -174,7 +180,8 @@ public class PaymentAcceptanceUtils {
         Collection<PaymentTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
         case prospect:
-            // TODO process independently
+            requireAcceptance = prospectPortalPaymentTypeRequire;
+            break;
         case resident:
             requireAcceptance = residentPortalPaymentTypeRequire;
             break;
@@ -204,7 +211,12 @@ public class PaymentAcceptanceUtils {
         Collection<CardTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
         case prospect:
-            // TODO process independently
+            if (forConvenienceFeeOnly) {
+                requireAcceptance = prospectPortalCardWithConvenienceFee;
+            } else {
+                requireAcceptance = prospectPortalCardRequire;
+            }
+            break;
         case resident:
             if (forConvenienceFeeOnly) {
                 requireAcceptance = residentPortalCardWithConvenienceFee;
@@ -263,7 +275,7 @@ public class PaymentAcceptanceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static Collection<PaymentTypeAcceptance> buildPaymentAcceptanceMatrixPortal() {
+    private static Collection<PaymentTypeAcceptance> buildPaymentAcceptanceMatrixResident() {
         Collection<PaymentTypeAcceptance> require = new ArrayList<PaymentTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
 
@@ -297,6 +309,34 @@ public class PaymentAcceptanceUtils {
     }
 
     @SuppressWarnings("unchecked")
+    private static Collection<PaymentTypeAcceptance> buildPaymentAcceptanceMatrixProspect() {
+        Collection<PaymentTypeAcceptance> require = new ArrayList<PaymentTypeAcceptance>();
+        ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
+
+        require.add(new PaymentTypeAcceptance(PaymentType.Echeck).and(p.setup().acceptedEcheck(), p.acceptedEcheck()). // 
+                and(p.prospectEcheck()));
+
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard).and(p.setup().acceptedCreditCard(), p.acceptedCreditCardMasterCard()).//
+                or(p.prospectCreditCardMasterCard(), p.setup().acceptedCreditCardConvenienceFee()));
+
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard).and(p.setup().acceptedCreditCard(), p.acceptedCreditCardVisa()).//
+                or(p.prospectCreditCardVisa(), p.setup().acceptedCreditCardConvenienceFee()));
+
+        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard).and(p.setup().acceptedCreditCard(), p.acceptedVisaDebit()).//
+                or(p.prospectVisaDebit(), p.setup().acceptedCreditCardConvenienceFee()));
+
+        require.add(new PaymentTypeAcceptance(PaymentType.DirectBanking).and(p.setup().acceptedDirectBanking(), p.acceptedDirectBanking()). //
+                and(p.prospectDirectBanking()));
+
+        if (!VistaTODO.removedForProduction && false) {
+            require.add(new PaymentTypeAcceptance(PaymentType.Interac).and(p.setup().acceptedInterac(), p.acceptedInterac()).//
+                    and(p.prospectInterac()));
+        }
+
+        return require;
+    }
+
+    @SuppressWarnings("unchecked")
     private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixCrm() {
         Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
@@ -314,7 +354,7 @@ public class PaymentAcceptanceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixPortal() {
+    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixResident() {
         Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
 
@@ -340,7 +380,7 @@ public class PaymentAcceptanceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithConvenienceFeePortal() {
+    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithConvenienceFeeResident() {
         Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
 
@@ -357,6 +397,48 @@ public class PaymentAcceptanceUtils {
             require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.setup().acceptedCreditCardConvenienceFee()).// 
                     not(p.residentPortalVisaDebit()). //
                     or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
+        }
+
+        return require;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixProspect() {
+        Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
+        ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
+
+        require.add(new CardTypeAcceptance(CreditCardType.MasterCard).and(p.setup().acceptedCreditCard(), p.acceptedCreditCardMasterCard()).//
+                or(p.prospectCreditCardMasterCard(), p.setup().acceptedCreditCardConvenienceFee()));
+
+        require.add(new CardTypeAcceptance(CreditCardType.Visa).and(p.setup().acceptedCreditCard(), p.acceptedCreditCardVisa()).// 
+                or(p.prospectCreditCardVisa(), p.setup().acceptedCreditCardConvenienceFee()));
+
+        if (VistaTODO.visaDebitHasConvenienceFee) {
+            require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.acceptedVisaDebit()).// 
+                    or(p.prospectVisaDebit(), p.setup().acceptedCreditCardConvenienceFee()));
+        } else {
+            require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.acceptedVisaDebit()).// 
+                    and(p.prospectVisaDebit()));
+        }
+
+        return require;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithConvenienceFeeProspect() {
+        Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
+        ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
+
+        require.add(new CardTypeAcceptance(CreditCardType.MasterCard).and(p.setup().acceptedCreditCard(), p.setup().acceptedCreditCardConvenienceFee()).// 
+                not(p.prospectCreditCardMasterCard()));
+
+        require.add(new CardTypeAcceptance(CreditCardType.Visa).and(p.setup().acceptedCreditCard(), p.setup().acceptedCreditCardConvenienceFee()).// 
+                not(p.prospectCreditCardVisa()));
+
+        // VISTA-3995
+        if (VistaTODO.visaDebitHasConvenienceFee) {
+            require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).and(p.setup().acceptedCreditCard(), p.setup().acceptedCreditCardConvenienceFee()).// 
+                    not(p.prospectVisaDebit()));
         }
 
         return require;

@@ -28,6 +28,7 @@ public class PaymentMethodSelectionPolicyDevPreloader extends BaseVistaDevDataPr
     public String create() {
         PaymentTypeSelectionPolicy policy = Persistence.service().retrieve(EntityQueryCriteria.create(PaymentTypeSelectionPolicy.class));
         policy.residentPortalCreditCardVisa().setValue(false);
+        policy.prospectCreditCardVisa().setValue(false);
         Persistence.service().persist(policy);
         return null;
     }

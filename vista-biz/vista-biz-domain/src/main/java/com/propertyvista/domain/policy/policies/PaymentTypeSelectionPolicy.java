@@ -74,6 +74,26 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     @Caption(name = "Interac")
     IPrimitive<Boolean> residentPortalInterac();
 
+    //=====  Accepted In prospect Portal
+
+    @Caption(name = "E-Check")
+    IPrimitive<Boolean> prospectEcheck();
+
+    @Caption(name = "Direct Banking")
+    IPrimitive<Boolean> prospectDirectBanking();
+
+    @Caption(name = "Visa Credit Card")
+    IPrimitive<Boolean> prospectCreditCardVisa();
+
+    @Caption(name = "MasterCard")
+    IPrimitive<Boolean> prospectCreditCardMasterCard();
+
+    @Caption(name = "Visa Debit Card")
+    IPrimitive<Boolean> prospectVisaDebit();
+
+    @Caption(name = "Interac")
+    IPrimitive<Boolean> prospectInterac();
+
     //===== Accepted when cashEquivalent flag on BillingAccount.paymentAccepted is set to CashEquivalent
 
     @Caption(name = "Cash")
