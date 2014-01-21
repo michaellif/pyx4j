@@ -746,6 +746,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease(), submit);
 
         if (submit) {
+            savePaymentData(bo, to);
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(bo);
         }
     }
