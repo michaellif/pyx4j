@@ -13,14 +13,22 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.security.CustomerSignature;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.dto.PaymentDataDTO;
 
 @Transient
@@ -32,4 +40,11 @@ public interface PaymentDTO extends PaymentDataDTO, PaymentRecord {
     CustomerSignature convenienceFeeSignature();
 
     IPrimitive<Boolean> completed();
+
+    IList<Deposit> deposits();
+
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
+    IPrimitive<BigDecimal> applicationFee();
 }

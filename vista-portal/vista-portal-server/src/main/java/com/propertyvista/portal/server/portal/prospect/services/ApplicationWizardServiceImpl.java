@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.portal.prospect.services;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +33,7 @@ import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -53,6 +53,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -60,6 +61,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -646,15 +648,30 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        dto.convenienceFeeSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
 
-        // calculate current balance:
-        // TODO get application fee amount somewhere!!!
-        dto.amount().setValue(new BigDecimal(20.0));
-        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
-            dto.amount().setValue(new BigDecimal("0.00"));
+        // current balance: -------------------------------------------------------------------------------------------------------
+
+        // calculate deposits fee:
+        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
+        dto.deposits().addAll(leaseTerm.version().leaseProducts().serviceItem().deposits());
+        for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
+            dto.deposits().addAll(feature.deposits());
         }
 
-        dto.convenienceFeeSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
+        // calculate application fee:
+        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
+                ProspectPortalPolicy.class);
+
+        if (policy.feePayment().getValue() == FeePayment.perApplicant) {
+            if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+                dto.applicationFee().setValue(policy.feeAmount().getValue());
+            }
+        } else if (policy.feePayment().getValue() == FeePayment.perLease) {
+            if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+                dto.applicationFee().setValue(policy.feeAmount().getValue());
+            }
+        }
 
         to.payment().set(dto);
     }
@@ -744,7 +761,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void loadRestrictions(OnlineApplication bo, OnlineApplicationDTO to) {
         Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
                 RestrictionsPolicy.class);
 
         if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
