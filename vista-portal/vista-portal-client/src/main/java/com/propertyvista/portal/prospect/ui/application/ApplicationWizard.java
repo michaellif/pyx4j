@@ -37,8 +37,8 @@ import com.propertyvista.portal.prospect.ui.application.steps.PaymentStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PersonalInfoAStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PersonalInfoBStep;
-import com.propertyvista.portal.prospect.ui.application.steps.SummaryStep;
 import com.propertyvista.portal.prospect.ui.application.steps.UnitStep;
+import com.propertyvista.portal.prospect.ui.application.steps.summary.SummaryStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 
