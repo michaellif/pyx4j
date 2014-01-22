@@ -34,7 +34,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private final Tab depositsTab, adjustmentsTab, billsTab, paymentsTab, financialTab, maintenanceTab, communicationTab;
+    private final Tab depositsTab, adjustmentsTab, billsTab, paymentsTab, financialTab, maintenanceTab, communicationTab, legalTab;
 
     public LeaseForm(IForm<LeaseDTO> view) {
         super(LeaseDTO.class, view);
@@ -46,6 +46,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
         paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
+        legalTab = addTab(createLegalTab().asWidget(), i18n.tr("Legal"));
         communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"));
         maintenanceTab = addTab(((LeaseViewerView) getParentView()).getMaintenanceListerView().asWidget(), i18n.tr("Maintenance"));
     }
