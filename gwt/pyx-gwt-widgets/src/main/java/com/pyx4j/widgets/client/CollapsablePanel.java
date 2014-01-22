@@ -58,8 +58,6 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers {
         collapseImage.setResource(images.collapse());
 
         collapseImage.getElement().getStyle().setPosition(Position.RELATIVE);
-        collapseImage.getElement().getStyle().setMarginTop(-collapseImage.getHeight() / 2, Unit.PX);
-        collapseImage.getElement().getStyle().setTop(50, Unit.PCT);
         collapseImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -86,7 +84,6 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers {
             return;
         }
         collapseImage.setResource(expended ? images.collapse() : images.expand());
-        collapseImage.getElement().getStyle().setMarginTop(-collapseImage.getHeight() / 2, Unit.PX);
         this.expended = expended;
 
         ToggleEvent.fire(this, expended);
