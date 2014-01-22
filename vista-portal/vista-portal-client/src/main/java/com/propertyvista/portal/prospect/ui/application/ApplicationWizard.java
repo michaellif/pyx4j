@@ -128,15 +128,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     @Override
-    protected void onStepSelected(WizardStep selectedStep) {
-        super.onStepSelected(selectedStep);
-
-        for (ApplicationWizardStep step : steps.values()) {
-            step.onStepSelected(selectedStep);
-        }
-    }
-
-    @Override
     public void updateProgress(WizardStep currentStep, WizardStep previousStep) {
         super.updateProgress(currentStep, previousStep);
 

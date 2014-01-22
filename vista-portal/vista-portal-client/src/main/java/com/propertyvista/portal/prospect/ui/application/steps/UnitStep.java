@@ -130,10 +130,9 @@ public class UnitStep extends ApplicationWizardStep {
     }
 
     @Override
-    public void onStepSelected(WizardStep selectedStep) {
-        super.onStepSelected(selectedStep);
-
-        if (selectedStep.equals(this)) {
+    public void setStepSelected(boolean selected) {
+        super.setStepSelected(selected);
+        if (selected) {
             setEditableState(selectedUnit.isValueEmpty());
         }
     }

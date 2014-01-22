@@ -101,7 +101,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
                 WizardStep step = steps.get(i);
                 StepStatus stepStatus = StepStatus.notComplete;
 
-                if (step.isStepCurrent()) {
+                if (step.isStepSelected()) {
                     stepStatus = StepStatus.current;
                 } else if (i == steps.size() - 1) {// Last step stays not-completed. 
                     stepStatus = StepStatus.notComplete;

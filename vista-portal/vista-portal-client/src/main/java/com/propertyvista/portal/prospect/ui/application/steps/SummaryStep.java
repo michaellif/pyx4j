@@ -13,28 +13,51 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 
 public class SummaryStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(SummaryStep.class);
+
+    private SummaryPanel panel;
 
     public SummaryStep() {
         super(OnlineApplicationWizardStepMeta.Summary);
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
-        int row = -1;
+    public Widget createStepContent() {
+        panel = new SummaryPanel();
+        return panel.asWidget();
+    }
 
-        // TODO : real content goes here...
+    @Override
+    public void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        panel.setValue(getValue());
+    }
 
-        return panel;
+    class SummaryPanel extends CEntityForm<OnlineApplicationDTO> {
+
+        public SummaryPanel() {
+            super(OnlineApplicationDTO.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     }
 
 }
