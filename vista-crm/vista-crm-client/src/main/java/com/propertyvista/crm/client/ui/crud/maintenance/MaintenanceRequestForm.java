@@ -14,8 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -326,10 +328,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             public void onValueChange(ValueChangeEvent<AptUnit> event) {
                 // prevent mutual reset
                 valueChangeScope.setScope(unitSelector);
-                AptUnit value = event.getValue();
-                if (value != null) {
+                AptUnit unit = event.getValue();
+                if (unit != null) {
                     if (!valueChangeScope.inScope(buildingSelector)) {
-                        buildingSelector.setValue(value.building());
+                        buildingSelector.setValue(unit.building());
                     }
                     if (!valueChangeScope.inScope(reporterSelector)) {
                         reporterSelector.setValue(null);
@@ -351,6 +353,20 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 }
                 setMaintenanceRequestCategoryMeta();
                 valueChangeScope.clearScope(buildingSelector);
+            }
+        });
+        reporterSelector.addValueChangeHandler(new ValueChangeHandler<Tenant>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Tenant> event) {
+                valueChangeScope.setScope(reporterSelector);
+                Tenant tenant = event.getValue();
+                if (tenant != null) {
+                    if (!valueChangeScope.inScope(unitSelector)) {
+                        unitSelector.setValue(tenant.lease().unit());
+                    }
+                    setMaintenanceRequestCategoryMeta();
+                }
+                valueChangeScope.clearScope(reporterSelector);
             }
         });
 
@@ -445,7 +461,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // to support yardi mode with multiple interfaces
         ensureBuilding();
 
-        get(proto().reportedDate()).setViewable(isViewable() || !mr.id().isNull());
+        get(proto().reportedDate()).setEditable(mr.id().isNull());
 
         get(proto().submitted()).setVisible(!mr.submitted().isNull());
         get(proto().updated()).setVisible(!mr.updated().isNull());
@@ -737,28 +753,22 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     class ValueChangeScope {
-        private Object scope;
+        private final Set<Object> scopeSet = new HashSet<Object>();
 
         public void setScope(Object scope) {
-            if (this.scope == null) {
-                assignScope(scope);
+            synchronized (this) {
+                scopeSet.add(scope);
             }
         }
 
         public void clearScope(Object scope) {
-            if (this.scope == scope) {
-                assignScope(null);
+            synchronized (this) {
+                scopeSet.remove(scope);
             }
         }
 
         public boolean inScope(Object scope) {
-            return this.scope == scope;
-        }
-
-        private void assignScope(Object scope) {
-            synchronized (this) {
-                this.scope = scope;
-            }
+            return scopeSet.contains(scope);
         }
     }
 }
