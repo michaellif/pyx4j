@@ -23,9 +23,11 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.security.CrmUser;
@@ -41,8 +43,10 @@ public interface LegalStatus extends IEntity {
 
         None,
 
+        @Translate("N4")
         N4,
 
+        @Translate("L1")
         L1,
 
         HearingDate,
@@ -69,6 +73,7 @@ public interface LegalStatus extends IEntity {
     @ReadOnly(allowOverrideNull = false)
     Lease lease();
 
+    @NotNull
     IPrimitive<Status> status();
 
     IPrimitive<String> details();

@@ -105,7 +105,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             while (leases.hasNext() && !executionMonitor.isTerminationRequested()) {
                 Lease lease = leases.next();
                 BigDecimal amountOwed = amountOwed(lease.billingAccount(), acceptableArCodes, today);
-                boolean hasActiveN4 = hasActiveN4(lease);
+                boolean hasActiveN4 = hasLegalStatus(lease);
 
                 if (!hasActiveN4 && amountOwed.compareTo(minAmountOwed) > 0) {
                     LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
@@ -180,14 +180,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             n4Letter.file().fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
             Persistence.service().persist(n4Letter);
 
-            LegalStatus legalStatus = EntityFactory.create(LegalStatus.class);
-            legalStatus.lease().set(leaseId);
-            legalStatus.status().setValue(Status.N4);
-            legalStatus.details().setValue(SimpleMessageFormat.format("termination date: {0,date,short}", n4LeaseData.terminationDate().getValue()));
-            legalStatus.notes().setValue("created via issuing N4 letter");
-            legalStatus.setOn().setValue(generationTime);
-            legalStatus.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
-            Persistence.service().persist(legalStatus);
+            ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(leaseId, Status.N4,
+                    SimpleMessageFormat.format("termination date: {0,date,short}", n4LeaseData.terminationDate().getValue()), "created via issue of N4 notice",
+                    EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
 
         } catch (Throwable error) {
             log.error("Failed to generate n4 for lease pk='" + leaseId.getPrimaryKey() + "'", error);
@@ -209,14 +204,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return amountOwed;
     }
 
-    private boolean hasActiveN4(Lease lease) {
-        List<N4LegalLetter> existingN4s = getN4(java.util.Arrays.asList(lease), null).get(lease);
-        for (N4LegalLetter existingN4 : existingN4s) {
-            if (existingN4.isActive().isBooleanTrue()) {
-                return true;
-            }
-        }
-        return false;
+    private boolean hasLegalStatus(Lease lease) {
+        LegalStatus status = ServerSideFactory.create(LeaseLegalFacade.class).getCurrentLegalStatus(lease.<Lease> createIdentityStub());
+        return status.status().getValue() != LegalStatus.Status.None;
     }
 
     /** Retrieves Employee's signature image from the db or returns <code>null</code> if the employee hasn't uploaded a signature image */

@@ -106,7 +106,6 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
 
     @Override
     public void setLegalStatus() {
-        // TODO Auto-generated method stub       
     }
 
     @Override

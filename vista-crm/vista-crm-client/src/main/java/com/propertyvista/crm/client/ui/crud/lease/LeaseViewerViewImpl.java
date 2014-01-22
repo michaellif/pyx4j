@@ -22,6 +22,7 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -68,6 +69,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -791,6 +793,16 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             }
         });
+    }
+
+    @Override
+    public void requestNewLegalStatus(final AsyncCallback<LegalStatus> legalStatusUpadate) {
+        new LegalStatusDialog() {
+            @Override
+            public void onSetLegalStatus(LegalStatus legalStatus) {
+                legalStatusUpadate.onSuccess(legalStatus);
+            }
+        }.show();
     }
 
     private void issueN4() {

@@ -35,6 +35,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.legal.LeaseLegalFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -45,6 +46,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -281,4 +283,11 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         // TODO implement this 
     }
 
+    @Override
+    public void setLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatus status) {
+        ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(leaseId, status.status().getValue(), status.details().getValue(),
+                "set manually via CRM", CrmAppContext.getCurrentUser());
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
 }

@@ -27,6 +27,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.legal.LeaseLegalFacade;
 import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
@@ -73,7 +74,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         loadTenantInsurance(to);
         loadRestrictions(to);
         loadCommunicationLetters(to);
-        loadLegalStatus(to); // MUST be after load communications letters
+        loadLegalStatus(to);
     }
 
     @Override
@@ -128,19 +129,14 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     private void loadLegalStatus(LeaseDTO lease) {
-        // TODO should be in a facade
-        EntityQueryCriteria<LegalStatus> criteria = EntityQueryCriteria.create(LegalStatus.class);
-        criteria.eq(criteria.proto().lease(), lease.getPrimaryKey());
-        criteria.desc(criteria.proto().setOn());
-
-        List<LegalStatus> statusesHistory = Persistence.service().query(criteria);
-        for (LegalStatus status : statusesHistory) {
-            Persistence.ensureRetrieve(status.setBy(), AttachLevel.Attached);
-        }
-        lease.legalStatusHistory().addAll(statusesHistory);
-        if (!statusesHistory.isEmpty()) {
-            LegalStatus current = statusesHistory.get(0);
-            lease.currentLegalStatus().setValue(SimpleMessageFormat.format("{0} ({1})", current.status().getValue().toString(), current.details().getValue()));
+        lease.legalStatusHistory().addAll(
+                ServerSideFactory.create(LeaseLegalFacade.class).getLegalStatusHistory(EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey())));
+        if (!lease.legalStatusHistory().isEmpty()) {
+            LegalStatus current = lease.legalStatusHistory().get(0);
+            if (current.status().getValue() != LegalStatus.Status.None) {
+                lease.currentLegalStatus().setValue(
+                        SimpleMessageFormat.format("{0} ({1})", current.status().getValue().toString(), current.details().getValue()));
+            }
         }
     }
 

@@ -53,6 +53,8 @@ import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudServi
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.legal.LegalStatus;
+import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -333,5 +335,32 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
         id.unit().set(EntityFactory.createIdentityStub(AptUnit.class, currentValue.unit().getPrimaryKey()));
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(id));
+    }
+
+    @Override
+    public void setLegalStatus() {
+        ((LeaseViewerView) getView()).requestNewLegalStatus(new DefaultAsyncCallback<LegalStatus>() {
+            @Override
+            public void onSuccess(LegalStatus result) {
+                ((LeaseViewerCrudService) getService()).setLegalStatus(new DefaultAsyncCallback<VoidSerializable>() {
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        refresh();
+                    }
+                }, EntityFactory.createIdentityStub(Lease.class, getEntityId()), result);
+            }
+        });
+    }
+
+    @Override
+    public void clearLegalStatus() {
+        final LegalStatus status = EntityFactory.create(LegalStatus.class);
+        status.status().setValue(Status.None);
+        ((LeaseViewerCrudService) getService()).setLegalStatus(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                refresh();
+            }
+        }, EntityFactory.createIdentityStub(Lease.class, getEntityId()), status);
     }
 }
