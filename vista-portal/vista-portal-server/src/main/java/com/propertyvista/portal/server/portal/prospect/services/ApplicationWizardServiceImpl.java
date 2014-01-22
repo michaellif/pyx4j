@@ -105,8 +105,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     public void init(AsyncCallback<OnlineApplicationDTO> callback) {
         OnlineApplication bo = ProspectPortalContext.getOnlineApplication();
 
-        Persistence.ensureRetrieve(bo.masterOnlineApplication(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease().unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease().unit().floorplan(), AttachLevel.Attached);
 
@@ -492,7 +490,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
 
             if (lease != null && !lease.unit().isNull()) {
-                Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(lease.unit().floorplan(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
 
@@ -724,9 +721,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void saveApplicationData(OnlineApplicationDTO to, boolean submit) {
         OnlineApplication bo = ProspectPortalContext.getOnlineApplication();
 
-        Persistence.ensureRetrieve(bo.masterOnlineApplication(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
-
         LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
                 .getPrimaryKey());
 
