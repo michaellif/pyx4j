@@ -65,7 +65,10 @@ public class ConfigInfoServlet extends HttpServlet {
         b.append("\n");
 
         b.append("ContextName              : ").append(LoggerConfig.getContextName()).append("\n");
-        b.append("ServerInfo               : ").append(Context.getRequest().getServletContext().getServerInfo()).append("\n");
+        try {
+            b.append("ServerInfo               : ").append(Context.getRequest().getServletContext().getServerInfo()).append("\n");
+        } catch (NoSuchMethodError ignoreOldTomcat) {
+        }
         b.append("SystemDate               : ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(SystemDateManager.getDate())).append("\n");
         b.append("\n");
 
