@@ -223,8 +223,7 @@ public class Persistence {
     }
 
     public static <T extends IEntity> void ensureRetrieve(T entityMember, AttachLevel attachLevel) {
-        if ((entityMember.getAttachLevel() == AttachLevel.Detached) && (entityMember.getOwner() != null)
-                && (entityMember.getOwner().getAttachLevel() == AttachLevel.Detached)) {
+        if ((entityMember.getAttachLevel() == AttachLevel.Detached) && (entityMember.getOwner() != null) && (entityMember.getOwner().isValueDetached())) {
             ensureRetrieve(entityMember.getOwner(), AttachLevel.Attached);
         }
         if (entityMember.getAttachLevel() == AttachLevel.Detached) {
@@ -237,6 +236,10 @@ public class Persistence {
     }
 
     public static <T extends IEntity> void ensureRetrieve(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
+        if ((collectionMember.getAttachLevel() == AttachLevel.Detached) && (collectionMember.getOwner() != null)
+                && (collectionMember.getOwner().isValueDetached())) {
+            ensureRetrieve(collectionMember.getOwner(), AttachLevel.Attached);
+        }
         if (collectionMember.getAttachLevel() == AttachLevel.Detached) {
             service().retrieveMember(collectionMember, attachLevel);
         } else {

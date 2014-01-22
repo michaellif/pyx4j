@@ -1373,7 +1373,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 if (tm.isExternalMember(entityMember.getOwner(), entityMember)) {
                     tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
                 } else {
-                    tm.retrieve(getPersistenceContext(), entityMember.getOwner().getPrimaryKey(), entityMember.getOwner(), AttachLevel.Attached, false);
+                    retrieve(entityMember.getOwner());
                 }
                 if (entityMember.getPrimaryKey() != null) {
                     if (cascadeRetrieve(entityMember, attachLevel, false) == null) {
