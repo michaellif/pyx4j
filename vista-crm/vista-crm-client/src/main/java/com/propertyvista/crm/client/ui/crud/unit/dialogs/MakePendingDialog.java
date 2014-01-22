@@ -59,7 +59,8 @@ public class MakePendingDialog extends OkCancelDialog {
                             @Override
                             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                                 if (value == null || value.before(minMakeVacantStartDay)) {
-                                    return new ValidationError(component, i18n.tr("please enter a date greater or equal to {0}", minMakeVacantStartDay));
+                                    return new ValidationError(component, i18n.tr("please enter a date greater or equal to {0,date,short}",
+                                            minMakeVacantStartDay));
                                 } else {
                                     return null;
                                 }
@@ -70,8 +71,8 @@ public class MakePendingDialog extends OkCancelDialog {
                             @Override
                             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                                 if (value == null || (value.before(minMakeVacantStartDay) | value.after(maxMakeVacantStartDay))) {
-                                    return new ValidationError(component, i18n.tr("please enter a between {0} and {1}", minMakeVacantStartDay,
-                                            maxMakeVacantStartDay));
+                                    return new ValidationError(component, i18n.tr("please enter a date between {0,date,short} and {1,date,short}",
+                                            minMakeVacantStartDay, maxMakeVacantStartDay));
                                 } else {
                                     return null;
                                 }
