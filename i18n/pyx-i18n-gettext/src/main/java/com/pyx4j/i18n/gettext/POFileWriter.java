@@ -84,12 +84,17 @@ public class POFileWriter {
             }
         }
 
+        if (duplicateReferencesAsComments) {
+            if (entry.references != null) {
+                for (final String str : entry.references) {
+                    writer.println("#. " + str);
+                }
+            }
+        }
+
         if (entry.references != null) {
             for (final String str : entry.references) {
                 writer.println("#: " + str);
-                if (duplicateReferencesAsComments) {
-                    writer.println("#. " + str);
-                }
             }
         }
 

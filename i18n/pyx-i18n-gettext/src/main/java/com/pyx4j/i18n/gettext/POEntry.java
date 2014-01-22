@@ -113,15 +113,15 @@ public class POEntry {
             }
         }
 
-        if (this.flags != null) {
-            for (final String str : this.flags) {
-                pe.addFlag(str);
-            }
-        }
-
         if (this.references != null) {
             for (final String str : this.references) {
                 pe.referenceAdd(str);
+            }
+        }
+
+        if (this.flags != null) {
+            for (final String str : this.flags) {
+                pe.addFlag(str);
             }
         }
 
