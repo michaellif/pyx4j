@@ -29,11 +29,11 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 public interface CoapplicantDTO extends IEntity {
 
     @Editor(type = EditorType.radiogroup)
-    @Caption(name = "Is dependent?")
+    @Caption(description = "Is dependent?")
     IPrimitive<Boolean> dependent();
 
     @Editor(type = EditorType.radiogroup)
-    @Caption(name = "Is age 18 or over?")
+    @Caption(description = "Is age 18 or over?")
     IPrimitive<Boolean> matured();
 
     IPrimitive<String> firstName();

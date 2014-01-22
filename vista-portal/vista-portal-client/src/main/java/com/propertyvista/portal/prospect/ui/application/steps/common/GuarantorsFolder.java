@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application.steps;
+package com.propertyvista.portal.prospect.ui.application.steps.common;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

@@ -97,8 +97,8 @@ public class PeopleStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).useLabelSemicolon(false).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().matured())).useLabelSemicolon(false).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().matured())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());

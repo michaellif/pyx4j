@@ -20,7 +20,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -29,6 +31,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
+import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.steps.common.DepositFolder;
 import com.propertyvista.portal.prospect.ui.application.steps.common.FeatureFolder;
@@ -157,6 +160,8 @@ public class OptionsStep extends ApplicationWizardStep {
                                 newItem.item().set(item);
                                 newItem.agreedPrice().setValue(item.price().getValue());
                                 addItem(newItem);
+                                ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(),
+                                        ApplicationWizardStateChangeEvent.ChangeType.termChange));
                             }
                         }
                         return true;
@@ -165,6 +170,12 @@ public class OptionsStep extends ApplicationWizardStep {
             } else {
                 MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
             }
+        }
+
+        @Override
+        protected void removeItem(CEntityFolderItem<BillableItem> item) {
+            super.removeItem(item);
+            ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
         }
     }
 

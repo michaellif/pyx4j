@@ -34,7 +34,6 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
-import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -101,14 +100,6 @@ public class UnitStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector), 50).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().selectedUnit(), selectedUnit)).build());
 
-        selectedUnit.addValueChangeHandler(new ValueChangeHandler<UnitTO>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<UnitTO> event) {
-                ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
-            }
-        });
-
-        panel.setH3(++row, 0, 1, i18n.tr("Exact match:"));
         availableUnitsHeader = panel.getWidget(row, 0);
         panel.setWidget(++row, 0, inject(proto().unitSelection().availableUnits(), availableUnitsFolder));
 
@@ -185,6 +176,7 @@ public class UnitStep extends ApplicationWizardStep {
             @Override
             public void onValueChange(final ValueChangeEvent<UnitTO> event) {
                 updateUnitOptions(event.getValue());
+                ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
             }
         });
     }
