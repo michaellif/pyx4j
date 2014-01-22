@@ -101,7 +101,7 @@ public class UnitStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector), 50).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().selectedUnit(), selectedUnit)).build());
 
-        selectedUnit.addValueChangeHandler(new ValueChangeHandler<UnitSelectionDTO.UnitTO>() {
+        selectedUnit.addValueChangeHandler(new ValueChangeHandler<UnitTO>() {
             @Override
             public void onValueChange(ValueChangeEvent<UnitTO> event) {
                 ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
