@@ -60,6 +60,7 @@ public class MaintenanceRequestsMockupPreloader extends BaseVistaDevDataPreloade
                 lease.leaseParticipants().iterator().next().<Tenant> cast());
         setRandomMetadata(maintenanceRequest);
 
+        maintenanceRequest.reportedDate().setValue(new LogicalDate(when));
         maintenanceRequest.submitted().setValue(when);
         maintenanceRequest.updated().setValue(when);
         maintenanceRequest.summary().setValue(CommonsGenerator.lipsumShort());

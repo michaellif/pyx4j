@@ -65,15 +65,21 @@ public interface MaintenanceRequest extends IEntity, HasNotesAndAttachments {
 
     AbstractPmcUser originator();
 
+    @NotNull
+    IPrimitive<LogicalDate> reportedDate();
+
     // --------------------------------------
 
+    @Caption(name = "Tenant")
     Tenant reporter();
 
     IPrimitive<String> reporterName();
 
+    @Caption(name = "Contact Phone")
     @Editor(type = EditorType.phone)
     IPrimitive<String> reporterPhone();
 
+    @Caption(name = "Contact Phone Type")
     IPrimitive<ContactPhoneType> phoneType();
 
     @Editor(type = EditorType.email)

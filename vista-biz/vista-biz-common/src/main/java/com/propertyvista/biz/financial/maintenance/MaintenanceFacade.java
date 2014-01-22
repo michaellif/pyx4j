@@ -35,6 +35,8 @@ public interface MaintenanceFacade {
 
     List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter);
 
+    MaintenanceRequest createNewRequest();
+
     MaintenanceRequest createNewRequest(Building building);
 
     MaintenanceRequest createNewRequest(AptUnit unit);

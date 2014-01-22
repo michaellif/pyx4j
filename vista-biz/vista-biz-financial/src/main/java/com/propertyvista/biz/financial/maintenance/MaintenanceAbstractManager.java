@@ -48,8 +48,15 @@ public abstract class MaintenanceAbstractManager {
 
     private final static I18n i18n = I18n.get(MaintenanceAbstractManager.class);
 
-    public MaintenanceRequest createNewRequest(Building building) {
+    public MaintenanceRequest createNewRequest() {
         MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+        request.reportedDate().setValue(SystemDateManager.getLogicalDate());
+
+        return request;
+    }
+
+    public MaintenanceRequest createNewRequest(Building building) {
+        MaintenanceRequest request = createNewRequest();
 
         Persistence.ensureRetrieve(building, AttachLevel.Attached);
 
@@ -59,7 +66,7 @@ public abstract class MaintenanceAbstractManager {
     }
 
     public MaintenanceRequest createNewRequest(AptUnit unit) {
-        MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+        MaintenanceRequest request = createNewRequest();
 
         Persistence.ensureRetrieve(unit, AttachLevel.Attached);
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
@@ -71,7 +78,7 @@ public abstract class MaintenanceAbstractManager {
     }
 
     public MaintenanceRequest createNewRequest(Tenant tenant) {
-        MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+        MaintenanceRequest request = createNewRequest();
 
         Persistence.ensureRetrieve(tenant, AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);

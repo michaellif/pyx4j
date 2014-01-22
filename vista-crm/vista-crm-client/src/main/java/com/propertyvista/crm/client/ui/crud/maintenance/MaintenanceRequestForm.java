@@ -43,6 +43,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -85,7 +86,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
-    private TwoColumnFlexFormPanel categoryPanel;
+    private BasicFlexFormPanel categoryPanel;
 
     private TwoColumnFlexFormPanel accessPanel;
 
@@ -99,8 +100,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private TwoColumnFlexFormPanel surveyPanel;
 
-    private TwoColumnFlexFormPanel imagePanel;
-
     private final BuildingSelector buildingSelector = new BuildingSelector();
 
     private final TenantSelector reporterSelector = new TenantSelector();
@@ -112,6 +111,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     private MaintenanceRequestMetadata meta;
 
     private MaintenanceRequestCategoryChoice mrCategory;
+
+    private final ValueChangeScope valueChangeScope = new ValueChangeScope();
 
     // TODO - YARDI: per building cache is easy to implement with current data model, but it is INEFFICIENT since
     // multiple buildings that belong to the same Yardi account will share the same Meta
@@ -168,18 +169,24 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
-        panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().reportedForOwnUnit()), 20, true).mockValue(true).build());
-        panel.setBR(++row, 0, 1);
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportedDate()), 10).build());
+        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().requestId()), 20).build());
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().requestId()), 20, true).build());
+        panel.setH1(++row, 0, 2, i18n.tr("Issue Location"));
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().building(), buildingSelector), 20, true).build());
+        int rowAnchor = row;
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportedForOwnUnit()), 20).mockValue(true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reporter(), reporterSelector), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reporterPhone()), 20).build());
+        panel.getRowFormatter().setVerticalAlign(row, HasVerticalAlignment.ALIGN_TOP);
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().phoneType()), 20).build());
+        panel.getRowFormatter().setVerticalAlign(row, HasVerticalAlignment.ALIGN_TOP);
+        panel.getFlexCellFormatter().setRowSpan(row, 0, 2);
+        panel.getCellFormatter().setHeight(row, 0, "100%");
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().unit(), unitSelector), 20, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().reporter(), reporterSelector), 20, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().reporterPhone()), 20, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().phoneType()), 20, true).build());
+        row = rowAnchor;
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().unit(), unitSelector), 20).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().building(), buildingSelector), 20).build());
         get(proto().reporter()).addValueChangeHandler(new ValueChangeHandler<Tenant>() {
             @Override
             public void onValueChange(ValueChangeEvent<Tenant> event) {
@@ -206,16 +213,21 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // category panel
         mrCategory = new MaintenanceRequestCategoryChoice();
         bind(mrCategory, proto().category());
-        categoryPanel = new TwoColumnFlexFormPanel();
-        panel.setWidget(++row, 0, 2, categoryPanel);
+        categoryPanel = new BasicFlexFormPanel();
+        panel.setWidget(++row, 1, categoryPanel);
+        panel.getFlexCellFormatter().setRowSpan(row, 1, 3);
+        row += 2;
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().priority(), prioritySelector), 20, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().summary()), 20, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
+        panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
+        rowAnchor = row;
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().priority(), prioritySelector), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().summary()), 30).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 30).build());
+        panel.getRowFormatter().setVerticalAlign(row, HasVerticalAlignment.ALIGN_TOP);
+        panel.getFlexCellFormatter().setRowSpan(row, 0, 2);
 
         // --------------------------------------------------------------------------------------------------------------------
-        int innerRow = -1;
-        imagePanel = new TwoColumnFlexFormPanel();
+        row = rowAnchor;
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadService> create(MaintenanceRequestPictureUploadService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
@@ -232,79 +244,76 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 return main;
             }
         };
-        imageSlider.setImageSize(480, 320);
-        imagePanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().pictures(), imageSlider), 320, true).build());
-        panel.setWidget(++row, 0, 2, imagePanel);
+        imageSlider.setImageSize(320, 240);
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().pictures(), imageSlider), 32).build());
+        panel.getFlexCellFormatter().setRowSpan(row, 1, 4);
+        row += 3;
+
         // --------------------------------------------------------------------------------------------------------------------
-
         unitAccessPanel = new TwoColumnFlexFormPanel();
-        innerRow = -1;
+        int innerRow = -1;
         unitAccessPanel.setH1(++innerRow, 0, 2, i18n.tr("Unit Access"));
-
-        accessPanel = new TwoColumnFlexFormPanel();
         unitAccessPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().permissionToEnter()), 20, true).build());
+        unitAccessPanel.setWidget(++innerRow, 0, 2, accessPanel = new TwoColumnFlexFormPanel());
 
-        get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
+        get(proto().permissionToEnter()).setNote(i18n.tr("Indicate whether Permission to Enter has been granted by Tenant."));
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 accessPanel.setVisible(event.getValue());
             }
         });
-        // --------------------------------------------------------------------------------------------------------------------
 
         // --------------------------------------------------------------------------------------------------------------------
-
-        accessPanel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().petInstructions()), 40, true).build());
-        get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
-        // --------------------------------------------------------------------------------------------------------------------
-
-        accessPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().preferredDate1()), 10).build());
-        accessPanel.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().preferredTime1()), 10).build());
-        accessPanel.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().preferredDate2()), 10).build());
-        accessPanel.setWidget(2, 1, new FormDecoratorBuilder(inject(proto().preferredTime2()), 10).build());
-
-        unitAccessPanel.setWidget(++innerRow, 0, 2, accessPanel);
+        innerRow = -1;
+        accessPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().preferredDate1()), 10).build());
+        accessPanel.setWidget(innerRow, 1, new FormDecoratorBuilder(inject(proto().preferredDate2()), 10).build());
+        accessPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().preferredTime1()), 10).build());
+        accessPanel.setWidget(innerRow, 1, new FormDecoratorBuilder(inject(proto().preferredTime2()), 10).build());
         get(proto().preferredDate1()).addValueValidator(new FutureDateValidator());
         get(proto().preferredDate2()).addValueValidator(new FutureDateValidator());
+
+        accessPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().petInstructions()), 50, true)
+                .customLabel(i18n.tr("Entry Instructions")).build());
+        get(proto().petInstructions()).setNote(i18n.tr("Entry instructions, including Pet Warnings, etc"));
 
         panel.setWidget(++row, 0, 2, unitAccessPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
-
         statusPanel = new TwoColumnFlexFormPanel();
-        statusPanel.setH1(0, 0, 3, i18n.tr("Status"));
-        innerRow = 0;
+        innerRow = -1;
+        statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
         statusPanel.setWidget(++innerRow, 0, 2,
                 new FormDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10, true).build());
         statusPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10, true).build());
         statusPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10, true).build());
 
+        FlowPanel detailHolder = new FlowPanel();
+        statusPanel.setWidget(1, 1, detailHolder);
+        statusPanel.getFlexCellFormatter().setRowSpan(1, 1, 3);
+        statusPanel.getFlexCellFormatter().getElement(1, 1).getStyle().setVerticalAlign(VerticalAlign.TOP);
+
+        // --------------------------------------------------------------------------------------------------------------------
         scheduledPanel = new TwoColumnFlexFormPanel();
         innerRow = -1;
         scheduledPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
         scheduledPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 10).build());
         scheduledPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 10).build());
 
+        // --------------------------------------------------------------------------------------------------------------------
         resolvedPanel = new TwoColumnFlexFormPanel();
         innerRow = -1;
         resolvedPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().resolvedDate(), new CDateLabel()), 10).build());
         resolvedPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().resolution(), new CLabel<String>()), 40).build());
 
-        FlowPanel detailHolder = new FlowPanel();
         detailHolder.add(scheduledPanel);
         detailHolder.add(resolvedPanel);
 
-        statusPanel.setWidget(1, 1, detailHolder);
-        statusPanel.getFlexCellFormatter().setRowSpan(1, 1, 3);
-        statusPanel.getFlexCellFormatter().getElement(1, 1).getStyle().setVerticalAlign(VerticalAlign.TOP);
-
-        panel.setWidget(++row, 0, 3, statusPanel);
+        panel.setWidget(++row, 0, 2, statusPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
-
         surveyPanel = new TwoColumnFlexFormPanel();
-
+        innerRow = -1;
         surveyPanel.setH1(++innerRow, 0, 2, proto().surveyResponse().getMeta().getCaption());
         surveyPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());
         surveyPanel.setWidget(innerRow, 1, new FormDecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel<String>()), 10).build());
@@ -312,12 +321,36 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.setWidget(++row, 0, 2, surveyPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
+        unitSelector.addValueChangeHandler(new ValueChangeHandler<AptUnit>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<AptUnit> event) {
+                // prevent mutual reset
+                valueChangeScope.setScope(unitSelector);
+                AptUnit value = event.getValue();
+                if (value != null) {
+                    if (!valueChangeScope.inScope(buildingSelector)) {
+                        buildingSelector.setValue(value.building());
+                    }
+                    if (!valueChangeScope.inScope(reporterSelector)) {
+                        reporterSelector.setValue(null);
+                    }
+                    setMaintenanceRequestCategoryMeta();
+                }
+                valueChangeScope.clearScope(unitSelector);
+            }
+        });
         buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
             @Override
             public void onValueChange(ValueChangeEvent<Building> event) {
-                unitSelector.setValue(null);
-                reporterSelector.setValue(null);
+                valueChangeScope.setScope(buildingSelector);
+                if (!valueChangeScope.inScope(unitSelector)) {
+                    unitSelector.setValue(null);
+                }
+                if (!valueChangeScope.inScope(reporterSelector)) {
+                    reporterSelector.setValue(null);
+                }
                 setMaintenanceRequestCategoryMeta();
+                valueChangeScope.clearScope(buildingSelector);
             }
         });
 
@@ -392,7 +425,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         categoryPanel.clear();
         int row = levels;
         for (choice = mrCategory; choice != null; choice = choice.getParentSelector()) {
-            categoryPanel.setWidget(--row, 0, 2, new FormDecoratorBuilder(choice, 20, true).build());
+            categoryPanel.setWidget(--row, 0, new FormDecoratorBuilder(choice, 20).build());
         }
     }
 
@@ -402,7 +435,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.maintenance, get(proto().requestId()), getValue().getPrimaryKey());
-            imagePanel.setVisible(true);
         }
 
         MaintenanceRequestDTO mr = getValue();
@@ -410,15 +442,16 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             return;
         }
 
-        if (!isEditable()) {
-            imagePanel.setVisible(mr.pictures() != null && !mr.pictures().isNull() && !mr.pictures().isEmpty());
-        }
         // to support yardi mode with multiple interfaces
         ensureBuilding();
+
+        get(proto().reportedDate()).setViewable(isViewable() || !mr.id().isNull());
 
         get(proto().submitted()).setVisible(!mr.submitted().isNull());
         get(proto().updated()).setVisible(!mr.updated().isNull());
         get(proto().status()).setVisible(!mr.submitted().isNull());
+
+        get(proto().pictures()).setVisible(isEditable() || !mr.pictures().isEmpty());
 
         StatusPhase phase = mr.status().phase().getValue();
 
@@ -432,7 +465,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         unitAccessPanel.setVisible(mr.reportedForOwnUnit().isBooleanTrue());
         accessPanel.setVisible(mr.permissionToEnter().isBooleanTrue() && getValue().reportedForOwnUnit().isBooleanTrue());
         setMaintenanceRequestCategoryMeta();
-
     }
 
     class BuildingSelector extends CEntitySelectorHyperlink<Building> {
@@ -700,6 +732,32 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 get(proto().text()).asWidget().setWidth("450px");
 
                 return content;
+            }
+        }
+    }
+
+    class ValueChangeScope {
+        private Object scope;
+
+        public void setScope(Object scope) {
+            if (this.scope == null) {
+                assignScope(scope);
+            }
+        }
+
+        public void clearScope(Object scope) {
+            if (this.scope == scope) {
+                assignScope(null);
+            }
+        }
+
+        public boolean inScope(Object scope) {
+            return this.scope == scope;
+        }
+
+        private void assignScope(Object scope) {
+            synchronized (this) {
+                this.scope = scope;
             }
         }
     }

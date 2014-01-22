@@ -44,6 +44,11 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
+    public MaintenanceRequest createNewRequest() {
+        return MaintenanceYardiManager.instance().createNewRequest();
+    }
+
+    @Override
     public MaintenanceRequest createNewRequest(Building building) {
         return MaintenanceYardiManager.instance().createNewRequest(building);
     }

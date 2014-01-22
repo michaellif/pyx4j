@@ -158,19 +158,20 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     protected MaintenanceRequestDTO init(InitializationData initializationData) {
         MaintenanceInitializationData initData = (MaintenanceInitializationData) initializationData;
 
+        MaintenanceRequest bo = null;
         if (initData != null) {
             if (!initData.tenant().isNull()) {
-                return createTO(ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(initData.tenant()));
+                bo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(initData.tenant());
             } else if (!initData.unit().isNull()) {
-                return createTO(ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(initData.unit()));
+                bo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(initData.unit());
             } else if (!initData.building().isNull()) {
-                return createTO(ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(initData.building()));
-            } else {
-                return super.init(initializationData);
+                bo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(initData.building());
             }
-        } else {
-            return super.init(initializationData);
         }
+        if (bo == null) {
+            bo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest();
+        }
+        return createTO(bo);
     }
 
     @Override

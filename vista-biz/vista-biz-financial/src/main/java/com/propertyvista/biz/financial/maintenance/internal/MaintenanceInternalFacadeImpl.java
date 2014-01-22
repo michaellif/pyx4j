@@ -54,6 +54,11 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
+    public MaintenanceRequest createNewRequest() {
+        return MaintenanceInternalManager.instance().createNewRequest();
+    }
+
+    @Override
     public MaintenanceRequest createNewRequest(Building building) {
         return MaintenanceInternalManager.instance().createNewRequest(building);
     }
