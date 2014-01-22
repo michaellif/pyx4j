@@ -584,7 +584,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         public NoticeViewer() {
             noticePanel.setWidget(0, 0, 1, inject(proto().notice()));
-            noticePanel.getWidget(0, 0).setStyleName(VistaTheme.StyleName.warningMessage.name());
+            noticePanel.getWidget(0, 0).setStyleName(VistaTheme.StyleName.WarningMessage.name());
             noticePanel.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
             noticePanel.setHR(1, 0, 1);

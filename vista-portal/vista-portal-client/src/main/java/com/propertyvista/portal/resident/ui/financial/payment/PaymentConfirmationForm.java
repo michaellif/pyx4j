@@ -74,7 +74,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         content.setWidget(++row, 0, autoPaySignupPanel = createAutoPaySignupPanel());
 
         // tweak:
-        get(proto().transactionErrorMessage()).asWidget().setStyleName(VistaTheme.StyleName.errorMessage.name());
+        get(proto().transactionErrorMessage()).asWidget().setStyleName(VistaTheme.StyleName.ErrorMessage.name());
 
         return content;
     }
@@ -105,7 +105,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>> decorator = ((FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>>) getDecorator());
         decorator.setCaption(headerUndefined);
 
-        decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.errorMessage.name());
+        decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.ErrorMessage.name());
 
         get(proto().transactionErrorMessage()).setVisible(false);
         get(proto().transactionAuthorizationNumber()).setVisible(false);
@@ -122,7 +122,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         if (getValue().paymentStatus().getValue().isFailed()) {
             decorator.setCaption(headerFailed);
-            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.errorMessage.name());
+            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
 
             get(proto().transactionErrorMessage()).setVisible(true);
             autoPaySignupPanel.setVisible(false);

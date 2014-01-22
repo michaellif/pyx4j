@@ -21,8 +21,6 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -30,7 +28,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 public class VistaTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        infoMessage, warningMessage, errorMessage
+        InfoMessage, WarningMessage, ErrorMessage
     }
 
     public VistaTheme() {
@@ -549,22 +547,25 @@ public class VistaTheme extends Theme {
     }
 
     protected void initMessageStyles() {
-        Style style = new Style(".", StyleName.errorMessage);
-        style.addProperty("font-size", "1.2em");
+        Style style = new Style(".", StyleName.ErrorMessage);
+        style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         style.addProperty("color", "#EF231B");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.warningMessage);
-        style.addProperty("font-size", "1.2em");
+        style = new Style(".", StyleName.WarningMessage);
+        style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         style.addProperty("color", "#F68308");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.infoMessage);
-        style.addProperty("font-size", "1.2em");
+        style = new Style(".", StyleName.InfoMessage);
+        style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         style.addProperty("color", "#60A11B");
+        style.addProperty("text-align", "left");
         addStyle(style);
     }
 }

@@ -147,7 +147,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         main.setBR(++row, 0, 2);
         main.setWidget(++row, 0, 2,
                 new HTML(i18n.tr("Note: If payment marked with {0} is not selected, a Web Payment Fee will apply to the Resident.", convenienceMarker)));
-        main.getWidget(row, 0).setStyleName(VistaTheme.StyleName.infoMessage.name());
+        main.getWidget(row, 0).setStyleName(VistaTheme.StyleName.InfoMessage.name());
 
         return main;
     }

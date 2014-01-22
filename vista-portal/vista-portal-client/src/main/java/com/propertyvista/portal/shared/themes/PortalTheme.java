@@ -514,22 +514,22 @@ public class PortalTheme extends Theme {
     }
 
     protected void initMessageStyles() {
-        Style style = new Style(".", StyleName.errorMessage);
-        style.addProperty("font-size", "1.2em");
-        style.addProperty("font-weight", "bolder");
+        Style style = new Style(".", StyleName.ErrorMessage);
+        style.addProperty("font-size", "1.1em");
         style.addProperty("color", "#EF231B");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.warningMessage);
-        style.addProperty("font-size", "1.2em");
-        style.addProperty("font-weight", "bolder");
+        style = new Style(".", StyleName.WarningMessage);
+        style.addProperty("font-size", "1.1em");
         style.addProperty("color", "#F68308");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.infoMessage);
-        style.addProperty("font-size", "1.2em");
-        style.addProperty("font-weight", "bolder");
+        style = new Style(".", StyleName.InfoMessage);
+        style.addProperty("font-size", "1.1em");
         style.addProperty("color", "#0091DC");
+        style.addProperty("text-align", "left");
         addStyle(style);
     }
 

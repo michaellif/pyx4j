@@ -46,7 +46,7 @@ public class ChargesSummaryGadget extends FlowPanel {
         }
 
         Label monthlyChargesCaption = new Label(i18n.tr("Monthly Charges"));
-        monthlyChargesCaption.setStyleName(RentalSummaryTheme.StyleName.ChargesCaption.name());
+        monthlyChargesCaption.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryCaption.name());
         panel.add(monthlyChargesCaption);
 
         add(panel);

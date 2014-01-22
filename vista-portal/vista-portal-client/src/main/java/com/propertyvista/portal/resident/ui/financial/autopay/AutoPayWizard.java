@@ -358,7 +358,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             panel.add(new HTML("<br/>"));
 
             panel.add(w = new HTML(i18n.tr("There are no payments set!")));
-            w.setStyleName(VistaTheme.StyleName.warningMessage.name());
+            w.setStyleName(VistaTheme.StyleName.WarningMessage.name());
             w.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
             get(proto().total()).setVisible(false);

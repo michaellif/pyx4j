@@ -169,11 +169,11 @@ public class NavigStepItem implements IsWidget {
             getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-            setHeight("34px");
-            getElement().getStyle().setProperty("minWidth", "34px");
-            getElement().getStyle().setLineHeight(34, Unit.PX);
+            setHeight("30px");
+            getElement().getStyle().setProperty("minWidth", "30px");
+            getElement().getStyle().setLineHeight(30, Unit.PX);
             getElement().getStyle().setFontSize(20, Unit.PX);
-            getElement().getStyle().setProperty("borderRadius", "17px");
+            getElement().getStyle().setProperty("borderRadius", "15px");
 
         }
 

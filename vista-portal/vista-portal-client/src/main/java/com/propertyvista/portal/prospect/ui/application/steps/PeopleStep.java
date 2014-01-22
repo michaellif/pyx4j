@@ -52,7 +52,7 @@ public class PeopleStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getWizard())));
 
         panel.setWidget(++row, 0, warningMessage);
-        warningMessage.setStyleName(StyleName.warningMessage.name());
+        warningMessage.setStyleName(StyleName.WarningMessage.name());
 
         return panel;
     }

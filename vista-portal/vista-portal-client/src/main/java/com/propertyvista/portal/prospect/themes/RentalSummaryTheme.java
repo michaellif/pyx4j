@@ -22,17 +22,18 @@ import com.pyx4j.commons.css.ThemeId;
 public class RentalSummaryTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Address, ChargesCaption
+        RentalSummaryBlock, RentalSummaryCaption
     }
 
     public RentalSummaryTheme() {
-        Style style = new Style(".", StyleName.Address);
+        Style style = new Style(".", StyleName.RentalSummaryBlock);
         style.addProperty("font-weight", "bolder");
         style.addProperty("font-size", "0.8em");
-        style.addProperty("padding-top", "5px");
+        style.addProperty("padding-top", "2px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ChargesCaption);
+        style = new Style(".", StyleName.RentalSummaryCaption);
+        style.addProperty("padding-top", "5px");
         style.addProperty("font-style", "italic");
         style.addProperty("font-size", "0.9em");
         addStyle(style);
