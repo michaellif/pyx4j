@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.portal.prospect.themes.RentalSummaryTheme;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.themes.BlockMixin;
@@ -27,6 +28,8 @@ import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 public class ChargesSummaryGadget extends FlowPanel {
 
     private static final I18n i18n = I18n.get(ChargesSummaryGadget.class);
+
+    private final HTML monthlyChargesHTML;
 
     public ChargesSummaryGadget() {
         super();
@@ -40,21 +43,32 @@ public class ChargesSummaryGadget extends FlowPanel {
 
         FlowPanel panel = new FlowPanel();
 
-        HTML applicationChargesHTML = new HTML(i18n.tr("Application Charges"));
-        if (false) {
-            panel.add(applicationChargesHTML);
-        }
+        Label caption = new Label(i18n.tr("Monthly Charges"));
+        caption.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryCaption.name());
+        panel.add(caption);
 
-        Label monthlyChargesCaption = new Label(i18n.tr("Monthly Charges"));
-        monthlyChargesCaption.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryCaption.name());
-        panel.add(monthlyChargesCaption);
+        monthlyChargesHTML = new HTML();
+        monthlyChargesHTML.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryBlock.name());
+        panel.add(monthlyChargesHTML);
 
         add(panel);
     }
 
     public void populate(OnlineApplicationDTO onlineApplication) {
-        // TODO Auto-generated method stub
+        if (onlineApplication != null) {
+            StringBuilder monthlyChargesBuilder = new StringBuilder();
 
+            monthlyChargesBuilder.append(onlineApplication.selectedService().item().name().getValue() + ": "
+                    + onlineApplication.selectedService().agreedPrice().getValue());
+
+            for (BillableItem billableItem : onlineApplication.selectedFeatures()) {
+                monthlyChargesBuilder.append(billableItem.item().name().getValue() + ": " + billableItem.agreedPrice().getValue());
+            }
+
+            monthlyChargesHTML.setHTML(monthlyChargesBuilder.toString());
+        } else {
+            monthlyChargesHTML.setHTML("");
+        }
     }
 
 }

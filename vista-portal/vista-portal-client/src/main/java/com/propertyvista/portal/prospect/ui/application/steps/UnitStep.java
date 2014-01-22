@@ -35,6 +35,7 @@ import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.Button;
@@ -42,6 +43,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
+import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.themes.ApplicationWizardTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
@@ -72,7 +74,7 @@ public class UnitStep extends ApplicationWizardStep {
     private final Button updateButton = new Button(i18n.tr("Change Selection"), new Command() {
         @Override
         public void execute() {
-            MessageDialog.confirm(i18n.tr("Warning"), i18n.tr("You will lost already selected Unit Options. Do you really want to change current selection?"),
+            MessageDialog.confirm(i18n.tr("Warning"), i18n.tr("You will lose already selected Unit Options. Do you really want to change current selection?"),
                     new Command() {
                         @Override
                         public void execute() {
@@ -98,6 +100,13 @@ public class UnitStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bedrooms(), bedroomSelector), 50).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector), 50).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().selectedUnit(), selectedUnit)).build());
+
+        selectedUnit.addValueChangeHandler(new ValueChangeHandler<UnitSelectionDTO.UnitTO>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<UnitTO> event) {
+                ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
+            }
+        });
 
         panel.setH3(++row, 0, 1, i18n.tr("Exact match:"));
         availableUnitsHeader = panel.getWidget(row, 0);
