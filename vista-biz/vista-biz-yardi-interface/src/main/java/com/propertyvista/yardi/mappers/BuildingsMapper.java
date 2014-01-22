@@ -46,6 +46,7 @@ public class BuildingsMapper {
         Identification identification = propertyID.getIdentification();
         building.propertyCode().setValue(identification.getPrimaryID());
         building.marketing().name().setValue(identification.getMarketingName());
+        building.defaultProductCatalog().setValue(false);
 
         return building;
     }

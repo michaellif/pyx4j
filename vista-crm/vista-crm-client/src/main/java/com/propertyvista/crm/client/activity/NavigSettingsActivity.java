@@ -113,9 +113,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         folder = new NavigFolder(i18n.tr("Policies"));
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
-        }
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
         if (!VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
         }
@@ -125,9 +123,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.Billing());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.Dates());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.Deposits());
-        }
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Deposits());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.EmailTemplates());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.IdAssignment());
 // TODO VISTA-2187       folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTermination());
@@ -143,9 +139,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.ProductTax());
         }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.ProspectPortal());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.Restrictions());
-        }
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Restrictions());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.TenantInsurance());
         if (VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.YardiInterface());
