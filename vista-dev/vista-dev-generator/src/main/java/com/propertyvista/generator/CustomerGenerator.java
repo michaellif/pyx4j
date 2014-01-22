@@ -21,27 +21,34 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 
 public class CustomerGenerator {
 
     public Customer createCustomer() {
         Customer item = EntityFactory.create(Customer.class);
+
         item.person().set(CommonsGenerator.createPerson());
+
         return item;
     }
 
     public Collection<EmergencyContact> createEmergencyContacts() {
         List<EmergencyContact> contacts = new ArrayList<EmergencyContact>();
+
         contacts.add(createEmergencyContact());
         contacts.add(createEmergencyContact());
+
         return contacts;
     }
 
     public EmergencyContact createEmergencyContact() {
         EmergencyContact contact = EntityFactory.create(EmergencyContact.class);
-        contact.set(CommonsGenerator.createPerson().duplicate(EmergencyContact.class));
 
+        contact.set(CommonsGenerator.createPerson().duplicate(EmergencyContact.class));
+        contact.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
         contact.address().set(CommonsGenerator.createAddressSimple());
 
         return contact;

@@ -57,11 +57,13 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
         main.setH3(++row, 0, 2, i18n.tr("Contact Info"));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
 
-        row = (oneColumn ? row : row - 2);
-        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
+        row = (oneColumn ? row : row - 3);
+        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().relationship()), 15).build());
         main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().email()), 22).build());
 
+        row = (oneColumn ? row : row + 1);
         main.setHR(++row, 0, 2);
         main.setWidget(++row, 0, span, inject(proto().address(), new AddressSimpleEditor(oneColumn)));
 

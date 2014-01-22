@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -38,6 +39,10 @@ public interface EmergencyContact extends Person {
 
     @OrderColumn
     IPrimitive<Integer> orderInCustomer();
+
+    @NotNull
+    @Caption(description = "Relation to the Applicant")
+    IPrimitive<PersonRelationship> relationship();
 
     @EmbeddedEntity
     AddressSimple address();
