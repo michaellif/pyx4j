@@ -30,6 +30,8 @@ public class RentalSummaryGadget extends FlowPanel {
 
     private final HTML apartmentHTML;
 
+    private final HTML termHTML;
+
     private final HTML utilityHTML;
 
     public RentalSummaryGadget() {
@@ -52,6 +54,14 @@ public class RentalSummaryGadget extends FlowPanel {
         apartmentHTML.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryBlock.name());
         panel.add(apartmentHTML);
 
+        caption = new Label(i18n.tr("Lease Term"));
+        caption.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryCaption.name());
+        panel.add(caption);
+
+        termHTML = new HTML();
+        termHTML.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryBlock.name());
+        panel.add(termHTML);
+
         caption = new Label(i18n.tr("Included Utilities"));
         caption.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryCaption.name());
         panel.add(caption);
@@ -71,10 +81,14 @@ public class RentalSummaryGadget extends FlowPanel {
             apartmentBuilder.append(onlineApplication.unit().building().info().address().getStringView());
             apartmentHTML.setHTML(apartmentBuilder.toString());
 
+            termHTML.setHTML((onlineApplication.leaseFrom().isNull() ? "" : onlineApplication.leaseFrom().getStringView()) + " - "
+                    + (onlineApplication.leaseTo().isNull() ? "" : onlineApplication.leaseTo().getStringView()));
+
             utilityHTML.setHTML(onlineApplication.utilities().getValue());
 
         } else {
             apartmentHTML.setHTML("");
+            termHTML.setHTML("");
             utilityHTML.setHTML("");
         }
     }
