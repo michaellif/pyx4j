@@ -16,6 +16,7 @@ package com.propertyvista.portal.shared.ui.util.editors;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
@@ -31,6 +32,7 @@ import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -65,6 +67,20 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy documentsPolicy) {
         this.documentsPolicy = documentsPolicy;
+
+        if (documentsPolicy != null) {
+            StringBuilder rule = new StringBuilder(i18n.tr("{0} ID(s) required", documentsPolicy.numberOfRequiredIDs().getValue()));
+            rule.append(" (");
+            for (IdentificationDocumentType docType : documentsPolicy.allowedIDs()) {
+                rule.append(docType.name().getStringView());
+                rule.append(", ");
+            }
+            rule.deleteCharAt(rule.length() - 1);
+            rule.deleteCharAt(rule.length() - 1);
+            rule.append(")");
+
+            setNoDataNotificationWidget(new Label(rule.toString()));
+        }
     }
 
     @Override

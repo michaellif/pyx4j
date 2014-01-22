@@ -26,7 +26,6 @@ public abstract class DocumentTypeSelectorDialog extends EntitySelectorListDialo
     private static final I18n i18n = I18n.get(DocumentTypeSelectorDialog.class);
 
     public DocumentTypeSelectorDialog(ApplicationDocumentationPolicy documentationPolicy) {
-//        super(i18n.tr("Select Document Type"), Arrays.<IdentificationDocumentType> asList());
         super(i18n.tr("Select Document Type"), Collections.<IdentificationDocumentType> emptyList());
         if (documentationPolicy != null) {
             setData(documentationPolicy.allowedIDs());
