@@ -32,7 +32,7 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     private String title;
 
-    private boolean current = false;
+    private boolean selected = false;
 
     private boolean complete = false;
 
@@ -62,12 +62,12 @@ public class WizardStep extends SimplePanel implements IValidatable {
         this.title = title;
     }
 
-    public void setStepCurrent(boolean current) {
-        this.current = current;
+    public void setStepSelected(boolean selected) {
+        this.selected = selected;
     }
 
-    public boolean isStepCurrent() {
-        return current;
+    public boolean isStepSelected() {
+        return selected;
     }
 
     public void setStepComplete(boolean complete) {

@@ -62,10 +62,10 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
 
         WizardStep previousSelection = getSelectedStep();
         if (previousSelection != null) {
-            previousSelection.setStepCurrent(false);
+            previousSelection.setStepSelected(false);
         }
 
-        step.setStepCurrent(true);
+        step.setStepSelected(true);
 
         showWidget(getWidgetIndex(step));
         SelectionEvent.fire(this, getSelectedStep());
