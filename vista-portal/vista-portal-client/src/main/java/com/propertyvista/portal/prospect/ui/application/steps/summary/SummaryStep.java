@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -35,13 +37,22 @@ public class SummaryStep extends ApplicationWizardStep {
     }
 
     @Override
-    public void setStepSelected(boolean selected) {
+    public void setStepSelected(final boolean selected) {
         super.setStepSelected(selected);
-        if (selected) {
-            form.setValue(getValue());
-        } else {
-            form.reset();
-        }
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                try {
+                    if (selected) {
+                        form.setValue(getValue());
+                    } else {
+                        form.reset();
+                    }
+                } catch (Throwable e) {
+                }
+            }
+        });
+
     }
 
 }
