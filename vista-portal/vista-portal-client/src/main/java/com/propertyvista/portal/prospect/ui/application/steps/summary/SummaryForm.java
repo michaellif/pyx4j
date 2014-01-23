@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -36,9 +39,13 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
 
     private final ApplicationWizard applicationWizard;
 
+    private final List<AbstractSectionPanel> sections;
+
     public SummaryForm(ApplicationWizard applicationWizard) {
         super(OnlineApplicationDTO.class);
         this.applicationWizard = applicationWizard;
+
+        sections = new ArrayList<AbstractSectionPanel>();
 
         asWidget().setStyleName(SummaryStepTheme.StyleName.SummaryStepForm.name());
 
@@ -75,10 +82,18 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
 
             if (panel != null) {
                 contentPanel.add(panel);
+                sections.add(panel);
             }
         }
 
         return contentPanel;
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        for (AbstractSectionPanel section : sections) {
+            section.updateState();
+        }
+    }
 }

@@ -92,16 +92,27 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         return entityPrototype;
     }
 
+    public void updateState() {
+        if (step.isStepComplete()) {
+            captionBar.setStepStatus(StepStatus.complete);
+        } else if (step.isStepVisited()) {
+            captionBar.setStepStatus(StepStatus.invalid);
+        } else {
+            captionBar.setStepStatus(StepStatus.notComplete);
+        }
+    }
+
     class SectionCaptionBar extends FlowPanel {
+
+        private final StepIndexLabel indexLabel;
 
         public SectionCaptionBar(int index, String caption) {
 
             setStyleName(SummaryStepTheme.StyleName.SummaryStepSectionCaptionBar.name());
 
-            StepIndexLabel indexLabel = new StepIndexLabel(String.valueOf(index));
+            indexLabel = new StepIndexLabel(String.valueOf(index));
             indexLabel.addStyleName(SummaryStepTheme.StyleName.SummaryStepSectionIndex.name());
             indexLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            indexLabel.setStatus(StepStatus.complete);
             add(indexLabel);
 
             Label captionLabel = new Label(caption);
@@ -112,5 +123,10 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
             getElement().getStyle().setFloat(Float.NONE);
         }
 
+        public void setStepStatus(StepStatus status) {
+            indexLabel.setStatus(status);
+        }
+
     }
+
 }
