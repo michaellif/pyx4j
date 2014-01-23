@@ -61,7 +61,7 @@ public class PeopleStep extends ApplicationWizardStep {
     public void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        warningMessage.setVisible(getValue().occupantsOver18areApplicants().isBooleanTrue());
+        warningMessage.setVisible(getValue().maturedOccupantsAreApplicants().isBooleanTrue());
     }
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
@@ -74,7 +74,7 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         public boolean isOccupantsOver18areApplicants() {
-            return wizard.getValue().occupantsOver18areApplicants().isBooleanTrue();
+            return wizard.getValue().maturedOccupantsAreApplicants().isBooleanTrue();
         }
 
         @Override

@@ -47,7 +47,7 @@ public interface OnlineApplicationDTO extends IEntity {
     /** Sets the age of majority for validation, null if no validation is required */
     IPrimitive<Integer> ageOfMajority();
 
-    IPrimitive<Boolean> occupantsOver18areApplicants();
+    IPrimitive<Boolean> maturedOccupantsAreApplicants();
 
     //--------------------------------------------
     // read and update data:

@@ -72,7 +72,7 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
     protected RestrictionsPolicy createPolicy(StringBuilder log) {
         RestrictionsPolicy policy = EntityFactory.create(RestrictionsPolicy.class);
 
-        policy.occupantsOver18areApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
+        policy.maturedOccupantsAreApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
         policy.occupantsPerBedRoom().setValue(OCCUPANTS_PER_BEDROOM);
         policy.maxParkingSpots().setValue(MAX_PARKING_SPOTS);
         policy.maxLockers().setValue(MAX_LOCKERS);
@@ -83,12 +83,11 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
             policy.ageOfMajority().setValue(ageOfMajority);
         } else {
             policy.enforceAgeOfMajority().setValue(false);
+            policy.ageOfMajority().setValue(18);
         }
 
         log.append(policy.getStringView());
 
         return policy;
-
     }
-
 }

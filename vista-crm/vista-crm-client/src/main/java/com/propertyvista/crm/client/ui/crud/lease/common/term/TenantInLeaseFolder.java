@@ -45,7 +45,6 @@ import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -71,6 +70,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private final IPane parentView;
 
+    private Boolean enforceAgeOfMajority;
+
+    private Boolean maturedOccupantsAreApplicants;
+
     public TenantInLeaseFolder(IPane parentView) {
         this(false, parentView);
     }
@@ -92,6 +95,22 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     @Override
     protected String getAddItemDialogBody() {
         return i18n.tr("Do you want to select existing Tenant?");
+    }
+
+    public Boolean getEnforceAgeOfMajority() {
+        return enforceAgeOfMajority;
+    }
+
+    public void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+        this.enforceAgeOfMajority = enforceAgeOfMajority;
+    }
+
+    public Boolean getMaturedOccupantsAreApplicants() {
+        return maturedOccupantsAreApplicants;
+    }
+
+    public void setMaturedOccupantsAreApplicants(Boolean maturedOccupantsAreApplicants) {
+        this.maturedOccupantsAreApplicants = maturedOccupantsAreApplicants;
     }
 
     @Override
@@ -182,7 +201,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         });
     }
 
-    private class TenantInLeaseEditor extends CEntityDecoratableForm<LeaseTermTenant> {
+    private class TenantInLeaseEditor extends CEntityForm<LeaseTermTenant> {
 
         private final TwoColumnFlexFormPanel preauthorizedPaymentsPanel = new TwoColumnFlexFormPanel();
 
@@ -270,13 +289,23 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
                 @Override
                 public ValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
-                    if (getValue() != null && getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
-                        if (role != null && Role.resposible().contains(role)) {
-                            if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
-                                return new ValidationError(
-                                        component,
-                                        i18n.tr("This person is too young to be an tenant or co-tenant: the minimum age required is {0}. Please mark the person as Dependent instead.",
-                                                getAgeOfMajority()));
+                    if (role != null && getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                        if (getEnforceAgeOfMajority()) {
+                            if (Role.resposible().contains(role)) {
+                                if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
+                                    return new ValidationError(
+                                            component,
+                                            i18n.tr("This person is too young to be an tenant or co-tenant: the minimum age required is {0}. Please mark the person as Dependent instead.",
+                                                    getAgeOfMajority()));
+                                }
+                            }
+                        }
+                        if (getMaturedOccupantsAreApplicants()) {
+                            if (Role.Dependent == role) {
+                                if (TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
+                                    return new ValidationError(component, i18n
+                                            .tr("According to internal regulations and age this person cannot be a Dependent."));
+                                }
                             }
                         }
                     }

@@ -26,9 +26,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
 
-    @Caption(name = "Occupants over 18 are Applicants", description = "Some landlords force all occupants over 18 to be on LEASE and therefore anyone OVER 18 MUST be Applicant/Co-Applicant and cannot be Dependent")
-    IPrimitive<Boolean> occupantsOver18areApplicants();
-
     @Caption(name = "Occupants per Bedroom", description = "Number of Occupants (N) per Bedroom in formula: Bedrooms x N = OccupantsPerUnit")
     IPrimitive<Double> occupantsPerBedRoom();
 
@@ -42,8 +39,11 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     IPrimitive<Integer> maxPets();
 
     @NotNull
-    IPrimitive<Boolean> enforceAgeOfMajority();
+    IPrimitive<Integer> ageOfMajority();
 
     @NotNull
-    IPrimitive<Integer> ageOfMajority();
+    IPrimitive<Boolean> enforceAgeOfMajority();
+
+    @Caption(name = "Matured Occupants are Applicants", description = "Some landlords force all matured occupants (over 18-19) to be on LEASE and therefore anyone OVER Age of Majority MUST be Applicant/Co-Applicant and cannot be Dependent")
+    IPrimitive<Boolean> maturedOccupantsAreApplicants();
 }

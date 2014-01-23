@@ -30,12 +30,13 @@ public class RestrictionsPolicyListerViewImpl extends CrmListerViewImplBase<Rest
         public RestrictionsPolicyLister() {
             super(RestrictionsPolicyDTO.class);
             setColumnDescriptors( // @formatter:off
-                    new MemberColumnDescriptor.Builder(proto().occupantsOver18areApplicants()).build(), 
                     new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), 
                     new MemberColumnDescriptor.Builder(proto().maxParkingSpots()).build(),
                     new MemberColumnDescriptor.Builder(proto().maxLockers()).build(),
                     new MemberColumnDescriptor.Builder(proto().maxPets()).build(),
-                    new MemberColumnDescriptor.Builder(proto().ageOfMajority()).build()
+                    new MemberColumnDescriptor.Builder(proto().ageOfMajority()).build(),
+                    new MemberColumnDescriptor.Builder(proto().enforceAgeOfMajority()).build(), 
+                    new MemberColumnDescriptor.Builder(proto().maturedOccupantsAreApplicants()).build() 
             ); // @formatter:on
         }
 

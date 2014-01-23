@@ -177,7 +177,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
             checkUnitMoveOut(to);
 
-            setAgeOfMajority(to);
+            setAgeRestrictions(to);
         }
     }
 
@@ -197,7 +197,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         fillserviceItems(currentValue);
 
         checkUnitMoveOut(currentValue);
-        setAgeOfMajority(currentValue);
+        setAgeRestrictions(currentValue);
 
         return currentValue;
     }
@@ -372,14 +372,15 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
     }
 
-    private void setAgeOfMajority(LeaseTermDTO dto) {
+    private void setAgeRestrictions(LeaseTermDTO dto) {
         dto.ageOfMajority().setValue(null);
 
         if (!dto.unit().isNull()) {
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit(), RestrictionsPolicy.class);
-            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-                dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-            }
+
+            dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+            dto.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
+            dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
         }
     }
 

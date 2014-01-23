@@ -28,8 +28,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -354,7 +354,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
-        setAgeOfMajority(getValue().ageOfMajority().getValue(), false);
+        setAgeRestrictions(getValue(), false);
     }
 
     @Override
@@ -429,9 +429,14 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     }
 
     @SuppressWarnings("rawtypes")
-    void setAgeOfMajority(Integer value, boolean revalidate) {
-        ((LeaseTermParticipantFolder) get(proto().version().tenants())).setAgeOfMajority(value);
-        ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setAgeOfMajority(value);
+    void setAgeRestrictions(LeaseTermDTO value, boolean revalidate) {
+        TenantInLeaseFolder tenantInLeaseFolder = ((TenantInLeaseFolder) ((LeaseTermParticipantFolder) get(proto().version().tenants())));
+
+        tenantInLeaseFolder.setAgeOfMajority(value.ageOfMajority().getValue());
+        tenantInLeaseFolder.setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
+        tenantInLeaseFolder.setMaturedOccupantsAreApplicants(value.maturedOccupantsAreApplicants().getValue());
+
+        ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setAgeOfMajority(value.ageOfMajority().getValue());
 
         if (revalidate) {
             ((LeaseTermParticipantFolder) get(proto().version().tenants())).revalidate();

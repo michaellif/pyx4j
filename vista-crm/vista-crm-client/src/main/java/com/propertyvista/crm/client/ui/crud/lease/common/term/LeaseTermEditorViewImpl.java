@@ -45,7 +45,7 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         form.get(form.proto().version().utilities()).setValue(value.version().utilities());
 
         form.setUnitNote(value.unitMoveOutNote().getValue());
-        form.setAgeOfMajority(value.ageOfMajority().getValue(), true);
+        form.setAgeRestrictions(value, true);
 
         this.getValue().lease().billingAccount().set(value.lease().billingAccount());
 

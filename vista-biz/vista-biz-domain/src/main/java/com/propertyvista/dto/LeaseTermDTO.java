@@ -56,8 +56,10 @@ public interface LeaseTermDTO extends LeaseTerm {
     @Caption(name = "Initial Balance")
     IPrimitive<BigDecimal> carryforwardBalance();
 
-    /**
-     * this value is passed for validation of age of the tenant
-     */
+    // policy validation values:
     IPrimitive<Integer> ageOfMajority();
+
+    IPrimitive<Boolean> enforceAgeOfMajority();
+
+    IPrimitive<Boolean> maturedOccupantsAreApplicants();
 }

@@ -334,7 +334,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority - 1));
             }
             // force dependency if needed:
-            if (to.occupantsOver18areApplicants().isBooleanTrue()) {
+            if (to.maturedOccupantsAreApplicants().isBooleanTrue()) {
                 cap.dependent().setValue(!cap.matured().getValue());
             }
 
@@ -758,11 +758,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
                 RestrictionsPolicy.class);
 
-        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-            to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-        }
-
-        to.occupantsOver18areApplicants().setValue(restrictionsPolicy.occupantsOver18areApplicants().getValue());
+        to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+        to.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
     }
 
     // ================================================================================================================
