@@ -25,6 +25,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -44,6 +45,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -75,9 +77,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             throw new UserRuntimeException(i18n.tr("No merchantAccount assigned to building to create the payment"));
         }
 
-        Persistence.service().retrieve(billingAccount.lease());
-        Persistence.service().retrieve(billingAccount.lease().unit());
-        Persistence.service().retrieve(billingAccount.lease().unit().building());
+        Persistence.ensureRetrieve(billingAccount.lease().unit().building(), AttachLevel.Attached);
 
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
@@ -222,6 +222,11 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @SuppressWarnings("incomplete-switch")
     private List<LeaseTermParticipant<? extends LeaseParticipant<?>>> retrievePayableUsers(Lease lease) {
         List<LeaseTermParticipant<? extends LeaseParticipant<?>>> users = new LinkedList<LeaseTermParticipant<? extends LeaseParticipant<?>>>();
+
+        Persistence.service().retrieve(lease.currentTerm());
+        if (lease.currentTerm().version().isNull()) {
+            lease.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, lease.currentTerm().getPrimaryKey()));
+        }
 
         // add payable tenants:
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
