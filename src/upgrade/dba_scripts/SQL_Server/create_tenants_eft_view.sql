@@ -9,7 +9,7 @@
 **/
 
 -- Adjust for the database in use
-USE sl_0107;
+USE sl_0121;
 
 DROP VIEW tenant_EFT_charges;
 
