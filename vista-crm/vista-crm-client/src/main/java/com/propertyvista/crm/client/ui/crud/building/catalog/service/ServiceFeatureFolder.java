@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -40,6 +41,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.misc.VistaTODO;
 
 class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
@@ -110,6 +112,9 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         public FeatureSelectorDialog() {
             super(Feature.class, true, getValue(), i18n.tr("Select Feature"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
+            if (!VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
+                addFilter(PropertyCriterion.eq(proto().defaultCatalogItem(), Boolean.FALSE));
+            }
             setDialogPixelWidth(700);
         }
 
@@ -133,7 +138,8 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
                     new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build()
+                    new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
+                    new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build()
             );//@formatter:on
         }
 
