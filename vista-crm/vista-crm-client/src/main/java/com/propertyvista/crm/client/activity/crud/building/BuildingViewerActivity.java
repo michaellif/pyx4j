@@ -32,6 +32,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
+import com.propertyvista.crm.client.visor.communityevent.CommunityEventVisorController;
 import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
@@ -90,6 +91,8 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     private MaintenanceRequestVisorController maintenanceRequestVisorController;
 
+    private CommunityEventVisorController communityEventtVisorController;
+
     private Key currentBuildingId;
 
     @SuppressWarnings("unchecked")
@@ -131,6 +134,16 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
             maintenanceRequestVisorController = new MaintenanceRequestVisorController(getView(), currentBuildingId);
         }
         return maintenanceRequestVisorController;
+    }
+
+    @Override
+    public CommunityEventVisorController getCommunityEventVisorController() {
+        if (communityEventtVisorController == null) {
+
+            communityEventtVisorController = new CommunityEventVisorController(getView(),
+                    EntityFactory.createIdentityStub(BuildingDTO.class, currentBuildingId));
+        }
+        return communityEventtVisorController;
     }
 
     @Override

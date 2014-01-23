@@ -7,20 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 25, 2013
- * @author michaellif
+ * Created on Jan 22, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.dto;
+package com.propertyvista.crm.rpc.services.building.communityevent;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.dto.CommunityEventDTO;
+import com.propertyvista.domain.property.asset.CommunityEvent;
+import com.propertyvista.domain.property.asset.building.Building;
 
-@Transient
-public interface CommunityEventsGadgetDTO extends ExtraGadgetDTO {
+public interface CommunityEventCrudService extends AbstractCrudService<CommunityEvent> {
+    @Transient
+    interface CommunityEventInitializationData extends InitializationData {
 
-    IList<CommunityEventDTO> events();
-
+        Building building();
+    }
 }

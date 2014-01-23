@@ -74,6 +74,7 @@ import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
 import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.asset.Boiler;
+import com.propertyvista.domain.property.asset.CommunityEvent;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -122,6 +123,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Locker.class, Properties.Locker.class, defaultImage);
         AppPlaceEntityMapper.register(Parking.class, Properties.Parking.class, defaultImage);
         AppPlaceEntityMapper.register(ParkingSpot.class, Properties.ParkingSpot.class, defaultImage);
+        AppPlaceEntityMapper.register(CommunityEvent.class, Properties.CommunityEvent.class, defaultImage);
 
         AppPlaceEntityMapper.register(Feature.class, Properties.Feature.class, defaultImage);
         AppPlaceEntityMapper.register(Service.class, Properties.Service.class, defaultImage);

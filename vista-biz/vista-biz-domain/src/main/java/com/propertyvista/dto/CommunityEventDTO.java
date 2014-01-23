@@ -7,20 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 25, 2013
- * @author michaellif
+ * Created on Jan 22, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.dto;
+package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.dto.CommunityEventDTO;
+import com.propertyvista.domain.property.asset.CommunityEvent;
 
 @Transient
-public interface CommunityEventsGadgetDTO extends ExtraGadgetDTO {
-
-    IList<CommunityEventDTO> events();
-
+public interface CommunityEventDTO extends CommunityEvent {
+    IList<CommunityEvent> events();
 }

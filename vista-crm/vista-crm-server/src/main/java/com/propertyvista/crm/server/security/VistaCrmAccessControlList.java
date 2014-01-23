@@ -68,6 +68,7 @@ import com.propertyvista.crm.rpc.services.building.ParkingSpotCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
+import com.propertyvista.crm.rpc.services.building.communityevent.CommunityEventCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
@@ -202,6 +203,7 @@ import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.asset.Boiler;
+import com.propertyvista.domain.property.asset.CommunityEvent;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -360,6 +362,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectFloorplanListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectBuildingUtilityListService.class));
+
+        grant(VistaBasicBehavior.CRM, new EntityPermission(CommunityEvent.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunityEventCrudService.class));
 
         grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(UpdateUploadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(UpdateUploadService.class));
@@ -597,6 +602,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseTermParticipantDatasetAccessRule(), LeaseTermTenant.class);
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new MaintenanceRequestDatasetAccessRule(), MaintenanceRequest.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new CommunityEventDatasetAccessRule(), CommunityEvent.class);
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), AggregatedTransfer.class);
 

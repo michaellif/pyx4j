@@ -102,6 +102,10 @@ public class CrmSiteMap implements SiteMap {
         public static class Roof extends CrmCrudAppPlace {
         }
 
+        @PlaceProperties(navigLabel = "Community Events")
+        public static class CommunityEvent extends CrmCrudAppPlace {
+        }
+
         @PlaceProperties(navigLabel = "Parkings")
         public static class Parking extends CrmCrudAppPlace {
         }
