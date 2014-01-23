@@ -22,8 +22,8 @@ public class OptionsSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(OptionsSectionPanel.class);
 
-    public OptionsSectionPanel(SummaryForm form, OptionsStep step) {
-        super(OnlineApplicationWizardStepMeta.Options.toString(), form, step);
+    public OptionsSectionPanel(int index, SummaryForm form, OptionsStep step) {
+        super(index, OnlineApplicationWizardStepMeta.Options.toString(), form, step);
     }
 
 }

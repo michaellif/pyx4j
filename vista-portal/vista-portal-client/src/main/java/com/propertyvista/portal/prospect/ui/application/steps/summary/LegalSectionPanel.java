@@ -22,8 +22,8 @@ public class LegalSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(LegalSectionPanel.class);
 
-    public LegalSectionPanel(SummaryForm form, LegalStep step) {
-        super(OnlineApplicationWizardStepMeta.Legal.toString(), form, step);
+    public LegalSectionPanel(int index, SummaryForm form, LegalStep step) {
+        super(index, OnlineApplicationWizardStepMeta.Legal.toString(), form, step);
     }
 
 }

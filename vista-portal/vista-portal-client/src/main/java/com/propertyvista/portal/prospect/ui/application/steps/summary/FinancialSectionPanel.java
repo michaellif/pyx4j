@@ -17,14 +17,13 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
-import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
 
 public class FinancialSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(FinancialSectionPanel.class);
 
-    public FinancialSectionPanel(SummaryForm form, FinancialStep step) {
-        super(OnlineApplicationWizardStepMeta.Financial.toString(), form, step);
+    public FinancialSectionPanel(int index, SummaryForm form, FinancialStep step) {
+        super(index, OnlineApplicationWizardStepMeta.Financial.toString(), form, step);
     }
 
 }

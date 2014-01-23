@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
@@ -43,34 +43,34 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
 
     @Override
     public IsWidget createContent() {
-        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
+        FlowPanel contentPanel = new FlowPanel();
 
-        int row = -1;
-
-        for (WizardStep step : applicationWizard.getAllSteps()) {
+        for (int i = 0; i < applicationWizard.getAllSteps().size(); i++) {
+            WizardStep step = applicationWizard.getAllSteps().get(i);
             AbstractSectionPanel panel = null;
+            int index = i + 1;
             if (step instanceof UnitStep) {
-                panel = new UnitSectionPanel(this, (UnitStep) step);
+                panel = new UnitSectionPanel(index, this, (UnitStep) step);
             } else if (step instanceof OptionsStep) {
-                panel = new OptionsSectionPanel(this, (OptionsStep) step);
+                panel = new OptionsSectionPanel(index, this, (OptionsStep) step);
             } else if (step instanceof LeaseStep) {
-                panel = new LeaseSectionPanel(this, (LeaseStep) step);
+                panel = new LeaseSectionPanel(index, this, (LeaseStep) step);
             } else if (step instanceof PeopleStep) {
-                panel = new PeopleSectionPanel(this, (PeopleStep) step);
+                panel = new PeopleSectionPanel(index, this, (PeopleStep) step);
             } else if (step instanceof AboutYouStep) {
-                panel = new AboutYouSectionPanel(this, (AboutYouStep) step);
+                panel = new AboutYouSectionPanel(index, this, (AboutYouStep) step);
             } else if (step instanceof AdditionalInfoStep) {
-                panel = new AdditionalInfoSectionPanel(this, (AdditionalInfoStep) step);
+                panel = new AdditionalInfoSectionPanel(index, this, (AdditionalInfoStep) step);
             } else if (step instanceof FinancialStep) {
-                panel = new FinancialSectionPanel(this, (FinancialStep) step);
+                panel = new FinancialSectionPanel(index, this, (FinancialStep) step);
             } else if (step instanceof ContactsStep) {
-                panel = new ContactsSectionPanel(this, (ContactsStep) step);
+                panel = new ContactsSectionPanel(index, this, (ContactsStep) step);
             } else if (step instanceof LegalStep) {
-                panel = new LegalSectionPanel(this, (LegalStep) step);
+                panel = new LegalSectionPanel(index, this, (LegalStep) step);
             }
 
             if (panel != null) {
-                contentPanel.setWidget(++row, 0, panel);
+                contentPanel.add(panel);
             }
         }
 

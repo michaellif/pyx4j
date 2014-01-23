@@ -22,8 +22,8 @@ public class ContactsSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(ContactsSectionPanel.class);
 
-    public ContactsSectionPanel(SummaryForm form, ContactsStep step) {
-        super(OnlineApplicationWizardStepMeta.Contacts.toString(), form, step);
+    public ContactsSectionPanel(int index, SummaryForm form, ContactsStep step) {
+        super(index, OnlineApplicationWizardStepMeta.Contacts.toString(), form, step);
     }
 
 }

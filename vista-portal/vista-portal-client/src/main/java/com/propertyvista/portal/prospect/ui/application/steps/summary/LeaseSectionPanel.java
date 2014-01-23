@@ -25,8 +25,8 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(LeaseSectionPanel.class);
 
-    public LeaseSectionPanel(SummaryForm form, LeaseStep step) {
-        super(OnlineApplicationWizardStepMeta.Lease.toString(), form, step);
+    public LeaseSectionPanel(int index, SummaryForm form, LeaseStep step) {
+        super(index, OnlineApplicationWizardStepMeta.Lease.toString(), form, step);
         addCaption(i18n.tr("Unit"));
         addField(proto().unit().info().number());
         addField(proto().unit().building().info().address());

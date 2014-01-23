@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
@@ -26,6 +29,8 @@ import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.prospect.ui.application.StepIndexLabel;
+import com.propertyvista.portal.prospect.ui.application.NavigStepItem.StepStatus;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -43,13 +48,17 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
 
     private int row = -1;
 
-    public AbstractSectionPanel(String caption, SummaryForm form, ApplicationWizardStep step) {
+    public AbstractSectionPanel(int index, String caption, SummaryForm form, ApplicationWizardStep step) {
         super(VistaImages.INSTANCE);
         this.form = form;
         this.step = step;
-        this.captionBar = new SectionCaptionBar(caption);
+        this.captionBar = new SectionCaptionBar(index, caption);
         this.contentPanel = new BasicFlexFormPanel();
         this.entityPrototype = EntityFactory.getEntityPrototype(OnlineApplicationDTO.class);
+
+        getElement().getStyle().setLineHeight(2, Unit.EM);
+        getElement().getStyle().setProperty("margin", "6px 0");
+        getElement().getStyle().setProperty("textAlign", "left");
 
         FlowPanel mainPanel = new FlowPanel();
         mainPanel.setWidth("100%");
@@ -62,10 +71,10 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
             @Override
             public void onToggle(ToggleEvent event) {
                 contentPanel.setVisible(event.isToggleOn());
-                captionBar.update(event.isToggleOn());
             }
         });
 
+        setExpended(false);
     }
 
     protected void addField(IObject<?> member) {
@@ -84,13 +93,22 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         return entityPrototype;
     }
 
-    class SectionCaptionBar extends Label {
+    class SectionCaptionBar extends FlowPanel {
 
-        public SectionCaptionBar(String caption) {
-            super(caption);
-        }
+        public SectionCaptionBar(int index, String caption) {
 
-        public void update(boolean toggleOn) {
+            StepIndexLabel indexLabel = new StepIndexLabel(String.valueOf(index));
+            indexLabel.getElement().getStyle().setProperty("marginLeft", "30px");
+            indexLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            indexLabel.setStatus(StepStatus.complete);
+            add(indexLabel);
+
+            Label label = new Label(caption);
+            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            label.getElement().getStyle().setProperty("paddingLeft", "10px");
+            add(label);
+
+            getElement().getStyle().setFloat(Float.NONE);
         }
 
     }

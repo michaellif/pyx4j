@@ -22,8 +22,8 @@ public class AdditionalInfoSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(AdditionalInfoSectionPanel.class);
 
-    public AdditionalInfoSectionPanel(SummaryForm form, AdditionalInfoStep step) {
-        super(OnlineApplicationWizardStepMeta.AdditionalInfo.toString(), form, step);
+    public AdditionalInfoSectionPanel(int index, SummaryForm form, AdditionalInfoStep step) {
+        super(index, OnlineApplicationWizardStepMeta.AdditionalInfo.toString(), form, step);
     }
 
 }

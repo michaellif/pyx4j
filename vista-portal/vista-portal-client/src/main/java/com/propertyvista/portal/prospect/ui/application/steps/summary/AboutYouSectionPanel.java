@@ -22,8 +22,8 @@ public class AboutYouSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(AboutYouSectionPanel.class);
 
-    public AboutYouSectionPanel(SummaryForm form, AboutYouStep step) {
-        super(OnlineApplicationWizardStepMeta.AboutYou.toString(), form, step);
+    public AboutYouSectionPanel(int index, SummaryForm form, AboutYouStep step) {
+        super(index, OnlineApplicationWizardStepMeta.AboutYou.toString(), form, step);
 
         addCaption(i18n.tr("Personal Information"));
 

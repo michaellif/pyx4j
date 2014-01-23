@@ -22,8 +22,8 @@ public class UnitSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(UnitSectionPanel.class);
 
-    public UnitSectionPanel(SummaryForm form, UnitStep step) {
-        super(OnlineApplicationWizardStepMeta.Unit.toString(), form, step);
+    public UnitSectionPanel(int index, SummaryForm form, UnitStep step) {
+        super(index, OnlineApplicationWizardStepMeta.Unit.toString(), form, step);
         addCaption(i18n.tr("Unit"));
         addField(proto().unit().info().number());
         addField(proto().unit().building().info().address());

@@ -48,7 +48,7 @@ public class NavigStepItem implements IsWidget {
 
     private final ContentPanel contentPanel;
 
-    private final PositionLabel positionLabel;
+    private final StepIndexLabel positionLabel;
 
     private final Label titleLabel;
 
@@ -71,7 +71,7 @@ public class NavigStepItem implements IsWidget {
         this.color = StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1);
         selected = false;
 
-        positionLabel = new PositionLabel(String.valueOf(index + 1));
+        positionLabel = new StepIndexLabel(String.valueOf(index + 1));
         contentPanel.add(positionLabel);
 
         titleLabel = new Label(title);
@@ -159,42 +159,4 @@ public class NavigStepItem implements IsWidget {
         }
     }
 
-    private class PositionLabel extends HTML {
-
-        PositionLabel(String label) {
-            super(label);
-
-            setStyleName(StepsTheme.StyleName.WizardStepHandler.name());
-            getElement().getStyle().setFloat(Float.LEFT);
-            getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-            getElement().getStyle().setTextAlign(TextAlign.CENTER);
-
-            setHeight("30px");
-            getElement().getStyle().setProperty("minWidth", "30px");
-            getElement().getStyle().setLineHeight(30, Unit.PX);
-            getElement().getStyle().setFontSize(20, Unit.PX);
-            getElement().getStyle().setProperty("borderRadius", "15px");
-
-        }
-
-        void setStatus(StepStatus status) {
-            getElement().getStyle().setColor("#fff");
-            switch (status) {
-            case notComplete:
-                getElement().getStyle().setBackgroundColor("#999");
-                break;
-            case complete:
-                getElement().getStyle().setBackgroundColor("#93c948");
-                break;
-            case current:
-                getElement().getStyle().setBackgroundColor("#fff");
-                getElement().getStyle().setColor("#999");
-                break;
-            case invalid:
-                getElement().getStyle().setBackgroundColor("#ef372f");
-                break;
-            }
-        }
-
-    }
 }

@@ -23,8 +23,8 @@ public class PeopleSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(PeopleSectionPanel.class);
 
-    public PeopleSectionPanel(SummaryForm form, PeopleStep step) {
-        super(OnlineApplicationWizardStepMeta.People.toString(), form, step);
+    public PeopleSectionPanel(int index, SummaryForm form, PeopleStep step) {
+        super(index, OnlineApplicationWizardStepMeta.People.toString(), form, step);
         addCaption(i18n.tr("People Living with You"));
         addField(proto().coapplicants(), new CoapplicantsReadonlyFolder());
 
