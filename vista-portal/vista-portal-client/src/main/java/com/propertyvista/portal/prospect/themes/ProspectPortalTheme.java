@@ -19,8 +19,14 @@ public class ProspectPortalTheme extends PortalTheme {
 
     public ProspectPortalTheme() {
         super();
+    }
+
+    @Override
+    protected void initStyles() {
         addTheme(new RentalSummaryTheme());
+        addTheme(new SummaryStepTheme());
         addTheme(new ApplicationWizardTheme());
+        super.initStyles();
     }
 
 }

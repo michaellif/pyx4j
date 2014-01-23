@@ -36,6 +36,7 @@ public class ApplicationWizardTheme extends Theme {
                 DefaultEntityFolderTheme.StyleDependent.hover);
         style.addProperty("opacity", "1");
         addStyle(style);
+
     }
 
     @Override

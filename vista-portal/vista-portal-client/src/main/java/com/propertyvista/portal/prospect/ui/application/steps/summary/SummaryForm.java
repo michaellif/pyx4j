@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
+import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
 import com.propertyvista.portal.prospect.ui.application.steps.AdditionalInfoStep;
@@ -38,6 +39,9 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
     public SummaryForm(ApplicationWizard applicationWizard) {
         super(OnlineApplicationDTO.class);
         this.applicationWizard = applicationWizard;
+
+        asWidget().setStyleName(SummaryStepTheme.StyleName.SummaryStepForm.name());
+
         setViewable(true);
     }
 
