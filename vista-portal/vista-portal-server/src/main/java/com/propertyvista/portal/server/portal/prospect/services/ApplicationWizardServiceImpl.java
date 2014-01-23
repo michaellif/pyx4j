@@ -22,7 +22,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -35,7 +34,6 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
@@ -705,13 +703,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(pbo);
 
-        Persistence.service().commit(); // this commit is necessary (before processing next)
-
-        try {
-            ServerSideFactory.create(PaymentFacade.class).processPayment(pbo, null);
-        } catch (PaymentException e) {
-            throw new UserRuntimeException(i18n.tr("Payment processing has been Failed!"), e);
-        }
     }
 
     private void saveApplicationData(OnlineApplicationDTO to, boolean submit) {
