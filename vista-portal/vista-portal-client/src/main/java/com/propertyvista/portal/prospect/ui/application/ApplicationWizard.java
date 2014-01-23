@@ -35,8 +35,8 @@ import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
 import com.propertyvista.portal.prospect.ui.application.steps.OptionsStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PaymentStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
-import com.propertyvista.portal.prospect.ui.application.steps.PersonalInfoAStep;
-import com.propertyvista.portal.prospect.ui.application.steps.PersonalInfoBStep;
+import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
+import com.propertyvista.portal.prospect.ui.application.steps.AdditionalInfoStep;
 import com.propertyvista.portal.prospect.ui.application.steps.UnitStep;
 import com.propertyvista.portal.prospect.ui.application.steps.summary.SummaryStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
@@ -61,8 +61,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 addStep(new LeaseStep());
             }
             addStep(new PeopleStep());
-            addStep(new PersonalInfoAStep());
-            addStep(new PersonalInfoBStep());
+            addStep(new AboutYouStep());
+            addStep(new AdditionalInfoStep());
             addStep(new FinancialStep());
             addStep(new ContactsStep());
             addStep(new LegalStep());
@@ -71,8 +71,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new ConfirmationStep());
         } else {
             addStep(new LeaseStep());
-            addStep(new PersonalInfoAStep());
-            addStep(new PersonalInfoBStep());
+            addStep(new AboutYouStep());
+            addStep(new AdditionalInfoStep());
             addStep(new FinancialStep());
             if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
                 addStep(new ContactsStep());

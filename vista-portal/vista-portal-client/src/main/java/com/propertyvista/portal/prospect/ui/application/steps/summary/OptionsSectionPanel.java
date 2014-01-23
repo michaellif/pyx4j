@@ -16,25 +16,14 @@ package com.propertyvista.portal.prospect.ui.application.steps.summary;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.portal.prospect.ui.application.steps.UnitStep;
+import com.propertyvista.portal.prospect.ui.application.steps.OptionsStep;
 
-public class UnitSectionPanel extends AbstractSectionPanel {
+public class OptionsSectionPanel extends AbstractSectionPanel {
 
-    private static final I18n i18n = I18n.get(UnitSectionPanel.class);
+    private static final I18n i18n = I18n.get(OptionsSectionPanel.class);
 
-    public UnitSectionPanel(SummaryForm form, UnitStep step) {
-        super(OnlineApplicationWizardStepMeta.Unit.toString(), form, step);
-        addCaption(i18n.tr("Unit"));
-        addField(proto().unit().info().number());
-        addField(proto().unit().building().info().address());
-        addField(proto().utilities());
-
-        addCaption(i18n.tr("Lease Term"));
-        addField(proto().leaseFrom());
-        addField(proto().leaseTo());
-
-        addCaption(i18n.tr("Lease Options"));
-        addField(proto().selectedService().agreedPrice());
+    public OptionsSectionPanel(SummaryForm form, OptionsStep step) {
+        super(OnlineApplicationWizardStepMeta.Options.toString(), form, step);
     }
 
 }

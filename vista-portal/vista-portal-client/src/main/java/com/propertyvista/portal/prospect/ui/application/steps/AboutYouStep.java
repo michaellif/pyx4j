@@ -30,13 +30,13 @@ import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBui
 import com.propertyvista.portal.shared.ui.util.editors.IdUploaderFolder;
 import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
 
-public class PersonalInfoAStep extends ApplicationWizardStep {
+public class AboutYouStep extends ApplicationWizardStep {
 
-    private static final I18n i18n = I18n.get(PersonalInfoAStep.class);
+    private static final I18n i18n = I18n.get(AboutYouStep.class);
 
     private final IdUploaderFolder fileUpload = new IdUploaderFolder();
 
-    public PersonalInfoAStep() {
+    public AboutYouStep() {
         super(OnlineApplicationWizardStepMeta.AboutYou);
     }
 

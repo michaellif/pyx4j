@@ -20,7 +20,14 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
+import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
+import com.propertyvista.portal.prospect.ui.application.steps.AdditionalInfoStep;
+import com.propertyvista.portal.prospect.ui.application.steps.ContactsStep;
+import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
+import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
+import com.propertyvista.portal.prospect.ui.application.steps.OptionsStep;
+import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
 import com.propertyvista.portal.prospect.ui.application.steps.UnitStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 
@@ -44,8 +51,22 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
             AbstractSectionPanel panel = null;
             if (step instanceof UnitStep) {
                 panel = new UnitSectionPanel(this, (UnitStep) step);
+            } else if (step instanceof OptionsStep) {
+                panel = new OptionsSectionPanel(this, (OptionsStep) step);
             } else if (step instanceof LeaseStep) {
                 panel = new LeaseSectionPanel(this, (LeaseStep) step);
+            } else if (step instanceof PeopleStep) {
+                panel = new PeopleSectionPanel(this, (PeopleStep) step);
+            } else if (step instanceof AboutYouStep) {
+                panel = new AboutYouSectionPanel(this, (AboutYouStep) step);
+            } else if (step instanceof AdditionalInfoStep) {
+                panel = new AdditionalInfoSectionPanel(this, (AdditionalInfoStep) step);
+            } else if (step instanceof FinancialStep) {
+                panel = new FinancialSectionPanel(this, (FinancialStep) step);
+            } else if (step instanceof ContactsStep) {
+                panel = new ContactsSectionPanel(this, (ContactsStep) step);
+            } else if (step instanceof LegalStep) {
+                panel = new LegalSectionPanel(this, (LegalStep) step);
             }
 
             if (panel != null) {

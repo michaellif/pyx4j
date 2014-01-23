@@ -46,9 +46,9 @@ import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
 
-public class PersonalInfoBStep extends ApplicationWizardStep {
+public class AdditionalInfoStep extends ApplicationWizardStep {
 
-    private static final I18n i18n = I18n.get(PersonalInfoBStep.class);
+    private static final I18n i18n = I18n.get(AdditionalInfoStep.class);
 
     private final BasicFlexFormPanel previousAddress = new BasicFlexFormPanel() {
         @Override
@@ -58,7 +58,7 @@ public class PersonalInfoBStep extends ApplicationWizardStep {
         }
     };
 
-    public PersonalInfoBStep() {
+    public AdditionalInfoStep() {
         super(OnlineApplicationWizardStepMeta.AdditionalInfo);
     }
 
