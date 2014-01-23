@@ -34,6 +34,7 @@ import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCovered
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -216,6 +217,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSureInsurancePolicyCrudService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSurePaymentMethodCrudService.class));
+
+        // Policy Node
+        grant(PortalResidentBehavior.Resident, new EntityPermission(Building.class, EntityPermission.READ));
 
         // Billing and Payments
         grant(PortalResidentBehavior.Resident, new EntityPermission(Bill.class, EntityPermission.READ));

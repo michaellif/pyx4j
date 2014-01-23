@@ -564,6 +564,9 @@ public class CrmSiteMap implements SiteMap {
             public static class LegalDocumentation extends CrmCrudAppPlace {
             }
 
+            public static class MaintenanceRequest extends CrmCrudAppPlace {
+            }
+
             @PlaceProperties(caption = "N4")
             public static class N4 extends CrmCrudAppPlace {
             }

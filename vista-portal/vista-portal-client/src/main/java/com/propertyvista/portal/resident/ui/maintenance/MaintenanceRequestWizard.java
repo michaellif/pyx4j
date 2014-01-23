@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -176,15 +177,12 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             }
         });
 
-        get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 accessPanel.setVisible(event.getValue());
             }
         });
-
-        get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
 
         return content;
     }
@@ -213,6 +211,14 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.maintenance, get(proto().requestId()), getValue().getPrimaryKey());
         }
+
+        // set notes
+        String note = getValue().notePermissionToEnter().getValue();
+        if (CommonsStringUtils.isEmpty(note)) {
+            note = i18n.tr("By checking this box you authorize the Landlord to enter your Apartment to assess and resolve this Issue.");
+        }
+        get(proto().permissionToEnter()).setNote(note);
+        get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
 
         StatusPhase phase = getValue().status().phase().getValue();
         get(proto().scheduledDate()).setVisible(phase == StatusPhase.Scheduled);
@@ -254,7 +260,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         }
         if (!isViewable()) {
             // set options and re-populate
-            mrCategory.setOptionsMeta(meta, getValue().reportedForOwnUnit().isNull() ? true : getValue().reportedForOwnUnit().isBooleanTrue());
+            mrCategory.setOptionsMeta(meta, getValue() == null ? true : getValue().reportedForOwnUnit().isBooleanTrue());
         }
         // re-populate after parent categories have been added
         if (getValue() != null) {

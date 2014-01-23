@@ -212,6 +212,9 @@ import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerm
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalTermsPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalTermsPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.maintenancerequest.MaintenanceRequestPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.maintenancerequest.MaintenanceRequestPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.maintenancerequest.MaintenanceRequestPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyViewerActivity;
@@ -1317,6 +1320,20 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new YardiInterfacePolicyViewerActivity(crudPlace);
+                            break;
+                        }
+                    } else if (crudPlace instanceof Administration.Policies.MaintenanceRequest) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new MaintenanceRequestPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new MaintenanceRequestPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new MaintenanceRequestPolicyViewerActivity(crudPlace);
+                            break;
+                        default:
                             break;
                         }
                     } else if (crudPlace instanceof Administration.Policies.ProspectPortal) {

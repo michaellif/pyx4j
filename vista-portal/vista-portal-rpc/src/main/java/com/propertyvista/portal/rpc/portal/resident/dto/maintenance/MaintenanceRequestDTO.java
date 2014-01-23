@@ -44,4 +44,5 @@ public interface MaintenanceRequestDTO extends MaintenanceRequest {
     @Format("h:mm a")
     IPrimitive<Time> scheduledTimeTo();
 
+    IPrimitive<String> notePermissionToEnter();
 }

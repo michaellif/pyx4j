@@ -27,19 +27,25 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.PermissionToEnterNote;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
+import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements
         MaintenanceRequestCrudService {
@@ -57,7 +63,28 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     protected MaintenanceRequestDTO init(InitializationData initializationData) {
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(
                 ResidentPortalContext.getLeaseTermTenant().leaseParticipant());
-        return createTO(maintenanceRequest);
+        MaintenanceRequestDTO dto = createTO(maintenanceRequest);
+        setPermissionToEnterNote(dto);
+
+        return dto;
+    }
+
+    private void setPermissionToEnterNote(MaintenanceRequestDTO dto) {
+        // add PermissionToEnter wording
+        LeaseTermTenant tenant = ResidentPortalContext.getLeaseTermTenant();
+        Persistence.ensureRetrieve(tenant.leaseParticipant().lease().unit().building(), AttachLevel.IdOnly);
+        try {
+            MaintenanceRequestPolicy mrPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                    tenant.leaseParticipant().lease().unit().building(), MaintenanceRequestPolicy.class);
+            for (PermissionToEnterNote note : mrPolicy.permissionToEnterNote()) {
+                if (note.locale().lang().getValue().name().startsWith(CompiledLocale.en.name())) {
+                    dto.notePermissionToEnter().set(note.text());
+                    break;
+                }
+            }
+        } catch (PolicyNotFoundException e) {
+            // ignore
+        }
     }
 
     @Override
@@ -75,6 +102,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     protected void enhanceAll(MaintenanceRequestDTO dto) {
         enhanceDbo(dto);
         dto.reportedForOwnUnit().setValue(ResidentPortalContext.getUnit().id().equals(dto.unit().id()));
+        setPermissionToEnterNote(dto);
 
         // populate latest scheduled info
         if (!dto.workHistory().isEmpty()) {
