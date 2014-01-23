@@ -113,7 +113,7 @@ public final class PapChargeReviewForm extends CEntityDecoratableForm<PapChargeR
         if (getValue().changeType().getValue() == ChangeType.Changed || getValue().changeType().getValue() == ChangeType.Unchanged) {
             if (get(proto().newPapAmount()).getValue() != null) {
                 BigDecimal change = get(proto().newPapAmount()).getValue().subtract(get(proto().suspendedPapAmount()).getValue());
-                changePercent = change.divide(get(proto().suspendedPapAmount()).getValue(), MathContext.DECIMAL32);
+                changePercent = change.divide(get(proto().suspendedPapAmount()).getValue(), 2, BigDecimal.ROUND_HALF_UP);
             } else {
                 changePercent = null;
             }

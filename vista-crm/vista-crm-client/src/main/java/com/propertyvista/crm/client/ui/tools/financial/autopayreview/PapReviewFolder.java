@@ -30,19 +30,16 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
+import com.propertyvista.crm.client.ui.tools.common.BulkItemsFolder;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargesTotalDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 
-public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
+public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
 
     private static final I18n i18n = I18n.get(PapReviewFolder.class);
 
@@ -66,22 +63,6 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             return new PapReviewForm();
         }
         return super.create(member);
-    }
-
-    @Override
-    public IFolderItemDecorator<PapReviewDTO> createItemDecorator() {
-        VistaBoxFolderItemDecorator<PapReviewDTO> itemDecorator = (VistaBoxFolderItemDecorator<PapReviewDTO>) PapReviewFolder.super.createItemDecorator();
-        itemDecorator.setCollapsible(false);
-        return itemDecorator;
-    }
-
-    public void checkAll(boolean isChecked) {
-        for (CComponent<?> c : getComponents()) {
-            if (c instanceof CEntityFolderItem) {
-                PapReviewForm papForm = (PapReviewForm) ((CEntityFolderItem<?>) c).getComponents().iterator().next();
-                papForm.setSelected(isChecked);
-            }
-        }
     }
 
     private static final class PapReviewForm extends CEntityDecoratableForm<PapReviewDTO> {
@@ -208,7 +189,7 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         papChargesTotal.changePercent().setValue(
                 papChargesTotal.suspendedPapAmount().getValue().compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : papChargesTotal.newPapAmount().getValue()
                         .subtract(papChargesTotal.suspendedPapAmount().getValue())
-                        .divide(papChargesTotal.suspendedPapAmount().getValue(), MathContext.DECIMAL32));
+                        .divide(papChargesTotal.suspendedPapAmount().getValue(), 2, BigDecimal.ROUND_HALF_UP));
 
         return papChargesTotal;
     }
