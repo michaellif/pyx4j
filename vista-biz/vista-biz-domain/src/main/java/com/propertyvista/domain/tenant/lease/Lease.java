@@ -252,7 +252,8 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> creationDate();
 
-    IPrimitive<LogicalDate> approvalDate();
+    // Used for versioning retrieval of approved Application
+    IPrimitive<Date> approvalDate();
 
     IPrimitive<LogicalDate> activationDate();
 

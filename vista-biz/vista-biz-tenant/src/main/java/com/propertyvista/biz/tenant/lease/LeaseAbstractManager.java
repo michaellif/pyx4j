@@ -372,7 +372,7 @@ public abstract class LeaseAbstractManager {
         Status leaseStatus = lease.status().getValue();
 
         lease.status().setValue(Lease.Status.Approved);
-        lease.approvalDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        lease.approvalDate().setValue(SystemDateManager.getDate());
 
         AgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
                 AgreementLegalPolicy.class);

@@ -106,7 +106,7 @@ class BillingCycleManager {
                 throw new BillingException("Existing lease start date should be earlier than creation date");
             }
             // for not-approved leases use current date
-            leaseStartDate = lease.approvalDate().isNull() ? SystemDateManager.getLogicalDate() : lease.approvalDate().getValue();
+            leaseStartDate = lease.approvalDate().isNull() ? SystemDateManager.getLogicalDate() : new LogicalDate(lease.approvalDate().getValue());
         } else {
             leaseStartDate = lease.leaseFrom().getValue();
         }
