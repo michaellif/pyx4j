@@ -13,12 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
-import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
@@ -35,8 +30,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
-import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class LeaseStep extends ApplicationWizardStep {
@@ -96,7 +89,7 @@ public class LeaseStep extends ApplicationWizardStep {
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             panel.setH3(++row, 0, 1, i18n.tr("People"));
-            panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder()));
+            panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsReadonlyFolder()));
         }
 
         return panel;
@@ -111,40 +104,4 @@ public class LeaseStep extends ApplicationWizardStep {
         featurePanel.setVisible(!getValue().selectedFeatures().isEmpty());
     }
 
-    private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
-
-        public CoapplicantsFolder() {
-            super(CoapplicantDTO.class);
-            setViewable(true);
-        }
-
-        @Override
-        public CComponent<?> create(IObject<?> member) {
-            if (member instanceof CoapplicantDTO) {
-                return new CoapplicantForm();
-            } else {
-                return super.create(member);
-            }
-        }
-
-        class CoapplicantForm extends CEntityForm<CoapplicantDTO> {
-
-            public CoapplicantForm() {
-                super(CoapplicantDTO.class);
-            }
-
-            @Override
-            public IsWidget createContent() {
-                BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-
-                int row = -1;
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
-
-                return mainPanel;
-            }
-        }
-    }
 }

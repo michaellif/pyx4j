@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
@@ -69,6 +70,10 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
 
     protected void addField(IObject<?> member) {
         contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(form.inject(member)).build());
+    }
+
+    protected void addField(IObject<?> member, CComponent<?> component) {
+        contentPanel.setWidget(++row, 0, form.inject(member, component));
     }
 
     protected void addCaption(String caption) {

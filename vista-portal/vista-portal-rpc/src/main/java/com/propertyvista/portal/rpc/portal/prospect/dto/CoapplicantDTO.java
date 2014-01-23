@@ -16,12 +16,14 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -36,9 +38,8 @@ public interface CoapplicantDTO extends IEntity {
     @Caption(description = "Is age 18 or over?")
     IPrimitive<Boolean> matured();
 
-    IPrimitive<String> firstName();
-
-    IPrimitive<String> lastName();
+    @EmbeddedEntity
+    Name name();
 
     IPrimitive<LogicalDate> birthDate();
 

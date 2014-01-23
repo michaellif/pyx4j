@@ -325,8 +325,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             cap.dependent().setValue(ltt.role().getValue() == Role.Dependent);
             cap.matured().setValue(false);
 
-            cap.firstName().setValue(ltt.leaseParticipant().customer().person().name().firstName().getValue());
-            cap.lastName().setValue(ltt.leaseParticipant().customer().person().name().lastName().getValue());
+            cap.name().set(ltt.leaseParticipant().customer().person().name());
             cap.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
 
             cap.relationship().setValue(ltt.relationship().getValue());
@@ -390,10 +389,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void updateCoApplicant(LeaseTermTenant ltt, CoapplicantDTO cap) {
         ltt.role().setValue(cap.dependent().isBooleanTrue() ? Role.Dependent : Role.CoApplicant);
-
-        ltt.leaseParticipant().customer().person().name().firstName().setValue(cap.firstName().getValue());
-        ltt.leaseParticipant().customer().person().name().lastName().setValue(cap.lastName().getValue());
-
+        ltt.leaseParticipant().customer().person().name().set(cap.name());
         ltt.leaseParticipant().customer().person().email().setValue(cap.email().getValue());
     }
 
