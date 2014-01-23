@@ -57,7 +57,9 @@ public class DefaultWidgetsTheme extends Theme {
 
         Slideshow, SlideshowAction,
 
-        ImageSlider, ImageSliderEditAction;
+        ImageSlider, ImageSliderEditAction,
+
+        CollapsablePanel, CollapsablePanelImage;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -89,6 +91,7 @@ public class DefaultWidgetsTheme extends Theme {
         initRecaptchaStyle();
         initImageSliderStyle();
         initSlideshow();
+        initCollapsablePanel();
     }
 
     protected void initAnchorStyle() {
@@ -392,4 +395,12 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
     }
 
+    private void initCollapsablePanel() {
+        Style style = new Style(".", StyleName.CollapsablePanel);
+        addStyle(style);
+
+        style = new Style(".", StyleName.CollapsablePanelImage);
+        style.addProperty("height", "2em");
+        addStyle(style);
+    }
 }

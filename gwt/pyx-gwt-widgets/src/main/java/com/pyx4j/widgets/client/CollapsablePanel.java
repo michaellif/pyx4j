@@ -52,9 +52,13 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers {
 
     public CollapsablePanel(WidgetsImages images) {
         this.images = images;
+
+        setStyleName(DefaultWidgetsTheme.StyleName.CollapsablePanel.name());
+
         getElement().getStyle().setPosition(Position.RELATIVE);
 
         collapseImage = new Image();
+
         collapseImage.setResource(images.collapse());
 
         collapseImage.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -69,11 +73,12 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers {
         });
 
         SimplePanel collapseImageHolder = new SimplePanel(collapseImage);
+        collapseImageHolder.setStyleName(DefaultWidgetsTheme.StyleName.CollapsablePanelImage.name());
+
         collapseImageHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
         collapseImageHolder.getElement().getStyle().setDisplay(Display.INLINE);
         collapseImageHolder.getElement().getStyle().setTop(0, Unit.PX);
         collapseImageHolder.getElement().getStyle().setLeft(0, Unit.PX);
-        collapseImageHolder.getElement().getStyle().setHeight(2, Unit.EM);
 
         add(collapseImageHolder);
 
