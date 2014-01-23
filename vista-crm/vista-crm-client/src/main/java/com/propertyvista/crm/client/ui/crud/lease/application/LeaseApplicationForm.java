@@ -46,6 +46,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         createCommonContent();
 
         addTab(createInfoTab());
+        addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
         addTab(createFinancialTab());
         addTab(createApprovalTab());
 
