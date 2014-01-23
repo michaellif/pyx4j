@@ -18,6 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -36,8 +37,10 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(PeopleStep.class);
 
-    private final HTML warningMessage = new HTML(
-            i18n.tr("Each additional tenant that is 18 or older is required to complete an additional application form. Access details will be emailed to them upon completion of this form."));
+    private final HTML warningMessage = new HTML();
+
+    private final String warningText = i18n
+            .tr("Each tenant that is {0} or older is required to complete an additional application form. Access details will be emailed to them upon completion of this application.");
 
     public PeopleStep() {
         super(OnlineApplicationWizardStepMeta.People);
@@ -61,7 +64,10 @@ public class PeopleStep extends ApplicationWizardStep {
     public void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        warningMessage.setVisible(getValue().maturedOccupantsAreApplicants().isBooleanTrue());
+        if (getValue().maturedOccupantsAreApplicants().isBooleanTrue()) {
+            warningMessage.setHTML(SimpleMessageFormat.format(warningText, getValue().ageOfMajority()));
+            warningMessage.setVisible(true);
+        }
     }
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
@@ -73,7 +79,7 @@ public class PeopleStep extends ApplicationWizardStep {
             this.wizard = applicationWizard;
         }
 
-        public boolean isOccupantsOver18areApplicants() {
+        public boolean maturedOccupantsAreApplicants() {
             return wizard.getValue().maturedOccupantsAreApplicants().isBooleanTrue();
         }
 
@@ -127,8 +133,8 @@ public class PeopleStep extends ApplicationWizardStep {
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
-                get(proto().matured()).setVisible(isOccupantsOver18areApplicants());
-                get(proto().dependent()).setVisible(!isOccupantsOver18areApplicants());
+                get(proto().matured()).setVisible(maturedOccupantsAreApplicants());
+                get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
                 get(proto().birthDate()).setVisible(getValue().dependent().getValue());
             }
         }
