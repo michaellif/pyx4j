@@ -51,7 +51,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected static final I18n i18n = I18n.get(LeaseFormBase.class);
 
-    private Tab chargesTab;
+    protected Tab chargesTab;
 
     protected LeaseFormBase(Class<DTO> clazz, IForm<DTO> view) {
         super(clazz, view);
@@ -59,9 +59,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected void createCommonContent() {
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            chargesTab = addTab(createChargesTab());
-        }
     }
 
     @Override
@@ -76,7 +73,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
+        if (chargesTab != null) {
             setTabVisible(chargesTab, getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
         }
 
@@ -238,7 +235,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         return i18n.tr("Charges");
     }
 
-    private TwoColumnFlexFormPanel createChargesTab() {
+    protected TwoColumnFlexFormPanel createChargesTab() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(getChargesTabTitle());
 
         main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));

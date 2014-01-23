@@ -46,6 +46,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         createCommonContent();
 
         addTab(createInfoTab());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            chargesTab = addTab(createChargesTab());
+        }
         addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
         addTab(createFinancialTab());
         addTab(createApprovalTab());
@@ -59,7 +62,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (VistaFeatures.instance().onlineApplication()) {
+        if (onlineStatusTab != null) {
             setTabVisible(onlineStatusTab, !getValue().leaseApplication().onlineApplication().isNull());
         }
 
