@@ -28,13 +28,14 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FeatureLister extends AbstractLister<Feature> {
 
     private final static I18n i18n = I18n.get(FeatureLister.class);
 
     public FeatureLister() {
-        super(Feature.class, true, true);
+        super(Feature.class, !VistaFeatures.instance().yardiIntegration(), !VistaFeatures.instance().yardiIntegration());
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

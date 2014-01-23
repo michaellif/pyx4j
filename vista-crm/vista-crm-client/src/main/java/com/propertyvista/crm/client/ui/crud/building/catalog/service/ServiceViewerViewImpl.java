@@ -18,10 +18,12 @@ import com.google.gwt.core.client.GWT;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.services.selections.version.ServiceVersionService;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ServiceViewerViewImpl extends CrmViewerViewImplBase<Service> implements ServiceViewerView {
 
     public ServiceViewerViewImpl() {
+        super(VistaFeatures.instance().yardiIntegration());
         setForm(new ServiceForm(this));
         enableLooseVersioning(Service.ServiceV.class, GWT.<ServiceVersionService> create(ServiceVersionService.class));
     }

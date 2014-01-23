@@ -28,13 +28,14 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ServiceLister extends AbstractLister<Service> {
 
     private final static I18n i18n = I18n.get(ServiceLister.class);
 
     public ServiceLister() {
-        super(Service.class, true, true);
+        super(Service.class, !VistaFeatures.instance().yardiIntegration(), !VistaFeatures.instance().yardiIntegration());
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
