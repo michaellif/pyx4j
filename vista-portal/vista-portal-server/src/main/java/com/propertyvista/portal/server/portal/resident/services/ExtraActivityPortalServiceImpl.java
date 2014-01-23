@@ -56,6 +56,7 @@ public class ExtraActivityPortalServiceImpl implements ExtraActivityPortalServic
 
         List<CommunityEvent> events = ServerSideFactory.create(CommunityEventFacade.class).getCommunityEvents(unit.building());
         if (events == null || events.isEmpty()) {
+            callback.onSuccess(null);
             return;
         }
 
