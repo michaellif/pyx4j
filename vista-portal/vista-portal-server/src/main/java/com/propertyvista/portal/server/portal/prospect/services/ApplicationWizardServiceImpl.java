@@ -320,21 +320,20 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
             CoapplicantDTO cap = EntityFactory.create(CoapplicantDTO.class);
 
-            cap.dependent().setValue(ltt.role().getValue() == Role.Dependent);
             cap.matured().setValue(false);
 
+            cap.dependent().setValue(ltt.role().getValue() == Role.Dependent);
             cap.name().set(ltt.leaseParticipant().customer().person().name());
             cap.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
-
             cap.relationship().setValue(ltt.relationship().getValue());
-
             cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
 
+            // update matured/dependent states:
             if (!cap.birthDate().isNull()) {
                 Integer ageOfMajority = (to.ageOfMajority().isNull() ? 18 : to.ageOfMajority().getValue());
                 cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority - 1));
             }
-
+            // force dependency if needed:
             if (to.occupantsOver18areApplicants().isBooleanTrue()) {
                 cap.dependent().setValue(!cap.matured().getValue());
             }
