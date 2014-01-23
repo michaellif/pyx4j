@@ -97,8 +97,8 @@ public class PeopleStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().matured())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
@@ -109,13 +109,14 @@ public class PeopleStep extends ApplicationWizardStep {
                 get(proto().dependent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
-                        updateBirthDateVisibility();
+                        get(proto().birthDate()).setVisible(getValue().dependent().getValue());
                     }
                 });
                 get(proto().matured()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
-                        updateBirthDateVisibility();
+                        get(proto().dependent()).setValue(!event.getValue());
+                        get(proto().birthDate()).setVisible(getValue().dependent().getValue());
                     }
                 });
 
@@ -127,15 +128,8 @@ public class PeopleStep extends ApplicationWizardStep {
                 super.onValueSet(populate);
 
                 get(proto().matured()).setVisible(isOccupantsOver18areApplicants());
-                updateBirthDateVisibility();
-            }
-
-            private void updateBirthDateVisibility() {
-                if (isOccupantsOver18areApplicants()) {
-                    get(proto().birthDate()).setVisible(getValue().dependent().getValue() && !getValue().matured().getValue());
-                } else {
-                    get(proto().birthDate()).setVisible(getValue().dependent().getValue());
-                }
+                get(proto().dependent()).setVisible(!isOccupantsOver18areApplicants());
+                get(proto().birthDate()).setVisible(getValue().dependent().getValue());
             }
         }
     }

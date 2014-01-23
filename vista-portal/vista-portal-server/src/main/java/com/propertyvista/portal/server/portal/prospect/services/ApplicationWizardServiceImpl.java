@@ -332,7 +332,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             if (!cap.birthDate().isNull()) {
                 Integer ageOfMajority = (to.ageOfMajority().isNull() ? 18 : to.ageOfMajority().getValue());
-                cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority));
+                cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority - 1));
+            }
+
+            if (to.occupantsOver18areApplicants().isBooleanTrue()) {
+                cap.dependent().setValue(!cap.matured().getValue());
             }
 
             // remember corresponding tenant: 
