@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.AdditionalInfoStep;
 
@@ -24,6 +26,11 @@ public class AdditionalInfoSectionPanel extends AbstractSectionPanel {
 
     public AdditionalInfoSectionPanel(int index, SummaryForm form, AdditionalInfoStep step) {
         super(index, OnlineApplicationWizardStepMeta.AdditionalInfo.toString(), form, step);
+
+        addField(proto().applicant().currentAddress(), new CEntityLabel<PriorAddress>(), true);
+
+        addField(proto().applicant().previousAddress(), new CEntityLabel<PriorAddress>(), true);
+
     }
 
 }

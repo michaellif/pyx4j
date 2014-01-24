@@ -80,8 +80,12 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(form.inject(member)).build());
     }
 
-    protected void addField(IObject<?> member, CComponent<?> component) {
-        contentPanel.setWidget(++row, 0, form.inject(member, component));
+    protected void addField(IObject<?> member, CComponent<?> component, boolean decorate) {
+        if (decorate) {
+            contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(form.inject(member, component)).build());
+        } else {
+            contentPanel.setWidget(++row, 0, form.inject(member, component));
+        }
     }
 
     protected void addCaption(String caption) {

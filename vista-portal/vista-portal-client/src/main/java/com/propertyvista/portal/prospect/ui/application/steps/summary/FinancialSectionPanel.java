@@ -17,6 +17,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
+import com.propertyvista.portal.shared.ui.util.editors.PersonalAssetFolder;
+import com.propertyvista.portal.shared.ui.util.editors.PersonalIncomeFolder;
 
 public class FinancialSectionPanel extends AbstractSectionPanel {
 
@@ -24,6 +26,13 @@ public class FinancialSectionPanel extends AbstractSectionPanel {
 
     public FinancialSectionPanel(int index, SummaryForm form, FinancialStep step) {
         super(index, OnlineApplicationWizardStepMeta.Financial.toString(), form, step);
-    }
 
+        addCaption(i18n.tr("Income"));
+
+        addField(proto().applicant().incomes(), new PersonalIncomeFolder(), false);
+
+        addCaption(i18n.tr("Assets"));
+        addField(proto().applicant().assets(), new PersonalAssetFolder(), false);
+
+    }
 }

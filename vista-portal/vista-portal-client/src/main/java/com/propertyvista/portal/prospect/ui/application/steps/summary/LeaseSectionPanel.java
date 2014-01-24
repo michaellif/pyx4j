@@ -31,7 +31,7 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
         super(index, OnlineApplicationWizardStepMeta.Lease.toString(), form, step);
         addCaption(i18n.tr("Unit"));
         addField(proto().unit().info().number());
-        addField(proto().unit().building().info().address(), new CEntityLabel<AddressStructured>());
+        addField(proto().unit().building().info().address(), new CEntityLabel<AddressStructured>(), true);
         addField(proto().utilities());
 
         addCaption(i18n.tr("Lease Term"));
@@ -43,7 +43,7 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             addCaption(i18n.tr("People Living with You"));
-            addField(proto().coapplicants(), new CoapplicantsReadonlyFolder());
+            addField(proto().coapplicants(), new CoapplicantsReadonlyFolder(), false);
         }
     }
 

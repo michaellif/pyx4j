@@ -29,7 +29,7 @@ public class AboutYouSectionPanel extends AbstractSectionPanel {
 
         addCaption(i18n.tr("Personal Information"));
 
-        addField(proto().applicant().person().name(), new CEntityLabel<Name>());
+        addField(proto().applicant().person().name(), new CEntityLabel<Name>(), true);
         addField(proto().applicant().person().sex());
         addField(proto().applicant().person().birthDate());
 
