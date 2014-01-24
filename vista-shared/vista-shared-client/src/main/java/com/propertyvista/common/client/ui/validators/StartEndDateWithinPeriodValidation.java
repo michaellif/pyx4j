@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
+import java.util.Calendar;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -20,17 +22,18 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-public class StartEndDateValidation {
+public class StartEndDateWithinPeriodValidation {
 
-    private static final I18n i18n = I18n.get(StartEndDateValidation.class);
+    private static final I18n i18n = I18n.get(StartEndDateWithinPeriodValidation.class);
 
-    public StartEndDateValidation(final CComponent<LogicalDate> start, final CComponent<LogicalDate> end) {
-        this(start, end, null);
+    public StartEndDateWithinPeriodValidation(final CComponent<LogicalDate> start, final CComponent<LogicalDate> end, int calendarField, int amount) {
+        this(start, end, calendarField, amount, null);
     }
 
-    public StartEndDateValidation(final CComponent<LogicalDate> start, final CComponent<LogicalDate> end, String message) {
+    public StartEndDateWithinPeriodValidation(final CComponent<LogicalDate> start, final CComponent<LogicalDate> end, final int calendarField,
+            final int amount, String message) {
         if (message == null) {
-            message = i18n.tr("The Start Date Must Be Earlier Than The End Date");
+            message = i18n.tr("The Start Date must be within Specified Period of the End Date");
         }
         final String msg = message;
 
@@ -40,8 +43,8 @@ public class StartEndDateValidation {
                 if (value == null || !end.isVisible() || end.getValue() == null) {
                     return null;
                 }
-                LogicalDate endDate = end.getValue();
-                return (!value.after(endDate) ? null : new ValidationError(component, msg));
+                LogicalDate endDate = add(end.getValue(), calendarField, -amount);
+                return (!value.before(endDate) ? null : new ValidationError(component, msg));
             }
         });
         start.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(end));
@@ -52,10 +55,18 @@ public class StartEndDateValidation {
                 if (value == null || !start.isVisible() || start.getValue() == null) {
                     return null;
                 }
-                LogicalDate startDate = start.getValue();
-                return (!value.before(startDate) ? null : new ValidationError(component, msg));
+                LogicalDate startDate = add(start.getValue(), calendarField, amount);
+                return (!value.after(startDate) ? null : new ValidationError(component, msg));
             }
         });
         end.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(start));
     }
+
+    private static LogicalDate add(LogicalDate date, int calendarField, int amount) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(calendarField, amount);
+        return new LogicalDate(c.getTime());
+    }
+
 }

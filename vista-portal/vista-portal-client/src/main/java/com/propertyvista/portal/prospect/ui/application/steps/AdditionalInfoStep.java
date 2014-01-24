@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -22,13 +22,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -36,13 +31,12 @@ import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValid
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
 
@@ -116,68 +110,36 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
     public void addValidations() {
         super.addValidations();
 
-        CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().applicant().currentAddress()));
-        CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().applicant().previousAddress()));
+        // ------------------------------------------------------------------------------------------------
+        CEntityForm<PriorAddress> currentAF = ((CEntityForm<PriorAddress>) get(proto().applicant().currentAddress()));
 
-        CComponent<LogicalDate> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
-        CComponent<LogicalDate> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
-        CComponent<LogicalDate> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());
-        CComponent<LogicalDate> p2 = previousAddressForm.get(previousAddressForm.proto().moveOutDate());
+        currentAF.get(currentAF.proto().moveInDate()).addValueValidator(new PastDateIncludeTodayValidator());
+        currentAF.get(currentAF.proto().moveOutDate()).addValueValidator(new FutureDateIncludeTodayValidator());
+        new StartEndDateValidation(currentAF.get(currentAF.proto().moveInDate()), currentAF.get(currentAF.proto().moveOutDate()),
+                i18n.tr("Move In date must be before Move Out date"));
 
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+        currentAF.get(currentAF.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                 enablePreviousAddress();
             }
         });
 
-        p1.addValueValidator(new PastDateValidator());
-        c1.addValueValidator(new PastDateIncludeTodayValidator());
-        c2.addValueValidator(new FutureDateIncludeTodayValidator());
+        // ------------------------------------------------------------------------------------------------
+        CEntityForm<PriorAddress> previousAF = ((CEntityForm<PriorAddress>) get(proto().applicant().previousAddress()));
 
-        new StartEndDateValidation(c1, c2);
-        new StartEndDateValidation(p1, p2);
-        StartEndDateWithinMonth(c1, p2, i18n.tr("Current Move In Date Should Be Within 30 Days Of Previous Move Out Date"));
-        StartEndDateWithinMonth(p2, c1, i18n.tr("Current Move In Date Should Be Within 30 Days Of Previous Move Out Date"));
+        previousAF.get(previousAF.proto().moveInDate()).addValueValidator(new PastDateValidator());
+        previousAF.get(previousAF.proto().moveOutDate()).addValueValidator(new PastDateValidator());
+        new StartEndDateValidation(previousAF.get(previousAF.proto().moveInDate()), previousAF.get(previousAF.proto().moveOutDate()),
+                i18n.tr("Move In date must be before Move Out date"));
 
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
-
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(currentAddressForm.get(currentAddressForm.proto().moveInDate())));
-
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(currentAddressForm.get(currentAddressForm.proto().moveInDate())));
-
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
-
+        // ------------------------------------------------------------------------------------------------
+        new StartEndDateWithinPeriodValidation(previousAF.get(previousAF.proto().moveOutDate()), currentAF.get(currentAF.proto().moveInDate()), Calendar.MONTH,
+                1, i18n.tr("Current Move In date should be within 1 month of previous Move Out date"));
     }
 
     private void enablePreviousAddress() {
         previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().applicant().currentAddress().moveInDate().getValue()));
-    }
-
-    private void StartEndDateWithinMonth(final CComponent<LogicalDate> value1, final CComponent<LogicalDate> value2, final String message) {
-        value1.addValueValidator(new EditableValueValidator<LogicalDate>() {
-            @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value == null || getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
-                    return null;
-                }
-
-                Date date = value2.getValue();
-                long limit1 = date.getTime() + 2678400000L; //limits date1 to be within a month of date2
-                long limit2 = date.getTime() - 2678400000L;
-                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationError(component, message);
-            }
-        });
     }
 
     class LegalQuestionWidgetDecoratorBuilder extends WidgetDecorator.Builder {

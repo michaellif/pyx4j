@@ -13,19 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.screening;
 
+import java.util.Calendar;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -35,6 +33,8 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.IdUploaderFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalAssetFolder;
@@ -83,57 +83,34 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
     @Override
     public void addValidations() {
-        CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
+        super.addValidations();
 
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+        // ------------------------------------------------------------------------------------------------
+        CEntityForm<PriorAddress> currentAF = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
+
+        currentAF.get(currentAF.proto().moveInDate()).addValueValidator(new PastDateIncludeTodayValidator());
+        currentAF.get(currentAF.proto().moveOutDate()).addValueValidator(new FutureDateIncludeTodayValidator());
+        new StartEndDateValidation(currentAF.get(currentAF.proto().moveInDate()), currentAF.get(currentAF.proto().moveOutDate()),
+                i18n.tr("Move In date must be before Move Out date"));
+
+        currentAF.get(currentAF.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                 enablePreviousAddress();
             }
         });
 
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new PastDateIncludeTodayValidator());
-        currentAddressForm.get(currentAddressForm.proto().moveOutDate()).addValueValidator(new FutureDateIncludeTodayValidator());
+        // ------------------------------------------------------------------------------------------------
+        CEntityForm<PriorAddress> previousAF = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
+
+        previousAF.get(previousAF.proto().moveInDate()).addValueValidator(new PastDateValidator());
+        previousAF.get(previousAF.proto().moveOutDate()).addValueValidator(new PastDateValidator());
+        new StartEndDateValidation(previousAF.get(previousAF.proto().moveInDate()), previousAF.get(previousAF.proto().moveOutDate()),
+                i18n.tr("Move In date must be before Move Out date"));
 
         // ------------------------------------------------------------------------------------------------
-
-        final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
-
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new PastDateValidator());
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
-            @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value == null || getValue() == null) {
-                    return null;
-                }
-                IPrimitive<LogicalDate> date = getValue().version().previousAddress().moveOutDate();
-                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationError(component, i18n
-                        .tr("Move In Date must be less then Move Out Date"));
-            }
-
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
-
-        // ------------------------------------------------------------------------------------------------
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new PastDateValidator());
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
-            @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value == null || getValue() == null) {
-                    return null;
-                }
-                IPrimitive<LogicalDate> date = getValue().version().previousAddress().moveInDate();
-                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationError(component, i18n
-                        .tr("Move Out Date must be greater then Move In Date"));
-            }
-
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+        new StartEndDateWithinPeriodValidation(previousAF.get(previousAF.proto().moveOutDate()), currentAF.get(currentAF.proto().moveInDate()), Calendar.MONTH,
+                1, i18n.tr("Current Move In date should be within 1 month of previous Move Out date"));
     }
 
     private TwoColumnFlexFormPanel createIdentificationDocumentsTab(String title) {

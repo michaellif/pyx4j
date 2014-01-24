@@ -41,7 +41,8 @@ public class PolicyFacadeImpl implements PolicyFacade {
             // TODO Find  LeaseTerm that have application
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().leaseParticipants().$().customer().personScreening(), entity));
-            criteria.desc(criteria.proto().units().$()._Leases().$().updated());
+// TODO VladS : (DEV:)Sort by collections is unsupported, Throwable class java.lang.Error
+//            criteria.desc(criteria.proto().units().$()._Leases().$().updated());
             node = Persistence.service().retrieve(criteria);
         } else {
             // TODO use the same code as in BreadcrumbsHelper
