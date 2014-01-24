@@ -22,7 +22,6 @@ public class CommunityEventCrudServiceImpl extends AbstractCrudServiceImpl<Commu
 
     public CommunityEventCrudServiceImpl() {
         super(CommunityEvent.class);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

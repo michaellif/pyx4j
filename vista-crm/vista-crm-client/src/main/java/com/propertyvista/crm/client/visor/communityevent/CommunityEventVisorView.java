@@ -44,14 +44,13 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorView;
 import com.propertyvista.domain.property.asset.CommunityEvent;
-import com.propertyvista.dto.CommunityEventDTO;
+import com.propertyvista.dto.CommunityEventsDTO;
 
 public class CommunityEventVisorView extends AbstractVisorPane {
     private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorView.class);
@@ -72,7 +71,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
         getController().populate(new DefaultAsyncCallback<EntitySearchResult<CommunityEvent>>() {
             @Override
             public void onSuccess(EntitySearchResult<CommunityEvent> result) {
-                CommunityEventDTO dto = EntityFactory.create(CommunityEventDTO.class);
+                CommunityEventsDTO dto = EntityFactory.create(CommunityEventsDTO.class);
                 for (CommunityEvent e : result.getData()) {
                     dto.events().add(e);
                 }
@@ -87,10 +86,10 @@ public class CommunityEventVisorView extends AbstractVisorPane {
         return (CommunityEventVisorController) super.getController();
     }
 
-    public class CommunityEventForm extends CEntityForm<CommunityEventDTO> {
+    public class CommunityEventForm extends CEntityForm<CommunityEventsDTO> {
 
         public CommunityEventForm() {
-            super(CommunityEventDTO.class);
+            super(CommunityEventsDTO.class);
         }
 
         @Override
@@ -115,7 +114,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
             @Override
             public CComponent<?> create(IObject<?> member) {
                 if (member instanceof CommunityEvent) {
-                    return new NoteEditor(true);
+                    return new EventEditor(true);
                 } else {
                     return super.create(member);
                 }
@@ -127,7 +126,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                     @Override
                     public void setComponent(final CEntityFolderItem<CommunityEvent> folderItem) {
                         super.setComponent(folderItem);
-                        final NoteEditor editor = (NoteEditor) getContent();
+                        final EventEditor editor = (EventEditor) getContent();
                         editor.addPropertyChangeHandler(new PropertyChangeHandler() {
 
                             @Override
@@ -151,7 +150,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                     public void execute() {
                         item.setViewable(false);
                         ((BoxFolderItemDecorator) item.getDecorator()).setExpended(true);
-                        ((NoteEditor) item.getComponents().toArray()[0]).setViewableMode(false);
+                        ((EventEditor) item.getComponents().toArray()[0]).setViewableMode(false);
                     }
                 });
 
@@ -176,13 +175,13 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                 confirm.show();
             }
 
-            private class NoteEditor extends CEntityDecoratableForm<CommunityEvent> {
+            private class EventEditor extends CEntityForm<CommunityEvent> {
 
                 private Button btnSave;
 
                 private Anchor btnCancel;
 
-                public NoteEditor(boolean viewable) {
+                public EventEditor(boolean viewable) {
                     super(CommunityEvent.class);
                     inheritViewable(false);
                     setViewable(viewable);
@@ -194,7 +193,8 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                     int row = -1;
 
                     content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().caption()), 20, true).build());
-                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().timeAndLocation()), 20, true).build());
+                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().date()), 10, true).build());
+                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().time()), 10, true).build());
                     content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 50, true).build());
                     content.setWidget(++row, 0, 2, createLowerToolbar());
                     content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);

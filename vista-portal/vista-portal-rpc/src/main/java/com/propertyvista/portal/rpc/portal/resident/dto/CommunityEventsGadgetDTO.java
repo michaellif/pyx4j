@@ -14,13 +14,9 @@
 package com.propertyvista.portal.rpc.portal.resident.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.dto.CommunityEventDTO;
+import com.propertyvista.dto.CommunityEventsDTO;
 
 @Transient
-public interface CommunityEventsGadgetDTO extends ExtraGadgetDTO {
-
-    IList<CommunityEventDTO> events();
-
+public interface CommunityEventsGadgetDTO extends CommunityEventsDTO, ExtraGadgetDTO {
 }

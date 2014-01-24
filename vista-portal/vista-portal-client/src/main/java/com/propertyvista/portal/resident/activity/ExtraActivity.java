@@ -30,13 +30,16 @@ import com.propertyvista.portal.resident.ui.extra.ExtraView;
 import com.propertyvista.portal.resident.ui.extra.ExtraView.ExtraPresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 
 public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
 
     private final ExtraView view;
 
-    private final ExtraActivityPortalService service = (ExtraActivityPortalService) GWT.create(ExtraActivityPortalService.class);
+    private final ExtraActivityPortalService extraActivityService = (ExtraActivityPortalService) GWT.create(ExtraActivityPortalService.class);
+
+    private final CommunityEventPortalCrudService communityEventService = (CommunityEventPortalCrudService) GWT.create(CommunityEventPortalCrudService.class);
 
     public ExtraActivity(Place place) {
         view = ResidentPortalSite.getViewFactory().getView(ExtraView.class);
@@ -67,7 +70,7 @@ public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
     }
 
     public void retreiveWheather(final AsyncCallback<WeatherGadgetDTO> callback) {
-        service.retreiveWheather(new DefaultAsyncCallback<WeatherGadgetDTO>() {
+        extraActivityService.retreiveWheather(new DefaultAsyncCallback<WeatherGadgetDTO>() {
             @Override
             public void onSuccess(WeatherGadgetDTO result) {
                 callback.onSuccess(result);
@@ -76,7 +79,7 @@ public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
     }
 
     public void retreiveCommunityEvents(final AsyncCallback<CommunityEventsGadgetDTO> callback) {
-        service.retreiveCommunityEvents(new DefaultAsyncCallback<CommunityEventsGadgetDTO>() {
+        communityEventService.retreiveCommunityEvents(new DefaultAsyncCallback<CommunityEventsGadgetDTO>() {
             @Override
             public void onSuccess(CommunityEventsGadgetDTO result) {
                 callback.onSuccess(result);

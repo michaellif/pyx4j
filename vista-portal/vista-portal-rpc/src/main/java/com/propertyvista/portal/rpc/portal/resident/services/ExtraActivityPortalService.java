@@ -17,11 +17,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 
 public interface ExtraActivityPortalService extends IService {
     void retreiveWheather(AsyncCallback<WeatherGadgetDTO> callback);
-
-    void retreiveCommunityEvents(AsyncCallback<CommunityEventsGadgetDTO> callback);
 }

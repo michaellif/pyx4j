@@ -55,6 +55,7 @@ import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocum
 import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
+import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
@@ -185,6 +186,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
+        grant(new IServiceExecutePermission(CommunityEventPortalCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 

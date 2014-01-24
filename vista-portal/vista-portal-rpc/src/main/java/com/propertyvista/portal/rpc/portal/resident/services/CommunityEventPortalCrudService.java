@@ -7,18 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 22, 2014
+ * Created on Jan 9, 2014
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.portal.rpc.portal.resident.services;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IList;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.property.asset.CommunityEvent;
+import com.pyx4j.rpc.shared.IService;
 
-@Transient
-public interface CommunityEventDTO extends CommunityEvent {
-    IList<CommunityEvent> events();
+import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
+
+public interface CommunityEventPortalCrudService extends IService {
+    void retreiveCommunityEvents(AsyncCallback<CommunityEventsGadgetDTO> callback);
 }

@@ -11,13 +11,15 @@
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.communityevent;
+package com.propertyvista.dto;
 
-import java.util.List;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.property.asset.CommunityEvent;
-import com.propertyvista.domain.property.asset.building.Building;
 
-public interface CommunityEventFacade {
-    List<CommunityEvent> getCommunityEvents(Building building);
+@Transient
+public interface CommunityEventsDTO extends IEntity {
+    IList<CommunityEvent> events();
 }
