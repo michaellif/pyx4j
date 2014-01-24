@@ -20,6 +20,8 @@ import com.yardi.entity.mits.Unitoccpstatusinfo;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 
 /** Converts Yardi Unit Availability to Vista Unit Availability Status */
@@ -35,10 +37,28 @@ public class YardiUnitAvailabilityAdapter {
         }
 
         Unitleasestatusinfo leasedStatus = unit.getUnit().getInformation().get(0).getUnitLeasedStatus();
-        if (leasedStatus == Unitleasestatusinfo.LEASED_ON_NOTICE) {
+        if (leasedStatus == Unitleasestatusinfo.LEASED_ON_NOTICE || leasedStatus == Unitleasestatusinfo.ON_NOTICE) {
             status.vacancyStatus().setValue(Vacancy.Notice);
         }
 
+        if (leasedStatus == Unitleasestatusinfo.LEASED_RESERVED || leasedStatus == Unitleasestatusinfo.RESERVED) {
+            status.rentedStatus().setValue(RentedStatus.Rented);
+        } else {
+            status.rentedStatus().setValue(RentedStatus.Unrented);
+        }
+        if (occupancyStatus == Unitoccpstatusinfo.OCCUPIED && leasedStatus == Unitleasestatusinfo.OTHER) {
+            status.rentedStatus().setValue(RentedStatus.OffMarket);
+        }
+
+        if (unit.getComment() != null && unit.getComment() instanceof String) {
+            String comment = (String) unit.getComment();
+            if (comment.equals("RentReady=true")) {
+                status.rentReadinessStatus().setValue(RentReadiness.RentReady);
+            }
+            if (comment.equals("RentReady=false")) {
+                status.rentReadinessStatus().setValue(RentReadiness.NeedsRepairs);
+            }
+        }
         return status;
 
     }
