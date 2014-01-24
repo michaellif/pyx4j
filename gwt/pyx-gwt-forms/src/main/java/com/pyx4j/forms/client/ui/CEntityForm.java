@@ -71,7 +71,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
 
     public CEntityForm(Class<E> clazz, IEditableComponentFactory factory) {
         if (factory == null) {
-            factory = new EntityFormComponentFactory();
+            factory = new BaseEditableComponentFactory();
         }
         this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
         this.factory = factory;

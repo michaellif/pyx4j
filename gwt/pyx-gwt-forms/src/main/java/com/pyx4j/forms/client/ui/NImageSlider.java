@@ -72,7 +72,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
 
     private int organizerWidth;
 
-    protected IEditableComponentFactory factory = new EntityFormComponentFactory();
+    protected IEditableComponentFactory factory = new BaseEditableComponentFactory();
 
     public NImageSlider(CImageSlider<T> cComponent) {
         super(cComponent);

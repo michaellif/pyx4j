@@ -48,7 +48,7 @@ public class NImage extends NField<IFile<?>, ImageSlider, CImage, ImageSlider> {
 
     private final ImageSlider imageSlider;
 
-    protected IEditableComponentFactory factory = new EntityFormComponentFactory();
+    protected IEditableComponentFactory factory = new BaseEditableComponentFactory();
 
     public NImage(CImage cComponent) {
         super(cComponent);
