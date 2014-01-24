@@ -93,8 +93,6 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
     }
 
     public void updateState() {
-        System.out.println("+++++++" + step.getOnlineApplicationWizardStepMeta() + " step.isStepComplete()=" + step.isStepComplete() + " step.isStepVisited()"
-                + step.isStepVisited());
         if (step.isStepComplete()) {
             captionBar.setStepStatus(StepStatus.complete);
         } else if (step.isStepVisited()) {

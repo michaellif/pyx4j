@@ -38,7 +38,6 @@ public class NameEditor extends CEntityForm<Name> {
         this(null);
     }
 
-    @SuppressWarnings("rawtypes")
     public NameEditor(String customViewLabel) {
         super(Name.class);
         this.customViewLabel = customViewLabel;
