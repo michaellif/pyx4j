@@ -262,6 +262,21 @@ BEGIN
         
         ALTER TABLE building_utility ADD COLUMN is_deleted BOOLEAN;
         
+        -- community_event
+        
+        CREATE TABLE community_event
+        (
+                id                              BIGINT                  NOT NULL,
+                caption                         VARCHAR(500),
+                location                        VARCHAR(500),
+                date                            DATE,
+                time                            TIME,
+                descriprion                     VARCHAR(2048),
+                building                        BIGINT,
+                        CONSTRAINT community_event_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE community_event OWNER TO vista;
         
         -- company_logo
         
@@ -303,6 +318,10 @@ BEGIN
         
         ALTER TABLE customer_signature OWNER TO vista;
       
+        -- emergency_contact
+        
+        ALTER TABLE emergency_contact ADD COLUMN relationship VARCHAR(50);
+        
         
         -- employee_signature
         
@@ -530,6 +549,10 @@ BEGIN
         );
         
         ALTER TABLE landlord_media_blob OWNER TO vista;
+        
+        -- lease
+        
+        ALTER TABLE lease ALTER COLUMN approval_date TYPE TIMESTAMP;
         
         -- lease_application
         

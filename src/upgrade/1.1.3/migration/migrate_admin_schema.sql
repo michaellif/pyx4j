@@ -346,10 +346,17 @@ SET search_path = '_admin_';
                 'paymentsPadProcessReconciliation', 'paymentsPadSend', 'paymentsReceiveAcknowledgment', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 
                 'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 
                 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
+       /*
        ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
         CHECK ((target) IN ('ApplicantTermsAndConditions', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'PmcPropertyVistaService', 
         'TenantBillingTerms', 'TenantPaymentWebPaymentFeeTerms', 'TenantPreAuthorizedPaymentCardTerms', 'TenantPreAuthorizedPaymentECheckTerms', 
         'TenantSurePreAuthorizedPaymentsAgreement', 'VistaPortalTermsAndConditions'));
+       */
+       ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
+                CHECK ((target) IN ('ApplicantTermsAndConditions', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 
+                                        'PmcPropertyVistaService', 'TenantBillingTerms', 'TenantPaymentWebPaymentFeeTerms', 'TenantPreAuthorizedPaymentCardTerms',
+                                         'TenantPreAuthorizedPaymentECheckTerms', 'TenantSurePreAuthorizedPaymentsAgreement', 'VistaPortalTermsAndConditions'));
+
 
 
         
