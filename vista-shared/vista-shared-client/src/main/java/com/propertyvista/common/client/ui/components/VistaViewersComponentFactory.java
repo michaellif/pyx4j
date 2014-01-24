@@ -20,6 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -28,12 +29,11 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
-import com.pyx4j.forms.client.ui.EntityFormComponentFactory;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public class VistaViewersComponentFactory extends EntityFormComponentFactory {
+public class VistaViewersComponentFactory extends BaseEditableComponentFactory {
 
     @Override
     public CComponent<?> create(IObject<?> member) {

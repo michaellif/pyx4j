@@ -18,17 +18,17 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntitySuggestBox;
 import com.pyx4j.forms.client.ui.CSignature;
-import com.pyx4j.forms.client.ui.EntityFormComponentFactory;
 
 import com.propertyvista.common.client.ui.components.editors.GeoLocationEditor;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.security.CustomerSignature;
 
-public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
+public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
 
     @Override
     public CComponent<?> create(IObject<?> member) {
