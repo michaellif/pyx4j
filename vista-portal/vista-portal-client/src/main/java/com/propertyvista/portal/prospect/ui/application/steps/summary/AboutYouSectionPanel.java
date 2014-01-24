@@ -13,10 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
 
@@ -29,7 +27,7 @@ public class AboutYouSectionPanel extends AbstractSectionPanel {
 
         addCaption(i18n.tr("Personal Information"));
 
-        addField(proto().applicant().person().name(), new CEntityLabel<Name>(), true);
+        addField(proto().applicant().person().name());
         addField(proto().applicant().person().sex());
         addField(proto().applicant().person().birthDate());
 

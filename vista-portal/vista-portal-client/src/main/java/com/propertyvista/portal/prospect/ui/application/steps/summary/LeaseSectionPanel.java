@@ -13,11 +13,9 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.CoapplicantsReadonlyFolder;
@@ -31,7 +29,7 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
         super(index, OnlineApplicationWizardStepMeta.Lease.toString(), form, step);
         addCaption(i18n.tr("Unit"));
         addField(proto().unit().info().number());
-        addField(proto().unit().building().info().address(), new CEntityLabel<AddressStructured>(), true);
+        addField(proto().unit().building().info().address());
         addField(proto().utilities());
 
         addCaption(i18n.tr("Lease Term"));

@@ -205,6 +205,7 @@ public interface BuildingInfo extends IEntity {
     @ToString(index = 0)
     IPrimitive<String> name();
 
+    @EmbeddedEntity
     AddressStructured address();
 
     IPrimitive<GeoPoint> location();
