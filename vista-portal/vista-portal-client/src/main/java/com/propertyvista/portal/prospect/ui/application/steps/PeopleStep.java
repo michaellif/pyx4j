@@ -24,6 +24,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -148,12 +149,15 @@ public class PeopleStep extends ApplicationWizardStep {
                 get(proto().matured()).setVisible(maturedOccupantsAreApplicants());
                 get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
                 get(proto().birthDate()).setVisible(getValue().dependent().getValue());
+
+                get(proto().matured()).setTooltip(i18n.tr("Is age {0} or over?", ageOfMajority()));
             }
 
             @Override
             public void addValidations() {
                 super.addValidations();
 
+                get(proto().matured()).addValueChangeHandler(new RevalidationTrigger<Boolean>(get(proto().birthDate())));
                 get(proto().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                     @Override
                     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
