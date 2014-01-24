@@ -18,11 +18,15 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
@@ -77,6 +81,14 @@ public class PeopleStep extends ApplicationWizardStep {
         public CoapplicantsFolder(ApplicationWizard applicationWizard) {
             super(CoapplicantDTO.class, i18n.tr("Occupant"));
             this.wizard = applicationWizard;
+        }
+
+        public Integer ageOfMajority() {
+            return wizard.getValue().ageOfMajority().getValue();
+        }
+
+        public boolean enforceAgeOfMajority() {
+            return wizard.getValue().enforceAgeOfMajority().isBooleanTrue();
         }
 
         public boolean maturedOccupantsAreApplicants() {
@@ -136,6 +148,28 @@ public class PeopleStep extends ApplicationWizardStep {
                 get(proto().matured()).setVisible(maturedOccupantsAreApplicants());
                 get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
                 get(proto().birthDate()).setVisible(getValue().dependent().getValue());
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+
+                get(proto().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+                    @Override
+                    public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                        if (value != null && getValue() != null) {
+                            if (maturedOccupantsAreApplicants()) {
+                                if (!getValue().matured().getValue()) {
+                                    if (TimeUtils.isOlderThan(value, ageOfMajority() - 1)) {
+                                        return new ValidationError(component, i18n.tr(
+                                                "This person is matured. According to regulations age of majority is {0}.", ageOfMajority()));
+                                    }
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                });
             }
         }
     }

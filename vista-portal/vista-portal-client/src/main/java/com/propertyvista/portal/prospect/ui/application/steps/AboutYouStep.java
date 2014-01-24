@@ -16,8 +16,13 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
@@ -76,4 +81,31 @@ public class AboutYouStep extends ApplicationWizardStep {
         }
     }
 
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        get(proto().applicant().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+            @Override
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                if (value != null && getValue() != null) {
+                    if (enforceAgeOfMajority()) {
+                        if (!TimeUtils.isOlderThan(value, ageOfMajority() - 1)) {
+                            return new ValidationError(component, i18n.tr(
+                                    "You are too young to be an Applicant or co-Applicant: the minimum age required is {0}.", ageOfMajority()));
+                        }
+                    }
+                }
+                return null;
+            }
+        });
+    }
+
+    public Integer ageOfMajority() {
+        return getWizard().getValue().ageOfMajority().getValue();
+    }
+
+    public boolean enforceAgeOfMajority() {
+        return getWizard().getValue().enforceAgeOfMajority().isBooleanTrue();
+    }
 }

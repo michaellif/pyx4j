@@ -759,6 +759,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 RestrictionsPolicy.class);
 
         to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+        to.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
         to.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
     }
 
