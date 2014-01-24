@@ -28,5 +28,4 @@ public class BusinessRules {
         Date needPreviousAddress = TimeUtils.createDate(now.getYear() - 3, now.getMonth(), now.getDate());
         return needPreviousAddress.before(currentAddressMoveInDate);
     }
-
 }

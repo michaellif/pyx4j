@@ -153,6 +153,5 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
             useLabelSemicolon(false);
             labelAlignment(Alignment.left);
         }
-
     }
 }
