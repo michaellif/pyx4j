@@ -16,6 +16,7 @@ package com.propertyvista.portal.resident.ui.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -34,6 +35,7 @@ import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -75,6 +77,31 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         super(MaintenanceRequestDTO.class, view, i18n.tr("New Maintenance Request"), i18n.tr("Submit"), ThemeColor.contrast5);
 
         addStep(createDetailsStep());
+    }
+
+    @Override
+    protected void onFinish() {
+        if (getValue() != null && //
+                getValue().reportedForOwnUnit().isBooleanTrue() && //
+                !getValue().permissionToEnter().isBooleanTrue() && //
+                !getValue().confirmedNoPermissionToEnter().isBooleanTrue() //
+        ) {
+            MessageDialog.confirm( //
+                    i18n.tr("Confirm 'No Entry'"), //
+                    i18n.tr("Please confirm that you do not wish to grant our staff Permission To Enter your apartment. " + //
+                            "<br>Please note that this may delay resolution of reported Issue. " + //
+                            "<br>Also, please be sure to provide your Preferred Date/Time for our visit." //
+                    ), //
+                    new Command() {
+                        @Override
+                        public void execute() {
+                            getValue().confirmedNoPermissionToEnter().setValue(true);
+                        }
+                    } //
+                    );
+        } else {
+            super.onFinish();
+        }
     }
 
     public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {

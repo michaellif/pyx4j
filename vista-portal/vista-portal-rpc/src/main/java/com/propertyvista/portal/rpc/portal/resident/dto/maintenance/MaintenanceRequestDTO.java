@@ -45,4 +45,6 @@ public interface MaintenanceRequestDTO extends MaintenanceRequest {
     IPrimitive<Time> scheduledTimeTo();
 
     IPrimitive<String> notePermissionToEnter();
+
+    IPrimitive<Boolean> confirmedNoPermissionToEnter();
 }
