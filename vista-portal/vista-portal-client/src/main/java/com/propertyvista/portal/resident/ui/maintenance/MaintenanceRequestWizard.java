@@ -89,8 +89,8 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             MessageDialog.confirm( //
                     i18n.tr("Confirm 'No Entry'"), //
                     i18n.tr("Please confirm that you do not wish to grant our staff Permission To Enter your apartment. " + //
-                            "<br>Please note that this may delay resolution of reported Issue. " + //
-                            "<br>Also, please be sure to provide your Preferred Date/Time for our visit." //
+                            "Please note that this may delay resolution of reported Issue. " + //
+                            "Also, please be sure to provide your Preferred Date/Time for our visit." //
                     ), //
                     new Command() {
                         @Override
