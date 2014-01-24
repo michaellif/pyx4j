@@ -160,7 +160,7 @@ public class PeopleStep extends ApplicationWizardStep {
                         if (value != null && getValue() != null) {
                             if (maturedOccupantsAreApplicants()) {
                                 if (!getValue().matured().getValue()) {
-                                    if (TimeUtils.isOlderThan(value, ageOfMajority() - 1)) {
+                                    if (TimeUtils.isOlderThan(value, ageOfMajority())) {
                                         return new ValidationError(component, i18n.tr(
                                                 "This person is matured. According to regulations age of majority is {0}.", ageOfMajority()));
                                     }

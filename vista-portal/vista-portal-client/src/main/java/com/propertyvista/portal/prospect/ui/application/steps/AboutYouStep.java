@@ -90,7 +90,7 @@ public class AboutYouStep extends ApplicationWizardStep {
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && getValue() != null) {
                     if (enforceAgeOfMajority()) {
-                        if (!TimeUtils.isOlderThan(value, ageOfMajority() - 1)) {
+                        if (!TimeUtils.isOlderThan(value, ageOfMajority())) {
                             return new ValidationError(component, i18n.tr(
                                     "You are too young to be an Applicant or co-Applicant: the minimum age required is {0}.", ageOfMajority()));
                         }

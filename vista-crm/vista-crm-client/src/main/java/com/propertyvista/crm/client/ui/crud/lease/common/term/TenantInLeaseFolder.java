@@ -292,7 +292,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     if (role != null && getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
                         if (getEnforceAgeOfMajority()) {
                             if (Role.resposible().contains(role)) {
-                                if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
+                                if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
                                     return new ValidationError(
                                             component,
                                             i18n.tr("This person is too young to be an tenant or co-tenant: the minimum age required is {0}. Please mark the person as Dependent instead.",
@@ -302,7 +302,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                         }
                         if (getMaturedOccupantsAreApplicants()) {
                             if (Role.Dependent == role) {
-                                if (TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
+                                if (TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
                                     return new ValidationError(component, i18n
                                             .tr("According to internal regulations and age this person cannot be a Dependent."));
                                 }

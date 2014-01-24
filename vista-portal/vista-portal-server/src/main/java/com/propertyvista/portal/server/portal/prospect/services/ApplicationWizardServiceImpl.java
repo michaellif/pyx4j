@@ -331,7 +331,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             // update matured/dependent states:
             if (!cap.birthDate().isNull()) {
                 Integer ageOfMajority = (to.ageOfMajority().isNull() ? 18 : to.ageOfMajority().getValue());
-                cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority - 1));
+                cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority));
             }
             // force dependency if needed:
             if (to.maturedOccupantsAreApplicants().isBooleanTrue()) {
