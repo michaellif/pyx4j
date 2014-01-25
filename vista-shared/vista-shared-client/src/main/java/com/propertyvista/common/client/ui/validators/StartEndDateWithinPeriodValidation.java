@@ -63,8 +63,9 @@ public class StartEndDateWithinPeriodValidation {
     }
 
     private static LogicalDate add(LogicalDate date, int months, int days) {
-        CalendarUtil.addMonthsToDate(date, months);
-        CalendarUtil.addDaysToDate(date, days);
-        return date;
+        LogicalDate result = new LogicalDate(date);
+        CalendarUtil.addMonthsToDate(result, months);
+        CalendarUtil.addDaysToDate(result, days);
+        return result;
     }
 }
