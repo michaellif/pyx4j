@@ -13,7 +13,7 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import java.util.Calendar;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -26,12 +26,12 @@ public class StartEndDateWithinPeriodValidation {
 
     private static final I18n i18n = I18n.get(StartEndDateWithinPeriodValidation.class);
 
-    public StartEndDateWithinPeriodValidation(final CComponent<LogicalDate> start, final CComponent<LogicalDate> end, int calendarField, int amount) {
-        this(start, end, calendarField, amount, null);
+    public StartEndDateWithinPeriodValidation(final CComponent<LogicalDate> start, final CComponent<LogicalDate> end, int months, int days) {
+        this(start, end, months, days, null);
     }
 
-    public StartEndDateWithinPeriodValidation(final CComponent<LogicalDate> start, final CComponent<LogicalDate> end, final int calendarField,
-            final int amount, String message) {
+    public StartEndDateWithinPeriodValidation(final CComponent<LogicalDate> start, final CComponent<LogicalDate> end, final int months, final int days,
+            String message) {
         if (message == null) {
             message = i18n.tr("The Start Date must be within Specified Period of the End Date");
         }
@@ -43,7 +43,7 @@ public class StartEndDateWithinPeriodValidation {
                 if (value == null || !end.isVisible() || end.getValue() == null) {
                     return null;
                 }
-                LogicalDate endDate = add(end.getValue(), calendarField, -amount);
+                LogicalDate endDate = add(end.getValue(), -months, -days);
                 return (!value.before(endDate) ? null : new ValidationError(component, msg));
             }
         });
@@ -55,18 +55,16 @@ public class StartEndDateWithinPeriodValidation {
                 if (value == null || !start.isVisible() || start.getValue() == null) {
                     return null;
                 }
-                LogicalDate startDate = add(start.getValue(), calendarField, amount);
+                LogicalDate startDate = add(start.getValue(), months, days);
                 return (!value.after(startDate) ? null : new ValidationError(component, msg));
             }
         });
         end.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(start));
     }
 
-    private static LogicalDate add(LogicalDate date, int calendarField, int amount) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(calendarField, amount);
-        return new LogicalDate(c.getTime());
+    private static LogicalDate add(LogicalDate date, int months, int days) {
+        CalendarUtil.addMonthsToDate(date, months);
+        CalendarUtil.addDaysToDate(date, days);
+        return date;
     }
-
 }

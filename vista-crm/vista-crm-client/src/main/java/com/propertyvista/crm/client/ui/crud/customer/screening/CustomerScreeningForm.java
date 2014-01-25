@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.screening;
 
-import java.util.Calendar;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
@@ -109,8 +107,8 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
                 i18n.tr("Move In date must be before Move Out date"));
 
         // ------------------------------------------------------------------------------------------------
-        new StartEndDateWithinPeriodValidation(previousAF.get(previousAF.proto().moveOutDate()), currentAF.get(currentAF.proto().moveInDate()), Calendar.MONTH,
-                1, i18n.tr("Current Move In date should be within 1 month of previous Move Out date"));
+        new StartEndDateWithinPeriodValidation(previousAF.get(previousAF.proto().moveOutDate()), currentAF.get(currentAF.proto().moveInDate()), 1, 0,
+                i18n.tr("Current Move In date should be within 1 month of previous Move Out date"));
     }
 
     private TwoColumnFlexFormPanel createIdentificationDocumentsTab(String title) {
