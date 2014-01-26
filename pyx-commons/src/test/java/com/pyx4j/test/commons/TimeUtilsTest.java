@@ -65,5 +65,7 @@ public class TimeUtilsTest extends TestCase {
 
         assertEquals(60, TimeUtils.durationParseSeconds("1 min"));
         assertEquals(70, TimeUtils.durationParseSeconds("1 min 10 sec"));
+        assertEquals(2 * 60 * 60, TimeUtils.durationParseSeconds("2 hours"));
+        assertEquals(2 * 60 * 60 + 1, TimeUtils.durationParseSeconds("2 hours 1 s"));
     }
 }

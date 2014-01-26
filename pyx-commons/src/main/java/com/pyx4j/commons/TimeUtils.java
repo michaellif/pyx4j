@@ -134,11 +134,15 @@ public class TimeUtils {
     public static int durationParseSeconds(String value) {
         Map<String, Integer> timeUnits = new LinkedHashMap<String, Integer>();
         timeUnits.put("months:month", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
-        timeUnits.put("seconds:second:sec:s", 1);
-        timeUnits.put("minutes:minute:min:m", Consts.MIN2SEC);
-        timeUnits.put("hours:hour:h", Consts.HOURS2SEC);
-        timeUnits.put("days:day:d", Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("seconds:second:sec", 1);
+        timeUnits.put("minutes:minute:min", Consts.MIN2SEC);
+        timeUnits.put("hours:hour", Consts.HOURS2SEC);
+        timeUnits.put("days:day", Consts.DAY2HOURS * Consts.HOURS2SEC);
 
+        timeUnits.put("s", 1);
+        timeUnits.put("m", Consts.MIN2SEC);
+        timeUnits.put("h", Consts.HOURS2SEC);
+        timeUnits.put("d", Consts.DAY2HOURS * Consts.HOURS2SEC);
         int seconds = 0;
 
         Collection<String> texts = SimpleRegExp.matches(value, "\\d+\\s*[a-zA-Z]*\\s*");
