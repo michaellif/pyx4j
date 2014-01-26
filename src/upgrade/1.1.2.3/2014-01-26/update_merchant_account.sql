@@ -29,7 +29,7 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-BEGIN TRANSACTION
+BEGIN TRANSACTION;
        
        SELECT * FROM _dba_.update_merchant_accounts();
 
