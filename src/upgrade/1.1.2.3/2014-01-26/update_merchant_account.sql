@@ -3,7 +3,7 @@
 ***
 ***             @version $Revision$ ($Author$) $Date$
 ***
-***             Rename metcap schema and remove all references
+***             Update merchant accounts
 ***
 ***     ======================================================================================================================
 **/
