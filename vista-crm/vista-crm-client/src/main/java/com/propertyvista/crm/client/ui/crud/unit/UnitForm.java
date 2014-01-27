@@ -22,7 +22,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
@@ -67,7 +66,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     public UnitForm(IForm<AptUnitDTO> view) {
         super(AptUnitDTO.class, view);
 
-        Tab tab = addTab(createGeneralTab(i18n.tr("General")));
+        Tab tab = addTab(createGeneralTab());
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
@@ -93,11 +92,11 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
 
         if (VistaFeatures.instance().yardiIntegration()) {
-            catalogMarketPricesPanel.setVisible(false);
+//            catalogMarketPricesPanel.setVisible(false);
             get(proto().financial()._marketRent()).setVisible(true);
         } else {
             get(proto().financial()._marketRent()).setVisible(!VistaFeatures.instance().productCatalog());
-            catalogMarketPricesPanel.setVisible(VistaFeatures.instance().productCatalog() && !getValue().building().defaultProductCatalog().isBooleanTrue());
+//            catalogMarketPricesPanel.setVisible(VistaFeatures.instance().productCatalog() && !getValue().building().defaultProductCatalog().isBooleanTrue());
         }
 
         updateSelectedLegalAddress();
@@ -111,58 +110,51 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         buildingLegalAddressLabel.setVisible(!ownedLegalAddress);
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab(String title) {
+    private TwoColumnFlexFormPanel createGeneralTab() {
 
-        int row = -1;
-        TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
-        left.setWidget(
-                ++row,
+        int leftRow = -1;
+
+        flexPanel.setWidget(
+                ++leftRow,
                 0,
                 new FormDecoratorBuilder(inject(proto().building(), isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
                         AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
 
-        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().floorplan(), new FloorplanSelectorHyperlink()), 20).build());
-        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
-        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().floorplan(), new FloorplanSelectorHyperlink()), 20).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
 
-        left.setBR(++row, 0, 1);
-        left.setWidget(
-                ++row,
+        flexPanel.setBR(++leftRow, 0, 1);
+        flexPanel.setWidget(
+                ++leftRow,
                 0,
                 new FormDecoratorBuilder(inject(proto().lease(), isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(
                         AppPlaceEntityMapper.resolvePlace(Lease.class))), 20).build());
-        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto()._availableForRent()), 9).build());
-        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
-        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto()._availableForRent()), 9).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
 
-        row = -1;
-        TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
-        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().floor()), 5).build());
-        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().number()), 5).build());
+        int rightRow = -1;
+        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info().floor()), 5).build());
+        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info().number()), 5).build());
 
-        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info()._bedrooms()), 5).build());
-        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info()._bathrooms()), 5).build());
+        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info()._bedrooms()), 5).build());
+        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info()._bathrooms()), 5).build());
 
-        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().area()), 8).build());
-        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
+        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info().area()), 8).build());
+        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
 
-        // form main panel from those two:
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
-
-        main.setWidget(0, 0, left);
-        main.setWidget(0, 1, right);
+        leftRow = Math.max(leftRow, rightRow);
 
         if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
-            catalogMarketPricesPanel.setH1(++row, 0, 1, proto().marketPrices().getMeta().getCaption());
-            catalogMarketPricesPanel.setWidget(++row, 0, 2, inject(proto().marketPrices(), new UnitServicePriceFolder()));
-            main.setWidget(1, 0, 2, catalogMarketPricesPanel);
+            catalogMarketPricesPanel.setH1(0, 0, 2, proto().marketPrices().getMeta().getCaption());
+            catalogMarketPricesPanel.setWidget(1, 0, 2, inject(proto().marketPrices(), new UnitServicePriceFolder()));
+            flexPanel.setWidget(++leftRow, 0, 2, catalogMarketPricesPanel);
         }
 
-        main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-        main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-
-        return main;
+        return flexPanel;
     }
 
     private BasicFlexFormPanel createLegalAddresslTab() {
