@@ -56,10 +56,9 @@ public class YardiUnitAvailabilityAdapter {
                 status.rentReadinessStatus().setValue(RentReadiness.RentReady);
             }
             if (comment.equals("RentReady=false")) {
-                status.rentReadinessStatus().setValue(RentReadiness.NeedsRepairs);
+                status.rentReadinessStatus().setValue(null);
             }
         }
         return status;
-
     }
 }
