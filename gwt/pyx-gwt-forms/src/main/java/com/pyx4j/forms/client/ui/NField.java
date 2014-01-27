@@ -261,10 +261,12 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             super();
             setStyleName(CComponentTheme.StyleName.FieldEditorPanel.name());
             getElement().getStyle().setProperty("display", "table");
+            setWidth("100%");
 
             editorHolder = new SimplePanel();
             editorHolder.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
             editorHolder.getElement().getStyle().setProperty("display", "table-cell");
+            editorHolder.setWidth("100%");
             add(editorHolder);
 
             groupFocusHandler = new GroupFocusHandler(this);

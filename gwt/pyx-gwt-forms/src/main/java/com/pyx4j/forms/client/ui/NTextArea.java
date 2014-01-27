@@ -37,7 +37,9 @@ public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<S
 
     @Override
     protected TextArea createEditor() {
-        return new TextArea();
+        TextArea textArea = new TextArea();
+        setWidth("100%");
+        return textArea;
     }
 
     @Override

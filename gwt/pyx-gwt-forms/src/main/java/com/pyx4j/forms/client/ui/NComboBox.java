@@ -53,7 +53,9 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
 
     @Override
     protected ListBox createEditor() {
-        return new ListBox();
+        ListBox listBox = new ListBox();
+        listBox.setWidth("100%");
+        return listBox;
     }
 
     @Override

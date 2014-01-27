@@ -160,6 +160,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         componentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
         componentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        componentHolder.setWidth(builder.componentWidth);
         componentHolder.add(nativeComponent);
 
         validationLabel = new Label();
