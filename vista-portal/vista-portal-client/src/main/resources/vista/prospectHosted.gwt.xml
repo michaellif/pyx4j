@@ -3,5 +3,5 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to="prospect">
     <inherits name='com.propertyvista.portal.ProspectPortal'/>
-    <set-property name="user.agent" value="safari,gecko1_8,ie6,ie8,ie9"/>
+    <set-property name="user.agent" value="safari,gecko1_8,ie8,ie9"/>
 </module>
