@@ -153,7 +153,7 @@ public class MerchantAccountProcessor {
             }
         });
 
-        if (retrievedAccount.merchantTerminalIdConvenienceFee().getValue().equals(model.merchantTerminalIdConvenienceFee().getValue())) {
+        if (!retrievedAccount.merchantTerminalIdConvenienceFee().equals(model.merchantTerminalIdConvenienceFee())) {
             retrievedAccount.merchantTerminalIdConvenienceFee().setValue(model.merchantTerminalIdConvenienceFee().getValue());
             retrievedAccount.setup().acceptedCreditCardConvenienceFee().setValue(!retrievedAccount.merchantTerminalIdConvenienceFee().isNull());
             ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, retrievedAccount);
@@ -219,7 +219,7 @@ public class MerchantAccountProcessor {
                 if (retrievedAccount.merchantTerminalId().getValue().equals(model.terminalId().getValue())) {
                     addStatus(model, "Terminal ID Record is not updated.");
 
-                    if (retrievedAccount.merchantTerminalIdConvenienceFee().getValue().equals(model.merchantTerminalIdConvenienceFee().getValue())) {
+                    if (!retrievedAccount.merchantTerminalIdConvenienceFee().equals(model.merchantTerminalIdConvenienceFee())) {
                         retrievedAccount.merchantTerminalIdConvenienceFee().setValue(model.merchantTerminalIdConvenienceFee().getValue());
                         addStatus(model, "Terminal ID Convenience Fee value updated.");
                         ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, retrievedAccount);
