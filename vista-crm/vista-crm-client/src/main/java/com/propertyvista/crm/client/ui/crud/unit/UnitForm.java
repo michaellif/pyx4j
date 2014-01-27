@@ -92,11 +92,11 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
 
         if (VistaFeatures.instance().yardiIntegration()) {
-//            catalogMarketPricesPanel.setVisible(false);
+            catalogMarketPricesPanel.setVisible(false);
             get(proto().financial()._marketRent()).setVisible(true);
         } else {
             get(proto().financial()._marketRent()).setVisible(!VistaFeatures.instance().productCatalog());
-//            catalogMarketPricesPanel.setVisible(VistaFeatures.instance().productCatalog() && !getValue().building().defaultProductCatalog().isBooleanTrue());
+            catalogMarketPricesPanel.setVisible(VistaFeatures.instance().productCatalog() && !getValue().building().defaultProductCatalog().isBooleanTrue());
         }
 
         updateSelectedLegalAddress();
