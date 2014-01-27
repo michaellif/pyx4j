@@ -87,20 +87,19 @@ public class PreauthorizedPaymentsCommons {
     // Internals:
 
     private static void fillCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
-        Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
 
         Lease lease = papDto.tenant().lease();
         LeaseProducts products = lease.currentTerm().version().leaseProducts();
         assert (products != null);
-        if (products.serviceItem().agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0 && !isCoveredItemExist(papDto, products.serviceItem())) {
+        if (/* products.serviceItem().agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0 && */!isCoveredItemExist(papDto, products.serviceItem())) {
             papDto.coveredItemsDTO().add(createCoveredItemDto(products.serviceItem(), lease, papDto.getPrimaryKey() == null));
         }
 
         for (BillableItem billableItem : products.featureItems()) {
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
             //@formatter:off
-            if (billableItem.agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0                                                                            // non-free
+            if (/*billableItem.agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0*/                                                                            // non-free
                 && !ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().code().type().getValue())                                       // recursive
                 && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
                 && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
@@ -160,7 +159,6 @@ public class PreauthorizedPaymentsCommons {
     }
 
     private static void updateCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
-        Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
 
         papDto.coveredItemsDTO().clear();
