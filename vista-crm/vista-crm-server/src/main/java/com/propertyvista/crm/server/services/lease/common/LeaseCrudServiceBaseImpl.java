@@ -29,11 +29,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.legal.LeaseLegalFacade;
 import com.propertyvista.biz.legal.N4ManagementFacade;
-import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
-import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
@@ -72,7 +70,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
 
         loadTenantInsurance(to);
-        loadRestrictions(to);
         loadCommunicationLetters(to);
         loadLegalStatus(to);
     }
@@ -113,13 +110,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     private void loadTenantInsurance(LeaseDTO lease) {
         Tenant tenantId = lease.currentTerm().version().tenants().get(0).leaseParticipant().<Tenant> createIdentityStub();
         lease.tenantInsuranceCertificates().addAll(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenantId, false));
-    }
-
-    protected void loadRestrictions(DTO lease) {
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), RestrictionsPolicy.class);
-        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-            lease.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-        }
     }
 
     private void loadCommunicationLetters(LeaseDTO lease) {

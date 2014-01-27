@@ -207,10 +207,11 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
                 @Override
                 public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                     if (getValue() != null && getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
-                        if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
-                            return new ValidationError(component, i18n.tr("The minimum age requirement for a guarantor is {0}.", getAgeOfMajority()));
+                        if (getEnforceAgeOfMajority()) {
+                            if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
+                                return new ValidationError(component, i18n.tr("The minimum age requirement for a guarantor is {0}.", getAgeOfMajority()));
+                            }
                         }
-
                     }
                     return null;
                 }

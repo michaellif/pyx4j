@@ -102,11 +102,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             get(proto().creationDate()).setVisible(false);
         }
 
-        CComponent<?> comp = get(proto().currentTerm().version().tenants());
-        ((TenantInLeaseFolder) comp).setAgeOfMajority(getValue().ageOfMajority().getValue());
-
         get(proto().currentLegalStatus()).setVisible(!(getValue().currentLegalStatus().isNull()));
-
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
@@ -214,7 +210,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // Tenants/Guarantors: ----------------------------------------------------------------------------------------------------------------------
         flexPanel.setH1(++leftRow, 0, 2, proto().currentTerm().version().tenants().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().tenants(), new TenantInLeaseFolder(getParentView())));
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().tenants(), new TenantInLeaseFolder()));
 
         flexPanel.setH1(++leftRow, 0, 2, proto().currentTerm().version().guarantors().getMeta().getCaption());
         flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder()));

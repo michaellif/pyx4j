@@ -308,7 +308,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         flexPanel.setH1(++leftRow, 0, 2, proto().version().tenants().getMeta().getCaption());
 
         TenantInLeaseFolder tf;
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(isEditable(), getParentView())));
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(isEditable())));
         tf.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
             @Override
             public void onValueChange(ValueChangeEvent<IList<LeaseTermTenant>> event) {
@@ -354,7 +354,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
-        setAgeRestrictions(getValue(), false);
+        setAgeRestrictions(getValue(), true);
     }
 
     @Override

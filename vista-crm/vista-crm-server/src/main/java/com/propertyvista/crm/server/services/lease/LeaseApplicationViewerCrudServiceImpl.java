@@ -31,7 +31,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
@@ -41,7 +40,6 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
-import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -100,20 +98,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         to.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(to.leaseApplication().onlineApplication()));
-    }
-
-    @Override
-    protected void loadRestrictions(LeaseApplicationDTO lease) {
-        RestrictionsPolicy restrictionsPolicy;
-        if (Lease.Status.isApplicationWithoutUnit(lease)) {
-            restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.leaseApplication().onlineApplication().building(),
-                    RestrictionsPolicy.class);
-        } else {
-            restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), RestrictionsPolicy.class);
-        }
-        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-            lease.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-        }
     }
 
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {

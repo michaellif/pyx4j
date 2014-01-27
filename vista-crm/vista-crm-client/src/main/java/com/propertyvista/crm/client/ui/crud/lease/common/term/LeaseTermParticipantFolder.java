@@ -34,6 +34,8 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     private Integer ageOfMajority;
 
+    private Boolean enforceAgeOfMajority = false;
+
     public LeaseTermParticipantFolder(Class<E> clazz, boolean modifiable) {
         super(clazz, modifiable);
         setOrderable(false);
@@ -47,13 +49,21 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
         return decor;
     }
 
+    public Integer getAgeOfMajority() {
+        return this.ageOfMajority;
+    }
+
     /** enables age of majority validation, pass <code>null</code> to disable validation */
     public void setAgeOfMajority(Integer ageOfMajority) {
         this.ageOfMajority = ageOfMajority;
     }
 
-    public Integer getAgeOfMajority() {
-        return this.ageOfMajority;
+    public Boolean getEnforceAgeOfMajority() {
+        return enforceAgeOfMajority;
+    }
+
+    public void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+        this.enforceAgeOfMajority = enforceAgeOfMajority;
     }
 
     @Override

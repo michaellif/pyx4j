@@ -41,7 +41,6 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -68,19 +67,14 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private boolean isPadEditable = false;
 
-    private final IPane parentView;
+    private Boolean maturedOccupantsAreApplicant = false;
 
-    private Boolean enforceAgeOfMajority;
-
-    private Boolean maturedOccupantsAreApplicants;
-
-    public TenantInLeaseFolder(IPane parentView) {
-        this(false, parentView);
+    public TenantInLeaseFolder() {
+        this(false);
     }
 
-    public TenantInLeaseFolder(boolean modifiable, IPane parentView) {
+    public TenantInLeaseFolder(boolean modifiable) {
         super(LeaseTermTenant.class, modifiable);
-        this.parentView = parentView;
     }
 
     public void setPadEditable(boolean isPadEditable) {
@@ -97,20 +91,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         return i18n.tr("Do you want to select existing Tenant?");
     }
 
-    public Boolean getEnforceAgeOfMajority() {
-        return enforceAgeOfMajority;
-    }
-
-    public void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
-        this.enforceAgeOfMajority = enforceAgeOfMajority;
-    }
-
     public Boolean getMaturedOccupantsAreApplicants() {
-        return maturedOccupantsAreApplicants;
+        return maturedOccupantsAreApplicant;
     }
 
     public void setMaturedOccupantsAreApplicants(Boolean maturedOccupantsAreApplicants) {
-        this.maturedOccupantsAreApplicants = maturedOccupantsAreApplicants;
+        this.maturedOccupantsAreApplicant = maturedOccupantsAreApplicants;
     }
 
     @Override
