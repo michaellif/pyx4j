@@ -395,10 +395,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             }
             setHTML(0, colIndex, headerText.toString());
 
-            if (!BrowserType.isIE()) {
-                getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
-            } else {
-                DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", columnDescriptor.getWidth());
+            String width = columnDescriptor.getWidth();
+            if (width != null) {
+                if (!BrowserType.isIE()) {
+                    getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
+                } else {
+                    DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", columnDescriptor.getWidth());
+                }
             }
 
             getCellFormatter().setWordWrap(0, colIndex, false);
