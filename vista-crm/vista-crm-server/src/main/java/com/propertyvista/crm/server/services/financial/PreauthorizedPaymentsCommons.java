@@ -92,7 +92,7 @@ public class PreauthorizedPaymentsCommons {
 
         Lease lease = papDto.tenant().lease();
         LeaseProducts products = lease.currentTerm().version().leaseProducts();
-
+        assert (products != null);
         if (products.serviceItem().agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0 && !isCoveredItemExist(papDto, products.serviceItem())) {
             papDto.coveredItemsDTO().add(createCoveredItemDto(products.serviceItem(), lease, papDto.getPrimaryKey() == null));
         }

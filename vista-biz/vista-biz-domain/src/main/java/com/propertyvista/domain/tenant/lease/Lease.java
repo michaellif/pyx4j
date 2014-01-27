@@ -123,7 +123,9 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
         }
 
         public static EnumSet<Status> noAutoPay() {
-            return EnumSet.of(Completed, Cancelled, Closed);
+            EnumSet<Status> result = EnumSet.of(Completed, Cancelled, Closed);
+            result.addAll(draft()); // disable, currently, draft leases auto pay. 
+            return result;
         }
 
         // states:
