@@ -130,6 +130,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorContentPanel);
+        style.addProperty("white-space", "nowrap");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorComponentHolder);
