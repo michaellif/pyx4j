@@ -29,8 +29,12 @@ public class BrowserType {
     };
 
     public static native boolean isIENative() /*-{
-                                              return ($doc.body.insertAdjacentHTML != null);
-                                              }-*/;
+                                                 return ($doc.body.insertAdjacentHTML != null);
+                                                 }-*/;
+
+    public static native boolean isIE11AndLaterNative() /*-{ 
+                                                        return !!window.MSStream; 
+                                                        }-*/;
 
     public native static boolean isFirefoxNative() /*-{
                                                    var agt = $wnd.navigator.userAgent.toLowerCase();
@@ -46,7 +50,7 @@ public class BrowserType {
     }
 
     public static final boolean isIE() {
-        return (impl.getType() == Browser.IE);
+        return (impl.getType() == Browser.IE) || (isFirefox() && isIE11AndLaterNative());
     }
 
     public static final boolean isOpera() {
@@ -66,7 +70,24 @@ public class BrowserType {
     }
 
     public static final String getCompiledType() {
-        return impl.getCompiledType();
+        StringBuilder b = new StringBuilder();
+        b.append(impl.getCompiledType());
+        if (isIE()) {
+            b.append(", isIE");
+            if (isIENative()) {
+                b.append(", isIENative");
+            }
+        }
+        if (isIE8()) {
+            b.append(", isIE8");
+        }
+        if (isIE10()) {
+            b.append(", isIE10");
+        }
+        if (isIE11()) {
+            b.append(", isIE11");
+        }
+        return b.toString();
     }
 
     private static Boolean isIE6;
@@ -76,6 +97,8 @@ public class BrowserType {
     private static Boolean isIE8;
 
     private static Boolean isIE10;
+
+    private static Boolean isIE11;
 
     private static Boolean isMobile;
 
@@ -105,6 +128,13 @@ public class BrowserType {
             isIE10 = isIE() && getUserAgent().toLowerCase().contains("msie 10");
         }
         return isIE10;
+    }
+
+    public static final boolean isIE11() {
+        if (isIE11 == null) {
+            isIE11 = isIE() && getUserAgent().toLowerCase().contains("trident/7");
+        }
+        return isIE11;
     }
 
     public static native boolean isIE8Native() /*-{
@@ -254,6 +284,25 @@ public class BrowserType {
         @Override
         public final String getCompiledType() {
             return "CompiledType#IE9";
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private static class ImplIE10 implements Impl {
+
+        @Override
+        public final Browser getType() {
+            return Browser.IE;
+        }
+
+        @Override
+        public float getVersion() {
+            return 10;
+        }
+
+        @Override
+        public final String getCompiledType() {
+            return "CompiledType#IE10";
         }
     }
 
