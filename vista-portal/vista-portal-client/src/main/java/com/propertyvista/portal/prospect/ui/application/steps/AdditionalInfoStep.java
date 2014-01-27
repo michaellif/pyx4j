@@ -36,6 +36,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
 
 public class AdditionalInfoStep extends ApplicationWizardStep {
@@ -140,16 +141,11 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().applicant().currentAddress().moveInDate().getValue()));
     }
 
-    class LegalQuestionWidgetDecoratorBuilder extends WidgetDecorator.Builder {
+    class LegalQuestionWidgetDecoratorBuilder extends RadioButtonGroupDecoratorBuilder {
 
         public LegalQuestionWidgetDecoratorBuilder(CComponent<?> component) {
             super(component);
             labelWidth("100%");
-            contentWidth(70 + "px");
-            componentWidth(70 + "px");
-            labelPosition(LabelPosition.top);
-            useLabelSemicolon(false);
-            labelAlignment(Alignment.left);
         }
     }
 }

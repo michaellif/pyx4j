@@ -37,6 +37,7 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
 
 public class PeopleStep extends ApplicationWizardStep {
 
@@ -116,8 +117,8 @@ public class PeopleStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().matured())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).build());
+                mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().matured())).build());
+                mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().dependent())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
@@ -147,10 +148,10 @@ public class PeopleStep extends ApplicationWizardStep {
                 super.onValueSet(populate);
 
                 get(proto().matured()).setVisible(maturedOccupantsAreApplicants());
-                get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
+//                get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
                 get(proto().birthDate()).setVisible(getValue().dependent().getValue());
 
-                get(proto().matured()).setTooltip(i18n.tr("Is age {0} or over?", ageOfMajority()));
+                get(proto().matured()).setTitle(i18n.tr("Is this occupant {0} or over?", ageOfMajority()));
             }
 
             @Override
