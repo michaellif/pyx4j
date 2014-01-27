@@ -667,7 +667,7 @@ public abstract class LeaseAbstractManager {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         // Verify the status
-        if (!lease.status().getValue().isDraft() || lease.status().getValue() != Status.Approved) {
+        if (!(lease.status().getValue().isDraft() || lease.status().getValue() == Status.Approved)) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
