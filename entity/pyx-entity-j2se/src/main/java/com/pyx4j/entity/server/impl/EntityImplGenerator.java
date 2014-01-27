@@ -158,7 +158,7 @@ public class EntityImplGenerator {
 
     public static void main(String[] args) {
         File target;
-        String classVersion = "1.6";
+        String classVersion = "1.7";
         if ((args != null) && (args.length > 0)) {
             target = new File(args[0]);
             if (args.length > 1) {
