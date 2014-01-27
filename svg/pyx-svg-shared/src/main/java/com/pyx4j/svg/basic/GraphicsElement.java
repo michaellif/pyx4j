@@ -1,5 +1,4 @@
 /*
-www.hotmail.com
  * Pyx4j framework
  * Copyright (C) 2008-2011 pyx4j.com.
  *
