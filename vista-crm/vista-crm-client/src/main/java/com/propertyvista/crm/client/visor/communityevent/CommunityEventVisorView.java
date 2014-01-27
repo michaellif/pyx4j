@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.visor.communityevent;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -63,6 +64,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
         form = new CommunityEventForm();
         form.initContent();
         SimplePanel contentPane = new SimplePanel();
+        contentPane.getElement().getStyle().setMargin(6, Unit.PX);
         contentPane.setWidget(form.asWidget());
         setContentPane(new ScrollPanel(contentPane));
     }
