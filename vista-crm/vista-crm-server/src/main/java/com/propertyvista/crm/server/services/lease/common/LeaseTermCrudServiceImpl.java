@@ -187,19 +187,20 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     private LeaseTermDTO setSelectedUnit(AptUnit unitId, LeaseTermDTO currentValue) {
-        ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue, unitId);
-        currentValue.building().set(currentValue.unit().building());
+        LeaseTermDTO result = EntityFactory.create(LeaseTermDTO.class);
+        result.set(ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue.duplicate(LeaseTerm.class), unitId).duplicate(LeaseTermDTO.class));
+        result.building().set(currentValue.unit().building());
 
-        loadDetachedProducts(currentValue);
+        loadDetachedProducts(result);
 
         // fill runtime editor data:
-        fillServiceEligibilityData(currentValue);
-        fillserviceItems(currentValue);
+        fillServiceEligibilityData(result);
+        fillserviceItems(result);
 
-        checkUnitMoveOut(currentValue);
-        setAgeRestrictions(currentValue);
+        checkUnitMoveOut(result);
+        setAgeRestrictions(result);
 
-        return currentValue;
+        return result;
     }
 
     @Override
@@ -208,14 +209,15 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             currentValue.lease().unit().set(currentValue.unit());
         }
 
-        ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId);
+        LeaseTermDTO result = EntityFactory.create(LeaseTermDTO.class);
+        result.set(ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId).duplicate(LeaseTermDTO.class));
 
-        loadDetachedProducts(currentValue);
+        loadDetachedProducts(result);
 
         // fill runtime editor data:
-        fillServiceEligibilityData(currentValue);
+        fillServiceEligibilityData(result);
 
-        callback.onSuccess(currentValue);
+        callback.onSuccess(result);
     }
 
     @Override

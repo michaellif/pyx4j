@@ -38,6 +38,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -269,7 +270,7 @@ public abstract class LeaseAbstractManager {
 
         // update lease deposits/unit rent if current term:
         Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
-        if (leaseTerm.equals(leaseTerm.lease().currentTerm())) {
+        if (VersionedEntityUtils.equalsIgnoreVersion(leaseTerm.lease().currentTerm(), leaseTerm)) {
             updateLeaseDeposits(leaseTerm.lease());
             updateUnitRentPrice(leaseTerm.lease());
 
@@ -740,6 +741,7 @@ public abstract class LeaseAbstractManager {
 
     private Lease setUnit(Lease lease, LeaseTerm leaseTerm, AptUnit unitId, boolean updateTermData) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm, AttachLevel.Attached);
 
         if (!Lease.Status.draft().contains(lease.status().getValue())) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
@@ -751,8 +753,9 @@ public abstract class LeaseAbstractManager {
         leaseTerm.unit().set(unit);
         setBuildingUtilities(leaseTerm);
 
-        if (leaseTerm.equals(lease.currentTerm())) {
+        if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
             lease.unit().set(unit);
+            leaseTerm.lease().set(lease);
 
             // set LeaseBillingPolicy offsets
             boolean policyFound = false;
@@ -783,9 +786,6 @@ public abstract class LeaseAbstractManager {
 
         // find/load all necessary ingredients:
         assert !lease.unit().isNull();
-        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
-
-        assert !lease.unit().building().isNull();
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
         ProductItem serviceItem = Persistence.service().retrieve(ProductItem.class, serviceId.getPrimaryKey());
@@ -803,7 +803,7 @@ public abstract class LeaseAbstractManager {
         BillableItem billableItem = createBillableItem(lease, serviceItem, node);
         leaseTerm.version().leaseProducts().serviceItem().set(billableItem);
 
-        if (leaseTerm.equals(lease.currentTerm())) {
+        if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
             if (!Lease.Status.draft().contains(lease.status().getValue())) {
                 throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
@@ -1135,7 +1135,6 @@ public abstract class LeaseAbstractManager {
     }
 
     protected LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm) {
-        Persistence.ensureRetrieve(leaseTerm.unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
 
