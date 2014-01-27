@@ -117,7 +117,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
             int row = -1;
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idType())).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().donotHave())).build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().donotHave())).componentWidth("auto").build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idNumber())).build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().notes())).build());
 

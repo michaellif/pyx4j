@@ -28,6 +28,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<IdentificationDocumentFile> {
 
@@ -59,7 +60,7 @@ public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     IdentificationDocumentFile.class));
 
-            main.setWidget(++row, 0, 1, inject(proto().file(), cfile));
+            main.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().file(), cfile)).customLabel("").labelWidth("0px").build());
 
             return main;
         }
