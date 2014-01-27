@@ -29,7 +29,13 @@
     </distributionManagement>
 
     <dependencies>
-
+        
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <optional>true</optional>
+        </dependency>
+        
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-shared</artifactId>
