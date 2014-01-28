@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.yardi.entity.ils.Availability;
@@ -29,8 +30,13 @@ import com.yardi.entity.mits.Uniteconstatusinfo;
 import com.yardi.entity.mits.Unitleasestatusinfo;
 import com.yardi.entity.mits.Unitoccpstatusinfo;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.gwt.server.DateUtils;
+
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 
 /**
  * The fixture in this test is based on experimenting with Yardi Voyager and data form ILS GUESTCARD INTERFACE v 2.0,
@@ -41,7 +47,7 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
  * when checkbox is set manually it doesn't update the 'unit status'
  * It's tested separately in special test, because it seems to be independent of other values.
  */
-
+@Ignore
 public class YardiUnitAvailabilityAdapterTest {
 
     private final ILSUnit VACANT_UNRENTED;
@@ -91,7 +97,7 @@ public class YardiUnitAvailabilityAdapterTest {
             VACANT_RENTED = new ILSUnit();
             Unit unit = new Unit();
             Information unitInformation = new Information();
-            unitInformation.setMarketRent(new BigDecimal("1000.00"));
+            unitInformation.setMarketRent(new BigDecimal("1111.00"));
             unitInformation.setUnitEcomomicStatus(Uniteconstatusinfo.RESIDENTIAL);
             unitInformation.setUnitOccupancyStatus(Unitoccpstatusinfo.VACANT);
             unitInformation.setUnitLeasedStatus(Unitleasestatusinfo.LEASED_RESERVED);
@@ -126,15 +132,15 @@ public class YardiUnitAvailabilityAdapterTest {
             unit.getInformation().add(unitInformation);
             ilsUnit.setUnit(unit);
 
-            Availability availability = new Availability();
+            Availability availability = new Availability(); // set to move out date from Voyager 
             availability.setVacancyClass("Occupied");
             VacateDate vacateDate = new VacateDate();
             vacateDate.setYear("2014");
             vacateDate.setMonth("1");
             vacateDate.setDay("31");
-
             availability.setVacateDate(vacateDate);
-            MadeReadyDate madeReadyDate = new MadeReadyDate();
+
+            MadeReadyDate madeReadyDate = new MadeReadyDate(); // set to available from date from Voyager
             madeReadyDate.setYear("2014");
             madeReadyDate.setMonth("2");
             madeReadyDate.setDay("1");
@@ -149,7 +155,7 @@ public class YardiUnitAvailabilityAdapterTest {
             ILSUnit ilsUnit = new ILSUnit();
             Unit unit = new Unit();
             Information unitInformation = new Information();
-            unitInformation.setMarketRent(new BigDecimal("888.00"));
+            unitInformation.setMarketRent(new BigDecimal("889.00"));
             unitInformation.setUnitEcomomicStatus(Uniteconstatusinfo.RESIDENTIAL);
             unitInformation.setUnitOccupancyStatus(Unitoccpstatusinfo.OCCUPIED);
             unitInformation.setUnitLeasedStatus(Unitleasestatusinfo.LEASED_RESERVED);
@@ -232,22 +238,103 @@ public class YardiUnitAvailabilityAdapterTest {
 
     @Test
     public void testVacancyStatus() {
-
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_UNRENTED);
+            Assert.assertEquals(Vacancy.Vacant, status.vacancyStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_RENTED);
+            Assert.assertEquals(Vacancy.Vacant, status.vacancyStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(OCCUPIED_NO_NOTICE);
+            Assert.assertEquals(null, status.vacancyStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_UNRENTED);
+            Assert.assertEquals(Vacancy.Notice, status.vacancyStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_RENTED);
+            Assert.assertEquals(Vacancy.Notice, status.vacancyStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(DOWN);
+            Assert.assertEquals(Vacancy.Vacant, status.vacancyStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(MODEL);
+            Assert.assertEquals(Vacancy.Vacant, status.vacancyStatus().getValue());
+        }
     }
 
     @Test
     public void testRentedStatus() {
-
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_UNRENTED);
+            Assert.assertEquals(RentedStatus.Unrented, status.rentedStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_RENTED);
+            Assert.assertEquals(RentedStatus.Rented, status.rentedStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(OCCUPIED_NO_NOTICE);
+            Assert.assertEquals(null, status.rentedStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_UNRENTED);
+            Assert.assertEquals(RentedStatus.Unrented, status.rentedStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_RENTED);
+            Assert.assertEquals(RentedStatus.Rented, status.rentedStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(DOWN);
+            Assert.assertEquals(RentedStatus.OffMarket, status.rentedStatus().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(MODEL);
+            Assert.assertEquals(RentedStatus.OffMarket, status.vacancyStatus().getValue());
+        }
     }
 
     @Test
     public void testUnitRent() {
-        // TODO
+        // TODO must be fetched out of the current lease?
     }
 
     @Test
     public void testMarketRent() {
-        // TODO 
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_UNRENTED);
+            Assert.assertEquals(new BigDecimal("1000.00"), status.marketRent().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_RENTED);
+            Assert.assertEquals(new BigDecimal("1111.00"), status.marketRent().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(OCCUPIED_NO_NOTICE);
+            Assert.assertEquals(new BigDecimal("999.00"), status.marketRent().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_UNRENTED);
+            Assert.assertEquals(new BigDecimal("888.00"), status.marketRent().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_RENTED);
+            Assert.assertEquals(new BigDecimal("889.00"), status.marketRent().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(DOWN);
+            Assert.assertEquals(new BigDecimal("777.00"), status.marketRent().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(MODEL);
+            Assert.assertEquals(new BigDecimal("666.00"), status.marketRent().getValue());
+        }
     }
 
     @Test
@@ -255,13 +342,43 @@ public class YardiUnitAvailabilityAdapterTest {
         // TODO 
     }
 
+    /**
+     * Applicable for 'Notice'
+     */
     @Test
     public void testRentEndDay() {
 
-        /*
-         * Applicable for 'Notice'
-         */
-        // TODO probably need to get this from lease 
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_UNRENTED);
+            Assert.assertEquals(null, status.rentEndDay().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_RENTED);
+            Assert.assertEquals(null, status.rentEndDay().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(OCCUPIED_NO_NOTICE);
+            Assert.assertEquals(null, status.rentEndDay().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_UNRENTED);
+            Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2014-01-31")), status.rentEndDay().getValue());
+        }
+
+        // TODO probably need to get this from lease
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_RENTED);
+            Assert.assertEquals(null, status.rentEndDay().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(DOWN);
+            Assert.assertEquals(null, status.rentEndDay().getValue());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(MODEL);
+            Assert.assertEquals(null, status.rentEndDay().getValue());
+        }
+
     }
 
     /**
@@ -269,17 +386,47 @@ public class YardiUnitAvailabilityAdapterTest {
      */
     @Test
     public void testVacantSince() {
-        // TODO
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_UNRENTED);
+            Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2014-01-31")), status.vacantSince().getValue());
+        }
+
+        // TODO maybe this information should be pulled from previous lease
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_RENTED);
+            Assert.assertEquals(null, status.vacantSince());
+        }
+
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(OCCUPIED_NO_NOTICE);
+            Assert.assertEquals(null, status.vacantSince());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_UNRENTED);
+            Assert.assertEquals(null, status.vacantSince());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_RENTED);
+            Assert.assertEquals(null, status.vacantSince());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(DOWN);
+            Assert.assertEquals(null, status.vacantSince());
+        }
+        {
+            UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(MODEL);
+            Assert.assertEquals(null, status.vacantSince());
+        }
     }
 
     @Test
     public void testRentedFromDay() {
-        // TODO
+        // TODO probably need to get that date from lease for 'RENTED' units
     }
 
     @Test
     public void testMoveInDay() {
-        // TODO 
+        // TODO probably need to get that date from lease for 'RENTED' units
     }
 
     public YardiUnitAvailabilityAdapter getAdapter() {
