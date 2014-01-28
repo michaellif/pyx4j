@@ -13,18 +13,20 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
+import java.io.IOException;
+
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm.TargetRole;
-import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
-public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<OnlineApplicationLegalPolicy> {
+public class OnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<OnlineApplicationLegalPolicy> {
 
-    public MockupOnlineApplicationPolicyPreloader() {
+    public OnlineApplicationPolicyPreloader() {
         super(OnlineApplicationLegalPolicy.class);
     }
 
@@ -33,24 +35,29 @@ public class MockupOnlineApplicationPolicyPreloader extends AbstractPolicyPreloa
         OnlineApplicationLegalPolicy policy = EntityFactory.create(OnlineApplicationLegalPolicy.class);
 
         // add legal terms
-        policy.terms().add(createTerm(SignatureFormat.None));
-        policy.terms().add(createTerm(SignatureFormat.AgreeBox));
-        policy.terms().add(createTerm(SignatureFormat.AgreeBoxAndFullName));
-        policy.terms().add(createTerm(SignatureFormat.FullName));
-        policy.terms().add(createTerm(SignatureFormat.Initials));
+        policy.terms().add(createTerm("Conditions of Acceptance of a Lease", "onlineApplicationTerm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.terms().add(createTerm("Consent to Lease", "onlineApplicationTerm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
 
         return policy;
     }
 
-    private OnlineApplicationLegalTerm createTerm(SignatureFormat format) {
+    public OnlineApplicationLegalTerm createTerm(String caption, String termsSourceFile, TargetRole role, SignatureFormat format) {
+
+        String termsContent;
+        try {
+            termsContent = IOUtils.getUTF8TextResource(termsSourceFile, LegalTermsPolicyPreloader.class);
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+        if (termsContent == null) {
+            throw new Error("Resource " + termsSourceFile + " not found to create " + caption);
+        }
+
         OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
-
+        term.title().setValue(caption);
+        term.body().setValue(termsContent);
+        term.applyToRole().setValue(role);
         term.signatureFormat().setValue(format);
-        term.applyToRole().setValue(TargetRole.All);
-        term.title().setValue(CommonsGenerator.lipsumShort());
-        term.body().setValue(CommonsGenerator.lipsum() + " <i>" + CommonsGenerator.lipsumShort() + "</i> " + CommonsGenerator.lipsum());
-
         return term;
     }
-
 }

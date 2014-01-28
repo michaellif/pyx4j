@@ -28,7 +28,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepo
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseSigningPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupOnlineApplicationPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.OnlineApplicationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProspectPortalPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.N4PolicyPreloader;
@@ -55,6 +55,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new AutoPayPolicyPreloader());
         add(new YardiInterfacePolicyPreloader());
         add(new N4PolicyPreloader());
+        add(new OnlineApplicationPolicyPreloader());
 
         if (!VistaTODO.Equifax_Off_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
@@ -71,7 +72,6 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new MockupDepositPolicyPreloader());
             add(new MockupLeaseAdjustmentPolicyPreloader());
             add(new MockupLeaseBillingPolicyPreloader());
-            add(new MockupOnlineApplicationPolicyPreloader());
             add(new MockupLeaseSigningPolicyPreloader());
             add(new MockupProspectPortalPolicyPreloader());
         }
