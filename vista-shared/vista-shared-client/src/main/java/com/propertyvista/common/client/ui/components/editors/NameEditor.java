@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -91,6 +92,11 @@ public class NameEditor extends CEntityForm<Name> {
     @Override
     public IsWidget createContent() {
         BasicFlexFormPanel main = (oneColumn ? new BasicFlexFormPanel() : new TwoColumnFlexFormPanel());
+        if (BrowserType.isIE()) {
+            // IE won't set table width based on the width of colgroup.col elements
+            // (see FormFlexPanelLeftColumn, FormFlexPanelRightColumn classes).
+            main.setWidth("90em");
+        }
         int row = -1;
         int col = (oneColumn ? 0 : 1);
         int span = (oneColumn ? 1 : 2);
