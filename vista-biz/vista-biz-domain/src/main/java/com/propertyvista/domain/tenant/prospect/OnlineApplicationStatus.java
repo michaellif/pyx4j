@@ -16,6 +16,8 @@ package com.propertyvista.domain.tenant.prospect;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -29,6 +31,7 @@ public interface OnlineApplicationStatus extends IEntity {
 
     IPrimitive<OnlineApplication.Status> status();
 
+    @Editor(type = EditorType.label)
     Customer customer();
 
     /**
