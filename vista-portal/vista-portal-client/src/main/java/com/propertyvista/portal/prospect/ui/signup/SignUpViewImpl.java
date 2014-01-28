@@ -24,6 +24,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
@@ -32,6 +33,8 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
     private static I18n i18n = I18n.get(SignUpViewImpl.class);
 
     private final SignUpGadget gadget;
+
+    private SignUpPresenter presenter;
 
     public SignUpViewImpl() {
 
@@ -66,7 +69,7 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
 
     @Override
     public void setPresenter(SignUpPresenter presenter) {
-
+        this.presenter = presenter;
     }
 
     @Override
@@ -77,6 +80,10 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
     @Override
     public void showValidationError(EntityValidationException caught) {
         gadget.showValidationError(caught);
+    }
+
+    public SignUpPresenter getPresenter() {
+        return presenter;
     }
 
 }

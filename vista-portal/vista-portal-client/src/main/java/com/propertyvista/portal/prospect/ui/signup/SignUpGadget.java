@@ -54,8 +54,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
     static final I18n i18n = I18n.get(SignUpGadget.class);
 
-    private SignUpPresenter presenter;
-
     private final SignUpForm signupForm;
 
     SignUpGadget(SignUpViewImpl view) {
@@ -131,7 +129,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
                     signupForm.revalidate();
                     signupForm.setUnconditionalValidationErrorRendering(true);
                     if (signupForm.isValid()) {
-                        presenter.signUp(signupForm.getValue());
+                        getGadgetView().getPresenter().signUp(signupForm.getValue());
                     }
                 }
             });
