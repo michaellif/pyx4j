@@ -126,7 +126,7 @@ public class ClientContext {
                         ClientContext.obtainAuthenticationData(null, null, true, null);
                     }
                 } else if (event.getSystemNotification() instanceof UserVisitChangedSystemNotification) {
-                    log.debug("Authorization Changed");
+                    log.debug("UserVisit Changed");
                     userVisit = ((UserVisitChangedSystemNotification) event.getSystemNotification()).getUserVisit();
                     if (userVisit != null) {
                         RPCManager.setUserVisitHashCode(userVisit.getServerSideHashCode());
