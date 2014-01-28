@@ -90,6 +90,7 @@ BEGIN
         ALTER TABLE legal_documentation DROP CONSTRAINT legal_documentation_node_discriminator_d_ck;
         ALTER TABLE master_online_application DROP CONSTRAINT master_online_application_status_e_ck;
         ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_node_discriminator_d_ck;
+        ALTER TABLE online_application DROP CONSTRAINT online_application_role_e_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_created_by_discr_d_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_details_discriminator_d_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_payment_type_e_ck;
@@ -271,8 +272,8 @@ BEGIN
                 location                        VARCHAR(500),
                 date                            DATE,
                 time                            TIME,
-                descriprion                     VARCHAR(2048),
-                building                        BIGINT,
+                description                     VARCHAR(2048),
+                building                        BIGINT                  NOT NULL,
                         CONSTRAINT community_event_pk PRIMARY KEY(id)
         );
         
@@ -627,10 +628,32 @@ BEGIN
         ALTER TABLE legal_letter RENAME COLUMN file_size TO file_file_size;
         ALTER TABLE legal_letter RENAME COLUMN updated_timestamp TO file_updated_timestamp;
         
+        ALTER TABLE legal_letter        ADD COLUMN cancellation_threshold NUMERIC(18,2),
+                                        ADD COLUMN is_active BOOLEAN,
+                                        ADD COLUMN termination_date DATE;
+        
         -- legal_letter_blob
         
         ALTER TABLE legal_letter_blob RENAME COLUMN content TO data;
         ALTER TABLE legal_letter_blob ADD COLUMN created TIMESTAMP;
+        
+        
+        -- legal_status
+        
+        CREATE TABLE legal_status
+        (
+                id                              BIGINT                  NOT NULL,
+                id_discriminator                VARCHAR(64)             NOT NULL,
+                lease                           BIGINT                  NOT NULL,
+                status                          VARCHAR(50),
+                details                         VARCHAR(500),
+                notes                           VARCHAR(500),
+                set_on                          TIMESTAMP,
+                set_by                          BIGINT,
+                        CONSTRAINT legal_status_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE legal_status OWNER TO vista;
         
         
         -- legal_terms_policy
@@ -661,7 +684,8 @@ BEGIN
         
         -- maintenance_request
         
-        ALTER TABLE maintenance_request ADD COLUMN phone_type VARCHAR(50);
+        ALTER TABLE maintenance_request         ADD COLUMN phone_type VARCHAR(50),
+                                                ADD COLUMN reported_date DATE;
         
         
         -- maintenance_request_category
@@ -701,6 +725,19 @@ BEGIN
         );
         
         ALTER TABLE maintenance_request_picture_blob OWNER TO vista;
+        
+        -- maintenance_request_policy
+        
+        CREATE TABLE maintenance_request_policy
+        (
+                id                              BIGINT                  NOT NULL,
+                node_discriminator              VARCHAR(50),
+                node                            BIGINT,
+                updated                         TIMESTAMP,
+                        CONSTRAINT maintenance_request_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_policy OWNER TO vista;
         
         -- marketing
         
@@ -855,6 +892,28 @@ BEGIN
         
         ALTER TABLE payment_record ADD COLUMN batch BIGINT;
         
+        -- payment_type_selection_policy
+        
+        ALTER TABLE payment_type_selection_policy       ADD COLUMN prospect_credit_card_master_card BOOLEAN,
+                                                        ADD COLUMN prospect_credit_card_visa BOOLEAN,
+                                                        ADD COLUMN prospect_direct_banking BOOLEAN,
+                                                        ADD COLUMN prospect_echeck BOOLEAN,
+                                                        ADD COLUMN prospect_interac BOOLEAN,
+                                                        ADD COLUMN prospect_visa_debit BOOLEAN;
+                                                        
+        -- permission_to_enter_note
+        
+        CREATE TABLE permission_to_enter_note
+        (
+                id                                      BIGINT                  NOT NULL,
+                locale                                  BIGINT,
+                policy                                  BIGINT                  NOT NULL,
+                text                                    VARCHAR(500),
+                order_by                                INT,
+                        CONSTRAINT permission_to_enter_note_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE permission_to_enter_note OWNER TO vista;
         
         -- pmc_company_info
         
@@ -968,6 +1027,11 @@ BEGIN
         );
         
         
+        -- restrictions_policy
+        
+        ALTER TABLE restrictions_policy RENAME COLUMN occupants_over18are_applicants TO matured_occupants_are_applicants;
+        
+        
         ALTER TABLE prospect_portal_policy OWNER TO vista;
         
         -- signed_online_application_legal_term
@@ -1007,17 +1071,33 @@ BEGIN
                 ||'     certificate_discriminator = d.certificate_discriminator '
                 ||'FROM '||v_schema_name||'.insurance_certificate_doc AS d '
                 ||'WHERE s.certificate_doc = d.id ';
+                
+                
+        -- maintenance_request
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request '
+                ||'SET  reported_date = submitted::date ';
         
         
         -- policy tables
         
         PERFORM * FROM _dba_.update_policy_tables(v_schema_name);
         
+        
+        -- restrictions_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
+                ||'SET  age_of_majority = 18 '
+                ||'WHERE age_of_majority IS NULL ';
+        
         -- tax
         
         EXECUTE 'UPDATE '||v_schema_name||'.tax '
                         ||'SET  policy_node_discriminator = ''Province'' '
                         ||'WHERE policy_node_discriminator = ''Disc_Province'' ';
+                        
+                        
+        SET CONSTRAINTS ALL IMMEDIATE;
         
         /**
         ***     ==========================================================================================================
@@ -1254,6 +1334,7 @@ BEGIN
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_tenant_fk FOREIGN KEY(lease_term_tenant) 
                 REFERENCES lease_term_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building ADD CONSTRAINT building_landlord_fk FOREIGN KEY(landlord) REFERENCES landlord(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE community_event ADD CONSTRAINT community_event_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE customer_signature ADD CONSTRAINT customer_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_owner_fk FOREIGN KEY(owner) 
                 REFERENCES identification_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1285,6 +1366,8 @@ BEGIN
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_value_fk FOREIGN KEY(value) REFERENCES building_utility(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_rental_criteria_guidelines_fk FOREIGN KEY(rental_criteria_guidelines) 
                 REFERENCES legal_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_status ADD CONSTRAINT legal_status_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_status ADD CONSTRAINT legal_status_set_by_fk FOREIGN KEY(set_by) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request_picture ADD CONSTRAINT maintenance_request_picture_maintenance_request_fk FOREIGN KEY(maintenance_request) 
                 REFERENCES maintenance_request(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1303,6 +1386,10 @@ BEGIN
         ALTER TABLE payment_posting_batch ADD CONSTRAINT payment_posting_batch_deposit_details_merchant_account_fk FOREIGN KEY(deposit_details_merchant_account) 
                 REFERENCES merchant_account(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_batch_fk FOREIGN KEY(batch) REFERENCES payment_posting_batch(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE permission_to_enter_note ADD CONSTRAINT permission_to_enter_note_locale_fk FOREIGN KEY(locale) 
+                REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE permission_to_enter_note ADD CONSTRAINT permission_to_enter_note_policy_fk FOREIGN KEY(policy) 
+                REFERENCES maintenance_request_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_company_info_fk FOREIGN KEY(company_info) 
                 REFERENCES pmc_company_info(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE product ADD CONSTRAINT product_code_fk FOREIGN KEY(code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1349,6 +1436,8 @@ BEGIN
                 'TenantInvitation'));
         ALTER TABLE email_templates_policy ADD CONSTRAINT email_templates_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE emergency_contact ADD CONSTRAINT emergency_contact_relationship_e_ck 
+                CHECK ((relationship) IN ('Aunt', 'Daughter', 'Father', 'Friend', 'Grandfather', 'Grandmother', 'Mother', 'Other', 'Son', 'Spouse', 'Uncle'));
         ALTER TABLE id_assignment_policy ADD CONSTRAINT id_assignment_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE ilsemail_config ADD CONSTRAINT ilsemail_config_frequency_e_ck CHECK ((frequency) IN ('daily', 'monthly', 'weekly'));
@@ -1368,8 +1457,13 @@ BEGIN
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE legal_status ADD CONSTRAINT legal_status_id_discriminator_ck CHECK (id_discriminator= 'LegalStatus');
+        ALTER TABLE legal_status ADD CONSTRAINT legal_status_status_e_ck 
+                CHECK ((status) IN ('HearingDate', 'L1', 'N4', 'None', 'Order', 'RequestToReviewOrder', 'SetAside', 'Sheriff', 'StayOrder'));
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_phone_type_e_ck CHECK ((phone_type) IN ('home', 'mobile', 'work'));
         ALTER TABLE maintenance_request_category ADD CONSTRAINT maintenance_request_category_type_e_ck CHECK ((type) IN ('Amenities', 'ApartmentUnit', 'Exterior'));
+        ALTER TABLE maintenance_request_policy ADD CONSTRAINT maintenance_request_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_status_e_ck 
                 CHECK ((status) IN ('Approved', 'Cancelled', 'Incomplete', 'InformationRequested', 'Submitted'));
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_node_discriminator_d_ck 
@@ -1383,19 +1477,22 @@ BEGIN
                 'parade', 'park', 'parkway', 'place', 'promenade', 'reserve', 'ridge', 'rise', 'road', 'row', 'square', 'street', 'strip', 'tarn', 'terrace', 
                 'thoroughfaree', 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
         ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
-                CHECK ((owner_discriminator) IN ('ARPolicy', 'AggregatedTransfer', 'AgreementLegalPolicy', 'ApplicationDocumentationPolicy', 'AptUnit', 
-                'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'Complex', 'DatesPolicy', 'DepositPolicy', 'EmailTemplatesPolicy', 
-                'Employee', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 'LeaseAdjustmentPolicy', 'LeaseBillingPolicy', 'LegalTermsPolicy', 
-                'Locker', 'MaintenanceRequest', 'MerchantAccount', 'N4Policy', 'OnlineAppPolicy', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 
-                'PaymentTypeSelectionPolicy', 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 
+                CHECK ((owner_discriminator) IN ('ARPolicy', 'AggregatedTransfer', 'AgreementLegalPolicy', 'ApplicationDocumentationPolicy', 
+                'AptUnit', 'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'Complex', 'DatesPolicy', 'DepositPolicy', 
+                'EmailTemplatesPolicy', 'Employee', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 'LeaseAdjustmentPolicy', 
+                'LeaseBillingPolicy', 'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 'MaintenanceRequestPolicy', 'MerchantAccount', 
+                'N4Policy', 'OnlineAppPolicy', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 'PaymentTypeSelectionPolicy', 
+                'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 
                 'YardiInterfacePolicy', 'feature', 'service'));
+        ALTER TABLE online_application ADD CONSTRAINT online_application_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
         ALTER TABLE online_application_legal_policy ADD CONSTRAINT online_application_legal_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE online_application_legal_term ADD CONSTRAINT online_application_legal_term_apply_to_role_e_ck CHECK ((apply_to_role) IN ('All', 'Applicant', 'Guarantor'));
         ALTER TABLE online_application_legal_term ADD CONSTRAINT online_application_legal_term_signature_format_e_ck 
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE online_application_wizard_step_status ADD CONSTRAINT online_application_wizard_step_status_step_e_ck 
-                CHECK ((step) IN ('AboutYou', 'AdditionalInfo', 'Contacts', 'Financial', 'Lease', 'Legal', 'Options', 'Payment', 'People', 'Summary', 'Unit'));
+                CHECK ((step) IN ('AboutYou', 'AdditionalInfo', 'Confirmation', 'Contacts', 'Financial', 'Lease', 'Legal', 'Options', 
+                'Payment', 'People', 'Summary', 'Unit'));
         ALTER TABLE payment_posting_batch ADD CONSTRAINT payment_posting_batch_created_by_discriminator_d_ck CHECK ((created_by_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE payment_posting_batch ADD CONSTRAINT payment_posting_batch_status_e_ck CHECK ((status) IN ('Canceled', 'Created', 'Posted'));
         ALTER TABLE payment_transactions_policy ADD CONSTRAINT payment_transactions_policy_node_discriminator_d_ck 
@@ -1442,6 +1539,7 @@ BEGIN
         CREATE INDEX ilssummary_floorplan_floorplan_idx ON ilssummary_floorplan USING btree (floorplan);
         CREATE INDEX lease_term_agreement_document_lease_term_v_idx ON lease_term_agreement_document USING btree (lease_term_v);
         CREATE INDEX payment_posting_batch_building_idx ON payment_posting_batch USING btree (building);
+        CREATE INDEX permission_to_enter_note_policy_idx ON permission_to_enter_note USING btree (policy);
 
 
         
