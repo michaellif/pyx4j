@@ -125,8 +125,8 @@ public class Visit implements Serializable {
     }
 
     void aclRevalidated() {
-        this.aclRevalidationTimeStamp = System.currentTimeMillis();
         this.changed = true;
+        this.aclRevalidationTimeStamp = System.currentTimeMillis();
     }
 
     public boolean isAclChanged() {
@@ -135,6 +135,7 @@ public class Visit implements Serializable {
 
     public void setAclChanged(boolean aclChanged) {
         this.aclChanged = aclChanged;
+        this.aclRevalidationTimeStamp = System.currentTimeMillis();
     }
 
     public String getSessionToken() {

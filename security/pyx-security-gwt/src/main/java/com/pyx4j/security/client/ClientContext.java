@@ -39,6 +39,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.client.ClientApplicationBackendConfig;
 import com.pyx4j.config.client.ClientApplicationVersion;
@@ -107,6 +108,8 @@ public class ClientContext {
 
     private static String sessionToken;
 
+    private static String clientAclTimeStamp;
+
     private static final Map<String, Object> attributes = new HashMap<String, Object>();
 
     private static ClientSystemInfo clientSystemInfo;
@@ -131,12 +134,17 @@ public class ClientContext {
                         break;
                     case syncRequired:
                         log.debug("Authorization sync Required");
+                        // Notification may be created inside "authenticate" call.
+                        // See if clientAclTimeStamp is updated by result of ongoing authenticate call. If it changes ignore the request
+                        final String startClientAclTimeStamp = clientAclTimeStamp;
                         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
                             @Override
                             public void execute() {
-                                if (isAuthenticated()) {
+                                if (isAuthenticated() && EqualsHelper.equals(startClientAclTimeStamp, clientAclTimeStamp)) {
                                     ClientContext.obtainAuthenticationData(null, null, true, null);
+                                } else {
+                                    log.debug("Authorization sync handled");
                                 }
                             }
                         });
@@ -278,7 +286,8 @@ public class ClientContext {
                 } else {
                     ClientContext.sessionToken = sessionToken;
                 }
-                RPCManager.setSessionToken(ClientContext.sessionToken, authenticationResponse.getAclTimeStamp());
+                clientAclTimeStamp = authenticationResponse.getAclTimeStamp();
+                RPCManager.setSessionToken(ClientContext.sessionToken, clientAclTimeStamp);
             }
             if (HTML5Storage.isSupported()) {
                 HTML5Storage.getLocalStorage().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
