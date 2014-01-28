@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.yardi.entity.ils.Availability;
@@ -47,7 +46,6 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
  * when checkbox is set manually it doesn't update the 'unit status'
  * It's tested separately in special test, because it seems to be independent of other values.
  */
-@Ignore
 public class YardiUnitAvailabilityAdapterTest {
 
     private final ILSUnit VACANT_UNRENTED;
@@ -83,8 +81,8 @@ public class YardiUnitAvailabilityAdapterTest {
             vacateDate.setYear("2014");
             vacateDate.setMonth("1");
             vacateDate.setDay("31");
-
             availability.setVacateDate(vacateDate);
+
             MadeReadyDate madeReadyDate = new MadeReadyDate();
             madeReadyDate.setYear("2014");
             madeReadyDate.setMonth("2");
@@ -189,7 +187,7 @@ public class YardiUnitAvailabilityAdapterTest {
             Unit unit = new Unit();
             Information unitInformation = new Information();
             unitInformation.setMarketRent(new BigDecimal("666.00"));
-            unitInformation.setUnitEcomomicStatus(Uniteconstatusinfo.DOWN);
+            unitInformation.setUnitEcomomicStatus(Uniteconstatusinfo.MODEL);
             unitInformation.setUnitOccupancyStatus(Unitoccpstatusinfo.VACANT);
             unitInformation.setUnitLeasedStatus(Unitleasestatusinfo.OTHER);
             unitInformation.setUnitLeasedStatusDescription("Non Revenue Generating Unit");
@@ -296,7 +294,7 @@ public class YardiUnitAvailabilityAdapterTest {
         }
         {
             UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(MODEL);
-            Assert.assertEquals(RentedStatus.OffMarket, status.vacancyStatus().getValue());
+            Assert.assertEquals(RentedStatus.OffMarket, status.rentedStatus().getValue());
         }
     }
 
@@ -394,28 +392,28 @@ public class YardiUnitAvailabilityAdapterTest {
         // TODO maybe this information should be pulled from previous lease
         {
             UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(VACANT_RENTED);
-            Assert.assertEquals(null, status.vacantSince());
+            Assert.assertEquals(null, status.vacantSince().getValue());
         }
 
         {
             UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(OCCUPIED_NO_NOTICE);
-            Assert.assertEquals(null, status.vacantSince());
+            Assert.assertEquals(null, status.vacantSince().getValue());
         }
         {
             UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_UNRENTED);
-            Assert.assertEquals(null, status.vacantSince());
+            Assert.assertEquals(null, status.vacantSince().getValue());
         }
         {
             UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(NOTICE_RENTED);
-            Assert.assertEquals(null, status.vacantSince());
+            Assert.assertEquals(null, status.vacantSince().getValue());
         }
         {
             UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(DOWN);
-            Assert.assertEquals(null, status.vacantSince());
+            Assert.assertEquals(null, status.vacantSince().getValue());
         }
         {
             UnitAvailabilityStatus status = getAdapter().extractAvailabilityStatus(MODEL);
-            Assert.assertEquals(null, status.vacantSince());
+            Assert.assertEquals(null, status.vacantSince().getValue());
         }
     }
 
@@ -429,7 +427,7 @@ public class YardiUnitAvailabilityAdapterTest {
         // TODO probably need to get that date from lease for 'RENTED' units
     }
 
-    public YardiUnitAvailabilityAdapter getAdapter() {
+    private YardiUnitAvailabilityAdapter getAdapter() {
         return new YardiUnitAvailabilityAdapter();
     }
 
