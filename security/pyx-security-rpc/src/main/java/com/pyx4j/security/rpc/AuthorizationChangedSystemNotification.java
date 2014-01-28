@@ -26,22 +26,31 @@ public class AuthorizationChangedSystemNotification implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private boolean sessionTerminated;
+    public enum ChangeType {
 
-    public AuthorizationChangedSystemNotification() {
-        setSessionTerminated(false);
+        sessionTerminated,
+
+        syncRequired,
+
+        behavioursChanged,
+
     }
 
-    public AuthorizationChangedSystemNotification(boolean sessionTerminated) {
-        setSessionTerminated(sessionTerminated);
+    private ChangeType changeType;
+
+    protected AuthorizationChangedSystemNotification() {
     }
 
-    public boolean isSessionTerminated() {
-        return sessionTerminated;
+    public AuthorizationChangedSystemNotification(ChangeType changeType) {
+        setChangeType(changeType);
     }
 
-    public void setSessionTerminated(boolean sessionTerminated) {
-        this.sessionTerminated = sessionTerminated;
+    public ChangeType getChangeType() {
+        return changeType;
+    }
+
+    public void setChangeType(ChangeType changeType) {
+        this.changeType = changeType;
     }
 
 }

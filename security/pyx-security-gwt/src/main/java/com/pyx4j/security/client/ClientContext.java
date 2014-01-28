@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -118,12 +120,26 @@ public class ClientContext {
             @Override
             public void onSystemNotificationReceived(SystemNotificationEvent event) {
                 if (event.getSystemNotification() instanceof AuthorizationChangedSystemNotification) {
-                    if (((AuthorizationChangedSystemNotification) event.getSystemNotification()).isSessionTerminated()) {
+                    switch (((AuthorizationChangedSystemNotification) event.getSystemNotification()).getChangeType()) {
+                    case sessionTerminated:
                         log.debug("Session terminated");
                         ClientContext.terminateSession();
-                    } else {
+                        break;
+                    case behavioursChanged:
                         log.debug("Authorization Changed");
                         ClientContext.obtainAuthenticationData(null, null, true, null);
+                        break;
+                    case syncRequired:
+                        log.debug("Authorization sync Required");
+                        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                            @Override
+                            public void execute() {
+                                if (isAuthenticated()) {
+                                    ClientContext.obtainAuthenticationData(null, null, true, null);
+                                }
+                            }
+                        });
                     }
                 } else if (event.getSystemNotification() instanceof UserVisitChangedSystemNotification) {
                     log.debug("UserVisit Changed");

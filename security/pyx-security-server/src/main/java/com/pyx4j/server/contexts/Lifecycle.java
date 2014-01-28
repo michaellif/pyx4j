@@ -45,6 +45,7 @@ import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
+import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification.ChangeType;
 import com.pyx4j.security.server.AclCreatorAllowAll;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
@@ -81,18 +82,18 @@ public class Lifecycle {
                                 visit.getAclTimeStamp());
                         if (behaviours == null) {
                             endSession(session);
-                            Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(true));
+                            Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.sessionTerminated));
                         } else {
                             Set<Behavior> assignedBehaviours = SecurityController.instance().getAllBehaviors(behaviours);
                             if (!EqualsHelper.equals(assignedBehaviours, visit.getAcl().getBehaviours())) {
                                 log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), assignedBehaviours);
                                 visit.beginSession(visit.getUserVisit(), SecurityController.instance().authorize(behaviours));
                                 visit.setAclChanged(true);
-                                Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+                                Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
                             } else {
                                 if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
                                     log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
-                                    Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+                                    Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.syncRequired));
                                 }
                                 visit.aclRevalidated();
                             }
@@ -184,7 +185,7 @@ public class Lifecycle {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(newBehaviours);
         beginSession(Context.getVisit().getUserVisit(), behaviors);
-        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
     }
 
     //TODO  Change the implementation to use Authorization functions

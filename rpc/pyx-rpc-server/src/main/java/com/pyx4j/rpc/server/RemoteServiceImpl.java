@@ -47,6 +47,7 @@ import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
+import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification.ChangeType;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
@@ -168,7 +169,7 @@ public class RemoteServiceImpl implements RemoteService {
                 return returnValue;
             } catch (Throwable e) {
                 if ((e instanceof SecurityViolationException) && (Context.getVisit() == null)) {
-                    Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(true));
+                    Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.sessionTerminated));
                 }
                 logOnce = false;
                 // Avoid duplicated log
