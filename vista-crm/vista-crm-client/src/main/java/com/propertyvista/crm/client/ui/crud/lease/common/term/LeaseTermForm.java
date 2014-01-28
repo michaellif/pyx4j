@@ -81,6 +81,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
@@ -122,14 +123,19 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
 
-                            filters.add(PropertyCriterion
-                                    .eq(proto().units().$().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
-                            filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                            LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
                             if (!currentValue.termFrom().isNull()) {
-                                filters.add(PropertyCriterion
-                                        .le(proto().units().$().unitOccupancySegments().$().dateFrom(), currentValue.termFrom().getValue()));
+                                dateFrom = currentValue.termFrom().getValue();
+                            }
+
+                            if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_unitOccupancySegments) {
+                                filters.add(PropertyCriterion.le(proto().units().$()._availableForRent(), dateFrom));
                             } else {
-                                filters.add(PropertyCriterion.le(proto().units().$().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+
+                                filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().status(),
+                                        AptUnitOccupancySegment.Status.available));
+                                filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                                filters.add(PropertyCriterion.le(proto().units().$().unitOccupancySegments().$().dateFrom(), dateFrom));
                             }
 
                             // TODO: filter by lease type also!!!
@@ -178,12 +184,17 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
 
-                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
-                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                            LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
                             if (!currentValue.termFrom().isNull()) {
-                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), currentValue.termFrom().getValue()));
+                                dateFrom = currentValue.termFrom().getValue();
+                            }
+
+                            if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_unitOccupancySegments) {
+                                filters.add(PropertyCriterion.le(proto()._availableForRent(), dateFrom));
                             } else {
-                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+                                filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
+                                filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), dateFrom));
                             }
 
                             // TODO: filter by lease type also!!!

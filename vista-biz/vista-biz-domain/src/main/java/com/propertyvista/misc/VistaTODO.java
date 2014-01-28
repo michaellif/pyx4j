@@ -67,4 +67,6 @@ public class VistaTODO {
 
     //VISTA-3995  this is temporary regulation in Canada;  TODO change when going to US
     public static boolean visaDebitHasConvenienceFee = false;
+
+    public static boolean yardi_unitOccupancySegments = true;
 }
