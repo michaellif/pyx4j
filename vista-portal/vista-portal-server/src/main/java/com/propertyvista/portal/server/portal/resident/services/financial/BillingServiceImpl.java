@@ -61,7 +61,7 @@ public class BillingServiceImpl implements BillingService {
 
         summary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
         if (!VistaFeatures.instance().yardiIntegration()) {
-            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
+            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(lease);
             summary.dueDate().setValue(bill.dueDate().getValue());
         }
         summary.leaseStatus().setValue(lease.status().getValue());
