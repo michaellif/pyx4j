@@ -47,6 +47,7 @@ public class PortalTheme extends Theme {
         initMenuBarStyles();
         initBackground();
         initMessageStyles();
+        initCellListStyle();
 
         addTheme(new PortalRootPaneTheme());
 
@@ -531,6 +532,39 @@ public class PortalTheme extends Theme {
         style.addProperty("color", "#0091DC");
         style.addProperty("text-align", "left");
         addStyle(style);
+    }
+
+    protected void initCellListStyle() {
+        // Available Selectors
+        // cellListWidget
+        // cellListEvenItem
+        // cellListOddItem
+        // cellListKeyboardSelectedItem
+        // cellListSelectedItem
+
+        Style style = new Style(".cellListWidget");
+        style.addProperty("background-color", ThemeColor.foreground, 0.01);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
+        addStyle(style);
+
+        style = new Style(".cellListEvenItem");
+        style.addProperty("color", ThemeColor.foreground, 0.9);
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        addStyle(style);
+
+        style = new Style(".cellListOddItem");
+        style.addProperty("background-color", ThemeColor.foreground, 0.05);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        addStyle(style);
+
+        style = new Style(".cellListSelectedItem");
+        style.addProperty("background-color", ThemeColor.foreground, 0.5);
+        style.addProperty("color", ThemeColor.foreground, 0);
+        addStyle(style);
+
     }
 
     @Override
