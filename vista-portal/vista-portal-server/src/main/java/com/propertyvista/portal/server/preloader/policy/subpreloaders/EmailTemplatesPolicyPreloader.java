@@ -419,7 +419,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "In order to make the transition as smooth as possible for you we have arranged an online portal for you to complete the signing of the lease, book your move-in date, setup your automatic payment withdrawals, along with other useful tips for your big moving day.<br/>"+ 
                 "<br/>" +
-                "You can use the same username and password that you have used during the application process to complete this process.<br/>"+ 
+                "You should use the same email and password that you have used during the application process to complete this process.<br/>"+ 
                 "<br/>" +
                 "In order to move to the next steps, click <b>[[{2}|here]]</b>.<br/>"+
                 "<br/>" +
