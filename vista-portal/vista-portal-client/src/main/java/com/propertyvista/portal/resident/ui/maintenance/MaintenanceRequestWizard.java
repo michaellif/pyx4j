@@ -156,6 +156,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             }
         };
         imageSlider.setImageSize(250, 240);
+        imageSlider.setOrganizerWidth(600);
         imagePanel.setWidget(0, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
         content.setWidget(++row, 0, imagePanel);
 
