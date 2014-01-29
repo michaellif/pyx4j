@@ -36,7 +36,7 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
     public void getPortalTerms(AsyncCallback<LegalTermsTO> callback) {
-        getVistaTerms(callback, VistaTerms.Target.VistaPortalTermsAndConditions);
+        getVistaTerms(callback, VistaTerms.Target.ResidentPortalTermsAndConditions);
     }
 
     @Override
@@ -65,18 +65,78 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
     }
 
     @Override
-    public void getProspectApplicantTerms(AsyncCallback<LegalTermsTO> callback) {
-        getVistaTerms(callback, VistaTerms.Target.ApplicantTermsAndConditions);
+    public void getPVProspectPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback) {
+        getVistaTerms(callback, VistaTerms.Target.ProspectPortalTermsAndConditions);
     }
 
     @Override
-    public void getProspectRentalCriteriaGuidelines(AsyncCallback<LegalTermsTO> callback) {
+    public void getPVProspectPortalPrivacyPolicy(AsyncCallback<LegalTermsTO> callback) {
+        getVistaTerms(callback, VistaTerms.Target.ProspectPortalPrivacyPolicy);
+    }
+
+    @Override
+    public void getPVResidentPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback) {
+        getVistaTerms(callback, VistaTerms.Target.ResidentPortalTermsAndConditions);
+    }
+
+    @Override
+    public void getPVResidentPortalPrivacyPolicy(AsyncCallback<LegalTermsTO> callback) {
+        getVistaTerms(callback, VistaTerms.Target.ResidentPortalPrivacyPolicy);
+    }
+
+    @Override
+    public void getPMCProspectPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback) {
         LegalTermsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                 Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), LegalTermsPolicy.class);
 
-        LegalTermsTO result = EntityFactory.create(LegalTermsTO.class);
-        result.caption().setValue(policy.residentPortalTermsAndConditions().caption().getValue());
-        result.content().setValue(policy.residentPortalTermsAndConditions().content().getValue());
+        LegalTermsTO result = null;
+        if (policy.prospectPortalTermsAndConditions().enabled().isBooleanTrue()) {
+            result = EntityFactory.create(LegalTermsTO.class);
+            result.caption().setValue(policy.prospectPortalTermsAndConditions().caption().getValue());
+            result.content().setValue(policy.prospectPortalTermsAndConditions().content().getValue());
+        }
+        callback.onSuccess(result);
+    }
+
+    @Override
+    public void getPMCProspectPortalPrivacyPolicy(AsyncCallback<LegalTermsTO> callback) {
+        LegalTermsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), LegalTermsPolicy.class);
+
+        LegalTermsTO result = null;
+        if (policy.prospectPortalPrivacyPolicy().enabled().isBooleanTrue()) {
+            result = EntityFactory.create(LegalTermsTO.class);
+            result.caption().setValue(policy.prospectPortalPrivacyPolicy().caption().getValue());
+            result.content().setValue(policy.prospectPortalPrivacyPolicy().content().getValue());
+        }
+        callback.onSuccess(result);
+    }
+
+    @Override
+    public void getPMCResidentPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback) {
+        LegalTermsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), LegalTermsPolicy.class);
+
+        LegalTermsTO result = null;
+        if (policy.residentPortalTermsAndConditions().enabled().isBooleanTrue()) {
+            result = EntityFactory.create(LegalTermsTO.class);
+            result.caption().setValue(policy.residentPortalTermsAndConditions().caption().getValue());
+            result.content().setValue(policy.residentPortalTermsAndConditions().content().getValue());
+        }
+        callback.onSuccess(result);
+    }
+
+    @Override
+    public void getPMCResidentPortalPrivacyPolicy(AsyncCallback<LegalTermsTO> callback) {
+        LegalTermsPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), LegalTermsPolicy.class);
+
+        LegalTermsTO result = null;
+        if (policy.residentPortalPrivacyPolicy().enabled().isBooleanTrue()) {
+            result = EntityFactory.create(LegalTermsTO.class);
+            result.caption().setValue(policy.residentPortalPrivacyPolicy().caption().getValue());
+            result.content().setValue(policy.residentPortalPrivacyPolicy().content().getValue());
+        }
         callback.onSuccess(result);
     }
 

@@ -66,9 +66,9 @@ public class PortalTermsActivity extends AbstractActivity {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantSurePreAuthorizedPaymentsAgreement(callback);
 // Prospect:            
         } else if (place instanceof ProspectPortalTerms.ApplicantTermsAndConditions) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getProspectApplicantTerms(callback);
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPVProspectPortalTermsAndConditions(callback);
         } else if (place instanceof ProspectPortalTerms.RentalCriteriaGuidelines) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getProspectRentalCriteriaGuidelines(callback);
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPMCProspectPortalTermsAndConditions(callback);
         }
 
         panel.setWidget(view);

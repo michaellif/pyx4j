@@ -43,14 +43,17 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html", "TODO name it SoleProprietorship");
         createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html", "TODO name it PaymentPad");
 
-        createTerms(Target.VistaPortalTermsAndConditions, "VistaPortalTermsAndConditions.html", "TODO name it portal");
+        createTerms(Target.ResidentPortalTermsAndConditions, "VistaPortalTermsAndConditions.html", "TODO name it portal");
 
         createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html", "TODO name it billing");
         createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "TenantPreAuthorizedPaymentECheckTerms.html", "TODO name it, ECheck");
         createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html", "TODO name it, Cards");
         createTerms(Target.TenantPaymentWebPaymentFeeTerms, "TenantPaymentWebPaymentFeeTerms.html", "Web Payment Fee - Terms and Conditions");
 
-        createTerms(Target.ApplicantTermsAndConditions, "ApplicantTermsAndConditions.html", "TODO Applicant T&C");
+        createTerms(Target.ProspectPortalTermsAndConditions, "ProspectPortalTermsAndConditions.html", "TODO Prospect Portal T&C");
+        createTerms(Target.ProspectPortalPrivacyPolicy, "ProspectPortalPrivacyPolicy.html", "TODO Prospect Portal Privacy Policy");
+        createTerms(Target.ResidentPortalTermsAndConditions, "ResidentPortalTermsAndConditions.html", "TODO Resident Portal T&C");
+        createTerms(Target.ResidentPortalPrivacyPolicy, "ResidentPortalPrivacyPolicy.html", "TODO Resident Portal Privacy Policy");
 
         createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html", "TODO TenantSure");
 

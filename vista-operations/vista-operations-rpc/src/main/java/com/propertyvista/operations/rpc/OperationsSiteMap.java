@@ -161,17 +161,31 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Vista Portal Terms And Conditions")
-        public static class TenantTerms extends VistaTermsAccess {
-            public TenantTerms() {
-                super(Target.VistaPortalTermsAndConditions);
+        @PlaceProperties(caption = "Resident Portal Terms And Conditions")
+        public static class ResidentPortalTermsAndConditions extends VistaTermsAccess {
+            public ResidentPortalTermsAndConditions() {
+                super(Target.ResidentPortalTermsAndConditions);
             }
         }
 
-        @PlaceProperties(caption = "Applicant Terms And Conditions")
-        public static class ApplicantTermsAndConditions extends VistaTermsAccess {
-            public ApplicantTermsAndConditions() {
-                super(Target.ApplicantTermsAndConditions);
+        @PlaceProperties(caption = "Resident Portal Privacy Policy")
+        public static class ResidentPortalPrivacyPolicy extends VistaTermsAccess {
+            public ResidentPortalPrivacyPolicy() {
+                super(Target.ResidentPortalPrivacyPolicy);
+            }
+        }
+
+        @PlaceProperties(caption = "Prospect Portal Terms And Conditions")
+        public static class ProspectPortalTermsAndConditions extends VistaTermsAccess {
+            public ProspectPortalTermsAndConditions() {
+                super(Target.ProspectPortalTermsAndConditions);
+            }
+        }
+
+        @PlaceProperties(caption = "Prospect Portal Privacy Policy")
+        public static class ProspectPortalPrivacyPolicy extends VistaTermsAccess {
+            public ProspectPortalPrivacyPolicy() {
+                super(Target.ProspectPortalPrivacyPolicy);
             }
         }
 

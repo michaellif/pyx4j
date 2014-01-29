@@ -21,9 +21,20 @@ import com.propertyvista.shared.rpc.LegalTermsTO;
 
 public interface PortalVistaTermsService extends IService {
 
+    @Deprecated
     void getPortalTerms(AsyncCallback<LegalTermsTO> callback);
 
     // ============== Resident ==============
+
+    void getPVResidentPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback);
+
+    void getPVResidentPortalPrivacyPolicy(AsyncCallback<LegalTermsTO> callback);
+
+    void getPMCResidentPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback);
+
+    void getPMCResidentPortalPrivacyPolicy(AsyncCallback<LegalTermsTO> callback);
+
+    // ---------------------------------------
 
     void getTenantBillingTerms(AsyncCallback<LegalTermsTO> callback);
 
@@ -37,8 +48,14 @@ public interface PortalVistaTermsService extends IService {
 
     // ============== Prospect ==============
 
-    void getProspectApplicantTerms(AsyncCallback<LegalTermsTO> callback);
+    void getPVProspectPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback);
 
-    void getProspectRentalCriteriaGuidelines(AsyncCallback<LegalTermsTO> callback);
+    void getPVProspectPortalPrivacyPolicy(AsyncCallback<LegalTermsTO> callback);
+
+    void getPMCProspectPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback);
+
+    void getPMCProspectPortalPrivacyPolicy(AsyncCallback<LegalTermsTO> callback);
+
+    // ---------------------------------------
 
 }
