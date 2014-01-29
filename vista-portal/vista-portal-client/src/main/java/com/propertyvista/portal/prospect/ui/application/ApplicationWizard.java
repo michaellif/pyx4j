@@ -147,6 +147,13 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     @Override
     protected boolean allowLeavingCurrentStep() {
+        int currentStepIndex = getSelectedIndex();
+        WizardStep currentStep = getSelectedStep();
+
+        if (currentStepIndex > -1) {
+            currentStep.showErrors(true);
+        }
+
         return true;
     }
 
