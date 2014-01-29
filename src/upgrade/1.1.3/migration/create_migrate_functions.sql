@@ -10,6 +10,8 @@
 
 CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_113(v_schema_name TEXT) RETURNS VOID AS
 $$
+DECLARE
+        v_rowcount      INT     := 0;
 BEGIN
         EXECUTE 'SET search_path = '||v_schema_name;
         
@@ -1084,6 +1086,7 @@ BEGIN
         PERFORM * FROM _dba_.update_policy_tables(v_schema_name);
         
         
+        
         -- restrictions_policy
         
         EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
@@ -1095,6 +1098,46 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.tax '
                         ||'SET  policy_node_discriminator = ''Province'' '
                         ||'WHERE policy_node_discriminator = ''Disc_Province'' ';
+                        
+                        
+        /**     
+        ***     ============================================================================================================
+        ***
+        ***             PRODUCT CATALOG MIGRATION 
+        ***
+        ***     ============================================================================================================
+        **/
+        
+        -- Insert into arcode - if necessary
+        
+        
+        
+        EXECUTE 'SELECT COUNT(id) '
+                ||'FROM '||v_schema_name||'.arcode '
+                ||'WHERE name = ''Residential'' '
+                INTO v_rowcount;
+                
+        IF (v_rowcount = 0) 
+        THEN
+                EXECUTE 'INSERT INTO '||v_schema_name||'.arcode (id,code_type,name,gl_code,updated,reserved) '
+                        ||'(SELECT nextval(''public.arcode_seq'') AS id, ''Residential'' AS code_type,'
+                        ||'''Residential'' AS name, id AS gl_code, '
+                        ||'DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated, ''FALSE'' AS reserved '
+                        ||'FROM '||v_schema_name||'.gl_code '
+                        ||'WHERE code_id = 5110 ) ';
+        END IF;                        
+                
+              
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
+                ||'SET  default_catalog_item = ''FALSE'', '
+                ||'     code = a.id '
+                ||'FROM '||v_schema_name||'.arcode AS a '
+                ||'WHERE a.name = ''Residential'' '
+                ||'AND  p.id_discriminator = ''Service'' ';
+       
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v '
+                ||'SET  price = 0.00 ';   
                         
                         
         SET CONSTRAINTS ALL IMMEDIATE;
@@ -1276,17 +1319,17 @@ BEGIN
         DROP TABLE payment_information;
         
         -- product
-        
+        /*
         ALTER TABLE product     DROP COLUMN code_type,
                                 DROP COLUMN is_default_catalog_item;
                                 
-                                
+        */                       
         -- product_item
-        
+        /*
         ALTER TABLE product_item        DROP COLUMN code,
                                         DROP COLUMN is_default;
         
-        
+        */
         -- proof_of_employment_document
         
         DROP TABLE proof_of_employment_document;
