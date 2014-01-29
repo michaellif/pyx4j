@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,7 +22,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class ExtraGadgetsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        CommunityEventCaption, CommunityEventTimeAndLocation,
+        CommunityEventCaption, CommunityEventTimeAndLocation, CommunityEventDescription,
 
         WeatherIcon, WeatherText, WeatherTemperature, WeatherType
 
@@ -38,6 +38,12 @@ public class ExtraGadgetsTheme extends Theme {
         style = new Style(".", StyleName.CommunityEventTimeAndLocation);
         style.addProperty("font-style", "italic");
         style.addProperty("font-size", "0.9em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.CommunityEventDescription);
+        style.addProperty("text-overflow", "ellipsis");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(".", StyleName.WeatherIcon);

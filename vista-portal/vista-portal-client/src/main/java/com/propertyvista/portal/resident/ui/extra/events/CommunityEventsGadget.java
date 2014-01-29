@@ -30,8 +30,6 @@ public class CommunityEventsGadget extends ExtraGadget<CommunityEventsGadgetDTO>
 
     private static final int MAX_EVENT_TO_SHOW = 3;
 
-    private static final int MAX_DESCRIPTION_LENGTH = 150;
-
     public CommunityEventsGadget(CommunityEventsGadgetDTO gadgetDTO) {
         super(gadgetDTO, i18n.tr("Upcoming Events"));
     }
@@ -51,7 +49,8 @@ public class CommunityEventsGadget extends ExtraGadget<CommunityEventsGadgetDTO>
             timeAndLocationHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventTimeAndLocation.name());
             panel.add(timeAndLocationHTML);
 
-            HTML descriptionHTML = new HTML(limitDescriptionLength(event));
+            HTML descriptionHTML = new HTML(event.description().getValue());
+            descriptionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventDescription.name());
             panel.add(descriptionHTML);
 
             if (++i > MAX_EVENT_TO_SHOW) {
@@ -60,14 +59,6 @@ public class CommunityEventsGadget extends ExtraGadget<CommunityEventsGadgetDTO>
         }
 
         return panel;
-    }
-
-    private static String limitDescriptionLength(CommunityEvent event) {
-        String description = event.description().getValue();
-        if (description != null && description.length() > MAX_DESCRIPTION_LENGTH) {
-            description = description.substring(0, MAX_DESCRIPTION_LENGTH);
-        }
-        return description;
     }
 
     private static String createDateAndLocation(CommunityEvent event) {
