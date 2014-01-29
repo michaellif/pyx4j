@@ -64,6 +64,7 @@ public class SiteViewTheme extends Theme {
         style.addProperty("border-right", "4px solid");
         style.addProperty("border-right-color", ThemeColor.object1);
         style.addProperty("line-height", "1.5em");
+        style.addProperty("white-space", "nowrap");
         addStyle(style);
 
         /*
