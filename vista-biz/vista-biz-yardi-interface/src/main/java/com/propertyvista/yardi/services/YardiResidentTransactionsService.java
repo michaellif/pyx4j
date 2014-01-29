@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -42,9 +43,11 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -59,8 +62,10 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
@@ -775,6 +780,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 for (ILSUnit ilsUnit : property.getILSUnit()) {
                     AptUnit aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
                     updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor);
+                    updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
                     executionMonitor.addProcessedEvent("Unit");
                 }
 
@@ -818,6 +824,51 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 return null;
             }
         });
+    }
+
+    private void updateAvailabilityReport(final AptUnit unit, final ILSUnit ilsUnit, ExecutionMonitor executionMonitor) {
+        final YardiUnitAvailabilityStatusAdapter unitAvailabilityStatusAdapter = new YardiUnitAvailabilityStatusAdapter();
+        try {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Throwable>() {
+                @Override
+                public Void execute() throws YardiServiceException {
+                    LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+
+                    UnitAvailabilityStatus currentAvailabilityStatus = retrieveCurrentAvailabilityStatus(unit);
+                    if (currentAvailabilityStatus.statusFrom().getValue().compareTo(today) == 0) {
+                        EntityQueryCriteria<UnitAvailabilityStatus> criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
+                        Persistence.service().delete(criteria);
+                    } else {
+                        GregorianCalendar cal = new GregorianCalendar();
+                        cal.setTime(today);
+                        cal.add(GregorianCalendar.DAY_OF_MONTH, -1);
+                        LogicalDate yesterday = new LogicalDate(cal.getTime());
+                        currentAvailabilityStatus.statusUntil().setValue(yesterday);
+                        Persistence.service().persist(currentAvailabilityStatus);
+                    }
+
+                    UnitAvailabilityStatus newAvailabilityStatus = unitAvailabilityStatusAdapter.extractAvailabilityStatus(ilsUnit);
+                    newAvailabilityStatus.statusFrom().setValue(today);
+                    newAvailabilityStatus.statusUntil().setValue(OccupancyFacade.MAX_DATE);
+                    unitAvailabilityStatusAdapter.mergeUnitInfo(newAvailabilityStatus, unit);
+                    Persistence.service().persist(newAvailabilityStatus);
+                    return null;
+                }
+
+            });
+            executionMonitor.addProcessedEvent("unit availability status", new BigDecimal(1));
+        } catch (Throwable e) {
+            executionMonitor.addFailedEvent("unit availability status", new BigDecimal(1));
+            log.error(SimpleMessageFormat.format("failed to import availability status for unit pk={0}", unit.getPrimaryKey()), e);
+        }
+    }
+
+    private UnitAvailabilityStatus retrieveCurrentAvailabilityStatus(AptUnit unit) {
+        EntityQueryCriteria<UnitAvailabilityStatus> criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
+        criteria.eq(criteria.proto().unit(), unit);
+        criteria.eq(criteria.proto().statusUntil(), OccupancyFacade.MAX_DATE);
+        UnitAvailabilityStatus status = Persistence.service().retrieve(criteria);
+        return status;
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {

@@ -46,7 +46,7 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
  * when checkbox is set manually it doesn't update the 'unit status'
  * It's tested separately in special test, because it seems to be independent of other values.
  */
-public class YardiUnitAvailabilityAdapterTest {
+public class YardiUnitAvailabilityStatusAdapterTest {
 
     private final ILSUnit VACANT_UNRENTED;
 
@@ -62,7 +62,7 @@ public class YardiUnitAvailabilityAdapterTest {
 
     private ILSUnit MODEL;
 
-    public YardiUnitAvailabilityAdapterTest() {
+    public YardiUnitAvailabilityStatusAdapterTest() {
         {
 
             VACANT_UNRENTED = new ILSUnit();
@@ -427,8 +427,8 @@ public class YardiUnitAvailabilityAdapterTest {
         // TODO probably need to get that date from lease for 'RENTED' units
     }
 
-    private YardiUnitAvailabilityAdapter getAdapter() {
-        return new YardiUnitAvailabilityAdapter();
+    private YardiUnitAvailabilityStatusAdapter getAdapter() {
+        return new YardiUnitAvailabilityStatusAdapter();
     }
 
 }

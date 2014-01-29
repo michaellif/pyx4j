@@ -22,15 +22,18 @@ import com.yardi.entity.mits.Unitleasestatusinfo;
 import com.yardi.entity.mits.Unitoccpstatusinfo;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 /** Converts Yardi Unit Availability to Vista Unit Availability Status */
-public class YardiUnitAvailabilityAdapter {
+public class YardiUnitAvailabilityStatusAdapter {
 
     public UnitAvailabilityStatus extractAvailabilityStatus(ILSUnit unit) {
         UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
@@ -100,5 +103,24 @@ public class YardiUnitAvailabilityAdapter {
 
         return status;
 
+    }
+
+    public void mergeUnitInfo(UnitAvailabilityStatus status, AptUnit unitId) {
+        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey());
+        Persistence.ensureRetrieve(unit.building(), AttachLevel.IdOnly);
+        Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.IdOnly);
+        status.unit().set(unit);
+        status.building().set(unit);
+        status.floorplan().set(unit.floorplan());
+    }
+
+    /**
+     * Attempt to fill lease related info of the availability status (like move-in, move out dates or actual rent) for the given status.
+     * 
+     * @param status
+     *            must containt reference to partent unitunit reference
+     */
+    public void mergeLeaseInfo(UnitAvailabilityStatus status) {
+        // TODO 
     }
 }
