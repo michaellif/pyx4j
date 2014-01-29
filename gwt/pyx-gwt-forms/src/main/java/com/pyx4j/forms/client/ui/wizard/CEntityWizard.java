@@ -139,7 +139,6 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         if (allowLeavingCurrentStep()) {
             WizardStep previousStep = getSelectedStep();
             WizardStep step = wizardPanel.getStep(index);
-            step.showErrors(false);
             wizardPanel.showStep(step);
             updateProgress(step, previousStep);
         }

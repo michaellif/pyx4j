@@ -55,7 +55,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName;
 import com.pyx4j.forms.client.validators.IValidatable;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 
 public class BasicFlexFormPanel extends FlexTable implements IValidatable {
@@ -200,16 +199,8 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
         for (CComponent<?> component : locateCComponents(this)) {
-            if (component.isUnconditionalValidationErrorRendering()) {
+            if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
                 results.appendValidationErrors(component.getValidationResults());
-            } else {
-                ArrayList<ValidationError> errors = component.getValidationResults().getValidationErrors();
-                for (ValidationError validationError : errors) {
-                    CComponent<?> originator = validationError.getOriginator();
-                    if ((originator.isUnconditionalValidationErrorRendering() || originator.isVisited()) && !originator.isValid()) {
-                        results.appendValidationError(validationError);
-                    }
-                }
             }
         }
         return results;
@@ -221,5 +212,4 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
             component.setUnconditionalValidationErrorRendering(show);
         }
     }
-
 }
