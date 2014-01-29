@@ -62,7 +62,7 @@ public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDefe
         try {
             Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
             byte[] pdfBytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(
-                    ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(lease.currentTerm(), true), createDraft);
+                    ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(lease.currentTerm(), true, createDraft));
             Downloadable d = new Downloadable(pdfBytes, MimeMap.getContentType(DownloadFormat.PDF));
             fileName = "blank-lease-agreement.pdf";
             d.save(fileName);

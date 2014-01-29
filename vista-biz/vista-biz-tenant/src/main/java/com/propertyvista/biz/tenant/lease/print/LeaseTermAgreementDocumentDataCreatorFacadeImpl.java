@@ -13,9 +13,13 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.AttachLevel;
@@ -43,7 +47,7 @@ import com.propertyvista.server.common.util.AddressRetriever;
 public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTermAgreementDocumentDataCreatorFacade {
 
     @Override
-    public LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, boolean blankSignatures) {
+    public LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, boolean blankSignatures, boolean draft) {
         Persistence.service().retrieve(leaseTerm.lease());
         Persistence.service().retrieve(leaseTerm.version().tenants());
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
@@ -75,13 +79,28 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
             leaseAgreementData.landlordLogo().setValue((blob.data().getValue()));
         }
 
-        leaseAgreementData.applicants().addAll(makeApplicants(leaseTerm));
+        if (!draft) {
+            leaseAgreementData.applicants().addAll(makeApplicants(leaseTerm));
+        }
         leaseAgreementData.terms().add(makeOccupantsTerm(leaseTerm));
         leaseAgreementData.terms().add(makePremisesTerm(AddressRetriever.getUnitLegalAddress(leaseTerm.lease().unit())));
         leaseAgreementData.terms().add(makeTermTerm(leaseTerm));
         leaseAgreementData.terms().add(makeRentTerm(leaseTerm));
         leaseAgreementData.terms().addAll(makeTermsForPrint(leaseTerm, blankSignatures));
 
+        if (draft) {
+            byte[] watermarkBytes;
+            InputStream is = null;
+            try {
+                is = LeaseTermAgreementDocumentDataCreatorFacadeImpl.class.getResourceAsStream("draft-watermark.png");
+                watermarkBytes = IOUtils.toByteArray(is);
+            } catch (IOException e) {
+                throw new RuntimeException("failed to load draft watermark image", e);
+            } finally {
+                com.pyx4j.gwt.server.IOUtils.closeQuietly(is);
+            }
+            leaseAgreementData.leaseAgreementBackground().setValue(watermarkBytes);
+        }
         return leaseAgreementData;
     }
 

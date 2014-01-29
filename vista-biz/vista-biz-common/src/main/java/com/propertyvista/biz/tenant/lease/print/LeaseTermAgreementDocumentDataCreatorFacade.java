@@ -18,6 +18,6 @@ import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 
 public interface LeaseTermAgreementDocumentDataCreatorFacade {
 
-    LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, boolean blankSignatures);
+    LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, boolean blankSignatures, boolean draft);
 
 }

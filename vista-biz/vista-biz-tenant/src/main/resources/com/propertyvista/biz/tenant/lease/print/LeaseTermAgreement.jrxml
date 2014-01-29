@@ -6,7 +6,7 @@
 	<parameter name="landlordName" class="java.lang.String"/>
 	<parameter name="landlordAddress" class="java.lang.String"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
-	<parameter name="backgroundImage" class="java.io.InputStream"/>
+	<parameter name="backgroundImage" class="java.io.InputStream"/>   
 	<parameter name="applicants" class="com.pyx4j.entity.core.IList"/>
 	<field name="body" class="java.lang.String"/>
 	<field name="title" class="java.lang.String"/>
@@ -17,8 +17,7 @@
 		<initialValueExpression><![CDATA[1]]></initialValueExpression>
 	</variable>
 	<background>
-		<band height="750" splitType="Stretch">
-            <printWhenExpression><![CDATA[$P{backgroundImage} != null]]></printWhenExpression>
+		<band height="750" splitType="Stretch">            
 			<image scaleImage="FillFrame" hAlign="Right" vAlign="Top">
 				<reportElement x="0" y="0" width="572" height="750"/>
 				<imageExpression><![CDATA[$P{backgroundImage}]]></imageExpression>

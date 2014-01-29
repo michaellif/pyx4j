@@ -14,13 +14,9 @@
 package com.propertyvista.biz.tenant.lease.print;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
 
 import com.sun.xml.messaging.saaj.util.ByteOutputStream;
 
@@ -34,7 +30,7 @@ import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 public class LeaseTermAgreementPdfCreatorFacadeImpl implements LeaseTermAgreementPdfCreatorFacade {
 
     @Override
-    public byte[] createPdf(LeaseAgreementDocumentDataDTO agreementData, boolean createDraft) {
+    public byte[] createPdf(LeaseAgreementDocumentDataDTO agreementData) {
         Map<String, Object> params = new HashMap<String, Object>();
 
         params.put("landlordName", agreementData.landlordName().getValue());
@@ -42,18 +38,8 @@ public class LeaseTermAgreementPdfCreatorFacadeImpl implements LeaseTermAgreemen
         if (agreementData.landlordLogo().getValue() != null) {
             params.put("landlordLogo", new ByteArrayInputStream(agreementData.landlordLogo().getValue()));
         }
-        if (createDraft) {
-            InputStream watermakStream = LeaseTermAgreementDocumentDataCreatorFacadeImpl.class.getResourceAsStream("draft-watermark.png");
-            byte[] watermarkBytes;
-            try {
-                watermarkBytes = IOUtils.toByteArray(watermakStream);
-                params.put("backgroundImage", new ByteArrayInputStream(watermarkBytes));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } finally {
-                com.pyx4j.gwt.server.IOUtils.closeQuietly(watermakStream);
-            }
-
+        if (agreementData.leaseAgreementBackground().getValue() != null) {
+            params.put("backgroundImage", new ByteArrayInputStream(agreementData.leaseAgreementBackground().getValue()));
         }
 
         params.put("applicants", agreementData.applicants());

@@ -31,4 +31,5 @@ public interface LeaseAgreementDocumentDataDTO extends IEntity {
 
     IList<LeaseAgreementDocumentLegalTerm4PrintDTO> terms();
 
+    IPrimitive<byte[]> leaseAgreementBackground();
 }

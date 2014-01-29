@@ -49,7 +49,7 @@ public class CreateMockLeaseTermAgreementPdf {
         leaseAgreementData.terms().add(makeMockAgreementTerm(10, makeMockSignatures(SignatureFormat.AgreeBoxAndFullName, 2), null));
         leaseAgreementData.terms().add(makeMockAgreementTerm(10, null, makeMockSignaturePlaceholdedrs(3)));
 
-        byte[] bytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(leaseAgreementData, true);
+        byte[] bytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(leaseAgreementData);
 
         FileOutputStream fos = null;
         try {

@@ -17,5 +17,5 @@ import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 
 public interface LeaseTermAgreementPdfCreatorFacade {
 
-    byte[] createPdf(LeaseAgreementDocumentDataDTO agreementData, boolean createDraft);
+    byte[] createPdf(LeaseAgreementDocumentDataDTO agreementData);
 }
