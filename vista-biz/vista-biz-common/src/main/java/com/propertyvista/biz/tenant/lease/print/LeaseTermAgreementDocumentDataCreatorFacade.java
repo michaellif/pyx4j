@@ -18,6 +18,14 @@ import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 
 public interface LeaseTermAgreementDocumentDataCreatorFacade {
 
-    LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, boolean blankSignatures, boolean draft);
+    /**
+     * Prepares data that is required for printout of hard copy of 'lease term agreement'
+     * 
+     * @param leaseTerm
+     * @param singaturePlaceholders
+     * @param isDraft
+     * @return
+     */
+    LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, boolean singaturePlaceholders, boolean isDraft);
 
 }
