@@ -27,6 +27,8 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
+import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
+import com.propertyvista.portal.prospect.ui.application.steps.AdditionalInfoStep;
 import com.propertyvista.portal.prospect.ui.application.steps.ConfirmationStep;
 import com.propertyvista.portal.prospect.ui.application.steps.ContactsStep;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
@@ -35,8 +37,6 @@ import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
 import com.propertyvista.portal.prospect.ui.application.steps.OptionsStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PaymentStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
-import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
-import com.propertyvista.portal.prospect.ui.application.steps.AdditionalInfoStep;
 import com.propertyvista.portal.prospect.ui.application.steps.UnitStep;
 import com.propertyvista.portal.prospect.ui.application.steps.summary.SummaryStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
@@ -65,7 +65,12 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new AdditionalInfoStep());
             addStep(new FinancialStep());
             addStep(new ContactsStep());
-            addStep(new LegalStep());
+            addStep(new LegalStep() {
+                @Override
+                public void onDownloadLeaseAgreementDraft() {
+                    ApplicationWizard.this.presenter.downloadLeaseAgreementDraft();
+                }
+            });
             addStep(new SummaryStep());
             addStep(new PaymentStep());
             addStep(new ConfirmationStep());
@@ -77,7 +82,12 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
                 addStep(new ContactsStep());
             }
-            addStep(new LegalStep());
+            addStep(new LegalStep() {
+                @Override
+                public void onDownloadLeaseAgreementDraft() {
+                    ApplicationWizard.this.presenter.downloadLeaseAgreementDraft();
+                }
+            });
             addStep(new SummaryStep());
             addStep(new ConfirmationStep());
         }

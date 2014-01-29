@@ -44,14 +44,13 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public void execute() {
-        //TODO Do actual blob creation
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() {
                 try {
                     byte[] agreementPdf = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(
-                            ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(leaseTerm, false));
+                            ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(leaseTerm, false), false);
                     saveBlob(agreementPdf);
                 } catch (Throwable e) {
                     throw new RuntimeException(e);

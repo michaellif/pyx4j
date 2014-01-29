@@ -33,6 +33,8 @@ public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO>
         void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unit);
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
+
+        void downloadLeaseAgreementDraft();
     }
 
     ApplicationWizard getApplicationWizard();

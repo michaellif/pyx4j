@@ -18,4 +18,6 @@ import com.pyx4j.essentials.rpc.report.ReportService;
 
 public interface LeaseTermBlankAgreementDocumentDownloadService extends ReportService<IEntity> {
 
+    public static String IS_DRAFT_KEY = "isDraft";
+
 }

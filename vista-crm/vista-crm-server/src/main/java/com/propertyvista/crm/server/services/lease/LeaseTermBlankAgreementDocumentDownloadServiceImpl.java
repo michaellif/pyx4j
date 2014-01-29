@@ -33,6 +33,6 @@ public class LeaseTermBlankAgreementDocumentDownloadServiceImpl extends ReportSe
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class,
                 (Key) reportRequest.getParameters().get(LeaseTermBlankAgreementDocumentDownloadService.LEASE_ID_PARAM_KEY));
-        callback.onSuccess(DeferredProcessRegistry.fork(new LeaseTermBlankAgreementDocumentCreationProcess(leaseId), ThreadPoolNames.DOWNLOADS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new LeaseTermBlankAgreementDocumentCreationProcess(leaseId, false), ThreadPoolNames.DOWNLOADS));
     }
 }

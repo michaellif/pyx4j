@@ -2,10 +2,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LeaseTermAgreement" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="116"/>
 	<parameter name="landlordName" class="java.lang.String"/>
 	<parameter name="landlordAddress" class="java.lang.String"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
+	<parameter name="backgroundImage" class="java.io.InputStream"/>
 	<parameter name="applicants" class="com.pyx4j.entity.core.IList"/>
 	<field name="body" class="java.lang.String"/>
 	<field name="title" class="java.lang.String"/>
@@ -16,7 +17,13 @@
 		<initialValueExpression><![CDATA[1]]></initialValueExpression>
 	</variable>
 	<background>
-		<band splitType="Stretch"/>
+		<band height="750" splitType="Stretch">
+            <printWhenExpression><![CDATA[$P{backgroundImage} != null]]></printWhenExpression>
+			<image scaleImage="FillFrame" hAlign="Right" vAlign="Top">
+				<reportElement x="0" y="0" width="572" height="750"/>
+				<imageExpression><![CDATA[$P{backgroundImage}]]></imageExpression>
+			</image>
+		</band>
 	</background>
 	<title>
 		<band height="239" splitType="Stretch">

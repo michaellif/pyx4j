@@ -13,12 +13,18 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 
 public class LegalStep extends ApplicationWizardStep {
+
+    private static final I18n i18n = I18n.get(LegalStep.class);
 
     public LegalStep() {
         super(OnlineApplicationWizardStepMeta.Legal);
@@ -30,8 +36,17 @@ public class LegalStep extends ApplicationWizardStep {
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().legalTerms(), new LegalTermsFolder(getView())));
-
+        panel.setWidget(++row, 0, new Button(i18n.tr("Download Lease Agreement Draft"), new Command() {
+            @Override
+            public void execute() {
+                onDownloadLeaseAgreementDraft();
+            }
+        }));
         return panel;
+    }
+
+    public void onDownloadLeaseAgreementDraft() {
+
     }
 
 }

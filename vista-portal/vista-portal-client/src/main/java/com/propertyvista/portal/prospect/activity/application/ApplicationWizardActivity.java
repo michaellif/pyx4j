@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.activity.application;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,11 +28,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -39,12 +43,14 @@ import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEven
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
 public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineApplicationDTO> implements ApplicationWizardPresenter {
@@ -150,5 +156,19 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
                 callback.onSuccess(result);
             }
         });
+    }
+
+    @Override
+    public void downloadLeaseAgreementDraft() {
+        ReportDialog reportDialog = new ReportDialog(i18n.tr("Creating Draft of Lease Agreement"), "");
+        reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+
+        HashMap<String, Serializable> requestParameters = new HashMap<>();
+        requestParameters.put(LeaseTermBlankAgreementDocumentDownloadService.IS_DRAFT_KEY, Boolean.TRUE);
+
+        ReportRequest request = new ReportRequest();
+        request.setParameters(requestParameters);
+        reportDialog.start(GWT.<LeaseTermBlankAgreementDocumentDownloadService> create(LeaseTermBlankAgreementDocumentDownloadService.class), request);
+
     }
 }

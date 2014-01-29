@@ -30,13 +30,16 @@ import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 public class LeaseTermAgreementPdfCreatorFacadeImpl implements LeaseTermAgreementPdfCreatorFacade {
 
     @Override
-    public byte[] createPdf(LeaseAgreementDocumentDataDTO agreementData) {
+    public byte[] createPdf(LeaseAgreementDocumentDataDTO agreementData, boolean createDraft) {
         Map<String, Object> params = new HashMap<String, Object>();
 
         params.put("landlordName", agreementData.landlordName().getValue());
         params.put("landlordAddress", agreementData.landlordAddress().getValue());
         if (agreementData.landlordLogo().getValue() != null) {
             params.put("landlordLogo", new ByteInputStream(agreementData.landlordLogo().getValue(), agreementData.landlordLogo().getValue().length));
+        }
+        if (createDraft) {
+            params.put("backgroundImage", LeaseTermAgreementDocumentDataCreatorFacadeImpl.class.getResourceAsStream("draft-watermark.png"));
         }
 
         params.put("applicants", agreementData.applicants());

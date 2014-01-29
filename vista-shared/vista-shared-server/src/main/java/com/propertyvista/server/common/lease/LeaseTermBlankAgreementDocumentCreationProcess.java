@@ -47,11 +47,14 @@ public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDefe
 
     private final Lease leaseId;
 
-    public LeaseTermBlankAgreementDocumentCreationProcess(Lease leaseId) {
+    private final boolean createDraft;
+
+    public LeaseTermBlankAgreementDocumentCreationProcess(Lease leaseId, boolean createDraft) {
         this.progress = new AtomicInteger();
         this.progress.set(0);
         this.progressMax = 1;
         this.leaseId = leaseId;
+        this.createDraft = createDraft;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDefe
         try {
             Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
             byte[] pdfBytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(
-                    ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(lease.currentTerm(), true));
+                    ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(lease.currentTerm(), true), createDraft);
             Downloadable d = new Downloadable(pdfBytes, MimeMap.getContentType(DownloadFormat.PDF));
             fileName = "blank-lease-agreement.pdf";
             d.save(fileName);
