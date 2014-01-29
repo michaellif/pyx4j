@@ -364,7 +364,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             if (getValue().lease().status().getValue() == Lease.Status.Application) {
                 idHolder.setWidget(applicationId);
-                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseApplication().applicationId()), getValue()
+                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.application, get(proto().lease().leaseApplication().applicationId()), getValue()
                         .lease().leaseApplication().getPrimaryKey());
             } else {
                 idHolder.setWidget(leaseId);
