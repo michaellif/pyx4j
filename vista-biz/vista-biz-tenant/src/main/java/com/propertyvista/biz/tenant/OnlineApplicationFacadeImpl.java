@@ -29,7 +29,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
@@ -66,7 +65,6 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Incomplete);
         masterOnlineApplication.building().set(building);
         masterOnlineApplication.floorplan().set(floorplan);
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(masterOnlineApplication);
         Persistence.service().persist(masterOnlineApplication);
 
         for (LeaseTermTenant tenant : masterOnlineApplication.leaseApplication().lease().currentTerm().version().tenants()) {

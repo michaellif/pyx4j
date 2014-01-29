@@ -20,12 +20,18 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -92,6 +98,14 @@ public interface LeaseApplication extends IEntity {
     @Detached
     @Owned(cascade = {})
     MasterOnlineApplication onlineApplication();
+
+    @NotNull
+    @ReadOnly
+    @ToString
+    @Length(14)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
+    IPrimitive<String> applicationId();
 
     @ToString(index = 0)
     IPrimitive<Status> status();

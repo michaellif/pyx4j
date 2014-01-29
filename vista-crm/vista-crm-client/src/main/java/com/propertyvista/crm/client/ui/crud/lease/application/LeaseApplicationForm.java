@@ -62,6 +62,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        get(proto().leaseApplication().applicationId()).setVisible(true);
+
         if (onlineStatusTab != null) {
             setTabVisible(onlineStatusTab, !getValue().leaseApplication().onlineApplication().isNull());
         }

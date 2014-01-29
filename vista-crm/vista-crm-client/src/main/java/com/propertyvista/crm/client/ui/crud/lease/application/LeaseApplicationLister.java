@@ -32,7 +32,7 @@ public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> 
         super(LeaseApplicationDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(),
+            new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id")).build(),
             new Builder(proto().type()).build(),
 
             new Builder(proto().unit().building().propertyCode()).build(),
@@ -58,7 +58,7 @@ public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> 
 
             new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).title(i18n.tr("Occupants")).build(),
             new Builder(proto().numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(),
-            new Builder(proto().numberOfDepentands(), true).sortable(false).searchable(false).title(i18n.tr("Depentands")).build(),
+            new Builder(proto().numberOfDepentands(), true).sortable(false).searchable(false).title(i18n.tr("Dependents")).build(),
             new Builder(proto().numberOfGuarantors(), true).sortable(false).searchable(false).title(i18n.tr("Guarantors")).build(),
 
             //TODO make this work

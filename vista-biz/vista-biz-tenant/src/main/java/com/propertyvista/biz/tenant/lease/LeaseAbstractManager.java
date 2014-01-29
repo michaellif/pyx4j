@@ -120,6 +120,7 @@ public abstract class LeaseAbstractManager {
         assert !lease.status().isNull();
         switch (lease.status().getValue()) {
         case Application:
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease.leaseApplication());
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
             break; // ok, allowed value...
         case NewLease:

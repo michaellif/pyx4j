@@ -58,6 +58,8 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        get(proto().leaseId()).setVisible(true);
+
         setTabVisible(depositsTab, !getValue().status().getValue().isDraft());
         setTabVisible(adjustmentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(billsTab, !getValue().status().getValue().isDraft() && SecurityController.checkBehavior(VistaCrmBehavior.Billing));

@@ -35,9 +35,9 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.IdAssignmentSequence;
 
@@ -61,9 +61,9 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
     }
 
     @Override
-    public void assignId(MasterOnlineApplication masterOnlineApplication) {
+    public void assignId(LeaseApplication leaseApplication) {
         if (needsGeneratedId(IdTarget.application)) {
-            masterOnlineApplication.onlineApplicationId().setValue(getId(IdTarget.application));
+            leaseApplication.applicationId().setValue(getId(IdTarget.application));
         }
     }
 

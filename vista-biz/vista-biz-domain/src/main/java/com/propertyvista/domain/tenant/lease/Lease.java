@@ -190,7 +190,7 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
     @ToString(index = 0)
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true, group = { "c,2" })
-    @MemberColumn(notNull = true, sortAdapter = AlphanumIndexAdapter.class)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> leaseId();
 
     //as of now @see PmcYardiCredential or -1 for internal

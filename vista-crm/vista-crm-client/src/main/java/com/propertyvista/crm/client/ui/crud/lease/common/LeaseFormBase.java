@@ -77,6 +77,11 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             setTabVisible(chargesTab, getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
         }
 
+        get(proto().leaseId()).setVisible(false);
+        get(proto().leaseApplication().applicationId()).setVisible(false);
+
+        get(proto().carryforwardBalance()).setVisible(!getValue().carryforwardBalance().isNull());
+
         get(proto().carryforwardBalance()).setVisible(!getValue().carryforwardBalance().isNull());
 
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
@@ -141,6 +146,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
 
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseId()), 10).build());
+        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseApplication().applicationId()), 10).build());
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().billingAccount().accountNumber()), 15).build());
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());

@@ -20,8 +20,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 
 public interface IdAssignmentFacade {
 
@@ -29,7 +29,7 @@ public interface IdAssignmentFacade {
 
     void assignId(Lead lead);
 
-    void assignId(MasterOnlineApplication masterOnlineApplication);
+    void assignId(LeaseApplication leaseApplication);
 
     void assignId(Customer customer);
 
