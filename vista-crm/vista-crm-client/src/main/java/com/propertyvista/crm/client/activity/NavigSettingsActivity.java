@@ -112,7 +112,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Policies"));
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
         if (!VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
@@ -130,10 +129,11 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         if (!VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.LeaseAdjustment());
         }
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.OnlineApplicationTerms());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.LegalDocumentation());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.MaintenanceRequest());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.N4());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.OnlineApplicationTerms());
 //      folder.addNavigItem(new CrmSiteMap.Settings.Policies.Pet());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.PaymentTypeSelection());
         if (!VistaFeatures.instance().yardiIntegration()) {

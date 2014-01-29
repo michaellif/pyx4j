@@ -30,14 +30,35 @@ public class LegalTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalTermsP
 
     @Override
     protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(//
-                createRentalCriteriaGuidelinesPanel() // 
+        return Arrays.asList( //
+                createResidentPortalTermsAndConditionsPanel(), //
+                createResidentPortalPrivacyPolicyPanel(), //
+                createProspectPortalTermsAndConditionsPanel(), //
+                createProspectPortalPrivacyPolicyPanel() //
                 );
     }
 
-    private TwoColumnFlexFormPanel createRentalCriteriaGuidelinesPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().rentalCriteriaGuidelines().getMeta().getCaption());
-        container.setWidget(0, 0, 2, inject(proto().rentalCriteriaGuidelines(), new LegalTermsPolicyItemForm(isEditable())));
+    private TwoColumnFlexFormPanel createResidentPortalTermsAndConditionsPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().residentPortalTermsAndConditions().getMeta().getCaption());
+        container.setWidget(0, 0, 2, inject(proto().residentPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable())));
+        return container;
+    }
+
+    private TwoColumnFlexFormPanel createResidentPortalPrivacyPolicyPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().residentPortalPrivacyPolicy().getMeta().getCaption());
+        container.setWidget(0, 0, 2, inject(proto().residentPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable())));
+        return container;
+    }
+
+    private TwoColumnFlexFormPanel createProspectPortalTermsAndConditionsPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().prospectPortalTermsAndConditions().getMeta().getCaption());
+        container.setWidget(0, 0, 2, inject(proto().prospectPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable())));
+        return container;
+    }
+
+    private TwoColumnFlexFormPanel createProspectPortalPrivacyPolicyPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().prospectPortalPrivacyPolicy().getMeta().getCaption());
+        container.setWidget(0, 0, 2, inject(proto().prospectPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable())));
         return container;
     }
 

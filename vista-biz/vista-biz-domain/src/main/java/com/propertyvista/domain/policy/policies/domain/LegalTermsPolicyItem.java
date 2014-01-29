@@ -32,4 +32,5 @@ public interface LegalTermsPolicyItem extends IEntity {
     @Editor(type = Editor.EditorType.richtextarea)
     IPrimitive<String> content();
 
+    IPrimitive<Boolean> enabled();
 }

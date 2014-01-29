@@ -26,6 +26,15 @@ import com.propertyvista.domain.policy.policies.domain.LegalTermsPolicyItem;
 public interface LegalTermsPolicy extends Policy, TenantsAccessiblePolicy {
 
     @Owned
-    LegalTermsPolicyItem rentalCriteriaGuidelines();
+    LegalTermsPolicyItem residentPortalTermsAndConditions();
+
+    @Owned
+    LegalTermsPolicyItem residentPortalPrivacyPolicy();
+
+    @Owned
+    LegalTermsPolicyItem prospectPortalTermsAndConditions();
+
+    @Owned
+    LegalTermsPolicyItem prospectPortalPrivacyPolicy();
 
 }

@@ -525,9 +525,6 @@ public class CrmSiteMap implements SiteMap {
             public static class ApplicationDocumentation extends CrmCrudAppPlace {
             }
 
-            public static class AgreementLegalTerms extends CrmCrudAppPlace {
-            }
-
             public static class AR extends CrmCrudAppPlace {
             }
 
@@ -564,7 +561,15 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "Legal Documentation - Terms and Conditions")
+            @PlaceProperties(caption = "LEGAL: Lease Agreement")
+            public static class AgreementLegalTerms extends CrmCrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "LEGAL: Lease Application")
+            public static class OnlineApplicationTerms extends CrmCrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "LEGAL: Portal Terms and Conditions")
             public static class LegalDocumentation extends CrmCrudAppPlace {
             }
 
@@ -573,9 +578,6 @@ public class CrmSiteMap implements SiteMap {
 
             @PlaceProperties(caption = "N4")
             public static class N4 extends CrmCrudAppPlace {
-            }
-
-            public static class OnlineApplicationTerms extends CrmCrudAppPlace {
             }
 
             public static class PaymentTypeSelection extends CrmCrudAppPlace {

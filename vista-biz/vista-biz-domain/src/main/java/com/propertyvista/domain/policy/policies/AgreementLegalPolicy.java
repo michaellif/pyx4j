@@ -19,6 +19,7 @@ import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.policies.domain.AgreementConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -28,4 +29,7 @@ public interface AgreementLegalPolicy extends Policy {
 
     @Owned
     IList<AgreementLegalTerm> terms();
+
+    @Owned
+    IList<AgreementConfirmationTerm> confirmation();
 }

@@ -29,6 +29,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.AgreementLegalPolicyDTO;
+import com.propertyvista.domain.policy.policies.domain.AgreementConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 
 public class AgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<AgreementLegalPolicyDTO> {
@@ -41,23 +42,34 @@ public class AgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Agreeme
 
     @Override
     protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createPaymentAuthorizationPanel());
+        return Arrays.asList(createTermsPanel(), createConfirmationPanel());
     }
 
-    private TwoColumnFlexFormPanel createPaymentAuthorizationPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Legal Tab"));
+    private TwoColumnFlexFormPanel createTermsPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Agreement"));
         int row = -1;
 
         container.setH1(++row, 0, 2, proto().terms().getMeta().getCaption());
-        container.setWidget(++row, 0, 2, inject(proto().terms(), new LegalTermFolder(isEditable())));
+        container.setWidget(++row, 0, 2, inject(proto().terms(), new LegalTermFolder<AgreementLegalTerm>(AgreementLegalTerm.class, isEditable())));
 
         return container;
     }
 
-    private static class LegalTermFolder extends VistaBoxFolder<AgreementLegalTerm> {
+    private TwoColumnFlexFormPanel createConfirmationPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Confirmation"));
+        int row = -1;
 
-        public LegalTermFolder(boolean isEditable) {
-            super(AgreementLegalTerm.class, isEditable);
+        container.setH1(++row, 0, 2, proto().confirmation().getMeta().getCaption());
+        container.setWidget(++row, 0, 2,
+                inject(proto().confirmation(), new LegalTermFolder<AgreementConfirmationTerm>(AgreementConfirmationTerm.class, isEditable())));
+
+        return container;
+    }
+
+    private static class LegalTermFolder<T extends AgreementLegalTerm> extends VistaBoxFolder<T> {
+
+        public LegalTermFolder(Class<T> entityClass, boolean isEditable) {
+            super(entityClass, isEditable);
         }
 
         @Override

@@ -75,8 +75,8 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
                 Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), LegalTermsPolicy.class);
 
         LegalTermsTO result = EntityFactory.create(LegalTermsTO.class);
-        result.caption().setValue(policy.rentalCriteriaGuidelines().caption().getValue());
-        result.content().setValue(policy.rentalCriteriaGuidelines().content().getValue());
+        result.caption().setValue(policy.residentPortalTermsAndConditions().caption().getValue());
+        result.content().setValue(policy.residentPortalTermsAndConditions().content().getValue());
         callback.onSuccess(result);
     }
 

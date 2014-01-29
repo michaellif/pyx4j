@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsPolicyItem;
 
-public class LegalTermsPolicyItemForm extends CEntityDecoratableForm<LegalTermsPolicyItem> {
+public class LegalTermsPolicyItemForm extends CEntityForm<LegalTermsPolicyItem> {
 
     public LegalTermsPolicyItemForm(boolean isEditable) {
         super(LegalTermsPolicyItem.class);
@@ -34,6 +34,7 @@ public class LegalTermsPolicyItemForm extends CEntityDecoratableForm<LegalTermsP
 
         int row = -1;
 
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enabled()), true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().caption()), true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().content()), true).build());
 
