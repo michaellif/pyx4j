@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.prospect.themes;
 
+import com.pyx4j.commons.css.Style;
+
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.themes.PortalTheme;
 
 public class ProspectPortalTheme extends PortalTheme {
@@ -26,6 +29,20 @@ public class ProspectPortalTheme extends PortalTheme {
         addTheme(new RentalSummaryTheme());
         addTheme(new SummaryStepTheme());
         addTheme(new ApplicationWizardTheme());
+
+        addTheme(new PortalRootPaneTheme() {
+            @Override
+            protected void initMainMenuStyles() {
+                super.initMainMenuStyles();
+
+                Style style = new Style(".", StyleName.MainMenuNavigItem);
+                style.addProperty("line-height", "30px");
+                style.addProperty("height", "30px");
+                style.addProperty("padding", "4px");
+                addStyle(style);
+            }
+        });
+
         super.initStyles();
     }
 

@@ -49,8 +49,6 @@ public class PortalTheme extends Theme {
         initMessageStyles();
         initCellListStyle();
 
-        addTheme(new PortalRootPaneTheme());
-
         addTheme(new ResponsiveLayoutTheme());
 
         addTheme(new HorizontalAlignCenterMixin());

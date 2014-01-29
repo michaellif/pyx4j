@@ -90,7 +90,7 @@ public class PortalRootPaneTheme extends Theme {
 
     }
 
-    private void initMainMenuStyles() {
+    protected void initMainMenuStyles() {
         Style style = new Style(".", StyleName.MainMenu);
         style.addProperty("width", "14em");
         style.addProperty("margin", "10px 0 0 10px");
@@ -108,11 +108,11 @@ public class PortalRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.MainMenuNavigItem);
         style.addProperty("background", ThemeColor.foreground, 0.01);
-        style.addProperty("line-height", "30px");
-        style.addProperty("height", "30px");
+        style.addProperty("line-height", "34px");
+        style.addProperty("height", "34px");
         style.addProperty("white-space", "nowrap");
         style.addProperty("font-weight", "bold");
-        style.addProperty("padding", "4px");
+        style.addProperty("padding", "6px");
         style.addProperty("list-style", "none");
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-style", "solid");

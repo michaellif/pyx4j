@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident.themes;
 
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.themes.PortalTheme;
 
 public class ResidentPortalTheme extends PortalTheme {
@@ -26,6 +27,7 @@ public class ResidentPortalTheme extends PortalTheme {
         super.initStyles();
         addTheme(new TenantSureTheme());
         addTheme(new ExtraGadgetsTheme());
+        addTheme(new PortalRootPaneTheme());
     }
 
 }
