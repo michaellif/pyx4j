@@ -19,7 +19,7 @@ public class VistaBrowserRequirments {
 
     private static boolean isBrowserCompatible2013() {
         if (BrowserType.isIE()) {
-            return BrowserType.isIENative() && ((isIEVersion9Native() && BrowserType.isIE8Native()) || BrowserType.isIE10());
+            return BrowserType.isIENative() && ((isIEVersion9Native() && BrowserType.isIE8Native()) || BrowserType.isIE10() || BrowserType.isIE11());
         } else if (BrowserType.isFirefox() || BrowserType.isSafari()) {
             return true;
         } else {
