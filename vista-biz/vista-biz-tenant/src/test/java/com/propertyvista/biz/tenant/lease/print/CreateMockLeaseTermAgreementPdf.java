@@ -40,7 +40,8 @@ public class CreateMockLeaseTermAgreementPdf {
         leaseAgreementData.landlordAddress().setValue("5935 Airport Road Suite 600, Mississauga, ON. L4V 1W5");
         leaseAgreementData.landlordLogo().setValue(
                 org.apache.poi.util.IOUtils.toByteArray(CreateMockLeaseTermAgreementPdf.class.getResourceAsStream("logo.png")));
-
+        leaseAgreementData.leaseAgreementBackground().setValue(
+                org.apache.poi.util.IOUtils.toByteArray(CreateMockLeaseTermAgreementPdf.class.getResourceAsStream("logo.png")));
         leaseAgreementData.applicants().add(makeMockApplicant("Vasya Petechkin"));
         leaseAgreementData.applicants().add(makeMockApplicant("Petya Vasechkin"));
 
