@@ -104,19 +104,20 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
-                // set predefined values for some ID types and do not allow editing:
-                CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
-                switch (getValue().target().getValue()) {
-                case application:
-                case customer:
-                case maintenance:
-                    combo.getOptions().clear();
-                    combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
-                    combo.setEditable(false);
-                    break;
+                if (isEditable()) {
+                    // set predefined values for some ID types and do not allow editing:
+                    CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
+                    switch (getValue().target().getValue()) {
+                    case customer:
+                    case maintenance:
+//                        combo.getOptions().clear();
+//                        combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
+                        combo.setEditable(false);
+                        break;
 
-                default:
-                    combo.setEditable(true);
+                    default:
+                        combo.setEditable(true);
+                    }
                 }
             }
         }

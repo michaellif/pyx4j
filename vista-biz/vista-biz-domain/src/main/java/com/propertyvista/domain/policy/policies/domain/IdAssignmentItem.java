@@ -63,7 +63,7 @@ public interface IdAssignmentItem extends IEntity {
         }
 
         public static EnumSet<IdTarget> userAssignedWhenYardyIntergation() {
-            return EnumSet.of(propertyCode, application, lease, tenant);
+            return EnumSet.of(propertyCode, lease, tenant);
         }
 
         public static EnumSet<IdTarget> nonEditableWhenYardyIntergation() {

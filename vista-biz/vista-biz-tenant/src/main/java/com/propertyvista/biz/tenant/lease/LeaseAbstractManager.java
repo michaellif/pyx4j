@@ -376,10 +376,6 @@ public abstract class LeaseAbstractManager {
         lease.status().setValue(Lease.Status.Approved);
         lease.approvalDate().setValue(SystemDateManager.getDate());
 
-        AgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
-                AgreementLegalPolicy.class);
-        lease.currentTerm().version().agreementLegalTerms().set(agreementLegalPolicy.terms());
-
         if (leaseStatus == Status.Application) {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
             lease.leaseApplication().decidedBy().set(decidedBy);
@@ -744,7 +740,7 @@ public abstract class LeaseAbstractManager {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm, AttachLevel.Attached);
 
-        if (!Lease.Status.draft().contains(lease.status().getValue())) {
+        if (!lease.status().getValue().isDraft()) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
@@ -773,6 +769,10 @@ public abstract class LeaseAbstractManager {
                 throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", lease.billingAccount().billingPeriod().getValue()));
             }
         }
+
+        AgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(leaseTerm.unit().building(),
+                AgreementLegalPolicy.class);
+        leaseTerm.version().agreementLegalTerms().set(agreementLegalPolicy.terms());
 
         if (updateTermData) {
             updateTermUnitRelatedData(leaseTerm);
