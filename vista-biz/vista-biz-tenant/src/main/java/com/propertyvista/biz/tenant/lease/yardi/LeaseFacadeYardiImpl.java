@@ -17,7 +17,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -31,179 +33,199 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
 
 public class LeaseFacadeYardiImpl implements LeaseFacade {
 
     @Override
     public Lease create(Status status) {
-        return new LeaseYardiManager().create(status);
+        if (status == Status.Application) {
+            return new LeaseYardiApplicationManager().create(status);
+        } else {
+            return new LeaseYardiImportManager().create(status);
+        }
     }
 
     @Override
     public Lease init(Lease lease) {
-        return new LeaseYardiManager().init(lease);
+        return getLeaseYardiManager(lease).init(lease);
     }
 
     @Override
     public Lease setUnit(Lease lease, AptUnit unitId) {
-        return new LeaseYardiManager().setUnit(lease, unitId);
+        return getLeaseYardiManager(lease).setUnit(lease, unitId);
     }
 
     @Override
     public Lease setService(Lease lease, ProductItem serviceId) {
-        return new LeaseYardiManager().setService(lease, serviceId);
+        return getLeaseYardiManager(lease).setService(lease, serviceId);
     }
 
     @Override
     public Lease persist(Lease lease) {
-        return new LeaseYardiManager().persist(lease);
+        return getLeaseYardiManager(lease).persist(lease);
     }
 
     @Override
     public Lease finalize(Lease lease) {
-        return new LeaseYardiManager().finalize(lease);
+        return getLeaseYardiManager(lease).finalize(lease);
     }
 
     @Override
     public Lease load(Lease leaseId, boolean forEdit) {
-        return new LeaseYardiManager().load(leaseId, forEdit);
+        return getLeaseYardiManager(retrieve(leaseId)).load(leaseId, forEdit);
     }
 
     @Override
     public Lease persist(Lease lease, boolean reserve) {
-        return new LeaseYardiManager().persist(lease, reserve);
+        return getLeaseYardiManager(lease).persist(lease, reserve);
     }
 
     @Override
     public Lease finalize(Lease lease, boolean reserve) {
-        return new LeaseYardiManager().finalize(lease, reserve);
+        return getLeaseYardiManager(lease).finalize(lease, reserve);
     }
 
     @Override
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
-        return new LeaseYardiManager().setUnit(leaseTerm, unitId);
+        return getLeaseYardiManager(retrieve(leaseTerm)).setUnit(leaseTerm, unitId);
     }
 
     @Override
     public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
-        return new LeaseYardiManager().setService(leaseTerm, serviceId);
+        return getLeaseYardiManager(retrieve(leaseTerm)).setService(leaseTerm, serviceId);
     }
 
     @Override
     public LeaseTerm setPackage(LeaseTerm leaseTerm, AptUnit unitId, BillableItem serviceItem, List<BillableItem> featureItems) {
-        return new LeaseYardiManager().setPackage(leaseTerm, unitId, serviceItem, featureItems);
+        return getLeaseYardiManager(retrieve(leaseTerm)).setPackage(leaseTerm, unitId, serviceItem, featureItems);
     }
 
     @Override
     public LeaseTerm persist(LeaseTerm leaseTerm) {
-        return new LeaseYardiManager().persist(leaseTerm);
+        return getLeaseYardiManager(retrieve(leaseTerm)).persist(leaseTerm);
     }
 
     @Override
     public LeaseTerm finalize(LeaseTerm leaseTerm) {
-        return new LeaseYardiManager().finalize(leaseTerm);
+        return getLeaseYardiManager(retrieve(leaseTerm)).finalize(leaseTerm);
     }
 
     @Override
     public void createMasterOnlineApplication(Lease leaseId, Building building, Floorplan floorplan) {
-        new LeaseYardiManager().createMasterOnlineApplication(leaseId, building, floorplan);
+        getLeaseYardiManager(retrieve(leaseId)).createMasterOnlineApplication(leaseId, building, floorplan);
     }
 
     @Override
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
-        new LeaseYardiManager().declineApplication(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieve(leaseId)).declineApplication(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
-        new LeaseYardiManager().cancelApplication(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieve(leaseId)).cancelApplication(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
-        new LeaseYardiManager().approve(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieve(leaseId)).approve(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void activate(Lease leaseId) {
-        new LeaseYardiManager().activate(leaseId);
+        getLeaseYardiManager(retrieve(leaseId)).activate(leaseId);
     }
 
     @Override
     public void renew(Lease leaseId) {
-        new LeaseYardiManager().renew(leaseId);
+        getLeaseYardiManager(retrieve(leaseId)).renew(leaseId);
     }
 
     @Override
     public void complete(Lease leaseId) {
-        new LeaseYardiManager().complete(leaseId);
+        getLeaseYardiManager(retrieve(leaseId)).complete(leaseId);
     }
 
     @Override
     public void close(Lease leaseId) {
-        new LeaseYardiManager().close(leaseId);
+        getLeaseYardiManager(retrieve(leaseId)).close(leaseId);
     }
 
     @Override
     public LeaseTerm createOffer(Lease leaseId, Type type) {
-        return new LeaseYardiManager().createOffer(leaseId, null, type);
+        return getLeaseYardiManager(retrieve(leaseId)).createOffer(leaseId, null, type);
     }
 
     @Override
     public LeaseTerm createOffer(Lease leaseId, AptUnit unitId, Type type) {
-        return new LeaseYardiManager().createOffer(leaseId, unitId, type);
+        return getLeaseYardiManager(retrieve(leaseId)).createOffer(leaseId, unitId, type);
     }
 
     @Override
     public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
-        new LeaseYardiManager().acceptOffer(leaseId, leaseTermId);
+        getLeaseYardiManager(retrieve(leaseId)).acceptOffer(leaseId, leaseTermId);
     }
 
     @Override
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate, LogicalDate leaseEndDate) {
-        new LeaseYardiManager().createCompletionEvent(leaseId, completionType, eventDate, moveOutDate, leaseEndDate);
+        getLeaseYardiManager(retrieve(leaseId)).createCompletionEvent(leaseId, completionType, eventDate, moveOutDate, leaseEndDate);
     }
 
     @Override
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
-        new LeaseYardiManager().cancelCompletionEvent(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieve(leaseId)).cancelCompletionEvent(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
-        new LeaseYardiManager().cancelLease(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieve(leaseId)).cancelLease(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
-        new LeaseYardiManager().moveOut(leaseId, actualMoveOut);
+        getLeaseYardiManager(retrieve(leaseId)).moveOut(leaseId, actualMoveOut);
     }
 
     @Override
     public BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node) {
-        return new LeaseYardiManager().createBillableItem(lease, itemId, node);
+        return getLeaseYardiManager(lease).createBillableItem(lease, itemId, node);
     }
 
     @Override
     public void updateLeaseDates(Lease lease) {
-        new LeaseYardiManager().updateLeaseDates(lease);
+        getLeaseYardiManager(lease).updateLeaseDates(lease);
     }
 
     @Override
     public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
-        new LeaseYardiManager().setLeaseAgreedPrice(lease, price);
+        getLeaseYardiManager(lease).setLeaseAgreedPrice(lease, price);
     }
 
     @Override
     public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
-        return new LeaseYardiManager().isMoveOutWithinNextBillingCycle(leaseId);
+        return getLeaseYardiManager(retrieve(leaseId)).isMoveOutWithinNextBillingCycle(leaseId);
     }
 
     @Override
     public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
-        new LeaseYardiManager().simpleLeaseRenew(leaseId, leaseEndDate);
+        getLeaseYardiManager(retrieve(leaseId)).simpleLeaseRenew(leaseId, leaseEndDate);
+    }
+
+    // internals:
+
+    private Lease retrieve(Lease leaseId) {
+        return Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+    }
+
+    private Lease retrieve(LeaseTerm leaseTerm) {
+        return leaseTerm.lease();
+    }
+
+    private LeaseAbstractManager getLeaseYardiManager(Lease lease) {
+        if (lease.status().getValue() == Status.Application) {
+            return new LeaseYardiApplicationManager();
+        } else {
+            return new LeaseYardiImportManager();
+        }
     }
 
 }

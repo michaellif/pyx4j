@@ -221,10 +221,14 @@ public abstract class LeaseAbstractManager {
         setUnit(leaseTerm.lease(), leaseTerm, unitId, false);
 
         // update service/features:
-        leaseTerm.version().leaseProducts().serviceItem().set(serviceItem);
+        if (serviceItem != null) {
+            leaseTerm.version().leaseProducts().serviceItem().set(serviceItem);
+        }
 
         leaseTerm.version().leaseProducts().featureItems().clear();
-        leaseTerm.version().leaseProducts().featureItems().addAll(featureItems);
+        if (featureItems != null) {
+            leaseTerm.version().leaseProducts().featureItems().addAll(featureItems);
+        }
 
         leaseTerm.version().leaseProducts().concessions().clear();
 

@@ -22,8 +22,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.LogicalDate;
@@ -88,10 +87,6 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     protected static final I18n i18n = I18n.get(LeaseTermForm.class);
-
-    private Widget leaseId, applicationId;
-
-    private final SimplePanel idHolder = new SimplePanel();
 
     protected LeaseTermForm(IForm<LeaseTermDTO> view) {
         super(LeaseTermDTO.class, view);
@@ -239,8 +234,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         int rightRow = 0;
 
         if (isEditable()) {
-            leaseId = new FormDecoratorBuilder(inject(proto().lease().leaseId()), 15).build();
-            applicationId = new FormDecoratorBuilder(inject(proto().lease().leaseApplication().applicationId()), 15).build();
+            FlowPanel idHolder = new FlowPanel();
+            idHolder.add(new FormDecoratorBuilder(inject(proto().lease().leaseId()), 15).build());
+            idHolder.add(new FormDecoratorBuilder(inject(proto().lease().leaseApplication().applicationId()), 15).build());
             flexPanel.setWidget(++rightRow, 1, idHolder);
         } else {
             flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(null) {
@@ -362,12 +358,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             boolean isCurrent = getValue().getPrimaryKey() == null
                     || getValue().getPrimaryKey().equalsIgnoreVersion(getValue().lease().currentTerm().getPrimaryKey());
 
+            get(proto().lease().leaseId()).setVisible(false);
+            get(proto().lease().leaseApplication().applicationId()).setVisible(false);
+
             if (getValue().lease().status().getValue() == Lease.Status.Application) {
-                idHolder.setWidget(applicationId);
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.application, get(proto().lease().leaseApplication().applicationId()), getValue()
                         .lease().leaseApplication().getPrimaryKey());
             } else {
-                idHolder.setWidget(leaseId);
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
             }
 

@@ -65,8 +65,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.yardi.mergers.LeaseMerger;
-import com.propertyvista.yardi.mergers.TenantMerger;
 import com.propertyvista.yardi.mergers.LeaseMerger.LeaseChargesMergeStatus;
+import com.propertyvista.yardi.mergers.TenantMerger;
 import com.propertyvista.yardi.services.ARCodeAdapter;
 
 public class YardiLeaseProcessor {
@@ -136,7 +136,7 @@ public class YardiLeaseProcessor {
 
         // unit:
         if (unit.getPrimaryKey() != null) {
-            leaseFacade.setUnit(lease, unit);
+            leaseFacade.setPackage(lease.currentTerm(), unit, null, Collections.<BillableItem> emptyList());
             leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
         }
 

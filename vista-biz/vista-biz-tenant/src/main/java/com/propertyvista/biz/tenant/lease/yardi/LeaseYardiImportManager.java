@@ -34,9 +34,9 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
-public class LeaseYardiManager extends LeaseAbstractManager {
+public class LeaseYardiImportManager extends LeaseAbstractManager {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaseYardiManager.class);
+    private static final Logger log = LoggerFactory.getLogger(LeaseYardiImportManager.class);
 
     @Override
     protected BillingAccount createBillingAccount() {
