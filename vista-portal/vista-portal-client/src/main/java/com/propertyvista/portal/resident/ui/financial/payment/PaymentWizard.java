@@ -52,7 +52,6 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
@@ -526,10 +525,10 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         final HTMLPanel legalTermsLinkPanel = new HTMLPanel(legalTermsBuilder.toSafeHtml());
 
-        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.PortalTermsAndConditions.class);
+        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
         legalTermsLinkPanel.addAndReplaceElement(termsOfUseAnchor, termsOfUseAnchorId);
 
-        Anchor billingPolicyAnchor = new TermsAnchor(i18n.tr("Billing And Refund Policy"), PortalSiteMap.BillingTerms.class);
+        Anchor billingPolicyAnchor = new TermsAnchor(i18n.tr("Billing And Refund Policy"), PortalSiteMap.PortalTerms.BillingTerms.class);
         legalTermsLinkPanel.addAndReplaceElement(billingPolicyAnchor, billingPolicyAnchorId);
 
         return legalTermsLinkPanel;

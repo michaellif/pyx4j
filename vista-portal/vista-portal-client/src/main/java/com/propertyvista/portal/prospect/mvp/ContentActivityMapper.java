@@ -24,6 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.activity.ApplicationContextSelectionActivity;
 import com.propertyvista.portal.prospect.activity.LandingActivity;
+import com.propertyvista.portal.prospect.activity.PortalTermsActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
 import com.propertyvista.portal.prospect.activity.application.ApplicationConfirmationActivity;
 import com.propertyvista.portal.prospect.activity.application.ApplicationStatusPageActivity;
@@ -34,7 +35,6 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Applic
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ProspectPortalTerms;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
-import com.propertyvista.portal.shared.activity.PortalTermsActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.shared.activity.login.LogoutActivity;
 import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
@@ -85,10 +85,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ApplicationConfirmationActivity(appPlace);
 
 // Internals/Terms: @formatter:off
-                    } else if (place instanceof PortalSiteMap.BillingTerms 
+                    } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms 
                             || place instanceof ProspectPortalTerms.ApplicantTermsAndConditions 
                             || place instanceof ProspectPortalTerms.RentalCriteriaGuidelines
-                            || place instanceof PortalSiteMap.PortalTermsAndConditions) {
+                            || place instanceof PortalSiteMap.PortalTerms.PortalTermsAndConditions
+                            || place instanceof PortalSiteMap.PortalTerms.PortalPrivacyPolicy
+                            || place instanceof PortalSiteMap.PortalTerms.PMCPrivacyPolicy
+                            || place instanceof PortalSiteMap.PortalTerms.PMCPrivacyPolicy) {
                         activity = new PortalTermsActivity(place);
                  // @formatter:on
                     }

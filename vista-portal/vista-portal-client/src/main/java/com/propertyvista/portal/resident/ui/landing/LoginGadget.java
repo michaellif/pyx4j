@@ -16,7 +16,6 @@ package com.propertyvista.portal.resident.ui.landing;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -30,7 +29,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -55,7 +53,6 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.portal.resident.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
@@ -95,7 +92,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
         loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        termsAndConditionsAnchor = new TermsAnchor(i18n.tr("RESIDENT TERMS AND CONDITIONS"), PortalSiteMap.PortalTermsAndConditions.class);
+        termsAndConditionsAnchor = new TermsAnchor(i18n.tr("RESIDENT TERMS AND CONDITIONS"), PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
         loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, anchorId);
 
         contentPanel.add(loginTermsLinkPanel);

@@ -24,7 +24,6 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 
 public class ConfirmationStep extends ApplicationWizardStep {
@@ -57,10 +56,10 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
         final HTMLPanel legalTermsLinkPanel = new HTMLPanel(legalTermsBuilder.toSafeHtml());
 
-        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.PortalTermsAndConditions.class);
+        Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
         legalTermsLinkPanel.addAndReplaceElement(termsOfUseAnchor, termsOfUseAnchorId);
 
-        Anchor billingPolicyAnchor = new TermsAnchor(i18n.tr("Billing And Refund Policy"), PortalSiteMap.BillingTerms.class);
+        Anchor billingPolicyAnchor = new TermsAnchor(i18n.tr("Billing And Refund Policy"), PortalSiteMap.PortalTerms.BillingTerms.class);
         legalTermsLinkPanel.addAndReplaceElement(billingPolicyAnchor, billingPolicyAnchorId);
 
         return legalTermsLinkPanel;

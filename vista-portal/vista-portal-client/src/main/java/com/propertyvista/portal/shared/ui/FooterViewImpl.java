@@ -32,9 +32,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
@@ -70,13 +70,14 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         actionsPanel.setWidth("50%");
 
-        Anchor termsAnchor = new TermsAnchor(i18n.tr("Terms And Conditions"), PortalSiteMap.PortalTermsAndConditions.class);
-
-        SimplePanel linksPanel = new SimplePanel(termsAnchor);
+        Toolbar linksPanel = new Toolbar();
+        linksPanel.addItem(new TermsAnchor(i18n.tr("Terms And Conditions"), PortalSiteMap.PortalTerms.PortalTermsAndConditions.class));
+        linksPanel.addItem(new HTML("&nbsp;-&nbsp;"));
+        linksPanel.addItem(new TermsAnchor(i18n.tr("Privacy Policy"), PortalSiteMap.PortalTerms.PortalPrivacyPolicy.class));
         linksPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         linksPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         linksPanel.getElement().getStyle().setProperty("textAlign", "center");
-        linksPanel.setWidth("100%");
+        linksPanel.asWidget().setWidth("100%");
 
         SimplePanel langSelectorPanel = new SimplePanel(new HTML("Eng(US) - Eng(Ca) - Fr(Ca)"));
         langSelectorPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
