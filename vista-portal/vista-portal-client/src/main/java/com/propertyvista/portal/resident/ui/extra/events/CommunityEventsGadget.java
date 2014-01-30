@@ -42,15 +42,18 @@ public class CommunityEventsGadget extends ExtraGadget<CommunityEventsGadgetDTO>
         for (CommunityEvent event : getGadgetDTO().events()) {
             HTML captionHTML = new HTML(event.caption().getValue());
             captionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventCaption.name());
-
+            captionHTML.setTitle(event.caption().getValue());
             panel.add(captionHTML);
 
-            HTML timeAndLocationHTML = new HTML(createDateAndLocation(event));
+            String dateLocation = createDateAndLocation(event);
+            HTML timeAndLocationHTML = new HTML(dateLocation);
             timeAndLocationHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventTimeAndLocation.name());
+            timeAndLocationHTML.setTitle(dateLocation);
             panel.add(timeAndLocationHTML);
 
             HTML descriptionHTML = new HTML(event.description().getValue());
             descriptionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventDescription.name());
+            descriptionHTML.setTitle(event.description().getValue());
             panel.add(descriptionHTML);
 
             if (++i > MAX_EVENT_TO_SHOW) {

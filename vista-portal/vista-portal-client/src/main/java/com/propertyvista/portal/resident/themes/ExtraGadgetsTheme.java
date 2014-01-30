@@ -33,11 +33,17 @@ public class ExtraGadgetsTheme extends Theme {
         style.addProperty("font-weight", "bolder");
         style.addProperty("text-decoration", "underline");
         style.addProperty("padding-top", "5px");
+        style.addProperty("text-overflow", "ellipsis");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(".", StyleName.CommunityEventTimeAndLocation);
         style.addProperty("font-style", "italic");
         style.addProperty("font-size", "0.9em");
+        style.addProperty("text-overflow", "ellipsis");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(".", StyleName.CommunityEventDescription);
@@ -48,16 +54,19 @@ public class ExtraGadgetsTheme extends Theme {
 
         style = new Style(".", StyleName.WeatherIcon);
         style.addProperty("vertical-align", "middle");
-        style.addProperty("margin", "10px 0");
+        style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", StyleName.WeatherText);
         style.addProperty("vertical-align", "middle");
+        style.addProperty("text-align", "center");
         style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", StyleName.WeatherTemperature);
         style.addProperty("font-size", "2em");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.WeatherType);
