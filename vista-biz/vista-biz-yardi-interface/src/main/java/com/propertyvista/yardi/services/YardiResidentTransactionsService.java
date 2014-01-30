@@ -835,16 +835,18 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     LogicalDate today = new LogicalDate(SystemDateManager.getDate());
 
                     UnitAvailabilityStatus currentAvailabilityStatus = retrieveCurrentAvailabilityStatus(unit);
-                    if (currentAvailabilityStatus.statusFrom().getValue().compareTo(today) == 0) {
-                        EntityQueryCriteria<UnitAvailabilityStatus> criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
-                        Persistence.service().delete(criteria);
-                    } else {
-                        GregorianCalendar cal = new GregorianCalendar();
-                        cal.setTime(today);
-                        cal.add(GregorianCalendar.DAY_OF_MONTH, -1);
-                        LogicalDate yesterday = new LogicalDate(cal.getTime());
-                        currentAvailabilityStatus.statusUntil().setValue(yesterday);
-                        Persistence.service().persist(currentAvailabilityStatus);
+                    if (currentAvailabilityStatus != null) {
+                        if (currentAvailabilityStatus.statusFrom().getValue().compareTo(today) == 0) {
+                            EntityQueryCriteria<UnitAvailabilityStatus> criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
+                            Persistence.service().delete(criteria);
+                        } else {
+                            GregorianCalendar cal = new GregorianCalendar();
+                            cal.setTime(today);
+                            cal.add(GregorianCalendar.DAY_OF_MONTH, -1);
+                            LogicalDate yesterday = new LogicalDate(cal.getTime());
+                            currentAvailabilityStatus.statusUntil().setValue(yesterday);
+                            Persistence.service().persist(currentAvailabilityStatus);
+                        }
                     }
 
                     UnitAvailabilityStatus newAvailabilityStatus = unitAvailabilityStatusAdapter.extractAvailabilityStatus(ilsUnit);

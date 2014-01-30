@@ -110,7 +110,7 @@ public class YardiUnitAvailabilityStatusAdapter {
         Persistence.ensureRetrieve(unit.building(), AttachLevel.IdOnly);
         Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.IdOnly);
         status.unit().set(unit);
-        status.building().set(unit);
+        status.building().set(unit.building());
         status.floorplan().set(unit.floorplan());
     }
 
