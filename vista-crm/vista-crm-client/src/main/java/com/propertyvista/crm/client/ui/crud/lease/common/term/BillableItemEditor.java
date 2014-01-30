@@ -173,7 +173,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         // tweak UI for ProductItem:
         if (VistaFeatures.instance().yardiIntegration()) {
 
-//            get(proto().item()).setVisible(false);
+            get(proto().item()).setVisible(isEditable() || !getValue().item().isNull());
 
             get(proto().effectiveDate()).setVisible(true);
             get(proto().effectiveDate()).setTooltip(null);

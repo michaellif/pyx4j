@@ -244,9 +244,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             preauthorizedPaymentsPanel.setVisible(!isEditable() && !getValue().leaseParticipant().preauthorizedPayments().isEmpty());
 
             if (isEditable()) {
-                get(proto().leaseParticipant().participantId()).setVisible(false);
-                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseParticipant().participantId()), getValue()
-                        .getPrimaryKey());
+                if (VistaFeatures.instance().yardiIntegration()) {
+                    get(proto().leaseParticipant().participantId()).setVisible(false);
+                } else {
+                    ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseParticipant().participantId()), getValue()
+                            .getPrimaryKey());
+                }
 
                 get(proto().leaseParticipant().customer().person().email()).setMandatory(!getValue().leaseParticipant().customer().user().isNull());
 
