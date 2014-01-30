@@ -52,8 +52,8 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().email()), 20).customLabel(i18n.tr("Agent Email")).build());
 
         // tweak UI:
-        get(proto().status()).setViewable(true);
-        get(proto().closeReason()).setViewable(true);
+        get(proto().status()).setEditable(false);
+        get(proto().closeReason()).setEditable(false);
 
         return main;
     }

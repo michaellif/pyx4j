@@ -142,7 +142,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().reason()), 12).build());
 
         // tweak UI:
-        get(proto().status()).setViewable(true);
+        get(proto().status()).setEditable(false);
         get(proto().result()).addValueChangeHandler(new ValueChangeHandler<Showing.Result>() {
             @Override
             public void onValueChange(ValueChangeEvent<Result> event) {
