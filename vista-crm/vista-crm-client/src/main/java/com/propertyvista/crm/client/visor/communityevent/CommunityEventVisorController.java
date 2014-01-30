@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,7 +59,7 @@ public class CommunityEventVisorController extends AbstractVisorController {
     public void populate(DefaultAsyncCallback<EntitySearchResult<CommunityEvent>> callback) {
         EntityListCriteria<CommunityEvent> criteria = new EntityListCriteria<CommunityEvent>(CommunityEvent.class);
         criteria.eq(criteria.proto().building(), building);
-        criteria.ge(criteria.proto().date(), new LogicalDate());
+        criteria.desc(criteria.proto().date());
         service.list(callback, criteria);
     }
 

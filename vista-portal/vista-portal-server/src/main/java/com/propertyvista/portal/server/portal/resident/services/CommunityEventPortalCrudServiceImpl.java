@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
@@ -51,8 +52,9 @@ public class CommunityEventPortalCrudServiceImpl extends AbstractCrudServiceImpl
 
         EntityQueryCriteria<CommunityEvent> criteria = EntityQueryCriteria.create(CommunityEvent.class);
         criteria.eq(criteria.proto().building(), unit.building());
-        criteria.desc(criteria.proto().date());
-        List<CommunityEvent> events = Persistence.service().query(criteria.desc(criteria.proto().id()));
+        criteria.ge(criteria.proto().date(), new LogicalDate());
+        criteria.asc(criteria.proto().date());
+        List<CommunityEvent> events = Persistence.service().query(criteria);
 
         if (events == null || events.isEmpty()) {
             callback.onSuccess(null);
