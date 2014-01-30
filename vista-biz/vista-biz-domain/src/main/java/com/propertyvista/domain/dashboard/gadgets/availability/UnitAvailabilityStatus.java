@@ -132,7 +132,7 @@ public interface UnitAvailabilityStatus extends IEntity {
     /** <code>(unitRent - unitMarketRent)/marketRent</code> */
     @Caption(name = "Delta (%)")
     @Format("#,##0.00")
-    @Editor(type = EditorType.money)
+    @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> rentDeltaRelative();
 
     /**

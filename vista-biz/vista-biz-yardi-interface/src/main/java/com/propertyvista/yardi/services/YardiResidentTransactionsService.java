@@ -853,6 +853,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     newAvailabilityStatus.statusFrom().setValue(today);
                     newAvailabilityStatus.statusUntil().setValue(OccupancyFacade.MAX_DATE);
                     unitAvailabilityStatusAdapter.mergeUnitInfo(newAvailabilityStatus, unit);
+                    unitAvailabilityStatusAdapter.mergeLeaseInfo(newAvailabilityStatus);
                     Persistence.service().persist(newAvailabilityStatus);
                     return null;
                 }

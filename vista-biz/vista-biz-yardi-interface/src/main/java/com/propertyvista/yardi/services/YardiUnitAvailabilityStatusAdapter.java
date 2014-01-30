@@ -13,7 +13,10 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.math.BigDecimal;
 import java.util.GregorianCalendar;
+
+import org.slf4j.Logger;
 
 import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.VacateDate;
@@ -22,8 +25,10 @@ import com.yardi.entity.mits.Unitleasestatusinfo;
 import com.yardi.entity.mits.Unitoccpstatusinfo;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
@@ -31,9 +36,12 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 /** Converts Yardi Unit Availability to Vista Unit Availability Status */
 public class YardiUnitAvailabilityStatusAdapter {
+
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(YardiUnitAvailabilityStatusAdapter.class);
 
     public UnitAvailabilityStatus extractAvailabilityStatus(ILSUnit unit) {
         UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
@@ -118,9 +126,38 @@ public class YardiUnitAvailabilityStatusAdapter {
      * Attempt to fill lease related info of the availability status (like move-in, move out dates or actual rent) for the given status.
      * 
      * @param status
-     *            must containt reference to partent unitunit reference
+     *            must contain reference to parent
      */
     public void mergeLeaseInfo(UnitAvailabilityStatus status) {
-        // TODO 
+        AptUnit unitId = status.unit().createIdentityStub();
+        if (status.vacancyStatus().getValue() == Vacancy.Vacant || status.vacancyStatus().getValue() == Vacancy.Notice) {
+            Lease lease = retrieveLastLease(unitId);
+            if (lease != null) {
+                Persistence.ensureRetrieve(lease.currentTerm().version().leaseProducts().serviceItem(), AttachLevel.Attached);
+                status.unitRent().setValue(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
+
+                if (status.marketRent().getValue() != null) {
+                    status.rentDeltaAbsolute().setValue(status.unitRent().getValue().subtract(status.marketRent().getValue()));
+                    if (status.marketRent().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                        status.rentDeltaRelative().setValue(
+                                status.rentDeltaAbsolute().getValue().divide(status.marketRent().getValue(), 2, BigDecimal.ROUND_HALF_UP));
+                    }
+                }
+
+            } else {
+                log.warn("failed to set unit rent for availability status of unit pk={}: lease not found", unitId.getPrimaryKey());
+            }
+        }
+    }
+
+    /** retrieves last lease */
+    private Lease retrieveLastLease(AptUnit unitId) {
+        LogicalDate today = SystemDateManager.getLogicalDate();
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.eq(criteria.proto().unit(), unitId);
+        criteria.le(criteria.proto().currentTerm().termFrom(), today);
+        criteria.desc(criteria.proto().currentTerm().termTo());
+        Lease lease = Persistence.service().retrieve(criteria);
+        return lease;
     }
 }

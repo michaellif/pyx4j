@@ -300,7 +300,7 @@ public class YardiUnitAvailabilityStatusAdapterTest {
 
     @Test
     public void testUnitRent() {
-        // TODO must be fetched out of the current lease?
+        // this is fetched from current or previous lease
     }
 
     @Test
