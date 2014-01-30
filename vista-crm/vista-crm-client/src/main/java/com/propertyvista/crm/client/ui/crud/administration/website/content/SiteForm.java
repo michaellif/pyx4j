@@ -37,7 +37,8 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         selectTab(addTab(content));
 
         content = new TwoColumnFlexFormPanel(i18n.tr("Site Logos"));
-        content.setWidget(0, 0, 2, inject(proto().logo(), new SiteImageResourceFolder(isEditable())));
+        content.setH4(0, 0, 2, i18n.tr("Recommended Logo size not to exceed: small - {0}, large - {1} pixels", "160x80", "300x90"));
+        content.setWidget(1, 0, 2, inject(proto().logo(), new SiteImageResourceFolder(isEditable())));
         addTab(content);
 
         content = new TwoColumnFlexFormPanel(proto().slogan().getMeta().getCaption());

@@ -120,7 +120,8 @@ select {
 	text-decoration:none;
 }
 #siteLogo {
-	height:93px;
+	max-width:300px;
+	max-height:93px;
 }
 #noLogo {
 	font-size:40px;

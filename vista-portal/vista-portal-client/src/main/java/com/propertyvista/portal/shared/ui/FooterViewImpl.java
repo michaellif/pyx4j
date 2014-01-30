@@ -286,6 +286,8 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
             pmcLogoImage = new Image();
             pmcLogoImage.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             pmcLogoImage.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            pmcLogoImage.getElement().getStyle().setProperty("maxWidth", "160px");
+            pmcLogoImage.getElement().getStyle().setProperty("maxHeight", "80px");
             contentPanel.add(pmcLogoImage);
 
             pmcTextPanel = new HTML();

@@ -120,9 +120,9 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 5, 20, 20).build());
-            main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().large().file(), largeLogo), 5, 20, 20).build());
+            main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().large().file(), largeLogo), 5, 20, 20).customLabel(i18n.tr("Large Logo")).build());
             main.getFlexCellFormatter().setRowSpan(row, 1, 2);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().small().file(), smallLogo), 5, 20, 20).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().small().file(), smallLogo), 5, 20, 20).customLabel(i18n.tr("Small Logo")).build());
 
             return main;
         }
