@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -36,12 +37,14 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
+import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -49,6 +52,7 @@ import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
+import com.propertyvista.shared.rpc.LegalTermsTO;
 
 public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
@@ -60,38 +64,38 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         super(view, null, i18n.tr("Create an Account to Begin"), ThemeColor.contrast2, 1);
         setActionsToolbar(new SignUpToolbar());
 
-        FlowPanel contentPanel = new FlowPanel();
+        final FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        {
-            signupForm = new SignUpForm();
-            signupForm.initContent();
-            contentPanel.add(signupForm);
-        }
+        signupForm = new SignUpForm();
+        signupForm.initContent();
+        contentPanel.add(signupForm);
 
-        {
+        GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPMCProspectPortalTermsAndConditions(new DefaultAsyncCallback<LegalTermsTO>() {
+            @Override
+            public void onSuccess(LegalTermsTO result) {
+                SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
+                String portalTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
+                String pmcTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
 
-            SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
-            String portalTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
-            String pmcTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
+                loginTermsBuilder.appendHtmlConstant(i18n.tr(
+                        "By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to the {0} and {1}.", "<span id=\""
+                                + portalTermsAndConditionsAnchorId + "\"></span>", "<span id=\"" + pmcTermsAndConditionsAnchorId + "\"></span>"));
 
-            loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to the {0} and {1}.",
-                    "<span id=\"" + portalTermsAndConditionsAnchorId + "\"></span>", "<span id=\"" + pmcTermsAndConditionsAnchorId + "\"></span>"));
+                HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
+                loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+                loginTermsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
 
-            HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
-            loginTermsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
-            loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+                Anchor portalTermsAndConditionsAnchor = new TermsAnchor(i18n.tr("ONLINE APPLICATION TERMS AND CONDITIONS"),
+                        PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
+                loginTermsLinkPanel.addAndReplaceElement(portalTermsAndConditionsAnchor, portalTermsAndConditionsAnchorId);
 
-            Anchor portalTermsAndConditionsAnchor = new TermsAnchor(i18n.tr("ONLINE APPLICATION TERMS AND CONDITIONS"),
-                    PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
-            loginTermsLinkPanel.addAndReplaceElement(portalTermsAndConditionsAnchor, portalTermsAndConditionsAnchorId);
+                Anchor pmcTermsAndConditionsAnchor = new TermsAnchor(result.caption().getValue(), PortalSiteMap.PortalTerms.PMCTermsAndConditions.class);
+                loginTermsLinkPanel.addAndReplaceElement(pmcTermsAndConditionsAnchor, pmcTermsAndConditionsAnchorId);
 
-            Anchor pmcTermsAndConditionsAnchor = new TermsAnchor(i18n.tr("GENERAL RENTAL AND OCCUPANCY CRITERIA GUIDELINES"),
-                    PortalSiteMap.PortalTerms.PMCTermsAndConditions.class);
-            loginTermsLinkPanel.addAndReplaceElement(pmcTermsAndConditionsAnchor, pmcTermsAndConditionsAnchorId);
-
-            contentPanel.add(loginTermsLinkPanel);
-        }
+                contentPanel.add(loginTermsLinkPanel);
+            }
+        });
 
         setContent(contentPanel);
     }

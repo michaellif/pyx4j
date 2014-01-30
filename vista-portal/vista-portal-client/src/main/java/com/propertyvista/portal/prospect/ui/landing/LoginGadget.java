@@ -16,6 +16,7 @@ package com.propertyvista.portal.prospect.ui.landing;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -46,6 +47,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -54,11 +56,13 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.portal.prospect.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
+import com.propertyvista.shared.rpc.LegalTermsTO;
 
 public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
@@ -77,32 +81,36 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
         setActionsToolbar(loginToolbar);
 
-        FlowPanel contentPanel = new FlowPanel();
+        final FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         loginForm = new LoginForm(this);
         loginForm.initContent();
         contentPanel.add(loginForm);
 
-        SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
-        String portalTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
-        String pmcTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
+        GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPMCProspectPortalTermsAndConditions(new DefaultAsyncCallback<LegalTermsTO>() {
+            @Override
+            public void onSuccess(LegalTermsTO result) {
+                SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
+                String portalTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
+                String pmcTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
 
-        loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to the {0} and {1}.", "<span id=\""
-                + portalTermsAndConditionsAnchorId + "\"></span>", "<span id=\"" + pmcTermsAndConditionsAnchorId + "\"></span>"));
+                loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to the {0} and {1}.",
+                        "<span id=\"" + portalTermsAndConditionsAnchorId + "\"></span>", "<span id=\"" + pmcTermsAndConditionsAnchorId + "\"></span>"));
 
-        HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
-        loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+                HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
+                loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
-        Anchor portalTermsAndConditionsAnchor = new TermsAnchor(i18n.tr("ONLINE APPLICATION TERMS AND CONDITIONS"),
-                PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
-        loginTermsLinkPanel.addAndReplaceElement(portalTermsAndConditionsAnchor, portalTermsAndConditionsAnchorId);
+                Anchor portalTermsAndConditionsAnchor = new TermsAnchor(i18n.tr("ONLINE APPLICATION TERMS AND CONDITIONS"),
+                        PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
+                loginTermsLinkPanel.addAndReplaceElement(portalTermsAndConditionsAnchor, portalTermsAndConditionsAnchorId);
 
-        Anchor pmcTermsAndConditionsAnchor = new TermsAnchor(i18n.tr("GENERAL RENTAL AND OCCUPANCY CRITERIA GUIDELINES"),
-                PortalSiteMap.PortalTerms.PMCTermsAndConditions.class);
-        loginTermsLinkPanel.addAndReplaceElement(pmcTermsAndConditionsAnchor, pmcTermsAndConditionsAnchorId);
+                Anchor pmcTermsAndConditionsAnchor = new TermsAnchor(result.caption().getValue(), PortalSiteMap.PortalTerms.PMCTermsAndConditions.class);
+                loginTermsLinkPanel.addAndReplaceElement(pmcTermsAndConditionsAnchor, pmcTermsAndConditionsAnchorId);
 
-        contentPanel.add(loginTermsLinkPanel);
+                contentPanel.add(loginTermsLinkPanel);
+            }
+        });
 
         setContent(contentPanel);
     }
