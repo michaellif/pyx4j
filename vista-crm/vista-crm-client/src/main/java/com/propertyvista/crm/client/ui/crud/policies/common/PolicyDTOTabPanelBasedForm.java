@@ -31,12 +31,12 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -186,7 +186,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
      * 
      * @author ArtyomB
      */
-    private static class PolicyNodeEditor extends CEntityDecoratableForm<PolicyNode> {
+    private static class PolicyNodeEditor extends CEntityForm<PolicyNode> {
 
         private Map<Class<? extends PolicyNode>, CComponent<?>> nodeTypeToComponentMap;
 

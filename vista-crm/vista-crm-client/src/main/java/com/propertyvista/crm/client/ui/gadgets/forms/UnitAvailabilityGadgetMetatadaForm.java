@@ -17,13 +17,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
 
-public class UnitAvailabilityGadgetMetatadaForm extends CEntityDecoratableForm<UnitAvailabilityGadgetMetadata> {
+public class UnitAvailabilityGadgetMetatadaForm extends CEntityForm<UnitAvailabilityGadgetMetadata> {
 
     public UnitAvailabilityGadgetMetatadaForm() {
         super(UnitAvailabilityGadgetMetadata.class);

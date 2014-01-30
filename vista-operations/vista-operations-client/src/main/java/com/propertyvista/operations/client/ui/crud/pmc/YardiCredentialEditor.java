@@ -18,18 +18,18 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
-class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
+class YardiCredentialEditor extends CEntityForm<PmcYardiCredential> {
 
     private static final I18n i18n = I18n.get(YardiCredentialEditor.class);
 

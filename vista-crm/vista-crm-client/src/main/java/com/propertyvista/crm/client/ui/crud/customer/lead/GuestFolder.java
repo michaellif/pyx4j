@@ -18,13 +18,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -70,7 +70,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
         return super.create(member);
     }
 
-    class GuestEditor extends CEntityDecoratableForm<Guest> {
+    class GuestEditor extends CEntityForm<Guest> {
 
         public GuestEditor() {
             super(Guest.class);

@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 
-public class BuildingListerGadgetMetadataForm extends CEntityDecoratableForm<BuildingListerGadgetMetadata> {
+public class BuildingListerGadgetMetadataForm extends CEntityForm<BuildingListerGadgetMetadata> {
 
     public BuildingListerGadgetMetadataForm() {
         super(BuildingListerGadgetMetadata.class);

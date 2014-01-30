@@ -18,19 +18,19 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.property.vendor.Warranty;
 import com.propertyvista.domain.property.vendor.WarrantyItem;
 
-public class WarrantyEditor extends CEntityDecoratableForm<Warranty> {
+public class WarrantyEditor extends CEntityForm<Warranty> {
 
     private static final I18n i18n = I18n.get(WarrantyEditor.class);
 

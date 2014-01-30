@@ -17,12 +17,12 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -145,7 +145,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         public PortalRegistrationInformationDialog(TenantPortalAccessInformationDTO info) {
             super(i18n.tr("Portal Registration Information"));
-            CEntityDecoratableForm<TenantPortalAccessInformationDTO> portalRegistrationInfoForm = new CEntityDecoratableForm<TenantPortalAccessInformationDTO>(
+            CEntityForm<TenantPortalAccessInformationDTO> portalRegistrationInfoForm = new CEntityForm<TenantPortalAccessInformationDTO>(
                     TenantPortalAccessInformationDTO.class) {
                 @Override
                 public IsWidget createContent() {

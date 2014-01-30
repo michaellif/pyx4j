@@ -19,6 +19,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -26,7 +27,6 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -75,7 +75,7 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
             return super.create(member);
         }
 
-        private class InvoiceLineItemViewer extends CEntityDecoratableForm<InvoiceLineItem> {
+        private class InvoiceLineItemViewer extends CEntityForm<InvoiceLineItem> {
 
             public InvoiceLineItemViewer() {
                 super(InvoiceLineItem.class);

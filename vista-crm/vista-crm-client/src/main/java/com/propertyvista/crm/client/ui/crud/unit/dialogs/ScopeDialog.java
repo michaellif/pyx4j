@@ -22,13 +22,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopingResultDTO.ScopingResult;
@@ -37,7 +37,7 @@ public class ScopeDialog extends OkCancelDialog {
 
     private final static I18n i18n = I18n.get(ScopeDialog.class);
 
-    private CEntityDecoratableForm<ScopingResultDTO> form;
+    private CEntityForm<ScopingResultDTO> form;
 
     private final Presenter presenter;
 
@@ -45,7 +45,7 @@ public class ScopeDialog extends OkCancelDialog {
         super(i18n.tr("Scoping"));
         this.presenter = presenter;
 
-        form = new CEntityDecoratableForm<ScopingResultDTO>(ScopingResultDTO.class) {
+        form = new CEntityForm<ScopingResultDTO>(ScopingResultDTO.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();

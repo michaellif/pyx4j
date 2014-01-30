@@ -25,11 +25,10 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-
-public abstract class ZoomableViewForm<E extends IEntity> extends CEntityDecoratableForm<E> {
+public abstract class ZoomableViewForm<E extends IEntity> extends CEntityForm<E> {
 
     public interface ZoominRequestHandler {
         void onZoomIn(IObject<?> zoomableObject);

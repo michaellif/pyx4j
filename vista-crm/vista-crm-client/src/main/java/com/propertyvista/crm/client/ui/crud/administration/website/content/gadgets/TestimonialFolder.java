@@ -17,9 +17,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.site.Testimonial;
@@ -38,7 +38,7 @@ public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
         return super.create(member);
     }
 
-    class TestimonialEditor extends CEntityDecoratableForm<Testimonial> {
+    class TestimonialEditor extends CEntityForm<Testimonial> {
 
         public TestimonialEditor() {
             super(Testimonial.class);

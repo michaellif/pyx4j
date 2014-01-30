@@ -16,15 +16,15 @@ package com.propertyvista.common.client.ui.components.editors.dto.wizards;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.dto.vista2pmc.PersonalInformationDTO;
 
-public class PersonalInformationForm extends CEntityDecoratableForm<PersonalInformationDTO> {
+public class PersonalInformationForm extends CEntityForm<PersonalInformationDTO> {
 
     public PersonalInformationForm() {
         super(PersonalInformationDTO.class);

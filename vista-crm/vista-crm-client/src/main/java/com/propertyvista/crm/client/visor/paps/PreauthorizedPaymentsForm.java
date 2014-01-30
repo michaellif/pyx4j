@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -33,7 +34,6 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -42,7 +42,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
-public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<PreauthorizedPaymentsDTO> {
+public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentsDTO> {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsForm.class);
 
@@ -114,7 +114,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
             });
         }
 
-        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
+        private class PreauthorizedPaymentEditor extends CEntityForm<PreauthorizedPaymentDTO> {
 
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);

@@ -23,15 +23,15 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
-public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder extends BulkItemsHolder<Item>> extends CEntityDecoratableForm<Holder> {
+public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder extends BulkItemsHolder<Item>> extends CEntityForm<Holder> {
 
     private final static I18n i18n = I18n.get(ItemsHolderForm.class);
 

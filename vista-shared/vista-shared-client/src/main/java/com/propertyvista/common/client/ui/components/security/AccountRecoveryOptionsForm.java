@@ -22,16 +22,16 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
-public class AccountRecoveryOptionsForm extends CEntityDecoratableForm<AccountRecoveryOptionsDTO> {
+public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptionsDTO> {
 
     private static final I18n i18n = I18n.get(AccountRecoveryOptionsForm.class);
 

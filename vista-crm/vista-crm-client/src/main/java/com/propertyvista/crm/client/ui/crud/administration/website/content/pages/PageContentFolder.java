@@ -33,7 +33,6 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
@@ -121,7 +120,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         callback.onSuccess(newEntity);
     }
 
-    class PageContentEditor extends CEntityDecoratableForm<PageContent> {
+    class PageContentEditor extends CEntityForm<PageContent> {
 
         public PageContentEditor() {
             super(PageContent.class);

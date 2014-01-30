@@ -18,16 +18,16 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.dto.vista2pmc.AgreementDTO;
 
-public class AgreementForm extends CEntityDecoratableForm<AgreementDTO> {
+public class AgreementForm extends CEntityForm<AgreementDTO> {
 
     private static final I18n i18n = I18n.get(AgreementForm.class);
 

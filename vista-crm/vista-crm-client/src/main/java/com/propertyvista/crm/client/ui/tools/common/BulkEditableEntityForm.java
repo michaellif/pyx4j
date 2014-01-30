@@ -17,11 +17,11 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.forms.client.ui.CEntityForm;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
-public abstract class BulkEditableEntityForm<Item extends BulkEditableEntity> extends CEntityDecoratableForm<Item> {
+public abstract class BulkEditableEntityForm<Item extends BulkEditableEntity> extends CEntityForm<Item> {
 
     public enum Styles implements IStyleName {
 

@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -29,7 +30,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillDataDTO;
@@ -76,7 +76,7 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
             return super.create(member);
         }
 
-        private class BillDataViewer extends CEntityDecoratableForm<BillDataDTO> {
+        private class BillDataViewer extends CEntityForm<BillDataDTO> {
 
             public BillDataViewer() {
                 super(BillDataDTO.class);

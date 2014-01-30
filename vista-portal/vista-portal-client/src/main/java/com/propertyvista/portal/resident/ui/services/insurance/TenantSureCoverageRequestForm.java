@@ -18,10 +18,10 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.common.client.ui.components.tenantinsurance.YesNoComboBox;
 import com.propertyvista.misc.VistaTODO;
@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureAgre
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<TenantSureCoverageDTO> {
+public class TenantSureCoverageRequestForm extends CEntityForm<TenantSureCoverageDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureCoverageRequestForm.class);
 

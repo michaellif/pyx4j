@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -38,7 +39,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -86,7 +86,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
             }
         }
 
-        private static class DepositPolicyItemEditor extends CEntityDecoratableForm<DepositPolicyItem> {
+        private static class DepositPolicyItemEditor extends CEntityForm<DepositPolicyItem> {
 
             private final SimplePanel valueHolder = new SimplePanel();
 

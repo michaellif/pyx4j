@@ -17,15 +17,15 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
-public class PropertyAccountInfoForm extends CEntityDecoratableForm<OnlinePaymentSetupDTO.PropertyAccountInfo> {
+public class PropertyAccountInfoForm extends CEntityForm<OnlinePaymentSetupDTO.PropertyAccountInfo> {
 
     public PropertyAccountInfoForm() {
         super(PropertyAccountInfo.class);

@@ -17,13 +17,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.security.LoginNotificationsConfigurationDTO;
 
-public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<LoginNotificationsConfigurationDTO> {
+public class LoginNotificationsConfigurationForm extends CEntityForm<LoginNotificationsConfigurationDTO> {
 
     public LoginNotificationsConfigurationForm() {
         super(LoginNotificationsConfigurationDTO.class);

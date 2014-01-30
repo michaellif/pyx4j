@@ -17,13 +17,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.domain.scheduler.TriggerNotification;
@@ -45,7 +45,7 @@ public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
         }
     }
 
-    public class NotificationEditor extends CEntityDecoratableForm<TriggerNotification> {
+    public class NotificationEditor extends CEntityForm<TriggerNotification> {
 
         public NotificationEditor() {
             super(TriggerNotification.class);

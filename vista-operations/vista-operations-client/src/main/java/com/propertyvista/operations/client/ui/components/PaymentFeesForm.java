@@ -15,14 +15,14 @@ package com.propertyvista.operations.client.ui.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 
-public class PaymentFeesForm<E extends AbstractPaymentFees> extends CEntityDecoratableForm<E> {
+public class PaymentFeesForm<E extends AbstractPaymentFees> extends CEntityForm<E> {
 
     public PaymentFeesForm(Class<E> clazz) {
         super(clazz);

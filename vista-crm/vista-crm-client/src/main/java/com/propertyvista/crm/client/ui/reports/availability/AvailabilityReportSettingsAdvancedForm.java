@@ -17,16 +17,16 @@ import java.util.Arrays;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
-public class AvailabilityReportSettingsAdvancedForm extends CEntityDecoratableForm<AvailabilityReportMetadata> {
+public class AvailabilityReportSettingsAdvancedForm extends CEntityForm<AvailabilityReportMetadata> {
 
     public AvailabilityReportSettingsAdvancedForm() {
         super(AvailabilityReportMetadata.class);

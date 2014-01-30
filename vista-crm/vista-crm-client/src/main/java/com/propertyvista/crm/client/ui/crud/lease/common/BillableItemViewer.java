@@ -38,7 +38,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.editors.YardiDataEditor;
@@ -59,7 +58,7 @@ import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
+public class BillableItemViewer extends CEntityForm<BillableItem> {
 
     static final I18n i18n = I18n.get(BillableItemViewer.class);
 

@@ -19,10 +19,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
@@ -43,7 +43,7 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
         return super.create(member);
     }
 
-    private class DebitRecordEditor extends CEntityDecoratableForm<PadSimDebitRecord> {
+    private class DebitRecordEditor extends CEntityForm<PadSimDebitRecord> {
 
         public DebitRecordEditor() {
             super(PadSimDebitRecord.class);

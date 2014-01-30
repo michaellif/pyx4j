@@ -30,9 +30,9 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkItemsFolder;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
@@ -65,7 +65,7 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
         return super.create(member);
     }
 
-    private static final class PapReviewForm extends CEntityDecoratableForm<PapReviewDTO> {
+    private static final class PapReviewForm extends CEntityForm<PapReviewDTO> {
 
         private PapChargeReviewForm chargeTotals;
 

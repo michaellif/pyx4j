@@ -15,15 +15,15 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.company.Company;
 
-public class CompanyEditor extends CEntityDecoratableForm<Company> {
+public class CompanyEditor extends CEntityForm<Company> {
 
     public CompanyEditor() {
         super(Company.class);

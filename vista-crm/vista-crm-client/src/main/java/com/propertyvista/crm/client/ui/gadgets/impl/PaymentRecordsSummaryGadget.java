@@ -43,7 +43,6 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -307,7 +306,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
         return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
     }
 
-    private static final class PaymentFeesForm extends CEntityDecoratableForm<PaymentFeesHolderDTO> {
+    private static final class PaymentFeesForm extends CEntityForm<PaymentFeesHolderDTO> {
 
         public PaymentFeesForm() {
             super(PaymentFeesHolderDTO.class);

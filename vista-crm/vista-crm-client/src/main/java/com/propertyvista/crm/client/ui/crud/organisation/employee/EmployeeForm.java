@@ -26,6 +26,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -40,7 +41,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.security.UserAuditingConfigurationForm;
@@ -260,7 +260,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
             return super.create(member);
         }
 
-        private class NotificationEditor extends CEntityDecoratableForm<Notification> {
+        private class NotificationEditor extends CEntityForm<Notification> {
 
             public NotificationEditor() {
                 super(Notification.class);

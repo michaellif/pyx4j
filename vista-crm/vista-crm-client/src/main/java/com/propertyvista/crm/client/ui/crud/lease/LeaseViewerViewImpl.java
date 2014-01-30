@@ -37,6 +37,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -52,7 +53,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -563,7 +563,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         private final boolean showTermination;
 
-        private CEntityDecoratableForm<LeaseDTO> content;
+        private CEntityForm<LeaseDTO> content;
 
         public TermLeaseBox(CompletionType action) {
             super(i18n.tr("Please fill"));
@@ -577,7 +577,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         protected Widget createBody() {
             getOkButton().setEnabled(true);
 
-            content = new CEntityDecoratableForm<LeaseDTO>(LeaseDTO.class) {
+            content = new CEntityForm<LeaseDTO>(LeaseDTO.class) {
                 @Override
                 public IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();

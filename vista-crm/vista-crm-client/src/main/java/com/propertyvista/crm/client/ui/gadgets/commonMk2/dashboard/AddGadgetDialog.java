@@ -50,7 +50,6 @@ import com.pyx4j.widgets.client.dialog.OkDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
@@ -151,7 +150,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
 
         }
 
-        public class GadgetDescriptorForm extends CEntityDecoratableForm<AddGadgetGadgetDescriptor> {
+        public class GadgetDescriptorForm extends CEntityForm<AddGadgetGadgetDescriptor> {
 
             public GadgetDescriptorForm() {
                 super(AddGadgetGadgetDescriptor.class);

@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
@@ -27,7 +28,6 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -55,7 +55,7 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
         return super.create(member);
     }
 
-    class ProductChargeEditor extends CEntityDecoratableForm<InvoiceProductCharge> {
+    class ProductChargeEditor extends CEntityForm<InvoiceProductCharge> {
 
         public ProductChargeEditor() {
             super(InvoiceProductCharge.class);

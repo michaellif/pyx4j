@@ -44,7 +44,6 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.editors.YardiDataEditor;
@@ -68,7 +67,7 @@ import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
+public class BillableItemEditor extends CEntityForm<BillableItem> {
 
     static final I18n i18n = I18n.get(BillableItemEditor.class);
 
@@ -174,7 +173,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         // tweak UI for ProductItem:
         if (VistaFeatures.instance().yardiIntegration()) {
 
-            get(proto().item()).setVisible(false);
+//            get(proto().item()).setVisible(false);
 
             get(proto().effectiveDate()).setVisible(true);
             get(proto().effectiveDate()).setTooltip(null);

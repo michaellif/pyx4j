@@ -17,11 +17,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 
 public abstract class PasswordEntryDialog extends OkCancelDialog {
@@ -33,7 +33,7 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
         // TODO Auto-generated constructor stub
     }
 
-    public static class PasswordEntryForm extends CEntityDecoratableForm<PasswordEntryDTO> {
+    public static class PasswordEntryForm extends CEntityForm<PasswordEntryDTO> {
 
         private final boolean requirePasswordConfirm;
 

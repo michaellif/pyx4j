@@ -17,11 +17,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
@@ -31,7 +31,7 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
 
     private static final I18n i18n = I18n.get(PmcBusinessInformationDocumentFolder.class);
 
-    private class PmcBusinessInformationDocumentForm extends CEntityDecoratableForm<PmcBusinessInfoDocument> {
+    private class PmcBusinessInformationDocumentForm extends CEntityForm<PmcBusinessInfoDocument> {
 
         public PmcBusinessInformationDocumentForm() {
             super(PmcBusinessInfoDocument.class);

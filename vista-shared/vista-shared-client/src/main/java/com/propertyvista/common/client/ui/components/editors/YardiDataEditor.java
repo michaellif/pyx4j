@@ -15,15 +15,15 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 
-public class YardiDataEditor extends CEntityDecoratableForm<YardiLeaseChargeData> {
+public class YardiDataEditor extends CEntityForm<YardiLeaseChargeData> {
 
     private static final I18n i18n = I18n.get(YardiDataEditor.class);
 

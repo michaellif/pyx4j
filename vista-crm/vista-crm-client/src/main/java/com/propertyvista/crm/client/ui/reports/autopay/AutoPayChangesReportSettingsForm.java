@@ -19,14 +19,14 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.reports.eft.SelectedBuildingsFolder;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public class AutoPayChangesReportSettingsForm extends CEntityDecoratableForm<AutoPayChangesReportMetadata> {
+public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChangesReportMetadata> {
 
     public AutoPayChangesReportSettingsForm() {
         super(AutoPayChangesReportMetadata.class);

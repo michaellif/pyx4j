@@ -21,16 +21,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.pmc.info.PmcSignature;
 
-public class PmcSignatureForm extends CEntityDecoratableForm<PmcSignature> {
+public class PmcSignatureForm extends CEntityForm<PmcSignature> {
 
     private static final I18n i18n = I18n.get(PmcSignatureForm.class);
 

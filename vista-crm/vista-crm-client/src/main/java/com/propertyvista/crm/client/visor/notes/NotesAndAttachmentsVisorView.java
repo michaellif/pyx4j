@@ -55,7 +55,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
@@ -191,7 +190,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 confirm.show();
             }
 
-            private class NoteEditor extends CEntityDecoratableForm<NotesAndAttachments> {
+            private class NoteEditor extends CEntityForm<NotesAndAttachments> {
 
                 private Button btnSave;
 

@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.reports.availability;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -25,7 +25,7 @@ import com.propertyvista.crm.client.ui.reports.NotEmptySetValidator;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
-public class AvailabilityReportSettingsSimpleForm extends CEntityDecoratableForm<AvailabilityReportMetadata> {
+public class AvailabilityReportSettingsSimpleForm extends CEntityForm<AvailabilityReportMetadata> {
 
     public AvailabilityReportSettingsSimpleForm() {
         super(AvailabilityReportMetadata.class);

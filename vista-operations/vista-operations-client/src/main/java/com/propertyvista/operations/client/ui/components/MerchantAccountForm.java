@@ -15,13 +15,13 @@ package com.propertyvista.operations.client.ui.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.AbstractMerchantAccount;
 
-public class MerchantAccountForm extends CEntityDecoratableForm<AbstractMerchantAccount> {
+public class MerchantAccountForm extends CEntityForm<AbstractMerchantAccount> {
 
     public MerchantAccountForm() {
         super(AbstractMerchantAccount.class);

@@ -16,14 +16,13 @@ package com.propertyvista.common.client.ui.components.login;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CCaptcha;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-
 @Deprecated
 // TODO replaces LoginForm with this component,  and all the buttons etc, should be created in the view
-public class AuthenticationRequestForm extends CEntityDecoratableForm<AuthenticationRequest> {
+public class AuthenticationRequestForm extends CEntityForm<AuthenticationRequest> {
 
     public AuthenticationRequestForm() {
         super(AuthenticationRequest.class);

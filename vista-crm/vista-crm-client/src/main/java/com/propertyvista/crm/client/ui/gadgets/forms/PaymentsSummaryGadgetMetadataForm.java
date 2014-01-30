@@ -22,19 +22,19 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 
-public class PaymentsSummaryGadgetMetadataForm extends CEntityDecoratableForm<PaymentsSummaryGadgetMetadata> {
+public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSummaryGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(PaymentsSummaryGadgetMetadataForm.class);
 

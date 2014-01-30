@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
@@ -40,10 +41,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 
-public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeRequest> {
+public class PasswordChangeForm extends CEntityForm<PasswordChangeRequest> {
 
     private final static I18n i18n = I18n.get(PasswordChangeForm.class);
 

@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -28,7 +29,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.BillingTheme;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -36,7 +36,7 @@ import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class BillForm extends CEntityDecoratableForm<BillDTO> {
+public class BillForm extends CEntityForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 
@@ -99,8 +99,8 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             content.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer()));
             content.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsibleViewer()));
 
-            Widget pastDueAmount = new FormWidgetDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyLabel())).customLabel(i18n.tr("Previous Bill Balance"))
-                    .build();
+            Widget pastDueAmount = new FormWidgetDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyLabel())).customLabel(
+                    i18n.tr("Previous Bill Balance")).build();
             pastDueAmount.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
             content.setWidget(++row, 0, pastDueAmount);
         }

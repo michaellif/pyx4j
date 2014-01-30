@@ -16,17 +16,17 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 
-public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityDecoratableForm<ArrearsYOYAnalysisChartGadgetMetadata> {
+public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityForm<ArrearsYOYAnalysisChartGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(ArrearsYoyAnalysisGadgetMetadataForm.class);
 

@@ -24,10 +24,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
@@ -85,7 +85,7 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
         return super.create(member);
     }
 
-    class PageMetaTagsEditor extends CEntityDecoratableForm<PageMetaTags> {
+    class PageMetaTagsEditor extends CEntityForm<PageMetaTags> {
 
         public PageMetaTagsEditor() {
             super(PageMetaTags.class);
