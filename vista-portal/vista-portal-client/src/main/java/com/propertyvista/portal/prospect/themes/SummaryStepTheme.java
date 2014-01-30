@@ -24,7 +24,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class SummaryStepTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        SummaryStepForm, SummaryStepSection, SummaryStepSectionCaptionBar, SummaryStepSectionIndex, SummaryStepSectionCaption
+        SummaryStepForm, SummaryStepSection, SummaryStepSectionCaptionBar, SummaryStepSectionStatus, SummaryStepSectionCaption
     }
 
     public SummaryStepTheme() {
@@ -38,21 +38,29 @@ public class SummaryStepTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.SummaryStepSection, " .", DefaultWidgetsTheme.StyleName.CollapsablePanelImage);
-        style.addProperty("height", "42px");
+        style.addProperty("height", "50px");
         addStyle(style);
 
         style = new Style(".", StyleName.SummaryStepSectionCaptionBar);
+        style.addProperty("height", "40px");
+        style.addProperty("line-height", "40px");
         style.addProperty("margin", "2px -10px");
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
         style.addProperty("padding", "5px;");
         addStyle(style);
 
-        style = new Style(".", StyleName.SummaryStepSectionIndex);
-        style.addProperty("margin-left", "40px");
+        style = new Style(".", StyleName.SummaryStepSectionStatus);
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("position", "absolute");
+        style.addProperty("right", "0");
+        style.addProperty("margin", "4px 20px 0 0");
         addStyle(style);
 
         style = new Style(".", StyleName.SummaryStepSectionCaption);
-        style.addProperty("padding-left", "10px");
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("padding-left", "40px");
         addStyle(style);
 
     }

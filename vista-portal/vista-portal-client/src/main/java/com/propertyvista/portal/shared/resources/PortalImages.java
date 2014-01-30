@@ -149,6 +149,28 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     @Source("Social-Flickr.png")
     ImageResource socialFlickr();
 
+    //=============== Messages ====================
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Messages_Icon_Close.png")
+    ImageResource messageClose();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Messages_Icon_Error.png")
+    ImageResource messageError();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Messages_Icon_Information.png")
+    ImageResource messageInformation();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Messages_Icon_Success.png")
+    ImageResource messageSuccess();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Messages_Icon_Warning.png")
+    ImageResource messageWarning();
+
     //=============== Devices ====================
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)

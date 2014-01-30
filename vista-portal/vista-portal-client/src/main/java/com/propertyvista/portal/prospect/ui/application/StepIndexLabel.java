@@ -47,14 +47,14 @@ public class StepIndexLabel extends HTML {
             getElement().getStyle().setBackgroundColor("#999");
             break;
         case complete:
-            getElement().getStyle().setBackgroundColor("#93c948");
+            getElement().getStyle().setBackgroundColor("#5EA11B");
             break;
         case current:
             getElement().getStyle().setBackgroundColor("#fff");
             getElement().getStyle().setColor("#999");
             break;
         case invalid:
-            getElement().getStyle().setBackgroundColor("#ef372f");
+            getElement().getStyle().setBackgroundColor("#FF4F3A");
             break;
         }
     }

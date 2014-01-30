@@ -13,10 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -30,9 +28,8 @@ import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.prospect.ui.application.StepIndexLabel;
-import com.propertyvista.portal.prospect.ui.application.NavigStepItem.StepStatus;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public abstract class AbstractSectionPanel extends CollapsablePanel {
@@ -97,38 +94,37 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
     }
 
     public void updateState() {
-        if (step.isStepComplete()) {
-            captionBar.setStepStatus(StepStatus.complete);
-        } else if (step.isStepVisited()) {
-            captionBar.setStepStatus(StepStatus.invalid);
-        } else {
-            captionBar.setStepStatus(StepStatus.notComplete);
-        }
+
+        captionBar.updateState();
+
     }
 
     class SectionCaptionBar extends FlowPanel {
 
-        private final StepIndexLabel indexLabel;
+        private final Image indexLabel;
 
         public SectionCaptionBar(int index, String caption) {
 
             setStyleName(SummaryStepTheme.StyleName.SummaryStepSectionCaptionBar.name());
 
-            indexLabel = new StepIndexLabel(String.valueOf(index));
-            indexLabel.addStyleName(SummaryStepTheme.StyleName.SummaryStepSectionIndex.name());
-            indexLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            add(indexLabel);
-
             Label captionLabel = new Label(caption);
             captionLabel.setStyleName(SummaryStepTheme.StyleName.SummaryStepSectionCaption.name());
-            captionLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             add(captionLabel);
 
-            getElement().getStyle().setFloat(Float.NONE);
+            indexLabel = new Image();
+            indexLabel.addStyleName(SummaryStepTheme.StyleName.SummaryStepSectionStatus.name());
+            add(indexLabel);
+
         }
 
-        public void setStepStatus(StepStatus status) {
-            indexLabel.setStatus(status);
+        void updateState() {
+            if (step.isStepComplete()) {
+                indexLabel.setResource(PortalImages.INSTANCE.messageSuccess());
+            } else if (step.isStepVisited()) {
+                indexLabel.setResource(PortalImages.INSTANCE.messageError());
+            } else {
+                indexLabel.setResource(null);
+            }
         }
 
     }
