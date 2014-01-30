@@ -35,11 +35,6 @@ import com.propertyvista.shared.rpc.LegalTermsTO;
 public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
-    public void getPortalTerms(AsyncCallback<LegalTermsTO> callback) {
-        getVistaTerms(callback, VistaTerms.Target.ResidentPortalTermsAndConditions);
-    }
-
-    @Override
     public void getTenantBillingTerms(AsyncCallback<LegalTermsTO> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantBillingTerms);
     }

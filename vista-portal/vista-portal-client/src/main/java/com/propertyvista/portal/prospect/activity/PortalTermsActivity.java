@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ProspectPortalTerms;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.TermsView;
@@ -61,10 +60,6 @@ public class PortalTermsActivity extends AbstractActivity {
 
         } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantBillingTerms(callback);
-        } else if (place instanceof ProspectPortalTerms.ApplicantTermsAndConditions) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPVProspectPortalTermsAndConditions(callback);
-        } else if (place instanceof ProspectPortalTerms.RentalCriteriaGuidelines) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPMCProspectPortalTermsAndConditions(callback);
         }
 
         panel.setWidget(view);

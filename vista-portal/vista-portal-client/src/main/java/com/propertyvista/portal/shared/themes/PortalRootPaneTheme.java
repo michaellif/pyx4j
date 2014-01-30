@@ -223,6 +223,10 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.01);
         addStyle(style);
 
+        style = new Style(".", StyleName.PageFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar, " .", DefaultWidgetsTheme.StyleName.Anchor);
+        style.addProperty("color", ThemeColor.foreground, 0.01);
+        addStyle(style);
+
         style = new Style(".", StyleName.PageFooterFollowUs);
         style.addProperty("padding", "10px 0");
         addStyle(style);

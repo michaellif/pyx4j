@@ -32,7 +32,6 @@ import com.propertyvista.portal.prospect.activity.application.ApplicationWizardA
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ApplicationContextSelection;
-import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ProspectPortalTerms;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
@@ -86,8 +85,6 @@ public class ContentActivityMapper implements AppActivityMapper {
 
 // Internals/Terms: @formatter:off
                     } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms 
-                            || place instanceof ProspectPortalTerms.ApplicantTermsAndConditions 
-                            || place instanceof ProspectPortalTerms.RentalCriteriaGuidelines
                             || place instanceof PortalSiteMap.PortalTerms.PortalTermsAndConditions
                             || place instanceof PortalSiteMap.PortalTerms.PortalPrivacyPolicy
                             || place instanceof PortalSiteMap.PortalTerms.PMCPrivacyPolicy

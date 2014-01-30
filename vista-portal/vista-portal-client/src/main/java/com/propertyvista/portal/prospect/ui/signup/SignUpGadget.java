@@ -13,15 +13,15 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,10 +37,10 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
-import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
@@ -70,22 +70,25 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         }
 
         {
-            FlowPanel loginTermsLinkPanel = new FlowPanel();
-            loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+
+            SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
+            String portalTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
+            String pmcTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
+
+            loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to the {0} and {1}.",
+                    "<span id=\"" + portalTermsAndConditionsAnchorId + "\"></span>", "<span id=\"" + pmcTermsAndConditionsAnchorId + "\"></span>"));
+
+            HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
             loginTermsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
-            loginTermsLinkPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
-            loginTermsLinkPanel.add(new InlineHTML(i18n.tr("By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to the ")));
+            Anchor portalTermsAndConditionsAnchor = new TermsAnchor(i18n.tr("ONLINE APPLICATION TERMS AND CONDITIONS"),
+                    PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
+            loginTermsLinkPanel.addAndReplaceElement(portalTermsAndConditionsAnchor, portalTermsAndConditionsAnchorId);
 
-            loginTermsLinkPanel.add(new TermsAnchor(i18n.tr("GENERAL RENTAL AND OCCUPANCY CRITERIA GUIDELINES"),
-                    ProspectPortalSiteMap.ProspectPortalTerms.RentalCriteriaGuidelines.class));
-
-            loginTermsLinkPanel.add(new InlineHTML(i18n.tr(" and ")));
-
-            loginTermsLinkPanel.add(new TermsAnchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"),
-                    ProspectPortalSiteMap.ProspectPortalTerms.ApplicantTermsAndConditions.class));
-
-            loginTermsLinkPanel.add(new InlineHTML("."));
+            Anchor pmcTermsAndConditionsAnchor = new TermsAnchor(i18n.tr("GENERAL RENTAL AND OCCUPANCY CRITERIA GUIDELINES"),
+                    PortalSiteMap.PortalTerms.PMCTermsAndConditions.class);
+            loginTermsLinkPanel.addAndReplaceElement(pmcTermsAndConditionsAnchor, pmcTermsAndConditionsAnchorId);
 
             contentPanel.add(loginTermsLinkPanel);
         }

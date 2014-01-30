@@ -21,9 +21,6 @@ import com.propertyvista.shared.rpc.LegalTermsTO;
 
 public interface PortalVistaTermsService extends IService {
 
-    @Deprecated
-    void getPortalTerms(AsyncCallback<LegalTermsTO> callback);
-
     // ============== Resident ==============
 
     void getPVResidentPortalTermsAndConditions(AsyncCallback<LegalTermsTO> callback);
