@@ -60,6 +60,7 @@ BEGIN TRANSACTION;
         DROP SEQUENCE tenant_charge_seq;
 
         -- New sequences
+        CREATE SEQUENCE agreement_confirmation_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_legal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_legal_term_signature_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -105,6 +106,7 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE signed_online_application_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
         -- Change owner to vista
+        ALTER SEQUENCE agreement_confirmation_term_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_legal_policy_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_legal_term_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_legal_term_signature_seq OWNER TO vista ;

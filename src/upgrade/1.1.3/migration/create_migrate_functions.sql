@@ -186,6 +186,22 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- agreement_confirmation_term
+        
+        CREATE TABLE agreement_confirmation_term
+        (
+                id                              BIGINT                  NOT NULL,
+                policy                          BIGINT                  NOT NULL,
+                title                           VARCHAR(500),
+                body                            VARCHAR(48000),
+                signature_format                VARCHAR(50),
+                order_id                        INT,
+                        CONSTRAINT agreement_confirmation_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE agreement_confirmation_term OWNER TO vista;
+        
+        
         -- agreement_legal_policy
         
         CREATE TABLE agreement_legal_policy
@@ -559,7 +575,9 @@ BEGIN
         
         -- lease_application
         
-        ALTER TABLE lease_application ADD COLUMN created_by BIGINT;
+        ALTER TABLE lease_application   ADD COLUMN created_by BIGINT,
+                                        ADD COLUMN application_id VARCHAR(14),
+                                        ADD COLUMN application_id_s VARCHAR(26);
         
         
         -- lease_term_agreement_document
@@ -662,11 +680,14 @@ BEGIN
         
         CREATE TABLE legal_terms_policy
         (
-                id                              BIGINT                  NOT NULL,
-                node_discriminator              VARCHAR(50),
-                node                            BIGINT,
-                updated                         TIMESTAMP,
-                rental_criteria_guidelines      BIGINT,
+                id                                      BIGINT                  NOT NULL,
+                node_discriminator                      VARCHAR(50),
+                node                                    BIGINT,
+                updated                                 TIMESTAMP,
+                resident_portal_terms_and_conditions    BIGINT,
+                resident_portal_privacy_policy          BIGINT,
+                prospect_portal_terms_and_conditions    BIGINT,
+                prospect_portal_privacy_policy          BIGINT,
                         CONSTRAINT legal_terms_policy_pk PRIMARY KEY(id)
         );
         
@@ -679,6 +700,7 @@ BEGIN
                 id                              BIGINT                  NOT NULL,
                 caption                         VARCHAR(500),
                 content                         VARCHAR(20845),
+                enabled                         BOOLEAN,
                         CONSTRAINT legal_terms_policy_item_pk PRIMARY KEY(id)
         );
         
@@ -1087,6 +1109,18 @@ BEGIN
         
         
         
+        -- product_item 
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.product_item '
+                ||'SET  element_discriminator = ''AptUnit'' '
+                ||'WHERE element_discriminator = ''Unit_BuildingElement'' ';
+                
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.product_item '
+                ||'SET  element_discriminator = ''Parking'' '
+                ||'WHERE element_discriminator = ''Parking_BuildingElement'' ';
+        
+        
         -- restrictions_policy
         
         EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
@@ -1107,6 +1141,23 @@ BEGIN
         ***
         ***     ============================================================================================================
         **/
+        
+        -- Temporary code !!! 
+        /*
+        EXECUTE 'DELETE FROM '||v_schema_name||'.product_item '
+                ||'WHERE id NOT IN      (SELECT DISTINCT item '
+                ||'                     FROM '||v_schema_name||'.billable_item)';
+                
+        EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
+                ||'WHERE id NOT IN      (SELECT DISTINCT product '
+                ||'                     FROM '||v_schema_name||'.product_item)';
+                
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.product '
+                ||'WHERE id NOT IN      (SELECT DISTINCT holder '
+                ||'                     FROM '||v_schema_name||'.product_v)';
+                
+        */        
         
         -- Insert into arcode - if necessary
         
@@ -1134,11 +1185,15 @@ BEGIN
                 ||'     code = a.id '
                 ||'FROM '||v_schema_name||'.arcode AS a '
                 ||'WHERE a.name = ''Residential'' '
-                ||'AND  p.id_discriminator = ''Service'' ';
+                ||'AND  p.id_discriminator = ''service'' ';
        
+        
         EXECUTE 'UPDATE '||v_schema_name||'.product_v '
-                ||'SET  price = 0.00 ';   
+                ||'SET  price = 0.00 '
+                ||'WHERE holder IN      (SELECT DISTINCT id FROM '||v_schema_name||'.product '
+                ||'                     WHERE   id_discriminator  = ''service'' )';   
                         
+        
                         
         SET CONSTRAINTS ALL IMMEDIATE;
         
@@ -1299,6 +1354,12 @@ BEGIN
         DROP TABLE marketing$ad_blurbs;
         
         
+        -- master_online_application
+        
+        ALTER TABLE master_online_application   DROP COLUMN online_application_id,
+                                                DROP COLUMN online_application_id_s;
+        
+        
         -- n4_policy
         
         ALTER TABLE n4_policy   DROP COLUMN mailing_address_street1,
@@ -1364,7 +1425,7 @@ BEGIN
         
         
         -- foreign keys
-        
+        ALTER TABLE agreement_confirmation_term ADD CONSTRAINT agreement_confirmation_term_policy_fk FOREIGN KEY(policy) REFERENCES agreement_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_legal_term ADD CONSTRAINT agreement_legal_term_policy_fk FOREIGN KEY(policy) REFERENCES agreement_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_legal_term_signature ADD CONSTRAINT agreement_legal_term_signature_signature_fk FOREIGN KEY(signature) 
                 REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1407,12 +1468,18 @@ BEGIN
                 REFERENCES agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_owner_fk FOREIGN KEY(owner) REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_value_fk FOREIGN KEY(value) REFERENCES building_utility(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_rental_criteria_guidelines_fk FOREIGN KEY(rental_criteria_guidelines) 
-                REFERENCES legal_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_set_by_fk FOREIGN KEY(set_by) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request_picture ADD CONSTRAINT maintenance_request_picture_maintenance_request_fk FOREIGN KEY(maintenance_request) 
                 REFERENCES maintenance_request(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_prospect_portal_privacy_policy_fk FOREIGN KEY(prospect_portal_privacy_policy) 
+                REFERENCES legal_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_prospect_portal_terms_and_conditions_fk FOREIGN KEY(prospect_portal_terms_and_conditions) 
+                REFERENCES legal_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_resident_portal_privacy_policy_fk FOREIGN KEY(resident_portal_privacy_policy) 
+                REFERENCES legal_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_resident_portal_terms_and_conditions_fk FOREIGN KEY(resident_portal_terms_and_conditions) 
+                REFERENCES legal_terms_policy_item(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_floorplan_fk FOREIGN KEY(floorplan) REFERENCES floorplan(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE note_attachment ADD CONSTRAINT note_attachment_owner_fk FOREIGN KEY(owner) REFERENCES notes_and_attachments(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1448,6 +1515,8 @@ BEGIN
                 
         -- check constraints
         
+        ALTER TABLE agreement_confirmation_term ADD CONSTRAINT agreement_confirmation_term_signature_format_e_ck 
+                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE agreement_legal_policy ADD CONSTRAINT agreement_legal_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE agreement_legal_term ADD CONSTRAINT agreement_legal_term_signature_format_e_ck 
@@ -1545,7 +1614,7 @@ BEGIN
         ALTER TABLE pet_policy ADD CONSTRAINT pet_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_tp_e_ck CHECK (tp = 'administrator');
-        --ALTER TABLE product_item ADD CONSTRAINT product_item_element_discriminator_d_ck CHECK ((element_discriminator) IN ('AptUnit', 'LockerArea', 'Parking', 'Roof'));
+        ALTER TABLE product_item ADD CONSTRAINT product_item_element_discriminator_d_ck CHECK ((element_discriminator) IN ('AptUnit', 'LockerArea', 'Parking', 'Roof'));
         ALTER TABLE product_tax_policy ADD CONSTRAINT product_tax_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE prospect_portal_policy ADD CONSTRAINT prospect_portal_policy_fee_payment_e_ck CHECK ((fee_payment) IN ('none', 'perApplicant', 'perLease'));
@@ -1561,7 +1630,12 @@ BEGIN
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
 
 
-   
+        
+        -- not null
+        
+        ALTER TABLE lease ALTER COLUMN lease_id DROP NOT NULL;
+        --ALTER TABLE product ALTER COLUMN code SET NOT NULL;
+        
        
         /**
         ***     ====================================================================================================
