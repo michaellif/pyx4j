@@ -17,8 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IVersionedEntity;
-import com.pyx4j.gwt.commons.Print;
-import com.pyx4j.gwt.commons.print.PrintManager;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.Button;
@@ -78,8 +76,8 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
             setEditingVisible(false);
         } else {
             setEditingVisible(!value.lease().status().getValue().isFormer() && value.status().getValue() != Status.AcceptedOffer);
-            setFinalizationVisible(isFinalizationVisible() && !value.lease().status().getValue().isDraft());
         }
+        setFinalizationVisible(isFinalizationVisible() && !value.lease().status().getValue().isDraft());
 
         offerAcceptButton.setVisible(value.status().getValue() == Status.Offer && !((IVersionedEntity<?>) value).version().versionNumber().isNull()
                 && value.lease().nextTerm().isNull());
