@@ -35,8 +35,13 @@ public class OnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<On
         OnlineApplicationLegalPolicy policy = EntityFactory.create(OnlineApplicationLegalPolicy.class);
 
         // add legal terms
-        policy.terms().add(createTerm("Conditions of Acceptance of a Lease", "onlineApplicationTerm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
-        policy.terms().add(createTerm("Consent to Lease", "onlineApplicationTerm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.legalTerms().add(
+                createTerm("Conditions of Acceptance of a Lease", "onlineApplicationTerm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.legalTerms().add(createTerm("Consent to Lease", "onlineApplicationTerm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+
+        // add confirmation terms
+        policy.confirmationTerms().add(createTerm("Privacy Policy", "onlineApplicationTerm3.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.confirmationTerms().add(createTerm("Digital Signature", "onlineApplicationTerm4.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
 
         return policy;
     }

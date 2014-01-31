@@ -41,17 +41,23 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
 
     @Override
     protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createPaymentAuthorizationPanel());
-    }
+        TwoColumnFlexFormPanel legalTermsPanel = new TwoColumnFlexFormPanel(i18n.tr("Legal Step"));
 
-    private TwoColumnFlexFormPanel createPaymentAuthorizationPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Legal Tab"));
-        int row = -1;
+        {
+            int row = -1;
+            legalTermsPanel.setH1(++row, 0, 2, proto().legalTerms().getMeta().getCaption());
+            legalTermsPanel.setWidget(++row, 0, 2, inject(proto().legalTerms(), new LegalTermFolder(isEditable())));
+        }
 
-        container.setH1(++row, 0, 2, proto().terms().getMeta().getCaption());
-        container.setWidget(++row, 0, 2, inject(proto().terms(), new LegalTermFolder(isEditable())));
+        TwoColumnFlexFormPanel confirmationTermsPanel = new TwoColumnFlexFormPanel(i18n.tr("Confirmation Step"));
 
-        return container;
+        {
+            int row = -1;
+            confirmationTermsPanel.setH1(++row, 0, 2, proto().confirmationTerms().getMeta().getCaption());
+            confirmationTermsPanel.setWidget(++row, 0, 2, inject(proto().confirmationTerms(), new LegalTermFolder(isEditable())));
+        }
+
+        return Arrays.asList(legalTermsPanel, confirmationTermsPanel);
     }
 
     private static class LegalTermFolder extends VistaBoxFolder<OnlineApplicationLegalTerm> {

@@ -27,5 +27,9 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface OnlineApplicationLegalPolicy extends Policy {
 
     @Owned
-    IList<OnlineApplicationLegalTerm> terms();
+    IList<OnlineApplicationLegalTerm> legalTerms();
+
+    @Owned
+    IList<OnlineApplicationLegalTerm> confirmationTerms();
+
 }

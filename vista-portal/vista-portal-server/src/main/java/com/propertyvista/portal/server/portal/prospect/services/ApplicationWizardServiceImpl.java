@@ -119,7 +119,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         fillCoApplicants(bo, to);
         fillGuarantors(bo, to);
 
-        fillLegalTerms(bo, to);
+        fillTerms(bo, to);
 
         fillStepsStatuses(bo, to);
 
@@ -602,13 +602,18 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
     }
 
-    private void fillLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
-        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationTerms(bo));
+    private void fillTerms(OnlineApplication bo, OnlineApplicationDTO to) {
+        to.legalTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationLegalTerms(bo));
+        to.confirmationTerms().addAll(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationConfirmationTerms(bo));
     }
 
-    private void saveLegalTerms(OnlineApplication bo, OnlineApplicationDTO to) {
+    private void saveTerms(OnlineApplication bo, OnlineApplicationDTO to) {
         bo.legalTerms().clear();
         bo.legalTerms().addAll(to.legalTerms());
+
+        bo.confirmationTerms().clear();
+        bo.confirmationTerms().addAll(to.confirmationTerms());
+
     }
 
     private void fillStepsStatuses(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -738,7 +743,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         saveApplicantData(bo, to);
-        saveLegalTerms(bo, to);
+        saveTerms(bo, to);
 
         saveStepsStatuses(bo, to);
 

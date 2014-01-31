@@ -74,6 +74,9 @@ public interface OnlineApplication extends IEntity {
     @Owned
     IList<SignedOnlineApplicationLegalTerm> legalTerms();
 
+    @Owned
+    IList<SignedOnlineApplicationLegalTerm> confirmationTerms();
+
     IPrimitive<Status> status();
 
     @Owned

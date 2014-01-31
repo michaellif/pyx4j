@@ -39,7 +39,9 @@ public interface OnlineApplicationFacade {
 
     EnumSet<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication application);
 
-    List<SignedOnlineApplicationLegalTerm> getOnlineApplicationTerms(OnlineApplication application);
+    List<SignedOnlineApplicationLegalTerm> getOnlineApplicationLegalTerms(OnlineApplication application);
+
+    List<SignedOnlineApplicationLegalTerm> getOnlineApplicationConfirmationTerms(OnlineApplication application);
 
     void submitOnlineApplication(OnlineApplication application);
 

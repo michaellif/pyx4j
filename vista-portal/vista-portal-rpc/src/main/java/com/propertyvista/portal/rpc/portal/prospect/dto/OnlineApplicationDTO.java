@@ -66,6 +66,8 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IList<SignedOnlineApplicationLegalTerm> legalTerms();
 
+    IList<SignedOnlineApplicationLegalTerm> confirmationTerms();
+
     IList<OnlineApplicationWizardStepStatus> stepsStatuses();
 
     PaymentDTO payment();
