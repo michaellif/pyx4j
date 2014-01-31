@@ -129,7 +129,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 dateFrom = currentValue.termFrom().getValue();
                             }
 
-                            if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_unitOccupancySegments) {
+                            if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_noUnitOccupancySegments) {
                                 filters.add(PropertyCriterion.le(proto().units().$()._availableForRent(), dateFrom));
                             } else {
 
@@ -190,7 +190,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 dateFrom = currentValue.termFrom().getValue();
                             }
 
-                            if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_unitOccupancySegments) {
+                            if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_noUnitOccupancySegments) {
                                 filters.add(PropertyCriterion.le(proto()._availableForRent(), dateFrom));
                             } else {
                                 filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
