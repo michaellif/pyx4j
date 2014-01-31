@@ -48,7 +48,6 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
@@ -240,11 +239,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.applicant().set(to.applicant().currentAddress(), screening.currentAddress());
         to.applicant().set(to.applicant().previousAddress(), screening.previousAddress());
 
+        Building policyNode = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationPolicyNode(bo);
+
         to.applicant().set(to.applicant().documents(), screening.documents());
-        to.applicant().set(
-                to.applicant().documentsPolicy(),
-                ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
-                        ApplicationDocumentationPolicy.class));
+        to.applicant().set(to.applicant().documentsPolicy(),
+                ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, ApplicationDocumentationPolicy.class));
         initializeRequiredDocuments(to.applicant());
 
         to.applicant().set(to.applicant().legalQuestions(), screening.legalQuestions());
@@ -277,6 +276,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 }
             }
             break;
+        case Dependent:
+            throw new IllegalArgumentException();
         }
     }
 
@@ -628,6 +629,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void fillPaymentData(OnlineApplication bo, OnlineApplicationDTO to) {
         Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
 
+        Building policyNode = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationPolicyNode(bo);
+
         PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
 
         dto.billingAccount().set(lease.billingAccount());
@@ -663,8 +666,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         // calculate application fee:
-        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
-                ProspectPortalPolicy.class);
+        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, ProspectPortalPolicy.class);
 
         if (policy.feePayment().getValue() == FeePayment.perApplicant) {
             if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
@@ -759,9 +761,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void loadRestrictions(OnlineApplication bo, OnlineApplicationDTO to) {
-        Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getPolicyNode(bo.masterOnlineApplication()),
-                RestrictionsPolicy.class);
+        Building policyNode = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationPolicyNode(bo);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
 
         to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
         to.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
@@ -1165,13 +1166,4 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         return ServerSideFactory.create(LeaseFacade.class).createBillableItem(ProspectPortalContext.getLease(), productItem, unit);
     }
 
-    private PolicyNode getPolicyNode(MasterOnlineApplication moa) {
-        if (!moa.leaseApplication().lease().unit().isNull()) {
-            return moa.leaseApplication().lease().unit();
-        } else if (!moa.building().isNull()) {
-            return moa.building();
-        } else {
-            throw new Error("Application do not have building relations");
-        }
-    }
 }

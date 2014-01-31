@@ -48,4 +48,6 @@ public interface OnlineApplicationFacade {
     void resendInvitationEmail(LeaseTermParticipant leaseParticipant);
 
     MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication masterOnlineApplication);
+
+    Building getOnlineApplicationPolicyNode(OnlineApplication app);
 }

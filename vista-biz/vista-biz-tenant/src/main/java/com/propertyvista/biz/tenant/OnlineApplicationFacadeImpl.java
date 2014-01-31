@@ -389,14 +389,29 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationLegalTerms(OnlineApplication app) {
-        List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$()._Leases().$().leaseApplication().onlineApplication(), app.masterOnlineApplication());
-        Building building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+    public Building getOnlineApplicationPolicyNode(OnlineApplication app) {
+        Building building;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().units().$()._Leases().$().leaseApplication().onlineApplication(), app.masterOnlineApplication());
+            building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        }
+        if (building != null) {
+            return building;
+        } else {
+            // Case of ILS link
+            Persistence.ensureRetrieve(app.masterOnlineApplication(), AttachLevel.Attached);
+            return app.masterOnlineApplication().building();
+        }
+    }
 
-        OnlineApplicationLegalPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
+    @Override
+    public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationLegalTerms(OnlineApplication app) {
+        Building policyNode = getOnlineApplicationPolicyNode(app);
+
+        OnlineApplicationLegalPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
                 OnlineApplicationLegalPolicy.class);
+        List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
         for (OnlineApplicationLegalTerm term : onlineApplicationPolicy.legalTerms()) {
             TargetRole termRole = term.applyToRole().getValue();
             if (termRole.matchesApplicationRole(app.role().getValue())) {
