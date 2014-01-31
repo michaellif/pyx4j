@@ -54,6 +54,7 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
+import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
@@ -73,41 +74,10 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         signupForm.initContent();
         contentPanel.add(signupForm);
 
-        Vector<TermsAndPoliciesType> termTypes = new Vector<TermsAndPoliciesType>();
-        termTypes.add(TermsAndPoliciesType.PVProspectPortalTermsAndConditions);
-        termTypes.add(TermsAndPoliciesType.PMCProspectPortalTermsAndConditions);
+        TermsLinkPanel termsLinkPanel = new TermsLinkPanel(i18n.tr("CREATE ACCOUNT"));
+        termsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
 
-        GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTermCaptions(new DefaultAsyncCallback<Vector<String>>() {
-            @Override
-            public void onSuccess(Vector<String> result) {
-                SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
-                String portalTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
-                String pmcTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
-
-                if (result.get(1) == null) {
-                    loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to the {0}.",
-                            "<span id=\"" + portalTermsAndConditionsAnchorId + "\"></span>"));
-                } else {
-                    loginTermsBuilder.appendHtmlConstant(i18n.tr(
-                            "By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to the {0} and {1}.", "<span id=\""
-                                    + portalTermsAndConditionsAnchorId + "\"></span>", "<span id=\"" + pmcTermsAndConditionsAnchorId + "\"></span>"));
-                }
-
-                HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
-                loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-                loginTermsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
-
-                Anchor pvTermsAndConditionsAnchor = new TermsAnchor(result.get(0), PortalSiteMap.PortalTerms.VistaTermsAndConditions.class);
-                loginTermsLinkPanel.addAndReplaceElement(pvTermsAndConditionsAnchor, portalTermsAndConditionsAnchorId);
-
-                if (result.get(1) != null) {
-                    Anchor pmcTermsAndConditionsAnchor = new TermsAnchor(result.get(1), PortalSiteMap.PortalTerms.PmcTermsAndConditions.class);
-                    loginTermsLinkPanel.addAndReplaceElement(pmcTermsAndConditionsAnchor, pmcTermsAndConditionsAnchorId);
-                }
-
-                contentPanel.add(loginTermsLinkPanel);
-            }
-        }, termTypes);
+        contentPanel.add(termsLinkPanel);
 
         setContent(contentPanel);
     }

@@ -15,17 +15,10 @@ package com.propertyvista.portal.resident.ui.signup;
 
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.WhiteSpace;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -43,8 +36,6 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
-import com.pyx4j.site.rpc.AppPlaceInfo;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
@@ -55,6 +46,7 @@ import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValid
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class SignUpGadget extends AbstractGadget<SignUpView> {
@@ -64,8 +56,6 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
     private SignUpPresenter presenter;
 
     private final SignUpForm signupForm;
-
-    private final Anchor termsAndConditionsAnchor;
 
     SignUpGadget(SignUpViewImpl view) {
         super(view, null, i18n.tr("Create Your Account"), ThemeColor.contrast2, 1);
@@ -78,40 +68,16 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
         signupForm.initContent();
         contentPanel.add(signupForm);
 
-        FlowPanel loginTermsLinkPanel = new FlowPanel();
-        loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        TermsLinkPanel termsLinkPanel = new TermsLinkPanel(i18n.tr("REGISTER"));
+        termsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
 
-        HTML termsPrefix = new HTML(i18n.tr("By clicking REGISTER, you are acknowledging that you have read and agree to our "));
-        termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
-        loginTermsLinkPanel.add(termsPrefix);
-
-        termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
-        termsAndConditionsAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        termsAndConditionsAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        termsAndConditionsAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showVistaTerms();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
-        loginTermsLinkPanel.add(termsAndConditionsAnchor);
-
-        HTML suffixPrefix = new HTML(".");
-        suffixPrefix.getElement().getStyle().setDisplay(Display.INLINE);
-        loginTermsLinkPanel.add(suffixPrefix);
-        loginTermsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
-        loginTermsLinkPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        contentPanel.add(loginTermsLinkPanel);
+        contentPanel.add(termsLinkPanel);
 
         setContent(contentPanel);
     }
 
     public void setPresenter(SignUpPresenter presenter) {
         this.presenter = presenter;
-        this.termsAndConditionsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPortalTermsPlace()));
     }
 
     public void showValidationError(EntityValidationException caught) {

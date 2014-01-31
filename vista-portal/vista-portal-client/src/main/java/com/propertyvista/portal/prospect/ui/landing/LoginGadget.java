@@ -62,6 +62,7 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPolicie
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
+import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
@@ -89,39 +90,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         loginForm.initContent();
         contentPanel.add(loginForm);
 
-        Vector<TermsAndPoliciesType> termTypes = new Vector<TermsAndPoliciesType>();
-        termTypes.add(TermsAndPoliciesType.PVProspectPortalTermsAndConditions);
-        termTypes.add(TermsAndPoliciesType.PMCProspectPortalTermsAndConditions);
-
-        GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTermCaptions(new DefaultAsyncCallback<Vector<String>>() {
-            @Override
-            public void onSuccess(Vector<String> result) {
-                SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
-                String portalTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
-                String pmcTermsAndConditionsAnchorId = HTMLPanel.createUniqueId();
-
-                if (result.get(1) == null) {
-                    loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to the {0}.",
-                            "<span id=\"" + portalTermsAndConditionsAnchorId + "\"></span>"));
-                } else {
-                    loginTermsBuilder.appendHtmlConstant(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to the {0} and {1}.",
-                            "<span id=\"" + portalTermsAndConditionsAnchorId + "\"></span>", "<span id=\"" + pmcTermsAndConditionsAnchorId + "\"></span>"));
-                }
-
-                HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
-                loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-
-                Anchor pvTermsAndConditionsAnchor = new TermsAnchor(result.get(0), PortalSiteMap.PortalTerms.VistaTermsAndConditions.class);
-                loginTermsLinkPanel.addAndReplaceElement(pvTermsAndConditionsAnchor, portalTermsAndConditionsAnchorId);
-
-                if (result.get(1) != null) {
-                    Anchor pmcTermsAndConditionsAnchor = new TermsAnchor(result.get(1), PortalSiteMap.PortalTerms.PmcTermsAndConditions.class);
-                    loginTermsLinkPanel.addAndReplaceElement(pmcTermsAndConditionsAnchor, pmcTermsAndConditionsAnchorId);
-                }
-
-                contentPanel.add(loginTermsLinkPanel);
-            }
-        }, termTypes);
+        contentPanel.add(new TermsLinkPanel(i18n.tr("LOGIN")));
 
         setContent(contentPanel);
     }
