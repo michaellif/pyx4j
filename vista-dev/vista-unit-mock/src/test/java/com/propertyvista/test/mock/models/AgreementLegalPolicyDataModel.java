@@ -17,11 +17,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
-import com.propertyvista.domain.policy.policies.AgreementLegalPolicy;
-import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
+import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class AgreementLegalPolicyDataModel extends MockDataModel<AgreementLegalPolicy> {
+public class AgreementLegalPolicyDataModel extends MockDataModel<LeaseAgreementLegalPolicy> {
 
     public AgreementLegalPolicyDataModel() {
     }
@@ -29,9 +29,9 @@ public class AgreementLegalPolicyDataModel extends MockDataModel<AgreementLegalP
     @Override
     protected void generate() {
 
-        AgreementLegalPolicy policy = EntityFactory.create(AgreementLegalPolicy.class);
+        LeaseAgreementLegalPolicy policy = EntityFactory.create(LeaseAgreementLegalPolicy.class);
 
-        policy.terms().add(createTerm(SignatureFormat.AgreeBox));
+        policy.legal().add(createTerm(SignatureFormat.AgreeBox));
 
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 
@@ -39,8 +39,8 @@ public class AgreementLegalPolicyDataModel extends MockDataModel<AgreementLegalP
         addItem(policy);
     }
 
-    private AgreementLegalTerm createTerm(SignatureFormat format) {
-        AgreementLegalTerm term = EntityFactory.create(AgreementLegalTerm.class);
+    private LeaseAgreementLegalTerm createTerm(SignatureFormat format) {
+        LeaseAgreementLegalTerm term = EntityFactory.create(LeaseAgreementLegalTerm.class);
 
         term.signatureFormat().setValue(format);
         term.title().setValue("Ut ut pellentesque nulla.");

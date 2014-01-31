@@ -17,12 +17,12 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.core.IEntity;
 
-import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
+import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.security.CustomerSignature;
 
 public interface AgreementLegalTermSignature extends IEntity {
 
-    AgreementLegalTerm term();
+    LeaseAgreementLegalTerm term();
 
     @Owned
     @Detached

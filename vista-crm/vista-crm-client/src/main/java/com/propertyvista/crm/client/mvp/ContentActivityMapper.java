@@ -203,9 +203,9 @@ import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjus
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.leasesigning.AgreementLegalPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.leasesigning.AgreementLegalPolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.leasesigning.AgreementLegalPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseAgreementLegalPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseAgreementLegalPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.leasesigning.LeaseAgreementLegalPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyViewerActivity;
@@ -221,9 +221,9 @@ import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyViewerActi
 import com.propertyvista.crm.client.activity.policies.n4.N4PolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.n4.N4PolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.n4.N4PolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.onlineapplication.OnlineApplicationPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.onlineapplication.OnlineApplicationPolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.onlineapplication.OnlineApplicationPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.onlineapplication.LeaseApplicationPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.onlineapplication.LeaseApplicationPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.onlineapplication.LeaseApplicationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyViewerActivity;
@@ -1066,29 +1066,29 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Policies.OnlineApplicationTerms) {
+                    } else if (crudPlace instanceof Administration.Policies.LeaseApplicationTerms) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new OnlineApplicationPolicyListerActivity(crudPlace);
+                            activity = new LeaseApplicationPolicyListerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new OnlineApplicationPolicyEditorActivity(crudPlace);
+                            activity = new LeaseApplicationPolicyEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new OnlineApplicationPolicyViewerActivity(crudPlace);
+                            activity = new LeaseApplicationPolicyViewerActivity(crudPlace);
                             break;
                         }
 
                     } else if (crudPlace instanceof Administration.Policies.AgreementLegalTerms) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new AgreementLegalPolicyListerActivity(crudPlace);
+                            activity = new LeaseAgreementLegalPolicyListerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new AgreementLegalPolicyEditorActivity(crudPlace);
+                            activity = new LeaseAgreementLegalPolicyEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new AgreementLegalPolicyViewerActivity(crudPlace);
+                            activity = new LeaseAgreementLegalPolicyViewerActivity(crudPlace);
                             break;
                         }
 

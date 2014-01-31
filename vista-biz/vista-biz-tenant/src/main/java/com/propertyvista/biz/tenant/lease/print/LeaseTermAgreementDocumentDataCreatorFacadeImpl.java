@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
+import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
@@ -225,13 +225,13 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
 
     private Collection<? extends LeaseAgreementDocumentLegalTerm4PrintDTO> makeTermsForPrint(LeaseTerm leaseTerm, boolean blankSignatures) {
         List<LeaseAgreementDocumentLegalTerm4PrintDTO> legalTerms4Print = new LinkedList<LeaseAgreementDocumentLegalTerm4PrintDTO>();
-        for (AgreementLegalTerm legalTerm : leaseTerm.version().agreementLegalTerms()) {
+        for (LeaseAgreementLegalTerm legalTerm : leaseTerm.version().agreementLegalTerms()) {
             legalTerms4Print.add(makeTermForPrint(leaseTerm, legalTerm, blankSignatures));
         }
         return legalTerms4Print;
     }
 
-    private LeaseAgreementDocumentLegalTerm4PrintDTO makeTermForPrint(LeaseTerm leaseTerm, AgreementLegalTerm legalTerm, boolean blankSignatures) {
+    private LeaseAgreementDocumentLegalTerm4PrintDTO makeTermForPrint(LeaseTerm leaseTerm, LeaseAgreementLegalTerm legalTerm, boolean blankSignatures) {
 
         LeaseAgreementDocumentLegalTerm4PrintDTO legalTerm4Print = EntityFactory.create(LeaseAgreementDocumentLegalTerm4PrintDTO.class);
         legalTerm4Print.id().setValue(legalTerm.id().getValue());

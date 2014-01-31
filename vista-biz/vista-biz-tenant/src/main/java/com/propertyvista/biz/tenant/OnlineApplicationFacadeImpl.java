@@ -31,9 +31,10 @@ import com.pyx4j.security.server.EmailValidator;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
-import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
-import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm.TargetRole;
+import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseApplicationConfirmationTerm;
+import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
+import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -54,6 +55,7 @@ import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
+import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
@@ -409,10 +411,10 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationLegalTerms(OnlineApplication app) {
         Building policyNode = getOnlineApplicationPolicyNode(app);
 
-        OnlineApplicationLegalPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
-                OnlineApplicationLegalPolicy.class);
+        LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
+                LeaseApplicationLegalPolicy.class);
         List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
-        for (OnlineApplicationLegalTerm term : onlineApplicationPolicy.legalTerms()) {
+        for (LeaseApplicationLegalTerm term : leaseApplicationPolicy.legalTerms()) {
             TargetRole termRole = term.applyToRole().getValue();
             if (termRole.matchesApplicationRole(app.role().getValue())) {
                 SignedOnlineApplicationLegalTerm signedTerm = EntityFactory.create(SignedOnlineApplicationLegalTerm.class);
@@ -425,21 +427,18 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationConfirmationTerms(OnlineApplication app) {
+    public List<SignedOnlineApplicationConfirmationTerm> getOnlineApplicationConfirmationTerms(OnlineApplication app) {
         Building building = getOnlineApplicationPolicyNode(app);
 
-        List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
+        List<SignedOnlineApplicationConfirmationTerm> terms = new ArrayList<SignedOnlineApplicationConfirmationTerm>();
 
-        OnlineApplicationLegalPolicy onlineApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
-                OnlineApplicationLegalPolicy.class);
-        for (OnlineApplicationLegalTerm term : onlineApplicationPolicy.confirmationTerms()) {
-            TargetRole termRole = term.applyToRole().getValue();
-            if (termRole.matchesApplicationRole(app.role().getValue())) {
-                SignedOnlineApplicationLegalTerm signedTerm = EntityFactory.create(SignedOnlineApplicationLegalTerm.class);
-                signedTerm.term().set(term);
-                signedTerm.signature().signatureFormat().set(term.signatureFormat());
-                terms.add(signedTerm);
-            }
+        LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
+                LeaseApplicationLegalPolicy.class);
+        for (LeaseApplicationConfirmationTerm term : leaseApplicationPolicy.confirmationTerms()) {
+            SignedOnlineApplicationConfirmationTerm signedTerm = EntityFactory.create(SignedOnlineApplicationConfirmationTerm.class);
+            signedTerm.term().set(term);
+            signedTerm.signature().signatureFormat().set(term.signatureFormat());
+            terms.add(signedTerm);
         }
         return terms;
     }

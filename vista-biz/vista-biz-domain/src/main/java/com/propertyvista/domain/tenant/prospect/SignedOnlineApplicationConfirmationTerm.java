@@ -20,14 +20,14 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.core.IEntity;
 
-import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
+import com.propertyvista.domain.policy.policies.domain.LeaseApplicationConfirmationTerm;
 import com.propertyvista.domain.security.CustomerSignature;
 
 @ToStringFormat("{0}")
-public interface SignedOnlineApplicationLegalTerm extends IEntity {
+public interface SignedOnlineApplicationConfirmationTerm extends IEntity {
 
     @ToString(index = 0)
-    LeaseApplicationLegalTerm term();
+    LeaseApplicationConfirmationTerm term();
 
     @Owned
     @Detached

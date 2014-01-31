@@ -67,7 +67,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
-import com.propertyvista.domain.policy.policies.AgreementLegalPolicy;
+import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
@@ -774,9 +774,9 @@ public abstract class LeaseAbstractManager {
             }
         }
 
-        AgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(leaseTerm.unit().building(),
-                AgreementLegalPolicy.class);
-        leaseTerm.version().agreementLegalTerms().set(agreementLegalPolicy.terms());
+        LeaseAgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(leaseTerm.unit().building(),
+                LeaseAgreementLegalPolicy.class);
+        leaseTerm.version().agreementLegalTerms().set(agreementLegalPolicy.legal());
 
         if (updateTermData) {
             updateTermUnitRelatedData(leaseTerm);

@@ -566,7 +566,7 @@ public class CrmSiteMap implements SiteMap {
             }
 
             @PlaceProperties(caption = "LEGAL: Lease Application")
-            public static class OnlineApplicationTerms extends CrmCrudAppPlace {
+            public static class LeaseApplicationTerms extends CrmCrudAppPlace {
             }
 
             @PlaceProperties(caption = "LEGAL: Portal Terms and Privacy")

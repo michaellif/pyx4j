@@ -24,7 +24,7 @@ import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification.ChangeType;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
+import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -47,7 +47,7 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         to.unit().set(lease.unit());
         to.leaseTerm().set(lease.currentTerm());
 
-        for (AgreementLegalTerm term : lease.currentTerm().version().agreementLegalTerms()) {
+        for (LeaseAgreementLegalTerm term : lease.currentTerm().version().agreementLegalTerms()) {
             AgreementLegalTermSignature signedTerm = EntityFactory.create(AgreementLegalTermSignature.class);
             signedTerm.term().set(term);
             signedTerm.signature().signatureFormat().set(term.signatureFormat());

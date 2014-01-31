@@ -22,13 +22,13 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.DatesPolic
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseAgreementPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseApplicationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseSigningPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.OnlineApplicationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProspectPortalPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.N4PolicyPreloader;
@@ -55,7 +55,8 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new AutoPayPolicyPreloader());
         add(new YardiInterfacePolicyPreloader());
         add(new N4PolicyPreloader());
-        add(new OnlineApplicationPolicyPreloader());
+        add(new LeaseApplicationPolicyPreloader());
+        add(new LeaseAgreementPolicyPreloader());
 
         if (!VistaTODO.Equifax_Off_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
@@ -72,7 +73,6 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new MockupDepositPolicyPreloader());
             add(new MockupLeaseAdjustmentPolicyPreloader());
             add(new MockupLeaseBillingPolicyPreloader());
-            add(new MockupLeaseSigningPolicyPreloader());
             add(new MockupProspectPortalPolicyPreloader());
         }
     }

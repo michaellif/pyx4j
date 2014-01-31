@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
+import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 
 @Transient
@@ -66,7 +67,7 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IList<SignedOnlineApplicationLegalTerm> legalTerms();
 
-    IList<SignedOnlineApplicationLegalTerm> confirmationTerms();
+    IList<SignedOnlineApplicationConfirmationTerm> confirmationTerms();
 
     IList<OnlineApplicationWizardStepStatus> stepsStatuses();
 
