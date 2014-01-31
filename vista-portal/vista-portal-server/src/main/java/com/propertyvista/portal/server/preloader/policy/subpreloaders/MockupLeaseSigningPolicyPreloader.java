@@ -17,6 +17,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.policy.policies.AgreementLegalPolicy;
+import com.propertyvista.domain.policy.policies.domain.AgreementConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.AgreementLegalTerm;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
@@ -32,17 +33,24 @@ public class MockupLeaseSigningPolicyPreloader extends AbstractPolicyPreloader<A
         AgreementLegalPolicy policy = EntityFactory.create(AgreementLegalPolicy.class);
 
         // add legal terms
-        policy.terms().add(createTerm(SignatureFormat.None));
-        policy.terms().add(createTerm(SignatureFormat.AgreeBox));
-        policy.terms().add(createTerm(SignatureFormat.AgreeBoxAndFullName));
-        policy.terms().add(createTerm(SignatureFormat.FullName));
-        policy.terms().add(createTerm(SignatureFormat.Initials));
+        policy.terms().add(createTerm(SignatureFormat.None, AgreementLegalTerm.class));
+        policy.terms().add(createTerm(SignatureFormat.AgreeBox, AgreementLegalTerm.class));
+        policy.terms().add(createTerm(SignatureFormat.AgreeBoxAndFullName, AgreementLegalTerm.class));
+        policy.terms().add(createTerm(SignatureFormat.FullName, AgreementLegalTerm.class));
+        policy.terms().add(createTerm(SignatureFormat.Initials, AgreementLegalTerm.class));
+
+        // add confirmation terms
+        policy.confirmation().add(createTerm(SignatureFormat.None, AgreementConfirmationTerm.class));
+        policy.confirmation().add(createTerm(SignatureFormat.AgreeBox, AgreementConfirmationTerm.class));
+        policy.confirmation().add(createTerm(SignatureFormat.AgreeBoxAndFullName, AgreementConfirmationTerm.class));
+        policy.confirmation().add(createTerm(SignatureFormat.FullName, AgreementConfirmationTerm.class));
+        policy.confirmation().add(createTerm(SignatureFormat.Initials, AgreementConfirmationTerm.class));
 
         return policy;
     }
 
-    private AgreementLegalTerm createTerm(SignatureFormat format) {
-        AgreementLegalTerm term = EntityFactory.create(AgreementLegalTerm.class);
+    private <T extends AgreementLegalTerm> T createTerm(SignatureFormat format, Class<T> termClass) {
+        T term = EntityFactory.create(termClass);
 
         term.signatureFormat().setValue(format);
         term.title().setValue(CommonsGenerator.lipsumShort());

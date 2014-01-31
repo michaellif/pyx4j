@@ -46,7 +46,7 @@ public class AgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Agreeme
     }
 
     private TwoColumnFlexFormPanel createTermsPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Agreement"));
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Agreement Step"));
         int row = -1;
 
         container.setH1(++row, 0, 2, proto().terms().getMeta().getCaption());
@@ -56,7 +56,7 @@ public class AgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Agreeme
     }
 
     private TwoColumnFlexFormPanel createConfirmationPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Confirmation"));
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Confirmation Step"));
         int row = -1;
 
         container.setH1(++row, 0, 2, proto().confirmation().getMeta().getCaption());

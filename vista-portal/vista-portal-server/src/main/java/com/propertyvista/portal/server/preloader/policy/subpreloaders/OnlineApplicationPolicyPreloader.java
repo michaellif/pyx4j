@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationLegalPolicy;
+import com.propertyvista.domain.policy.policies.domain.OnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm.TargetRole;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
@@ -36,17 +37,25 @@ public class OnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<On
 
         // add legal terms
         policy.legalTerms().add(
-                createTerm("Conditions of Acceptance of a Lease", "onlineApplicationTerm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
-        policy.legalTerms().add(createTerm("Consent to Lease", "onlineApplicationTerm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+                createTerm("Conditions of Acceptance of a Lease", "onlineApplicationTerm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox,
+                        OnlineApplicationLegalTerm.class));
+        policy.legalTerms()
+                .add(createTerm("Consent to Lease", "onlineApplicationTerm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox,
+                        OnlineApplicationLegalTerm.class));
 
         // add confirmation terms
-        policy.confirmationTerms().add(createTerm("Privacy Policy", "onlineApplicationTerm3.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
-        policy.confirmationTerms().add(createTerm("Digital Signature", "onlineApplicationTerm4.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.confirmationTerms().add(
+                createTerm("Privacy Policy", "onlineApplicationTerm3.html", TargetRole.Applicant, SignatureFormat.AgreeBox,
+                        OnlineApplicationConfirmationTerm.class));
+        policy.confirmationTerms().add(
+                createTerm("Digital Signature", "onlineApplicationTerm4.html", TargetRole.Applicant, SignatureFormat.AgreeBox,
+                        OnlineApplicationConfirmationTerm.class));
 
         return policy;
     }
 
-    public OnlineApplicationLegalTerm createTerm(String caption, String termsSourceFile, TargetRole role, SignatureFormat format) {
+    public <T extends OnlineApplicationLegalTerm> T createTerm(String caption, String termsSourceFile, TargetRole role, SignatureFormat format,
+            Class<T> termClass) {
 
         String termsContent;
         try {
@@ -58,7 +67,7 @@ public class OnlineApplicationPolicyPreloader extends AbstractPolicyPreloader<On
             throw new Error("Resource " + termsSourceFile + " not found to create " + caption);
         }
 
-        OnlineApplicationLegalTerm term = EntityFactory.create(OnlineApplicationLegalTerm.class);
+        T term = EntityFactory.create(termClass);
         term.title().setValue(caption);
         term.body().setValue(termsContent);
         term.applyToRole().setValue(role);

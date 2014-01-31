@@ -19,6 +19,7 @@ import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.policies.domain.OnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -30,6 +31,6 @@ public interface OnlineApplicationLegalPolicy extends Policy {
     IList<OnlineApplicationLegalTerm> legalTerms();
 
     @Owned
-    IList<OnlineApplicationLegalTerm> confirmationTerms();
+    IList<OnlineApplicationConfirmationTerm> confirmationTerms();
 
 }
