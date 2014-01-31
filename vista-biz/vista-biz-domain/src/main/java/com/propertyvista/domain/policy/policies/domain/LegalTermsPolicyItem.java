@@ -28,7 +28,7 @@ public interface LegalTermsPolicyItem extends IEntity {
     @ToString(index = 0)
     IPrimitive<String> caption();
 
-    @Length(20845)
+    @Length(300000)
     @Editor(type = Editor.EditorType.richtextarea)
     IPrimitive<String> content();
 
