@@ -325,14 +325,6 @@ public class PaymentAcceptanceUtils {
         require.add(new PaymentTypeAcceptance(PaymentType.CreditCard).and(p.setup().acceptedCreditCard(), p.acceptedVisaDebit()).//
                 or(p.prospectVisaDebit(), p.setup().acceptedCreditCardConvenienceFee()));
 
-        require.add(new PaymentTypeAcceptance(PaymentType.DirectBanking).and(p.setup().acceptedDirectBanking(), p.acceptedDirectBanking()). //
-                and(p.prospectDirectBanking()));
-
-        if (!VistaTODO.removedForProduction && false) {
-            require.add(new PaymentTypeAcceptance(PaymentType.Interac).and(p.setup().acceptedInterac(), p.acceptedInterac()).//
-                    and(p.prospectInterac()));
-        }
-
         return require;
     }
 

@@ -48,11 +48,9 @@ public class PaymentMethodSelectionPolicyPreloader extends AbstractPolicyPreload
 
         // -- Accepted In prospect Portal
         policy.prospectEcheck().setValue(Boolean.TRUE);
-        policy.prospectDirectBanking().setValue(Boolean.TRUE);
         policy.prospectCreditCardMasterCard().setValue(Boolean.TRUE);
         policy.prospectCreditCardVisa().setValue(Boolean.TRUE);
         policy.prospectVisaDebit().setValue(Boolean.TRUE);
-        policy.prospectInterac().setValue(Boolean.TRUE);
 
         // -- Accepted when cashEquivalent flag on BillingAccount.paymentAccepted is set to CashEquivalent
         policy.cashEquivalentCash().setValue(Boolean.TRUE);
