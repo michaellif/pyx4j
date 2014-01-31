@@ -423,6 +423,52 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void setValue(Path path, Serializable value) {
+        //assertPath(path);
+        Map<String, Serializable> ownerValueMap = ensureValue(true);
+        LoopCounter c = new LoopCounter(path.getPathMembers());
+        for (String memberName : path.getPathMembers()) {
+            switch (c.next()) {
+            case SINGLE:
+            case LAST:
+                ownerValueMap.put(memberName, value);
+                break;
+            default:
+                Serializable ownerValue = ownerValueMap.get(memberName);
+                if (ownerValue instanceof Map<?, ?>) {
+                    ownerValueMap = (Map<String, Serializable>) ownerValue;
+                } else {
+                    // ensureValue
+                    // TODO ICollection support
+                    ownerValueMap.put(memberName, ownerValue = new EntityValueMap());
+                    ownerValueMap = (Map<String, Serializable>) ownerValue;
+                }
+            }
+        }
+    }
+
+    /**
+     * Use data map directly. No need to create Member
+     */
+    @Override
+    public void setMemberValue(String memberName, Serializable value) {
+        assert (memberName != null);
+        assert (getEntityMeta().getMemberMeta(memberName) != null);
+        ensureValue(true).put(memberName, value);
+    }
+
+    @Override
+    public <T extends IObject<?>> void set(T member, T value) {
+        assert (getEntityMeta().getMemberMeta(member.getFieldName()) != null);
+        if (value instanceof IEntity) {
+            ((IEntity) getMember(member.getFieldName())).set((IEntity) value);
+        } else {
+            ensureValue(true).put(member.getFieldName(), (Serializable) value.getValue());
+        }
+    }
+
     /**
      * IEntity equals by value or Map object (e.g. the same map) or value of PK.equals().
      */
@@ -750,48 +796,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
             value = ((Map<String, Serializable>) value).get(memberName);
         }
         return value;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void setValue(Path path, Serializable value) {
-        //assertPath(path);
-        Map<String, Serializable> ownerValueMap = ensureValue(true);
-        LoopCounter c = new LoopCounter(path.getPathMembers());
-        for (String memberName : path.getPathMembers()) {
-            switch (c.next()) {
-            case SINGLE:
-            case LAST:
-                ownerValueMap.put(memberName, value);
-                break;
-            default:
-                Serializable ownerValue = ownerValueMap.get(memberName);
-                if (ownerValue instanceof Map<?, ?>) {
-                    ownerValueMap = (Map<String, Serializable>) ownerValue;
-                } else {
-                    // ensureValue
-                    // TODO ICollection support
-                    ownerValueMap.put(memberName, ownerValue = new EntityValueMap());
-                    ownerValueMap = (Map<String, Serializable>) ownerValue;
-                }
-            }
-        }
-    }
-
-    /**
-     * Use data map directly. No need to create Member
-     */
-    @Override
-    public void setMemberValue(String memberName, Serializable value) {
-        assert (memberName != null);
-        assert (getEntityMeta().getMemberMeta(memberName) != null);
-        ensureValue(true).put(memberName, value);
-    }
-
-    @Override
-    public <T extends IObject<?>> void set(T member, T value) {
-        assert (getEntityMeta().getMemberMeta(member.getFieldName()) != null);
-        ensureValue(true).put(member.getFieldName(), (Serializable) value.getValue());
     }
 
     private Object getMemberStringView(String memberName, boolean forMessageFormatFormat) {
