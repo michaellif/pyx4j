@@ -50,10 +50,10 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html", "TODO name it, Cards");
         createTerms(Target.TenantPaymentWebPaymentFeeTerms, "TenantPaymentWebPaymentFeeTerms.html", "Web Payment Fee - Terms and Conditions");
 
-        createTerms(Target.ProspectPortalTermsAndConditions, "ProspectPortalTermsAndConditions.html", "TODO Prospect Portal T&C");
-        createTerms(Target.ProspectPortalPrivacyPolicy, "ProspectPortalPrivacyPolicy.html", "TODO Prospect Portal Privacy Policy");
-        createTerms(Target.ResidentPortalTermsAndConditions, "ResidentPortalTermsAndConditions.html", "TODO Resident Portal T&C");
-        createTerms(Target.ResidentPortalPrivacyPolicy, "ResidentPortalPrivacyPolicy.html", "TODO Resident Portal Privacy Policy");
+        createTerms(Target.ProspectPortalTermsAndConditions, "ProspectPortalTermsAndConditions.html", "PROSPECT PORTAL TERMS AND CONDITIONS");
+        createTerms(Target.ProspectPortalPrivacyPolicy, "ProspectPortalPrivacyPolicy.html", "PROSPECT PORTAL PRIVACY POLICY");
+        createTerms(Target.ResidentPortalTermsAndConditions, "ResidentPortalTermsAndConditions.html", "RESIDENT PORTAL TERMS AND CONDITIONS");
+        createTerms(Target.ResidentPortalPrivacyPolicy, "ResidentPortalPrivacyPolicy.html", " RESIDENT PORTAL PRIVACY POLICY");
 
         createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html", "TODO TenantSure");
 
