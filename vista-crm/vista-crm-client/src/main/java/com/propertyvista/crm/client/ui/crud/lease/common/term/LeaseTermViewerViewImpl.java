@@ -24,6 +24,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionService;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
 import com.propertyvista.dto.LeaseTermDTO;
@@ -73,7 +74,7 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         super.populate(value);
 
         if (VistaFeatures.instance().yardiIntegration()) {
-            setEditingVisible(false);
+            setEditingVisible(value.lease().status().getValue() == Lease.Status.Application);
         } else {
             setEditingVisible(!value.lease().status().getValue().isFormer() && value.status().getValue() != Status.AcceptedOffer);
         }
