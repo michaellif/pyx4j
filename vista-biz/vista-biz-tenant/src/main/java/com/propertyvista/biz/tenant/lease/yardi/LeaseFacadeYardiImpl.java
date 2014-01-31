@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
@@ -217,6 +218,7 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     }
 
     private Lease retrieve(LeaseTerm leaseTerm) {
+        Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
         return leaseTerm.lease();
     }
 
