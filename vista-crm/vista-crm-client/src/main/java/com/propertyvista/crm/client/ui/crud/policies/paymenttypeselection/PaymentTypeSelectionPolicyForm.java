@@ -106,6 +106,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         prospectPortal.getWidget(0, col).setWidth(lblW);
         prospectPortal.setWidget(0, ++col, aligned(proto().prospectEcheck()).build());
         prospectPortal.setWidget(0, ++col, new HTML());
+        prospectPortal.getWidget(0, col).setWidth(lblW);
         prospectPortal.setWidget(0, ++col,
                 aligned(proto().prospectCreditCardMasterCard()).customLabel(proto().prospectCreditCardMasterCard().getMeta().getCaption() + convenienceMarker)
                         .build());
