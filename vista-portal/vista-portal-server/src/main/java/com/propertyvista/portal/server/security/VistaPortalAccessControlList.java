@@ -208,6 +208,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new EntityPermission(IdentificationDocumentFile.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(ProofOfEmploymentDocumentFile.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(LeasePaymentMethod.class, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(CustomerPicture.class, CRUD));
 
         //=======================================
 
