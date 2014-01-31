@@ -7,20 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-10
+ * Created on 2013-01-30
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.portal.rpc.portal.shared.services;
+
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.shared.rpc.LegalTermTO;
 
-public interface AbstractLegalTermsService extends IService {
+public interface PortalTermsAndPoliciesService extends IService {
 
-    void retrieveLegalTerms(AsyncCallback<LegalTermTO> callback);
+    void getTerm(AsyncCallback<LegalTermTO> callback, TermsAndPoliciesType type);
+
+    void getTermCaptions(AsyncCallback<Vector<String>> callback, Vector<TermsAndPoliciesType> types);
 
 }

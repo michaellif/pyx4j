@@ -79,7 +79,7 @@ import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserSer
 import com.propertyvista.portal.rpc.portal.shared.services.PortalContentService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveService;
-import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
+import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
@@ -100,7 +100,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
     public VistaPortalAccessControlList() {
 
         grant(new IServiceExecutePermission(ResidentAuthenticationService.class));
-        grant(new IServiceExecutePermission(PortalVistaTermsService.class));
+        grant(new IServiceExecutePermission(PortalTermsAndPoliciesService.class));
         grant(new IServiceExecutePermission(ResidentSelfRegistrationService.class));
 
         grant(new IServiceExecutePermission(ProspectAuthenticationService.class));

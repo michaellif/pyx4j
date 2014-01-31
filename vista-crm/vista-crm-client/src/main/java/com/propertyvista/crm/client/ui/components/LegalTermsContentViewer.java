@@ -23,9 +23,9 @@ import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.shared.rpc.LegalTermsTO;
+import com.propertyvista.shared.rpc.LegalTermTO;
 
-public class LegalTermsContentViewer extends CViewer<LegalTermsTO> {
+public class LegalTermsContentViewer extends CViewer<LegalTermTO> {
 
     public enum Styles implements IStyleName {
         LegalTermsContentViewerCaption, LegalTermsContentViewerHolder, LegalTermsContentViewerContent;
@@ -38,7 +38,7 @@ public class LegalTermsContentViewer extends CViewer<LegalTermsTO> {
     }
 
     @Override
-    public IsWidget createContent(LegalTermsTO legalTermsContent) {
+    public IsWidget createContent(LegalTermTO legalTermsContent) {
         FlowPanel contentPanel = new FlowPanel();
         Label caption = new Label();
         caption.addStyleName(Styles.LegalTermsContentViewerCaption.name());

@@ -92,7 +92,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(loginTermsBuilder.toSafeHtml());
         loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        termsAndConditionsAnchor = new TermsAnchor(i18n.tr("RESIDENT TERMS AND CONDITIONS"), PortalSiteMap.PortalTerms.PortalTermsAndConditions.class);
+        termsAndConditionsAnchor = new TermsAnchor(i18n.tr("RESIDENT TERMS AND CONDITIONS"), PortalSiteMap.PortalTerms.VistaTermsAndConditions.class);
         loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, anchorId);
 
         contentPanel.add(loginTermsLinkPanel);

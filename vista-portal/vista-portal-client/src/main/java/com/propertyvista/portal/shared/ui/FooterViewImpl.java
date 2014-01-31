@@ -71,9 +71,9 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         actionsPanel.setWidth("50%");
 
         Toolbar linksPanel = new Toolbar();
-        linksPanel.addItem(new TermsAnchor(i18n.tr("Terms And Conditions"), PortalSiteMap.PortalTerms.PortalTermsAndConditions.class));
+        linksPanel.addItem(new TermsAnchor(i18n.tr("Terms And Conditions"), PortalSiteMap.PortalTerms.VistaTermsAndConditions.class));
         linksPanel.addItem(new HTML("&nbsp;-&nbsp;"));
-        linksPanel.addItem(new TermsAnchor(i18n.tr("Privacy Policy"), PortalSiteMap.PortalTerms.PortalPrivacyPolicy.class));
+        linksPanel.addItem(new TermsAnchor(i18n.tr("Privacy Policy"), PortalSiteMap.PortalTerms.VistaPrivacyPolicy.class));
         linksPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         linksPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         linksPanel.getElement().getStyle().setProperty("textAlign", "center");

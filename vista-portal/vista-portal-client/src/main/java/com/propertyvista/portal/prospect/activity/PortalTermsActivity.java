@@ -21,11 +21,12 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
+import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.TermsView;
-import com.propertyvista.shared.rpc.LegalTermsTO;
+import com.propertyvista.shared.rpc.LegalTermTO;
 
 public class PortalTermsActivity extends AbstractActivity {
 
@@ -41,25 +42,29 @@ public class PortalTermsActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
-        DefaultAsyncCallback<LegalTermsTO> callback = new DefaultAsyncCallback<LegalTermsTO>() {
+        DefaultAsyncCallback<LegalTermTO> callback = new DefaultAsyncCallback<LegalTermTO>() {
             @Override
-            public void onSuccess(LegalTermsTO result) {
+            public void onSuccess(LegalTermTO result) {
                 view.populate(result.caption().getValue(), result.content().getValue());
                 panel.setWidget(view);
             }
         };
 
-        if (place instanceof PortalSiteMap.PortalTerms.PortalTermsAndConditions) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPVProspectPortalTermsAndConditions(callback);
-        } else if (place instanceof PortalSiteMap.PortalTerms.PortalPrivacyPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPVProspectPortalPrivacyPolicy(callback);
-        } else if (place instanceof PortalSiteMap.PortalTerms.PMCTermsAndConditions) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPMCProspectPortalTermsAndConditions(callback);
-        } else if (place instanceof PortalSiteMap.PortalTerms.PMCPrivacyPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPMCProspectPortalPrivacyPolicy(callback);
+        if (place instanceof PortalSiteMap.PortalTerms.VistaTermsAndConditions) {
+            GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
+                    TermsAndPoliciesType.PVProspectPortalTermsAndConditions);
+        } else if (place instanceof PortalSiteMap.PortalTerms.VistaPrivacyPolicy) {
+            GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
+                    TermsAndPoliciesType.PVProspectPortalPrivacyPolicy);
+        } else if (place instanceof PortalSiteMap.PortalTerms.PmcTermsAndConditions) {
+            GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
+                    TermsAndPoliciesType.PMCProspectPortalTermsAndConditions);
+        } else if (place instanceof PortalSiteMap.PortalTerms.PmcPrivacyPolicy) {
+            GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
+                    TermsAndPoliciesType.PMCProspectPortalPrivacyPolicy);
 
         } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getTenantBillingTerms(callback);
+            GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback, TermsAndPoliciesType.TenantBillingTerms);
         }
 
         panel.setWidget(view);

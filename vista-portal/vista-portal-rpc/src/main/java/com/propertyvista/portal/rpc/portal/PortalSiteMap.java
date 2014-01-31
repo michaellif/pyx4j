@@ -71,16 +71,16 @@ public class PortalSiteMap implements SiteMap {
 
     public static class PortalTerms {
 
-        public static class PortalTermsAndConditions extends AppPlace implements PublicPlace {
+        public static class VistaTermsAndConditions extends AppPlace implements PublicPlace {
         }
 
-        public static class PortalPrivacyPolicy extends AppPlace implements PublicPlace {
+        public static class VistaPrivacyPolicy extends AppPlace implements PublicPlace {
         }
 
-        public static class PMCTermsAndConditions extends AppPlace implements PublicPlace {
+        public static class PmcTermsAndConditions extends AppPlace implements PublicPlace {
         }
 
-        public static class PMCPrivacyPolicy extends AppPlace implements PublicPlace {
+        public static class PmcPrivacyPolicy extends AppPlace implements PublicPlace {
         }
 
         public static class BillingTerms extends AppPlace implements PublicPlace {

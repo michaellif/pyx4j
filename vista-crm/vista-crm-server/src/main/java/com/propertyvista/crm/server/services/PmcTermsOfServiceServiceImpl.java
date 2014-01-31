@@ -26,14 +26,14 @@ import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.server.TaskRunner;
-import com.propertyvista.shared.rpc.LegalTermsTO;
+import com.propertyvista.shared.rpc.LegalTermTO;
 
 //TODO use the same way as PortalVistaTermsService
 public class PmcTermsOfServiceServiceImpl implements PmcTermsOfServiceService {
 
     @Override
-    public void retrieveLegalTerms(AsyncCallback<LegalTermsTO> callback) {
-        LegalTermsTO legalTerms = EntityFactory.create(LegalTermsTO.class);
+    public void retrieveLegalTerms(AsyncCallback<LegalTermTO> callback) {
+        LegalTermTO legalTerms = EntityFactory.create(LegalTermTO.class);
         String terms = TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {

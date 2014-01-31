@@ -20,7 +20,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface LegalTermsTO extends IEntity {
+public interface LegalTermTO extends IEntity {
 
     IPrimitive<String> caption();
 

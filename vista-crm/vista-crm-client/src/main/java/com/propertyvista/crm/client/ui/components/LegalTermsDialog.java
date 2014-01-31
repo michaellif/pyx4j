@@ -17,7 +17,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.crm.rpc.services.AbstractLegalTermsService;
-import com.propertyvista.shared.rpc.LegalTermsTO;
+import com.propertyvista.shared.rpc.LegalTermTO;
 
 public class LegalTermsDialog extends OkDialog {
 
@@ -28,10 +28,10 @@ public class LegalTermsDialog extends OkDialog {
         final LegalTermsContentViewer termsViewer = new LegalTermsContentViewer("400px");
         setBody(termsViewer);
         setDialogPixelWidth(500);
-        service.retrieveLegalTerms(new DefaultAsyncCallback<LegalTermsTO>() {
+        service.retrieveLegalTerms(new DefaultAsyncCallback<LegalTermTO>() {
 
             @Override
-            public void onSuccess(LegalTermsTO result) {
+            public void onSuccess(LegalTermTO result) {
                 termsViewer.populate(result);
                 isLoaded = true;
             }

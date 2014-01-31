@@ -85,10 +85,10 @@ public class ContentActivityMapper implements AppActivityMapper {
 
 // Internals/Terms: @formatter:off
                     } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms 
-                            || place instanceof PortalSiteMap.PortalTerms.PortalTermsAndConditions
-                            || place instanceof PortalSiteMap.PortalTerms.PortalPrivacyPolicy
-                            || place instanceof PortalSiteMap.PortalTerms.PMCPrivacyPolicy
-                            || place instanceof PortalSiteMap.PortalTerms.PMCPrivacyPolicy) {
+                            || place instanceof PortalSiteMap.PortalTerms.VistaTermsAndConditions
+                            || place instanceof PortalSiteMap.PortalTerms.VistaPrivacyPolicy
+                            || place instanceof PortalSiteMap.PortalTerms.PmcPrivacyPolicy
+                            || place instanceof PortalSiteMap.PortalTerms.PmcPrivacyPolicy) {
                         activity = new PortalTermsActivity(place);
                  // @formatter:on
                     }
