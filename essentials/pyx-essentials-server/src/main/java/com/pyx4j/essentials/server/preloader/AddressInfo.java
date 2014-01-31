@@ -29,7 +29,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 @RpcTransient
 @Transient
-@ToStringFormat("{1} {2}, {3}")
+@ToStringFormat("{0} {1}, {2}")
 public interface AddressInfo extends IEntity {
 
     @ToString
