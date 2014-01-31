@@ -298,22 +298,23 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // screening:
         LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), participant, AttachLevel.Attached);
-        CustomerScreening.CustomerScreeningV screening = participant.effectiveScreening().version();
+        CustomerScreening.CustomerScreeningV screeningv = participant.effectiveScreening().version();
+        participant.effectiveScreening().screene().set(customer);
         //
-        screening.set(screening.currentAddress(), to.applicant().currentAddress());
-        screening.set(screening.previousAddress(), to.applicant().previousAddress());
-        screening.set(screening.legalQuestions(), to.applicant().legalQuestions());
+        screeningv.set(screeningv.currentAddress(), to.applicant().currentAddress());
+        screeningv.set(screeningv.previousAddress(), to.applicant().previousAddress());
+        screeningv.set(screeningv.legalQuestions(), to.applicant().legalQuestions());
 
-        screening.documents().clear();
-        screening.documents().addAll(to.applicant().documents());
+        screeningv.documents().clear();
+        screeningv.documents().addAll(to.applicant().documents());
 
-        screening.incomes().clear();
-        screening.incomes().addAll(to.applicant().incomes());
+        screeningv.incomes().clear();
+        screeningv.incomes().addAll(to.applicant().incomes());
 
-        screening.assets().clear();
-        screening.assets().addAll(to.applicant().assets());
+        screeningv.assets().clear();
+        screeningv.assets().addAll(to.applicant().assets());
 
-        Persistence.service().merge(screening);
+        Persistence.service().merge(participant.effectiveScreening());
     }
 
     private void fillCoApplicants(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -860,6 +861,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private List<UnitTO> retriveAvailableUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
         if (moveIn == null) {
             moveIn = new LogicalDate(SystemDateManager.getDate());
+        }
+        if (baths == null) {
+            baths = BathroomNumber.Any;
+        }
+        if (beds == null) {
+            beds = BedroomNumber.Any;
         }
 
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
