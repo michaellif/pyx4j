@@ -109,12 +109,12 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentWizard.this.getValue().allowedCardTypes();
+            return PaymentWizard.this.getValue().allowedPaymentsSetup().allowedCardTypes();
         }
 
         @Override
         protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-            return PaymentWizard.this.getValue().convenienceFeeApplicableCardTypes();
+            return PaymentWizard.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
         };
 
         @Override
@@ -188,19 +188,19 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.reset();
-                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setEditable(true);
 
-                        if (getValue().allowedPaymentTypes().isEmpty()) {
+                        if (getValue().allowedPaymentsSetup().allowedPaymentTypes().isEmpty()) {
                             paymentMethodEditor.initNew(null);
                             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
                         } else {
                             // set preferred value:
-                            if (getValue().allowedPaymentTypes().contains(PaymentType.Echeck)) {
+                            if (getValue().allowedPaymentsSetup().allowedPaymentTypes().contains(PaymentType.Echeck)) {
                                 paymentMethodEditor.initNew(PaymentType.Echeck);
                             } else {
                                 paymentMethodEditor.initNew(null);
@@ -345,7 +345,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override

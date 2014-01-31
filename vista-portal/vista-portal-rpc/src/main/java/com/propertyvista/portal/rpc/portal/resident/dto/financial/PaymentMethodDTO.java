@@ -15,23 +15,14 @@ package com.propertyvista.portal.rpc.portal.resident.dto.financial;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.core.IPrimitiveSet;
 
-import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
 
 @Transient
 public interface PaymentMethodDTO extends IEntity {
 
     LeasePaymentMethod paymentMethod();
 
-    IPrimitive<Boolean> electronicPaymentsAllowed();
-
-    IPrimitiveSet<PaymentType> allowedPaymentTypes();
-
-    IPrimitiveSet<CreditCardType> allowedCardTypes();
-
-    IPrimitiveSet<CreditCardType> convenienceFeeApplicableCardTypes();
+    AllowedPaymentsSetup allowedPaymentsSetup();
 }

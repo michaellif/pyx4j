@@ -48,6 +48,7 @@ import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -86,6 +87,16 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public boolean isElectronicPaymentsSetup(LeaseTerm leaseTermId) {
         return PaymentUtils.isElectronicPaymentsSetup(leaseTermId);
+    }
+
+    @Override
+    public AllowedPaymentsSetup getAllowedPaymentsSetup(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        return PaymentUtils.getAllowedPaymentsSetup(billingAccountId, vistaApplication);
+    }
+
+    @Override
+    public AllowedPaymentsSetup getAllowedPaymentsSetup(Building policyNode, VistaApplication vistaApplication) {
+        return PaymentUtils.getAllowedPaymentsSetup(policyNode, vistaApplication);
     }
 
     @Override

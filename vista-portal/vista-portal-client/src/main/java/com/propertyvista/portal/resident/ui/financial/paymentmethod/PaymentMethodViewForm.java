@@ -43,7 +43,7 @@ public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO>
         content.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
             @Override
             protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-                return PaymentMethodViewForm.this.getValue().convenienceFeeApplicableCardTypes();
+                return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
             }
         }));
 

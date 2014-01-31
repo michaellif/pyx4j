@@ -100,7 +100,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentForm.this.getValue().allowedCardTypes().getValue();
+            return PaymentForm.this.getValue().allowedPaymentsSetup().allowedCardTypes().getValue();
         };
 
         @Override
@@ -266,21 +266,21 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentDataDTO.PaymentSelect> event) {
                 paymentMethodEditor.reset();
-                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setEditable(true);
 
-                        if (getValue().allowedPaymentTypes().isEmpty()) {
+                        if (getValue().allowedPaymentsSetup().allowedPaymentTypes().isEmpty()) {
                             paymentMethodEditor.initNew(null);
                             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
                         } else {
                             // set preferred value:
-                            if (getValue().allowedPaymentTypes().contains(PaymentType.Echeck)) {
+                            if (getValue().allowedPaymentsSetup().allowedPaymentTypes().contains(PaymentType.Echeck)) {
                                 paymentMethodEditor.initNew(PaymentType.Echeck);
-                            } else if (getValue().allowedPaymentTypes().contains(PaymentType.Cash)) {
+                            } else if (getValue().allowedPaymentsSetup().allowedPaymentTypes().contains(PaymentType.Cash)) {
                                 paymentMethodEditor.initNew(PaymentType.Cash);
                             } else {
                                 paymentMethodEditor.initNew(null);
@@ -389,8 +389,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         noticeViewer.updateVisibility();
 
         if (isEditable()) {
-            paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
-            paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+            paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentsSetup().allowedPaymentTypes());
+            paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
             if (isNew) {
                 get(proto().leaseTermParticipant()).setEditable(true);
@@ -484,8 +484,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     private void changeLeaseParticipant() {
         paymentMethodEditor.reset();
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(true);
-        paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+        paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentsSetup().allowedPaymentTypes());
+        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override
             public void onSuccess(Void result) {

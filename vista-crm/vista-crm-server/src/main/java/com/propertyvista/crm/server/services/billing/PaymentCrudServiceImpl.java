@@ -82,13 +82,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
         dto.billingAccount().set(billingAccount);
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(billingAccount));
-        dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.crm));
-        dto.allowedCardTypes()
-                .setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(dto.billingAccount(), VistaApplication.crm));
-        dto.convenienceFeeApplicableCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(dto.billingAccount(), VistaApplication.crm));
+        dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(dto.billingAccount(), VistaApplication.crm));
 
         dto.leaseId().set(billingAccount.lease().leaseId());
         dto.leaseStatus().set(billingAccount.lease().status());
@@ -114,12 +108,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         super.enhanceRetrieved(bo, to, retrieveTarget);
         enhanceListRetrieved(bo, to);
 
-        to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(to.billingAccount()));
-        to.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(to.billingAccount(), VistaApplication.crm));
-        to.allowedCardTypes().setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(to.billingAccount(), VistaApplication.crm));
-        to.convenienceFeeApplicableCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(to.billingAccount(), VistaApplication.crm));
+        to.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.billingAccount(), VistaApplication.crm));
+
         to.participants().addAll(retrievePayableUsers(to.billingAccount().lease()));
     }
 

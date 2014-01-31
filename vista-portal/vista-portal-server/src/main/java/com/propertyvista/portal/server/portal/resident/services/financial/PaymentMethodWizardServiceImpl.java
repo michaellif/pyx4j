@@ -48,18 +48,13 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
         PaymentMethodDTO dto = EntityFactory.create(PaymentMethodDTO.class);
 
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
-        dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
-        dto.allowedCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.resident));
-        dto.convenienceFeeApplicableCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedPaymentsSetup()
+                .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
 
-        if (dto.allowedPaymentTypes().contains(PaymentType.Echeck)) {
+        if (dto.allowedPaymentsSetup().allowedPaymentTypes().contains(PaymentType.Echeck)) {
             dto.paymentMethod().type().setValue(PaymentType.Echeck);
-        } else if (!dto.allowedPaymentTypes().isEmpty()) {
-            dto.paymentMethod().type().setValue(dto.allowedPaymentTypes().iterator().next());
+        } else if (!dto.allowedPaymentsSetup().allowedPaymentTypes().isEmpty()) {
+            dto.paymentMethod().type().setValue(dto.allowedPaymentsSetup().allowedPaymentTypes().iterator().next());
         }
 
         return dto;

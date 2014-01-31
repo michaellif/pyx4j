@@ -67,16 +67,11 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
         AutoPayDTO dto = EntityFactory.create(AutoPayDTO.class);
 
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
-        dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
-        dto.allowedCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.resident));
-        dto.convenienceFeeApplicableCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedPaymentsSetup()
+                .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
 
         // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
-        dto.allowedCardTypes().removeAll(dto.convenienceFeeApplicableCardTypes());
+        dto.allowedPaymentsSetup().allowedCardTypes().removeAll(dto.allowedPaymentsSetup().convenienceFeeApplicableCardTypes());
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
@@ -125,9 +120,10 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit().building());
 
-        to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
-        to.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
+        to.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
+
+        // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
+        to.allowedPaymentsSetup().allowedCardTypes().removeAll(to.allowedPaymentsSetup().convenienceFeeApplicableCardTypes());
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), to.address());
 

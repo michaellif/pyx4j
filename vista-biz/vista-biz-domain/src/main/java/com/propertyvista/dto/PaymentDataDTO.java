@@ -19,14 +19,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 
 @Transient
@@ -60,13 +58,7 @@ public interface PaymentDataDTO extends IEntity {
     @Editor(type = EditorType.label)
     IPrimitive<Status> leaseStatus();
 
-    IPrimitive<Boolean> electronicPaymentsAllowed();
-
-    IPrimitiveSet<PaymentType> allowedPaymentTypes();
-
-    IPrimitiveSet<CreditCardType> allowedCardTypes();
-
-    IPrimitiveSet<CreditCardType> convenienceFeeApplicableCardTypes();
+    AllowedPaymentsSetup allowedPaymentsSetup();
 
     // UI-only (control organization) members:
 

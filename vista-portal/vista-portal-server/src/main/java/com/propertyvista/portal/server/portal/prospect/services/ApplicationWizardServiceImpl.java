@@ -637,13 +637,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
 
         dto.billingAccount().set(lease.billingAccount());
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
-        dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
-        dto.allowedCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.resident));
-        dto.convenienceFeeApplicableCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(policyNode, VistaApplication.prospect));
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 

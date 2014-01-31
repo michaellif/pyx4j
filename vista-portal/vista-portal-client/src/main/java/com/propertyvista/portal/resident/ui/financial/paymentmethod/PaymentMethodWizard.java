@@ -65,12 +65,12 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentMethodWizard.this.getValue().allowedCardTypes();
+            return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().allowedCardTypes();
         }
 
         @Override
         protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-            return PaymentMethodWizard.this.getValue().convenienceFeeApplicableCardTypes();
+            return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
         };
 
         @Override
@@ -148,7 +148,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
     }
 
     private Widget createConfirmationDetailsPanel() {

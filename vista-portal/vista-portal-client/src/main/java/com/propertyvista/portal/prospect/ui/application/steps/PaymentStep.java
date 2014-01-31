@@ -56,12 +56,12 @@ public class PaymentStep extends ApplicationWizardStep {
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentStep.this.getValue().payment().allowedCardTypes();
+            return PaymentStep.this.getValue().payment().allowedPaymentsSetup().allowedCardTypes();
         }
 
         @Override
         protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-            return PaymentStep.this.getValue().payment().convenienceFeeApplicableCardTypes();
+            return PaymentStep.this.getValue().payment().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
         };
 
         @Override
@@ -106,19 +106,20 @@ public class PaymentStep extends ApplicationWizardStep {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.reset();
-                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().allowedPaymentsSetup().electronicPaymentsAllowed()
+                        .getValue(Boolean.FALSE));
 
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setEditable(true);
 
-                        if (getValue().payment().allowedPaymentTypes().isEmpty()) {
+                        if (getValue().payment().allowedPaymentsSetup().allowedPaymentTypes().isEmpty()) {
                             paymentMethodEditor.initNew(null);
                             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
                         } else {
                             // set preferred value:
-                            if (getValue().payment().allowedPaymentTypes().contains(PaymentType.Echeck)) {
+                            if (getValue().payment().allowedPaymentsSetup().allowedPaymentTypes().contains(PaymentType.Echeck)) {
                                 paymentMethodEditor.initNew(PaymentType.Echeck);
                             } else {
                                 paymentMethodEditor.initNew(null);
@@ -169,7 +170,7 @@ public class PaymentStep extends ApplicationWizardStep {
     public void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override
