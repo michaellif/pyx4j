@@ -55,6 +55,7 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.server.common.util.TenantConverter;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseApplicationDTO> implements LeaseApplicationViewerCrudService {
 
@@ -92,8 +93,10 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
 
         if (!Lease.Status.isApplicationWithoutUnit(to)) {
-            ServerSideFactory.create(ScreeningFacade.class).calculateSuggestedDecision(
-                    ServerSideFactory.create(BillingFacade.class).getMaxLeaseTermMonthlyTotal(to.currentTerm()), to.leaseApproval());
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                BigDecimal total = ServerSideFactory.create(BillingFacade.class).getMaxLeaseTermMonthlyTotal(to.currentTerm());
+                ServerSideFactory.create(ScreeningFacade.class).calculateSuggestedDecision(total, to.leaseApproval());
+            }
         }
 
         to.masterApplicationStatus().set(

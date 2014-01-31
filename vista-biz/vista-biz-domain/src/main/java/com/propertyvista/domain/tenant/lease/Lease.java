@@ -196,7 +196,6 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
     //as of now @see PmcYardiCredential or -1 for internal
     @ReadOnly
     @Indexed(group = { "c,2" })
-    @MemberColumn(notNull = true)
     IPrimitive<Key> integrationSystemId();
 
     @NotNull
