@@ -14,7 +14,6 @@
 package com.propertyvista.portal.shared.ui.util.editors;
 
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -39,10 +38,10 @@ import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfo
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.shared.ui.util.PortalPaymentTypesUtil;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor<E> {
+public abstract class PaymentMethodEditor<E extends AbstractPaymentMethod> extends
+        com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor<E> {
 
     private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 
@@ -50,14 +49,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
         super(clazz, new VistaEditorsComponentFactory());
     }
 
-    @Override
-    public Set<PaymentType> defaultPaymentTypes() {
-        return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
-    }
-
-    protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-        return EnumSet.noneOf(CreditCardType.class);
-    }
+    protected abstract Set<CreditCardType> getConvienceFeeApplicableCardTypes();
 
     @Override
     public IsWidget createContent() {
@@ -73,7 +65,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
         content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
 
         // tweaks:
-        ((CComboBox<PaymentType>) get(proto().type())).setOptions(defaultPaymentTypes());
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
@@ -191,8 +182,9 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
         super.onValueSet(populate);
 
         if (get(proto().type()).isEditable() && get(proto().type()) instanceof CComboBox) {
-            // set single-available option preselected for new items: 
             CComboBox<PaymentType> type = ((CComboBox<PaymentType>) get(proto().type()));
+            type.setOptions(getPaymentTypes());
+            // set single-available option preselected for new items: 
             if (getValue().id().isNull() && !type.getOptions().isEmpty()) {
                 type.setValue(type.getOptions().get(0), false, populate);
             }

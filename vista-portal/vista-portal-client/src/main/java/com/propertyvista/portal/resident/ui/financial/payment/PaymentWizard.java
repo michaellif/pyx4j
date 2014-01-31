@@ -85,7 +85,6 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
-import com.propertyvista.portal.shared.ui.util.PortalPaymentTypesUtil;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
@@ -103,8 +102,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
-        public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes(true);
+        public Set<PaymentType> getPaymentTypes() {
+            return PaymentWizard.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
         }
 
         @Override
@@ -315,7 +314,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             @Override
             public ValidationError isValid(CComponent<LeasePaymentMethod> component, LeasePaymentMethod value) {
                 if (value != null) {
-                    return (paymentMethodEditor.defaultPaymentTypes().contains(value.type().getValue()) ? null : new ValidationError(component, i18n
+                    return (paymentMethodEditor.getPaymentTypes().contains(value.type().getValue()) ? null : new ValidationError(component, i18n
                             .tr("Not allowed payment type!")));
                 }
                 return null;

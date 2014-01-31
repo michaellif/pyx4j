@@ -85,11 +85,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creationDate()), 10).build());
 
-        main.setWidget(
-                ++row,
-                0,
-                new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
-                        RadioGroup.Layout.HORISONTAL)), 22).build());
+        main.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL)), 22).build());
         if (proto() instanceof PaymentMethod) {
             main.setWidget(row, 1, new FormDecoratorBuilder(inject(((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
         }
@@ -371,7 +368,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     /**
      * Override in derived classes to supply alternative set of options.
      */
-    public Set<PaymentType> defaultPaymentTypes() {
+    public Set<PaymentType> getPaymentTypes() {
         return EnumSet.allOf(PaymentType.class);
     }
 

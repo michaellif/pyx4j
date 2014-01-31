@@ -37,7 +37,6 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.util.PortalPaymentTypesUtil;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
@@ -50,8 +49,8 @@ public class PaymentStep extends ApplicationWizardStep {
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
-        public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes(true);
+        public Set<PaymentType> getPaymentTypes() {
+            return PaymentStep.this.getValue().payment().allowedPaymentsSetup().allowedPaymentTypes();
         }
 
         @Override

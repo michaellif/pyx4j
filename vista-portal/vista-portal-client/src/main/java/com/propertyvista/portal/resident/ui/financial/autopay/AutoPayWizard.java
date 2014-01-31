@@ -310,7 +310,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             @Override
             public ValidationError isValid(CComponent<LeasePaymentMethod> component, LeasePaymentMethod value) {
                 if (value != null) {
-                    return (paymentMethodEditor.defaultPaymentTypes().contains(value.type().getValue()) ? null : new ValidationError(component, i18n
+                    return (paymentMethodEditor.getPaymentTypes().contains(value.type().getValue()) ? null : new ValidationError(component, i18n
                             .tr("Not allowed payment type!")));
                 }
                 return null;

@@ -168,7 +168,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
             }
         });
 
-        pmRadioGroup.setOptions(defaultPaymentTypes());
+        pmRadioGroup.setOptions(getPaymentTypes());
 
         return pmRadioGroup;
     }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
@@ -76,8 +78,13 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
     }
 
     @Override
-    public Set<PaymentType> defaultPaymentTypes() {
+    public Set<PaymentType> getPaymentTypes() {
         return EnumSet.of(PaymentType.CreditCard);
+    }
+
+    @Override
+    protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
+        return Collections.emptySet();
     }
 
     @Override

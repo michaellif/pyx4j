@@ -53,7 +53,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         }
 
         @Override
-        public Set<PaymentType> defaultPaymentTypes() {
+        public Set<PaymentType> getPaymentTypes() {
             return EnumSet.of(PaymentType.CreditCard);
         }
 
