@@ -13,16 +13,11 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
-import java.util.Vector;
-
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -39,21 +34,15 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.domain.legal.TermsAndPoliciesType;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
-import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
