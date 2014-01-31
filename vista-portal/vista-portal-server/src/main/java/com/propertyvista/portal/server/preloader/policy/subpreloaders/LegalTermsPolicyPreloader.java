@@ -31,10 +31,12 @@ public class LegalTermsPolicyPreloader extends AbstractPolicyPreloader<LegalTerm
     @Override
     protected LegalTermsPolicy createPolicy(StringBuilder log) {
         LegalTermsPolicy policy = EntityFactory.create(LegalTermsPolicy.class);
-        policy.residentPortalTermsAndConditions().set(createLegalTermsPolicyItem("Resident Portal Terms And Conditions", "rentalCriteriaGuidelines.html"));
-        policy.residentPortalPrivacyPolicy().set(createLegalTermsPolicyItem("Resident Portal Privacy Policy", "rentalCriteriaGuidelines.html"));
-        policy.prospectPortalTermsAndConditions().set(createLegalTermsPolicyItem("Prospect Portal Terms And Conditions", "rentalCriteriaGuidelines.html"));
-        policy.prospectPortalPrivacyPolicy().set(createLegalTermsPolicyItem("Prospect Portal Privacy Policy", "rentalCriteriaGuidelines.html"));
+        policy.residentPortalTermsAndConditions().set(
+                createLegalTermsPolicyItem("RESIDENT PORTAL TERMS AND CONDITIONS", "ResidentPortalTermsAndConditionsCrm.html"));
+        policy.residentPortalPrivacyPolicy().set(createLegalTermsPolicyItem("RESIDENT PORTAL PRIVACY POLICY", "ResidentPortalPrivacyPolicyCrm.html"));
+        policy.prospectPortalTermsAndConditions().set(
+                createLegalTermsPolicyItem("PROSPECT PORTAL TERMS AND CONDITIONS", "ProspectPortalTermsAndConditionsCrm.html"));
+        policy.prospectPortalPrivacyPolicy().set(createLegalTermsPolicyItem("PROSPECT PORTAL PRIVACY POLICY", "ProspectPortalPrivacyPolicyCrm.html"));
         return policy;
     }
 
