@@ -122,6 +122,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().units().$().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
+                            filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), Boolean.TRUE));
+
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
 
                             LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
@@ -144,6 +146,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             if (VistaFeatures.instance().yardiIntegration()) {
                                 filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE));
                                 filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().availableOnline(), Boolean.TRUE));
+                            } else {
+                                filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), currentValue
+                                        .unit().building().defaultProductCatalog().isBooleanTrue()));
                             }
 
                         } else {
@@ -187,6 +192,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
+                            filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.TRUE));
+
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
 
                             LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
@@ -208,6 +215,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             if (VistaFeatures.instance().yardiIntegration()) {
                                 filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE));
                                 filters.add(PropertyCriterion.in(proto().productItems().$().product().availableOnline(), Boolean.TRUE));
+                            } else {
+                                filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), currentValue.unit()
+                                        .building().defaultProductCatalog().isBooleanTrue()));
                             }
 
                         } else {
