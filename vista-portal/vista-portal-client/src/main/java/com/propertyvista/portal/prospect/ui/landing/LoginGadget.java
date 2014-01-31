@@ -15,9 +15,7 @@ package com.propertyvista.portal.prospect.ui.landing;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,13 +24,11 @@ import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -48,7 +44,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -58,10 +53,8 @@ import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCre
 import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.portal.prospect.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPoliciesService;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
@@ -90,7 +83,9 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         loginForm.initContent();
         contentPanel.add(loginForm);
 
-        contentPanel.add(new TermsLinkPanel(i18n.tr("LOGIN")));
+        contentPanel.add(new TermsLinkPanel(i18n.tr("LOGIN"), TermsAndPoliciesType.PVProspectPortalTermsAndConditions,
+                PortalSiteMap.PortalTerms.VistaTermsAndConditions.class, TermsAndPoliciesType.PMCProspectPortalTermsAndConditions,
+                PortalSiteMap.PortalTerms.PmcTermsAndConditions.class));
 
         setContent(contentPanel);
     }

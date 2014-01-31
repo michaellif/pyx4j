@@ -49,7 +49,9 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
+import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.portal.resident.ui.landing.LandingView.LandingPresenter;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
@@ -80,7 +82,9 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         loginForm.initContent();
         contentPanel.add(loginForm);
 
-        contentPanel.add(new TermsLinkPanel(i18n.tr("LOGIN")));
+        contentPanel.add(new TermsLinkPanel(i18n.tr("LOGIN"), TermsAndPoliciesType.PVResidentPortalTermsAndConditions,
+                PortalSiteMap.PortalTerms.VistaTermsAndConditions.class, TermsAndPoliciesType.PMCResidentPortalTermsAndConditions,
+                PortalSiteMap.PortalTerms.PmcTermsAndConditions.class));
 
         setContent(contentPanel);
     }

@@ -38,7 +38,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
@@ -68,7 +70,9 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
         signupForm.initContent();
         contentPanel.add(signupForm);
 
-        TermsLinkPanel termsLinkPanel = new TermsLinkPanel(i18n.tr("REGISTER"));
+        TermsLinkPanel termsLinkPanel = new TermsLinkPanel(i18n.tr("REGISTER"), TermsAndPoliciesType.PVResidentPortalTermsAndConditions,
+                PortalSiteMap.PortalTerms.VistaTermsAndConditions.class, TermsAndPoliciesType.PMCResidentPortalTermsAndConditions,
+                PortalSiteMap.PortalTerms.PmcTermsAndConditions.class);
         termsLinkPanel.getElement().getStyle().setProperty("maxWidth", 500, Unit.PX);
 
         contentPanel.add(termsLinkPanel);
