@@ -94,6 +94,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class LeaseAbstractManager {
 
@@ -836,11 +837,14 @@ public abstract class LeaseAbstractManager {
         // pre-populate mandatory features for the new service:
         Persistence.ensureRetrieve(service.features(), AttachLevel.Attached);
         for (Feature feature : service.features()) {
-            if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
-                if (feature.version().mandatory().isBooleanTrue()) {
-                    Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
-                    if (!feature.version().items().isEmpty()) {
-                        leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, feature.version().items().get(0), node));
+            if (!VistaFeatures.instance().yardiIntegration() || VistaFeatures.instance().yardiIntegration()
+                    && feature.version().availableOnline().isBooleanTrue()) {
+                if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
+                    if (feature.version().mandatory().isBooleanTrue()) {
+                        Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
+                        if (!feature.version().items().isEmpty()) {
+                            leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, feature.version().items().get(0), node));
+                        }
                     }
                 }
             }
@@ -1149,6 +1153,9 @@ public abstract class LeaseAbstractManager {
 
         // use default product catalog items for specific cases:
         boolean useDefaultCatalog = (leaseTerm.unit().building().defaultProductCatalog().isBooleanTrue() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            useDefaultCatalog = false;
+        }
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.eq(serviceCriteria.proto().catalog(), leaseTerm.unit().building().productCatalog());
@@ -1157,6 +1164,10 @@ public abstract class LeaseAbstractManager {
         serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
                 PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), termFrom));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            serviceCriteria.eq(serviceCriteria.proto().version().availableOnline(), Boolean.TRUE);
+        }
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);

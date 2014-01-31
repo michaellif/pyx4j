@@ -55,6 +55,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<LeaseTerm, LeaseTermDTO> implements LeaseTermCrudService {
 
@@ -172,7 +173,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             if (retrieveTarget == RetrieveTarget.Edit) {
                 // fill runtime editor data:
                 fillServiceEligibilityData(to);
-                fillserviceItems(to);
+                fillServiceItems(to);
             }
 
             checkUnitMoveOut(to);
@@ -195,7 +196,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // fill runtime editor data:
         fillServiceEligibilityData(result);
-        fillserviceItems(result);
+        fillServiceItems(result);
 
         checkUnitMoveOut(result);
         setAgeRestrictions(result);
@@ -281,11 +282,14 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             // features:
             Persistence.ensureRetrieve(selectedService.features(), AttachLevel.Attached);
             for (Feature feature : selectedService.features()) {
-                if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
-                    Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
-                    for (ProductItem item : feature.version().items()) {
-                        Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
-                        currentValue.selectedFeatureItems().add(item);
+                if (!VistaFeatures.instance().yardiIntegration() || VistaFeatures.instance().yardiIntegration()
+                        && feature.version().availableOnline().isBooleanTrue()) {
+                    if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
+                        Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
+                        for (ProductItem item : feature.version().items()) {
+                            Persistence.ensureRetrieve(item.product(), AttachLevel.Attached);
+                            currentValue.selectedFeatureItems().add(item);
+                        }
                     }
                 }
             }
@@ -298,7 +302,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         return (selectedService != null);
     }
 
-    private void fillserviceItems(LeaseTermDTO currentValue) {
+    private void fillServiceItems(LeaseTermDTO currentValue) {
         currentValue.selectedServiceItems().clear();
 
         Persistence.ensureRetrieve(currentValue.unit().building(), AttachLevel.Attached);
@@ -307,6 +311,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         boolean useDefaultCatalog = (currentValue.unit().building().defaultProductCatalog().isBooleanTrue() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
         LogicalDate termFrom = (currentValue.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : currentValue.termFrom().getValue());
 
+        if (VistaFeatures.instance().yardiIntegration()) {
+            useDefaultCatalog = false;
+        }
+
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.eq(serviceCriteria.proto().catalog(), currentValue.unit().building().productCatalog());
         serviceCriteria.eq(serviceCriteria.proto().code().type(), currentValue.lease().type());
@@ -314,6 +322,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
                 PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), termFrom));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            serviceCriteria.eq(serviceCriteria.proto().version().availableOnline(), Boolean.TRUE);
+        }
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);

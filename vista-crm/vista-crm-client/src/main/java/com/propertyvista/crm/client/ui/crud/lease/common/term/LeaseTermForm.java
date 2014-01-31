@@ -132,7 +132,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_noUnitOccupancySegments) {
                                 filters.add(PropertyCriterion.le(proto().units().$()._availableForRent(), dateFrom));
                             } else {
-
                                 filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().status(),
                                         AptUnitOccupancySegment.Status.available));
                                 filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
@@ -141,6 +140,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                             // TODO: filter by lease type also!!!
 //                            filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().serviceType(), currentValue.lease().type()));
+
+                            if (VistaFeatures.instance().yardiIntegration()) {
+                                filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE));
+                                filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().availableOnline(), Boolean.TRUE));
+                            }
 
                         } else {
                             assert false : "Weird! Value shouln'd be edited in this lease status!";
@@ -200,6 +204,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                             // TODO: filter by lease type also!!!
 //                            filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().serviceType(), currentValue.lease().type()));
+
+                            if (VistaFeatures.instance().yardiIntegration()) {
+                                filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE));
+                                filters.add(PropertyCriterion.in(proto().productItems().$().product().availableOnline(), Boolean.TRUE));
+                            }
 
                         } else {
                             assert false : "Weird! Value shouln'd be edited in this lease status!";
