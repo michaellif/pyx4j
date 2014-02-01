@@ -149,9 +149,9 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         WizardStep currentStep = getSelectedStep();
 
         if (currentStepIndex > -1) {
+            currentStep.showErrors(true);
             ValidationResults validationResults = currentStep.getValidationResults();
             if (!validationResults.isValid()) {
-                currentStep.showErrors(true);
                 MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
                 return false;
             }
