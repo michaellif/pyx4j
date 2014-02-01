@@ -24,9 +24,11 @@ import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification.ChangeType;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
-import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
+import com.propertyvista.domain.tenant.lease.SignedAgreementConfirmationTerm;
+import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
@@ -48,12 +50,18 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         to.leaseTerm().set(lease.currentTerm());
 
         for (LeaseAgreementLegalTerm term : lease.currentTerm().version().agreementLegalTerms()) {
-            AgreementLegalTermSignature signedTerm = EntityFactory.create(AgreementLegalTermSignature.class);
+            SignedAgreementLegalTerm signedTerm = EntityFactory.create(SignedAgreementLegalTerm.class);
             signedTerm.term().set(term);
             signedTerm.signature().signatureFormat().set(term.signatureFormat());
             to.legalTerms().add(signedTerm);
         }
 
+        for (LeaseAgreementConfirmationTerm term : lease.currentTerm().version().agreementConfirmationTerm()) {
+            SignedAgreementConfirmationTerm signedTerm = EntityFactory.create(SignedAgreementConfirmationTerm.class);
+            signedTerm.term().set(term);
+            signedTerm.signature().signatureFormat().set(term.signatureFormat());
+            to.confirmationTerms().add(signedTerm);
+        }
         callback.onSuccess(to);
     }
 

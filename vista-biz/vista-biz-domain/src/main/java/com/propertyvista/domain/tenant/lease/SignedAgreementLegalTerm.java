@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.core.IEntity;
@@ -20,12 +21,13 @@ import com.pyx4j.entity.core.IEntity;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.security.CustomerSignature;
 
-public interface AgreementLegalTermSignature extends IEntity {
+public interface SignedAgreementLegalTerm extends IEntity {
 
     LeaseAgreementLegalTerm term();
 
     @Owned
     @Detached
+    @Caption(name = "I agree to the Terms")
     CustomerSignature signature();
 
 }

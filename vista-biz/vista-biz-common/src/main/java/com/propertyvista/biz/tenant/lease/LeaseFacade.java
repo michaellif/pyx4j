@@ -29,7 +29,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
+import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 
 public interface LeaseFacade {
 

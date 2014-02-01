@@ -13,14 +13,21 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IEntity;
 
-@DiscriminatorValue("Digital")
-public interface AgreementDigitalSignatures extends AgreementSignatures {
+import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmationTerm;
+import com.propertyvista.domain.security.CustomerSignature;
 
-    @Owned(cascade = {})
-    IList<SignedAgreementLegalTerm> legalTermsSignatures();
+public interface SignedAgreementConfirmationTerm extends IEntity {
+
+    LeaseAgreementConfirmationTerm term();
+
+    @Owned
+    @Detached
+    @Caption(name = "I agree to the Terms")
+    CustomerSignature signature();
 
 }

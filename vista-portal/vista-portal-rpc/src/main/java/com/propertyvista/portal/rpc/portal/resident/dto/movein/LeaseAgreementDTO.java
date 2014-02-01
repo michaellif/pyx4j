@@ -20,13 +20,17 @@ import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.AgreementLegalTermSignature;
+import com.propertyvista.domain.tenant.lease.SignedAgreementConfirmationTerm;
+import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 
 @Transient
 public interface LeaseAgreementDTO extends IEntity {
 
     @Owned
-    IList<AgreementLegalTermSignature> legalTerms();
+    IList<SignedAgreementLegalTerm> legalTerms();
+
+    @Owned
+    IList<SignedAgreementConfirmationTerm> confirmationTerms();
 
     AptUnit unit();
 

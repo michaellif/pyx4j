@@ -36,10 +36,11 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
     private final static I18n i18n = I18n.get(LeaseSigningWizard.class);
 
     public LeaseSigningWizard(LeaseSigningWizardView view) {
-        super(LeaseAgreementDTO.class, view, i18n.tr("Lease"), i18n.tr("Submit"), ThemeColor.contrast2);
+        super(LeaseAgreementDTO.class, view, i18n.tr("Move-In Wizard"), i18n.tr("Submit"), ThemeColor.contrast2);
 
         addStep(createDetailsStep());
         addStep(createAgreementStep());
+        addStep(createConfirmationStep());
     }
 
     public BasicFlexFormPanel createDetailsStep() {
@@ -92,6 +93,16 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setWidget(++row, 0, inject(proto().legalTerms(), new LegalTermsFolder()));
+
+        return panel;
+    }
+
+    public BasicFlexFormPanel createConfirmationStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
+        int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
+
+        panel.setWidget(++row, 0, inject(proto().confirmationTerms(), new ConfirmationTermsFolder()));
 
         return panel;
     }

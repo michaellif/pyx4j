@@ -43,6 +43,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -143,6 +144,8 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
         IList<BuildingUtility> utilities();
 
         IList<LeaseAgreementLegalTerm> agreementLegalTerms();
+
+        IList<LeaseAgreementConfirmationTerm> agreementConfirmationTerm();
 
         @Owned(cascade = {})
         @Detached(level = AttachLevel.IdOnly)
