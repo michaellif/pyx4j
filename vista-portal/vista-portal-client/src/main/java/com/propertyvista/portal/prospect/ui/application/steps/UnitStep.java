@@ -145,7 +145,7 @@ public class UnitStep extends ApplicationWizardStep {
 
         updateButton.setVisible(!editable);
 
-        ((WizardDecorator<?>) getWizard().getDecorator()).getFooterPanel().asWidget().setVisible(!editable);
+        //TODO VladL - why is it needed?       ((WizardDecorator<?>) getWizard().getDecorator()).getFooterPanel().asWidget().setVisible(!editable);
     }
 
     @Override
