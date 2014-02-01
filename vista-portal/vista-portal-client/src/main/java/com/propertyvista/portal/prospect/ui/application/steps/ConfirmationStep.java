@@ -32,7 +32,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().confirmationTerms(), new LegalTermsFolder(getView())));
+        panel.setWidget(++row, 0, inject(proto().confirmationTerms(), new ConfirmationTermsFolder(getView())));
 
         return panel;
     }
