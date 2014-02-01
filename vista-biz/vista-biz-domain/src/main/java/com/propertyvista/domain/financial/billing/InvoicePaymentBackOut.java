@@ -13,13 +13,22 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 
 @DiscriminatorValue("PaymentBackOut")
 public interface InvoicePaymentBackOut extends InvoiceDebit {
 
+    interface PaymentRecordColumnId extends ColumnId {
+    }
+
+    @JoinColumn(PaymentRecordColumnId.class)
     PaymentRecord paymentRecord();
+
+    IPrimitive<Boolean> applyNSF();
 
 }

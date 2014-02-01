@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentRecordListerViewImpl extends CrmListerViewImplBase<PaymentRecord> implements PaymentRecordListerView {
+public class PaymentRecordListerViewImpl extends CrmListerViewImplBase<PaymentRecordDTO> implements PaymentRecordListerView {
 
     public PaymentRecordListerViewImpl() {
         setLister(new PaymentRecordLister());

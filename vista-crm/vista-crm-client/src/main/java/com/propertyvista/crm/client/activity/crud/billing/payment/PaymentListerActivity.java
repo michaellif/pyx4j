@@ -24,18 +24,18 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.PaymentRecordListerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentListerActivity extends AbstractListerActivity<PaymentRecord> {
+public class PaymentListerActivity extends AbstractListerActivity<PaymentRecordDTO> {
 
     public PaymentListerActivity(AppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PaymentRecordListerView.class), GWT.<PaymentRecordListService> create(PaymentRecordListService.class),
-                PaymentRecord.class);
+        super(place, CrmSite.getViewFactory().getView(PaymentRecordListerView.class), GWT.<PaymentRecordListService> create(PaymentRecordListService.class),
+                PaymentRecordDTO.class);
 
     }
 
     @Override
-    protected void parseExternalFilters(AppPlace place, Class<PaymentRecord> entityClass, EntityFiltersBuilder<PaymentRecord> filters) {
+    protected void parseExternalFilters(AppPlace place, Class<PaymentRecordDTO> entityClass, EntityFiltersBuilder<PaymentRecordDTO> filters) {
         super.parseExternalFilters(place, entityClass, filters);
 
         String val;

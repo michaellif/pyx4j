@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services.financial;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentRecordListService extends AbstractListService<PaymentRecord> {
+public interface PaymentRecordListService extends AbstractListService<PaymentRecordDTO> {
 
 }

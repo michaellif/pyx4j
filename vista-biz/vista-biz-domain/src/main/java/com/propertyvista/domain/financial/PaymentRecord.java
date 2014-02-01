@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -48,6 +49,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
@@ -279,4 +281,8 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     @Owned(cascade = {})
     ISet<PaymentRecordProcessing> processing();
+
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = InvoicePaymentBackOut.class, mappedBy = InvoicePaymentBackOut.PaymentRecordColumnId.class)
+    InvoicePaymentBackOut invoicePaymentBackOut();
 }

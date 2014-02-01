@@ -16,6 +16,7 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -26,4 +27,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 public interface PaymentRecordDTO extends PaymentDataDTO, PaymentRecord {
 
     IList<LeaseTermParticipant<? extends LeaseParticipant<?>>> participants();
+
+    IPrimitive<Boolean> rejectedWithNSF();
+
 }

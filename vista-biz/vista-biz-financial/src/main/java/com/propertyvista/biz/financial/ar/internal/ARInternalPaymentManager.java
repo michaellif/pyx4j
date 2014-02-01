@@ -70,6 +70,7 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
         backOut.billingAccount().set(paymentRecord.billingAccount());
         backOut.description().setValue(i18n.tr("Payment from ''{0}'' was rejected", paymentRecord.createdDate().getValue().toString()));
         backOut.taxTotal().setValue(BigDecimal.ZERO);
+        backOut.applyNSF().setValue(applyNSF);
 
         Persistence.service().persist(backOut);
 

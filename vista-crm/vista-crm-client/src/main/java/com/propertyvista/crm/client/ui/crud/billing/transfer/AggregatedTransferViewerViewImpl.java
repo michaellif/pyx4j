@@ -25,26 +25,26 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.FundsTransferType;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
 public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<AggregatedTransfer> implements AggregatedTransferViewerView {
 
     private static final I18n i18n = I18n.get(AggregatedTransferViewerViewImpl.class);
 
-    private final ILister<PaymentRecord> paymentLister;
+    private final ILister<PaymentRecordDTO> paymentLister;
 
-    private final ILister<PaymentRecord> returnedPaymentLister;
+    private final ILister<PaymentRecordDTO> returnedPaymentLister;
 
-    private final ILister<PaymentRecord> rejectedBatchPaymentsLister;
+    private final ILister<PaymentRecordDTO> rejectedBatchPaymentsLister;
 
     private final MenuItem cancelAction;
 
     public AggregatedTransferViewerViewImpl() {
         super(true);
 
-        paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
-        returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
-        rejectedBatchPaymentsLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
+        paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentRecordLister());
+        returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentRecordLister());
+        rejectedBatchPaymentsLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentRecordLister());
 
         setForm(new AggregatedTransferForm(this));
 
@@ -78,17 +78,17 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     }
 
     @Override
-    public ILister<PaymentRecord> getPaymentsListerView() {
+    public ILister<PaymentRecordDTO> getPaymentsListerView() {
         return paymentLister;
     }
 
     @Override
-    public ILister<PaymentRecord> getReturnedPaymentsListerView() {
+    public ILister<PaymentRecordDTO> getReturnedPaymentsListerView() {
         return returnedPaymentLister;
     }
 
     @Override
-    public ILister<PaymentRecord> getRejectedBatchPaymentsListerView() {
+    public ILister<PaymentRecordDTO> getRejectedBatchPaymentsListerView() {
         return rejectedBatchPaymentsLister;
     }
 }

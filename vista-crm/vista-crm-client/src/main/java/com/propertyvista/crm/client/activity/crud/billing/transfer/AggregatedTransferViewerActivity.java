@@ -30,27 +30,28 @@ import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudServic
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
 public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> implements AggregatedTransferViewerView.Presenter {
 
-    private final ILister.Presenter<PaymentRecord> paymentLister;
+    private final ILister.Presenter<PaymentRecordDTO> paymentLister;
 
-    private final ILister.Presenter<PaymentRecord> returnedPaymentLister;
+    private final ILister.Presenter<PaymentRecordDTO> returnedPaymentLister;
 
-    private final ILister.Presenter<PaymentRecord> rejectedBatchPaymentsLister;
+    private final ILister.Presenter<PaymentRecordDTO> rejectedBatchPaymentsLister;
 
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(AggregatedTransferViewerView.class), GWT
+        super(place, CrmSite.getViewFactory().getView(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
 
-        paymentLister = new ListerController<PaymentRecord>(((AggregatedTransferViewerView) getView()).getPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
+        paymentLister = new ListerController<PaymentRecordDTO>(((AggregatedTransferViewerView) getView()).getPaymentsListerView(),
+                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecordDTO.class);
 
-        returnedPaymentLister = new ListerController<PaymentRecord>(((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
+        returnedPaymentLister = new ListerController<PaymentRecordDTO>(((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(),
+                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecordDTO.class);
 
-        rejectedBatchPaymentsLister = new ListerController<PaymentRecord>(((AggregatedTransferViewerView) getView()).getRejectedBatchPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
+        rejectedBatchPaymentsLister = new ListerController<PaymentRecordDTO>(((AggregatedTransferViewerView) getView()).getRejectedBatchPaymentsListerView(),
+                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecordDTO.class);
     }
 
     @Override

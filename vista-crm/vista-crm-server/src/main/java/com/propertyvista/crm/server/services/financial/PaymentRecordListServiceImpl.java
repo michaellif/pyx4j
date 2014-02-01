@@ -13,16 +13,19 @@
  */
 package com.propertyvista.crm.server.services.financial;
 
-import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentRecordListServiceImpl extends AbstractListServiceImpl<PaymentRecord> implements PaymentRecordListService {
+public class PaymentRecordListServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentRecordListService {
 
     public PaymentRecordListServiceImpl() {
-        super(PaymentRecord.class);
+        super(PaymentRecord.class, PaymentRecordDTO.class);
     }
 
     @Override
@@ -31,11 +34,21 @@ public class PaymentRecordListServiceImpl extends AbstractListServiceImpl<Paymen
     }
 
     @Override
-    protected void enhanceListRetrieved(PaymentRecord entity, PaymentRecord dto) {
-        super.enhanceListRetrieved(entity, dto);
-        Persistence.service().retrieve(dto.billingAccount());
-        Persistence.service().retrieve(dto.billingAccount().lease());
-        Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
-        Persistence.service().retrieve(dto.paymentMethod().customer());
+    protected void enhanceListCriteria(EntityListCriteria<PaymentRecord> boCriteria, EntityListCriteria<PaymentRecordDTO> toCriteria) {
+        PropertyCriterion nsfCriteria = toCriteria.getCriterion(toCriteria.proto().rejectedWithNSF());
+        if (nsfCriteria != null) {
+            toCriteria.getFilters().remove(nsfCriteria);
+            boCriteria.eq(boCriteria.proto().invoicePaymentBackOut().applyNSF(), nsfCriteria.getValue());
+        }
+        super.enhanceListCriteria(boCriteria, toCriteria);
+    }
+
+    @Override
+    protected void enhanceListRetrieved(PaymentRecord bo, PaymentRecordDTO to) {
+        super.enhanceListRetrieved(bo, to);
+        Persistence.service().retrieve(to.billingAccount());
+        Persistence.service().retrieve(to.billingAccount().lease());
+        Persistence.service().retrieve(to.billingAccount().lease().unit().building());
+        Persistence.service().retrieve(to.paymentMethod().customer());
     }
 }

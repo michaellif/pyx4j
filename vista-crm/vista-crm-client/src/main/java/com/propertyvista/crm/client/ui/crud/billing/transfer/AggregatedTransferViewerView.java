@@ -17,7 +17,7 @@ import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface AggregatedTransferViewerView extends IViewer<AggregatedTransfer> {
 
@@ -27,9 +27,9 @@ public interface AggregatedTransferViewerView extends IViewer<AggregatedTransfer
 
     }
 
-    ILister<PaymentRecord> getPaymentsListerView();
+    ILister<PaymentRecordDTO> getPaymentsListerView();
 
-    ILister<PaymentRecord> getReturnedPaymentsListerView();
+    ILister<PaymentRecordDTO> getReturnedPaymentsListerView();
 
-    ILister<PaymentRecord> getRejectedBatchPaymentsListerView();
+    ILister<PaymentRecordDTO> getRejectedBatchPaymentsListerView();
 }

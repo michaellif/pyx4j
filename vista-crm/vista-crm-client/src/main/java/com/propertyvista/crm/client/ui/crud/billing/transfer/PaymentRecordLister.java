@@ -21,14 +21,14 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentRecordLister extends AbstractLister<PaymentRecord> {
+public class PaymentRecordLister extends AbstractLister<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentRecordLister.class);
 
     public PaymentRecordLister() {
-        super(PaymentRecord.class, false);
+        super(PaymentRecordDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),
@@ -46,6 +46,8 @@ public class PaymentRecordLister extends AbstractLister<PaymentRecord> {
             new MemberColumnDescriptor.Builder(proto().lastStatusChangeDate()).build(),
             new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
+            new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
             new MemberColumnDescriptor.Builder(proto().notice()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().createdBy()).visible(false).searchable(false).build()

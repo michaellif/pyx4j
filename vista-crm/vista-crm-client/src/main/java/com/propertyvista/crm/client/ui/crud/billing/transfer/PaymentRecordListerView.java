@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentRecordListerView extends ILister<PaymentRecord> {
+public interface PaymentRecordListerView extends ILister<PaymentRecordDTO> {
 
 }
