@@ -70,7 +70,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     private final LoginToolbar loginToolbar;
 
     LoginGadget(final LandingViewImpl view) {
-        super(view, null, i18n.tr("Already Started an Application?"), ThemeColor.contrast2, 1);
+        super(view, null, i18n.tr("Login to continue Online Application"), ThemeColor.contrast2, 1);
 
         loginToolbar = new LoginToolbar();
 
