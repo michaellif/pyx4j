@@ -830,6 +830,19 @@ BEGIN
         ALTER TABLE notes_and_attachments       ADD COLUMN owner BIGINT,
                                                 ADD COLUMN owner_discriminator VARCHAR(50);
                                                 
+       
+        -- online_application$confirmation_terms
+        
+        CREATE TABLE online_application$confirmation_terms
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT online_application$confirmation_terms_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE online_application$confirmation_terms OWNER TO vista;
                                                 
         -- online_application$legal_terms
         
@@ -1483,6 +1496,10 @@ BEGIN
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_floorplan_fk FOREIGN KEY(floorplan) REFERENCES floorplan(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE note_attachment ADD CONSTRAINT note_attachment_owner_fk FOREIGN KEY(owner) REFERENCES notes_and_attachments(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE online_application$confirmation_terms ADD CONSTRAINT online_application$confirmation_terms_owner_fk FOREIGN KEY(owner) 
+                REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE online_application$confirmation_terms ADD CONSTRAINT online_application$confirmation_terms_value_fk FOREIGN KEY(value) 
+                REFERENCES signed_online_application_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application$legal_terms ADD CONSTRAINT online_application$legal_terms_owner_fk FOREIGN KEY(owner) 
                 REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application$legal_terms ADD CONSTRAINT online_application$legal_terms_value_fk FOREIGN KEY(value) 
@@ -1633,6 +1650,7 @@ BEGIN
         
         -- not null
         
+        ALTER TABLE lease ALTER COLUMN integration_system_id DROP NOT NULL;
         ALTER TABLE lease ALTER COLUMN lease_id DROP NOT NULL;
         --ALTER TABLE product ALTER COLUMN code SET NOT NULL;
         
@@ -1649,11 +1667,13 @@ BEGIN
         CREATE INDEX ilsprofile_email_building_idx ON ilsprofile_email USING btree (building);
         CREATE INDEX lease_term_v$agreement_legal_terms_owner_idx ON lease_term_v$agreement_legal_terms USING btree (owner);
         CREATE INDEX lease_term_v$utilities_owner_idx ON lease_term_v$utilities USING btree (owner);
+        CREATE INDEX online_application$confirmation_terms_owner_idx ON online_application$confirmation_terms USING btree (owner);
         CREATE INDEX online_application$legal_terms_owner_idx ON online_application$legal_terms USING btree (owner);
         CREATE INDEX agreement_signatures_lease_term_tenant_discriminator_idx ON agreement_signatures USING btree (lease_term_tenant_discriminator);
         CREATE INDEX agreement_signatures_lease_term_tenant_idx ON agreement_signatures USING btree (lease_term_tenant);
         CREATE INDEX ilssummary_building_building_idx ON ilssummary_building USING btree (building);
         CREATE INDEX ilssummary_floorplan_floorplan_idx ON ilssummary_floorplan USING btree (floorplan);
+        CREATE UNIQUE INDEX lease_application_application_id_idx ON lease_application USING btree (LOWER(application_id));
         CREATE INDEX lease_term_agreement_document_lease_term_v_idx ON lease_term_agreement_document USING btree (lease_term_v);
         CREATE INDEX payment_posting_batch_building_idx ON payment_posting_batch USING btree (building);
         CREATE INDEX permission_to_enter_note_policy_idx ON permission_to_enter_note USING btree (policy);
