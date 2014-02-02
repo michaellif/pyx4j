@@ -94,6 +94,9 @@ public class MessageTemplate {
         if (body == null) {
             throw new Error("Email wrapper template " + wrapperTextResourceName + " not found");
         }
+        for (Entry<String, String> me : variables.entrySet()) {
+            html = html.replace(me.getKey(), me.getValue());
+        }
         return html.replace("{MESSAGE}", getBody());
     }
 
