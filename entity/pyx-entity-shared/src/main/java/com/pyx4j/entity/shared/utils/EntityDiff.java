@@ -189,11 +189,25 @@ public class EntityDiff {
             changes.append(CommonsStringUtils.nvl_concat(path.name, name, "."));
             changes.append(": ");
             if (logTransient) {
-                changes.append("** -> **");
+                changes.append(obfuscated(v1));
+                changes.append(" -> ");
+                changes.append(obfuscated(v2));
             } else {
                 changes.append(v1);
                 changes.append(" -> ");
                 changes.append(v2);
+            }
+        }
+
+        private Object obfuscated(Object v) {
+            if (v == null) {
+                return null;
+            } else if ((v instanceof String) && (((String) v).length() == 0)) {
+                return null;
+            } else if ((v instanceof IEntity) && (((IEntity) v).isEmpty())) {
+                return null;
+            } else {
+                return "**";
             }
         }
 
@@ -204,7 +218,7 @@ public class EntityDiff {
             changes.append(CommonsStringUtils.nvl_concat(path.name, name, "."));
             changes.append(": ");
             if (logTransient) {
-                changes.append(action).append(" **");
+                changes.append(action).append(" ").append(obfuscated(v2));
             } else {
                 changes.append(action);
                 changes.append(" ");
