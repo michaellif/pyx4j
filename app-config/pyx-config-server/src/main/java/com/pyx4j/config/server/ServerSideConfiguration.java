@@ -69,6 +69,8 @@ public class ServerSideConfiguration {
 
     private static Boolean isUnitTest;
 
+    private static final long startTime = System.currentTimeMillis();
+
     public static enum EnvironmentType {
         LocalJVM, GAEDevelopment, GAESandbox
     }
@@ -105,6 +107,10 @@ public class ServerSideConfiguration {
         }
         ServerSideConfiguration.instance = instance;
         instanceDefinedFrom = new Throwable("ServerSideConfiguration initialized from");
+    }
+
+    public static long getStartTime() {
+        return startTime;
     }
 
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {

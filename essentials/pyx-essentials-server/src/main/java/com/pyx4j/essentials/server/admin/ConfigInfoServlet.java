@@ -22,13 +22,17 @@ package com.pyx4j.essentials.server.admin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.SystemDateManager;
@@ -69,7 +73,9 @@ public class ConfigInfoServlet extends HttpServlet {
             b.append("ServerInfo               : ").append(Context.getRequest().getServletContext().getServerInfo()).append("\n");
         } catch (NoSuchMethodError ignoreOldTomcat) {
         }
-        b.append("SystemDate               : ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(SystemDateManager.getDate())).append("\n");
+        b.append("System Date              : ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(SystemDateManager.getDate())).append("\n");
+        b.append("System Uptime            : ").append(systemUptime()).append("\n");
+        b.append("Application Uptime       : ").append(applicationUptime()).append("\n");
         b.append("\n");
 
         ServerSideConfiguration conf = ServerSideConfiguration.instance();
@@ -98,6 +104,22 @@ public class ConfigInfoServlet extends HttpServlet {
         b.append("System Properties:\n").append(ServerSideConfiguration.getSystemProperties());
 
         return b.toString();
+    }
+
+    private String applicationUptime() {
+        return TimeUtils.durationFormatSeconds((int) (System.currentTimeMillis() - ServerSideConfiguration.getStartTime()) / Consts.SEC2MSEC) + ", since: "
+                + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(ServerSideConfiguration.getStartTime()));
+    }
+
+    private String systemUptime() {
+        try {
+            long jvmStartTime = ManagementFactory.getRuntimeMXBean().getStartTime();
+            long jvmUpTime = ManagementFactory.getRuntimeMXBean().getUptime();
+            return TimeUtils.durationFormatSeconds((int) jvmUpTime / Consts.SEC2MSEC) + ", since: "
+                    + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(new Date(jvmStartTime));
+        } catch (Throwable e) {
+            return "n/a " + e.getMessage();
+        }
     }
 
     protected String applicationConfigurationText() {

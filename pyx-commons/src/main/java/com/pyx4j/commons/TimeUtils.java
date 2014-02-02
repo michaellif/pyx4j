@@ -181,11 +181,15 @@ public class TimeUtils {
         for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
             int value = seconds / me.getValue();
             if (value != 0) {
+                if (b.length() > 0) {
+                    b.append(" ");
+                }
                 seconds = seconds - (value * me.getValue());
+                b.append(value).append(" ");
                 if (value == 1) {
-                    b.append(" 1 ").append(me.getKey().split(":")[0]);
+                    b.append(me.getKey().split(":")[0]);
                 } else {
-                    b.append(" ").append(value).append(" ").append(me.getKey().split(":")[1]);
+                    b.append(me.getKey().split(":")[1]);
                 }
             }
         }
