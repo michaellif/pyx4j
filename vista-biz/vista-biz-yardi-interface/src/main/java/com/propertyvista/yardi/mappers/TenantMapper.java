@@ -205,9 +205,9 @@ public class TenantMapper {
             }
         }
         // Mass email testing
-        if (true) {
-            return yardiCustomer.getCustomerID() + "@pyx4j.com";
-        }
+//        if (true) {
+//            return yardiCustomer.getCustomerID() + "@pyx4j.com";
+//        }
         return null;
     }
 
