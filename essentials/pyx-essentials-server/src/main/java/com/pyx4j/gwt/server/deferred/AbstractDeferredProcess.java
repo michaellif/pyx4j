@@ -28,10 +28,10 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
 
     private static final long serialVersionUID = -7013680464201337453L;
 
-    protected boolean completed = false;
+    protected volatile boolean completed = false;
 
     //TODO use AtomicBoolean
-    protected volatile boolean canceled;
+    protected volatile boolean canceled = false;
 
     //TODO Use,this
     protected AtomicInteger progress;
