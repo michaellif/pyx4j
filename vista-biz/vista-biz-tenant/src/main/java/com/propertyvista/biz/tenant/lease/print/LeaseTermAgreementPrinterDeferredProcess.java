@@ -60,6 +60,8 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
 
         });
 
+        completed = true;
+
     }
 
     private void saveBlob(byte[] bytes) {
