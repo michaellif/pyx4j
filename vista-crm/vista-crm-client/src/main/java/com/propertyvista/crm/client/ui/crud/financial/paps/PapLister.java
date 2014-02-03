@@ -31,6 +31,7 @@ public class PapLister extends AbstractLister<AutopayAgreement> {
         super(AutopayAgreement.class, false);
 
         setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().id()).build(),
                 new MemberColumnDescriptor.Builder(proto().tenant().lease()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().tenant()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().tenant().lease().leaseId()).searchableOnly().build(),
