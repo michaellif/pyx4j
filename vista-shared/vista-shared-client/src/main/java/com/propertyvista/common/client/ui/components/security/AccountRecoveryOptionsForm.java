@@ -21,13 +21,12 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
@@ -46,9 +45,9 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recoveryEmail())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recoveryEmail())).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useSecurityQuestionChallengeForPasswordReset())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().useSecurityQuestionChallengeForPasswordReset())).build());
         get(proto().useSecurityQuestionChallengeForPasswordReset()).asWidget().getElement().getStyle().setPaddingTop(1, Unit.EM);
         get(proto().useSecurityQuestionChallengeForPasswordReset()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -58,9 +57,9 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
             }
         });
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityQuestion())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityQuestion())).build());
         get(proto().securityQuestion()).setVisible(false);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityAnswer(), new CPasswordTextField())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityAnswer(), new CPasswordTextField())).build());
         get(proto().securityAnswer()).setVisible(false);
 
         return content;
@@ -94,25 +93,4 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
             get(proto().securityAnswer()).setValue("");
         }
     }
-
-    // decoration stuff:
-    protected class DecoratorBuilder extends WidgetDecorator.Builder {
-
-        public DecoratorBuilder(CComponent<?> component) {
-            super(component);
-        }
-
-        public DecoratorBuilder(CComponent<?> component, double componentWidth) {
-            super(component);
-            componentWidth(componentWidth);
-        }
-
-        public DecoratorBuilder(CComponent<?> component, double componentWidth, double labelWidth) {
-            super(component);
-            componentWidth(componentWidth);
-            labelWidth(labelWidth);
-        }
-
-    }
-
 }

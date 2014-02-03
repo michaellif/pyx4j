@@ -49,6 +49,10 @@ public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
     @Override
     protected void addItem() {
         new EntitySelectorTableDialog<Pmc>(Pmc.class, true, getAlreadySelected(), i18n.tr("Select Pmc")) {
+            {
+                setDialogPixelWidth(850);
+            }
+
             @Override
             public boolean onClickOk() {
                 for (Pmc item : getSelectedItems()) {

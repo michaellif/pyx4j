@@ -68,7 +68,10 @@ public class AccountRecoveryOptionsDialog extends Composite {
                                 @Override public boolean onClickOk() { return AccountRecoveryOptionsDialog.this.onClickOk();}
                                 @Override public boolean onClickCancel() { return AccountRecoveryOptionsDialog.this.onClickCancel();}})            
                 , this.recoveryOptionsForm.asWidget()
-        ) { 
+        ) {
+            {
+                setDialogPixelWidth(700);
+            }
             @Override protected String optionTextOk() { 
                 return i18n.tr("Update"); 
             }
