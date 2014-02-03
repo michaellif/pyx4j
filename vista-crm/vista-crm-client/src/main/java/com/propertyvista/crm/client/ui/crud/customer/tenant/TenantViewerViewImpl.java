@@ -89,7 +89,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         });
         addAction(registrationAction);
 
-        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted PAPs"), new Command() {
+        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted AutoPayments"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).viewDeletedPaps();
