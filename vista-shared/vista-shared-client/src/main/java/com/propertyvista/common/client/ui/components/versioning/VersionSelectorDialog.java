@@ -53,6 +53,6 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().versionNumber(), false));
+        return Arrays.asList(new Sort(proto().versionNumber(), true));
     }
 }
