@@ -85,6 +85,11 @@ public class LeaseMerger {
         existing.termFrom().setValue(YardiLeaseProcessor.guessFromDate(imported));
         existing.termTo().setValue(getImportedDate(imported.getLeaseToDate()));
 
+        // correct term type if yardi changed lease end date:
+        if (!existing.termTo().isNull() && existing.type().getValue() == LeaseTerm.Type.Periodic) {
+            existing.type().setValue(LeaseTerm.Type.FixedEx);
+        }
+
         return existing;
     }
 
