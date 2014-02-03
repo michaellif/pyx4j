@@ -24,18 +24,18 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class PapForm extends CrmEntityForm<AutopayAgreement> {
+public class PapForm extends CrmEntityForm<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(PapForm.class);
 
-    public PapForm(IForm<AutopayAgreement> view) {
-        super(AutopayAgreement.class, view);
+    public PapForm(IForm<AutoPayDTO> view) {
+        super(AutoPayDTO.class, view);
         createTabs();
     }
 

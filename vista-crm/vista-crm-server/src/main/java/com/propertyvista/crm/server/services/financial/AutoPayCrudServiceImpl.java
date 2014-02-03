@@ -13,17 +13,21 @@
  */
 package com.propertyvista.crm.server.services.financial;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 
-public class AutoPayCrudServiceImpl extends AbstractCrudServiceImpl<AutopayAgreement> implements AutoPayCrudService {
+public class AutoPayCrudServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAgreement, AutoPayDTO> implements AutoPayCrudService {
 
     public AutoPayCrudServiceImpl() {
-        super(AutopayAgreement.class);
+        super(AutopayAgreement.class, AutoPayDTO.class);
     }
 
     @Override
@@ -32,20 +36,25 @@ public class AutoPayCrudServiceImpl extends AbstractCrudServiceImpl<AutopayAgree
     }
 
     @Override
-    protected void enhanceRetrieved(AutopayAgreement bo, AutopayAgreement to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(AutopayAgreement bo, AutoPayDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        Persistence.ensureRetrieve(to.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(to.tenant().lease(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(to.createdBy(), AttachLevel.ToStringMembers);
     }
 
     @Override
-    protected void enhanceListRetrieved(AutopayAgreement bo, AutopayAgreement dto) {
+    protected void enhanceListRetrieved(AutopayAgreement bo, AutoPayDTO dto) {
         super.enhanceListRetrieved(bo, dto);
 
-        Persistence.ensureRetrieve(dto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dto.tenant().lease(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(dto.createdBy(), AttachLevel.ToStringMembers);
+
+        dto.price().setValue(BigDecimal.ZERO);
+        dto.payment().setValue(BigDecimal.ZERO);
+        for (AutopayAgreementCoveredItem item : dto.coveredItems()) {
+            dto.price().setValue(dto.payment().getValue().add(item.billableItem().agreedPrice().getValue()));
+            dto.payment().setValue(dto.payment().getValue().add(item.amount().getValue()));
+        }
     }
 }

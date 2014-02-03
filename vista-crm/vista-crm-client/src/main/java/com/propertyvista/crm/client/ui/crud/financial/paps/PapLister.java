@@ -21,17 +21,20 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
 
-public class PapLister extends AbstractLister<AutopayAgreement> {
+public class PapLister extends AbstractLister<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(PapLister.class);
 
     public PapLister() {
-        super(AutopayAgreement.class, false);
+        super(AutoPayDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().id()).build(),
+                
+                new MemberColumnDescriptor.Builder(proto().price()).searchable(false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().payment()).searchable(false).sortable(false).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().tenant().lease()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().tenant()).searchable(false).build(),

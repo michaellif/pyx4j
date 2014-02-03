@@ -22,17 +22,17 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.financial.paps.PapListerView;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
-import com.propertyvista.domain.payment.AutopayAgreement;
 
-public class PapListerActivity extends AbstractListerActivity<AutopayAgreement> {
+public class PapListerActivity extends AbstractListerActivity<AutoPayDTO> {
 
     public PapListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(PapListerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class), AutopayAgreement.class);
+        super(place, CrmSite.getViewFactory().getView(PapListerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class), AutoPayDTO.class);
     }
 
     @Override
-    protected void parseExternalFilters(AppPlace place, Class<AutopayAgreement> entityClass, EntityFiltersBuilder<AutopayAgreement> filters) {
+    protected void parseExternalFilters(AppPlace place, Class<AutoPayDTO> entityClass, EntityFiltersBuilder<AutoPayDTO> filters) {
         super.parseExternalFilters(place, entityClass, filters);
 
         String val;

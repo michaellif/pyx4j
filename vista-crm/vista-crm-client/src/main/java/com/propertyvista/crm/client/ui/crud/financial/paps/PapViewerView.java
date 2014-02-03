@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.financial.paps;
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
 
-public interface PapViewerView extends IViewer<AutopayAgreement> {
+public interface PapViewerView extends IViewer<AutoPayDTO> {
 
     interface Presenter extends IViewer.Presenter {
     }
