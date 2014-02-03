@@ -148,8 +148,8 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             int row = -1;
             CLabel site = new CLabel();
             site.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().socialSite(), site), 10).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().siteUrl()), 35).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().socialSite(), site), 10, true).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().siteUrl()), 35, true).build());
             get(proto().siteUrl()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
                 public ValidationError isValid(CComponent<String> component, String url) {

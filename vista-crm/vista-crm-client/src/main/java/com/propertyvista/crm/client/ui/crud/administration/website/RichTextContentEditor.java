@@ -55,18 +55,18 @@ public class RichTextContentEditor extends CEntityForm<HtmlContent> {
         int row = -1;
         if (selectableLocale) {
             CEntityComboBox<AvailableLocale> locale = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), 10, true).build());
         } else {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), 10, true).build());
         }
         if (isEditable()) {
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().html(), editor), 60).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().html(), editor), 60, true).build());
         } else {
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60, true).build());
         }
 
         return main;
