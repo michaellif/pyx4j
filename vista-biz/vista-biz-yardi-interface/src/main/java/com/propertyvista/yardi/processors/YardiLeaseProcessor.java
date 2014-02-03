@@ -233,9 +233,15 @@ public class YardiLeaseProcessor {
         }
 
         if (new LeaseMerger().isTermDatesChanged(yardiLease, lease.currentTerm())) {
+            LogicalDate termFrom = lease.currentTerm().termFrom().getValue();
+            LogicalDate termTo = lease.currentTerm().termTo().getValue();
+
             lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
             toFinalize = true;
-            log.debug("        - TermDatesChanged...");
+
+            log.debug("        - TermDatesChanged...  \n\ttermFrom({}->{})\n\ttermTo({}->{})", //
+                    termFrom, lease.currentTerm().termFrom().getValue(), //
+                    termTo, lease.currentTerm().termTo().getValue());
         }
 
         if (new LeaseMerger().isPaymentTypeChanged(rtCustomer, lease)) {
