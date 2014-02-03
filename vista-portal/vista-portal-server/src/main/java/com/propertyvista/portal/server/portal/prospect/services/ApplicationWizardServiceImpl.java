@@ -115,6 +115,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         fillLeaseData(bo, to);
 
         fillUnitSelectionData(bo, to);
+        fillUnitOptionsData(bo, to);
 
         fillApplicantData(bo, to);
 
@@ -165,7 +166,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId) {
-        callback.onSuccess(retriveAvailableUnitOptions(Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey())));
+        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
+
+        options.unit().set(Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey()));
+
+        callback.onSuccess(fillAvailableUnitOptions(options));
     }
 
     @Override
@@ -491,7 +496,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
 
-            if (lease != null && !lease.unit().isNull()) {
+            if (!lease.unit().isNull()) {
                 Persistence.ensureRetrieve(lease.unit().floorplan(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
 
@@ -499,8 +504,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 unitSelection.building().set(lease.unit().building());
                 unitSelection.floorplan().set(lease.unit().floorplan());
                 unitSelection.moveIn().setValue(lease.leaseFrom().getValue());
-
-                to.unitOptionsSelection().set(retriveCurrentUnitOptions(lease));
             } else {
                 Persistence.ensureRetrieve(moa.floorplan(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(moa.building(), AttachLevel.ToStringMembers);
@@ -588,8 +591,22 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
     }
 
-    private void saveUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
-        if (!to.unitSelection().selectedUnit().isNull() && !to.unitOptionsSelection().selectedService().isNull()) {
+    private void fillUnitOptionsData(OnlineApplication bo, OnlineApplicationDTO to) {
+        Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
+        if (!lease.unit().isNull()) {
+            UnitOptionsSelectionDTO options = retriveCurrentUnitOptions(lease);
+            options.restrictions().set(retriveUnitOptionRestrictions(options.unit()));
+            fillCatalogFeatures(options, options.selectedService().item().product().<Service.ServiceV> cast(), false);
+            to.unitOptionsSelection().set(options);
+        }
+    }
+
+    private void saveUnitOptionsData(OnlineApplication bo, OnlineApplicationDTO to) {
+        if (to.unitSelection().isNull()) {
+            return; // currently - do nothing if non-unit-selection mode!
+        }
+
+        if (!to.unitOptionsSelection().isNull()) {
             LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
             List<BillableItem> featureItems = new ArrayList<BillableItem>();
@@ -599,10 +616,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             featureItems.addAll(to.unitOptionsSelection().selectedUtilities());
             featureItems.addAll(to.unitOptionsSelection().selectedOther());
 
-            leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
-
             ServerSideFactory.create(LeaseFacade.class).setPackage(leaseTerm,
-                    EntityFactory.createIdentityStub(AptUnit.class, to.unitSelection().selectedUnit().getPrimaryKey()),
+                    EntityFactory.createIdentityStub(AptUnit.class, to.unitOptionsSelection().unit().getPrimaryKey()),
                     to.unitOptionsSelection().selectedService(), featureItems);
         }
     }
@@ -726,7 +741,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         switch (bo.role().getValue()) {
         case Applicant:
-            saveUnitSelectionData(bo, to);
+            saveUnitOptionsData(bo, to);
             saveCoApplicants(bo, to);
             saveGuarantors(bo, to);
             break;
@@ -1040,19 +1055,17 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         assert (!lease.unit().isNull());
 
         options.unit().set(lease.unit());
-        options.restrictions().set(retriveUnitOptionRestrictions(lease.unit()));
+
         fillCurrentProductItems(options, lease.currentTerm());
         loadDetachedProducts(options);
 
         return options;
     }
 
-    private UnitOptionsSelectionDTO retriveAvailableUnitOptions(AptUnit unit) {
-        UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
+    private UnitOptionsSelectionDTO fillAvailableUnitOptions(UnitOptionsSelectionDTO options) {
+        options.restrictions().set(retriveUnitOptionRestrictions(options.unit()));
 
-        options.unit().set(unit);
-        options.restrictions().set(retriveUnitOptionRestrictions(unit));
-        fillAvailableCatalogItems(options);
+        fillAvailableCatalogProducts(options);
         loadDetachedProducts(options);
 
         return options;
@@ -1093,11 +1106,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 options.selectedOther().add(feature);
             }
         }
-
-        fillCatalogItems(options, options.selectedService().item().product().<Service.ServiceV> cast(), false);
     }
 
-    private void fillAvailableCatalogItems(UnitOptionsSelectionDTO options) {
+    private void fillAvailableCatalogProducts(UnitOptionsSelectionDTO options) {
         assert (!options.unit().isNull());
         EntityQueryCriteria<ProductItem> criteria = new EntityQueryCriteria<ProductItem>(ProductItem.class);
         // correct service type:
@@ -1112,11 +1123,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ProductItem productItem = Persistence.service().retrieve(criteria);
         if (productItem != null) {
             options.selectedService().set(createBillableItem(productItem, options.unit()));
-            fillCatalogItems(options, productItem.product().<Service.ServiceV> cast(), true);
+            fillCatalogFeatures(options, productItem.product().<Service.ServiceV> cast(), true);
         }
     }
 
-    private void fillCatalogItems(UnitOptionsSelectionDTO options, Service.ServiceV service, Boolean fillMandatory) {
+    private void fillCatalogFeatures(UnitOptionsSelectionDTO options, Service.ServiceV service, boolean fillMandatory) {
         Persistence.service().retrieveMember(service.features());
 
         for (Feature feature : service.features()) {
