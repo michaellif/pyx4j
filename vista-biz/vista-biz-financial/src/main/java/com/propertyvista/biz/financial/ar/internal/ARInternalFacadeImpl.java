@@ -167,11 +167,6 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public BillingFacade getBillingFacade() {
-        return BillingInternalFacadeImpl.instance();
-    }
-
-    @Override
     public List<InvoiceProductCharge> estimateLeaseCharges(BillingCycle billingCycle, Lease lease) {
         return new LeaseProductsPriceEstimator(billingCycle, lease).calculateCharges();
     }

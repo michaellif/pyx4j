@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing.internal;
+package com.propertyvista.biz.financial.billing.yardi;
 
 import java.math.BigDecimal;
 
@@ -23,70 +23,70 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
-public final class BillingInternalFacadeImpl implements BillingFacade {
+public final class BillingYardiFacadeImpl implements BillingFacade {
 
-    public BillingInternalFacadeImpl() {
+    public BillingYardiFacadeImpl() {
 
-    }
-
-    @Override
-    public Bill runBilling(Lease leaseId) {
-        return BillingManager.instance().runBilling(leaseId, false);
-    }
-
-    @Override
-    public Bill runBilling(Lease leaseId, BillingCycle cycle) {
-        return BillingManager.instance().runBilling(leaseId, cycle, false);
-    }
-
-    @Override
-    public Bill runBillingPreview(Lease leaseId) {
-        return BillingManager.instance().runBilling(leaseId, true);
-    }
-
-    @Override
-    public Bill getBill(Lease lease, int billSequenceNumber) {
-        return BillingManager.instance().getBill(lease, billSequenceNumber);
-    }
-
-    @Override
-    public Bill getLatestConfirmedBill(Lease lease) {
-        return BillingManager.instance().getLatestConfirmedBill(lease);
-    }
-
-    @Override
-    public Bill getLatestBill(Lease lease) {
-        return BillingManager.instance().getLatestBill(lease);
-    }
-
-    @Override
-    public boolean isLatestBill(Bill bill) {
-        return BillingManager.instance().isLatestBill(bill);
-    }
-
-    @Override
-    public Bill confirmBill(Bill bill) {
-        return BillingManager.instance().confirmBill(bill);
-    }
-
-    @Override
-    public Bill rejectBill(Bill bill, String reason) {
-        return BillingManager.instance().rejectBill(bill, reason);
-    }
-
-    @Override
-    public BillingCycle getNextBillBillingCycle(Lease lease) {
-        return BillingManager.instance().getNextBillBillingCycle(lease);
-    }
-
-    @Override
-    public void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
-        BillingManager.instance().updateLeaseAdjustmentTax(adjustment);
     }
 
     @Override
     public BigDecimal getMaxLeaseTermMonthlyTotal(LeaseTerm leaseTerm) {
         return BillingUtils.getMaxLeaseTermMonthlyTotal(leaseTerm);
+    }
+
+    @Override
+    public Bill runBilling(Lease leaseId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Bill runBilling(Lease leaseId, BillingCycle cycle) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Bill runBillingPreview(Lease leaseId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Bill getBill(Lease lease, int billSequenceNumber) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Bill getLatestConfirmedBill(Lease lease) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Bill getLatestBill(Lease lease) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isLatestBill(Bill bill) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Bill confirmBill(Bill billStub) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Bill rejectBill(Bill billStub, String reason) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public BillingCycle getNextBillBillingCycle(Lease lease) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
+        throw new UnsupportedOperationException();
     }
 
 }

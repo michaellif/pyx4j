@@ -101,7 +101,5 @@ public interface ARFacade {
 
     ARCode getReservedARCode(ARCode.Type type);
 
-    BillingFacade getBillingFacade();
-
     List<InvoiceProductCharge> estimateLeaseCharges(BillingCycle billingCycle, Lease lease);
 }

@@ -14,15 +14,20 @@
 package com.propertyvista.biz.financial.billing;
 
 import com.pyx4j.config.server.FacadeFactory;
-import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.internal.BillingInternalFacadeImpl;
+import com.propertyvista.biz.financial.billing.yardi.BillingYardiFacadeImpl;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingFacadeFactory implements FacadeFactory<BillingFacade> {
 
     @Override
     public BillingFacade getFacade() {
-        return ServerSideFactory.create(ARFacade.class).getBillingFacade();
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return new BillingYardiFacadeImpl();
+        } else {
+            return new BillingInternalFacadeImpl();
+        }
     }
 
 }
