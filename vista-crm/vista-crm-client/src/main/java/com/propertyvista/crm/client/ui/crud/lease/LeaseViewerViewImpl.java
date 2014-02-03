@@ -165,7 +165,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addView(viewApplication);
 
-        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted PAPs"), new Command() {
+        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
