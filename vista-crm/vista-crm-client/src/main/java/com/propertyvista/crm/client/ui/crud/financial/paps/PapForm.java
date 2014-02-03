@@ -40,7 +40,7 @@ public class PapForm extends CrmEntityForm<AutopayAgreement> {
     }
 
     public void createTabs() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
@@ -52,22 +52,25 @@ public class PapForm extends CrmEntityForm<AutopayAgreement> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiredFrom(), new CDateLabel()), 10).build());
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate(), new CDateLabel()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 15).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updatedByTenant(), new CDateLabel()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updatedBySystem(), new CDateLabel()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updatedByTenant()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updatedBySystem()), 10).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isDeleted()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isDeleted()), 5).build());
 
         content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
         selectTab(addTab(content));
+        setTabBarVisible(false);
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        get(proto().updated()).setVisible(!getValue().updated().isNull());
 
         boolean support = SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport);
         get(proto().updatedByTenant()).setVisible(support);

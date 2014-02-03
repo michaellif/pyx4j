@@ -120,21 +120,26 @@ public interface AutopayAgreement extends IEntity, HasNotesAndAttachments {
     /**
      * billingCycleStartDate when it was changed by Tenant
      */
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> updatedByTenant();
 
     /**
      * billingCycleStartDate when it was renewed/changed by system
      */
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> updatedBySystem();
 
     @ReadOnly
     @Detached(level = AttachLevel.ToStringMembers)
     AbstractPmcUser createdBy();
 
-    @Timestamp(Timestamp.Update.Created)
+    @Format("MM/dd/yyyy HH:mm:ss")
     @Editor(type = EditorType.label)
+    @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> creationDate();
 
+    @Format("MM/dd/yyyy HH:mm:ss")
+    @Editor(type = EditorType.label)
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 }
