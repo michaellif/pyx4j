@@ -216,6 +216,8 @@ public class MessageDialog extends Dialog {
 
             HTML htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
             htmlMessage.getElement().getStyle().setPadding(10, Unit.PX);
+            htmlMessage.getElement().getStyle().setProperty("maxWidth", "400px");
+            htmlMessage.getElement().getStyle().setProperty("wordWrap", "break-word");
 
             HorizontalPanel htmlHolder = new HorizontalPanel();
             htmlHolder.setSize("100%", "100%");
