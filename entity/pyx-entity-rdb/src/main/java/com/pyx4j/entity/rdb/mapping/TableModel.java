@@ -497,6 +497,29 @@ public class TableModel {
         return sqlUpdate;
     }
 
+    private String sqlUpdateBulk(String alias, IEntity entityTemplate) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SET ");
+        boolean first = true;
+        for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
+            if (member.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
+                // TODO
+                continue;
+            } else if (!member.containsMemberValue(entityTemplate)) {
+                continue;
+            }
+            for (String name : member.getValueAdapter().getColumnNames(member.sqlName())) {
+                if (first) {
+                    first = false;
+                } else {
+                    sql.append(", ");
+                }
+                sql.append(name).append(" = ? ");
+            }
+        }
+        return sql.toString();
+    }
+
     private void bindParameter(PreparedStatement stmt, int parameterIndex, Class<?> valueClass, Object value, MemberMeta memberMeta) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, dialect.getTargetSqlType(valueClass));
@@ -526,6 +549,33 @@ public class TableModel {
             bindParameter(stmt, parameterIndex, member.getIndexValueClass(), member.getIndexedValue(entity), null);
             parameterIndex++;
         }
+        return parameterIndex;
+    }
+
+    private int bindPersistParametersBulk(int parameterIndex, PersistenceContext persistenceContext, PreparedStatement stmt, IEntity entityTemplate)
+            throws SQLException {
+        for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
+            if (member.getMemberMeta().isEntity()) {
+//TODO                
+//                IEntity childEntity = (IEntity) member.getMember(entityTemplate);
+//                if ((childEntity.getPrimaryKey() == null) && childEntity.hasValues()) {
+//                    log.error("Saving non persisted reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+//                    throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
+//                }
+//                if (member.isOwnerColumn() && (!childEntity.hasValues()) && member.getMemberMeta().getAnnotation(NotNull.class) != null) {
+//                    log.error("Saving empty owner reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+//                    throw new Error("Trying to save child entity with undefined owner; " + childEntity.getDebugExceptionInfoString());
+//                }
+//                parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, childEntity);
+            } else if (member.containsMemberValue(entityTemplate)) {
+                parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, member.getPersistMemberValue(entityTemplate));
+            }
+        }
+//TODO        
+//        for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
+//            bindParameter(stmt, parameterIndex, member.getIndexValueClass(), member.getIndexedValue(entityTemplate), null);
+//            parameterIndex++;
+//        }
         return parameterIndex;
     }
 
@@ -633,6 +683,40 @@ public class TableModel {
             if (dialect.isUniqueConstraintException(e)) {
                 throw new UniqueConstraintUserRuntimeException(i18n.tr("Unable to update \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
                         getUniqueConstraintFieldName()), EntityFactory.getEntityPrototype(entity.getValueClass()));
+            } else {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
+    }
+
+    public <T extends IEntity> int updateBulk(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, T entityTemplate) {
+        PreparedStatement stmt = null;
+        StringBuilder sql = new StringBuilder();
+        try {
+            QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
+            sql.append("UPDATE ").append(qb.getUpdateSQL(getFullTableName(), sqlUpdateBulk("m1", entityTemplate)));
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
+            int parameterIndex = 1;
+            parameterIndex = bindPersistParametersBulk(parameterIndex, persistenceContext, stmt, entityTemplate);
+            parameterIndex = qb.bindParameters(parameterIndex, persistenceContext, stmt);
+            persistenceContext.setUncommittedChanges();
+            int updated = stmt.executeUpdate();
+            if (EntityPersistenceServiceRDB.traceWarnings) {
+                SQLUtils.logAndClearWarnings(persistenceContext.getConnection());
+            }
+            return updated;
+        } catch (SQLException e) {
+            log.error("{} SQL {}", tableName, sql);
+            log.error("{} SQL update error", tableName, e);
+            debugErrors(persistenceContext, e);
+            if (dialect.isUniqueConstraintException(e)) {
+                throw new UniqueConstraintUserRuntimeException(i18n.tr("Unable to update \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
+                        getUniqueConstraintFieldName()), EntityFactory.getEntityPrototype(entityTemplate.getValueClass()));
             } else {
                 throw new RuntimeException(e);
             }

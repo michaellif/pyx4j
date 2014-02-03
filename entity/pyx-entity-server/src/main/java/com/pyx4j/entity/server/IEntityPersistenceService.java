@@ -104,7 +104,7 @@ public interface IEntityPersistenceService {
     public <T extends IEntity> void merge(Iterable<T> entityIterable);
 
     /**
-     * Update only members set in entityTemplate
+     * Update only members set in entityTemplate, e.g. Bulk update; update ... where ...
      * 
      * @param criteria
      * @param entityTemplate

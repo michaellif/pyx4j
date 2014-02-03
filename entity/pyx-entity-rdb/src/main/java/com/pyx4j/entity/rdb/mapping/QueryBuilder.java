@@ -46,9 +46,9 @@ import com.pyx4j.entity.core.adapters.IndexAdapter;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
@@ -489,6 +489,10 @@ public class QueryBuilder<T extends IEntity> {
         return getJoins(mainTableSqlName) + getWhere() + getSorts();
     }
 
+    String getUpdateSQL(String mainTableSqlName, String setExpression) {
+        return getJoins(mainTableSqlName) + setExpression + getWhere() + getSorts();
+    }
+
     private String getJoins(String mainTableSqlName) {
         StringBuilder sqlFrom = new StringBuilder();
         sqlFrom.append(mainTableSqlName).append(' ').append(mainTableSqlAlias);
@@ -533,7 +537,10 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     int bindParameters(PersistenceContext persistenceContext, PreparedStatement stmt) throws SQLException {
-        int parameterIndex = 1;
+        return bindParameters(1, persistenceContext, stmt);
+    }
+
+    int bindParameters(int parameterIndex, PersistenceContext persistenceContext, PreparedStatement stmt) throws SQLException {
         parameterIndex = this.queryJoin.bindParameters(parameterIndex, persistenceContext, stmt);
         if (dialect.isMultitenantSharedSchema()) {
             stmt.setString(parameterIndex, NamespaceManager.getNamespace());
