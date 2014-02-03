@@ -39,7 +39,7 @@ public class PortalRootPaneTheme extends Theme {
 
         NotificationContainer, NotificationItem, NotificationItemTitle, NotificationItemCloseButton,
 
-        NotificationGadget;
+        NotificationGadget, TermsGadget, TermsGadgetContent;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -55,6 +55,7 @@ public class PortalRootPaneTheme extends Theme {
         initHeaderNotificationStyles();
         initPageNotificationStyles();
         initCommunicationStyles();
+        initTermsGadgetStyles();
 
     }
 
@@ -397,6 +398,22 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("text-align", "center");
         style.addProperty("padding-top", "20px");
         addStyle(style);
+    }
+
+    private void initTermsGadgetStyles() {
+        Style style = new Style(".", StyleName.TermsGadget);
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TermsGadget, " .", DashboardTheme.StyleName.GadgetHeader);
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TermsGadgetContent);
+        style.addProperty("text-align", "left");
+        style.addProperty("padding", "20px");
+        addStyle(style);
+
     }
 
     @Override

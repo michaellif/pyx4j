@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.shared.ui;
 
-import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -45,14 +43,12 @@ public class TermsViewImpl extends SimplePanel implements TermsView {
         TermsGadget(TermsViewImpl viewer, String title, String content) {
             super(viewer, null, title, ThemeColor.foreground, 0.3);
 
-            addStyleName(PortalRootPaneTheme.StyleName.NotificationGadget.name());
+            addStyleName(PortalRootPaneTheme.StyleName.TermsGadget.name());
 
-            FlowPanel viewPanel = new FlowPanel();
-            viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+            HTML contentHolder = new HTML(content);
+            contentHolder.setStyleName(PortalRootPaneTheme.StyleName.TermsGadgetContent.name());
 
-            viewPanel.add(new HTML(content));
-
-            setContent(viewPanel);
+            setContent(contentHolder);
 
         }
 
