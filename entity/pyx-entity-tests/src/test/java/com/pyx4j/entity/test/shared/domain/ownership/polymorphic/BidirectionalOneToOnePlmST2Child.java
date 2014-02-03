@@ -14,24 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 8, 2012
+ * Created on 2013-01-18
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-@Table(prefix = "test")
-public interface BidirectionalOneToOnePlmSTP2CParent extends IEntity {
+@AbstractEntity
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
+public interface BidirectionalOneToOnePlmST2Child extends IEntity {
 
-    @Owned
-    @JoinColumn
-    BidirectionalOneToOnePlmSTP2CChild child();
+    @Owner
+    BidirectionalOneToOnePlmSTParent parent();
 
     IPrimitive<String> testId();
 

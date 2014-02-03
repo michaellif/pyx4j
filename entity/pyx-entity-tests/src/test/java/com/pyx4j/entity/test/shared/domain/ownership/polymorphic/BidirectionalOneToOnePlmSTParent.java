@@ -14,19 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-01-18
+ * Created on Feb 8, 2012
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-@DiscriminatorValue("a")
 @Table(prefix = "test")
-public interface BidirectionalOneToOnePlmSTP2CChildA extends BidirectionalOneToOnePlmSTP2CChild {
+public interface BidirectionalOneToOnePlmSTParent extends IEntity {
 
-    IPrimitive<String> propA();
+    @Owned
+    @JoinColumn
+    BidirectionalOneToOnePlmST2Child child();
+
+    IPrimitive<String> testId();
+
+    IPrimitive<String> name();
 }

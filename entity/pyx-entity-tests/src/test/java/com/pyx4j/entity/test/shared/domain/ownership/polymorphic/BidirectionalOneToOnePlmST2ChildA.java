@@ -20,20 +20,13 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IPrimitive;
 
-@AbstractEntity
-@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
-public interface BidirectionalOneToOnePlmSTP2CChild extends IEntity {
+@DiscriminatorValue("a")
+@Table(prefix = "test")
+public interface BidirectionalOneToOnePlmST2ChildA extends BidirectionalOneToOnePlmST2Child {
 
-    @Owner
-    BidirectionalOneToOnePlmSTP2CParent parent();
-
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
+    IPrimitive<String> propA();
 }

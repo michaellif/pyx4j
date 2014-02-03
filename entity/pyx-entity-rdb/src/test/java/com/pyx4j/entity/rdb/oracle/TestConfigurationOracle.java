@@ -63,7 +63,9 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         ShortWords shortWords = new ShortWords();
         shortWords.add("TEST", "T");
         shortWords.add("BASE", "B");
+        shortWords.add("ASSOCIATION2", "ASC2");
         shortWords.add("ORGANIZATION", "ORG");
+        shortWords.add("ORGANIZATION2", "ORG2");
         shortWords.add("EMPLOYEE", "EMP");
         shortWords.add("DEPARTMENT", "DEPT");
         shortWords.add("DEPARTMENTS", "DEPTS");
@@ -82,12 +84,15 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("DETD", "D");
         shortWords.add("DETACHED", "DET");
         shortWords.add("DIFERENT", "DIF");
+        shortWords.add("DATA", "DT");
+        shortWords.add("DATA1", "DT1");
         shortWords.add("READ", "R");
         shortWords.add("OWNED", "OW");
         shortWords.add("OWNER", "O");
         shortWords.add("ONE", "1");
         shortWords.add("POLY", "PL");
-        shortWords.add("POLYMORPHIC", "PL");
+        shortWords.add("POLYMORPHIC", "P8");
+        shortWords.add("PLM", "P8");
         shortWords.add("MAIN", "M");
         shortWords.add("MEMBER", "MBR");
         shortWords.add("MANAGED", "M");
@@ -98,14 +103,16 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("CONCRETE3", "R3");
         shortWords.add("ASSIGNED", "ASN");
         shortWords.add("PRINCIPAL", "PRNP");
-        shortWords.add("UNIDIRECTIONAL", "UD");
         shortWords.add("BIDIRECTIONAL", "BD");
+        shortWords.add("UNIDIRECTIONAL", "UD");
+        shortWords.add("UNMAINTAINED", "UM");
         shortWords.add("PARENT", "PA");
         shortWords.add("CPARENT", "CPA");
         shortWords.add("STPARENT", "STPA");
         shortWords.add("CHILD", "C1");
         shortWords.add("CCHILD", "C2");
         shortWords.add("STCHILD", "SCL");
+        shortWords.add("NCPCHILD", "NCPC1");
         shortWords.add("CHILDREN", "C3");
         shortWords.add("AUTO", "A");
         shortWords.add("INVERSED", "R");
@@ -116,9 +123,6 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("VALUE", "VL");
         shortWords.add("AMOUNT", "AMT");
 
-        shortWords.add("T_BD_1_TO_1_PLM_STP2_CPA_CHILD_DISCRIMINATOR_D_CK", "t_bd_1_to_1_plm_1234_dc_d_ck");
-
         return new NamingConventionOracle(30, shortWords);
     }
-
 }
