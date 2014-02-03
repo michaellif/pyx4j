@@ -25,6 +25,8 @@ import junit.framework.Assert;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
+import com.pyx4j.entity.test.shared.domain.Department;
+import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Simple1;
 
 public abstract class UpdateQueryRDBTestCase extends DatastoreTestBase {
@@ -68,4 +70,149 @@ public abstract class UpdateQueryRDBTestCase extends DatastoreTestBase {
         }
 
     }
+
+    public void testEmbeddedUpdate() {
+        String testId = uniqueString();
+        Employee ent1;
+        Employee ent2;
+        {
+            Employee ent = EntityFactory.create(Employee.class);
+            ent.firstName().setValue(testId);
+            ent.workAddress().streetName().setValue("A");
+            srv.persist(ent);
+            ent1 = ent;
+        }
+        {
+            Employee ent = EntityFactory.create(Employee.class);
+            ent.firstName().setValue(testId);
+            ent.workAddress().streetName().setValue("B");
+            srv.persist(ent);
+            ent2 = ent;
+        }
+
+        // test
+
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.eq(criteria.proto().firstName(), testId);
+
+        Employee entityTemplate = EntityFactory.create(Employee.class);
+        entityTemplate.workAddress().streetName().setValue("C");
+
+        srv.update(criteria, entityTemplate);
+
+        {
+            Employee ent = srv.retrieve(Employee.class, ent1.getPrimaryKey());
+            Assert.assertEquals("Name updated", entityTemplate.workAddress().streetName().getValue(), ent.workAddress().streetName().getValue());
+        }
+        {
+            Employee ent = srv.retrieve(Employee.class, ent2.getPrimaryKey());
+            Assert.assertEquals("Name updated", entityTemplate.workAddress().streetName().getValue(), ent.workAddress().streetName().getValue());
+        }
+    }
+
+    public void testRefferenceUpdate() {
+        String testId = uniqueString();
+
+        Department department1 = EntityFactory.create(Department.class);
+        department1.name().setValue("A" + testId);
+        srv.persist(department1);
+
+        Department department2 = EntityFactory.create(Department.class);
+        department2.name().setValue("B" + testId);
+        srv.persist(department2);
+
+        Employee ent1;
+        Employee ent2;
+        {
+            Employee ent = EntityFactory.create(Employee.class);
+            ent.firstName().setValue(testId);
+            ent.workAddress().streetName().setValue("A");
+            ent.department().set(department1);
+            srv.persist(ent);
+            ent1 = ent;
+        }
+        {
+            Employee ent = EntityFactory.create(Employee.class);
+            ent.firstName().setValue(testId);
+            ent.workAddress().streetName().setValue("B");
+            ent.department().set(department1);
+            srv.persist(ent);
+            ent2 = ent;
+        }
+
+        // test
+
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.eq(criteria.proto().firstName(), testId);
+
+        Employee entityTemplate = EntityFactory.create(Employee.class);
+        entityTemplate.department().set(department2);
+
+        srv.update(criteria, entityTemplate);
+
+        {
+            Employee ent = srv.retrieve(Employee.class, ent1.getPrimaryKey());
+            Assert.assertEquals("Reference updated", department2, ent.department());
+            Assert.assertEquals("Name not updated", ent1.workAddress().streetName().getValue(), ent.workAddress().streetName().getValue());
+        }
+        {
+            Employee ent = srv.retrieve(Employee.class, ent2.getPrimaryKey());
+            Assert.assertEquals("Reference updated", department2, ent.department());
+            Assert.assertEquals("Name not updated", ent2.workAddress().streetName().getValue(), ent.workAddress().streetName().getValue());
+        }
+    }
+
+    //TODO
+    public void TODO_testJonConditionUpdate() {
+        String testId = uniqueString();
+
+        Department department1 = EntityFactory.create(Department.class);
+        department1.name().setValue("A" + testId);
+        srv.persist(department1);
+
+        Employee ent1;
+        Employee ent2;
+        {
+            Employee ent = EntityFactory.create(Employee.class);
+            ent.firstName().setValue(testId);
+            ent.department().set(department1);
+            ent.rating().setValue(1);
+            ent.workAddress().streetName().setValue("A");
+            srv.persist(ent);
+            ent1 = ent;
+        }
+        {
+            Employee ent = EntityFactory.create(Employee.class);
+            ent.firstName().setValue(testId);
+            ent.department().set(department1);
+            ent.rating().setValue(2);
+            ent.workAddress().streetName().setValue("B");
+            srv.persist(ent);
+            ent2 = ent;
+        }
+
+        // test
+
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.eq(criteria.proto().department().name(), department1.name());
+
+        Employee entityTemplate = EntityFactory.create(Employee.class);
+        entityTemplate.workAddress().streetName().setValue("C");
+
+        srv.update(criteria, entityTemplate);
+
+        {
+            Employee ent = srv.retrieve(Employee.class, ent1.getPrimaryKey());
+            Assert.assertEquals("Not updated", ent1.rating().getValue(), ent.rating().getValue());
+            Assert.assertEquals("Reference Not updated", department1, ent.department());
+            Assert.assertEquals("Name updated", entityTemplate.workAddress().streetName().getValue(), ent.workAddress().streetName().getValue());
+        }
+        {
+            Employee ent = srv.retrieve(Employee.class, ent2.getPrimaryKey());
+            Assert.assertEquals("Not updated", ent2.rating().getValue(), ent.rating().getValue());
+            Assert.assertEquals("Reference Not updated", department1, ent.department());
+            Assert.assertEquals("Name updated", entityTemplate.workAddress().streetName().getValue(), ent.workAddress().streetName().getValue());
+        }
+    }
+
 }

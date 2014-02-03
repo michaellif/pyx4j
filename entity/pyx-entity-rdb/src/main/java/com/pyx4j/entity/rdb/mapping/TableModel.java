@@ -502,10 +502,7 @@ public class TableModel {
         sql.append(" SET ");
         boolean first = true;
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-            if (member.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
-                // TODO
-                continue;
-            } else if (!member.containsMemberValue(entityTemplate)) {
+            if (!member.containsMemberValue(entityTemplate)) {
                 continue;
             }
             for (String name : member.getValueAdapter().getColumnNames(member.sqlName())) {
@@ -555,19 +552,20 @@ public class TableModel {
     private int bindPersistParametersBulk(int parameterIndex, PersistenceContext persistenceContext, PreparedStatement stmt, IEntity entityTemplate)
             throws SQLException {
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-            if (member.getMemberMeta().isEntity()) {
-//TODO                
-//                IEntity childEntity = (IEntity) member.getMember(entityTemplate);
-//                if ((childEntity.getPrimaryKey() == null) && childEntity.hasValues()) {
-//                    log.error("Saving non persisted reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
-//                    throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
-//                }
-//                if (member.isOwnerColumn() && (!childEntity.hasValues()) && member.getMemberMeta().getAnnotation(NotNull.class) != null) {
-//                    log.error("Saving empty owner reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
-//                    throw new Error("Trying to save child entity with undefined owner; " + childEntity.getDebugExceptionInfoString());
-//                }
-//                parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, childEntity);
-            } else if (member.containsMemberValue(entityTemplate)) {
+            if (!member.containsMemberValue(entityTemplate)) {
+                continue;
+            } else if (member.getMemberMeta().isEntity()) {
+                IEntity childEntity = (IEntity) member.getMember(entityTemplate);
+                if ((childEntity.getPrimaryKey() == null) && childEntity.hasValues()) {
+                    log.error("Saving non persisted reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                    throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
+                }
+                if (member.isOwnerColumn() && (!childEntity.hasValues()) && member.getMemberMeta().getAnnotation(NotNull.class) != null) {
+                    log.error("Saving empty owner reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                    throw new Error("Trying to save child entity with undefined owner; " + childEntity.getDebugExceptionInfoString());
+                }
+                parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, childEntity);
+            } else {
                 parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, member.getPersistMemberValue(entityTemplate));
             }
         }
