@@ -46,17 +46,20 @@ import com.pyx4j.server.mail.SMTPMailServiceConfig;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -187,6 +190,18 @@ class VistaBusinessStatsReport {
 
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CrmUser.class);
+            data.payingTenants().setValue(Persistence.service().count(criteria) + data.payingTenants().getValue());
+        }
+
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.isNull(criteria.proto().billingAccount().payments().$().createdBy());
+            data.payingTenants().setValue(Persistence.service().count(criteria) + data.payingTenants().getValue());
+        }
+
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CustomerUser.class);
             criteria.ge(criteria.proto().billingAccount().payments().$().createdDate(), reportSince);
             data.newPayingTenants().setValue(Persistence.service().count(criteria));
@@ -194,7 +209,7 @@ class VistaBusinessStatsReport {
 
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck);
             criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
@@ -218,7 +233,7 @@ class VistaBusinessStatsReport {
 
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
             criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
@@ -232,7 +247,7 @@ class VistaBusinessStatsReport {
 
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Interac);
             criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
@@ -248,31 +263,69 @@ class VistaBusinessStatsReport {
 
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
             criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            criteria.eq(criteria.proto().paymentMethod().details(), CreditCardInfo.class);
             List<PaymentRecord> records = Persistence.service().query(criteria);
-            BigDecimal amount = BigDecimal.ZERO;
+
+            BigDecimal amountVisa = BigDecimal.ZERO;
+            BigDecimal amountVisaDebit = BigDecimal.ZERO;
+            BigDecimal amountMastercard = BigDecimal.ZERO;
+            Integer countVisa = 0;
+            Integer countVisaDebit = 0;
+            Integer countMastercard = 0;
             for (PaymentRecord record : records) {
-                amount = amount.add(record.amount().getValue());
+                if (record.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue().equals(CreditCardType.Visa)) {
+                    amountVisa = amountVisa.add(record.amount().getValue());
+                    countVisa++;
+                } else if (record.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue().equals(CreditCardType.VisaDebit)) {
+                    amountVisaDebit = amountVisaDebit.add(record.amount().getValue());
+                    countVisaDebit++;
+                } else {
+                    amountMastercard = amountMastercard.add(record.amount().getValue());
+                    countMastercard++;
+                }
             }
-            data.creditVisaCount().setValue(records.size());
-            data.creditVisaValue().setValue(amount);
+            data.creditVisaCount().setValue(countVisa);
+            data.creditVisaValue().setValue(amountVisa);
+            data.creditVisaDebitCount().setValue(countVisaDebit);
+            data.creditVisaDebitValue().setValue(amountVisaDebit);
+            data.creditMastercardCount().setValue(countMastercard);
+            data.creditMastercardValue().setValue(amountMastercard);
 
             criteria.eq(criteria.proto().createdBy(), CustomerUser.class);
             records = Persistence.service().query(criteria);
-            amount = BigDecimal.ZERO;
-            for (PaymentRecord record : records) {
-                amount = amount.add(record.amount().getValue());
-            }
 
-            data.creditVisaCountOneTime().setValue(records.size());
-            data.creditVisaValueOneTime().setValue(amount);
+            amountVisa = BigDecimal.ZERO;
+            amountVisaDebit = BigDecimal.ZERO;
+            amountMastercard = BigDecimal.ZERO;
+            countVisa = 0;
+            countVisaDebit = 0;
+            countMastercard = 0;
+            for (PaymentRecord record : records) {
+                if (record.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue().equals(CreditCardType.Visa)) {
+                    amountVisa = amountVisa.add(record.amount().getValue());
+                    countVisa++;
+                } else if (record.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue().equals(CreditCardType.VisaDebit)) {
+                    amountVisaDebit = amountVisaDebit.add(record.amount().getValue());
+                    countVisaDebit++;
+                } else {
+                    amountMastercard = amountMastercard.add(record.amount().getValue());
+                    countMastercard++;
+                }
+            }
+            data.creditVisaCountOneTime().setValue(countVisa);
+            data.creditVisaValueOneTime().setValue(amountVisa);
+            data.creditVisaDebitCountOneTime().setValue(countVisaDebit);
+            data.creditVisaDebitValueOneTime().setValue(amountVisaDebit);
+            data.creditMastercardCountOneTime().setValue(countMastercard);
+            data.creditMastercardValueOneTime().setValue(amountMastercard);
         }
 
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Interac);
             criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
@@ -288,6 +341,13 @@ class VistaBusinessStatsReport {
             EntityQueryCriteria<TenantSureInsuranceCertificate> criteria = EntityQueryCriteria.create(TenantSureInsuranceCertificate.class);
             criteria.eq(criteria.proto().insurancePolicy().status(), TenantSureStatus.Active);
             data.insuranceCount().setValue(Persistence.service().count(criteria));
+        }
+
+        {
+            EntityQueryCriteria<GeneralInsuranceCertificate> criteria = EntityQueryCriteria.create(GeneralInsuranceCertificate.class);
+            criteria.gt(criteria.proto().expiryDate(), new Date());
+            data.insuranceCount().setValue(Persistence.service().count(criteria));
+
         }
 
         {
