@@ -203,15 +203,14 @@ public class YardiLeaseProcessor {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
 
-        boolean toPersist = false;
-        boolean toFinalize = false;
-
         boolean leaseMove = false;
         if (!lease.currentTerm().yardiLeasePk().isNull()
                 && !EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
             // TODO Need to find another lease to merge with
             leaseMove = true;
         }
+
+        boolean toPersist = false;
 
         // if unit update is occurred:
         String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
@@ -222,7 +221,7 @@ public class YardiLeaseProcessor {
             log.debug("updating unit {} for lease {}", unit.getStringView(), getLeaseId(rtCustomer));
 
             lease = new LeaseMerger().updateUnit(unit, lease);
-            toFinalize = true;
+            toPersist = true;
             log.debug("        - LeaseUnitChanged...");
         }
 
@@ -237,7 +236,7 @@ public class YardiLeaseProcessor {
             LogicalDate termTo = lease.currentTerm().termTo().getValue();
 
             lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
-            toFinalize = true;
+            toPersist = true;
 
             log.debug("        - TermDatesChanged...  \n\ttermFrom({}->{})\n\ttermTo({}->{})", //
                     termFrom, lease.currentTerm().termFrom().getValue(), //
@@ -253,24 +252,21 @@ public class YardiLeaseProcessor {
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         if (new TenantMerger().isChanged(yardiCustomers, lease.currentTerm().version().tenants())) {
             lease.currentTerm().set(new TenantMerger(executionMonitor).updateTenants(yardiCustomers, lease.currentTerm()));
-            toFinalize = true;
+            toPersist = true;
             log.debug("        - TenantsChanged...");
         }
 
         lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
         if (new TenantMerger(executionMonitor).updateTenantsData(rtCustomer, lease)) {
-            toFinalize = true;
+            toPersist = true;
             log.debug("        - TenantDataChanged...");
         }
 
         // persist: 
 
-        if (toFinalize) {
+        if (toPersist) {
             lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            log.debug("        >> Finalizing lease! <<");
-        } else if (toPersist) {
-            lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            log.debug("        >> Persisting lease! <<");
+            log.debug("        >> Persisting/Finalizing lease! <<");
         }
 
         // manage state:
