@@ -90,7 +90,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         //TODO count only
         Persistence.service().retrieveMember(bo.floorplans(), AttachLevel.CollectionSizeOnly);
-
         Persistence.ensureRetrieve(bo.landlord(), AttachLevel.ToStringMembers);
     }
 
@@ -116,27 +115,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             to.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));
         }
 
-        // Geotagging:
-        to.geoLocation().set(EntityFactory.create(GeoLocation.class));
-        if (!bo.info().location().isNull()) {
-            double lat = bo.info().location().getValue().getLat();
-            if (lat < 0) {
-                to.geoLocation().latitudeType().setValue(LatitudeType.South);
-                to.geoLocation().latitude().setValue(-lat);
-            } else {
-                to.geoLocation().latitudeType().setValue(LatitudeType.North);
-                to.geoLocation().latitude().setValue(lat);
-            }
-            double lng = bo.info().location().getValue().getLng();
-            if (lng < 0) {
-                to.geoLocation().longitudeType().setValue(LongitudeType.West);
-                to.geoLocation().longitude().setValue(-lng);
-            } else {
-                to.geoLocation().longitudeType().setValue(LongitudeType.East);
-                to.geoLocation().longitude().setValue(lng);
-            }
-        }
-
         // Financial
         Persistence.service().retrieveMember(bo.merchantAccounts());
         if (!bo.merchantAccounts().isEmpty()) {
@@ -144,23 +122,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             to.merchantAccount().set(ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(oneAccount));
         }
 
-        // ils
-        {
-            EntityQueryCriteria<ILSSummaryBuilding> criteria = EntityQueryCriteria.create(ILSSummaryBuilding.class);
-            criteria.eq(criteria.proto().building(), bo);
-            to.ilsSummary().addAll(Persistence.service().query(criteria));
-        }
-        {
-            EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
-            criteria.eq(criteria.proto().building(), bo);
-            to.ilsProfile().addAll(Persistence.service().query(criteria));
-        }
-        {
-            EntityQueryCriteria<ILSProfileEmail> criteria = EntityQueryCriteria.create(ILSProfileEmail.class);
-            criteria.eq(criteria.proto().building(), bo);
-            to.ilsEmail().set(Persistence.service().retrieve(criteria));
-        }
-        to.ilsEmailConfigured().setValue(Persistence.service().count(EntityQueryCriteria.create(ILSEmailConfig.class)) > 0);
+        retrieveGeotagging(bo, to);
+        retrieveILS(bo, to);
     }
 
     @Override
@@ -193,26 +156,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
     @Override
     protected void persist(Building bo, BuildingDTO to) {
-        // Geotagging:
-        if (!to.geoLocation().isNull()) {
-            Double lat = to.geoLocation().latitude().getValue();
-            Double lng = to.geoLocation().longitude().getValue();
-            if ((lng != null) && (lat != null)) {
-                if (LatitudeType.South.equals(to.geoLocation().latitudeType().getValue())) {
-                    lat = -lat;
-                }
-                if (LongitudeType.West.equals(to.geoLocation().longitudeType().getValue())) {
-                    lng = -lng;
-                }
-                bo.info().location().setValue(new GeoPoint(lat, lng));
-            }
-        } else {
-            if (to.info().location().isNull()) {
-                SharedGeoLocator.populateGeo(to);
-            } else {
-                bo.info().location().set(null);
-            }
-        }
 
         {
             Persistence.service().retrieveMember(bo.merchantAccounts());
@@ -224,39 +167,13 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             }
         }
 
-        // ils marketing
-        {
-            EntityQueryCriteria<ILSSummaryBuilding> criteria = EntityQueryCriteria.create(ILSSummaryBuilding.class);
-            criteria.eq(criteria.proto().building(), to);
-            for (ILSSummaryBuilding summary : Persistence.service().query(criteria)) {
-                if (!to.ilsSummary().contains(summary)) {
-                    Persistence.service().delete(summary);
-                }
-            }
-            for (ILSSummaryBuilding summary : to.ilsSummary()) {
-                summary.building().set(bo);
-                Persistence.service().merge(summary);
-            }
-        }
-        {
-            EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
-            criteria.eq(criteria.proto().building(), to);
-            for (ILSProfileBuilding profile : Persistence.service().query(criteria)) {
-                if (!to.ilsProfile().contains(profile)) {
-                    Persistence.service().delete(profile);
-                }
-            }
-            for (ILSProfileBuilding profile : to.ilsProfile()) {
-                profile.building().set(bo);
-                Persistence.service().merge(profile);
-            }
-        }
-        to.ilsEmail().building().set(bo);
-        Persistence.service().merge(to.ilsEmail());
+        saveGeotagging(bo, to);
+
+        ServerSideFactory.create(BuildingFacade.class).persist(bo);
 
         saveUtilities(bo);
 
-        ServerSideFactory.create(BuildingFacade.class).persist(bo);
+        saveILS(bo, to);
     }
 
     private void loadUtilities(Building bo) {
@@ -284,6 +201,101 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             utility.isDeleted().setValue(false);
             Persistence.service().merge(utility);
         }
+    }
+
+    private void retrieveGeotagging(Building bo, BuildingDTO to) {
+        to.geoLocation().set(EntityFactory.create(GeoLocation.class));
+        if (!bo.info().location().isNull()) {
+            double lat = bo.info().location().getValue().getLat();
+            if (lat < 0) {
+                to.geoLocation().latitudeType().setValue(LatitudeType.South);
+                to.geoLocation().latitude().setValue(-lat);
+            } else {
+                to.geoLocation().latitudeType().setValue(LatitudeType.North);
+                to.geoLocation().latitude().setValue(lat);
+            }
+            double lng = bo.info().location().getValue().getLng();
+            if (lng < 0) {
+                to.geoLocation().longitudeType().setValue(LongitudeType.West);
+                to.geoLocation().longitude().setValue(-lng);
+            } else {
+                to.geoLocation().longitudeType().setValue(LongitudeType.East);
+                to.geoLocation().longitude().setValue(lng);
+            }
+        }
+    }
+
+    private void saveGeotagging(Building bo, BuildingDTO to) {
+        if (!to.geoLocation().isNull()) {
+            Double lat = to.geoLocation().latitude().getValue();
+            Double lng = to.geoLocation().longitude().getValue();
+            if ((lng != null) && (lat != null)) {
+                if (LatitudeType.South.equals(to.geoLocation().latitudeType().getValue())) {
+                    lat = -lat;
+                }
+                if (LongitudeType.West.equals(to.geoLocation().longitudeType().getValue())) {
+                    lng = -lng;
+                }
+                bo.info().location().setValue(new GeoPoint(lat, lng));
+            }
+        } else {
+            if (to.info().location().isNull()) {
+                SharedGeoLocator.populateGeo(to);
+            } else {
+                bo.info().location().set(null);
+            }
+        }
+    }
+
+    private void retrieveILS(Building bo, BuildingDTO to) {
+        {
+            EntityQueryCriteria<ILSSummaryBuilding> criteria = EntityQueryCriteria.create(ILSSummaryBuilding.class);
+            criteria.eq(criteria.proto().building(), bo);
+            to.ilsSummary().addAll(Persistence.service().query(criteria));
+        }
+        {
+            EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
+            criteria.eq(criteria.proto().building(), bo);
+            to.ilsProfile().addAll(Persistence.service().query(criteria));
+        }
+        {
+            EntityQueryCriteria<ILSProfileEmail> criteria = EntityQueryCriteria.create(ILSProfileEmail.class);
+            criteria.eq(criteria.proto().building(), bo);
+            to.ilsEmail().set(Persistence.service().retrieve(criteria));
+        }
+        to.ilsEmailConfigured().setValue(Persistence.service().count(EntityQueryCriteria.create(ILSEmailConfig.class)) > 0);
+    }
+
+    private void saveILS(Building bo, BuildingDTO to) {
+        {
+            EntityQueryCriteria<ILSSummaryBuilding> criteria = EntityQueryCriteria.create(ILSSummaryBuilding.class);
+            criteria.eq(criteria.proto().building(), to);
+            for (ILSSummaryBuilding summary : Persistence.service().query(criteria)) {
+                if (!to.ilsSummary().contains(summary)) {
+                    Persistence.service().delete(summary);
+                }
+            }
+            for (ILSSummaryBuilding summary : to.ilsSummary()) {
+                summary.building().set(bo);
+                Persistence.service().merge(summary);
+            }
+        }
+        {
+            EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
+            criteria.eq(criteria.proto().building(), to);
+            for (ILSProfileBuilding profile : Persistence.service().query(criteria)) {
+                if (!to.ilsProfile().contains(profile)) {
+                    Persistence.service().delete(profile);
+                }
+            }
+            for (ILSProfileBuilding profile : to.ilsProfile()) {
+                profile.building().set(bo);
+                Persistence.service().merge(profile);
+            }
+        }
+        to.ilsEmail().building().set(bo);
+
+        Persistence.service().merge(to.ilsEmail());
     }
 
     @Override
