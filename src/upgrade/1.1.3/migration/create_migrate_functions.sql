@@ -186,62 +186,8 @@ BEGIN
         ***     ======================================================================================================
         **/
         
-        -- agreement_confirmation_term
-        
-        CREATE TABLE agreement_confirmation_term
-        (
-                id                              BIGINT                  NOT NULL,
-                policy                          BIGINT                  NOT NULL,
-                title                           VARCHAR(500),
-                body                            VARCHAR(48000),
-                signature_format                VARCHAR(50),
-                order_id                        INT,
-                        CONSTRAINT agreement_confirmation_term_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE agreement_confirmation_term OWNER TO vista;
         
         
-        -- agreement_legal_policy
-        
-        CREATE TABLE agreement_legal_policy
-        (
-                id                              BIGINT                  NOT NULL,
-                node_discriminator              VARCHAR(50),
-                node                            BIGINT,
-                updated                         TIMESTAMP,
-                        CONSTRAINT agreement_legal_policy_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE agreement_legal_policy OWNER TO vista;
-        
-        
-        -- agreement_legal_term
-        
-        CREATE TABLE agreement_legal_term
-        (
-                id                              BIGINT                  NOT NULL,
-                policy                          BIGINT                  NOT NULL,
-                title                           VARCHAR(500),
-                body                            VARCHAR(48000),
-                signature_format                VARCHAR(50),
-                order_id                        INT,
-                        CONSTRAINT agreement_legal_term_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE agreement_legal_term OWNER TO vista;
-        
-        -- agreement_legal_term_signature
-        
-        CREATE TABLE agreement_legal_term_signature
-        (
-                id                              BIGINT                  NOT NULL,
-                term                            BIGINT,
-                signature                       BIGINT,
-                        CONSTRAINT agreement_legal_term_signature_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE agreement_legal_term_signature OWNER TO vista;
         
         
         -- agreement_signatures
@@ -578,6 +524,97 @@ BEGIN
         ALTER TABLE lease_application   ADD COLUMN created_by BIGINT,
                                         ADD COLUMN application_id VARCHAR(14),
                                         ADD COLUMN application_id_s VARCHAR(26);
+                                        
+        -- lease_agreement_confirmation_term
+        
+        CREATE TABLE lease_agreement_confirmation_term
+        (
+                id                              BIGINT                  NOT NULL,
+                policy                          BIGINT                  NOT NULL,
+                title                           VARCHAR(500),
+                body                            VARCHAR(48000),
+                signature_format                VARCHAR(50),
+                order_id                        INT,
+                        CONSTRAINT lease_agreement_confirmation_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_agreement_confirmation_term OWNER TO vista;
+        
+        
+        -- lease_agreement_legal_policy
+        
+        CREATE TABLE lease_agreement_legal_policy
+        (
+                id                              BIGINT                  NOT NULL,
+                node_discriminator              VARCHAR(50),
+                node                            BIGINT,
+                updated                         TIMESTAMP,
+                        CONSTRAINT lease_agreement_legal_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_agreement_legal_policy OWNER TO vista;
+        
+        
+        -- lease_agreement_legal_term
+        
+        CREATE TABLE lease_agreement_legal_term
+        (
+                id                              BIGINT                  NOT NULL,
+                policy                          BIGINT                  NOT NULL,
+                title                           VARCHAR(500),
+                body                            VARCHAR(48000),
+                signature_format                VARCHAR(50),
+                order_id                        INT,
+                        CONSTRAINT lease_agreement_legal_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_agreement_legal_term OWNER TO vista;
+        
+        
+        -- lease_application_confirmation_term
+        
+        CREATE TABLE lease_application_confirmation_term
+        (
+                id                              BIGINT                  NOT NULL,
+                policy                          BIGINT                  NOT NULL,
+                title                           VARCHAR(500),
+                body                            VARCHAR(48000),
+                signature_format                VARCHAR(50),
+                order_id                        INT,
+                        CONSTRAINT lease_application_confirmation_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_application_confirmation_term OWNER TO vista;
+        
+         -- lease_application_legal_policy
+        
+        CREATE TABLE lease_application_legal_policy
+        (
+                id                              BIGINT                  NOT NULL,
+                node_discriminator              VARCHAR(50),
+                node                            BIGINT,
+                updated                         TIMESTAMP,
+                        CONSTRAINT lease_application_legal_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_application_legal_policy OWNER TO vista;
+        
+        
+        -- lease_application_legal_term
+        
+        CREATE TABLE lease_application_legal_term
+        (
+                id                              BIGINT                  NOT NULL,
+                policy                          BIGINT                  NOT NULL,
+                title                           VARCHAR(500),
+                body                            VARCHAR(48000),
+                signature_format                VARCHAR(50),
+                apply_to_role                   VARCHAR(50),
+                order_id                        INT,
+                        CONSTRAINT lease_application_legal_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_application_legal_term OWNER TO vista;
         
         
         -- lease_term_agreement_document
@@ -612,6 +649,21 @@ BEGIN
         );
         
         ALTER TABLE lease_term_agreement_document_blob OWNER TO vista;
+        
+        
+        -- lease_term_v$agreement_confirmation_term
+        
+        CREATE TABLE lease_term_v$agreement_confirmation_term
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT lease_term_v$agreement_confirmation_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_term_v$agreement_confirmation_term OWNER TO vista;
+        
         
         -- lease_term_v$agreement_legal_terms
         
@@ -699,7 +751,7 @@ BEGIN
         (
                 id                              BIGINT                  NOT NULL,
                 caption                         VARCHAR(500),
-                content                         VARCHAR(20845),
+                content                         VARCHAR(300000),
                 enabled                         BOOLEAN,
                         CONSTRAINT legal_terms_policy_item_pk PRIMARY KEY(id)
         );
@@ -858,35 +910,6 @@ BEGIN
         ALTER TABLE online_application$legal_terms OWNER TO vista;
         
         
-        
-        -- online_application_legal_policy
-        
-        CREATE TABLE online_application_legal_policy
-        (
-                id                              BIGINT                  NOT NULL,
-                node_discriminator              VARCHAR(50),
-                node                            BIGINT,
-                updated                         TIMESTAMP,
-                        CONSTRAINT online_application_legal_policy_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE online_application_legal_policy OWNER TO vista;
-        
-        -- online_application_legal_term
-        
-        CREATE TABLE online_application_legal_term
-        (
-                id                              BIGINT                  NOT NULL,
-                policy                          BIGINT                  NOT NULL,
-                title                           VARCHAR(500),
-                body                            VARCHAR(48000),
-                signature_format                VARCHAR(50),
-                apply_to_role                   VARCHAR(50),
-                order_id                        INT,
-                        CONSTRAINT online_application_legal_term_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE online_application_legal_term OWNER TO vista;
         
         -- online_application_wizard_step_status
         
@@ -1070,6 +1093,45 @@ BEGIN
         
         
         ALTER TABLE prospect_portal_policy OWNER TO vista;
+        
+        
+        -- signed_agreement_confirmation_term
+        
+        CREATE TABLE signed_agreement_confirmation_term
+        (
+                id                              BIGINT                  NOT NULL,
+                term                            BIGINT,
+                signature                       BIGINT,
+                        CONSTRAINT signed_agreement_confirmation_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE signed_agreement_confirmation_term OWNER TO vista;
+        
+        -- signed_agreement_legal_term
+        
+        CREATE TABLE signed_agreement_legal_term
+        (
+                id                              BIGINT                  NOT NULL,
+                term                            BIGINT,
+                signature                       BIGINT,
+                        CONSTRAINT signed_agreement_legal_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE signed_agreement_legal_term OWNER TO vista;
+        
+        
+        -- signed_online_application_confirmation_term
+        
+        CREATE TABLE signed_online_application_confirmation_term
+        (
+                id                              BIGINT                  NOT NULL,
+                term                            BIGINT,
+                signature                       BIGINT,
+                        CONSTRAINT signed_online_application_confirmation_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE signed_online_application_confirmation_term OWNER TO vista;
+        
         
         -- signed_online_application_legal_term
         
@@ -1392,6 +1454,12 @@ BEGIN
         
         DROP TABLE payment_information;
         
+        
+        -- payment_type_selection_policy
+        
+        ALTER TABLE payment_type_selection_policy       DROP COLUMN prospect_direct_banking,
+                                                        DROP COLUMN prospect_interac;
+        
         -- product
         /*
         ALTER TABLE product     DROP COLUMN code_type,
@@ -1438,16 +1506,11 @@ BEGIN
         
         
         -- foreign keys
-        ALTER TABLE agreement_confirmation_term ADD CONSTRAINT agreement_confirmation_term_policy_fk FOREIGN KEY(policy) REFERENCES agreement_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE agreement_legal_term ADD CONSTRAINT agreement_legal_term_policy_fk FOREIGN KEY(policy) REFERENCES agreement_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE agreement_legal_term_signature ADD CONSTRAINT agreement_legal_term_signature_signature_fk FOREIGN KEY(signature) 
-                REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE agreement_legal_term_signature ADD CONSTRAINT agreement_legal_term_signature_term_fk FOREIGN KEY(term) 
-                REFERENCES agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
+
         ALTER TABLE agreement_signatures$legal_terms_signatures ADD CONSTRAINT agreement_signatures$legal_terms_signatures_owner_fk FOREIGN KEY(owner) 
                 REFERENCES agreement_signatures(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_signatures$legal_terms_signatures ADD CONSTRAINT agreement_signatures$legal_terms_signatures_value_fk FOREIGN KEY(value) 
-                REFERENCES agreement_legal_term_signature(id)  DEFERRABLE INITIALLY DEFERRED;
+                REFERENCES signed_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_tenant_fk FOREIGN KEY(lease_term_tenant) 
                 REFERENCES lease_term_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building ADD CONSTRAINT building_landlord_fk FOREIGN KEY(landlord) REFERENCES landlord(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1472,13 +1535,24 @@ BEGIN
         ALTER TABLE landlord ADD CONSTRAINT landlord_address_province_fk FOREIGN KEY(address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE landlord ADD CONSTRAINT landlord_logo_fk FOREIGN KEY(logo) REFERENCES landlord_media(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE landlord ADD CONSTRAINT landlord_signature_fk FOREIGN KEY(signature) REFERENCES landlord_media(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_agreement_confirmation_term ADD CONSTRAINT lease_agreement_confirmation_term_policy_fk FOREIGN KEY(policy) 
+                REFERENCES lease_agreement_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_agreement_legal_term ADD CONSTRAINT lease_agreement_legal_term_policy_fk FOREIGN KEY(policy) REFERENCES lease_agreement_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_application ADD CONSTRAINT lease_application_created_by_fk FOREIGN KEY(created_by) REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application_confirmation_term ADD CONSTRAINT lease_application_confirmation_term_policy_fk FOREIGN KEY(policy) 
+                REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_policy_fk FOREIGN KEY(policy) 
+                REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_lease_term_v_fk FOREIGN KEY(lease_term_v) 
                 REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$agreement_legal_terms ADD CONSTRAINT lease_term_v$agreement_legal_terms_owner_fk FOREIGN KEY(owner) 
                 REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term_v$agreement_confirmation_term ADD CONSTRAINT lease_term_v$agreement_confirmation_term_owner_fk FOREIGN KEY(owner) 
+                REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term_v$agreement_confirmation_term ADD CONSTRAINT lease_term_v$agreement_confirmation_term_value_fk FOREIGN KEY(value) 
+                REFERENCES lease_agreement_confirmation_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$agreement_legal_terms ADD CONSTRAINT lease_term_v$agreement_legal_terms_value_fk FOREIGN KEY(value) 
-                REFERENCES agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
+                REFERENCES lease_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_owner_fk FOREIGN KEY(owner) REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_value_fk FOREIGN KEY(value) REFERENCES building_utility(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1499,13 +1573,11 @@ BEGIN
         ALTER TABLE online_application$confirmation_terms ADD CONSTRAINT online_application$confirmation_terms_owner_fk FOREIGN KEY(owner) 
                 REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application$confirmation_terms ADD CONSTRAINT online_application$confirmation_terms_value_fk FOREIGN KEY(value) 
-                REFERENCES signed_online_application_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
+                REFERENCES signed_online_application_confirmation_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application$legal_terms ADD CONSTRAINT online_application$legal_terms_owner_fk FOREIGN KEY(owner) 
                 REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application$legal_terms ADD CONSTRAINT online_application$legal_terms_value_fk FOREIGN KEY(value) 
                 REFERENCES signed_online_application_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE online_application_legal_term ADD CONSTRAINT online_application_legal_term_policy_fk FOREIGN KEY(policy) 
-                REFERENCES online_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE online_application_wizard_step_status ADD CONSTRAINT online_application_wizard_step_status_online_application_fk FOREIGN KEY(online_application) 
                 REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE payment_method ADD CONSTRAINT payment_method_signature_fk FOREIGN KEY(signature) REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1524,20 +1596,27 @@ BEGIN
                 REFERENCES proof_of_employment_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE proof_of_employment_document_folder ADD CONSTRAINT proof_of_employment_document_folder_owner_fk FOREIGN KEY(owner) 
                 REFERENCES customer_screening_income(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE signed_agreement_confirmation_term ADD CONSTRAINT signed_agreement_confirmation_term_signature_fk FOREIGN KEY(signature) 
+                REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE signed_agreement_confirmation_term ADD CONSTRAINT signed_agreement_confirmation_term_term_fk FOREIGN KEY(term) 
+                REFERENCES lease_agreement_confirmation_term(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE signed_agreement_legal_term ADD CONSTRAINT signed_agreement_legal_term_signature_fk FOREIGN KEY(signature) 
+                REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE signed_agreement_legal_term ADD CONSTRAINT signed_agreement_legal_term_term_fk FOREIGN KEY(term) 
+                REFERENCES lease_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE signed_online_application_confirmation_term ADD CONSTRAINT signed_online_application_confirmation_term_signature_fk FOREIGN KEY(signature) 
+                REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE signed_online_application_confirmation_term ADD CONSTRAINT signed_online_application_confirmation_term_term_fk FOREIGN KEY(term) 
+                REFERENCES lease_application_confirmation_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE signed_online_application_legal_term ADD CONSTRAINT signed_online_application_legal_term_signature_fk FOREIGN KEY(signature) 
                 REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE signed_online_application_legal_term ADD CONSTRAINT signed_online_application_legal_term_term_fk FOREIGN KEY(term) 
-                REFERENCES online_application_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;  
+                REFERENCES lease_application_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
+
                 
                 
         -- check constraints
         
-        ALTER TABLE agreement_confirmation_term ADD CONSTRAINT agreement_confirmation_term_signature_format_e_ck 
-                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
-        ALTER TABLE agreement_legal_policy ADD CONSTRAINT agreement_legal_policy_node_discriminator_d_ck 
-                CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
-        ALTER TABLE agreement_legal_term ADD CONSTRAINT agreement_legal_term_signature_format_e_ck 
-                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_id_discriminator_ck CHECK ((id_discriminator) IN ('Digital', 'Ink'));
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_tenant_discriminator_d_ck CHECK (lease_term_tenant_discriminator = 'Tenant');
         ALTER TABLE application_documentation_policy ADD CONSTRAINT application_documentation_policy_node_discriminator_d_ck 
@@ -1572,6 +1651,9 @@ BEGIN
         ALTER TABLE ilsemail_config ADD CONSTRAINT ilsemail_config_frequency_e_ck CHECK ((frequency) IN ('daily', 'monthly', 'weekly'));
         ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_certificate_discriminator_d_ck 
                 CHECK ((certificate_discriminator) IN ('InsuranceGeneral', 'InsuranceTenantSure'));
+        ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_apply_to_role_e_ck CHECK ((apply_to_role) IN ('All', 'Applicant', 'Guarantor'));
+        ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_signature_format_e_ck 
+                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE landlord ADD CONSTRAINT landlord_address_street_direction_e_ck 
                 CHECK ((address_street_direction) IN ('east', 'north', 'northEast', 'northWest', 'south', 'southEast', 'southWest', 'west'));
         ALTER TABLE landlord ADD CONSTRAINT landlord_address_street_type_e_ck 
@@ -1581,6 +1663,16 @@ BEGIN
                 'parkway', 'place', 'promenade', 'reserve', 'ridge', 'rise', 'road', 'row', 'square', 'street', 'strip', 'tarn', 'terrace', 'thoroughfaree', 
                 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
         ALTER TABLE lease_adjustment_policy ADD CONSTRAINT lease_adjustment_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE lease_agreement_confirmation_term ADD CONSTRAINT lease_agreement_confirmation_term_signature_format_e_ck 
+                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
+        ALTER TABLE lease_agreement_legal_policy ADD CONSTRAINT lease_agreement_legal_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE lease_agreement_legal_term ADD CONSTRAINT lease_agreement_legal_term_signature_format_e_ck 
+                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
+        ALTER TABLE lease_application_confirmation_term ADD CONSTRAINT lease_application_confirmation_term_signature_format_e_ck 
+                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
+        ALTER TABLE lease_application_legal_policy ADD CONSTRAINT lease_application_legal_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE lease_billing_policy ADD CONSTRAINT lease_billing_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
@@ -1614,11 +1706,6 @@ BEGIN
                 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 
                 'YardiInterfacePolicy', 'feature', 'service'));
         ALTER TABLE online_application ADD CONSTRAINT online_application_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
-        ALTER TABLE online_application_legal_policy ADD CONSTRAINT online_application_legal_policy_node_discriminator_d_ck 
-                CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
-        ALTER TABLE online_application_legal_term ADD CONSTRAINT online_application_legal_term_apply_to_role_e_ck CHECK ((apply_to_role) IN ('All', 'Applicant', 'Guarantor'));
-        ALTER TABLE online_application_legal_term ADD CONSTRAINT online_application_legal_term_signature_format_e_ck 
-                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE online_application_wizard_step_status ADD CONSTRAINT online_application_wizard_step_status_step_e_ck 
                 CHECK ((step) IN ('AboutYou', 'AdditionalInfo', 'Confirmation', 'Contacts', 'Financial', 'Lease', 'Legal', 'Options', 
                 'Payment', 'People', 'Summary', 'Unit'));
@@ -1665,6 +1752,7 @@ BEGIN
         
         CREATE INDEX agreement_signatures$legal_terms_signatures_owner_idx ON agreement_signatures$legal_terms_signatures USING btree (owner);
         CREATE INDEX ilsprofile_email_building_idx ON ilsprofile_email USING btree (building);
+        CREATE INDEX lease_term_v$agreement_confirmation_term_owner_idx ON lease_term_v$agreement_confirmation_term USING btree (owner);
         CREATE INDEX lease_term_v$agreement_legal_terms_owner_idx ON lease_term_v$agreement_legal_terms USING btree (owner);
         CREATE INDEX lease_term_v$utilities_owner_idx ON lease_term_v$utilities USING btree (owner);
         CREATE INDEX online_application$confirmation_terms_owner_idx ON online_application$confirmation_terms USING btree (owner);

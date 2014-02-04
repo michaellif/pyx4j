@@ -60,10 +60,8 @@ BEGIN TRANSACTION;
         DROP SEQUENCE tenant_charge_seq;
 
         -- New sequences
-        CREATE SEQUENCE agreement_confirmation_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        CREATE SEQUENCE agreement_legal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        CREATE SEQUENCE agreement_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        CREATE SEQUENCE agreement_legal_term_signature_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        
+        
         CREATE SEQUENCE agreement_signatures$legal_terms_signatures_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_signatures_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE community_event_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -80,6 +78,13 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE landlord_media_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE landlord_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE legal_status_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE lease_agreement_confirmation_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE lease_agreement_legal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE lease_agreement_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE lease_application_confirmation_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE lease_application_legal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE lease_application_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE lease_term_v$agreement_confirmation_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE lease_term_agreement_document_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE lease_term_agreement_document_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE lease_term_v$agreement_legal_terms_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -91,8 +96,6 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE maintenance_request_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE note_attachment_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application$legal_terms_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        CREATE SEQUENCE online_application_legal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        CREATE SEQUENCE online_application_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application$confirmation_terms_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         -- CREATE SEQUENCE online_application$steps_statuses_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application_wizard_step_status_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -104,13 +107,13 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE proof_of_employment_document_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE proof_of_employment_document_folder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE prospect_portal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE signed_agreement_confirmation_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE signed_agreement_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE signed_online_application_confirmation_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE signed_online_application_legal_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
         -- Change owner to vista
-        ALTER SEQUENCE agreement_confirmation_term_seq OWNER TO vista ;
-        ALTER SEQUENCE agreement_legal_policy_seq OWNER TO vista ;
-        ALTER SEQUENCE agreement_legal_term_seq OWNER TO vista ;
-        ALTER SEQUENCE agreement_legal_term_signature_seq OWNER TO vista ;
+        
         ALTER SEQUENCE agreement_signatures$legal_terms_signatures_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_signatures_seq OWNER TO vista ;
         ALTER SEQUENCE community_event_seq OWNER TO vista ;
@@ -135,6 +138,13 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE landlord_media_seq OWNER TO vista ;
         ALTER SEQUENCE landlord_seq OWNER TO vista ;
         ALTER SEQUENCE legal_status_seq OWNER TO vista ;
+        ALTER SEQUENCE lease_agreement_confirmation_term_seq OWNER TO vista ;
+        ALTER SEQUENCE lease_agreement_legal_policy_seq OWNER TO vista ;
+        ALTER SEQUENCE lease_agreement_legal_term_seq OWNER TO vista ;
+        ALTER SEQUENCE lease_application_confirmation_term_seq OWNER TO vista ;
+        ALTER SEQUENCE lease_application_legal_policy_seq OWNER TO vista ;
+        ALTER SEQUENCE lease_application_legal_term_seq OWNER TO vista ;
+        ALTER SEQUENCE lease_term_v$agreement_confirmation_term_seq OWNER TO vista ;
         ALTER SEQUENCE lease_term_agreement_document_blob_seq OWNER TO vista ;
         ALTER SEQUENCE lease_term_agreement_document_seq OWNER TO vista ;
         ALTER SEQUENCE lease_term_v$agreement_legal_terms_seq OWNER TO vista ;
@@ -148,8 +158,6 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE note_attachment_seq OWNER TO vista ;
         ALTER SEQUENCE online_application$confirmation_terms_seq OWNER TO vista ;
         ALTER SEQUENCE online_application$legal_terms_seq OWNER TO vista ;
-        ALTER SEQUENCE online_application_legal_policy_seq OWNER TO vista ;
-        ALTER SEQUENCE online_application_legal_term_seq OWNER TO vista ;
         -- ALTER SEQUENCE online_application$steps_statuses_seq OWNER TO vista ;
         ALTER SEQUENCE online_application_wizard_step_status_seq OWNER TO vista ;
         ALTER SEQUENCE payment_posting_batch_seq OWNER TO vista ;
@@ -160,6 +168,9 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE proof_of_employment_document_file_seq OWNER TO vista ;
         ALTER SEQUENCE proof_of_employment_document_folder_seq OWNER TO vista ;
         ALTER SEQUENCE prospect_portal_policy_seq OWNER TO vista ;
+        ALTER SEQUENCE signed_agreement_confirmation_term_seq OWNER TO vista ;
+        ALTER SEQUENCE signed_agreement_legal_term_seq OWNER TO vista ;
+        ALTER SEQUENCE signed_online_application_confirmation_term_seq OWNER TO vista ;
         ALTER SEQUENCE signed_online_application_legal_term_seq OWNER TO vista ;
 
        
