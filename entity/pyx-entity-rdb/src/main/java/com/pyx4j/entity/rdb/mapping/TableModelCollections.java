@@ -189,7 +189,7 @@ public class TableModelCollections {
                     parameterIndex++;
                 }
                 if (PersistenceTrace.trace) {
-                    log.info(Trace.id() + "insert {} (" + entity.getPrimaryKey() + ", " + value + ", " + seq + ")", member.sqlName());
+                    log.info("{}insert {} ({}, {}, {})", Trace.id(), member.sqlName(), entity.getPrimaryKey(), value, seq);
                 }
                 persistenceContext.setUncommittedChanges();
                 stmt.executeUpdate();
