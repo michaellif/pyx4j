@@ -74,5 +74,4 @@ public interface OnlineApplicationDTO extends IEntity {
 
     PaymentDTO payment();
 
-    IPrimitive<Status> status();
 }

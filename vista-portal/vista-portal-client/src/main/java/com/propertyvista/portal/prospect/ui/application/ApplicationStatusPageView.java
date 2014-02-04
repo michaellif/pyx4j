@@ -14,11 +14,14 @@
 package com.propertyvista.portal.prospect.ui.application;
 
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 import com.propertyvista.portal.shared.ui.IViewerView;
 
 public interface ApplicationStatusPageView extends IViewerView<MasterOnlineApplicationStatus> {
 
     public interface ApplicationStatusPagePresenter extends IViewerPresenter<MasterOnlineApplicationStatus> {
+
+        public OnlineApplicationStatus getUserApplicationStatus();
 
     }
 

@@ -109,7 +109,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease().unit().floorplan(), AttachLevel.Attached);
 
         OnlineApplicationDTO to = EntityFactory.create(OnlineApplicationDTO.class);
-        to.status().setValue(bo.status().getValue()); // propagate application status
 
         loadRestrictions(bo, to);
 

@@ -18,12 +18,17 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.ui.application.ApplicationStatusPageView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationStatusPageView.ApplicationStatusPagePresenter;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
@@ -31,21 +36,29 @@ public class ApplicationStatusPageActivity extends SecurityAwareActivity impleme
 
     private final ApplicationStatusPageView view;
 
+    private MasterOnlineApplicationStatus masterAppStatus;
+
     public ApplicationStatusPageActivity(AppPlace place) {
         this.view = ProspectPortalSite.getViewFactory().getView(ApplicationStatusPageView.class);
         this.view.setPresenter(this);
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
-        panel.setWidget(view);
 
         GWT.<ApplicationStatusService> create(ApplicationStatusService.class).retrieveMasterApplicationStatus(
                 new DefaultAsyncCallback<MasterOnlineApplicationStatus>() {
                     @Override
                     public void onSuccess(MasterOnlineApplicationStatus result) {
-                        view.populate(result);
+                        masterAppStatus = result;
+
+                        if (getUserApplicationStatus().status().getValue() == OnlineApplication.Status.Invited) {
+                            AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.Application());
+                        } else {
+                            panel.setWidget(view);
+                            view.populate(result);
+                        }
                     }
                 });
     }
@@ -58,5 +71,16 @@ public class ApplicationStatusPageActivity extends SecurityAwareActivity impleme
     @Override
     public void onStop() {
         onCancel();
+    }
+
+    @Override
+    public OnlineApplicationStatus getUserApplicationStatus() {
+
+        for (OnlineApplicationStatus appStatus : masterAppStatus.individualApplications()) {
+            if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(appStatus.customer().user().getPrimaryKey())) {
+                return appStatus;
+            }
+        }
+        throw new Error("Application is not found");
     }
 }

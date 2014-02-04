@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
@@ -99,7 +98,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
             switch (masterAppStatus.status().getValue()) {
             case Incomplete:
 
-                OnlineApplicationStatus userAppStatus = getUserApplicationStatus(masterAppStatus);
+                OnlineApplicationStatus userAppStatus = presenter.getUserApplicationStatus();
 
                 switch (userAppStatus.status().getValue()) {
                 case Incomplete:
@@ -146,16 +145,6 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
     @Override
     public void reset() {
         progressGadget.reset();
-    }
-
-    private OnlineApplicationStatus getUserApplicationStatus(MasterOnlineApplicationStatus masterAppStatus) {
-
-        for (OnlineApplicationStatus appStatus : masterAppStatus.individualApplications()) {
-            if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(appStatus.customer().user().getPrimaryKey())) {
-                return appStatus;
-            }
-        }
-        throw new Error("Application is not found");
     }
 
     class ApplicationStatusGadget extends AbstractGadget<ApplicationStatusPageViewImpl> {
