@@ -109,6 +109,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease().unit().floorplan(), AttachLevel.Attached);
 
         OnlineApplicationDTO to = EntityFactory.create(OnlineApplicationDTO.class);
+        to.status().setValue(bo.status().getValue()); // propagate application status
 
         loadRestrictions(bo, to);
 
@@ -770,6 +771,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 savePaymentData(bo, to);
             }
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(bo);
+        } else {
+            // update application status:
+            bo.status().setValue(OnlineApplication.Status.Incomplete);
+            Persistence.service().merge(bo);
         }
     }
 
