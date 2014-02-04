@@ -107,7 +107,6 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         });
 
         get(proto().customer().person().sex()).setMandatory(!VistaFeatures.instance().yardiIntegration());
-        get(proto().customer().person().birthDate()).setMandatory(!VistaFeatures.instance().yardiIntegration());
     }
 
     private TwoColumnFlexFormPanel createContactsTab(String title) {

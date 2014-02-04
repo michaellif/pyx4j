@@ -96,6 +96,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 throw new IllegalArgumentException();
             }
             ClientPolicyManager.setIdComponentEditabilityByPolicy(idTarget, get(proto().participantId()), getValue().getPrimaryKey());
+
+            get(proto().customer().person().birthDate()).setMandatory(!getValue().ageOfMajority().isNull());
         } else {
             get(proto().customer().personScreening()).setVisible(getValue().customer().personScreening().getPrimaryKey() != null);
         }
@@ -109,20 +111,18 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     @Override
     public void addValidations() {
         get(proto().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
-                @Override
-                public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                    if (value != null && !getValue().ageOfMajority().isNull()) {
-                        if (!TimeUtils.isOlderThan(value, getValue().ageOfMajority().getValue())) {
-                            return new ValidationError(component, i18n.tr("This lease participant is too young: the minimum age required is {0}.", getValue()
-                                    .ageOfMajority().getValue()));
-                        }
+        get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+            @Override
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                if (value != null && !getValue().ageOfMajority().isNull()) {
+                    if (!TimeUtils.isOlderThan(value, getValue().ageOfMajority().getValue())) {
+                        return new ValidationError(component, i18n.tr("This lease participant is too young: the minimum age required is {0}.", getValue()
+                                .ageOfMajority().getValue()));
                     }
-                    return null;
                 }
-            });
-        }
+                return null;
+            }
+        });
     }
 
     protected TwoColumnFlexFormPanel createDetailsTab(String title) {

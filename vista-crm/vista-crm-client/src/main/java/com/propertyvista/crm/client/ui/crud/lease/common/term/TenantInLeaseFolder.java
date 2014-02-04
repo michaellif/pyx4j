@@ -251,6 +251,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                             .getPrimaryKey());
                 }
 
+                get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(getEnforceAgeOfMajority());
                 get(proto().leaseParticipant().customer().person().email()).setMandatory(!getValue().leaseParticipant().customer().user().isNull());
 
                 if (get(proto().role()) instanceof CComboBox) {
@@ -265,7 +266,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             super.addValidations();
 
             get(proto().leaseParticipant().customer().person().sex()).setMandatory(!VistaFeatures.instance().yardiIntegration());
-            get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(!VistaFeatures.instance().yardiIntegration());
             get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
             get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
 
