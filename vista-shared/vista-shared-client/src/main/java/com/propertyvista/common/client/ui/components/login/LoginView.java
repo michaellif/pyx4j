@@ -25,8 +25,6 @@ public interface LoginView extends IsView {
 
     interface DevLoginCredentials {
 
-        int getHotKey();
-
         DemoData.UserType getUserType();
 
     }

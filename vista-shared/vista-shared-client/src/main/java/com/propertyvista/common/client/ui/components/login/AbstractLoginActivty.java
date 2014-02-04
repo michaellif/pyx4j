@@ -44,18 +44,10 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
 
     public static class DevLoginCredentialsImpl implements LoginView.DevLoginCredentials {
 
-        private final int shortcut;
-
         private final DemoData.UserType user;
 
-        public DevLoginCredentialsImpl(DemoData.UserType user, char shortcut) {
+        public DevLoginCredentialsImpl(DemoData.UserType user) {
             this.user = user;
-            this.shortcut = shortcut;
-        }
-
-        @Override
-        public int getHotKey() {
-            return shortcut;
         }
 
         @Override
