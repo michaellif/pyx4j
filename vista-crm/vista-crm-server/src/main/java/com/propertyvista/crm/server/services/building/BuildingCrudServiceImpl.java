@@ -77,6 +77,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         entity.suspended().setValue(false);
         entity.marketing().visibility().setValue(PublicVisibilityType.global);
         entity.defaultProductCatalog().setValue(true);
+        entity.ilsEmailConfigured().setValue(Persistence.service().count(EntityQueryCriteria.create(ILSEmailConfig.class)) > 0);
 
         return entity;
     }
@@ -327,7 +328,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building buildingId) {
+    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback) {
         // find configured vendors
         Vector<ILSVendor> vendors = new Vector<ILSVendor>();
         ILSConfig config = Persistence.service().retrieve(EntityQueryCriteria.create(ILSConfig.class));

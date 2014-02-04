@@ -77,7 +77,6 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -562,7 +561,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                         }
                     }.show();
                 }
-            }, EntityFactory.createIdentityStub(Building.class, BuildingForm.this.getValue().getPrimaryKey()));
+            });
         }
 
         private class ILSProfileBuildingEditor extends CEntityForm<ILSProfileBuilding> {

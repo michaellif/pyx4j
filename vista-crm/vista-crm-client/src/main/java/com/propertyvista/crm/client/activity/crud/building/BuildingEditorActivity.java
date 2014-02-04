@@ -26,15 +26,13 @@ import com.propertyvista.crm.client.ui.crud.building.BuildingEditorView;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingEditorActivity extends CrmEditorActivity<BuildingDTO> implements BuildingEditorView.Presenter {
 
     public BuildingEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(BuildingEditorView.class), GWT.<BuildingCrudService> create(BuildingCrudService.class),
-                BuildingDTO.class);
+        super(place, CrmSite.getViewFactory().getView(BuildingEditorView.class), GWT.<BuildingCrudService> create(BuildingCrudService.class), BuildingDTO.class);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class BuildingEditorActivity extends CrmEditorActivity<BuildingDTO> imple
     }
 
     @Override
-    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building buildingId) {
-        ((BuildingCrudService) getService()).getILSVendors(callback, buildingId);
+    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback) {
+        ((BuildingCrudService) getService()).getILSVendors(callback);
     }
 }

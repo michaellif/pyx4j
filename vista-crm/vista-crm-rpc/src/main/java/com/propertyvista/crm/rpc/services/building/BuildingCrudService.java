@@ -34,5 +34,5 @@ public interface BuildingCrudService extends AbstractCrudService<BuildingDTO> {
 
     void updateFromYardi(AsyncCallback<VoidSerializable> callback, Building buildingId);
 
-    void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building buildingId);
+    void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback);
 }
