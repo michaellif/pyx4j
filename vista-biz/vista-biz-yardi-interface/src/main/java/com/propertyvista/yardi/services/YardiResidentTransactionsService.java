@@ -209,6 +209,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     public void updateLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+        // Each DB update function called in this method should be UnitOfWork, Unable to wrap here because for dual exception thrown.
+        //This transaction should not update Lease, only in child unit of work
+
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
         final Key yardiInterfaceId = yc.getPrimaryKey();
         String propertyCode = lease.unit().building().propertyCode().getValue();
@@ -227,19 +230,19 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
         } catch (YardiResidentNoTenantsExistException e) {
             log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
-            new YardiLeaseProcessor().expireLeaseProducts(lease);
+            terminateLeaseCharges(lease, null);
         }
         if (leaseCharges != null) {
-            Lease processed = null;
+            boolean processed = false;
             // we should just get one element in the list for the requested leaseId
             for (Property property : leaseCharges.getProperty()) {
                 for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                    processed = importLeaseCharges(yardiInterfaceId, propertyCode, rtCustomer, null);
+                    processed |= importLeaseCharges(yardiInterfaceId, propertyCode, rtCustomer, null);
                 }
             }
             // handle non-processed lease
-            if (processed == null) {
-                new YardiLeaseProcessor().expireLeaseProducts(lease);
+            if (!processed) {
+                terminateLeaseCharges(lease, null);
             }
         }
     }
@@ -650,12 +653,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    private Lease importLeaseCharges(Key yardiInterfaceId, final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor)
+    private boolean importLeaseCharges(Key yardiInterfaceId, final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor)
             throws YardiServiceException {
         // make sure we have received any transactions
         if (rtCustomer.getRTServiceTransactions().getTransactions().size() == 0) {
             log.info("No Lease Charges received for property: ", propertyCode);
-            return null;
+            return false;
         }
         // grab customerId from the first available ChargeDetail element
         String customerId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
@@ -674,7 +677,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         });
 
-        return lease;
+        return true;
     }
 
     // create new term with no features and set service charge = 0
