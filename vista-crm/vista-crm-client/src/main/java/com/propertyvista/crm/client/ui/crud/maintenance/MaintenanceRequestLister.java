@@ -65,7 +65,7 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().submitted(), false), new Sort(proto().updated(), false));
+        return Arrays.asList(new Sort(proto().submitted(), true), new Sort(proto().updated(), false));
     }
 
     private static ColumnDescriptor createCategoryColumn(MaintenanceRequestDTO proto) {
