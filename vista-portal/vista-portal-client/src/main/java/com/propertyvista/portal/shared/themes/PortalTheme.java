@@ -430,6 +430,10 @@ public class PortalTheme extends Theme {
         style.addProperty("margin-right", "40px");
         addStyle(style);
 
+        style = new Style("li");
+        style.addProperty("list-style-position", "inside");
+        addStyle(style);
+
         style = new Style(".", DefaultWidgetsTheme.StyleName.DropDownPanel);
         style.addProperty("z-index", "20");
         addStyle(style);

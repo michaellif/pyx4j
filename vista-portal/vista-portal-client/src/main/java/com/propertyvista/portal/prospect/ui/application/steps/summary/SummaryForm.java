@@ -95,7 +95,7 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         for (AbstractSectionPanel section : sections) {
-            section.updateState();
+            section.onValueSet();
         }
 
     }

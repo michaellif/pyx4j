@@ -14,6 +14,7 @@
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
@@ -26,6 +27,7 @@ import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
@@ -44,6 +46,8 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
 
     private final OnlineApplicationDTO entityPrototype;
 
+    private final HTML errorMessageBar;
+
     private int row = -1;
 
     public AbstractSectionPanel(int index, String caption, SummaryForm form, ApplicationWizardStep step) {
@@ -60,13 +64,20 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         mainPanel.setWidth("100%");
         setWidget(mainPanel);
         mainPanel.add(captionBar);
+
+        errorMessageBar = new HTML();
+        errorMessageBar.setStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        mainPanel.add(errorMessageBar);
+
         mainPanel.add(contentPanel);
 
         addToggleHandler(new ToggleHandler() {
 
             @Override
             public void onToggle(ToggleEvent event) {
+                errorMessageBar.setVisible(event.isToggleOn());
                 contentPanel.setVisible(event.isToggleOn());
+
             }
         });
 
@@ -93,10 +104,11 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         return entityPrototype;
     }
 
-    public void updateState() {
+    public void onValueSet() {
 
         captionBar.updateState();
 
+        errorMessageBar.setHTML(step.getValidationResults().getValidationMessage(true, true, false));
     }
 
     class SectionCaptionBar extends FlowPanel {
