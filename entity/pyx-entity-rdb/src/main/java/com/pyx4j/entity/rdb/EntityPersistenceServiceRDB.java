@@ -637,7 +637,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private void insert(TableModel tm, IEntity entity) {
         if (PersistenceTrace.trace) {
-            log.info(Trace.enter() + "insert {}", tm.getTableName());
+            log.info("{}{}insert {}", Trace.enter(), getPersistenceContext().txId(), tm.getTableName());
         }
         if (PersistenceTrace.traceEntity) {
             if (traceEntityFilter(entity)) {
@@ -733,14 +733,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
         } finally {
             if (PersistenceTrace.trace) {
-                log.info(Trace.returns() + "insert {}", tm.getTableName());
+                log.info("{}{}insert {}", Trace.returns(), getPersistenceContext().txId(), tm.getTableName());
             }
         }
     }
 
     private boolean update(TableModel tm, IEntity entity, boolean doMerge) {
         if (PersistenceTrace.trace) {
-            log.info(Trace.enter() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
+            log.info("{}{}update {} id={}", Trace.enter(), getPersistenceContext().txId(), tm.getTableName(), entity.getPrimaryKey());
         }
         if (PersistenceTrace.traceEntity) {
             if (traceEntityFilter(entity)) {
@@ -817,7 +817,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             return updated;
         } finally {
             if (PersistenceTrace.trace) {
-                log.info(Trace.returns() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
+                log.info("{}{}update {} id={}", Trace.enter(), getPersistenceContext().txId(), tm.getTableName(), entity.getPrimaryKey());
             }
         }
     }
@@ -1800,7 +1800,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private <T extends IEntity> void cascadeDelete(EntityMeta entityMeta, Key primaryKey) {
         if (PersistenceTrace.trace) {
-            log.info(Trace.enter() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
+            log.info("{}{}cascadeDelete {} id={}", Trace.enter(), getPersistenceContext().txId(), entityMeta.getPersistenceName(), primaryKey);
         }
         try {
             TableModel tm = tableModel(entityMeta);
@@ -1876,7 +1876,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         } finally {
             if (PersistenceTrace.trace) {
-                log.info(Trace.returns() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
+                log.info("{}{}cascadeDelete {} id={}", Trace.returns(), getPersistenceContext().txId(), entityMeta.getPersistenceName(), primaryKey);
             }
         }
     }
