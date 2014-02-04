@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -31,6 +32,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -139,6 +141,12 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
     @Override
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().leaseId(), false));
+    }
+
+    @Override
+    protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
+        criteria.in(criteria.proto().status(), Lease.Status.present());
+        return super.updateCriteria(criteria);
     }
 
     public void onPadFileUpload() {

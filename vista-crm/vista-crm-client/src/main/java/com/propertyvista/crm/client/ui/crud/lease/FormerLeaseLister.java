@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -66,8 +65,7 @@ public class FormerLeaseLister extends AbstractLister<LeaseDTO> {
 
     @Override
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
-        // TODO : set all that stuff in Activity (like TenantListers) or CRUD service ?
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.former()));
+        criteria.in(criteria.proto().status(), Lease.Status.former());
         return super.updateCriteria(criteria);
     }
 }

@@ -31,7 +31,5 @@ public class ActiveTenantCrudServiceImpl extends TenantCrudServiceImpl implement
         dbCriteria.eq(dbCriteria.proto().leaseTermParticipants().$().leaseTermV().holder(), dbCriteria.proto().lease().currentTerm());
         // and finalized e.g. last only:
         dbCriteria.isCurrent(dbCriteria.proto().leaseTermParticipants().$().leaseTermV());
-
     }
-
 }

@@ -16,8 +16,8 @@ package com.propertyvista.crm.server.services.customer;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class ActiveGuarantorCrudServiceImpl extends GuarantorCrudServiceImpl implements ActiveGuarantorCrudService {
@@ -32,5 +32,4 @@ public class ActiveGuarantorCrudServiceImpl extends GuarantorCrudServiceImpl imp
         // and finalized e.g. last only:
         dbCriteria.isCurrent(dbCriteria.proto().leaseTermParticipants().$().leaseTermV());
     }
-
 }

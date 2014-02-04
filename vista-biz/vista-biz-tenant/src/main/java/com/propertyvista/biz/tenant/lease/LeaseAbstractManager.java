@@ -67,8 +67,8 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
-import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
+import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -292,10 +292,10 @@ public abstract class LeaseAbstractManager {
         Lease lease = load(leaseId, false);
 
         // Verify the status
-        if (!Lease.Status.draft().contains(lease.status().getValue())) {
+        if (!lease.status().getValue().isDraft()) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
-        if (LeaseApplication.Status.Created != lease.leaseApplication().status().getValue()) {
+        if (lease.leaseApplication().status().getValue() != LeaseApplication.Status.Created) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Application Status (\"{0}\")", lease.leaseApplication().status().getValue()));
         }
 
@@ -669,7 +669,7 @@ public abstract class LeaseAbstractManager {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         // Verify the status
-        if (!(lease.status().getValue().isDraft() || lease.status().getValue() == Status.Approved)) {
+        if (!lease.status().getValue().isDraft() && lease.status().getValue() != Status.Approved) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
@@ -811,7 +811,7 @@ public abstract class LeaseAbstractManager {
         leaseTerm.version().leaseProducts().serviceItem().set(billableItem);
 
         if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
-            if (!Lease.Status.draft().contains(lease.status().getValue())) {
+            if (!lease.status().getValue().isDraft()) {
                 throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
 // TODO - review deposits lifecycle management!

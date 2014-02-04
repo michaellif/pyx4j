@@ -42,5 +42,4 @@ public class FormerTenantCrudServiceImpl extends TenantCrudServiceImpl implement
         or.right().ne(dbCriteria.proto().lease().status(), Lease.Status.Application);
         or.right().ne(dbCriteria.proto().lease().status(), Lease.Status.ExistingLease);
     }
-
 }

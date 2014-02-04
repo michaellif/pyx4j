@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -26,9 +25,8 @@ import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorListerActivity extends AbstractListerActivity<GuarantorDTO> {
 
-    @SuppressWarnings("unchecked")
     public GuarantorListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().getView(GuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(ActiveGuarantorCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(GuarantorListerView.class), GWT.<ActiveGuarantorCrudService> create(ActiveGuarantorCrudService.class),
                 GuarantorDTO.class);
     }
 

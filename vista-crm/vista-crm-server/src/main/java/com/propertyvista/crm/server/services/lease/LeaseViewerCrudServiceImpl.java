@@ -80,8 +80,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         }
 
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
-
-        dbCriteria.in(dbCriteria.proto().status(), Lease.Status.present());
     }
 
     @Override

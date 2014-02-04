@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.lease;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -26,9 +25,8 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class FormerLeaseListerActivity extends AbstractListerActivity<LeaseDTO> {
 
-    @SuppressWarnings("unchecked")
     public FormerLeaseListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().getView(FormerLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(FormerLeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class),
                 LeaseDTO.class);
     }
 }

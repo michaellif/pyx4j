@@ -13,9 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.TenantDTO;
+
 public class PotentialTenantLister extends TenantLister {
 
     public PotentialTenantLister() {
         super(false);
+    }
+
+    @Override
+    protected EntityListCriteria<TenantDTO> updateCriteria(EntityListCriteria<TenantDTO> criteria) {
+        criteria.in(criteria.proto().lease().status(), Lease.Status.draft());
+        return super.updateCriteria(criteria);
     }
 }
