@@ -38,7 +38,7 @@ public class NotificationsUtils {
 
     public static List<Employee> getNotificationTraget(Lease leaseId, Notification.NotificationType notificationType) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$()._Leases(), leaseId);
+        criteria.eq(criteria.proto().units().$().leases(), leaseId);
         return getNotificationTraget(Persistence.service().retrieve(criteria, AttachLevel.IdOnly), notificationType);
     }
 

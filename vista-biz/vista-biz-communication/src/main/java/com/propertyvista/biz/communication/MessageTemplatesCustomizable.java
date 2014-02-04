@@ -86,13 +86,13 @@ class MessageTemplatesCustomizable {
 
     static EmailTemplate getEmailTemplate(EmailTemplateType type, BillingAccount billingAccountId) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccountId);
+        criteria.eq(criteria.proto().units().$().leases().$().billingAccount(), billingAccountId);
         return getEmailTemplate(type, Persistence.service().retrieve(criteria, AttachLevel.IdOnly));
     }
 
     static EmailTemplate getEmailTemplate(EmailTemplateType type, Lease leaseId) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$()._Leases(), leaseId);
+        criteria.eq(criteria.proto().units().$().leases(), leaseId);
         return getEmailTemplate(type, Persistence.service().retrieve(criteria, AttachLevel.IdOnly));
     }
 

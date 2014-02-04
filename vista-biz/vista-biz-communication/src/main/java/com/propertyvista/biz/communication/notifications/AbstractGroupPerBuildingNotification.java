@@ -34,7 +34,7 @@ public abstract class AbstractGroupPerBuildingNotification extends AbstractNotif
         this.leaseIds.add(leaseId);
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$()._Leases(), leaseId);
+        criteria.eq(criteria.proto().units().$().leases(), leaseId);
         buildingId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
     }
 

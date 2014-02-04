@@ -15,6 +15,7 @@ package com.propertyvista.biz.policy;
 
 import java.util.List;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -39,8 +40,10 @@ public class PolicyFacadeImpl implements PolicyFacade {
         // Special case for not business owned
         if (entity instanceof CustomerScreening) {
             // TODO Find  LeaseTerm that have application
+            Persistence.ensureRetrieve(((CustomerScreening) entity).screene(), AttachLevel.IdOnly);
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().leaseParticipants().$().customer().personScreening(), entity));
+            criteria.add(PropertyCriterion.eq(criteria.proto().units().$().leases().$().leaseParticipants().$().customer(),
+                    ((CustomerScreening) entity).screene()));
 // TODO VladS : (DEV:)Sort by collections is unsupported, Throwable class java.lang.Error
 //            criteria.desc(criteria.proto().units().$()._Leases().$().updated());
             node = Persistence.service().retrieve(criteria);

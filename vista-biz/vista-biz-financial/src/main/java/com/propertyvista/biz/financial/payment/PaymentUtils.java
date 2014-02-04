@@ -59,7 +59,7 @@ class PaymentUtils {
     public static boolean isPaymentsAllowed(BillingAccount billingAccountId) {
         if (PaymentRecord.merchantAccountIsRequedForPayments) {
             EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
+            criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
             return Persistence.service().retrieve(criteria) != null;
         } else {
             return true;
@@ -74,7 +74,7 @@ class PaymentUtils {
 
     public static boolean isElectronicPaymentsSetup(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
         return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
@@ -105,7 +105,7 @@ class PaymentUtils {
 
     public static ElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
         MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
         return getEffectiveElectronicPaymentsSetup(merchantAccount);
     }
@@ -119,19 +119,19 @@ class PaymentUtils {
 
     public static boolean isElectronicPaymentsSetup(Lease leaseId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases(), leaseId));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases(), leaseId));
         return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
     public static boolean isElectronicPaymentsSetup(LeaseTerm leaseTermId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().leaseTerms(), leaseTermId));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().leaseTerms(), leaseTermId));
         return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
     static MerchantAccount retrieveMerchantAccount(PaymentRecord paymentRecord) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), paymentRecord.billingAccount()));
         return Persistence.service().retrieve(criteria);
     }
 
@@ -143,7 +143,7 @@ class PaymentUtils {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.eq(criteria.proto().invalid(), Boolean.FALSE);
         criteria.eq(criteria.proto().status(), MerchantAccountActivationStatus.Active);
-        criteria.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId);
+        criteria.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId);
         for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
             if (!merchantAccount.merchantTerminalId().isNull()) {
                 return merchantAccount;
@@ -165,7 +165,7 @@ class PaymentUtils {
             PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
             {
                 EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccountId));
+                criteria.add(PropertyCriterion.eq(criteria.proto().units().$().leases().$().billingAccount(), billingAccountId));
                 Building policyNode = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
                 paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, PaymentTypeSelectionPolicy.class);
             }
@@ -220,7 +220,7 @@ class PaymentUtils {
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._Leases().$().billingAccount(), billingAccountId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().leases().$().billingAccount(), billingAccountId));
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }
@@ -247,7 +247,7 @@ class PaymentUtils {
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._Leases().$().billingAccount(), billingAccountId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().leases().$().billingAccount(), billingAccountId));
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }

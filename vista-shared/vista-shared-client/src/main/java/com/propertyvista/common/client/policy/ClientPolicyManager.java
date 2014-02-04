@@ -26,9 +26,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
-import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientSecurityController;
 
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -115,7 +115,9 @@ public class ClientPolicyManager {
             public void onSuccess(Policy result) {
                 callback.onSuccess((POLICY) result);
             }
-        }, entity.createIdentityStub(), EntityFactory.getEntityPrototype(policyClass));
+            // Note: DO NOT create IdentityStub for supplied entity - newly created (not persisted) ones does not have it!
+            // more over in some cases some entity member data used to retrieve correct policy node (see PolicyFacadeImpl.obtainHierarchicalEffectivePolicy())
+        }, entity/* .createIdentityStub() */, EntityFactory.getEntityPrototype(policyClass));
     }
 
     public static void initialize(PolicyRetrieveService policyRetrieveService) {

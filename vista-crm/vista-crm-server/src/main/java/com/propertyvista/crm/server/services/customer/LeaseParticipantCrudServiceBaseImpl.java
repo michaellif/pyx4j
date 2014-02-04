@@ -117,7 +117,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         }
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().currentTerm().versions(), to.leaseTermV()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().units().$().leases().$().currentTerm().versions(), to.leaseTermV()));
         Building building = Persistence.service().retrieve(criteria);
 
         // save new/edited ones:

@@ -59,7 +59,7 @@ public class ResidentPortalContext extends PortalVistaContext {
 
     public static AptUnit getUnit() {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.eq(criteria.proto()._Leases(), getLeaseIdStub());
+        criteria.eq(criteria.proto().leases(), getLeaseIdStub());
         return Persistence.service().retrieve(criteria);
     }
 

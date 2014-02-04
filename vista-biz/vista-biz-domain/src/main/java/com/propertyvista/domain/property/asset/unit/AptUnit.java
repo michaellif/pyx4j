@@ -101,7 +101,7 @@ public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachm
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = Lease.class)
-    ISet<Lease> _Leases();
+    ISet<Lease> leases();
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = ProductItem.class, mappedBy = ProductItem.BuildingElementColumnId.class)

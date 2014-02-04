@@ -49,7 +49,7 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
         Building building;
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccount));
+            criteria.add(PropertyCriterion.eq(criteria.proto().units().$().leases().$().billingAccount(), billingAccount));
             building = Persistence.service().retrieve(criteria);
         }
 

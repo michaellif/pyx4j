@@ -395,7 +395,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         Building building;
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.eq(criteria.proto().units().$()._Leases().$().leaseApplication().onlineApplication(), app.masterOnlineApplication());
+            criteria.eq(criteria.proto().units().$().leases().$().leaseApplication().onlineApplication(), app.masterOnlineApplication());
             building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
         }
         if (building != null) {
