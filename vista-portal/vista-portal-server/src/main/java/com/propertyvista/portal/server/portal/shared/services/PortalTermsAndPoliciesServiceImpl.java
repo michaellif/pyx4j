@@ -41,16 +41,16 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
     public void getTerm(AsyncCallback<LegalTermTO> callback, TermsAndPoliciesType type) {
         switch (type) {
         case PMCResidentPortalTermsAndConditions:
-            getPMCTerm(getPMCResidentPortalTermsAndConditionsPolicyItem());
+            getPMCTerm(callback, getPMCResidentPortalTermsAndConditionsPolicyItem());
             break;
         case PMCResidentPortalPrivacyPolicy:
-            getPMCTerm(getPMCResidentPortalPrivacyPolicyPolicyItem());
+            getPMCTerm(callback, getPMCResidentPortalPrivacyPolicyPolicyItem());
             break;
         case PMCProspectPortalTermsAndConditions:
-            getPMCTerm(getPMCProspectPortalTermsAndConditionsPolicyItem());
+            getPMCTerm(callback, getPMCProspectPortalTermsAndConditionsPolicyItem());
             break;
         case PMCProspectPortalPrivacyPolicy:
-            getPMCTerm(getPMCProspectPortalPrivacyPolicyPolicyItem());
+            getPMCTerm(callback, getPMCProspectPortalPrivacyPolicyPolicyItem());
             break;
         case PVProspectPortalPrivacyPolicy:
             getVistaTerm(callback, VistaTerms.Target.ProspectPortalPrivacyPolicy);
@@ -80,7 +80,6 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
             getVistaTerm(callback, VistaTerms.Target.TenantSurePreAuthorizedPaymentsAgreement);
             break;
         }
-
     }
 
     @Override
@@ -129,14 +128,14 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
                 Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)), LegalTermsPolicy.class);
     }
 
-    private LegalTermTO getPMCTerm(LegalTermsPolicyItem policyItem) {
+    private void getPMCTerm(AsyncCallback<LegalTermTO> callback, LegalTermsPolicyItem policyItem) {
         LegalTermTO result = null;
         if (policyItem.enabled().isBooleanTrue()) {
             result = EntityFactory.create(LegalTermTO.class);
             result.caption().setValue(policyItem.caption().getValue());
             result.content().setValue(policyItem.content().getValue());
         }
-        return result;
+        callback.onSuccess(result);
     }
 
     private String getPMCTermCaption(LegalTermsPolicyItem policyItem) {
