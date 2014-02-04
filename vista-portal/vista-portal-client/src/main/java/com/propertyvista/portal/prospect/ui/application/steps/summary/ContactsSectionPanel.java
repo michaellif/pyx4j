@@ -13,17 +13,19 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
-import com.pyx4j.i18n.shared.I18n;
-
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.ContactsStep;
+import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
 
 public class ContactsSectionPanel extends AbstractSectionPanel {
 
-    private static final I18n i18n = I18n.get(ContactsSectionPanel.class);
-
     public ContactsSectionPanel(int index, SummaryForm form, ContactsStep step) {
         super(index, OnlineApplicationWizardStepMeta.Contacts.toString(), form, step);
+
+        EmergencyContactFolder emergencyContactFolder = new EmergencyContactFolder();
+        emergencyContactFolder.setViewable(true);
+        addField(proto().applicant().emergencyContacts(), emergencyContactFolder, false);
+
     }
 
 }
