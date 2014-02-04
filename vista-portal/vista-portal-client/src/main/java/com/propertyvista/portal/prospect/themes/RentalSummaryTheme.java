@@ -30,6 +30,7 @@ public class RentalSummaryTheme extends Theme {
         style.addProperty("font-weight", "bolder");
         style.addProperty("font-size", "0.8em");
         style.addProperty("padding-top", "2px");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.RentalSummaryCaption);
