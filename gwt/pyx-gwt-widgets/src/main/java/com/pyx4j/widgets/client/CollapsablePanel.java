@@ -92,7 +92,6 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers {
             return;
         }
         collapseImage.setResource(expended ? images.collapse() : images.expand());
-        collapseImage.getElement().getStyle().setMarginTop(-collapseImage.getHeight() / 2, Unit.PX);
         this.expended = expended;
 
         ToggleEvent.fire(this, expended);

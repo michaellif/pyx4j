@@ -211,7 +211,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @SuppressWarnings("unchecked")
     protected void calculateActionsState() {
-        boolean enabled = getParent().isEnabled() && getParent().isEditable();
+        boolean enabled = getParent().isEnabled() && getParent().isEditable() && !getParent().isViewable();
         if (!enabled) {
             actionsBar.setDefaultActionsState(false, false, false);
         } else {

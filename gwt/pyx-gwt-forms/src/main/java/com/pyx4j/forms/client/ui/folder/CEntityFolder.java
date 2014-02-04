@@ -110,10 +110,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     public void setOrderable(boolean orderable) {
         this.orderable = orderable;
-        for (CEntityFolderItem<E> item : itemsList) {
-            item.setMovable(orderable);
-            item.calculateActionsState();
-        }
+        calculateActionsState();
     }
 
     public boolean isAddable() {
@@ -131,17 +128,25 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     public void setRemovable(boolean removable) {
         this.removable = removable;
+        calculateActionsState();
+    }
+
+    private void calculateActionsState() {
+        boolean addable = isAddable() && isEnabled() && isEditable() && !isViewable();
+        if (getDecorator() != null) {
+            ((IFolderDecorator) getDecorator()).setAddButtonVisible(addable);
+        }
         for (CEntityFolderItem<E> item : itemsList) {
             item.setRemovable(removable);
+            item.setMovable(orderable);
             item.calculateActionsState();
         }
     }
 
-    private void calculateActionsState() {
-        boolean addable = isAddable() && isEnabled() && isEditable();
-        if (getDecorator() != null) {
-            ((IFolderDecorator) getDecorator()).setAddButtonVisible(addable);
-        }
+    @Override
+    public void revalidate() {
+        super.revalidate();
+        calculateActionsState();
     }
 
     /**
