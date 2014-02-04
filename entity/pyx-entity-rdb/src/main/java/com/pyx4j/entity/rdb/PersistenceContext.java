@@ -46,10 +46,6 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public class PersistenceContext {
 
-    public static final boolean traceOpenSession = false;
-
-    public static final boolean traceTransaction = false;
-
     private static final Logger log = LoggerFactory.getLogger(PersistenceContext.class);
 
     private final PersistenceContext suppressedPersistenceContext;
@@ -124,7 +120,7 @@ public class PersistenceContext {
         this.connectionProvider = connectionProvider;
         this.connectionTarget = connectionTarget;
         this.transactionType = transactionType;
-        if (traceOpenSession) {
+        if (PersistenceTrace.traceOpenSession) {
             this.contextOpenFrom = Trace.getStackTrace(new Throwable());
         } else if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
             this.contextOpenFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
@@ -239,7 +235,7 @@ public class PersistenceContext {
                 }
             }
 
-            if (traceOpenSession) {
+            if (PersistenceTrace.traceOpenSession) {
                 log.info("*** connection open  {} {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType, getConnectionTarget());
                 synchronized (openSessionLock) {
                     openSessionCount++;
@@ -328,7 +324,7 @@ public class PersistenceContext {
         if (options().enableSavepointAsNestedTransactions) {
             TransactionContext tc = transactionContexts.pop();
             tc.merge(transactionContexts.peek());
-            if (PersistenceContext.traceTransaction) {
+            if (PersistenceTrace.traceTransaction) {
                 log.info("{} releaseSavepoint {}", txId(), tc.savepointName);
             }
             tc.releaseSavepoint(connection, getDialect());
@@ -345,20 +341,20 @@ public class PersistenceContext {
 
     void addTransactionCompensationHandler(CompensationHandler handler) {
         transactionContexts.peek().addTransactionCompensationHandler(handler);
-        if (PersistenceContext.traceTransaction) {
+        if (PersistenceTrace.traceTransaction) {
             log.info("{} add CompensationHandler {}", txId(), handler.getClass().getName());
         }
     }
 
     void addTransactionCompletionHandler(Executable<Void, RuntimeException> handler) {
         transactionContexts.peek().addTransactionCompletionHandler(handler);
-        if (PersistenceContext.traceTransaction) {
+        if (PersistenceTrace.traceTransaction) {
             log.info("{} add CompletionHandler {}", txId(), handler.getClass().getName());
         }
     }
 
     void commit() {
-        if (PersistenceContext.traceTransaction) {
+        if (PersistenceTrace.traceTransaction) {
             log.info("{} commit\n\tfrom:{}\t", txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
         }
         assertTransactionManangementCallOrigin();
@@ -377,7 +373,7 @@ public class PersistenceContext {
     }
 
     void rollback() {
-        if (PersistenceContext.traceTransaction) {
+        if (PersistenceTrace.traceTransaction) {
             log.info("{} rollback\n\tfrom:{}\t", txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
         }
         assertTransactionManangementCallOrigin();
@@ -401,7 +397,7 @@ public class PersistenceContext {
                 log.error("There are uncommitted changes in Database. {}", getUncommittedChangesFrom());
             }
             SQLUtils.closeQuietly(connection);
-            if (traceOpenSession) {
+            if (PersistenceTrace.traceOpenSession) {
                 log.info("*** connection close {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType);
                 synchronized (openSessionLock) {
                     openSessionCount--;
@@ -418,7 +414,7 @@ public class PersistenceContext {
     public void terminate() {
         if (connection != null) {
             SQLUtils.closeQuietly(connection);
-            if (traceOpenSession) {
+            if (PersistenceTrace.traceOpenSession) {
                 log.info("*** connection close {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType);
                 synchronized (openSessionLock) {
                     openSessionCount--;
@@ -428,7 +424,7 @@ public class PersistenceContext {
             connection = null;
         }
         if (!isEnded) {
-            if (PersistenceContext.traceTransaction) {
+            if (PersistenceTrace.traceTransaction) {
                 log.info("{} terminate", txId());
             }
             throw new Error("Transaction was not ended");
@@ -436,7 +432,7 @@ public class PersistenceContext {
     }
 
     public static void debugOpenSessions() {
-        if (traceOpenSession) {
+        if (PersistenceTrace.traceOpenSession) {
             log.info("*** OpenSessions {}", openSessionCount);
             for (PersistenceContext persistenceContext : openSessions) {
                 log.info("*** {} {}, context open from {}", new Object[] { Integer.toHexString(System.identityHashCode(persistenceContext)),

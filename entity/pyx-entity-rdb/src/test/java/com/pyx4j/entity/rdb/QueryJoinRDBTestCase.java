@@ -76,7 +76,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         emp2.department().set(department2);
         srv.persist(emp2);
 
-        if (EntityPersistenceServiceRDB.traceSql) {
+        if (PersistenceTrace.traceSql) {
             log.debug(Trace.id() + " setId = {} ", setId);
         }
 

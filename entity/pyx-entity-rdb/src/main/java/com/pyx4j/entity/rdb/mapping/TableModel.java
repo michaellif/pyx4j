@@ -56,6 +56,7 @@ import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceContext;
+import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.Ddl;
 import com.pyx4j.entity.rdb.dialect.Dialect;
@@ -585,7 +586,7 @@ public class TableModel {
             sql.append(getFullTableName());
             sql.append(sqlInsert());
 
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             if (dialect.isSequencesBaseIdentity()) {
@@ -624,7 +625,7 @@ public class TableModel {
                     SQLUtils.closeQuietly(keys);
                 }
             }
-            if (EntityPersistenceServiceRDB.trace) {
+            if (PersistenceTrace.trace) {
                 log.info(Trace.id() + "saved {} [{}] ", this.getTableName(), entity.getPrimaryKey());
             }
         } catch (SQLException e) {
@@ -650,7 +651,7 @@ public class TableModel {
             sql.append(getFullTableName());
             sql.append(sqlUpdate());
 
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -670,7 +671,7 @@ public class TableModel {
             }
             persistenceContext.setUncommittedChanges();
             boolean updated = (stmt.executeUpdate() == 1);
-            if (EntityPersistenceServiceRDB.traceWarnings) {
+            if (PersistenceTrace.traceWarnings) {
                 SQLUtils.logAndClearWarnings(persistenceContext.getConnection());
             }
             return updated;
@@ -695,7 +696,7 @@ public class TableModel {
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
             sql.append("UPDATE ").append(qb.getUpdateSQL(getFullTableName(), sqlUpdateBulk("m1", entityTemplate)));
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -704,7 +705,7 @@ public class TableModel {
             parameterIndex = qb.bindParameters(parameterIndex, persistenceContext, stmt);
             persistenceContext.setUncommittedChanges();
             int updated = stmt.executeUpdate();
-            if (EntityPersistenceServiceRDB.traceWarnings) {
+            if (PersistenceTrace.traceWarnings) {
                 SQLUtils.logAndClearWarnings(persistenceContext.getConnection());
             }
             return updated;
@@ -864,7 +865,7 @@ public class TableModel {
             if (forUpdate) {
                 sql.append(" FOR UPDATE");
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -932,7 +933,7 @@ public class TableModel {
                     sql = dialect.applyLimitCriteria(sql);
                 }
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql);
@@ -1010,7 +1011,7 @@ public class TableModel {
                     sql = dialect.applyLimitCriteria(sql);
                 }
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql);
@@ -1084,7 +1085,7 @@ public class TableModel {
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -1125,7 +1126,7 @@ public class TableModel {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
             sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL() + " FROM "
                     + qb.getSQL(getFullTableName());
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql);
@@ -1173,7 +1174,7 @@ public class TableModel {
                     sql = dialect.applyLimitCriteria(sql);
                 }
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql);
@@ -1234,7 +1235,7 @@ public class TableModel {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteriaNoSorts);
 
             sql = "SELECT " + dialect.sqlFunction(qb, func, args) + " FROM " + qb.getSQL(getFullTableName());
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
 
@@ -1268,7 +1269,7 @@ public class TableModel {
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -1303,7 +1304,7 @@ public class TableModel {
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -1366,7 +1367,7 @@ public class TableModel {
             sql.append("INSERT INTO ");
             sql.append(getFullTableName());
             sql.append(sqlInsert());
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString(), autoGeneratedKeys);
@@ -1429,7 +1430,7 @@ public class TableModel {
             sql.append("INSERT INTO ");
             sql.append(getFullTableName());
             sql.append(sqlInsert());
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             boolean hasKeys = (getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED);
@@ -1474,7 +1475,7 @@ public class TableModel {
             sql.append("UPDATE  ");
             sql.append(getFullTableName());
             sql.append(sqlUpdate());
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -1540,7 +1541,7 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());

@@ -39,6 +39,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceContext;
+import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.HSQLDialect;
@@ -159,7 +160,7 @@ public class TableModelCollections {
             }
 
             sql.append(")");
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -187,7 +188,7 @@ public class TableModelCollections {
                     stmt.setString(parameterIndex, NamespaceManager.getNamespace());
                     parameterIndex++;
                 }
-                if (EntityPersistenceServiceRDB.trace) {
+                if (PersistenceTrace.trace) {
                     log.info(Trace.id() + "insert {} (" + entity.getPrimaryKey() + ", " + value + ", " + seq + ")", member.sqlName());
                 }
                 persistenceContext.setUncommittedChanges();
@@ -281,7 +282,7 @@ public class TableModelCollections {
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
@@ -304,7 +305,7 @@ public class TableModelCollections {
                     insertData.remove(value);
                     if (isList && member.isOrderMaterialized()) {
                         if (valueIdx != rs.getInt(member.sqlOrderColumnName())) {
-                            if (EntityPersistenceServiceRDB.trace) {
+                            if (PersistenceTrace.trace) {
                                 log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt(member.sqlOrderColumnName())
                                         + "->" + valueIdx + ")", member.sqlName());
                             }
@@ -316,7 +317,7 @@ public class TableModelCollections {
                 } else {
                     boolean removeFromFoinTable = true;
                     if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships())) {
-                        if (EntityPersistenceServiceRDB.trace) {
+                        if (PersistenceTrace.trace) {
                             log.info(Trace.id() + "add cascadeRemove " + ((IEntity) value).getDebugExceptionInfoString());
                         }
                         cascadeRemove.add((IEntity) value);
@@ -326,7 +327,7 @@ public class TableModelCollections {
                     }
 
                     if (removeFromFoinTable) {
-                        if (EntityPersistenceServiceRDB.traceSql) {
+                        if (PersistenceTrace.traceSql) {
                             log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), "delete row from cursor",
                                     Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                         }
@@ -335,7 +336,7 @@ public class TableModelCollections {
                     }
                 }
             }
-            if (EntityPersistenceServiceRDB.traceWarnings) {
+            if (PersistenceTrace.traceWarnings) {
                 SQLUtils.logAndClearWarnings(persistenceContext.getConnection());
             } else if (dialect instanceof HSQLDialect) {
                 // https://sourceforge.net/tracker/?func=detail&aid=3490661&group_id=23316&atid=378131
@@ -405,7 +406,7 @@ public class TableModelCollections {
             if (isList) {
                 sql.append(" ORDER BY ").append(member.sqlOrderColumnName());
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -481,7 +482,7 @@ public class TableModelCollections {
             if (isList) {
                 sql.append(", ").append(member.sqlOrderColumnName());
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -531,7 +532,7 @@ public class TableModelCollections {
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -566,7 +567,7 @@ public class TableModelCollections {
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
-            if (EntityPersistenceServiceRDB.traceSql) {
+            if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -585,7 +586,7 @@ public class TableModelCollections {
             persistenceContext.setUncommittedChanges();
             stmt.executeBatch();
 
-            if (EntityPersistenceServiceRDB.traceWarnings) {
+            if (PersistenceTrace.traceWarnings) {
                 SQLUtils.logAndClearWarnings(persistenceContext.getConnection());
             } else if (dialect instanceof HSQLDialect) {
                 persistenceContext.getConnection().clearWarnings();
