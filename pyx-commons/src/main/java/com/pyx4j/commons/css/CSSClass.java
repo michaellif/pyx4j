@@ -31,31 +31,14 @@ public enum CSSClass {
 
     pyx4j_StatusBar,
 
-    pyx4j_BarSeparator,
-
-    //Section Panel
-    pyx4j_Section, pyx4j_Section_Border, pyx4j_Section_SelectionBorder, pyx4j_Section_Background, pyx4j_Section_Content, pyx4j_Section_ContentBorder, pyx4j_Section_header2Holder,
-
-    //Folder Panel
-    pyx4j_Folder,
-
     //Picker
     pyx4j_Picker, pyx4j_PickerPanel, pyx4j_PickerLine, pyx4j_PickerLine_Selected,
-
-    //Button
-    pyx4j_Button, pyx4j_ButtonContainer, pyx4j_ButtonContent, pyx4j_ButtonText, pyx4j_ButtonImage,
 
     // Style for GWT button active { The one that has Enter focus in dialog}
     gwtButtonDefault,
 
     //Tooltip
     pyx4j_Tooltip, pyx4j_Tooltip_Shadow,
-
-    //Hyperlink
-    pyx4j_Reference,
-
-    //GroupBox
-    pyx4j_GroupBox, pyx4j_GroupBox_Caption,
 
     //Photoalbom
     pyx4j_Photoalbom_Thumbnail, pyx4j_SlideshowPopup, pyx4j_Photoalbom_Caption,
