@@ -25,6 +25,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication.Status;
 
 @Transient
 public interface OnlineApplicationDTO extends IEntity {
@@ -72,4 +73,6 @@ public interface OnlineApplicationDTO extends IEntity {
     IList<OnlineApplicationWizardStepStatus> stepsStatuses();
 
     PaymentDTO payment();
+
+    IPrimitive<Status> status();
 }
