@@ -13,17 +13,19 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
-import com.pyx4j.i18n.shared.I18n;
-
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
+import com.propertyvista.portal.prospect.ui.application.steps.LegalTermsFolder;
 
 public class LegalSectionPanel extends AbstractSectionPanel {
 
-    private static final I18n i18n = I18n.get(LegalSectionPanel.class);
-
     public LegalSectionPanel(int index, SummaryForm form, LegalStep step) {
         super(index, OnlineApplicationWizardStepMeta.Legal.toString(), form, step);
+
+        LegalTermsFolder legalTermsFolder = new LegalTermsFolder();
+        legalTermsFolder.setViewable(true);
+        addField(proto().legalTerms(), legalTermsFolder, false);
+
     }
 
 }

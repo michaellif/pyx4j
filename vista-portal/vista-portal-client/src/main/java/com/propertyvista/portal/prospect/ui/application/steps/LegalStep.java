@@ -22,7 +22,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 
-public class LegalStep extends ApplicationWizardStep {
+public abstract class LegalStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(LegalStep.class);
 
@@ -35,7 +35,7 @@ public class LegalStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().legalTerms(), new LegalTermsFolder(getView())));
+        panel.setWidget(++row, 0, inject(proto().legalTerms(), new LegalTermsFolder()));
         panel.setWidget(++row, 0, new Button(i18n.tr("Download Lease Agreement Draft"), new Command() {
             @Override
             public void execute() {
@@ -45,8 +45,6 @@ public class LegalStep extends ApplicationWizardStep {
         return panel;
     }
 
-    public void onDownloadLeaseAgreementDraft() {
-
-    }
+    public abstract void onDownloadLeaseAgreementDraft();
 
 }

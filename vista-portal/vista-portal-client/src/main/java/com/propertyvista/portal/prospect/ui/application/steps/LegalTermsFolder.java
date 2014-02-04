@@ -26,23 +26,17 @@ import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
-import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLegalTerm> {
 
-    private static final I18n i18n = I18n.get(LegalTermsFolder.class);
-
-    private final ApplicationWizardView view;
-
-    public LegalTermsFolder(ApplicationWizardView view) {
+    public LegalTermsFolder() {
         super(SignedOnlineApplicationLegalTerm.class);
         setOrderable(false);
         setAddable(false);
         setRemovable(false);
 
-        this.view = view;
     }
 
     @Override
