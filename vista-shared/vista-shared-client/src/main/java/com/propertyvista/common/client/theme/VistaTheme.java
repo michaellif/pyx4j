@@ -118,24 +118,6 @@ public class VistaTheme extends Theme {
 
     }
 
-    protected void initSectionStyles() {
-        Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Border));
-        style.addProperty("background-color", ThemeColor.foreground, 0.6);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_SelectionBorder));
-        style.addProperty("background-color", ThemeColor.foreground, 0.8);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Background));
-        style.addProperty("background-color", ThemeColor.foreground, 0.8);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Content));
-        style.addProperty("background-color", ThemeColor.background);
-        addStyle(style);
-    }
-
     protected void initToolbarStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Toolbar));
         // style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
@@ -152,15 +134,6 @@ public class VistaTheme extends Theme {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_StatusBar));
         style.addProperty("background-color", ThemeColor.object1, 0.8);
         style.addProperty("padding", "2 2 2 8");
-        addStyle(style);
-    }
-
-    protected void initBarSeparatorStyle() {
-        Style style = new Style(Selector.valueOf(CSSClass.pyx4j_BarSeparator));
-        style.addProperty("border-left", "2px ridge");
-        style.addProperty("border-left-color", ThemeColor.object1, 0.8);
-
-        style.addProperty("margin-left", "3px");
         addStyle(style);
     }
 
@@ -335,41 +308,6 @@ public class VistaTheme extends Theme {
 
     }
 
-    protected void initButtonStyles() {
-        Style style = new Style(CSSClass.pyx4j_ButtonContainer);
-        style.addProperty("height", "22px");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_ButtonContent);
-        style.addProperty("padding-left", "2px");
-        style.addProperty("padding-right", "2px");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColor.object1, 0.5);
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        style.addProperty("outline", "none");
-        style.addProperty("background-color", ThemeColor.object1, 0.9);
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_ButtonImage);
-        style.addProperty("padding-right", "4px");
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background-color", ThemeColor.object1, 0.4);
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_Button + "-pushed" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("border-style", "ridge");
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_Button + "-checked" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background", ThemeColor.object1, 0.3);
-        style.addProperty("border-style", "inset");
-        addStyle(style);
-    }
-
     protected void initGwtButtonStyles() {
         // GWT Button, Code is a copy from com.google.gwt.user.theme.standard.Standard
         String gwtButton = ".gwt-Button";
@@ -442,31 +380,6 @@ public class VistaTheme extends Theme {
     }
 
     protected void initHyperlinkStyle() {
-    }
-
-    protected void initGroupBoxStyle() {
-
-        Style style = new Style(CSSClass.pyx4j_GroupBox);
-        style.addProperty("padding", "5px");
-        style.addProperty("margin", "3px");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GroupBox, "-expanded");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.object1, 0.5);
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GroupBox, "-collapsed");
-        style.addProperty("border", "none");
-        style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", ThemeColor.object1, 0.5);
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GroupBox_Caption);
-        style.addProperty("padding", "5px 2px 2px 2px");
-        style.addProperty("verticalAlign", "top");
-        style.addProperty("color", ThemeColor.object1, 0.5);
-        addStyle(style);
     }
 
     protected void initPhotoalbomStyle() {
