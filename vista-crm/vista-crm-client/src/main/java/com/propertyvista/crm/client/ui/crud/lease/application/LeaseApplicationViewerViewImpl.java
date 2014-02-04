@@ -279,7 +279,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(approveAction, status.isDraft());
         setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
         setActionVisible(declineAction, status.isDraft());
-        setActionVisible(cancelAction, status != Status.Cancelled);
+        setActionVisible(cancelAction, status.isDraft());
 
         // edit/view terms enabling logic:
         editButton.setVisible(status.isDraft());
