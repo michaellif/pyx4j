@@ -20,7 +20,13 @@
  */
 package com.pyx4j.commons.css;
 
+/**
+ * Each component will have its own Theme, M.L. works on this
+ * 
+ */
+@Deprecated
 public enum CSSClass {
+
     pyx4j_Toolbar,
 
     pyx4j_StatusBar,
