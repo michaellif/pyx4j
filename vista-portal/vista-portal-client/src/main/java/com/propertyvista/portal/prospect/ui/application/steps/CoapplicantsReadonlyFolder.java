@@ -18,11 +18,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -33,9 +31,7 @@ public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> 
 
     public CoapplicantsReadonlyFolder() {
         super(CoapplicantDTO.class, i18n.tr("Occupant"));
-        setOrderable(false);
-        setAddable(false);
-        setRemovable(false);
+        setViewable(true);
     }
 
     @Override

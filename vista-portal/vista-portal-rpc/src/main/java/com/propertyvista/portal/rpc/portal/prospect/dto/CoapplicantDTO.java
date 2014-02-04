@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -39,6 +40,7 @@ public interface CoapplicantDTO extends IEntity {
     IPrimitive<Boolean> matured();
 
     @EmbeddedEntity
+    @ToString()
     Name name();
 
     IPrimitive<LogicalDate> birthDate();

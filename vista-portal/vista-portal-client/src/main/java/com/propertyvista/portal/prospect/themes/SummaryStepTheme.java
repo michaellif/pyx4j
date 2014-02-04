@@ -37,7 +37,7 @@ public class SummaryStepTheme extends Theme {
         style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.SummaryStepSection, " .", DefaultWidgetsTheme.StyleName.CollapsablePanelImage);
+        style = new Style(".", StyleName.SummaryStepSection, ">.", DefaultWidgetsTheme.StyleName.CollapsablePanelImage);
         style.addProperty("height", "50px");
         addStyle(style);
 
