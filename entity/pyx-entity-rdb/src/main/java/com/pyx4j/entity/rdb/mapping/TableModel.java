@@ -570,7 +570,7 @@ public class TableModel {
                 parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, member.getPersistMemberValue(entityTemplate));
             }
         }
-//TODO        
+//TODO
 //        for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
 //            bindParameter(stmt, parameterIndex, member.getIndexValueClass(), member.getIndexedValue(entityTemplate), null);
 //            parameterIndex++;
@@ -587,7 +587,7 @@ public class TableModel {
             sql.append(sqlInsert());
 
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             if (dialect.isSequencesBaseIdentity()) {
                 stmt = persistenceContext.getConnection().prepareStatement(sql.toString(), new String[] { dialect.getNamingConvention().sqlIdColumnName() });
@@ -652,7 +652,7 @@ public class TableModel {
             sql.append(sqlUpdate());
 
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // Just in case, used for pooled connections
@@ -697,7 +697,7 @@ public class TableModel {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
             sql.append("UPDATE ").append(qb.getUpdateSQL(getFullTableName(), sqlUpdateBulk("m1", entityTemplate)));
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             int parameterIndex = 1;
@@ -866,7 +866,7 @@ public class TableModel {
                 sql.append(" FOR UPDATE");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // Just in case, used for pooled connections
@@ -934,7 +934,7 @@ public class TableModel {
                 }
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql);
             if (limit > 0) {
@@ -1012,7 +1012,7 @@ public class TableModel {
                 }
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql);
             if (limit > 0) {
@@ -1086,7 +1086,7 @@ public class TableModel {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // Just in case, used for pooled connections
@@ -1127,7 +1127,7 @@ public class TableModel {
             sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL() + " FROM "
                     + qb.getSQL(getFullTableName());
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql);
             if (limit > 0) {
@@ -1175,7 +1175,7 @@ public class TableModel {
                 }
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql);
             if (limit > 0) {
@@ -1236,7 +1236,7 @@ public class TableModel {
 
             sql = "SELECT " + dialect.sqlFunction(qb, func, args) + " FROM " + qb.getSQL(getFullTableName());
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
 
             stmt = persistenceContext.getConnection().prepareStatement(sql);
@@ -1270,7 +1270,7 @@ public class TableModel {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
@@ -1305,7 +1305,7 @@ public class TableModel {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             int pkSize = 0;
@@ -1368,7 +1368,7 @@ public class TableModel {
             sql.append(getFullTableName());
             sql.append(sqlInsert());
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString(), autoGeneratedKeys);
             for (T entity : entityIterable) {
@@ -1431,7 +1431,7 @@ public class TableModel {
             sql.append(getFullTableName());
             sql.append(sqlInsert());
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             boolean hasKeys = (getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED);
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
@@ -1476,7 +1476,7 @@ public class TableModel {
             sql.append(getFullTableName());
             sql.append(sqlUpdate());
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections
@@ -1542,7 +1542,7 @@ public class TableModel {
         ResultSet rs = null;
         try {
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections

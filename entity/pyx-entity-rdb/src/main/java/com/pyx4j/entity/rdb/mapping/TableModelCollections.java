@@ -161,7 +161,7 @@ public class TableModelCollections {
 
             sql.append(")");
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             int seq = 0;
@@ -283,7 +283,7 @@ public class TableModelCollections {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 
@@ -328,7 +328,7 @@ public class TableModelCollections {
 
                     if (removeFromFoinTable) {
                         if (PersistenceTrace.traceSql) {
-                            log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), "delete row from cursor",
+                            log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), "delete row from cursor",
                                     Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                         }
                         persistenceContext.setUncommittedChanges();
@@ -407,10 +407,10 @@ public class TableModelCollections {
                 sql.append(" ORDER BY ").append(member.sqlOrderColumnName());
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
-            // zero means there is no limit, Need for pooled connections 
+            // zero means there is no limit, Need for pooled connections
             stmt.setMaxRows(0);
             int parameterIndex = 1;
             parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
@@ -483,10 +483,10 @@ public class TableModelCollections {
                 sql.append(", ").append(member.sqlOrderColumnName());
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
-            // zero means there is no limit, Need for pooled connections 
+            // zero means there is no limit, Need for pooled connections
             stmt.setMaxRows(0);
             int parameterIndex = 1;
             if (dialect.isMultitenantSharedSchema()) {
@@ -533,7 +533,7 @@ public class TableModelCollections {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
@@ -568,7 +568,7 @@ public class TableModelCollections {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             int pkSize = 0;

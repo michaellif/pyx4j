@@ -78,7 +78,7 @@ public class TableModelExternal {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // Just in case, used for pooled connections 
