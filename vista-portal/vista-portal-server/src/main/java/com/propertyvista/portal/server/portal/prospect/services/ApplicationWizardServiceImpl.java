@@ -40,6 +40,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -91,7 +92,6 @@ import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
-import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
@@ -241,23 +241,26 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.applicant().set(to.applicant().emergencyContacts(), customer.emergencyContacts());
 
         // screening:
-        LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), participant, AttachLevel.Attached);
-        CustomerScreening.CustomerScreeningV screening = participant.effectiveScreening().version();
+        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer);
+        Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
+        ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(screening);
         //
-        to.applicant().set(to.applicant().currentAddress(), screening.currentAddress());
-        to.applicant().set(to.applicant().previousAddress(), screening.previousAddress());
+        to.applicant().set(to.applicant().currentAddress(), screening.version().currentAddress());
+        to.applicant().set(to.applicant().previousAddress(), screening.version().previousAddress());
 
         Building policyNode = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationPolicyNode(bo);
 
-        to.applicant().set(to.applicant().documents(), screening.documents());
+        to.applicant().set(to.applicant().documents(), screening.version().documents());
         to.applicant().set(to.applicant().documentsPolicy(),
                 ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, ApplicationDocumentationPolicy.class));
         initializeRequiredDocuments(to.applicant());
 
-        to.applicant().set(to.applicant().legalQuestions(), screening.legalQuestions());
+        to.applicant().set(to.applicant().legalQuestions(), screening.version().legalQuestions());
 
-        to.applicant().set(to.applicant().incomes(), screening.incomes());
-        to.applicant().set(to.applicant().assets(), screening.assets());
+        to.applicant().set(to.applicant().incomes(), screening.version().incomes());
+        to.applicant().set(to.applicant().assets(), screening.version().assets());
     }
 
     private void saveApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -297,29 +300,24 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         //
         customer.set(customer.person(), to.applicant().person());
         customer.set(customer.picture(), to.applicant().picture());
-
-        customer.emergencyContacts().clear();
-        customer.emergencyContacts().addAll(to.applicant().emergencyContacts());
+        customer.emergencyContacts().set(to.applicant().emergencyContacts());
+        //DataDump.dump("customer", customer);
 
         // screening:
-        LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), participant, AttachLevel.Attached);
-        CustomerScreening.CustomerScreeningV screeningv = participant.effectiveScreening().version();
-        participant.effectiveScreening().screene().set(customer);
+        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer);
+        //DataDump.dump("dbScreening", screening);
         //
-        screeningv.set(screeningv.currentAddress(), to.applicant().currentAddress());
-        screeningv.set(screeningv.previousAddress(), to.applicant().previousAddress());
-        screeningv.set(screeningv.legalQuestions(), to.applicant().legalQuestions());
+        screening.version().set(screening.version().currentAddress(), to.applicant().currentAddress());
+        screening.version().set(screening.version().previousAddress(), to.applicant().previousAddress());
+        screening.version().set(screening.version().legalQuestions(), to.applicant().legalQuestions());
 
-        screeningv.documents().clear();
-        screeningv.documents().addAll(to.applicant().documents());
+        screening.version().documents().set(to.applicant().documents());
+        screening.version().incomes().set(to.applicant().incomes());
+        screening.version().assets().set(to.applicant().assets());
 
-        screeningv.incomes().clear();
-        screeningv.incomes().addAll(to.applicant().incomes());
+        //DataDump.dump("saveScreening", screening);
 
-        screeningv.assets().clear();
-        screeningv.assets().addAll(to.applicant().assets());
-
-        Persistence.service().merge(participant.effectiveScreening());
+        Persistence.service().merge(screening);
     }
 
     private void fillCoApplicants(OnlineApplication bo, OnlineApplicationDTO to) {

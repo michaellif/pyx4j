@@ -28,10 +28,11 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -40,6 +41,10 @@ import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
+import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
@@ -50,6 +55,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -252,12 +258,40 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     @Override
+    public CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId) {
+        CustomerScreening screeningId = retrivePersonScreeningDraftOrFinal(customerId, AttachLevel.IdOnly);
+        if (screeningId == null) {
+            CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
+            screening.screene().set(customerId);
+            return screening;
+        } else {
+            return Persistence.retrieveDraftForEdit(CustomerScreening.class, screeningId.getPrimaryKey());
+        }
+    }
+
+    @Override
+    public void registerUploadedDocuments(CustomerScreening screening) {
+        for (IdentificationDocumentFolder document : screening.version().documents()) {
+            for (IdentificationDocumentFile applicationDocument : document.files()) {
+                FileUploadRegistry.register(applicationDocument.file());
+            }
+        }
+        for (CustomerScreeningIncome income : screening.version().incomes()) {
+            for (ProofOfEmploymentDocumentFolder document : income.documents()) {
+                for (ProofOfEmploymentDocumentFile applicationDocument : document.files()) {
+                    FileUploadRegistry.register(applicationDocument.file());
+                }
+            }
+        }
+    }
+
+    @Override
     public CustomerScreening retrivePersonScreeningDraftOrFinal(Customer customerId, AttachLevel attachLevel) {
         EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
         CustomerScreening screening = Persistence.service().retrieve(criteria, attachLevel);
-        if (screening != null) {
+        if (screening != null && !screening.version().isNull()) {
             return screening;
         }
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);

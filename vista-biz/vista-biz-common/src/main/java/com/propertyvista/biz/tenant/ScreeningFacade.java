@@ -43,6 +43,10 @@ public interface ScreeningFacade {
      */
     CustomerScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel);
 
+    CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId);
+
+    void registerUploadedDocuments(CustomerScreening screening);
+
     /**
      * Find if Draft exists, if not find final version
      */

@@ -13,20 +13,16 @@
  */
 package com.propertyvista.crm.server.services.customer.screening;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
+import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
-import com.propertyvista.domain.media.IdentificationDocumentFile;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
 public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServiceImpl<CustomerScreening> implements CustomerScreeningCrudService {
 
@@ -61,18 +57,7 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
     @Override
     protected CustomerScreening duplicateForDraftEdit(CustomerScreening bo) {
         bo = super.duplicateForDraftEdit(bo);
-        for (IdentificationDocumentFolder document : bo.version().documents()) {
-            for (IdentificationDocumentFile applicationDocument : document.files()) {
-                FileUploadRegistry.register(applicationDocument.file());
-            }
-        }
-        for (CustomerScreeningIncome income : bo.version().incomes()) {
-            for (ProofOfEmploymentDocumentFolder document : income.documents()) {
-                for (ProofOfEmploymentDocumentFile applicationDocument : document.files()) {
-                    FileUploadRegistry.register(applicationDocument.file());
-                }
-            }
-        }
+        ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(bo);
         return bo;
     }
 }
