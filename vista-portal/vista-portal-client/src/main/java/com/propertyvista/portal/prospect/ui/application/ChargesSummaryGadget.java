@@ -59,10 +59,10 @@ public class ChargesSummaryGadget extends FlowPanel {
             StringBuilder monthlyChargesBuilder = new StringBuilder();
 
             monthlyChargesBuilder.append(onlineApplication.selectedService().item().name().getValue() + ": "
-                    + onlineApplication.selectedService().agreedPrice().getValue());
+                    + onlineApplication.selectedService().agreedPrice().getValue() + "</br>");
 
             for (BillableItem billableItem : onlineApplication.selectedFeatures()) {
-                monthlyChargesBuilder.append(billableItem.item().name().getValue() + ": " + billableItem.agreedPrice().getValue());
+                monthlyChargesBuilder.append(billableItem.item().name().getValue() + ": " + billableItem.agreedPrice().getValue() + "</br>");
             }
 
             monthlyChargesHTML.setHTML(monthlyChargesBuilder.toString());
