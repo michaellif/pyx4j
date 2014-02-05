@@ -200,7 +200,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
         addValueValidator(new EditableValueValidator<IList<BillableItem>>() {
             @Override
             public ValidationError isValid(CComponent<IList<BillableItem>> component, IList<BillableItem> value) {
-                if (value == null) {
+                if (value == null || getMaxCount() < 0) {
                     return null;
                 }
                 return (value.size() < getMaxCount()) ? null : new ValidationError(component,
