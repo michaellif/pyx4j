@@ -35,7 +35,9 @@ public interface PmcCompanyInfoContact extends IEntity {
     @I18n
     public enum CompanyInfoContactType {
 
-        administrator;
+        administrator,
+
+        privacyIssues;
 
         @Override
         public String toString() {
