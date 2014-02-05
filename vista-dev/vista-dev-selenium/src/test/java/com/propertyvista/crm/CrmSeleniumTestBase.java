@@ -15,7 +15,7 @@ package com.propertyvista.crm;
 
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.selenium.D;
+import com.pyx4j.selenium.DebugIdBuilder;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.selenium.SeleniumTestBase;
 
@@ -39,8 +39,8 @@ public class CrmSeleniumTestBase extends SeleniumTestBase {
     }
 
     protected void login() {
-        selenium.type(D.id(proto(AuthenticationRequest.class).email()), "pm001@pyx4j.com");
-        selenium.type(D.id(proto(AuthenticationRequest.class).password()), "pm001@pyx4j.com");
+        selenium.type(DebugIdBuilder.id(proto(AuthenticationRequest.class).email()), "pm001@pyx4j.com");
+        selenium.type(DebugIdBuilder.id(proto(AuthenticationRequest.class).password()), "pm001@pyx4j.com");
         selenium.click(CrudDebugId.Criteria_Submit);
     }
 }
