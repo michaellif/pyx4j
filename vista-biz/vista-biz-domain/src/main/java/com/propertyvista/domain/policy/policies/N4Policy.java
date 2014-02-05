@@ -57,6 +57,14 @@ public interface N4Policy extends Policy {
     IList<ARCode> relevantARCodes();
 
     @NotNull
+    @Caption(description = "Termination date advance days for monthly, bi-weekly or yearly rent")
+    IPrimitive<Integer> terminationDateAdvanceDaysLongRentPeriod();
+
+    @NotNull
+    @Caption(description = "Termination date advance days for weekly or daily rent")
+    IPrimitive<Integer> terminationDateAdvanceDaysShortRentPeriod();
+
+    @NotNull
     IPrimitive<Integer> handDeliveryAdvanceDays();
 
     @NotNull

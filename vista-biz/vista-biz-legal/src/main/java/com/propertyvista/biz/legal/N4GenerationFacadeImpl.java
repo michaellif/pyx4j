@@ -201,8 +201,11 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     private int terminationAdvanceDaysForLeaseType(Lease leaseId) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), N4Policy.class);
+
         // TODO this is value for Yearly or Month-to-Month lease (we don't have other kinds of leases therefore it's fine now, but later can become a problem)
-        return 14;
+        return policy.terminationDateAdvanceDaysLongRentPeriod().getValue();
     }
 
     private String getStreetAddress(AddressStructured companyAddress) {

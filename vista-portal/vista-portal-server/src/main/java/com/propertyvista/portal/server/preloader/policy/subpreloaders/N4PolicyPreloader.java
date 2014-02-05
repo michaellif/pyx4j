@@ -29,11 +29,15 @@ public class N4PolicyPreloader extends AbstractPolicyPreloader<N4Policy> {
         N4Policy policy = EntityFactory.create(N4Policy.class);
         policy.includeSignature().setValue(true);
 
+        policy.terminationDateAdvanceDaysLongRentPeriod().setValue(14);
+        policy.terminationDateAdvanceDaysShortRentPeriod().setValue(7);
+
         policy.handDeliveryAdvanceDays().setValue(0);
         policy.mailDeliveryAdvanceDays().setValue(5);
         policy.courierDeliveryAdvanceDays().setValue(1);
 
         log.append(policy.getStringView());
+
         return policy;
     }
 

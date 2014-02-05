@@ -135,6 +135,11 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
         TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
         row = -1;
+        deliveryPanel.setH1(++row, 0, 2, i18n.tr("Termination date calculation:"));
+        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().terminationDateAdvanceDaysLongRentPeriod())).build());
+        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().terminationDateAdvanceDaysShortRentPeriod())).build());
+
+        deliveryPanel.setH1(++row, 0, 2, i18n.tr("Additional advance days based on delivery method:"));
         deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().handDeliveryAdvanceDays())).build());
         deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().mailDeliveryAdvanceDays())).build());
         deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().courierDeliveryAdvanceDays())).build());
@@ -149,7 +154,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         public ARCodeFolder() {
             super(N4PolicyDTOARCodeHolderDTO.class);
             setOrderable(false);
-            setViewable(true);
+            setAddable(true);
         }
 
         public void setARCodeOptions(List<ARCode> arCodeOptions) {
@@ -159,7 +164,10 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof N4PolicyDTOARCodeHolderDTO) {
-                return new N4PolicyDTOARCodeHolderForm(null, false);
+                N4PolicyDTOARCodeHolderForm form = new N4PolicyDTOARCodeHolderForm(null, false);
+                form.inheritViewable(false);
+                form.setViewable(true);
+                return form;
             }
             return super.create(member);
         }
