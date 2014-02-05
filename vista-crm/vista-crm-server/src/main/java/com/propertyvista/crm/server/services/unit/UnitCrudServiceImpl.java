@@ -59,7 +59,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().unit(), in));
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.present()));
             // set sorting by 'from date' to get last active lease first:
             criteria.desc(criteria.proto().leaseFrom());
             to.lease().set(Persistence.service().retrieve(criteria));
