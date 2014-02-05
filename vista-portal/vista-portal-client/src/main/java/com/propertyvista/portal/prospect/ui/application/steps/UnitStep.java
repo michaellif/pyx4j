@@ -33,7 +33,6 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;

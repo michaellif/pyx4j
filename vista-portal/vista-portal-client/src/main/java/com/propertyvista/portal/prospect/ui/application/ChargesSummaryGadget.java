@@ -55,7 +55,7 @@ public class ChargesSummaryGadget extends FlowPanel {
     }
 
     public void populate(OnlineApplicationDTO onlineApplication) {
-        if (onlineApplication != null) {
+        if (onlineApplication != null && !onlineApplication.unit().isNull()) {
             StringBuilder monthlyChargesBuilder = new StringBuilder();
 
             monthlyChargesBuilder.append(onlineApplication.selectedService().item().name().getValue() + ": "
@@ -67,7 +67,7 @@ public class ChargesSummaryGadget extends FlowPanel {
 
             monthlyChargesHTML.setHTML(monthlyChargesBuilder.toString());
         } else {
-            monthlyChargesHTML.setHTML("");
+            monthlyChargesHTML.setHTML("&nbsp;");
         }
     }
 

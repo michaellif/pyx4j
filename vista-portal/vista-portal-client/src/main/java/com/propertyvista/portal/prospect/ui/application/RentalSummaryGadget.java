@@ -74,23 +74,22 @@ public class RentalSummaryGadget extends FlowPanel {
     }
 
     public void populate(OnlineApplicationDTO onlineApplication) {
-        if (onlineApplication != null) {
+        if (onlineApplication != null && !onlineApplication.unit().isNull()) {
             StringBuilder apartmentBuilder = new StringBuilder();
             apartmentBuilder.append(i18n.tr("Unit")).append(" ").append(onlineApplication.unit().info().number().getStringView()).append("<br/>");
             apartmentBuilder.append(" ").append(onlineApplication.unit().floorplan().marketingName().getStringView()).append("<br/>");
             apartmentBuilder.append(onlineApplication.unit().building().info().address().getStringView());
             apartmentHTML.setHTML(apartmentBuilder.toString());
-
-            termHTML.setHTML((onlineApplication.leaseFrom().isNull() ? "" : onlineApplication.leaseFrom().getStringView()) + " - "
-                    + (onlineApplication.leaseTo().isNull() ? "" : onlineApplication.leaseTo().getStringView()));
-
+            if (onlineApplication.leaseFrom().isNull() || onlineApplication.leaseTo().isNull()) {
+                termHTML.setHTML("&nbsp;");
+            } else {
+                termHTML.setHTML((onlineApplication.leaseFrom().getStringView()) + " - " + onlineApplication.leaseTo().getStringView());
+            }
             utilityHTML.setHTML(onlineApplication.utilities().getValue());
-
         } else {
-            apartmentHTML.setHTML("");
-            termHTML.setHTML("");
-            utilityHTML.setHTML("");
+            apartmentHTML.setHTML("&nbsp;");
+            termHTML.setHTML("&nbsp;");
+            utilityHTML.setHTML("&nbsp;");
         }
     }
-
 }
