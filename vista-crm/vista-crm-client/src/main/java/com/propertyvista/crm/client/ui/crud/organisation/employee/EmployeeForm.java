@@ -58,6 +58,7 @@ import com.propertyvista.domain.company.Notification.NotificationType;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.misc.VistaTODO;
 
 public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -133,7 +134,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().mobilePhone()).setVisible(isManager || isSelfEditor);
         get(proto().signature().file()).setVisible(isManager || isSelfEditor);
         privilegesTab.setTabVisible(isSelfEditor || isManager);
-        auditingTab.setTabVisible(isSelfEditor || isManager);
+        auditingTab.setTabVisible(VistaTODO.VISTA_4066_EmployeeAuditingEmailNotificationsImplemented && (isSelfEditor || isManager));
         alertsTab.setTabVisible(isSelfEditor || isManager);
     }
 

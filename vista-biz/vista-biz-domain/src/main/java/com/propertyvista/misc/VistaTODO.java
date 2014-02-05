@@ -69,4 +69,7 @@ public class VistaTODO {
     public static boolean visaDebitHasConvenienceFee = false;
 
     public static boolean yardi_noUnitOccupancySegments = true;
+
+    public static boolean VISTA_4066_EmployeeAuditingEmailNotificationsImplemented = false;
+
 }
