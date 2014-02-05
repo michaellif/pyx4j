@@ -172,7 +172,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         ServerSideFactory.create(BuildingFacade.class).persist(bo);
 
-        saveUtilities(bo);
+        saveUtilities(bo, to);
 
         saveILS(bo, to);
     }
@@ -185,19 +185,22 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         bo.utilities().addAll(Persistence.service().query(criteria));
     }
 
-    private void saveUtilities(Building bo) {
-        EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
-        criteria.eq(criteria.proto().building(), bo);
-        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+    private void saveUtilities(Building bo, BuildingDTO to) {
+        if (to.getPrimaryKey() != null) {
+            // Remove old Utility
+            EntityQueryCriteria<BuildingUtility> criteria = EntityQueryCriteria.create(BuildingUtility.class);
+            criteria.eq(criteria.proto().building(), to);
+            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
 
-        for (BuildingUtility utility : Persistence.service().query(criteria)) {
-            if (!bo.utilities().remove(utility)) {
-                utility.isDeleted().setValue(true);
-                Persistence.service().merge(utility);
+            for (BuildingUtility utility : Persistence.service().query(criteria)) {
+                if (!to.utilities().contains(utility)) {
+                    utility.isDeleted().setValue(true);
+                    Persistence.service().merge(utility);
+                }
             }
         }
-
-        for (BuildingUtility utility : bo.utilities()) {
+        // Save new and update existing
+        for (BuildingUtility utility : to.utilities()) {
             utility.building().set(bo);
             utility.isDeleted().setValue(false);
             Persistence.service().merge(utility);
