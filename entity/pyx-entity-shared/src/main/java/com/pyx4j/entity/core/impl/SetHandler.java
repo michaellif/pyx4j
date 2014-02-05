@@ -73,6 +73,9 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
 
     @Override
     public void set(ISet<TYPE> typedSet) {
+        for (TYPE entity : typedSet) {
+            ensureTypedValue(entity);
+        }
         setValue(typedSet.getValue());
     }
 

@@ -1072,7 +1072,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         } else if (!childEntity.isNull()) {
                             childEntity = childEntity.cast();
                             TableModel childTM = tableModel(childEntity.getEntityMeta());
-                            fireModificationAdapters(childTM, childEntity);
+                            fireModificationAdaptersNewEntity(childTM, childEntity);
                             updated = true;
                         }
                     }
@@ -1119,7 +1119,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @SuppressWarnings("unchecked")
-    private void fireModificationAdapters(TableModel tm, IEntity entity) {
+    private void fireModificationAdaptersNewEntity(TableModel tm, IEntity entity) {
         Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
         Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
         if (adapters != null) {
@@ -1145,6 +1145,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(entity, memberMeta, null, value)) {
                             log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
+                            log.debug("Error in member '{}' change of entity {}\n{}", member, entity.getDebugExceptionInfoString(),
+                                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                             throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
                         }
                     }
@@ -1155,6 +1157,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(entity, memberMeta, null, value)) {
                             log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
+                            log.debug("Error in member '{}' change of entity {}\n{}", member, entity.getDebugExceptionInfoString(),
+                                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                             throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
                         }
                     }
@@ -1174,13 +1178,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         if (!childEntity.isValueDetached()) {
                             childEntity = childEntity.cast();
                             TableModel childTM = tableModel(childEntity.getEntityMeta());
-                            fireModificationAdapters(childTM, childEntity);
+                            fireModificationAdaptersNewEntity(childTM, childEntity);
                         }
                     }
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
                     if (!childEntity.isValueDetached() && childEntity.hasValues()) {
-                        fireModificationAdapters(tableModel(childEntity.getEntityMeta()), childEntity);
+                        fireModificationAdaptersNewEntity(tableModel(childEntity.getEntityMeta()), childEntity);
                     }
                 }
             }
@@ -1207,7 +1211,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (!isNewEntity) {
             updated = retrieveAndApplyModifications(tm, baseEntity, entity);
         } else {
-            fireModificationAdapters(tm, entity);
+            fireModificationAdaptersNewEntity(tm, entity);
             updated = true;
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {

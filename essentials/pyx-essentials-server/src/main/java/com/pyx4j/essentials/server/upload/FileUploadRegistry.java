@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.IFile;
@@ -32,6 +35,8 @@ import com.pyx4j.entity.shared.IHasFile;
 import com.pyx4j.server.contexts.Context;
 
 public class FileUploadRegistry {
+
+    private static final Logger log = LoggerFactory.getLogger(FileUploadRegistry.class);
 
     private static final String SESSION_ATTRIBUTE = FileUploadRegistry.class.getName();
 
@@ -58,13 +63,19 @@ public class FileUploadRegistry {
 
     public static boolean allowModifications(IHasFile<?> entity, MemberMeta meta, Object valueOrig, Object valueNew) {
         if (entity.file().accessKey().isNull()) {
+            log.debug("file of entity {} do not have accessKey", entity);
             return false;
         }
         IFile<?> userUploadedFile = get(entity.file().accessKey().getValue());
         if (userUploadedFile == null) {
+            log.debug("file {} of entity {} is not registered", entity.file().accessKey().getValue(), entity);
             return false;
         } else {
-            return EqualsHelper.equals(userUploadedFile.blobKey().getValue(), valueNew);
+            boolean sameBlob = EqualsHelper.equals(userUploadedFile.blobKey().getValue(), valueNew);
+            if (!sameBlob) {
+                log.debug("blobId changed {}->{} in entity {}", userUploadedFile.blobKey().getValue(), valueNew, entity);
+            }
+            return sameBlob;
         }
     }
 }

@@ -48,6 +48,9 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public void set(IList<TYPE> typedList) {
+        for (TYPE entity : typedList) {
+            ensureTypedValue(entity);
+        }
         setValue(typedList.getValue());
     }
 
