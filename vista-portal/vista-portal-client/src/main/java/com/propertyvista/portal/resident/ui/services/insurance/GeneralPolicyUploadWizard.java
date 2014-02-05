@@ -14,6 +14,7 @@
 package com.propertyvista.portal.resident.ui.services.insurance;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
@@ -23,6 +24,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
@@ -63,6 +65,31 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 .build());
         contentPanel.setWidget(++row, 0,
                 new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).mockValue(new BigDecimal("222.33")).build());
+        contentPanel.setWidget(
+                ++row,
+                0,
+                new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).mockValue(
+                        new LogicalDate(System.currentTimeMillis() - (long) 182 * 24 * 60 * 60 * 1000)).build());
+
+        contentPanel.setWidget(
+                ++row,
+                0,
+                new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).mockValue(
+                        new LogicalDate(System.currentTimeMillis() + (long) 182 * 24 * 60 * 60 * 1000)).build());
+
+        contentPanel.setH1(++row, 0, 1, "Attach Scanned Insurance Certificate Documents");
+        contentPanel.setWidget(++row, 0, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));
+
+        return contentPanel;
+    }
+
+    public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
+        this.minRequiredLiability = minRequiredLiability;
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
         get(proto().certificate().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
@@ -81,12 +108,6 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 return null;
             }
         });
-        contentPanel.setWidget(
-                ++row,
-                0,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).mockValue(
-                        new LogicalDate(System.currentTimeMillis() - (long) 182 * 24 * 60 * 60 * 1000)).build());
-
         get(proto().certificate().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
@@ -96,12 +117,6 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 return null;
             }
         });
-        contentPanel.setWidget(
-                ++row,
-                0,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).mockValue(
-                        new LogicalDate(System.currentTimeMillis() + (long) 182 * 24 * 60 * 60 * 1000)).build());
-
         get(proto().certificate().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
@@ -111,15 +126,14 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 return null;
             }
         });
-
-        contentPanel.setH1(++row, 0, 1, "Attach Scanned Insurance Certificate Documents");
-        contentPanel.setWidget(++row, 0, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));
-
-        return contentPanel;
+        get(proto().certificate().certificateDocs()).addValueValidator(new EditableValueValidator<List<InsuranceCertificateScan>>() {
+            @Override
+            public ValidationError isValid(CComponent<List<InsuranceCertificateScan>> component, List<InsuranceCertificateScan> value) {
+                if (value != null && value.isEmpty()) {
+                    return new ValidationError(component, i18n.tr("Please upload a scan of your insurance certificate"));
+                }
+                return null;
+            }
+        });
     }
-
-    public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
-        this.minRequiredLiability = minRequiredLiability;
-    }
-
 }

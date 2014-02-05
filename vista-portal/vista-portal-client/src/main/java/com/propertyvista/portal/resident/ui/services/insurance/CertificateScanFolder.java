@@ -68,6 +68,12 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateSc
 
             return content;
         }
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+            get(proto().file()).setMandatory(true);
+        }
     }
 
 }
