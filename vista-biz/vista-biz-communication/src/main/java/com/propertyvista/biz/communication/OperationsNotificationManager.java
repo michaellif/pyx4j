@@ -71,4 +71,13 @@ public class OperationsNotificationManager {
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;
     }
+
+    public static MailMessage createCfcErrorMessage(String error) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        email.setTo("support@propertyvista.com");
+        email.setSubject("TenantSure CFC API error");
+        email.setHtmlBody(error);
+        return email;
+    }
 }

@@ -52,6 +52,11 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
         send(OperationsNotificationManager.createInvalidDirectDebitReceivedEmail(paymentRecord));
     }
 
+    @Override
+    public void sendTenantSureCfcOperationProblem(String error) {
+        send(OperationsNotificationManager.createCfcErrorMessage(error));
+    }
+
     private void send(MailMessage m) {
         try {
             if (MailDeliveryStatus.Success != Mail.send(m)) {

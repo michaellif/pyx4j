@@ -26,4 +26,6 @@ public interface OperationsNotificationFacade {
     void sendOperationsPasswordRetrievalToken(OperationsUser user) throws UserRuntimeException;
 
     void invalidDirectDebitReceived(DirectDebitRecord paymentRecord);
+
+    void sendTenantSureCfcOperationProblem(String error);
 }
