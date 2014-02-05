@@ -27,9 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -58,8 +55,6 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
-
-    private static final Logger log = LoggerFactory.getLogger(CComponent.class);
 
     private static final I18n i18n = I18n.get(CComponent.class);
 

@@ -33,8 +33,6 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>> extends CComponent<DATA_TYPE> {
 
-    private static final Logger log = LoggerFactory.getLogger(CField.class);
-
     private WIDGET_TYPE nativeWidget;
 
     private Command navigationCommand;
