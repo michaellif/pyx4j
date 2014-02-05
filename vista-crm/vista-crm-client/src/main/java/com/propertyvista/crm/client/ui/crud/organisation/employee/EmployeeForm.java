@@ -109,7 +109,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
-        get(proto().isSecurityQuestionSet()).setEditable(false);
+        get(proto().isSecurityQuestionSet()).setViewable(true);
         get(proto().enabled()).setVisible(isManager);
         get(proto().requiredPasswordChangeOnNextLogIn()).setVisible(isManager);
 

@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.organization;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
@@ -79,8 +80,9 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
         Persistence.service().retrieve(to.employees());
 
         //TODO proper Role
+        CrmUserCredential crs = null;
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization) && (bo.user().getPrimaryKey() != null)) {
-            CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
+            crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
             to.enabled().set(crs.enabled());
             to.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
             to.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
@@ -88,6 +90,14 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             to.credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
             to.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
+        }
+        if (bo.user().getPrimaryKey() != null) {
+            if (crs != null) {
+                crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
+            }
+            if (crs != null) {
+                to.isSecurityQuestionSet().setValue(!CommonsStringUtils.isEmpty(crs.securityQuestion().getValue()));
+            }
         }
 
         Persistence.service().retrieveMember(bo.notifications());
