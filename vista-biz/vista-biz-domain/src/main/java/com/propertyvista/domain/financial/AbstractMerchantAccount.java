@@ -19,25 +19,30 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 public interface AbstractMerchantAccount extends IEntity {
 
+    @NotNull
     @Length(8)
     @RpcTransient
     @Indexed(uniqueConstraint = true)
     IPrimitive<String> merchantTerminalId();
 
+    @NotNull
     @Length(3)
     @ToString
     IPrimitive<String> bankId();
 
+    @NotNull
     @Length(5)
     @ToString
     IPrimitive<String> branchTransitNumber();
 
+    @NotNull
     @Length(12)
     @ToString
     IPrimitive<String> accountNumber();
