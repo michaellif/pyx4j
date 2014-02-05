@@ -32,17 +32,14 @@ public interface AbstractMerchantAccount extends IEntity {
     @Indexed(uniqueConstraint = true)
     IPrimitive<String> merchantTerminalId();
 
-    @NotNull
     @Length(3)
     @ToString
     IPrimitive<String> bankId();
 
-    @NotNull
     @Length(5)
     @ToString
     IPrimitive<String> branchTransitNumber();
 
-    @NotNull
     @Length(12)
     @ToString
     IPrimitive<String> accountNumber();
