@@ -168,7 +168,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId) {
         UnitOptionsSelectionDTO options = EntityFactory.create(UnitOptionsSelectionDTO.class);
 
-        options.unit().set(Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey()));
+        options.unit().set(filterUnitData(Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey())));
 
         callback.onSuccess(fillAvailableUnitOptions(options));
     }
@@ -787,8 +787,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     // ================================================================================================================
 
     private AptUnit filterUnitData(AptUnit unit) {
-        assert (!unit.building().isValueDetached());
-        assert (!unit.floorplan().isValueDetached());
+        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.Attached);
 
         AptUnit to = new EntityBinder<AptUnit, AptUnit>(AptUnit.class, AptUnit.class) {
             @Override
