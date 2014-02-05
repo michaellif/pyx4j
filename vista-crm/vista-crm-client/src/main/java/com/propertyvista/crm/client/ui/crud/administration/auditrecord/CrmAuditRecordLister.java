@@ -32,6 +32,7 @@ public class CrmAuditRecordLister extends AbstractLister<AuditRecordDTO> {
                 new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
                 new MemberColumnDescriptor.Builder(proto().event()).build(),
+                new MemberColumnDescriptor.Builder(proto().targetEntity()).build(),
                 new MemberColumnDescriptor.Builder(proto().details()).build()                
         );//@formatter:on
     }
