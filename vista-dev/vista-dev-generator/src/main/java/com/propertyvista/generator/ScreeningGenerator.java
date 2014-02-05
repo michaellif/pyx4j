@@ -69,8 +69,9 @@ public class ScreeningGenerator {
         CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
 
         // Documents
-        for (int i = 0; i < 2 + RandomUtil.randomInt(2); i++) {
-            screening.version().documents().add(createIdentificationDocument());
+        screening.version().documents().add(createIdentificationDocument(IdentificationDocumentType.Type.canadianSIN));
+        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+            screening.version().documents().add(createIdentificationDocument(null));
         }
 
         // Address
@@ -250,12 +251,22 @@ public class ScreeningGenerator {
         return list;
     }
 
-    private IdentificationDocumentFolder createIdentificationDocument() {
+    private IdentificationDocumentFolder createIdentificationDocument(IdentificationDocumentType.Type type) {
         IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);
         if (identificationDocumentTypes == null) {
             identificationDocumentTypes = Persistence.service().query(EntityQueryCriteria.create(IdentificationDocumentType.class));
         }
-        document.idType().set(RandomUtil.random(identificationDocumentTypes));
+        if (type == null) {
+            document.idType().set(RandomUtil.random(identificationDocumentTypes));
+        } else {
+            for (IdentificationDocumentType idType : identificationDocumentTypes) {
+                if (idType.type().getValue() == type) {
+                    document.idType().set(idType);
+                    break;
+                }
+            }
+        }
+
         if (document.idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) {
             document.idNumber().setValue(CreditCardNumberGenerator.generateCanadianSin());
         } else {
