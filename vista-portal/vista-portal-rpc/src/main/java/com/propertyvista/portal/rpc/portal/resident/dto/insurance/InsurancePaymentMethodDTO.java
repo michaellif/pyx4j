@@ -22,7 +22,9 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 @Transient
 public interface InsurancePaymentMethodDTO extends IEntity {
 
-    InsurancePaymentMethod paymentMethod();
+    InsurancePaymentMethod newPaymentMethod();
+
+    InsurancePaymentMethod currentPaymentMethod();
 
     @Deprecated
     IPrimitive<String> preauthorizedPaymentAgreement();

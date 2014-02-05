@@ -21,12 +21,15 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -37,16 +40,23 @@ public class TenantSurePaymentMethodCrudServiceImpl implements TenantSurePayment
     @Override
     public void init(AsyncCallback<InsurancePaymentMethodDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
         InsurancePaymentMethodDTO dto = EntityFactory.create(InsurancePaymentMethodDTO.class);
-        dto.paymentMethod().set(EntityFactory.create(InsurancePaymentMethod.class));
-        dto.paymentMethod().type().setValue(PaymentType.CreditCard);
+
+        dto.newPaymentMethod().set(EntityFactory.create(InsurancePaymentMethod.class));
+        dto.newPaymentMethod().type().setValue(PaymentType.CreditCard);
+        dto.newPaymentMethod().preAuthorizedAgreementSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
         dto.preauthorizedPaymentAgreement().setValue("TODO use PortalVistaTermsService");
+
+        dto.currentPaymentMethod().set(
+                ServerSideFactory.create(PaymentMethodFacade.class).retrieveInsurancePaymentMethod(
+                        ResidentPortalContext.getTenant().<Tenant> createIdentityStub()));
+
         callback.onSuccess(dto);
     }
 
     @Override
     public void create(AsyncCallback<Key> callback, InsurancePaymentMethodDTO editableEntity) {
-        editableEntity.paymentMethod().tenant().set(ResidentPortalContext.getTenant());
-        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(editableEntity.paymentMethod(), ResidentPortalContext.getTenant());
+        editableEntity.newPaymentMethod().tenant().set(ResidentPortalContext.getTenant());
+        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(editableEntity.newPaymentMethod(), ResidentPortalContext.getTenant());
         Persistence.service().commit();
         callback.onSuccess(null);
     }

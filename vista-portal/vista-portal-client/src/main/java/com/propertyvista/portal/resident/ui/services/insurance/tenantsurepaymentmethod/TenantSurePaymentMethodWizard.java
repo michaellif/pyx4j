@@ -16,15 +16,19 @@ package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymen
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardView.Persenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<InsurancePaymentMethodDTO> {
 
@@ -42,7 +46,8 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     public TenantSurePaymentMethodWizard(IWizardView<InsurancePaymentMethodDTO> view) {
         super(InsurancePaymentMethodDTO.class, view, i18n.tr("TenantSure Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast3);
 
-        addStep(createPaymentMethodStep());
+        addStep(createDisplayCurrentPaymentMethodStep());
+        addStep(createInputNewPaymentMethodStep());
     }
 
     public void setPresenter(TenantSurePaymentMethodWizardView.Persenter presenter) {
@@ -55,10 +60,22 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
         paymentMethodForm.setValue(paymentMethod);
     }
 
-    private BasicFlexFormPanel createPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
+    private BasicFlexFormPanel createDisplayCurrentPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Current Payment Method"));
+        int row = -1;
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentPaymentMethod().creationDate(), new CDateLabel()), 100).build());
+//        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentPaymentMethod().type(), new CEnumLabel()), 150).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>())).build());
+        panel.setWidget(++row, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().currentPaymentMethod().billingAddress(), new CEntityLabel<AddressSimple>())).build());
 
-        panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodForm));
+        return panel;
+    }
+
+    private BasicFlexFormPanel createInputNewPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("New Payment Method"));
+
+        panel.setWidget(0, 0, inject(proto().newPaymentMethod(), paymentMethodForm));
 
         return panel;
     }
