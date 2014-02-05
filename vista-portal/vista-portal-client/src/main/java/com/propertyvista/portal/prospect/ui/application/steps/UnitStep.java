@@ -117,6 +117,13 @@ public class UnitStep extends ApplicationWizardStep {
     public void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        if (getValue().unitSelection().bedrooms().isNull()) {
+            bedroomSelector.setValue(BedroomNumber.Any);
+        }
+        if (getValue().unitSelection().bathrooms().isNull()) {
+            bathroomSelector.setValue(BathroomNumber.Any);
+        }
+
         setEditableState(getValue().unitSelection().selectedUnit().isNull());
     }
 
@@ -143,7 +150,6 @@ public class UnitStep extends ApplicationWizardStep {
         potentialUnitsFolder.setVisible(editable);
 
         updateButton.setVisible(!editable);
-
     }
 
     @Override
@@ -175,7 +181,6 @@ public class UnitStep extends ApplicationWizardStep {
             @Override
             public void onValueChange(final ValueChangeEvent<UnitTO> event) {
                 updateUnitOptions(event.getValue());
-                ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
             }
         });
     }
@@ -185,12 +190,14 @@ public class UnitStep extends ApplicationWizardStep {
         current.availableUnits().clear();
         current.potentialUnits().clear();
 
-        getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<UnitSelectionDTO>() {
-            @Override
-            public void onSuccess(UnitSelectionDTO result) {
-                setAvailableUnits(result);
-            }
-        }, current);
+        if (!current.moveIn().isNull()) {
+            getWizard().getPresenter().getAvailableUnits(new DefaultAsyncCallback<UnitSelectionDTO>() {
+                @Override
+                public void onSuccess(UnitSelectionDTO result) {
+                    setAvailableUnits(result);
+                }
+            }, current);
+        }
     }
 
     private void updateUnitOptions(UnitTO unit) {
@@ -199,6 +206,9 @@ public class UnitStep extends ApplicationWizardStep {
                 @Override
                 public void onSuccess(UnitOptionsSelectionDTO result) {
                     ((OptionsStep) getWizard().getStep(OptionsStep.class)).setStepValue(result);
+                    getValue().unit().set(result.unit());
+                    ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(),
+                            ApplicationWizardStateChangeEvent.ChangeType.termChange));
                 }
             }, unit);
         }
