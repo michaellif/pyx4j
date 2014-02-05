@@ -95,8 +95,8 @@ public class UnitStep extends ApplicationWizardStep {
 
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().building(), new CEntityLabel<Building>())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().moveIn()), 120).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bedrooms(), bedroomSelector), 50).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector), 50).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bedrooms(), bedroomSelector), 120).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector), 120).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().selectedUnit(), selectedUnit)).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Exact match:"));

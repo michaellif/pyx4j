@@ -296,7 +296,7 @@ public class PortalTheme extends Theme {
                 style.addProperty("border-style", "solid");
                 style.addProperty("border-width", "1px");
                 style.addProperty("border-radius", "5px");
-                style.addProperty("padding", "10px");
+                style.addProperty("padding", "10px 15px");
                 style.addProperty("margin", "10px");
                 style.addProperty("overflow", "hidden");
                 addStyle(style);

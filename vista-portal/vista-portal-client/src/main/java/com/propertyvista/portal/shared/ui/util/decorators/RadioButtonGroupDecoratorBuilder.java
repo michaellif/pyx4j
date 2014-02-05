@@ -20,7 +20,7 @@ public class RadioButtonGroupDecoratorBuilder extends WidgetDecorator.Builder {
 
     public RadioButtonGroupDecoratorBuilder(CComponent<?> component) {
         super(component);
-        contentWidth(70 + "px");
+        contentWidth("100%");
         componentWidth(70 + "px");
         labelPosition(LabelPosition.top);
         useLabelSemicolon(false);
