@@ -74,8 +74,6 @@ public class TesterSite extends AppSite {
             ClientLogger.addAppender(new RPCAppender(Level.WARN));
         }
 
-        RootPanel.get().add(GlassPanel.instance());
-
         DefaultErrorHandlerDialog.register();
 
         getHistoryHandler().register(getPlaceController(), getEventBus());
@@ -83,6 +81,8 @@ public class TesterSite extends AppSite {
         StyleManager.installTheme(new TesterTheme(), new TesterPalette());
 
         setRootPane(new TesterRootPane());
+
+        RootPanel.get().add(GlassPanel.instance());
 
         hideLoadingIndicator();
 

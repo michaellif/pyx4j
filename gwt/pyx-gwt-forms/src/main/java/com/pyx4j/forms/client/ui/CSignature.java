@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -50,7 +51,8 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
             @Override
             public ValidationError isValid(CComponent<ISignature> component, ISignature value) {
                 if (value != null) {
-                    switch (value.signatureFormat().getValue()) {
+                    SignatureFormat signatureFormat = value.signatureFormat().isNull() ? SignatureFormat.None : value.signatureFormat().getValue();
+                    switch (signatureFormat) {
                     case None:
                         break;
                     case AgreeBox:

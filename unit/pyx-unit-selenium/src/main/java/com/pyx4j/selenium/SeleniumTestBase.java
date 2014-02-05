@@ -274,7 +274,7 @@ public class SeleniumTestBase extends TestCase {
     }
 
     public void assertValueOnForm(IDebugId formDebugId, IEntity member) {
-        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(D.id(formDebugId, member)));
+        assertEquals(member.getMeta().getCaption(), member.getStringView(), selenium.getValue(DebugIdBuilder.id(formDebugId, member)));
     }
 
     public void assertValueOnForm(IPrimitive<?> member) {
@@ -313,7 +313,7 @@ public class SeleniumTestBase extends TestCase {
     }
 
     public void setValueOnForm(IDebugId formDebugId, IEntity member) {
-        selenium.setValue(D.id(formDebugId, member), member.getStringView());
+        selenium.setValue(DebugIdBuilder.id(formDebugId, member), member.getStringView());
     }
 
     public void setValueOnForm(IPrimitive<?> member) {
@@ -323,13 +323,13 @@ public class SeleniumTestBase extends TestCase {
     public void setValueOnForm(IDebugId formDebugId, IPrimitive<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().isEnum()) {
-            selenium.setEnumValue(D.id(formDebugId, member), (Enum<?>) member.getValue());
+            selenium.setEnumValue(DebugIdBuilder.id(formDebugId, member), (Enum<?>) member.getValue());
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            selenium.setValue(D.id(formDebugId, member), (Boolean) member.getValue());
+            selenium.setValue(DebugIdBuilder.id(formDebugId, member), (Boolean) member.getValue());
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class)) || (mm.getValueClass().equals(LogicalDate.class))) {
-            selenium.setDateValue(D.id(formDebugId, member), (Date) member.getValue(), mm.getFormat());
+            selenium.setDateValue(DebugIdBuilder.id(formDebugId, member), (Date) member.getValue(), mm.getFormat());
         } else {
-            selenium.setValue(D.id(formDebugId, member), member.getStringView());
+            selenium.setValue(DebugIdBuilder.id(formDebugId, member), member.getStringView());
         }
     }
 }

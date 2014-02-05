@@ -48,7 +48,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
  * </pre>
  * 
  */
-public class D {
+public class DebugIdBuilder {
 
     public static IDebugId id(IList<?> formFolder, int itemNumber) {
         return new CompositeDebugId(formFolder.getPath(), IDebugId.ROW_PREFIX, itemNumber);
