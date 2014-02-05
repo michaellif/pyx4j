@@ -33,12 +33,15 @@ start new log file on each application start
         <file>${container-home}/logs/${application-name}/${logs-name}.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--  Rollover at the top of each hour.  -->
             <fileNamePattern>${container-home}/logs/${application-name}/${logs-name}.%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.PyxExtensionSizeAndTimeBasedFNATP">
                 <rolloverOnStart>true</rolloverOnStart>
                 <maxFileSize>7000KB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>300</maxHistory>
+            <!-- see fileNamePattern; hours, disabled because of the VISTA-4094 -->
+            <maxHistory>0</maxHistory>
+            <cleanHistoryOnStart>false</cleanHistoryOnStart>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
