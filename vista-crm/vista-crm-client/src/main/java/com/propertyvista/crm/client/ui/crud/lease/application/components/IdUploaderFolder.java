@@ -15,10 +15,13 @@ package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -34,7 +37,9 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.misc.CreditCardNumberGenerator;
 
 public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolder> {
 
@@ -155,6 +160,24 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
                     return null;
                 }
             });
+
+            if (ApplicationMode.isDevelopment()) {
+                this.addDevShortcutHandler(new DevShortcutHandler() {
+                    @Override
+                    public void onDevShortcut(DevShortcutEvent event) {
+                        if (event.getKeyCode() == 'Q') {
+                            event.consume();
+                            devGenerateNumbers();
+                        }
+                    }
+                });
+            }
+        }
+
+        private void devGenerateNumbers() {
+            if (getValue().idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) {
+                get(proto().idNumber()).setValue(CreditCardNumberGenerator.generateCanadianSin());
+            }
         }
     }
 }

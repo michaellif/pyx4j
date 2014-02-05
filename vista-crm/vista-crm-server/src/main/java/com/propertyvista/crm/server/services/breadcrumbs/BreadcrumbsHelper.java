@@ -105,8 +105,8 @@ public class BreadcrumbsHelper {
             criteria.desc(criteria.proto().leaseParticipant().lease().updated());
             LeaseTermParticipant<?> leaseParticipant = Persistence.service().retrieve(criteria);
             trail.add(toStringDuplicate(leaseParticipant));
-            Persistence.service().retrieve(leaseParticipant.leaseTermV());
-            startFromTarget = leaseParticipant.leaseTermV();
+            Persistence.ensureRetrieve(leaseParticipant.leaseTermV().holder(), AttachLevel.Attached);
+            startFromTarget = leaseParticipant.leaseTermV().holder();
         }
 
         if (startFromTarget instanceof Lease) {

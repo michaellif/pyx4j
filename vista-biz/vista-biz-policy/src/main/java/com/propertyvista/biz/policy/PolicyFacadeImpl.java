@@ -25,6 +25,7 @@ import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public class PolicyFacadeImpl implements PolicyFacade {
 
@@ -40,13 +41,21 @@ public class PolicyFacadeImpl implements PolicyFacade {
         // Special case for not business owned
         if (entity instanceof CustomerScreening) {
             // TODO Find  LeaseTerm that have application
-            Persistence.ensureRetrieve(((CustomerScreening) entity).screene(), AttachLevel.IdOnly);
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().units().$().leases().$().leaseParticipants().$().customer(),
-                    ((CustomerScreening) entity).screene()));
-// TODO VladS : (DEV:)Sort by collections is unsupported, Throwable class java.lang.Error
-//            criteria.desc(criteria.proto().units().$()._Leases().$().updated());
-            node = Persistence.service().retrieve(criteria);
+            LeaseTermParticipant<?> leaseParticipant;
+            {
+                @SuppressWarnings("rawtypes")
+                EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant().customer().personScreening(), entity));
+                criteria.desc(criteria.proto().leaseParticipant().lease().updated());
+                leaseParticipant = Persistence.service().retrieve(criteria);
+            }
+            // Find building by Lease
+            {
+                Persistence.ensureRetrieve(leaseParticipant.leaseTermV().holder(), AttachLevel.Attached);
+                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                criteria.eq(criteria.proto().units().$().leases(), leaseParticipant.leaseTermV().holder().lease());
+                node = Persistence.service().retrieve(criteria);
+            }
         } else {
             // TODO use the same code as in BreadcrumbsHelper
             throw new IllegalArgumentException("TODO take a code from BreadcrumbsHelper and find fist PolicyNode in object hierarchy");
