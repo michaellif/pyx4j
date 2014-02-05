@@ -142,6 +142,13 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
         private class AutoPayViewer extends CEntityForm<AutoPayInfoDTO> {
 
+            private final Anchor detailsViewAnchor = new Anchor("View Details", new Command() {
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().viewPreauthorizedPayment(getValue());
+                }
+            });
+
             public AutoPayViewer() {
                 super(AutoPayInfoDTO.class);
 
@@ -158,12 +165,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()), 250).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount()), 100).build());
 
-                content.setWidget(++row, 0, new Anchor("View Details", new Command() {
-                    @Override
-                    public void execute() {
-                        getGadgetView().getPresenter().viewPreauthorizedPayment(getValue());
-                    }
-                }));
+                content.setWidget(++row, 0, detailsViewAnchor);
 
                 return content;
             }
@@ -174,8 +176,9 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 super.onValueSet(populate);
 
                 get(proto().paymentMethod()).setVisible(!getValue().paymentMethod().isNull());
+                detailsViewAnchor.setVisible(!getValue().paymentMethod().isNull());
 
-                ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty()
+                ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isNull()
                         && parentView.getValue().allowCancelationByResident().isBooleanTrue());
             }
         }
