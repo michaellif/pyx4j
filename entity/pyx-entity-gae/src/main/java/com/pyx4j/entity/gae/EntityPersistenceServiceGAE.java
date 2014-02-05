@@ -462,6 +462,16 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             entityMembersModificationAdapters = adapters.memberModificationAdapters();
         }
 
+        // TODO change main look to go over Members  not just values
+        if (merge) {
+            EntityMeta em = iEntity.getEntityMeta();
+            for (String memberName : em.getMemberNames()) {
+                if (!iEntity.getValue().containsKey(memberName)) {
+                    iEntity.setMemberValue(memberName, null);
+                }
+            }
+        }
+
         nextValue: for (Map.Entry<String, Serializable> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue nextValue;

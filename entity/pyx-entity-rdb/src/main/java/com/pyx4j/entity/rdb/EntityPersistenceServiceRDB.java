@@ -1005,11 +1005,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
                 value = member.getMemberValue(entity);
                 lastValue = member.getMemberValue(baseEntity);
-                // merge incomplete data
-                if ((value == null) && (lastValue != null) && !member.containsMemberValue(entity)) {
-                    member.setMemberValue(entity, lastValue);
-                    continue;
-                }
             }
             if (!EqualsHelper.equals(lastValue, value)) {
                 updated = true;

@@ -70,7 +70,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
         Employee emp3 = srv.retrieve(Employee.class, pk);
         Assert.assertEquals("firstName updated", emp2.firstName().getValue(), emp3.firstName().getValue());
-        Assert.assertEquals("holidays not updated", emp1.holidays().getValue(), emp3.holidays().getValue());
+        Assert.assertNull("holidays not removed", emp3.holidays().getValue());
     }
 
     public void testUnownedOneToOnePersist() {
