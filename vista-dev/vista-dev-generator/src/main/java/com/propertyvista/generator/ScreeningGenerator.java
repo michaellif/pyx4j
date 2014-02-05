@@ -94,7 +94,7 @@ public class ScreeningGenerator {
     }
 
     private void makeAddressValid(PriorAddress currentAddress, PriorAddress previousAddress) {
-        currentAddress.moveOutDate().setValue(RandomUtil.randomLogicalDate(2013, 2014)); // this has to be in the future
+        currentAddress.moveOutDate().setValue(DataGenerator.randomDateFuture(24)); // this has to be in the future
 
         // moveOut date for previous address is 1 day before the moveIn date for current address
         Date moveOut = new Date();
