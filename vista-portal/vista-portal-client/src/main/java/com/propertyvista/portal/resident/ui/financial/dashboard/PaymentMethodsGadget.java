@@ -186,7 +186,8 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 }
 
                 if (getValue().restricted().isBooleanTrue()) {
-                    get(proto().paymentMethod().type()).setNote(i18n.tr("This Payment Method is currently restricted for use in Portal!"), NoteStyle.Warn);
+                    get(proto().paymentMethod().type()).setNote(i18n.tr("This Payment Method Type is currently restricted and cannot be used in Portal!"),
+                            NoteStyle.Warn);
                 }
             }
         }
