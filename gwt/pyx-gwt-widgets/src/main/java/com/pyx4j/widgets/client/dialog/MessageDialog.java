@@ -12,16 +12,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,8 +39,13 @@ public class MessageDialog extends Dialog {
         Error, Warning, Info, Confirm
     }
 
+    private final MessagePanel messagePanel;
+
     public MessageDialog(String caption, String message, Type type, DialogOptions options) {
-        super(caption, options, new MessagePanel(message, type));
+        super(caption);
+        setDialogOptions(options);
+        messagePanel = new MessagePanel(message, type);
+        setBody(messagePanel);
     }
 
     public static void error(String title, String text) {
@@ -179,57 +187,72 @@ public class MessageDialog extends Dialog {
         });
     }
 
-    static class MessagePanel extends DockPanel {
+    @Override
+    public void layout() {
+        if (messagePanel != null) {
+            messagePanel.layout();
+        }
+        super.layout();
+    }
+
+    class MessagePanel extends FlowPanel {
+
+        private final ScrollPanel htmlScroll;
+
+        private final HTML htmlMessage;
 
         MessagePanel(final String message, Type type) {
-
             super();
-            setSize("100%", "100%");
-            DOM.setStyleAttribute(getElement(), "padding", "10px");
-            DOM.setStyleAttribute(getElement(), "paddingBottom", "20px");
+            getElement().getStyle().setProperty("display", "table");
 
-            WidgetsImageBundle images = ImageFactory.getImages();
+            WidgetsImageBundle imageBundle = ImageFactory.getImages();
             ImageResource imageResource = null;
 
             switch (type) {
             case Info:
-                imageResource = images.info();
+                imageResource = imageBundle.info();
                 break;
             case Confirm:
-                imageResource = images.confirm();
+                imageResource = imageBundle.confirm();
                 break;
             case Warning:
-                imageResource = images.warning();
+                imageResource = imageBundle.warning();
                 break;
             case Error:
-                imageResource = images.error();
+                imageResource = imageBundle.error();
                 break;
             default:
                 break;
             }
 
-            Image image = new Image(imageResource);
-            DOM.setStyleAttribute(image.getElement(), "margin", "10px");
+            SimplePanel imageHolder = new SimplePanel(new Image(imageResource));
+            imageHolder.getElement().getStyle().setProperty("display", "table-cell");
+            imageHolder.getElement().getStyle().setPadding(10, Unit.PX);
+            imageHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            add(imageHolder);
 
-            add(image, DockPanel.WEST);
-            setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
-
-            HTML htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
+            htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
             htmlMessage.getElement().getStyle().setPadding(10, Unit.PX);
-            htmlMessage.getElement().getStyle().setProperty("maxWidth", "400px");
             htmlMessage.getElement().getStyle().setProperty("wordWrap", "break-word");
+            htmlMessage.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
 
-            HorizontalPanel htmlHolder = new HorizontalPanel();
-            htmlHolder.setSize("100%", "100%");
+            htmlScroll = new ScrollPanel();
+            htmlScroll.setWidget(htmlMessage);
 
-            htmlHolder.add(htmlMessage);
-            htmlHolder.setCellHorizontalAlignment(htmlMessage, HasHorizontalAlignment.ALIGN_CENTER);
-            htmlHolder.setCellVerticalAlignment(htmlMessage, HasVerticalAlignment.ALIGN_MIDDLE);
+            SimplePanel htmlHolder = new SimplePanel(htmlScroll);
+            htmlHolder.getElement().getStyle().setProperty("display", "table-cell");
+            htmlHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-            add(htmlHolder, DockPanel.CENTER);
-            setCellHeight(htmlHolder, "100%");
-            setCellWidth(htmlHolder, "100%");
+            add(htmlHolder);
 
+        }
+
+        public void layout() {
+//            if (htmlMessage.getOffsetHeight() > Window.getClientHeight() - 200) {
+//                htmlScroll.setHeight(Math.max(200, Window.getClientHeight() - 200) + "px");
+//            } else {
+//                htmlScroll.setHeight("auto");
+//            }
         }
 
     }

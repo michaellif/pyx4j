@@ -180,26 +180,16 @@ public class Dialog implements ProvidesResize, IsWidget {
     }
 
     public void setBody(IsWidget body) {
-        if (this.body != null) {
-            content.remove(this.body);
-        }
-
         this.body = body;
         if (body != null) {
-            content.add(body, DockPanel.CENTER);
-            content.setCellWidth(body, "100%");
-            content.setCellHeight(body, "100%");
+            content.setBody(body);
         }
     }
 
     public void setDialogOptions(DialogOptions options) {
         this.options = options;
-        if (buttonsPanel != null) {
-            content.remove(buttonsPanel);
-        }
         buttonsPanel = createButtonsPanel();
-        content.add(buttonsPanel, DockPanel.SOUTH);
-        content.setCellHeight(buttonsPanel, "1px");
+        content.setOptions(buttonsPanel);
 
         this.addKeyDownHandler(new KeyDownHandler() {
 
@@ -600,11 +590,29 @@ public class Dialog implements ProvidesResize, IsWidget {
         return custom4Button;
     }
 
-    class ContentPanel extends DockPanel implements RequiresResize, ProvidesResize {
+    class ContentPanel extends FlowPanel implements RequiresResize, ProvidesResize {
+
+        private final SimplePanel bodyHolder;
+
+        private final SimplePanel optionsHolder;
 
         public ContentPanel() {
             setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
             setSize("100%", "100%");
+
+            bodyHolder = new SimplePanel();
+            add(bodyHolder);
+
+            optionsHolder = new SimplePanel();
+            add(optionsHolder);
+        }
+
+        public void setBody(IsWidget body) {
+            bodyHolder.setWidget(body);
+        }
+
+        public void setOptions(IsWidget options) {
+            optionsHolder.setWidget(options);
         }
 
         @Override

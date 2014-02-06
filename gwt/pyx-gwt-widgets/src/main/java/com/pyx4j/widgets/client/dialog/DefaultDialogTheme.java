@@ -81,6 +81,8 @@ public class DefaultDialogTheme extends Theme {
         style = new Style(".", StyleName.DialogButtonsPanel);
         style.addProperty("border-top", "solid 1px");
         style.addProperty("border-top-color", ThemeColor.foreground, 0.3);
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.DialogDefaultButtonsToolbar);
