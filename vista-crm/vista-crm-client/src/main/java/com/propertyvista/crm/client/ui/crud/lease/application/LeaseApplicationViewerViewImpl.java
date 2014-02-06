@@ -89,6 +89,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setForm(new LeaseApplicationForm(this));
 
         // Buttons:
+        Button downloadDraftLeaseAgreement = new Button(i18n.tr("Draft Lease Agreement"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).downloadDraftLeaseAgreement();
+            }
+        });
+        addHeaderToolbarItem(downloadDraftLeaseAgreement);
+
         editButton = new Button(i18n.tr("Edit"), new Command() {
             @Override
             public void execute() {
@@ -247,6 +255,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         addAction(cancelAction);
+
     }
 
     @Override

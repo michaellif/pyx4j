@@ -46,6 +46,9 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
         void getCreditCheckServiceStatus(AsyncCallback<PmcEquifaxStatus> callback);
 
         void isCreditCheckViewAllowed(AsyncCallback<VoidSerializable> callback);
+
+        void downloadDraftLeaseAgreement();
+
     }
 
     ILister<PaymentRecordDTO> getPaymentListerView();

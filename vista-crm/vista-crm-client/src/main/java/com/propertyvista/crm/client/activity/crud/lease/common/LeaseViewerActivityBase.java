@@ -93,6 +93,7 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
 
         HashMap<String, Serializable> params = new HashMap<String, Serializable>();
         params.put(LeaseTermBlankAgreementDocumentDownloadService.LEASE_ID_PARAM_KEY, getEntityId());
+
         ReportRequest request = new ReportRequest();
         request.setParameters(params);
         reportDialog.start(GWT.<LeaseTermBlankAgreementDocumentDownloadService> create(LeaseTermBlankAgreementDocumentDownloadService.class), request);

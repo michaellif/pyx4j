@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.application;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -22,10 +24,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -39,12 +43,14 @@ import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<LeaseApplicationDTO> implements LeaseApplicationViewerView.Presenter {
 
@@ -164,6 +170,20 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                 callback.onSuccess(result);
             }
         });
+    }
+
+    @Override
+    public void downloadDraftLeaseAgreement() {
+        ReportDialog reportDialog = new ReportDialog(i18n.tr("Creating Draft Lease Document"), "");
+        reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+
+        HashMap<String, Serializable> params = new HashMap<String, Serializable>();
+        params.put(LeaseTermBlankAgreementDocumentDownloadService.LEASE_ID_PARAM_KEY, getEntityId());
+        params.put(LeaseTermBlankAgreementDocumentDownloadService.CREATE_DRAFT_PARAM_KEY, "true");
+
+        ReportRequest request = new ReportRequest();
+        request.setParameters(params);
+        reportDialog.start(GWT.<LeaseTermBlankAgreementDocumentDownloadService> create(LeaseTermBlankAgreementDocumentDownloadService.class), request);
     }
 
     protected void populatePayments(Lease result) {
