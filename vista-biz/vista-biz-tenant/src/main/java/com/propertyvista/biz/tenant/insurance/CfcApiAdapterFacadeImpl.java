@@ -45,11 +45,11 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
+import com.propertyvista.biz.tenant.insurance.errors.CfcApiException;
+import com.propertyvista.biz.tenant.insurance.errors.TooManyPreviousClaimsException;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCfcMoneyAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCoverageRequestAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureTenantAdapter;
-import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
-import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
 import com.propertyvista.biz.tenant.insurance.tenantsure.rules.ITenantSurePaymentSchedule;
 import com.propertyvista.biz.tenant.insurance.tenantsure.rules.TenantSurePaymentScheduleFactory;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;

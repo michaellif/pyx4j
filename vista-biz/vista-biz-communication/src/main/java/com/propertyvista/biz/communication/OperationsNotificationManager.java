@@ -13,6 +13,10 @@
  */
 package com.propertyvista.biz.communication;
 
+import javax.xml.ws.WebServiceException;
+
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -20,6 +24,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.server.mail.MessageTemplate;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.biz.tenant.insurance.errors.CfcApiException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -72,12 +77,20 @@ public class OperationsNotificationManager {
         return email;
     }
 
-    public static MailMessage createCfcErrorMessage(String error) {
+    public static MailMessage createCfcErrorMessage(Throwable error) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
         email.setTo("support@propertyvista.com");
-        email.setSubject("TenantSure CFC API error");
-        email.setHtmlBody(error);
+        if (error instanceof CfcApiException) {
+            email.setSubject("TenantSure CFC API error");
+        } else if (error instanceof WebServiceException) {
+            email.setSubject("TenantSure CFC API web service error");
+        } else {
+            email.setSubject("TenantSure error");
+        }
+        email.setHtmlBody(error.getMessage() + "<br><pre>" + ExceptionUtils.getStackTrace(error) + "</pre>");
+
         return email;
     }
+
 }

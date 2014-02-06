@@ -27,5 +27,6 @@ public interface OperationsNotificationFacade {
 
     void invalidDirectDebitReceived(DirectDebitRecord paymentRecord);
 
-    void sendTenantSureCfcOperationProblem(String error);
+    void sendTenantSureCfcOperationProblem(Throwable error);
+
 }

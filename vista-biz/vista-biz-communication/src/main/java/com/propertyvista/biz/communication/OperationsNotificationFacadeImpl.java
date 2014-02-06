@@ -53,7 +53,7 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
     }
 
     @Override
-    public void sendTenantSureCfcOperationProblem(String error) {
+    public void sendTenantSureCfcOperationProblem(Throwable error) {
         send(OperationsNotificationManager.createCfcErrorMessage(error));
     }
 

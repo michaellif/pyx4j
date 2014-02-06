@@ -17,8 +17,8 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
-import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
+import com.propertyvista.biz.tenant.insurance.errors.CfcApiException;
+import com.propertyvista.biz.tenant.insurance.errors.TooManyPreviousClaimsException;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyClient;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.insurance.tenantsure.errors;
+package com.propertyvista.biz.tenant.insurance.errors;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

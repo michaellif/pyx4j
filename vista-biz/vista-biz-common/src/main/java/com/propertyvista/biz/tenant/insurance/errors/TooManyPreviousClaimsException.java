@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.insurance.tenantsure.errors;
+package com.propertyvista.biz.tenant.insurance.errors;
 
 public class TooManyPreviousClaimsException extends CfcApiException {
 
