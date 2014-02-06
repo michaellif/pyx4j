@@ -1165,6 +1165,17 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- advertising_blurb to ilssummary_building
+        
+        EXECUTE 'INSERT INTO    '||v_schema_name||'.ilssummary_building (id,building,title,description) '
+                ||'(SELECT      nextval(''public.ilssummary_building_seq'') AS id, '
+                ||'b.id AS building,m.name AS title,a.content AS description '
+                ||'FROM         '||v_schema_name||'.building b '
+                ||'JOIN         '||v_schema_name||'.marketing m ON (b.marketing = m.id) '
+                ||'JOIN         '||v_schema_name||'.marketing$ad_blurbs mb ON (m.id = mb.owner) '
+                ||'JOIN         '||v_schema_name||'.advertising_blurb a ON (a.id = mb.value) '
+                ||'ORDER BY b.id )';
+        
         -- insurance_certificate_scan
         
         EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_scan AS s '
@@ -1178,6 +1189,13 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request '
                 ||'SET  reported_date = submitted::date ';
+        
+        
+        -- marketing - delete extra rows 
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.marketing '
+                ||'WHERE id IN  (SELECT DISTINCT marketing '
+                ||'             FROM '||v_schema_name||'.apt_unit) '; 
         
         
         -- n4_policy
@@ -1741,7 +1759,7 @@ BEGIN
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE pet_policy ADD CONSTRAINT pet_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
-        ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_tp_e_ck CHECK (tp = 'administrator');
+        ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_tp_e_ck CHECK ((tp) IN ('administrator', 'privacyIssues'));
         ALTER TABLE product_item ADD CONSTRAINT product_item_element_discriminator_d_ck CHECK ((element_discriminator) IN ('AptUnit', 'LockerArea', 'Parking', 'Roof'));
         ALTER TABLE product_tax_policy ADD CONSTRAINT product_tax_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
