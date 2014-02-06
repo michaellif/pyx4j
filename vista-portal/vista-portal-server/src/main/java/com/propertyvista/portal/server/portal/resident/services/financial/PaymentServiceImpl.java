@@ -31,10 +31,13 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -184,6 +187,7 @@ public class PaymentServiceImpl implements PaymentService {
             pmi.id().setValue(pm.id().getValue());
             pmi.paymentMethod().set(pm);
             pmi.usedByAutoPay().setValue(isUsedByAutoPay(pm));
+            pmi.restricted().setValue(isRestricted(lease, pm));
 
             paymentMethods.add(pmi);
         }
@@ -197,7 +201,24 @@ public class PaymentServiceImpl implements PaymentService {
         return Persistence.service().exists(criteria);
     }
 
-    class PaymentMethodDtoBinder extends EntityBinder<LeasePaymentMethod, PaymentMethodDTO> {
+    private static Boolean isRestricted(Lease lease, LeasePaymentMethod pm) {
+        AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident);
+        Boolean result = false;
+
+        if (!aps.allowedPaymentTypes().contains(pm.type().getValue())) {
+            result = true;
+        } else {
+            if (pm.type().getValue() == PaymentType.CreditCard) {
+                if (!aps.allowedCardTypes().contains(pm.details().<CreditCardInfo> cast().cardType().getValue())) {
+                    result = true;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private class PaymentMethodDtoBinder extends EntityBinder<LeasePaymentMethod, PaymentMethodDTO> {
 
         protected PaymentMethodDtoBinder() {
             super(LeasePaymentMethod.class, PaymentMethodDTO.class);
@@ -236,7 +257,7 @@ public class PaymentServiceImpl implements PaymentService {
         return currentAutoPayments;
     }
 
-    class AutoPayDtoBinder extends EntityBinder<AutopayAgreement, AutoPayDTO> {
+    private class AutoPayDtoBinder extends EntityBinder<AutopayAgreement, AutoPayDTO> {
 
         protected AutoPayDtoBinder() {
             super(AutopayAgreement.class, AutoPayDTO.class);

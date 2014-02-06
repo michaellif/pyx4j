@@ -110,8 +110,12 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             super(AutoPayInfoDTO.class, true);
             this.parentView = parentView;
 
+            setEditable(true);
+            inheritViewable(false);
+
             setOrderable(false);
             setAddable(false);
+            setRemovable(true);
         }
 
         @Override
@@ -153,7 +157,6 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 super(AutoPayInfoDTO.class);
 
                 setViewable(true);
-                inheritViewable(false);
             }
 
             @Override

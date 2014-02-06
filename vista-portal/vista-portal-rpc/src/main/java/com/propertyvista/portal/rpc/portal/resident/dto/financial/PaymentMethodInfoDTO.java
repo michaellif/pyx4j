@@ -27,4 +27,6 @@ public interface PaymentMethodInfoDTO extends IEntity {
     PaymentMethod paymentMethod();
 
     IPrimitive<Boolean> usedByAutoPay();
+
+    IPrimitive<Boolean> restricted();
 }

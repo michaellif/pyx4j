@@ -108,8 +108,12 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
             super(PaymentMethodInfoDTO.class, true);
             this.parentView = parentView;
 
+            setEditable(true);
+            inheritViewable(false);
+
             setOrderable(false);
             setAddable(false);
+            setRemovable(true);
         }
 
         @Override
@@ -149,7 +153,6 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 super(PaymentMethodInfoDTO.class);
 
                 setViewable(true);
-                inheritViewable(false);
             }
 
             @Override
@@ -164,7 +167,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 content.setWidget(++row, 0,
                         new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>())).build());
 
-                content.setWidget(++row, 0, new Anchor("View Details", new Command() {
+                content.setWidget(++row, 0, new Anchor(i18n.tr("View Details"), new Command() {
                     @Override
                     public void execute() {
                         getGadgetView().getPresenter().viewPaymentMethod(getValue());
@@ -180,6 +183,10 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
                 if (getValue().usedByAutoPay().isBooleanTrue()) {
                     ((CEntityFolderItem<PaymentMethodInfoDTO>) getParent()).setRemovable(parentView.getValue().allowCancelationByResident().isBooleanTrue());
+                }
+
+                if (getValue().restricted().isBooleanTrue()) {
+                    get(proto().paymentMethod().type()).setNote(i18n.tr("This Payment Method is currently restricted for use in Portal!"), NoteStyle.Warn);
                 }
             }
         }
