@@ -142,7 +142,6 @@ public class Dialog implements ProvidesResize, IsWidget {
         super();
 
         popupPanel = new PopupPanel(false, true);
-
         popupPanel.getElement().getStyle().setProperty("zIndex", "20");
 
         container = new FlowPanel();
@@ -158,7 +157,6 @@ public class Dialog implements ProvidesResize, IsWidget {
         setCaption(caption);
 
         content = new ContentPanel();
-        content.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
 
         container.add(content);
 
@@ -404,6 +402,9 @@ public class Dialog implements ProvidesResize, IsWidget {
         } else {
             popupPanel.setWidth(Window.getClientWidth() + "px");
         }
+
+        popupPanel.getElement().getStyle().setPropertyPx("maxHeight", (int) (Window.getClientHeight() * 0.8));
+
         int left = Math.max(Window.getScrollLeft() + (Window.getClientWidth() - popupPanel.getOffsetWidth()) / 2, 0);
         popupPanel.getElement().getStyle().setPropertyPx("left", left);
 
@@ -602,6 +603,7 @@ public class Dialog implements ProvidesResize, IsWidget {
     class ContentPanel extends DockPanel implements RequiresResize, ProvidesResize {
 
         public ContentPanel() {
+            setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
             setSize("100%", "100%");
         }
 
