@@ -128,7 +128,7 @@
 
         <jettyVersion>9.0.7.v20131107</jettyVersion>
 
-        <slf4jVersion>1.7.5</slf4jVersion>
+        <slf4jVersion>1.7.6</slf4jVersion>
 
         <jasperreportsVersion>5.2.0</jasperreportsVersion>
         <batikVersion>1.7</batikVersion>
