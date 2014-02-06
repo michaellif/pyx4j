@@ -50,6 +50,9 @@ public class CBuildingLabel extends CEntityLabel<Building> {
                 result.append(value.info().address().streetDirection().getStringView());
             }
 
+            result.append(" ");
+            result.append(value.info().address().city().getStringView());
+
             return result.toString();
         }
     }
