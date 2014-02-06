@@ -181,13 +181,15 @@ public class PaymentServiceImpl implements PaymentService {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
                 ResidentPortalContext.getLeaseTermTenant(), PaymentMethodUsage.InProfile, VistaApplication.resident);
 
+        AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident);
+
         for (LeasePaymentMethod pm : methods) {
             PaymentMethodInfoDTO pmi = EntityFactory.create(PaymentMethodInfoDTO.class);
 
             pmi.id().setValue(pm.id().getValue());
             pmi.paymentMethod().set(pm);
             pmi.usedByAutoPay().setValue(isUsedByAutoPay(pm));
-            pmi.restricted().setValue(isRestricted(lease, pm));
+            pmi.restricted().setValue(isRestricted(aps, pm));
 
             paymentMethods.add(pmi);
         }
@@ -201,8 +203,7 @@ public class PaymentServiceImpl implements PaymentService {
         return Persistence.service().exists(criteria);
     }
 
-    private static Boolean isRestricted(Lease lease, LeasePaymentMethod pm) {
-        AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident);
+    private static Boolean isRestricted(AllowedPaymentsSetup aps, LeasePaymentMethod pm) {
         Boolean result = false;
 
         if (!aps.allowedPaymentTypes().contains(pm.type().getValue())) {
