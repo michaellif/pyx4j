@@ -103,7 +103,8 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     IPrimitive<String> yardiLeasePk();
 
     @NotNull
-    @ReadOnly
+//    TODO in Yardi mode we just can guess it form supplied dates, sometimes it need to be corrected.
+//    @ReadOnly
     @ToString(index = 2)
     @MemberColumn(name = "leaseTermType")
     IPrimitive<Type> type();
