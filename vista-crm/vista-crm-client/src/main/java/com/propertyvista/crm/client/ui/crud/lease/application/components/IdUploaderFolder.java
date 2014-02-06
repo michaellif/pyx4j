@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -64,7 +67,12 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
 
     @Override
     protected void addItem() {
-        new DocumentTypeSelectorDialog(documentationPolicy) {
+        Collection<IdentificationDocumentType> usedTypes = new ArrayList<IdentificationDocumentType>();
+        for (IdentificationDocumentFolder doc : getValue()) {
+            usedTypes.add(doc.idType());
+        }
+
+        new DocumentTypeSelectorDialog(documentationPolicy, usedTypes) {
             @Override
             public boolean onClickOk() {
                 IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);

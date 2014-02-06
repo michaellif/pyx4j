@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.shared.ui.util.editors;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -45,7 +48,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
     final static I18n i18n = I18n.get(IdUploaderFolder.class);
 
-    protected ApplicationDocumentationPolicy documentsPolicy = null;
+    protected ApplicationDocumentationPolicy documentationPolicy = null;
 
     public IdUploaderFolder() {
         super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
@@ -55,8 +58,8 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
                 if (value != null) {
 //                    assert (documentsPolicy != null);
-                    if (documentsPolicy != null) {
-                        int numOfRemainingDocs = documentsPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                    if (documentationPolicy != null) {
+                        int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                         if (numOfRemainingDocs > 0) {
                             return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
                         }
@@ -70,7 +73,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy documentsPolicy) {
-        this.documentsPolicy = documentsPolicy;
+        this.documentationPolicy = documentsPolicy;
 
         if (documentsPolicy != null) {
             StringBuilder rule = new StringBuilder(i18n.tr("{0} ID(s) required", documentsPolicy.numberOfRequiredIDs().getValue()));
@@ -89,7 +92,12 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
     @Override
     protected void addItem() {
-        new DocumentTypeSelectorDialog(documentsPolicy) {
+        Collection<IdentificationDocumentType> usedTypes = new ArrayList<IdentificationDocumentType>();
+        for (IdentificationDocumentFolder doc : getValue()) {
+            usedTypes.add(doc.idType());
+        }
+
+        new DocumentTypeSelectorDialog(documentationPolicy, usedTypes) {
             @Override
             public boolean onClickOk() {
                 IdentificationDocumentFolder document = EntityFactory.create(IdentificationDocumentFolder.class);

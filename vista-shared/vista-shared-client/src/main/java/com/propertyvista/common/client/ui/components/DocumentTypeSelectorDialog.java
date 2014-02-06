@@ -13,7 +13,10 @@
  */
 package com.propertyvista.common.client.ui.components;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -25,10 +28,16 @@ public abstract class DocumentTypeSelectorDialog extends EntitySelectorListDialo
 
     private static final I18n i18n = I18n.get(DocumentTypeSelectorDialog.class);
 
-    public DocumentTypeSelectorDialog(ApplicationDocumentationPolicy documentationPolicy) {
+    public DocumentTypeSelectorDialog(ApplicationDocumentationPolicy documentationPolicy, Collection<IdentificationDocumentType> usedTypes) {
         super(i18n.tr("Select Document Type"), Collections.<IdentificationDocumentType> emptyList());
         if (documentationPolicy != null) {
-            setData(documentationPolicy.allowedIDs());
+            List<IdentificationDocumentType> typesToSelect = new ArrayList<IdentificationDocumentType>();
+            for (IdentificationDocumentType type : documentationPolicy.allowedIDs()) {
+                if (!usedTypes.contains(type)) {
+                    typesToSelect.add(type);
+                }
+            }
+            setData(typesToSelect);
         }
     }
 
