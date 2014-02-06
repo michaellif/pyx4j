@@ -708,7 +708,6 @@ public class TableModel {
                         + " FROM " + qb.getSQL(getFullTableName()));
                 sql.append(')');
             }
-            System.out.println(sql);
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
