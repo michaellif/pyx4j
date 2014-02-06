@@ -105,6 +105,7 @@ public interface MaintenanceRequest extends IEntity, HasNotesAndAttachments {
     @Timestamp(Update.Created)
     IPrimitive<Date> submitted();
 
+    @Timestamp(Update.Updated)
     @Caption(name = "Last Updated")
     IPrimitive<Date> updated();
 
@@ -185,4 +186,9 @@ public interface MaintenanceRequest extends IEntity, HasNotesAndAttachments {
     @Detached
     @OrderBy(PrimaryKey.class)
     IList<MaintenanceRequestPicture> pictures();
+
+    @Owned
+    @Detached
+    @OrderBy(PrimaryKey.class)
+    IList<MaintenanceRequestStatusRecord> statusHistory();
 }

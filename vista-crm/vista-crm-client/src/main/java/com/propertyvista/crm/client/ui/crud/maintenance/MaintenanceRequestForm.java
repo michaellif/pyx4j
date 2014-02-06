@@ -76,10 +76,12 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatusRecord;
 import com.propertyvista.domain.maintenance.NoticeOfEntry;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -125,6 +127,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         selectTab(addTab(createGeneralTab()));
         addTab(createWorkHistoryTab());
+        addTab(createStatusHistoryTab());
     }
 
     private void ensureBuilding() {
@@ -285,15 +288,15 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         statusPanel = new TwoColumnFlexFormPanel();
         innerRow = -1;
         statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
-        statusPanel.setWidget(++innerRow, 0, 2,
-                new FormDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10, true).build());
-        statusPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10, true).build());
-        statusPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10, true).build());
+        rowAnchor = innerRow;
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
 
         FlowPanel detailHolder = new FlowPanel();
-        statusPanel.setWidget(1, 1, detailHolder);
-        statusPanel.getFlexCellFormatter().setRowSpan(1, 1, 3);
-        statusPanel.getFlexCellFormatter().getElement(1, 1).getStyle().setVerticalAlign(VerticalAlign.TOP);
+        statusPanel.setWidget(++rowAnchor, 1, detailHolder);
+        statusPanel.getFlexCellFormatter().setRowSpan(rowAnchor, 1, innerRow - rowAnchor + 1);
+        statusPanel.getFlexCellFormatter().getElement(rowAnchor, 1).getStyle().setVerticalAlign(VerticalAlign.TOP);
 
         // --------------------------------------------------------------------------------------------------------------------
         scheduledPanel = new TwoColumnFlexFormPanel();
@@ -402,8 +405,14 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     private TwoColumnFlexFormPanel createWorkHistoryTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Work History"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(proto().workHistory().getMeta().getCaption());
         panel.setWidget(0, 0, 2, inject(proto().workHistory(), new MaintenanceRequestScheduleFolder()));
+        return panel;
+    }
+
+    private TwoColumnFlexFormPanel createStatusHistoryTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(proto().statusHistory().getMeta().getCaption());
+        panel.setWidget(0, 0, 2, inject(proto().statusHistory(), new StatusHistoryFolder()));
         return panel;
     }
 
@@ -746,6 +755,44 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageId())).contentWidth("350px").labelWidth("100px").build());
                 content.setWidget(++row, 0, inject(proto().text()));
                 get(proto().text()).asWidget().setWidth("450px");
+
+                return content;
+            }
+        }
+    }
+
+    class StatusHistoryFolder extends VistaBoxFolder<MaintenanceRequestStatusRecord> {
+        public StatusHistoryFolder() {
+            super(MaintenanceRequestStatusRecord.class, false);
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof MaintenanceRequestStatusRecord) {
+                return new StatusRecordViewer();
+            }
+            return super.create(member);
+        }
+
+        class StatusRecordViewer extends CEntityForm<MaintenanceRequestStatusRecord> {
+
+            public StatusRecordViewer() {
+                super(MaintenanceRequestStatusRecord.class);
+                setViewable(true);
+                setEditable(false);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                int row = -1;
+                // left side
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updatedBy(), new CEntityLabel<AbstractPmcUser>())).build());
+                // right side
+                row = -1;
+                content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().oldStatus(), new CEntityLabel<MaintenanceRequestStatus>())).build());
+                content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().newStatus(), new CEntityLabel<MaintenanceRequestStatus>())).build());
 
                 return content;
             }

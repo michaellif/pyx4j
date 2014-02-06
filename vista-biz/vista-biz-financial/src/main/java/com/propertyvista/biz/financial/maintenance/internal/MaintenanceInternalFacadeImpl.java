@@ -20,6 +20,7 @@ import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -91,5 +92,10 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     @Override
     public void beforeListRequest() {
         // N/A - do nothing
+    }
+
+    @Override
+    public void addStatusHistoryRecord(MaintenanceRequest request, MaintenanceRequestStatus oldStatus) {
+        MaintenanceInternalManager.instance().addStatusHistoryRecord(request, oldStatus);
     }
 }

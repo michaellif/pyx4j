@@ -139,20 +139,22 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     @Override
     public void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, requestId);
+        MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
         ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(request);
-        Persistence.service().commit();
+        saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
 
     @Override
     public void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId, Integer rate) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, requestId);
+        MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
         SurveyResponse response = EntityFactory.create(SurveyResponse.class);
         response.rating().setValue(rate);
         ServerSideFactory.create(MaintenanceFacade.class).rateMaintenanceRequest(request, response);
-        Persistence.service().commit();
+        saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
 
@@ -192,5 +194,10 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
         }
 
         callback.onSuccess(dto);
+    }
+
+    private void saveRequest(MaintenanceRequest request, MaintenanceRequestStatus oldStatus) {
+        ServerSideFactory.create(MaintenanceFacade.class).addStatusHistoryRecord(request, oldStatus);
+        Persistence.service().commit();
     }
 }

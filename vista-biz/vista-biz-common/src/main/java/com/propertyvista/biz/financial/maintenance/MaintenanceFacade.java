@@ -19,6 +19,7 @@ import java.util.Set;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -56,4 +57,6 @@ public interface MaintenanceFacade {
     void beforeItemRequest(Building building);
 
     void beforeListRequest();
+
+    void addStatusHistoryRecord(MaintenanceRequest request, MaintenanceRequestStatus oldStatus);
 }

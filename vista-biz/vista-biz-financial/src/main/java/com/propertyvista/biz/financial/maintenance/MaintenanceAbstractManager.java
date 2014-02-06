@@ -19,6 +19,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -38,9 +40,13 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatusRecord;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public abstract class MaintenanceAbstractManager {
@@ -117,7 +123,7 @@ public abstract class MaintenanceAbstractManager {
             request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Submitted));
             isNewRequest = true;
         }
-        Persistence.service().merge(request);
+        Persistence.service().persist(request);
 
         if (isNewRequest) {
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedPMC(request);
@@ -127,15 +133,14 @@ public abstract class MaintenanceAbstractManager {
 
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Cancelled));
-        request.updated().setValue(SystemDateManager.getDate());
-        Persistence.service().merge(request);
+        Persistence.service().persist(request);
 
         ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
     }
 
     public void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate) {
         request.surveyResponse().set(rate);
-        Persistence.service().merge(request);
+        Persistence.service().persist(request);
     }
 
     public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
@@ -153,12 +158,12 @@ public abstract class MaintenanceAbstractManager {
             }
         }
 
-        Persistence.service().merge(request);
+        Persistence.service().persist(request);
     }
 
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Resolved));
-        Persistence.service().merge(request);
+        Persistence.service().persist(request);
 
         ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
     }
@@ -180,6 +185,27 @@ public abstract class MaintenanceAbstractManager {
         }
 
         return Persistence.service().query(criteria.desc(criteria.proto().updated()));
+    }
+
+    public void addStatusHistoryRecord(MaintenanceRequest request, MaintenanceRequestStatus oldStatus) {
+        if (request.getPrimaryKey() == null || !request.status().equals(oldStatus)) {
+            MaintenanceRequestStatusRecord record = EntityFactory.create(MaintenanceRequestStatusRecord.class);
+            record.oldStatus().set(oldStatus);
+            record.newStatus().set(request.status());
+            // try to resolve context user
+            AbstractPmcUser user = null;
+            Key userKey = Context.getVisit().getUserVisit().getPrincipalPrimaryKey();
+            if (userKey != null) {
+                user = Persistence.service().retrieve(CrmUser.class, userKey);
+                if (user == null) {
+                    user = Persistence.service().retrieve(CustomerUser.class, userKey);
+                }
+            }
+            record.updatedBy().set(user);
+
+            request.statusHistory().add(record);
+            Persistence.service().persist(request);
+        }
     }
 
     protected MaintenanceRequestStatus getMaintenanceStatus(Building building, StatusPhase phase) {

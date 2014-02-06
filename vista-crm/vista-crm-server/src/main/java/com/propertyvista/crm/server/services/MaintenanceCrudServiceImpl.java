@@ -33,6 +33,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -85,6 +86,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
             parent = parent.parent();
         }
         Persistence.ensureRetrieve(dbo.workHistory(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dbo.statusHistory(), AttachLevel.Attached);
     }
 
     @Override
@@ -105,6 +107,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     public void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestScheduleDTO scheduleDTO, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
         MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
         schedule.scheduledDate().set(scheduleDTO.scheduledDate());
@@ -112,7 +115,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         schedule.scheduledTimeTo().set(scheduleDTO.scheduledTimeTo());
         schedule.workDescription().set(scheduleDTO.workDescription());
         ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, schedule);
-        Persistence.service().commit();
+        saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
 
@@ -128,29 +131,32 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     public void resolveAction(AsyncCallback<VoidSerializable> callback, LogicalDate resolvedOn, String resolution, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
         request.resolvedDate().setValue(resolvedOn);
         request.resolution().setValue(resolution);
         ServerSideFactory.create(MaintenanceFacade.class).resolveMaintenanceRequest(request);
-        Persistence.service().commit();
+        saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
 
     @Override
     public void rateAction(AsyncCallback<VoidSerializable> callback, SurveyResponse rate, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
         ServerSideFactory.create(MaintenanceFacade.class).rateMaintenanceRequest(request, rate);
-        Persistence.service().commit();
+        saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
 
     @Override
     public void cancelAction(AsyncCallback<VoidSerializable> callback, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
         ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(request);
-        Persistence.service().commit();
+        saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
 
@@ -199,5 +205,10 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     protected void persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
         ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo);
+    }
+
+    private void saveRequest(MaintenanceRequest request, MaintenanceRequestStatus oldStatus) {
+        ServerSideFactory.create(MaintenanceFacade.class).addStatusHistoryRecord(request, oldStatus);
+        Persistence.service().commit();
     }
 }
