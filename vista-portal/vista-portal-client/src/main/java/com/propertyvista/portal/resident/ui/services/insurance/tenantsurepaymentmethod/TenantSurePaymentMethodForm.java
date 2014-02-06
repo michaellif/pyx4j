@@ -36,9 +36,9 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
-import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
+import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
-public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePaymentMethod> {
+public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<InsurancePaymentMethod> {
 
     private static final I18n i18n = I18n.get(TenantSurePaymentMethodForm.class);
 
@@ -83,6 +83,11 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
     }
 
     @Override
+    protected Set<CreditCardType> getAllowedCardTypes() {
+        return EnumSet.allOf(CreditCardType.class);
+    }
+
+    @Override
     protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
         return Collections.emptySet();
     }
@@ -98,5 +103,4 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
     protected String getNameOn() {
         return ClientContext.getUserVisit().getName();
     }
-
 }

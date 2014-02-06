@@ -46,10 +46,11 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
+import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
@@ -61,7 +62,12 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
     private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
 
-    private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+
+        @Override
+        public Set<PaymentType> getPaymentTypes() {
+            return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+        }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {

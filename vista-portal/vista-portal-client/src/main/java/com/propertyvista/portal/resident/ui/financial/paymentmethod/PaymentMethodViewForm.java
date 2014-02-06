@@ -23,9 +23,10 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
-import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
+import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO> {
 
@@ -40,7 +41,18 @@ public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO>
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+        content.setWidget(++row, 0, inject(proto().paymentMethod(), new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+
+            @Override
+            public Set<PaymentType> getPaymentTypes() {
+                return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+            }
+
+            @Override
+            protected Set<CreditCardType> getAllowedCardTypes() {
+                return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().allowedCardTypes();
+            }
+
             @Override
             protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
                 return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();

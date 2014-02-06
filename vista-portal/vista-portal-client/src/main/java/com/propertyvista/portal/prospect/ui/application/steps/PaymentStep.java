@@ -38,7 +38,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
-import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
+import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentStep extends ApplicationWizardStep {
 
@@ -46,7 +46,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
-    private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
         public Set<PaymentType> getPaymentTypes() {

@@ -87,7 +87,7 @@ import com.propertyvista.portal.shared.ui.IWizardView;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
-import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
+import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
@@ -99,7 +99,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
-    private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
         public Set<PaymentType> getPaymentTypes() {

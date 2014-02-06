@@ -35,19 +35,25 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
+import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public abstract class PaymentMethodEditor<E extends AbstractPaymentMethod> extends
-        com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor<E> {
+public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod> extends PaymentMethodEditor<E> {
 
-    private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
+    private static final I18n i18n = I18n.get(PortalPaymentMethodEditor.class);
 
-    public PaymentMethodEditor(Class<E> clazz) {
+    public PortalPaymentMethodEditor(Class<E> clazz) {
         super(clazz, new VistaEditorsComponentFactory());
     }
+
+    @Override
+    public abstract Set<PaymentType> getPaymentTypes();
+
+    @Override
+    protected abstract Set<CreditCardType> getAllowedCardTypes();
 
     protected abstract Set<CreditCardType> getConvienceFeeApplicableCardTypes();
 
@@ -141,11 +147,11 @@ public abstract class PaymentMethodEditor<E extends AbstractPaymentMethod> exten
 
             @Override
             protected Set<CreditCardType> getAllowedCardTypes() {
-                return PaymentMethodEditor.this.getAllowedCardTypes();
+                return PortalPaymentMethodEditor.this.getAllowedCardTypes();
             }
 
             protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-                return PaymentMethodEditor.this.getConvienceFeeApplicableCardTypes();
+                return PortalPaymentMethodEditor.this.getConvienceFeeApplicableCardTypes();
             }
 
             private void decorateConvienceFeeApplicableCard(CreditCardType type) {

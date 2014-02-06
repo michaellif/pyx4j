@@ -70,7 +70,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
-import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
+import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
@@ -86,7 +86,12 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     private final SimplePanel detailsTotalHolder = new SimplePanel();
 
-    private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+
+        @Override
+        public Set<PaymentType> getPaymentTypes() {
+            return AutoPayWizard.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+        }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
