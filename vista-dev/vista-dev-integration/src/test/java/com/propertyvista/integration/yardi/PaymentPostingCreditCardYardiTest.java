@@ -47,7 +47,7 @@ import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.updater.PropertyUpdater;
 
 @Category(FunctionalTests.class)
-public class CreditCardPaymentYardiTest extends PaymentYardiTestBase {
+public class PaymentPostingCreditCardYardiTest extends PaymentYardiTestBase {
 
     private Lease lease;
 

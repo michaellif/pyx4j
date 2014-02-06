@@ -19,7 +19,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ //
 //
-        CreditCardPaymentYardiTest.class,//
+        PaymentPostingCreditCardYardiTest.class,//
+        PaymentPostingCheckYardiTest.class,//
         PaymentBatchSingleBuildingCreditCardYardiTest.class, //
         PaymentBatchSingleBuildingEcheckYardiTest.class, //
         PaymentBatchThreeBuildingYardiTest.class, //
@@ -28,6 +29,7 @@ import org.junit.runners.Suite;
         PreauthorizedPaymentRenewTest.class, //
         YardiLeaseChargesTest.class, //
         YardiLeaseImportTest.class, //
+        YardiLeaseImportVersionsTest.class, //
         YardiLeaseLifecycleTest.class, //
         YardiLeasePriceEstimatorTest.class, //
         YardiUnitTransferTest.class //
