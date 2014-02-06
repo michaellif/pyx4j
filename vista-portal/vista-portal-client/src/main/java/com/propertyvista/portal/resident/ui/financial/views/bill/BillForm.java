@@ -30,10 +30,10 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
+import com.propertyvista.portal.shared.ui.util.CBuildingLabel;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class BillForm extends CEntityForm<BillDTO> {
@@ -69,7 +69,7 @@ public class BillForm extends CEntityForm<BillDTO> {
         if (showInfoSection) {
             content.setH1(++row, 0, 1, i18n.tr("Info"));
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>())).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().billingCycle().building(), new CEntityLabel<Building>())).build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().billingCycle().building(), new CBuildingLabel())).build());
 
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod(), new CEnumLabel())).build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate(), new CDateLabel())).build());

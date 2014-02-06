@@ -136,7 +136,7 @@ public class BillingServiceImpl implements BillingService {
         Persistence.service().retrieve(result.billData().lineItems());
         Persistence.service().retrieve(result.billData().billingAccount());
         Persistence.service().retrieve(result.billData().billingAccount().lease());
-        Persistence.service().retrieve(result.billData().billingCycle().building(), AttachLevel.ToStringMembers, false);
+        Persistence.service().retrieve(result.billData().billingCycle().building());
 
         BillingUtils.enhanceBillDto(bill, result.billData());
 
