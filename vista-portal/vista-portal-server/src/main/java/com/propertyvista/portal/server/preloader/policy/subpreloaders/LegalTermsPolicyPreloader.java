@@ -35,8 +35,8 @@ public class LegalTermsPolicyPreloader extends AbstractPolicyPreloader<LegalTerm
                 createLegalTermsPolicyItem("RESIDENT PORTAL TERMS AND CONDITIONS", "ResidentPortalTermsAndConditionsCrm.html"));
         policy.residentPortalPrivacyPolicy().set(createLegalTermsPolicyItem("RESIDENT PORTAL PRIVACY POLICY", "ResidentPortalPrivacyPolicyCrm.html"));
         policy.prospectPortalTermsAndConditions().set(
-                createLegalTermsPolicyItem("PROSPECT PORTAL TERMS AND CONDITIONS", "ProspectPortalTermsAndConditionsCrm.html"));
-        policy.prospectPortalPrivacyPolicy().set(createLegalTermsPolicyItem("PROSPECT PORTAL PRIVACY POLICY", "ProspectPortalPrivacyPolicyCrm.html"));
+                createLegalTermsPolicyItem("ONLINE APPLICATION TERMS AND CONDITIONS", "ProspectPortalTermsAndConditionsCrm.html"));
+        policy.prospectPortalPrivacyPolicy().set(createLegalTermsPolicyItem("ONLINE APPLICATION PRIVACY POLICY", "ProspectPortalPrivacyPolicyCrm.html"));
         return policy;
     }
 
