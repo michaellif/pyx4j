@@ -162,8 +162,7 @@ public abstract class UpdateQueryRDBTestCase extends DatastoreTestBase {
         }
     }
 
-    //TODO
-    public void TODO_testJonConditionUpdate() {
+    public void testJonConditionUpdate() {
         String testId = uniqueString();
 
         Department department1 = EntityFactory.create(Department.class);

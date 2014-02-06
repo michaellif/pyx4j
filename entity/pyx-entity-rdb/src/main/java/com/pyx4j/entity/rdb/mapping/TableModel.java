@@ -58,6 +58,7 @@ import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.rdb.SQLUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.Ddl;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
@@ -512,6 +513,9 @@ public class TableModel {
                 } else {
                     sql.append(", ");
                 }
+                if (alias != null) {
+                    sql.append(alias).append('.');
+                }
                 sql.append(name).append(" = ? ");
             }
         }
@@ -695,7 +699,16 @@ public class TableModel {
         StringBuilder sql = new StringBuilder();
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
-            sql.append("UPDATE ").append(qb.getUpdateSQL(getFullTableName(), sqlUpdateBulk("m1", entityTemplate)));
+            if (dialect.databaseType() == DatabaseType.MySQL) {
+                sql.append("UPDATE ").append(qb.getUpdateSQL(getFullTableName(), sqlUpdateBulk("m1", entityTemplate)));
+            } else {
+                sql.append("UPDATE ").append(getFullTableName()).append(sqlUpdateBulk(null, entityTemplate));
+                sql.append("WHERE ").append(dialect.getNamingConvention().sqlIdColumnName()).append(" IN (");
+                sql.append("SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL()
+                        + " FROM " + qb.getSQL(getFullTableName()));
+                sql.append(')');
+            }
+            System.out.println(sql);
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
