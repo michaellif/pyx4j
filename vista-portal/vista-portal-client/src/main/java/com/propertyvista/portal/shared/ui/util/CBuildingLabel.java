@@ -32,8 +32,23 @@ public class CBuildingLabel extends CEntityLabel<Building> {
             }
 
             result.append(value.info().address().streetNumber().getStringView());
+
+            if (!value.info().address().streetNumberSuffix().isNull()) {
+                result.append(" ");
+                result.append(value.info().address().streetNumberSuffix().getStringView());
+            }
+
             result.append(" ");
             result.append(value.info().address().streetName().getStringView());
+
+            if (!value.info().address().streetType().isNull()) {
+                result.append(" ");
+                result.append(value.info().address().streetType().getStringView());
+            }
+            if (!value.info().address().streetDirection().isNull()) {
+                result.append(" ");
+                result.append(value.info().address().streetDirection().getStringView());
+            }
 
             return result.toString();
         }
