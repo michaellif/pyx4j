@@ -134,6 +134,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
             bo.unit().set(to.reporter().lease().unit());
         }
         ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo);
+        ServerSideFactory.create(MaintenanceFacade.class).addStatusHistoryRecord(bo, null);
     }
 
     @Override

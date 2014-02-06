@@ -205,6 +205,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     protected void persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
         ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo);
+        ServerSideFactory.create(MaintenanceFacade.class).addStatusHistoryRecord(bo, null);
     }
 
     private void saveRequest(MaintenanceRequest request, MaintenanceRequestStatus oldStatus) {
