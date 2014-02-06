@@ -849,7 +849,9 @@ BEGIN
                                 ADD COLUMN mailing_address_street_name VARCHAR(500),
                                 ADD COLUMN mailing_address_street_type VARCHAR(50),
                                 ADD COLUMN mailing_address_street_direction VARCHAR(50),
-                                ADD COLUMN mailing_address_county VARCHAR(500);
+                                ADD COLUMN mailing_address_county VARCHAR(500),
+                                ADD COLUMN termination_date_advance_days_long_rent_period INT,
+                                ADD COLUMN termination_date_advance_days_short_rent_period INT;
                                         
                                         
         -- note_attachment
@@ -1176,6 +1178,28 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request '
                 ||'SET  reported_date = submitted::date ';
+        
+        
+        -- n4_policy
+        
+        EXECUTE 'SELECT COUNT(id) '
+                ||'FROM '||v_schema_name||'.n4_policy '
+                INTO v_rowcount;
+                
+        IF (v_rowcount = 0) 
+        THEN
+                EXECUTE 'INSERT INTO '||v_schema_name||'.n4_policy (id,node_discriminator,node,hand_delivery_advance_days,'
+                        ||'mail_delivery_advance_days,courier_delivery_advance_days) '
+                        ||'(SELECT nextval(''public.n4_policy_seq'') AS id, ''OrganizationPoliciesNode'' AS node_discriminator,'
+                        ||'id  AS node, 0 AS hand_delivery_advance_days, 5 AS mail_delivery_advance_days, 1 AS courier_delivery_advance_days '
+                        ||'FROM '||v_schema_name||'.organization_policies_node) ';
+                        
+        END IF;                        
+        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.n4_policy '
+                ||'SET  termination_date_advance_days_long_rent_period = 14,'
+                ||'     termination_date_advance_days_short_rent_period = 7 ';
         
         
         -- policy tables
