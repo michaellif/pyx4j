@@ -740,7 +740,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         switch (bo.role().getValue()) {
         case Applicant:
             if (!to.unitSelection().isNull()) {
+                // from lease term of 1 year from entered move in date:  
                 leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
+                leaseTerm.termFrom().setValue(new LogicalDate(DateUtils.yearsAdd(leaseTerm.termFrom().getValue(), 1)));
             }
             saveUnitOptionsData(bo, to);
             saveCoApplicants(bo, to);
