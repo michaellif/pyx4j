@@ -114,9 +114,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                         "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server", yc.database()));
             }
             String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
-
-            log.debug("GetPropertyConfigurations Result: {}", xml);
-
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -163,7 +160,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                         yc.database(), propertyId));
             }
             String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
-
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -219,8 +215,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                         yc.database(), propertyId, tenantId));
             }
             String xml = response.getGetResidentTransaction_LoginResult().getExtraElement().toString();
-
-            log.debug("GetResidentTransaction: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -270,9 +264,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                 throw new YardiServiceException("importResidentTransactions received NULL response");
             }
             String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
-
-            log.debug("ImportResidentTransactions: {}", xml);
-
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
                 YardiLicense.handleVendorLicenseError(messages);
@@ -318,8 +309,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                 throw new YardiServiceException("getUnitInformation_Login received NULL response");
             }
             String xml = response.getGetUnitInformation_LoginResult().getExtraElement().toString();
-
-            log.debug("GetUnitInformation: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -371,8 +360,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                         propertyListCode, date));
             }
             String xml = response.getGetResidentsLeaseCharges_LoginResult().getExtraElement().toString();
-
-            log.debug("GetResidentsLeaseCharges: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -431,8 +418,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                         "getResidentsLeaseCharges received NULL response; PropertyId {0}, TenantId {1}, Date {2}", propertyId, tenantId, date));
             }
             String xml = response.getGetResidentLeaseCharges_LoginResult().getExtraElement().toString();
-
-            log.debug("GetResidentLeaseCharges: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
