@@ -336,6 +336,11 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     }
 
     @Override
+    protected void outputDevelopmentModeWarning() {
+        log.info("Wicket is running in DEVELOPMENT mode.");
+    }
+
+    @Override
     // super implementation uses HttpServletResponse.encodeURL() to append jsessionid to url
     // we don't want that as we rely on cookies
     protected WebResponse newWebResponse(final WebRequest webRequest, final HttpServletResponse httpServletResponse) {
