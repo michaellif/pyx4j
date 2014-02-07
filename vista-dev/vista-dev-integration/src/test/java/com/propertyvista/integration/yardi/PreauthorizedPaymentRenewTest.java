@@ -18,13 +18,16 @@ import java.rmi.RemoteException;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
@@ -100,38 +103,45 @@ public class PreauthorizedPaymentRenewTest extends PaymentYardiTestBase {
 
         setSysDate("2012-01-11");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(1); // PAP is NOT suspended
 
         setSysDate("2012-02-11");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(1); // PAP is NOT suspended
 
         setSysDate("2012-02-29");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(1); // PAP is NOT suspended!
 
         // new round:
         createSomePap();
         setSysDate("2012-03-01");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!
 
         // new round:
         createSomePap();
         setSysDate("2012-03-11");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!
 
         // new round:
         createSomePap();
         setSysDate("2012-03-31");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!
 
         // new round:
         createSomePap();
         setSysDate("2012-04-11");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!        
     }
 
@@ -179,22 +189,26 @@ public class PreauthorizedPaymentRenewTest extends PaymentYardiTestBase {
 
         setSysDate("2012-01-11");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(1); // PAP is NOT suspended
 
         setSysDate("2012-02-11");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!
 
         // new round:
         createSomePap();
         setSysDate("2012-02-29");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!
 
         // new round:
         createSomePap();
         setSysDate("2012-03-01");
         yardiImportAll(getYardiCredential("prop123"));
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsLastMonthSuspend);
         new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!
     }
 
