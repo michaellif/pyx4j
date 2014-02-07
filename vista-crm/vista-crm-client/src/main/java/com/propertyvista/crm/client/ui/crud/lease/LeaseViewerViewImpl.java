@@ -141,7 +141,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private MenuItem issueN4Action;
 
-    private MenuItem downloadAgreementItem;
+    private MenuItem downloadSignedAgreementItem;
 
     private MenuItem uploadSignedAgreementItem;
 
@@ -470,45 +470,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             addAction(issueN4Action);
         }
 
-        Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement Document"));
-        ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
-
-        signAgreementDocumentItem = new MenuItem(i18n.tr("Sign Agreement Document"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).signAgreementDocument();
-            }
-        });
-        leaseAgreementDocumentMenu.addItem(signAgreementDocumentItem);
-
-        uploadSignedAgreementItem = new MenuItem(i18n.tr("Upload Signed Agreement"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).uploadSignedAgreement();
-            }
-        });
-        leaseAgreementDocumentMenu.addItem(uploadSignedAgreementItem);
-
-        leaseAgreementDocumentMenu.addSeparator();
-
-        downloadAgreementItem = new MenuItem(i18n.tr("Download Signed Agreement"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).downloadSignedAgreement(getForm().getValue().currentTerm().version().agreementDocument());
-            }
-        });
-        leaseAgreementDocumentMenu.addItem(downloadAgreementItem);
-
-        MenuItem downloadBlankAgreementItem = new MenuItem(i18n.tr("Download Agreement for Signing"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).downloadAgreementForSigning();
-            }
-        });
-        leaseAgreementDocumentMenu.addItem(downloadBlankAgreementItem);
-
-        leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
-        addHeaderToolbarItem(leaseAgreementDocument);
+        addAgreementDocumentMenu();
 
     }
 
@@ -571,7 +533,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             renewButton.setVisible(status == Status.Active && completion == null);
         }
 
-        downloadAgreementItem.setVisible(!value.currentTerm().version().agreementDocument().isNull());
+        downloadSignedAgreementItem.setVisible(!value.currentTerm().version().agreementDocument().isNull());
     }
 
     @Override
@@ -871,6 +833,48 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }.show();
     }
 
+    private void addAgreementDocumentMenu() {
+        Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement Document"));
+        ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
+
+        signAgreementDocumentItem = new MenuItem(i18n.tr("Sign"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).signAgreementDocument();
+            }
+        });
+        leaseAgreementDocumentMenu.addItem(signAgreementDocumentItem);
+
+        uploadSignedAgreementItem = new MenuItem(i18n.tr("Upload..."), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).uploadSignedAgreement();
+            }
+        });
+        leaseAgreementDocumentMenu.addItem(uploadSignedAgreementItem);
+
+        leaseAgreementDocumentMenu.addSeparator();
+
+        downloadSignedAgreementItem = new MenuItem(i18n.tr("Download Signed"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).downloadSignedAgreement(getForm().getValue().currentTerm().version().agreementDocument());
+            }
+        });
+        leaseAgreementDocumentMenu.addItem(downloadSignedAgreementItem);
+
+        MenuItem downloadBlankAgreementItem = new MenuItem(i18n.tr("Download for Signing"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).downloadAgreementForSigning();
+            }
+        });
+        leaseAgreementDocumentMenu.addItem(downloadBlankAgreementItem);
+
+        leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
+        addHeaderToolbarItem(leaseAgreementDocument);
+    }
+
     private abstract class RenewLeaseBox extends OkCancelDialog {
 
         private final CDatePicker endLeaseDate = new CDatePicker();
@@ -898,4 +902,5 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             return (endLeaseDate.getValue() != null ? new LogicalDate(endLeaseDate.getValue()) : null);
         }
     }
+
 }
