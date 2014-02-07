@@ -30,6 +30,7 @@ import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
@@ -80,6 +81,13 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void viewDeletedPaps(Tenant tenantId);
 
         void createMaintenanceRequest();
+
+        void downloadBlankAgreement();
+
+        void downloadSignedAgreement(LeaseTermAgreementDocument doc);
+
+        void uploadSignedAgreement();
+
     }
 
     ILister<DepositLifecycleDTO> getDepositListerView();

@@ -46,8 +46,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final MenuItem viewHistoricTerms;
 
-    private MenuItem downloadAgreementItem;
-
     public LeaseViewerViewImplBase() {
         super(true);
 
@@ -97,30 +95,8 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         papsButton.setMenu(papsMenu = papsButton.createMenu());
         addHeaderToolbarItem(papsButton.asWidget());
 
-        Button downloadAgreementButton = new Button(i18n.tr("Download"));
-
-        ButtonMenuBar downloadAgreementMenu = downloadAgreementButton.createMenu();
-        MenuItem downloadBlankAgreementItem = new MenuItem(i18n.tr("Download Bank Agreement"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).downloadBlankAgreement();
-            }
-        });
-        downloadAgreementMenu.addItem(downloadBlankAgreementItem);
-
-        downloadAgreementItem = new MenuItem(i18n.tr("Download Signed Agreement"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).downloadSignedAgreement(getForm().getValue().currentTerm().version().agreementDocument());
-            }
-        });
-        downloadAgreementMenu.addItem(downloadAgreementItem);
-
-        downloadAgreementButton.setMenu(downloadAgreementMenu);
-        addHeaderToolbarItem(downloadAgreementButton);
-
         Button legalStatusButton = new Button(i18n.tr("Legal"));
-        ButtonMenuBar legalStatusMenu = downloadAgreementButton.createMenu();
+        ButtonMenuBar legalStatusMenu = legalStatusButton.createMenu();
         legalStatusButton.setMenu(legalStatusMenu);
         MenuItem setLegalStatus = new MenuItem(i18n.tr("Set Legal Status"), new Command() {
             @Override
@@ -155,8 +131,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
         viewHistoricTerms.setVisible(value.historyPresent().isBooleanTrue());
-
-        downloadAgreementItem.setVisible(!value.currentTerm().version().agreementDocument().isNull());
 
         setupPapsMenu(value);
     }

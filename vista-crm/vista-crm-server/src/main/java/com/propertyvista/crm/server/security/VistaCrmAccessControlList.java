@@ -119,6 +119,7 @@ import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.crm.rpc.services.lease.IdentificationDocumentCrmUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.ProofOfEmploymentDocumentCrmUploadService;
@@ -417,6 +418,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ProofOfEmploymentDocumentCrmUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(IdentificationDocumentCrmUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermAgreementDocumentUploadService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTerm.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermCrudService.class));

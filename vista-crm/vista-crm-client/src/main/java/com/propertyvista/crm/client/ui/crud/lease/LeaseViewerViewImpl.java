@@ -50,6 +50,7 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -139,6 +140,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final MenuItem yardiImportAction;
 
     private MenuItem issueN4Action;
+
+    private MenuItem downloadAgreementItem;
+
+    private MenuItem uploadSignedAgreementItem;
 
     public LeaseViewerViewImpl() {
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
@@ -460,6 +465,37 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         });
         addAction(issueN4Action);
+
+        Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement Document"));
+
+        ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
+        MenuItem downloadBlankAgreementItem = new MenuItem(i18n.tr("Download Bank Agreement"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).downloadBlankAgreement();
+            }
+        });
+        leaseAgreementDocumentMenu.addItem(downloadBlankAgreementItem);
+
+        uploadSignedAgreementItem = new MenuItem(i18n.tr("Upload Signed Agreement"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).uploadSignedAgreement();
+            }
+        });
+        leaseAgreementDocumentMenu.addItem(uploadSignedAgreementItem);
+
+        downloadAgreementItem = new MenuItem(i18n.tr("Download Signed Agreement"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).downloadSignedAgreement(getForm().getValue().currentTerm().version().agreementDocument());
+            }
+        });
+        leaseAgreementDocumentMenu.addItem(downloadAgreementItem);
+
+        leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
+        addHeaderToolbarItem(leaseAgreementDocument);
+
     }
 
     @Override
@@ -520,6 +556,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
             renewButton.setVisible(status == Status.Active && completion == null);
         }
+
+        downloadAgreementItem.setVisible(!value.currentTerm().version().agreementDocument().isNull());
     }
 
     @Override

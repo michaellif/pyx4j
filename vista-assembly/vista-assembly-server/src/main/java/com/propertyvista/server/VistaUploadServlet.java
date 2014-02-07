@@ -27,6 +27,7 @@ import com.propertyvista.crm.server.services.customer.CustomerPictureCrmUploadSe
 import com.propertyvista.crm.server.services.customer.InsuranceCertificateScanCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.TenantPadFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.lease.IdentificationDocumentCrmUploadServiceImpl;
+import com.propertyvista.crm.server.services.lease.LeaseTermAgreementDocumentUploadServiceImpl;
 import com.propertyvista.crm.server.services.lease.ProofOfEmploymentDocumentCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.organization.EmployeeSignatureUploadServiceImpl;
 import com.propertyvista.operations.server.services.EncryptedStorageServicePrivateKeyUploadServiceImpl;
@@ -65,5 +66,7 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(IdentificationDocumentCrmUploadServiceImpl.class);
         register(ProofOfEmploymentDocumentProspectUploadServiceImpl.class);
         register(IdentificationDocumentProspectUploadServiceImpl.class);
+
+        register(LeaseTermAgreementDocumentUploadServiceImpl.class);
     }
 }
