@@ -135,7 +135,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         protected void removeItem(final CEntityFolderItem<PaymentMethodInfoDTO> item) {
             String text = i18n.tr("Do you really want to delete the Payment Method?");
             if (item.getValue().usedByAutoPay().isBooleanTrue()) {
-                text = i18n.tr("This Payment Method is used in AutoPay(s). Do you really want to delete it?");
+                text = i18n.tr("This Payment Method is used in AutoPay(s). Do you really want to delete it with corresponding AutoPay(s)?");
             }
 
             MessageDialog.confirm(i18n.tr("Please confirm"), text, new Command() {

@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.customer;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -36,6 +37,7 @@ import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.server.services.financial.PreauthorizedPaymentsCommons;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
@@ -139,6 +141,16 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     }
 
     private void savePreauthorizedPayments(TenantDTO dto) {
+        // remove PAPs with no corresponding Payment Method (removed during edit session):
+        Iterator<PreauthorizedPaymentDTO> it = dto.preauthorizedPayments().iterator();
+        while (it.hasNext()) {
+            PreauthorizedPaymentDTO papDTO = it.next();
+            LeasePaymentMethod lpm = Persistence.service().retrieve(LeasePaymentMethod.class, papDTO.paymentMethod().getPrimaryKey());
+            if (lpm == null || lpm.isDeleted().isBooleanTrue()) {
+                it.remove();
+            }
+        }
+
         PreauthorizedPaymentsCommons
                 .savePreauthorizedPayments(dto.preauthorizedPayments(), EntityFactory.createIdentityStub(Tenant.class, dto.id().getValue()));
     }

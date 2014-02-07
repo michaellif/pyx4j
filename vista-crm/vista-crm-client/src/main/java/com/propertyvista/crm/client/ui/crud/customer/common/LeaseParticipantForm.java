@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -30,6 +31,7 @@ import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -56,6 +58,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerPicture;
@@ -259,8 +262,31 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 if (LeaseParticipantForm.this.getValue().electronicPaymentsAllowed().isBooleanTrue()) {
                     super.addItem();
                 } else {
-                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Merchant account is not setup to receive Electronic Payments"));
+                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Merchant Account is not setup to receive Electronic Payments"));
                 }
+            }
+
+            @Override
+            protected void removeItem(final CEntityFolderItem<LeasePaymentMethod> item) {
+                String message = null;
+                if (rootClass.equals(TenantDTO.class)) {
+                    message = i18n.tr("This Payment Method may be used in AutoPay(s). Do you really want to delete it with corresponding AutoPay(s)?");
+                } else if (rootClass.equals(GuarantorDTO.class)) {
+                    message = i18n.tr("Do you really want to delete the Payment Method?");
+                } else {
+                    throw new IllegalArgumentException();
+                }
+
+                MessageDialog.confirm(i18n.tr("Please confirm"), message, new Command() {
+                    @Override
+                    public void execute() {
+                        doRemoveItem(item);
+                    }
+                });
+            }
+
+            private void doRemoveItem(CEntityFolderItem<LeasePaymentMethod> item) {
+                super.removeItem(item);
             }
         }));
 
