@@ -89,7 +89,7 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
         Persistence.service().commit();
     }
 
-    public void testSuccessfulPaymentPostingWithTriggeredLeaseUpdate() throws Exception {
+    public void testPaymentPostingWithTriggeredLeaseUpdate() throws Exception {
         final PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), createCheckPaymentMethod(tenant.customer()),
                 "100");
         Persistence.service().commit();
@@ -153,5 +153,45 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
             assertEquals("update lease version", Integer.valueOf(6 + WRONG), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
+    }
+
+    public void testPaymentPostingWithTriggeredLeaseChargeRemove() throws Exception {
+        final PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), createCheckPaymentMethod(tenant.customer()),
+                "100");
+        Persistence.service().commit();
+
+        {
+            Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
+            assertEquals("initial lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
+        }
+
+        // Make change in Yardi before posting payment.
+        {
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop1", "t000111", "rent"). //
+                    set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2010-12-31"));
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+        {
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop1", "t000111", "park"). //
+                    set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2010-12-31"));
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Exception>() {
+            @Override
+            public Void execute() throws Exception {
+                ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
+                return null;
+            }
+        });
+
+        // TODO remove 
+        int WRONG = 1;
+        {
+            Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
+            assertEquals("update lease version", Integer.valueOf(3 + WRONG + WRONG), leaseCurrent.currentTerm().version().versionNumber().getValue());
+        }
+
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
     }
 }
