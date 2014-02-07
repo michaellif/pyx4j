@@ -392,7 +392,7 @@ public class Dialog implements ProvidesResize, IsWidget {
             popupPanel.setWidth(Window.getClientWidth() + "px");
         }
 
-        popupPanel.getElement().getStyle().setPropertyPx("maxHeight", (int) (Window.getClientHeight() * 0.8));
+        popupPanel.getElement().getStyle().setPropertyPx("maxHeight", (int) (Window.getClientHeight() * 0.9));
 
         int left = Math.max(Window.getScrollLeft() + (Window.getClientWidth() - popupPanel.getOffsetWidth()) / 2, 0);
         popupPanel.getElement().getStyle().setPropertyPx("left", left);

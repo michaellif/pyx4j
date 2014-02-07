@@ -248,11 +248,14 @@ public class MessageDialog extends Dialog {
         }
 
         public void layout() {
-//            if (htmlMessage.getOffsetHeight() > Window.getClientHeight() - 200) {
-//                htmlScroll.setHeight(Math.max(200, Window.getClientHeight() - 200) + "px");
-//            } else {
-//                htmlScroll.setHeight("auto");
-//            }
+            htmlScroll.setHeight("auto");
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    htmlScroll.setHeight(Math.max(200, MessageDialog.this.asWidget().getOffsetHeight() - 100) + "px");
+                }
+            });
+
         }
 
     }
