@@ -80,12 +80,6 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
         if (eventDate == null) {
             eventDate = new LogicalDate(SystemDateManager.getDate());
         }
-        if (expectedMoveOut == null) {
-            expectedMoveOut = new LogicalDate(SystemDateManager.getDate());
-        }
-        if (leaseEndDate == null) {
-            leaseEndDate = new LogicalDate(SystemDateManager.getDate());
-        }
 
         super.createCompletionEvent(leaseId, completionType, eventDate, expectedMoveOut, leaseEndDate);
     }

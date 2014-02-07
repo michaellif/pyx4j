@@ -268,8 +268,10 @@ public class YardiLeaseProcessor {
 
         if (lease.status().getValue().isActive()) {
             if (isOnNotice(rtCustomer)) {
-                lease = markLeaseOnNotice(lease, yardiLease);
-            } else if (CompletionType.Notice.equals(lease.completion().getValue())) {
+                if (lease.completion().getValue() != CompletionType.Notice) {
+                    lease = markLeaseOnNotice(lease, yardiLease);
+                }
+            } else if (lease.completion().getValue() == CompletionType.Notice) {
                 lease = cancelMarkLeaseOnNotice(lease, yardiLease);
             }
             if (isFormerLease(rtCustomer)) { // active -> past transition:

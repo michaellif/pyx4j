@@ -30,6 +30,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.occupancy.OccupancyOperationException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
@@ -37,6 +39,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.yardi.processors.YardiLeaseProcessor;
@@ -65,7 +68,16 @@ public class LeaseMerger {
         existing.expectedMoveIn().setValue(getImportedDate(imported.getExpectedMoveInDate()));
         existing.actualMoveIn().setValue(getImportedDate(imported.getActualMoveIn()));
 
+        boolean changed = isChanged(existing.expectedMoveOut(), imported.getExpectedMoveOutDate());
         existing.expectedMoveOut().setValue(getImportedDate(imported.getExpectedMoveOutDate()));
+        // update unit availability date in case of noticed lease:
+        if (changed && existing.completion().getValue() == CompletionType.Notice) {
+            try {
+                ServerSideFactory.create(OccupancyFacade.class).moveOut(existing.unit().getPrimaryKey(), existing.expectedMoveOut().getValue(), existing);
+            } catch (OccupancyOperationException e) {
+                throw new IllegalStateException(e.getMessage());
+            }
+        }
 
         return existing;
     }
