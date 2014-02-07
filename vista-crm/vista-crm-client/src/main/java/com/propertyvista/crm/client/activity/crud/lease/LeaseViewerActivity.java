@@ -408,4 +408,9 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                     }
                 }).show();
     }
+
+    @Override
+    public void signAgreementDocument() {
+        // TODO implement agreement signing
+    }
 }

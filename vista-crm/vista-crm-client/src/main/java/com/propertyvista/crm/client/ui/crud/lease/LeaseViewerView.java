@@ -88,6 +88,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void uploadSignedAgreement();
 
+        void signAgreementDocument();
+
     }
 
     ILister<DepositLifecycleDTO> getDepositListerView();
