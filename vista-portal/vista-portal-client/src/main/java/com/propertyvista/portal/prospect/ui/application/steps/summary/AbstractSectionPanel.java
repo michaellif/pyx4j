@@ -105,9 +105,7 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
     }
 
     public void onValueSet() {
-
         captionBar.updateState();
-
         errorMessageBar.setHTML(step.getValidationResults().getValidationMessage(true, true, false));
     }
 
@@ -123,7 +121,8 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
             captionLabel.setStyleName(SummaryStepTheme.StyleName.SummaryStepSectionCaption.name());
             add(captionLabel);
 
-            indexLabel = new Image();
+            indexLabel = new Image(PortalImages.INSTANCE.messageSuccess());
+            indexLabel.setVisible(false);
             indexLabel.addStyleName(SummaryStepTheme.StyleName.SummaryStepSectionStatus.name());
             add(indexLabel);
 
@@ -132,10 +131,12 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         void updateState() {
             if (step.isStepComplete()) {
                 indexLabel.setResource(PortalImages.INSTANCE.messageSuccess());
+                indexLabel.setVisible(true);
             } else if (step.isStepVisited()) {
                 indexLabel.setResource(PortalImages.INSTANCE.messageError());
+                indexLabel.setVisible(true);
             } else {
-                indexLabel.setResource(null);
+                indexLabel.setVisible(false);
             }
         }
 
