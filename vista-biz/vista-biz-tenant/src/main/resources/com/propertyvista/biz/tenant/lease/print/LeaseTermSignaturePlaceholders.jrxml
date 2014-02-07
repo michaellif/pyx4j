@@ -9,7 +9,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="182" height="20"/>
 				<textElement textAlignment="Right"/>
-				<text><![CDATA[Tenant:]]></text>
+				<text><![CDATA[Name:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="194" y="0" width="164" height="20"/>
@@ -33,13 +33,13 @@
 			<line>
 				<reportElement x="194" y="18" width="164" height="1"/>
 				<graphicElement>
-					<pen lineWidth="1.25"/>
+					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="368" y="18" width="82" height="1"/>
 				<graphicElement>
-					<pen lineWidth="1.25"/>
+					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 		</band>
