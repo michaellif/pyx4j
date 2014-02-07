@@ -140,19 +140,13 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
 
-        // TODO vlads 'HQSL transactions testing hack'  in YardiMockResidentTransactionsStubImpl
-        if (false) {
-            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Exception>() {
-                @Override
-                public Void execute() throws Exception {
-                    ServerSideFactory.create(PaymentFacade.class).reject(paymentRecord, true);
-                    return null;
-                }
-            });
-        } else {
-            ServerSideFactory.create(PaymentFacade.class).reject(paymentRecord, true);
-            Persistence.service().commit();
-        }
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Exception>() {
+            @Override
+            public Void execute() throws Exception {
+                ServerSideFactory.create(PaymentFacade.class).reject(paymentRecord, true);
+                return null;
+            }
+        });
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());

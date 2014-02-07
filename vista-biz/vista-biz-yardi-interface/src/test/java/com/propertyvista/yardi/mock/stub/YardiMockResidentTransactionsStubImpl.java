@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.YardiServiceException;
@@ -79,9 +78,6 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public void importResidentTransactions(PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException {
-        // HQSL transactions testing hack
-        Persistence.service().commit();
-
         YardiMockServer.instance().importResidentTransactions(reversalTransactions);
     }
 
