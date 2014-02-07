@@ -69,7 +69,6 @@ public interface ProspectPortalPolicy extends Policy {
     IPrimitive<FeePayment> feePayment();
 
     @Format("#,##0.00")
-    @Editor(type = EditorType.label)
     @Caption(description = "Amount of fee definition")
     IPrimitive<BigDecimal> feeAmount();
 }
