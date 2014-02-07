@@ -26,7 +26,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
@@ -50,6 +52,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.billing.bill.BillListerController;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.SigningEmplyeeSelectionDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
@@ -63,8 +66,10 @@ import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentD
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
@@ -411,6 +416,22 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void signAgreementDocument() {
-        // TODO implement agreement signing
+        EntityListCriteria<Employee> criteria = new EntityListCriteria<>(Employee.class);
+        GWT.<SelectEmployeeListService> create(SelectEmployeeListService.class).list(new DefaultAsyncCallback<EntitySearchResult<Employee>>() {
+            @Override
+            public void onSuccess(EntitySearchResult<Employee> result) {
+                new SigningEmplyeeSelectionDialog(result.getData()) {
+                    @Override
+                    public void onEmployeeSelected(Employee employeeId) {
+                        ((LeaseViewerCrudService) getService()).signLease(new DefaultAsyncCallback<VoidSerializable>() {
+                            @Override
+                            public void onSuccess(VoidSerializable result) {
+                                populate();
+                            }
+                        }, employeeId);
+                    };
+                }.show();
+            }
+        }, criteria);
     }
 }

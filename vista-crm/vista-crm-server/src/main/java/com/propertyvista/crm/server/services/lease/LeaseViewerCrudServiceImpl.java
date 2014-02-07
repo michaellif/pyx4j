@@ -46,6 +46,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -286,6 +287,12 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(leaseId, status.status().getValue(), status.details().getValue(),
                 "set manually via CRM", CrmAppContext.getCurrentUser());
         Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void signLease(AsyncCallback<VoidSerializable> callback, Employee employeeId) {
+        // TODO Auto-generated method stub
         callback.onSuccess(null);
     }
 }

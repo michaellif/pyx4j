@@ -25,6 +25,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -64,8 +65,10 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
      */
     void simpleLeaseRenew(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate leaseEndDate);
 
-    void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4BatchRequestDTO n4GenerationQuery);
+    void issueN4(AsyncCallback<VoidSerializable> callback, N4BatchRequestDTO n4GenerationQuery);
 
-    void setLegalStatus(AsyncCallback<VoidSerializable> defaultAsynCallback, Lease leaseId, LegalStatus status);
+    void setLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatus status);
+
+    void signLease(AsyncCallback<VoidSerializable> callback, Employee employeeId);
 
 }

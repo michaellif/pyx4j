@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.server.services.selections;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.company.Employee;
@@ -28,6 +30,12 @@ public class SelectEmployeeListServiceImpl extends AbstractListServiceImpl<Emplo
     protected void bind() {
         bind(toProto.id(), boProto.id());
         bindCompleteObject();
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Employee bo, Employee dto) {
+        super.enhanceListRetrieved(bo, dto);
+        Persistence.service().retrieve(dto.signature(), AttachLevel.IdOnly, false);
     }
 
 }
