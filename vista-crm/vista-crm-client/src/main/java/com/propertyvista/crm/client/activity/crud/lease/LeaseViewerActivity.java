@@ -380,7 +380,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void downloadBlankAgreement() {
+    public void downloadAgreementForSigning() {
         ReportDialog reportDialog = new ReportDialog(i18n.tr("Creating Lease Agreement Document for Signing"), "");
         reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
 

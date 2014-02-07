@@ -28,8 +28,10 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade.LeaseTermAgreementSignaturesMode;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementPdfCreatorFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 
 public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDeferredProcess {
 
@@ -61,9 +63,13 @@ public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDefe
     public void execute() {
         try {
             Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-            byte[] pdfBytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(
-                    ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(lease.currentTerm(), true, createDraft));
+
+            LeaseAgreementDocumentDataDTO documentData = ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(
+                    lease.currentTerm(), LeaseTermAgreementSignaturesMode.PlaceholdersAndAvailableSignatures, createDraft);
+            byte[] pdfBytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(documentData);
+
             Downloadable d = new Downloadable(pdfBytes, MimeMap.getContentType(DownloadFormat.PDF));
+
             fileName = "blank-lease-agreement.pdf";
             d.save(fileName);
         } catch (Throwable e) {

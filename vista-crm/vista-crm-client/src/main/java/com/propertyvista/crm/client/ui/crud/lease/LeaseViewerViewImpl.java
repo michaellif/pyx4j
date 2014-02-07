@@ -472,7 +472,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         MenuItem downloadBlankAgreementItem = new MenuItem(i18n.tr("Download Agreement for Signing"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).downloadBlankAgreement();
+                ((LeaseViewerView.Presenter) getPresenter()).downloadAgreementForSigning();
             }
         });
         leaseAgreementDocumentMenu.addItem(downloadBlankAgreementItem);

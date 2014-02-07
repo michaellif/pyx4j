@@ -82,7 +82,7 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void createMaintenanceRequest();
 
-        void downloadBlankAgreement();
+        void downloadAgreementForSigning();
 
         void downloadSignedAgreement(LeaseTermAgreementDocument doc);
 

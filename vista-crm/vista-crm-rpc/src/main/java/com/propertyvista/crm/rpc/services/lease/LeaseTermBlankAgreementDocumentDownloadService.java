@@ -20,6 +20,8 @@ public interface LeaseTermBlankAgreementDocumentDownloadService extends ReportSe
 
     String LEASE_ID_PARAM_KEY = "LEASE_ID";
 
+    String USE_ONLY_SIGNATURE_PLACEHOLDERS_PARAM_KEY = "USE_ONLY_SIGNATURE_PLACEHOLDERS";
+
     String CREATE_DRAFT_PARAM_KEY = "MAKE_DRAFT";
 
 }

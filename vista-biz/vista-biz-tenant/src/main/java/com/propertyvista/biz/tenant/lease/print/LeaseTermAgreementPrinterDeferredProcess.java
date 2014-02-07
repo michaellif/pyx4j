@@ -24,6 +24,7 @@ import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
+import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade.LeaseTermAgreementSignaturesMode;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
@@ -50,7 +51,8 @@ class LeaseTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
             public Void execute() {
                 try {
                     byte[] agreementPdf = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(
-                            ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(leaseTerm, false, false));
+                            ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(leaseTerm,
+                                    LeaseTermAgreementSignaturesMode.SignaturesOnly, false));
                     saveBlob(agreementPdf);
                 } catch (Throwable e) {
                     throw new RuntimeException(e);

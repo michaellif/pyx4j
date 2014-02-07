@@ -18,14 +18,20 @@ import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 
 public interface LeaseTermAgreementDocumentDataCreatorFacade {
 
+    public enum LeaseTermAgreementSignaturesMode {
+
+        PlaceholdersOnly, SignaturesOnly, PlaceholdersAndAvailableSignatures, None
+
+    }
+
     /**
      * Prepares data that is required for printout of hard copy of 'lease term agreement'
      * 
      * @param leaseTerm
-     * @param singaturePlaceholders
+     * @param signaturePlaceholdersOnly
      * @param isDraft
      * @return
      */
-    LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, boolean singaturePlaceholders, boolean isDraft);
+    LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, LeaseTermAgreementSignaturesMode signaturesMode, boolean isDraft);
 
 }
