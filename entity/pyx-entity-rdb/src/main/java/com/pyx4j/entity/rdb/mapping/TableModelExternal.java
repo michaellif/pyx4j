@@ -41,7 +41,7 @@ public class TableModelExternal {
 
     private static final Logger log = LoggerFactory.getLogger(TableModelExternal.class);
 
-    public static void retrieve(PersistenceContext persistenceContext, IEntity entity, MemberExternalOperationsMeta member) {
+    public static void retrieve(PersistenceContext persistenceContext, IEntity ownerEntity, MemberExternalOperationsMeta member) {
         Dialect dialect = persistenceContext.getDialect();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -73,7 +73,9 @@ public class TableModelExternal {
                 }
                 sql.append(name).append(" = ?");
             }
-
+            if (member.hasChildJoinContition()) {
+                sql.append(" AND ").append(member.getSqlChildJoinContition());
+            }
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
@@ -85,7 +87,7 @@ public class TableModelExternal {
             stmt.setMaxRows(1);
 
             int parameterIndex = 1;
-            parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
+            parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, ownerEntity);
 
             if (dialect.isMultitenantSharedSchema()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
@@ -93,7 +95,7 @@ public class TableModelExternal {
             }
             rs = stmt.executeQuery();
 
-            IEntity childEntity = (IEntity) member.getMember(entity);
+            IEntity childEntity = (IEntity) member.getMember(ownerEntity);
             if ((childEntity.getAttachLevel() != AttachLevel.Detached) && !childEntity.isNull()) {
                 log.warn("retrieving to not empty external member {}\n called from {}", member.getMemberPath(),
                         Trace.getCallOrigin(EntityPersistenceServiceRDB.class));

@@ -20,10 +20,6 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.ObjectClassType;
@@ -57,28 +53,7 @@ public class JoinOwnedInformation extends JoinInformation {
         }
 
         if (EntityFactory.getEntityMeta(childEntityClass).getPersistableSuperClass() != null) {
-            List<String> discriminatorStrings = new ArrayList<String>();
-            for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(childEntityClass)) {
-                DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
-                if (discriminator != null) {
-                    discriminatorStrings.add(discriminator.value());
-                }
-            }
-            if (discriminatorStrings.size() == 1) {
-                sqlChildJoinContition = dialect.sqlDiscriminatorColumnName() + " = '" + discriminatorStrings.get(0) + "'";
-            } else {
-                sqlChildJoinContition = dialect.sqlDiscriminatorColumnName() + " IN (";
-                boolean first = true;
-                for (String desc : discriminatorStrings) {
-                    if (first) {
-                        first = false;
-                    } else {
-                        sqlChildJoinContition += ",";
-                    }
-                    sqlChildJoinContition += "'" + desc + "'";
-                }
-                sqlChildJoinContition += ") ";
-            }
+            sqlChildJoinContition = buildChildJoinContition(dialect, childEntityClass);
         }
 
     }

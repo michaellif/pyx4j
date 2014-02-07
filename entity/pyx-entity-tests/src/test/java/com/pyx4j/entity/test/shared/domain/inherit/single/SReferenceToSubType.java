@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,25 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-01-04
+ * Created on Feb 7, 2014
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.inherit.single;
 
-import com.pyx4j.entity.annotations.ColumnId;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-@DiscriminatorValue("C2")
-public interface SConcrete2 extends SBase {
+@Table(prefix = "test")
+public interface SReferenceToSubType extends IEntity {
 
-    IPrimitive<String> nameC2();
+    IPrimitive<String> testId();
 
-    interface ReferenceMasterColumnId extends ColumnId {
-    }
+    IPrimitive<String> name();
 
-    @JoinColumn(ReferenceMasterColumnId.class)
-    SReferenceToSubType master();
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = SConcrete1.class, mappedBy = SConcrete1.ReferenceMasterColumnId.class)
+    SConcrete1 reference();
+
 }

@@ -74,6 +74,10 @@ class JoinTableInformation extends JoinInformation {
         } else if (orderMemberMeta != null) {
             collectionOrderMeta = new MemberCollectionOrderMeta(dialect, orderMemberMeta);
         }
+
+        if (EntityFactory.getEntityMeta(entityClass).getPersistableSuperClass() != null) {
+            sqlChildJoinContition = buildChildJoinContition(dialect, entityClass);
+        }
     }
 
     private MemberMeta findOwnerMember(EntityMeta joinEntityMeta) {

@@ -20,6 +20,10 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
@@ -142,6 +146,33 @@ abstract class JoinInformation {
             }
         }
         return false;
+    }
+
+    protected static String buildChildJoinContition(Dialect dialect, Class<? extends IEntity> entityClass) {
+        List<String> discriminatorStrings = new ArrayList<String>();
+        for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityClass)) {
+            DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
+            if (discriminator != null) {
+                discriminatorStrings.add(discriminator.value());
+            }
+        }
+        if (discriminatorStrings.size() == 1) {
+            return dialect.sqlDiscriminatorColumnName() + " = '" + discriminatorStrings.get(0) + "'";
+        } else {
+            StringBuilder sqlChildJoinContition = new StringBuilder();
+            sqlChildJoinContition.append(dialect.sqlDiscriminatorColumnName()).append(" IN (");
+            boolean first = true;
+            for (String desc : discriminatorStrings) {
+                if (first) {
+                    first = false;
+                } else {
+                    sqlChildJoinContition.append(",");
+                }
+                sqlChildJoinContition.append("'" + desc + "'");
+            }
+            sqlChildJoinContition.append(") ");
+            return sqlChildJoinContition.toString();
+        }
     }
 
 }

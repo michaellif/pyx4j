@@ -25,6 +25,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -41,6 +42,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.single.SBase;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete1;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete2;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SReference;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SReferenceToSubType;
 
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
@@ -594,5 +596,32 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             List<SBase> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
         }
+    }
+
+    public void testSingleTableExternalMember() {
+        String testId = uniqueString();
+
+        SReferenceToSubType master = EntityFactory.create(SReferenceToSubType.class);
+        master.testId().setValue(testId);
+        srv.persist(master);
+
+        SConcrete2 ent2 = EntityFactory.create(SConcrete2.class);
+        ent2.testId().setValue(testId);
+        ent2.nameC2().setValue("c2:" + uniqueString());
+        ent2.master().set(master);
+        srv.persist(ent2);
+
+        SConcrete1 ent1 = EntityFactory.create(SConcrete1.class);
+        ent1.testId().setValue(testId);
+        ent1.nameC1().setValue("c1:" + uniqueString());
+        ent1.master().set(master);
+        srv.persist(ent1);
+
+        // Test Query that should not retrieve SConcrete2
+        {
+            SReferenceToSubType masterR1 = srv.retrieve(SReferenceToSubType.class, master.getPrimaryKey());
+            srv.retrieveMember(masterR1.reference(), AttachLevel.Attached);
+        }
+
     }
 }
