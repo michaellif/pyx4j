@@ -246,7 +246,8 @@ public class MessageDialog extends Dialog {
         }
 
         public void layout() {
-            htmlScroll.getElement().getStyle().setPropertyPx("maxHeight", Math.max(100, (int) (Window.getClientHeight() * 0.9) - 100));
+            int offsetHeight = getActualDialogHeight() - htmlScroll.getOffsetHeight();
+            htmlScroll.getElement().getStyle().setPropertyPx("maxHeight", Math.max(100, (int) (Window.getClientHeight() * 0.9) - offsetHeight));
         }
 
     }

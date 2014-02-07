@@ -174,6 +174,10 @@ public class Dialog implements ProvidesResize, IsWidget {
 
     }
 
+    protected int getActualDialogHeight() {
+        return container.getOffsetHeight();
+    }
+
     public void setCaption(String caption) {
         captionPanel.setHTML(caption);
     }
