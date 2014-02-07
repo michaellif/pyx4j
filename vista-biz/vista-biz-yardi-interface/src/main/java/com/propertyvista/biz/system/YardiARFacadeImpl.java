@@ -17,14 +17,12 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -36,7 +34,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
-public class YardiARFacadeImpl implements YardiARFacade {
+public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiARFacade {
 
     @Override
     public void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
@@ -49,22 +47,28 @@ public class YardiARFacadeImpl implements YardiARFacade {
     @Override
     public void updateLease(Lease lease) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
+
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-        YardiResidentTransactionsService.getInstance().updateLease(VistaDeployment.getPmcYardiCredential(lease.unit().building()), lease);
+
+        YardiResidentTransactionsService.getInstance().updateLease(getPmcYardiCredential(lease), lease);
     }
 
     @Override
     public void updateProductCatalog(Building building) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
+
         Persistence.ensureRetrieve(building, AttachLevel.Attached);
+
         YardiResidentTransactionsService.getInstance().updateProductCatalog(VistaDeployment.getPmcYardiCredential(building), building);
     }
 
     @Override
     public PaymentBatchContext createPaymentBatchContext(Building building) throws RemoteException, YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
+
         YardiPaymentBatchContext paymentBatchContext = new YardiPaymentBatchContext();
         paymentBatchContext.ensureOpenBatch(VistaDeployment.getPmcYardiCredential(building), building.propertyCode().getValue());
+
         return paymentBatchContext;
     }
 
@@ -73,9 +77,8 @@ public class YardiARFacadeImpl implements YardiARFacade {
         assert VistaFeatures.instance().yardiIntegration();
 
         Persistence.ensureRetrieve(receipt.billingAccount(), AttachLevel.Attached);
-        Building buildingId = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(receipt.billingAccount().lease());
 
-        YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(buildingId), receipt,
+        YardiSystemBatchesService.getInstance().postReceipt(getPmcYardiCredential(receipt.billingAccount().lease()), receipt,
                 (YardiPaymentBatchContext) paymentBatchContext);
     }
 
@@ -84,9 +87,8 @@ public class YardiARFacadeImpl implements YardiARFacade {
         assert VistaFeatures.instance().yardiIntegration();
 
         Persistence.ensureRetrieve(reversal.billingAccount(), AttachLevel.Attached);
-        Building buildingId = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(reversal.billingAccount().lease());
 
-        YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(buildingId), reversal);
+        YardiResidentTransactionsService.getInstance().postReceiptReversal(getPmcYardiCredential(reversal.billingAccount().lease()), reversal);
     }
 
     @Override
