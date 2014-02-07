@@ -347,6 +347,8 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             } else {
                 log.info(messages.toString());
             }
+        } catch (YardiServiceException e) {
+            throw e;
         } catch (Throwable e) {
             throw new YardiServiceException(e);
         }

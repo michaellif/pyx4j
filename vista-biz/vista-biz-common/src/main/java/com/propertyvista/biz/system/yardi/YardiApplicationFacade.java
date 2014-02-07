@@ -13,7 +13,10 @@
  */
 package com.propertyvista.biz.system.yardi;
 
+import com.pyx4j.commons.UserRuntimeException;
+
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface YardiApplicationFacade {
@@ -29,4 +32,12 @@ public interface YardiApplicationFacade {
 
     /** Create Future Lease; set tId in Lease.leaseId */
     Lease approveApplication(Lease lease) throws YardiServiceException;
+
+    /**
+     * @param buildingId
+     *            for which Online Applications will be enabled
+     * @throws UserRuntimeException
+     *             is there are changes to be made in yardi
+     */
+    void validateApplicationAcceptance(Building buildingId) throws UserRuntimeException;
 }
