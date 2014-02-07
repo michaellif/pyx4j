@@ -73,7 +73,7 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
 
     @Override
     public Lease load(Lease leaseId, boolean forEdit) {
-        return getLeaseYardiManager(retrieve(leaseId)).load(leaseId, forEdit);
+        return getLeaseYardiManager(retrieveLeseStatus(leaseId)).load(leaseId, forEdit);
     }
 
     @Override
@@ -113,77 +113,77 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
 
     @Override
     public void createMasterOnlineApplication(Lease leaseId, Building building, Floorplan floorplan) {
-        getLeaseYardiManager(retrieve(leaseId)).createMasterOnlineApplication(leaseId, building, floorplan);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).createMasterOnlineApplication(leaseId, building, floorplan);
     }
 
     @Override
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
-        getLeaseYardiManager(retrieve(leaseId)).declineApplication(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).declineApplication(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
-        getLeaseYardiManager(retrieve(leaseId)).cancelApplication(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).cancelApplication(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
-        getLeaseYardiManager(retrieve(leaseId)).approve(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).approve(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void activate(Lease leaseId) {
-        getLeaseYardiManager(retrieve(leaseId)).activate(leaseId);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).activate(leaseId);
     }
 
     @Override
     public void renew(Lease leaseId) {
-        getLeaseYardiManager(retrieve(leaseId)).renew(leaseId);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).renew(leaseId);
     }
 
     @Override
     public void complete(Lease leaseId) {
-        getLeaseYardiManager(retrieve(leaseId)).complete(leaseId);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).complete(leaseId);
     }
 
     @Override
     public void close(Lease leaseId) {
-        getLeaseYardiManager(retrieve(leaseId)).close(leaseId);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).close(leaseId);
     }
 
     @Override
     public LeaseTerm createOffer(Lease leaseId, Type type) {
-        return getLeaseYardiManager(retrieve(leaseId)).createOffer(leaseId, null, type);
+        return getLeaseYardiManager(retrieveLeseStatus(leaseId)).createOffer(leaseId, null, type);
     }
 
     @Override
     public LeaseTerm createOffer(Lease leaseId, AptUnit unitId, Type type) {
-        return getLeaseYardiManager(retrieve(leaseId)).createOffer(leaseId, unitId, type);
+        return getLeaseYardiManager(retrieveLeseStatus(leaseId)).createOffer(leaseId, unitId, type);
     }
 
     @Override
     public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
-        getLeaseYardiManager(retrieve(leaseId)).acceptOffer(leaseId, leaseTermId);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).acceptOffer(leaseId, leaseTermId);
     }
 
     @Override
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate, LogicalDate leaseEndDate) {
-        getLeaseYardiManager(retrieve(leaseId)).createCompletionEvent(leaseId, completionType, eventDate, moveOutDate, leaseEndDate);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).createCompletionEvent(leaseId, completionType, eventDate, moveOutDate, leaseEndDate);
     }
 
     @Override
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
-        getLeaseYardiManager(retrieve(leaseId)).cancelCompletionEvent(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).cancelCompletionEvent(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
-        getLeaseYardiManager(retrieve(leaseId)).cancelLease(leaseId, decidedBy, decisionReason);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).cancelLease(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
-        getLeaseYardiManager(retrieve(leaseId)).moveOut(leaseId, actualMoveOut);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).moveOut(leaseId, actualMoveOut);
     }
 
     @Override
@@ -203,18 +203,27 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
 
     @Override
     public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
-        return getLeaseYardiManager(retrieve(leaseId)).isMoveOutWithinNextBillingCycle(leaseId);
+        return getLeaseYardiManager(retrieveLeseStatus(leaseId)).isMoveOutWithinNextBillingCycle(leaseId);
     }
 
     @Override
     public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
-        getLeaseYardiManager(retrieve(leaseId)).simpleLeaseRenew(leaseId, leaseEndDate);
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).simpleLeaseRenew(leaseId, leaseEndDate);
+    }
+
+    @Override
+    public Building getLeasePolicyNode(Lease leaseId) {
+        return getLeaseYardiManager(retrieveLeseStatus(leaseId)).getLeasePolicyNode(leaseId);
     }
 
     // internals:
 
-    private Lease retrieve(Lease leaseId) {
-        return Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+    private Lease retrieveLeseStatus(Lease leaseId) {
+        if (leaseId.isValueDetached()) {
+            return Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        } else {
+            return leaseId;
+        }
     }
 
     private Lease retrieve(LeaseTerm leaseTerm) {

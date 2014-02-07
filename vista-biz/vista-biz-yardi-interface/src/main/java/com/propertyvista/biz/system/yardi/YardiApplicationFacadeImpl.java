@@ -15,20 +15,20 @@ package com.propertyvista.biz.system.yardi;
 
 import com.pyx4j.commons.UserRuntimeException;
 
+import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.services.YardiGuestManagementService;
 
-public class YardiApplicationFacadeImpl implements YardiApplicationFacade {
+public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implements YardiApplicationFacade {
 
     @Override
     public Lease createApplication(Lease lease) throws YardiServiceException {
         if (!lease.leaseId().isNull()) {
             throw new UserRuntimeException("New Application should not have id: " + lease.leaseId().getValue());
         }
-        PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(lease.unit().building());
+        PmcYardiCredential yc = getPmcYardiCredential(lease);
         String pId = YardiGuestManagementService.getInstance().createNewProspect(yc, lease);
         lease.leaseId().setValue(pId);
         return lease;
@@ -39,7 +39,7 @@ public class YardiApplicationFacadeImpl implements YardiApplicationFacade {
         if (lease.leaseId().isNull() || !lease.leaseId().getValue().startsWith("p")) {
             throw new UserRuntimeException("Invalid lease id: " + lease.leaseId().getValue());
         }
-        PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(lease.unit().building());
+        PmcYardiCredential yc = getPmcYardiCredential(lease);
         YardiGuestManagementService.getInstance().holdUnit(yc, lease);
     }
 
@@ -48,7 +48,7 @@ public class YardiApplicationFacadeImpl implements YardiApplicationFacade {
         if (lease.leaseId().isNull() || !lease.leaseId().getValue().startsWith("p")) {
             throw new UserRuntimeException("Invalid lease id: " + lease.leaseId().getValue());
         }
-        PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(lease.unit().building());
+        PmcYardiCredential yc = getPmcYardiCredential(lease);
         String tId = YardiGuestManagementService.getInstance().signLease(yc, lease);
         lease.leaseId().setValue(tId);
         return lease;

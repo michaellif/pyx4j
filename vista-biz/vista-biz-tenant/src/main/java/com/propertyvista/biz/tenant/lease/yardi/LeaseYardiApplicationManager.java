@@ -18,10 +18,15 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -33,6 +38,8 @@ import com.propertyvista.domain.tenant.lease.Lease.Status;
 public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     private static final Logger log = LoggerFactory.getLogger(LeaseYardiApplicationManager.class);
+
+    private final static I18n i18n = I18n.get(LeaseYardiApplicationManager.class);
 
     @Override
     protected BillingAccount createBillingAccount() {
@@ -69,6 +76,14 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
         super.approve(leaseId, decidedBy, decisionReason);
         // activate, newly created leases:
         activate(leaseId);
+        try {
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
+            ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(lease);
+            ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
+        } catch (YardiServiceException e) {
+            throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
+        }
     }
 
     @Override

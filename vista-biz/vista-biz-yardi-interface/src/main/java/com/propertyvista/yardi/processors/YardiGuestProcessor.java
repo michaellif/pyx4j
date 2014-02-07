@@ -41,10 +41,15 @@ import com.yardi.entity.guestcard40.Quotes;
 import com.yardi.entity.guestcard40.UnitType;
 import com.yardi.entity.mits.Information;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
+
+import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiGuestProcessor {
+
     private final String agent, source;
 
     public YardiGuestProcessor(String agent, String source) {
@@ -156,8 +161,8 @@ public class YardiGuestProcessor {
     }
 
     private AddressStructured getCurrentAddress(Lease lease) {
-        // TODO: VladL - update address retrieval logic as needed
-        return lease._applicant().customer().personScreening().version().currentAddress();
+        return ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftOrFinal(lease._applicant().customer(), AttachLevel.Attached)
+                .version().currentAddress();
     }
 
     private AddressType getAddress(AddressStructured as) {

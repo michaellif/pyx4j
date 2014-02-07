@@ -17,12 +17,14 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -71,11 +73,9 @@ public class YardiARFacadeImpl implements YardiARFacade {
         assert VistaFeatures.instance().yardiIntegration();
 
         Persistence.ensureRetrieve(receipt.billingAccount(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(receipt.billingAccount().lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(receipt.billingAccount().lease().unit(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(receipt.billingAccount().lease().unit().building(), AttachLevel.Attached);
+        Building buildingId = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(receipt.billingAccount().lease());
 
-        YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(receipt.billingAccount().lease().unit().building()), receipt,
+        YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(buildingId), receipt,
                 (YardiPaymentBatchContext) paymentBatchContext);
     }
 
@@ -84,11 +84,9 @@ public class YardiARFacadeImpl implements YardiARFacade {
         assert VistaFeatures.instance().yardiIntegration();
 
         Persistence.ensureRetrieve(reversal.billingAccount(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(reversal.billingAccount().lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(reversal.billingAccount().lease().unit().building(), AttachLevel.Attached);
+        Building buildingId = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(reversal.billingAccount().lease());
 
-        YardiResidentTransactionsService.getInstance().postReceiptReversal(
-                VistaDeployment.getPmcYardiCredential(reversal.billingAccount().lease().unit().building()), reversal);
+        YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(buildingId), reversal);
     }
 
     @Override

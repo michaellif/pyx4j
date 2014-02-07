@@ -84,6 +84,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+
         YardiGuestProcessor guestProcessor = getProcessor(yc, lease);
         // create guest, add rentable items, preferred unit, and moveIn date
         Prospect guest = guestProcessor.getProspect(lease);

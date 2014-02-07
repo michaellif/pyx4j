@@ -28,8 +28,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 
 public interface LeaseFacade {
 
@@ -125,4 +123,9 @@ public interface LeaseFacade {
      */
     void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate);
 
+    /**
+     * @param leaseId
+     * @return buildingId
+     */
+    Building getLeasePolicyNode(Lease leaseId);
 }

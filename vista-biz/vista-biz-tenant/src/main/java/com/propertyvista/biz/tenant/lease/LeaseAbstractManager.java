@@ -1228,4 +1228,18 @@ public abstract class LeaseAbstractManager {
         }
         return false;
     }
+
+    public Building getLeasePolicyNode(Lease leaseId) {
+        Building building;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().units().$().leases(), leaseId);
+            building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        }
+        if (building != null) {
+            return building;
+        } else {
+            throw new Error();
+        }
+    }
 }
