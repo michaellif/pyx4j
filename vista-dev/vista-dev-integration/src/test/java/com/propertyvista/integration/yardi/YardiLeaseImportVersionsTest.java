@@ -52,13 +52,10 @@ public class YardiLeaseImportVersionsTest extends PaymentYardiTestBase {
         // No changes in Yardi, Just run import
         yardiImportAll(getYardiCredential("prop1"));
 
-        // TODO remove 
-        int WRONG = 1;
-
         // Nothing changes, expect the same version
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("initial lease version", Integer.valueOf(2 + WRONG), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("initial lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         // Make two change in Yardi
@@ -78,14 +75,14 @@ public class YardiLeaseImportVersionsTest extends PaymentYardiTestBase {
         // Two changes made  version ++2
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(4 + WRONG), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(4), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         yardiImportAll(getYardiCredential("prop1"));
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(4 + WRONG + WRONG), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(4), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
     }

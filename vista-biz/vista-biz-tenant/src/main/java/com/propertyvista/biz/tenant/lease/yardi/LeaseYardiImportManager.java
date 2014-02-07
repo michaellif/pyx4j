@@ -143,10 +143,12 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
 
     @Override
     public void updateLeaseDates(Lease lease) {
+        LogicalDate expectedMoveIn = lease.expectedMoveIn().getValue();
         LogicalDate expectedMoveOut = lease.expectedMoveOut().getValue();
 
         super.updateLeaseDates(lease);
 
+        lease.expectedMoveIn().setValue(expectedMoveIn);
         lease.expectedMoveOut().setValue(expectedMoveOut);
     }
 
