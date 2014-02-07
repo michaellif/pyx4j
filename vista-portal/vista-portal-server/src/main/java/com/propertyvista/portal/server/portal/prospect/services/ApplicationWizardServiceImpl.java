@@ -739,6 +739,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         switch (bo.role().getValue()) {
         case Applicant:
+            if (!to.unitSelection().isNull()) {
+                leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
+            }
             saveUnitOptionsData(bo, to);
             saveCoApplicants(bo, to);
             saveGuarantors(bo, to);
