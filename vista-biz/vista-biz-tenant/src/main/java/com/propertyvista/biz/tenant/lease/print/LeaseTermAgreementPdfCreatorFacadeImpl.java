@@ -43,6 +43,7 @@ public class LeaseTermAgreementPdfCreatorFacadeImpl implements LeaseTermAgreemen
         }
 
         params.put("applicants", agreementData.applicants());
+        params.put("landlordAgentsSignatures", agreementData.landlordAgentsSignatures());
 
         ByteOutputStream bos = new ByteOutputStream();
         JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreatorFacadeImpl.class.getPackage().getName() + ".LeaseTermAgreement",

@@ -24,12 +24,14 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -46,9 +48,9 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -291,8 +293,21 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void signLease(AsyncCallback<VoidSerializable> callback, Employee employeeId) {
-        // TODO Auto-generated method stub
+    public void signLease(AsyncCallback<VoidSerializable> callback, Lease leaseId) {
+        CrmUserSignature signature = EntityFactory.create(CrmUserSignature.class);
+
+        signature.signatureFormat().setValue(SignatureFormat.FullName);
+        signature.agree().setValue(true);
+        signature.fullName().setValue(CrmAppContext.getCurrentUserEmployee().name().getStringView());
+
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.Attached);
+        lease.currentTerm().version().employeeSignature().set(signature);
+
+        Persistence.service().merge(lease.currentTerm().version());
+
+        // TODO Add lease agreement document generation logic that checks if all signatures present signed and creates a document
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 }

@@ -47,6 +47,7 @@ import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmatio
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
 @ToStringFormat("{0} - {1}, {2}")
@@ -151,6 +152,10 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
         @Owned(cascade = {})
         @Detached(level = AttachLevel.IdOnly)
         LeaseTermAgreementDocument agreementDocument();
+
+        @Owned
+        CrmUserSignature employeeSignature();
+
     }
 
     // internals:   -----------------------------------------------

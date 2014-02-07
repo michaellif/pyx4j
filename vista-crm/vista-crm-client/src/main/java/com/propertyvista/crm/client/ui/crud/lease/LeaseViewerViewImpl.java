@@ -833,6 +833,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }.show();
     }
 
+    private void signLeaseTermAgreement() {
+        MessageDialog.confirm(i18n.tr("Sign Agreement Document"), i18n.tr("Are you sure?"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).signAgreementDocument();
+            }
+        });
+    }
+
     private void addAgreementDocumentMenu() {
         Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement Document"));
         ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
@@ -840,7 +849,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         signAgreementDocumentItem = new MenuItem(i18n.tr("Sign..."), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).signAgreementDocument();
+                signLeaseTermAgreement();
             }
         });
         leaseAgreementDocumentMenu.addItem(signAgreementDocumentItem);

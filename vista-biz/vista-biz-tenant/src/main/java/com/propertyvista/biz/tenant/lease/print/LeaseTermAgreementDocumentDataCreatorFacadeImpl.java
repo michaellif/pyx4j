@@ -92,6 +92,13 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         leaseAgreementData.terms().add(makeRentTerm(leaseTerm));
         leaseAgreementData.terms().addAll(makeTermsForPrint(leaseTerm, !makeDraft ? signaturesMode : LeaseTermAgreementSignaturesMode.None));
 
+        if (!makeDraft
+                && (signaturesMode == LeaseTermAgreementSignaturesMode.SignaturesOnly || signaturesMode == LeaseTermAgreementSignaturesMode.PlaceholdersAndAvailableSignatures)) {
+            if (leaseTerm.version().employeeSignature().hasValues()) {
+                leaseAgreementData.landlordAgentsSignatures().add(leaseTerm.version().employeeSignature());
+            }
+        }
+
         if (makeDraft) {
             byte[] watermarkBytes;
             InputStream is = null;

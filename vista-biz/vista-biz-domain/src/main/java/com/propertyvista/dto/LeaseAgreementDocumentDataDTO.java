@@ -18,6 +18,8 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.security.CrmUserSignature;
+
 @Transient
 public interface LeaseAgreementDocumentDataDTO extends IEntity {
 
@@ -30,6 +32,8 @@ public interface LeaseAgreementDocumentDataDTO extends IEntity {
     IList<LeaseAgreementDocumentLegalTermTenantDTO> applicants();
 
     IList<LeaseAgreementDocumentLegalTerm4PrintDTO> terms();
+
+    IList<CrmUserSignature> landlordAgentsSignatures();
 
     IPrimitive<byte[]> leaseAgreementBackground();
 }

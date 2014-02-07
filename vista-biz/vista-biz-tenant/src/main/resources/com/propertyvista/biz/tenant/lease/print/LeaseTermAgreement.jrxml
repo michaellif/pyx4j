@@ -8,6 +8,8 @@
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
 	<parameter name="backgroundImage" class="java.io.InputStream"/>
 	<parameter name="applicants" class="com.pyx4j.entity.core.IList"/>
+    <parameter name="landlordAgentsSignatures" class="java.util.List"/>
+
 	<field name="body" class="java.lang.String"/>
 	<field name="title" class="java.lang.String"/>
 	<field name="signatures" class="com.pyx4j.entity.core.IList"/>
@@ -147,4 +149,13 @@
 			</subreport>
 		</band>
 	</detail>
+	<summary>
+		<band height="1" splitType="Stretch">
+            <subreport>
+				<reportElement x="104" y="0" width="450" height="1"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($P{landlordAgentsSignatures})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseTermSignatures")]]></subreportExpression>
+			</subreport>
+        </band>
+	</summary>
 </jasperReport>
