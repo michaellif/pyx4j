@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.financial;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -50,5 +51,10 @@ public class PaymentRecordListServiceImpl extends AbstractCrudServiceDtoImpl<Pay
         Persistence.service().retrieve(to.billingAccount().lease());
         Persistence.service().retrieve(to.billingAccount().lease().unit().building());
         Persistence.service().retrieve(to.paymentMethod().customer());
+
+        Persistence.ensureRetrieve(bo.invoicePaymentBackOut(), AttachLevel.Attached);
+        if (!bo.invoicePaymentBackOut().isNull()) {
+            to.rejectedWithNSF().setValue(bo.invoicePaymentBackOut().applyNSF().getValue());
+        }
     }
 }
