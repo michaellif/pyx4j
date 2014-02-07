@@ -15,6 +15,7 @@ package com.propertyvista.biz.tenant.lease.print;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,7 @@ import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
@@ -242,11 +244,15 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         legalTerm4Print.title().setValue(legalTerm.title().getValue());
         legalTerm4Print.body().setValue(legalTerm.body().getValue());
 
-        for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
-            if (shouldSign(tenant)) {
+        List<LeaseTermParticipant<?>> leaseTermParticipants = new ArrayList<>();
+        leaseTermParticipants.addAll(leaseTerm.version().tenants());
+        leaseTermParticipants.addAll(leaseTerm.version().guarantors());
+
+        for (LeaseTermParticipant<?> participant : leaseTermParticipants) {
+            if (shouldSign(participant)) {
                 switch (signaturesMode) {
                 case SignaturesOnly: {
-                    CustomerSignature tenantsSignature = getSignature(legalTerm, tenant);
+                    CustomerSignature tenantsSignature = getSignature(legalTerm, participant);
                     if (tenantsSignature != null) {
                         legalTerm4Print.signatures().add(tenantsSignature);
                     }
@@ -255,17 +261,17 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
 
                 case PlaceholdersOnly: {
                     if (needsPlaceholder(legalTerm.signatureFormat().getValue())) {
-                        legalTerm4Print.signaturePlaceholders().add(makeSignaturePlaceholder(tenant));
+                        legalTerm4Print.signaturePlaceholders().add(makeSignaturePlaceholder(participant));
                     }
                     break;
                 }
 
                 case PlaceholdersAndAvailableSignatures: {
-                    CustomerSignature tenantsSignature = getSignature(legalTerm, tenant);
+                    CustomerSignature tenantsSignature = getSignature(legalTerm, participant);
                     if (tenantsSignature != null) {
                         legalTerm4Print.signatures().add(tenantsSignature);
                     } else if (needsPlaceholder(legalTerm.signatureFormat().getValue())) {
-                        legalTerm4Print.signaturePlaceholders().add(makeSignaturePlaceholder(tenant));
+                        legalTerm4Print.signaturePlaceholders().add(makeSignaturePlaceholder(participant));
                     }
                     break;
                 }
@@ -281,8 +287,9 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         return legalTerm4Print;
     }
 
-    private boolean shouldSign(LeaseTermTenant tenant) {
-        return tenant.role().getValue() == Role.Applicant || tenant.role().getValue() == Role.CoApplicant;
+    private boolean shouldSign(LeaseTermParticipant<?> participant) {
+        return participant.role().getValue() == Role.Applicant || participant.role().getValue() == Role.CoApplicant
+                || participant.role().getValue() == Role.Guarantor;
     }
 
     private boolean needsPlaceholder(SignatureFormat signatureFormat) {
@@ -295,13 +302,17 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
                 || signature.signatureFormat().getValue() == SignatureFormat.Initials;
     }
 
-    private CustomerSignature getSignature(LeaseAgreementLegalTerm legalTerm, LeaseTermTenant tenant) {
-        if (!tenant.agreementSignatures().isNull() && tenant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
+    private CustomerSignature getSignature(LeaseAgreementLegalTerm legalTerm, LeaseTermParticipant<?> participant) {
+        if (!participant.agreementSignatures().isNull() && participant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
             // find a signature that belongs to the term
-            for (SignedAgreementLegalTerm signedLegalTerm : (tenant.agreementSignatures().duplicate(AgreementDigitalSignatures.class).legalTermsSignatures())) {
+            for (SignedAgreementLegalTerm signedLegalTerm : (participant.agreementSignatures().duplicate(AgreementDigitalSignatures.class)
+                    .legalTermsSignatures())) {
                 if (signedLegalTerm.term().getPrimaryKey().equals(legalTerm.getPrimaryKey())) {
                     if (isPrintableSignature(signedLegalTerm.signature())) {
-                        return signedLegalTerm.signature();
+                        CustomerSignature signature = signedLegalTerm.signature().duplicate(CustomerSignature.class);
+                        String roleName = participant.role().getValue() == Role.Guarantor ? "Guarantor" : "Tenant";
+                        signature.fullName().setValue(signature.fullName().getValue() + " (" + roleName + ")");
+                        return signature;
                     }
                     break;
                 }
@@ -311,10 +322,15 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         return null;
     }
 
-    private LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO makeSignaturePlaceholder(LeaseTermTenant tenant) {
+    private LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO makeSignaturePlaceholder(LeaseTermParticipant<?> participant) {
         LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO signaturePlaceholder = EntityFactory
                 .create(LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO.class);
-        signaturePlaceholder.tenantName().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
+
+        String roleName = participant.role().getValue() == Role.Guarantor ? "Guarantor" : "Tenant";
+        String participantName = participant.leaseParticipant().customer().person().name().getStringView();
+
+        signaturePlaceholder.tenantName().setValue(participantName + " (" + roleName + ")");
+
         return signaturePlaceholder;
     }
 }

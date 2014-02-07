@@ -17,7 +17,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Tenant:]]></text>
+				<text><![CDATA[Name:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="0" y="15" width="171" height="20"/>
