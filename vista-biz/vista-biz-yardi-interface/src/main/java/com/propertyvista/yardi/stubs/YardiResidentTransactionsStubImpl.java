@@ -164,7 +164,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             }
             String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
 
-            log.debug("GetResidentTransactions: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {

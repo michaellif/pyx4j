@@ -121,18 +121,22 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
                     String fileName = TransactionLog.log(transactionId, fileName() + "-request", logSec(mc.getEnvelope().toString()), "xml");
                     if (fileName != null) {
                         recordedTracastionsLogs.add(fileName);
+                        log.debug("{} Service Context in file {}", prefix, fileName);
+                    } else {
+                        log.debug("{} Service Context {}", prefix, logSec(mc.getEnvelope().toString()));
                     }
-                    log.debug("{} Service Context {}", prefix, logSec(mc.getEnvelope().toString()));
                     requestStartTime = System.currentTimeMillis();
                 }
             }
 
             @Override
             public void attachEnvelopeEvent(MessageContext mc) {
-                log.debug("{} Envelope Event {}", prefix, mc.getEnvelope());
                 String fileName = TransactionLog.log(transactionId, fileName() + "-response", mc.getEnvelope().toString(), "xml");
                 if (fileName != null) {
                     recordedTracastionsLogs.add(fileName);
+                    log.debug("{} Envelope Event in file {}", prefix, fileName);
+                } else {
+                    log.debug("{} Envelope Event {}", prefix, mc.getEnvelope());
                 }
                 if (envelopeBuffer != null) {
                     envelopeBuffer.append(mc.getEnvelope());
