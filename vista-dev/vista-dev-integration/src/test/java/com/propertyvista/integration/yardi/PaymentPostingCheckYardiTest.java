@@ -119,11 +119,9 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
             }
         });
 
-        // TODO remove 
-        int WRONG = 1;
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(4 + WRONG), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(4), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
@@ -150,7 +148,7 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(6 + WRONG), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(6), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
     }
@@ -185,11 +183,9 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
             }
         });
 
-        // TODO remove 
-        int WRONG = 1;
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(3 + WRONG + WRONG), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(3), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
