@@ -15,12 +15,14 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -98,6 +100,16 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         @Override
+        protected void createNewEntity(AsyncCallback<CoapplicantDTO> callback) {
+            CoapplicantDTO entity = EntityFactory.create(CoapplicantDTO.class);
+
+            entity.dependent().setValue(true);
+            entity.matured().setValue(false);
+
+            callback.onSuccess(entity);
+        }
+
+        @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof CoapplicantDTO) {
                 return new CoapplicantForm();
@@ -148,7 +160,7 @@ public class PeopleStep extends ApplicationWizardStep {
                 super.onValueSet(populate);
 
                 get(proto().matured()).setVisible(maturedOccupantsAreApplicants());
-//                get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
+                get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
                 get(proto().birthDate()).setVisible(getValue().dependent().getValue());
 
                 get(proto().matured()).setTitle(i18n.tr("Is this occupant {0} or over?", ageOfMajority()));
