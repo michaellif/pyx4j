@@ -41,6 +41,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -51,6 +52,16 @@ import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 public class YardiGuestManagementService extends YardiAbstractService {
 
     private static final Logger log = LoggerFactory.getLogger(YardiGuestManagementService.class);
+
+    public enum ApplicantType {
+        Prospect("ProspectID"), Tenant("TenantID");
+
+        public final String id;
+
+        private ApplicantType(String id) {
+            this.id = id;
+        }
+    }
 
     private static class SingletonHolder {
         public static final YardiGuestManagementService INSTANCE = new YardiGuestManagementService();
@@ -67,91 +78,126 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private static final String ILS_SOURCE = "ILS";
 
-    public String createFutureLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
-        String leaseId = null;
+    public String createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        String prospectId = null;
 
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
-        String propertyCode = lease.unit().building().propertyCode().getValue();
-        MarketingSources sources = ServerSideFactory.create(YardiGuestManagementStub.class).getYardiMarketingSources(yc, propertyCode);
-        if (true) {
-            String agentName = null;
-            String sourceName = null;
-            for (PropertyMarketingSources source : sources.getProperty()) {
-                if (propertyCode.equals(source.getPropertyCode())) {
-                    for (MarketingAgent agent : source.getPropertyRequiredFields().getAgents().getAgentName()) {
-                        if (ILS_AGENT.equals(agent.getValue())) {
-                            agentName = agent.getValue();
-                        }
-                    }
-                    for (MarketingSource src : source.getPropertyRequiredFields().getSources().getSourceName()) {
-                        if (ILS_SOURCE.equals(src.getValue())) {
-                            sourceName = src.getValue();
-                        }
-                    }
-                }
+        YardiGuestProcessor guestProcessor = getProcessor(yc, lease);
+        // create guest, add rentable items, preferred unit, and moveIn date
+        Prospect guest = guestProcessor.getProspect(lease);
+        for (String type : getLeaseProducts(lease)) {
+            guestProcessor.addRentableItem(guest, type);
+        }
+        guestProcessor //
+                .addUnit(guest, getUnitInfo(lease.unit())) //
+                .addLeaseTerm(guest, lease.leaseFrom().getValue(), lease.leaseTo().getValue()) //
+                .addMoveInDate(guest, lease.expectedMoveIn().getValue()) //
+                .setEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
+        submitGuest(yc, guest);
+        log.info("Created Prospect tenant with rentable items");
+
+        // do guest search to retrieve lease id
+        String guestId = lease.getPrimaryKey().toString();
+        prospectId = getTenantId(yc, lease.unit().building(), guestId, ApplicantType.Prospect);
+        if (prospectId == null) {
+            throw new YardiServiceException("Prospect not found: " + guestId);
+        }
+        log.info("Created Prospect: {}", prospectId);
+
+        return prospectId;
+    }
+
+    public boolean holdUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        YardiGuestProcessor guestProcessor = getProcessor(yc, lease);
+        Prospect guest = guestProcessor.getProspect(lease);
+        // add unit hold event
+        guestProcessor.clearPreferences(guest);
+        EventType event = guestProcessor.getNewEvent(EventTypes.HOLD, false);
+        Identification holdId = new Identification();
+        holdId.setIDType(lease.unit().info().number().getValue());
+        holdId.setIDValue("0");
+        event.setEventID(holdId);
+        guestProcessor.setEvent(guest, event);
+        submitGuest(yc, guest);
+        log.info("Reserved unit: {}", lease.unit().info().number().getValue());
+        // TODO - handle negative case
+        return true;
+    }
+
+    public String signLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        YardiGuestProcessor guestProcessor = getProcessor(yc, lease);
+        Prospect guest = guestProcessor.getProspect(lease);
+        // create lease
+        for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
+            EventType event = guestProcessor.getNewEvent(type, false);
+            if (type == EventTypes.LEASE_SIGN) {
+                event.setQuotes(guestProcessor.getRentQuote(getRentPrice()));
             }
-
-            if (agentName == null) {
-                String msg = SimpleMessageFormat.format("Marketing Agent {0} is not configured.", ILS_AGENT);
-                throw new YardiServiceException(msg);
-            } else if (sourceName == null) {
-                String msg = SimpleMessageFormat.format("Marketing Source {0} is not configured.", ILS_SOURCE);
-                throw new YardiServiceException(msg);
-            }
-
-            YardiGuestProcessor guestProcessor = new YardiGuestProcessor(agentName, sourceName);
-            // create guest, add rentable items, preferred unit, and moveIn date
-            Prospect guest = guestProcessor.getProspect(lease);
-            for (String type : getLeaseProducts(lease)) {
-                guestProcessor.addRentableItem(guest, type);
-            }
-            guestProcessor //
-                    .addUnit(guest, getUnitInfo(lease.unit())) //
-                    .addLeaseTerm(guest, lease.leaseFrom().getValue(), lease.leaseTo().getValue()) //
-                    .addMoveInDate(guest, lease.expectedMoveIn().getValue()) //
-                    .setEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
-            submitGuest(yc, guest);
-            log.info("Created Prospect tenant with rentable items");
-
-            // add unit hold event
-            guestProcessor.clearPreferences(guest);
-            EventType event = guestProcessor.getNewEvent(EventTypes.HOLD, false);
-            Identification holdId = new Identification();
-            holdId.setIDType(lease.unit().info().number().getValue());
-            holdId.setIDValue("0");
-            event.setEventID(holdId);
             guestProcessor.setEvent(guest, event);
             submitGuest(yc, guest);
-            log.info("Reserved unit: {}", lease.unit().info().number().getValue());
-
-            // create lease
-            for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
-                event = guestProcessor.getNewEvent(type, false);
-                if (type == EventTypes.LEASE_SIGN) {
-                    event.setQuotes(guestProcessor.getRentQuote(getRentPrice()));
-                }
-                guestProcessor.setEvent(guest, event);
-                submitGuest(yc, guest);
-                log.info("Triggered event: {}", type.name());
-            }
+            log.info("Triggered event: {}", type.name());
         }
-        // do guest search to retrieve lease id
-        String guestId = lease._applicant().getPrimaryKey().toString();
-        leaseId = getTenantId(yc, propertyCode, guestId);
-        if (leaseId == null) {
-            throw new YardiServiceException("Tenant not found: " + guestId);
+        // do tenant search to retrieve lease id
+        String guestId = lease.getPrimaryKey().toString();
+        String tenantId = getTenantId(yc, lease.unit().building(), guestId, ApplicantType.Tenant);
+        if (tenantId == null) {
+            throw new YardiServiceException("Prospect not found: " + guestId);
         }
-        log.info("Created Lease: {}", leaseId);
+        log.info("Created Lease: {}", tenantId);
 
-        return leaseId;
+        return tenantId;
+    }
+
+    public String createFutureLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        String pId = createNewProspect(yc, lease);
+        log.info("Created Prospect: {}", pId);
+
+        holdUnit(yc, lease);
+        log.info("Unit held for: {}", pId);
+
+        String tId = signLease(yc, lease);
+        log.info("Signed lease: {}", tId);
+
+        return tId;
     }
 
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         log.info("Getting RentableItems for property {}", propertyId);
         return ServerSideFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, propertyId);
+    }
+
+    private YardiGuestProcessor getProcessor(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        String propertyCode = lease.unit().building().propertyCode().getValue();
+        MarketingSources sources = ServerSideFactory.create(YardiGuestManagementStub.class).getYardiMarketingSources(yc, propertyCode);
+
+        String agentName = null;
+        String sourceName = null;
+        for (PropertyMarketingSources source : sources.getProperty()) {
+            if (propertyCode.equals(source.getPropertyCode())) {
+                for (MarketingAgent agent : source.getPropertyRequiredFields().getAgents().getAgentName()) {
+                    if (ILS_AGENT.equals(agent.getValue())) {
+                        agentName = agent.getValue();
+                    }
+                }
+                for (MarketingSource src : source.getPropertyRequiredFields().getSources().getSourceName()) {
+                    if (ILS_SOURCE.equals(src.getValue())) {
+                        sourceName = src.getValue();
+                    }
+                }
+            }
+        }
+
+        if (agentName == null) {
+            String msg = SimpleMessageFormat.format("Marketing Agent {0} is not configured.", ILS_AGENT);
+            throw new YardiServiceException(msg);
+        } else if (sourceName == null) {
+            String msg = SimpleMessageFormat.format("Marketing Source {0} is not configured.", ILS_SOURCE);
+            throw new YardiServiceException(msg);
+        }
+
+        return new YardiGuestProcessor(agentName, sourceName);
     }
 
     private Information getUnitInfo(AptUnit unit) {
@@ -181,10 +227,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
         ServerSideFactory.create(YardiGuestManagementStub.class).importGuestInfo(yc, lead);
     }
 
-    private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId) throws YardiServiceException {
+    private String getTenantId(PmcYardiCredential yc, Building building, String guestId, ApplicantType type) throws YardiServiceException {
         Prospect t = null;
         String tenantId = null;
-        LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
+        LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc, building.propertyCode().getValue(), guestId);
         for (Prospect p : guestActivity.getProspects().getProspect()) {
             Customer c = p.getCustomers().getCustomer().get(0);
             for (Identification id : c.getIdentification()) {
@@ -199,7 +245,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
         Customer c = t.getCustomers().getCustomer().get(0);
         for (Identification id : c.getIdentification()) {
-            if ("TenantID".equals(id.getIDType())) {
+            if (type.id.equals(id.getIDType())) {
                 tenantId = id.getIDValue();
                 break;
             }

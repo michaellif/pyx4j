@@ -13,15 +13,20 @@
  */
 package com.propertyvista.biz.system.yardi;
 
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface YardiApplicationFacade {
-    /** Create GuestCard; set pId in Lease.leaseId */
-    Lease createApplication(Lease lease);
+    /**
+     * Create GuestCard; set pId in Lease.leaseId
+     * 
+     * @throws YardiServiceException
+     */
+    Lease createApplication(Lease lease) throws YardiServiceException;
 
     /** Tries to hold unit in Yardi; throws exception on failure */
-    void holdUnit(Lease lease);
+    void holdUnit(Lease lease) throws YardiServiceException;
 
     /** Create Future Lease; set tId in Lease.leaseId */
-    Lease approveApplication(Lease lease);
+    Lease approveApplication(Lease lease) throws YardiServiceException;
 }
