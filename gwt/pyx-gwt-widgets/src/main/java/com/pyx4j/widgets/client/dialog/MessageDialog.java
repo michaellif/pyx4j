@@ -12,14 +12,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -248,14 +246,7 @@ public class MessageDialog extends Dialog {
         }
 
         public void layout() {
-            htmlScroll.setHeight("auto");
-            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                @Override
-                public void execute() {
-                    htmlScroll.setHeight(Math.max(200, MessageDialog.this.asWidget().getOffsetHeight() - 100) + "px");
-                }
-            });
-
+            htmlScroll.getElement().getStyle().setPropertyPx("maxHeight", Math.max(100, (int) (Window.getClientHeight() * 0.9) - 100));
         }
 
     }
