@@ -286,10 +286,14 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             }
 
             private void doRemoveItem(CEntityFolderItem<LeasePaymentMethod> item) {
+                onPaymentMethodRemove(item.getValue());
                 super.removeItem(item);
             }
         }));
 
         return main;
+    }
+
+    protected void onPaymentMethodRemove(LeasePaymentMethod lpm) {
     }
 }

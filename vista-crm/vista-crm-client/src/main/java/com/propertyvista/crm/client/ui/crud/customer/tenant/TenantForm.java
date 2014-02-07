@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -20,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -154,6 +156,19 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         if (!isEditable() & VistaFeatures.instance().yardiIntegration()) {
             get(proto().leaseTermV()).setVisible(!getValue().isPotentialTenant().isBooleanTrue());
         }
+    }
+
+    @Override
+    protected void onPaymentMethodRemove(LeasePaymentMethod lpm) {
+        PreauthorizedPaymentFolder ppf = ((PreauthorizedPaymentFolder) (CComponent<?>) get(proto().preauthorizedPayments()));
+        IList<PreauthorizedPaymentDTO> items = ppf.getValue();
+        Iterator<PreauthorizedPaymentDTO> it = items.iterator();
+        while (it.hasNext()) {
+            if (it.next().paymentMethod().equals(lpm)) {
+                it.remove();
+            }
+        }
+        ppf.populate(items);
     }
 
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
