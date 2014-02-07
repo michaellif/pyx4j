@@ -30,6 +30,7 @@ public class CLabel<E> extends CField<E, NLabel<E>> {
         super();
         setFormat(new LabelFormat());
         setNativeWidget(new NLabel<E>(this));
+        setEditable(false);
     }
 
     public void setFormat(IFormat<E> format) {
