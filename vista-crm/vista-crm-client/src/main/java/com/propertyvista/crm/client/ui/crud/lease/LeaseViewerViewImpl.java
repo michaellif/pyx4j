@@ -459,14 +459,16 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             });
         }
 
-        addActionSeparator();
-        issueN4Action = new MenuItem(i18n.tr("Issue N4"), new Command() {
-            @Override
-            public void execute() {
-                issueN4();
-            }
-        });
-        addAction(issueN4Action);
+        if (false) {
+            addActionSeparator();
+            issueN4Action = new MenuItem(i18n.tr("Issue N4"), new Command() {
+                @Override
+                public void execute() {
+                    issueN4();
+                }
+            });
+            addAction(issueN4Action);
+        }
 
         Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement Document"));
         ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
