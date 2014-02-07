@@ -225,22 +225,17 @@ public class YardiLeaseProcessor {
             log.debug("        - LeaseUnitChanged...");
         }
 
-        if (new LeaseMerger().isLeaseDatesChanged(yardiLease, lease)) {
+        if (LeaseMerger.isLeaseDatesChanged(yardiLease, lease)) {
             lease = new LeaseMerger().mergeLeaseDates(yardiLease, lease);
             toPersist = true;
             log.debug("        - LeaseDatesChanged...");
         }
 
-        if (new LeaseMerger().isTermDatesChanged(yardiLease, lease.currentTerm())) {
-            LogicalDate termFrom = lease.currentTerm().termFrom().getValue();
-            LogicalDate termTo = lease.currentTerm().termTo().getValue();
-
+        if (LeaseMerger.isTermDatesChanged(yardiLease, lease.currentTerm())) {
             lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
             toPersist = true;
 
-            log.debug("        - TermDatesChanged...  \n\ttermFrom({}->{})\n\ttermTo({}->{})", //
-                    termFrom, lease.currentTerm().termFrom().getValue(), //
-                    termTo, lease.currentTerm().termTo().getValue());
+            log.debug("        - TermDatesChanged...");
         }
 
         if (new LeaseMerger().isPaymentTypeChanged(rtCustomer, lease)) {

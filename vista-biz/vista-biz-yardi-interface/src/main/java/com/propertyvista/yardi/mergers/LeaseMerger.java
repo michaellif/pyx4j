@@ -50,17 +50,15 @@ public class LeaseMerger {
         NoChange, DatesOnly, TotalAmount
     }
 
-    private boolean isNew = false;
+    public static boolean isLeaseDatesChanged(YardiLease imported, Lease existing) {
+        boolean changed = false;
 
-    public boolean isLeaseDatesChanged(YardiLease imported, Lease existing) {
-        isNew = false;
+        changed |= isChanged(existing.expectedMoveIn(), imported.getExpectedMoveInDate());
+        changed |= isChanged(existing.actualMoveIn(), imported.getActualMoveIn());
 
-        compare(existing.expectedMoveIn(), getImportedDate(imported.getExpectedMoveInDate()));
-        compare(existing.actualMoveIn(), getImportedDate(imported.getActualMoveIn()));
+        changed |= isChanged(existing.expectedMoveOut(), imported.getExpectedMoveOutDate());
 
-        compare(existing.expectedMoveOut(), getImportedDate(imported.getExpectedMoveOutDate()));
-
-        return isNew;
+        return changed;
     }
 
     public Lease mergeLeaseDates(YardiLease imported, Lease existing) {
@@ -72,13 +70,13 @@ public class LeaseMerger {
         return existing;
     }
 
-    public boolean isTermDatesChanged(YardiLease imported, LeaseTerm existing) {
-        isNew = false;
+    public static boolean isTermDatesChanged(YardiLease imported, LeaseTerm existing) {
+        boolean changed = false;
 
-        compare(existing.termFrom(), YardiLeaseProcessor.guessFromDate(imported));
-        compare(existing.termTo(), getImportedDate(imported.getLeaseToDate()));
+        changed |= isChanged(existing.termFrom(), YardiLeaseProcessor.guessFromDate(imported));
+        changed |= isChanged(existing.termTo(), imported.getLeaseToDate());
 
-        return isNew;
+        return changed;
     }
 
     public LeaseTerm mergeTermDates(YardiLease imported, LeaseTerm existing) {
@@ -222,17 +220,18 @@ public class LeaseMerger {
         return result;
     }
 
-    private void compare(IPrimitive<LogicalDate> existing, Date imported) {
-        if (!isNew) {
-            LogicalDate importedDate = getImportedDate(imported);
-            if ((existing.isNull() && importedDate != null) || (!existing.isNull() && importedDate == null)) {
-                isNew = true;
-            } else if (!existing.isNull() && importedDate != null) {
-                if (!importedDate.equals(existing.getValue())) {
-                    isNew = true;
-                }
+    private static boolean isChanged(IPrimitive<LogicalDate> existing, Date imported) {
+        LogicalDate importedDate = getImportedDate(imported);
+        if ((existing.isNull() && importedDate != null) || (!existing.isNull() && importedDate == null)) {
+            log.debug("date changed {} {} {}", existing.getFieldName(), existing.getValue(), importedDate);
+            return true;
+        } else if (!existing.isNull() && importedDate != null) {
+            if (!importedDate.equals(existing.getValue())) {
+                log.debug("date changed {} {} {}", existing.getFieldName(), existing.getValue(), importedDate);
+                return true;
             }
         }
+        return false;
     }
 
     private static LogicalDate getImportedDate(Date date) {
