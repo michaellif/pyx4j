@@ -42,7 +42,8 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
 
     public void ensureOpenBatch(PmcYardiCredential yc, String propertyCode) throws RemoteException, YardiServiceException {
         if (isOpen()) {
-            Validate.isTrue(this.propertyCode.equals(propertyCode), "Single propertyCode " + this.propertyCode + " expected in one batch");
+            Validate.isTrue(this.propertyCode.equals(propertyCode), "Single propertyCode " + this.propertyCode + " expected in one batch, but not "
+                    + propertyCode);
         } else {
             this.batchId = YardiSystemBatchesService.getInstance().openReceiptBatch(yc, propertyCode);
             this.propertyCode = propertyCode;

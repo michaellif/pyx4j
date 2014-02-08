@@ -58,11 +58,9 @@ public class YardiSystemBatchesService extends YardiAbstractService {
         ServerSideFactory.create(YardiSystemBatchesStub.class).postReceiptBatch(yc, paymentBatchContext.getBatchId());
     }
 
-    public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt, YardiPaymentBatchContext paymentBatchContext) throws YardiServiceException,
-            RemoteException, ARException {
+    public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt, String propertyCode, YardiPaymentBatchContext paymentBatchContext)
+            throws YardiServiceException, RemoteException, ARException {
         YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
-
-        String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
 
         boolean singleTrasactionBatch = false;
         if (paymentBatchContext == null) {

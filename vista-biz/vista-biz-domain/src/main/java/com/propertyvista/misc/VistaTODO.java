@@ -72,4 +72,10 @@ public class VistaTODO {
 
     public static boolean VISTA_4066_EmployeeAuditingEmailNotificationsImplemented = false;
 
+    /**
+     * VladS. Need this to compare profiling between two versions of the code.
+     * Since changes are significant. It will be done over time.
+     */
+    public static boolean POSTING_SPEED = false;
+
 }
