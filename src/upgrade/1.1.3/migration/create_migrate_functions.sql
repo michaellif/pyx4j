@@ -124,7 +124,7 @@ BEGIN
         ALTER TABLE file_blob DROP CONSTRAINT file_blob_pk;
         ALTER TABLE general_insurance_policy_blob DROP CONSTRAINT general_insurance_policy_blob_pk;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_pk;
-        --ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_pk;
+        ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_pk;
         ALTER TABLE legal_documentation$co_application DROP CONSTRAINT legal_documentation$co_application_pk;
         ALTER TABLE legal_documentation$guarantor_application DROP CONSTRAINT legal_documentation$guarantor_application_pk;
         ALTER TABLE legal_documentation$lease DROP CONSTRAINT legal_documentation$lease_pk;
@@ -137,7 +137,7 @@ BEGIN
         ALTER TABLE marketing$ad_blurbs DROP CONSTRAINT marketing$ad_blurbs_pk;
         ALTER TABLE online_application$signatures DROP CONSTRAINT online_application$signatures_pk;
         ALTER TABLE online_application$steps DROP CONSTRAINT online_application$steps_pk;
-        --ALTER TABLE payment_information DROP CONSTRAINT payment_information_pk;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_pk;
         ALTER TABLE proof_of_employment_document DROP CONSTRAINT proof_of_employment_document_pk;
         ALTER TABLE property_phone DROP CONSTRAINT property_phone_pk;
         ALTER TABLE summary DROP CONSTRAINT summary_pk;
@@ -814,6 +814,23 @@ BEGIN
         );
         
         ALTER TABLE maintenance_request_policy OWNER TO vista;
+        
+        
+        -- maintenance_request_status_record
+        
+        CREATE TABLE maintenance_request_status_record
+        (
+                id                              BIGINT                  NOT NULL,
+                request                         BIGINT,
+                old_status                      BIGINT,
+                new_status                      BIGINT,
+                updated_by_discriminator        VARCHAR(50),
+                updated_by                      BIGINT,
+                created                         TIMESTAMP,
+                        CONSTRAINT maintenance_request_status_record_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_status_record OWNER TO vista;
         
         -- marketing
         
@@ -1631,6 +1648,12 @@ BEGIN
                 REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE permission_to_enter_note ADD CONSTRAINT permission_to_enter_note_policy_fk FOREIGN KEY(policy) 
                 REFERENCES maintenance_request_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_status_record ADD CONSTRAINT maintenance_request_status_record_new_status_fk FOREIGN KEY(new_status) 
+                REFERENCES maintenance_request_status(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_status_record ADD CONSTRAINT maintenance_request_status_record_old_status_fk FOREIGN KEY(old_status) 
+                REFERENCES maintenance_request_status(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_status_record ADD CONSTRAINT maintenance_request_status_record_request_fk FOREIGN KEY(request) 
+                REFERENCES maintenance_request(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_company_info_fk FOREIGN KEY(company_info) 
                 REFERENCES pmc_company_info(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE product ADD CONSTRAINT product_code_fk FOREIGN KEY(code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1660,7 +1683,8 @@ BEGIN
         -- check constraints
         
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_id_discriminator_ck CHECK ((id_discriminator) IN ('Digital', 'Ink'));
-        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_tenant_discriminator_d_ck CHECK (lease_term_tenant_discriminator = 'Tenant');
+        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_tenant_discriminator_d_ck 
+                CHECK ((lease_term_tenant_discriminator) IN ('Guarantor', 'Tenant'));
         ALTER TABLE application_documentation_policy ADD CONSTRAINT application_documentation_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE arpolicy ADD CONSTRAINT arpolicy_node_discriminator_d_ck 
@@ -1727,6 +1751,8 @@ BEGIN
         ALTER TABLE maintenance_request_category ADD CONSTRAINT maintenance_request_category_type_e_ck CHECK ((type) IN ('Amenities', 'ApartmentUnit', 'Exterior'));
         ALTER TABLE maintenance_request_policy ADD CONSTRAINT maintenance_request_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE maintenance_request_status_record ADD CONSTRAINT maintenance_request_status_record_updated_by_discriminator_d_ck 
+                CHECK ((updated_by_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_status_e_ck 
                 CHECK ((status) IN ('Approved', 'Cancelled', 'Incomplete', 'InformationRequested', 'Submitted'));
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_node_discriminator_d_ck 
@@ -1781,6 +1807,7 @@ BEGIN
         
         ALTER TABLE lease ALTER COLUMN integration_system_id DROP NOT NULL;
         ALTER TABLE lease ALTER COLUMN lease_id DROP NOT NULL;
+        ALTER TABLE maintenance_request_status_record ALTER COLUMN request SET NOT NULL;
         --ALTER TABLE product ALTER COLUMN code SET NOT NULL;
         
        
@@ -1805,6 +1832,7 @@ BEGIN
         CREATE INDEX ilssummary_floorplan_floorplan_idx ON ilssummary_floorplan USING btree (floorplan);
         CREATE UNIQUE INDEX lease_application_application_id_idx ON lease_application USING btree (LOWER(application_id));
         CREATE INDEX lease_term_agreement_document_lease_term_v_idx ON lease_term_agreement_document USING btree (lease_term_v);
+        CREATE INDEX maintenance_request_status_record_request_idx ON maintenance_request_status_record USING btree (request);
         CREATE INDEX payment_posting_batch_building_idx ON payment_posting_batch USING btree (building);
         CREATE INDEX permission_to_enter_note_policy_idx ON permission_to_enter_note USING btree (policy);
 
@@ -1827,6 +1855,4 @@ BEGIN
         
 END;
 $$
-LANGUAGE plpgsql VOLATILE;
-
-        
+LANGUAGE plpgsql VOLATILE;      
