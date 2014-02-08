@@ -349,7 +349,7 @@ public class Dialog implements ProvidesResize, IsWidget {
         public void onClick(ClickEvent event) {
             Object sender = event.getSource();
             if (triggerOption(sender)) {
-                popupPanel.hide();
+                hide(false);
             }
         }
 

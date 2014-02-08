@@ -22,9 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
