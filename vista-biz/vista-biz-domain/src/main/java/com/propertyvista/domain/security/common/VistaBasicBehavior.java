@@ -30,9 +30,9 @@ public enum VistaBasicBehavior implements Behavior {
 
     CRMPasswordChangeRequiresSecurityQuestion,
 
-    ProspectivePortal,
+    ProspectPortal,
 
-    ProspectivePortalPasswordChangeRequired,
+    ProspectPortalPasswordChangeRequired,
 
     ResidentPortal,
 
@@ -41,10 +41,6 @@ public enum VistaBasicBehavior implements Behavior {
     Operations,
 
     OperationsPasswordChangeRequired,
-
-    Field,
-
-    FieldPasswordChangeRequired,
 
     VistaTermsAcceptanceRequired;
 

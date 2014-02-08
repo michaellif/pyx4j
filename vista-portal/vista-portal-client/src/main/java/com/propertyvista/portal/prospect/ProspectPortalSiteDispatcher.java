@@ -56,7 +56,7 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
-        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectivePortalPasswordChangeRequired)) {
+        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(PortalProspectBehavior.ApplicationSelectionRequired)) {
             return new ProspectPortalSiteMap.ApplicationContextSelection();

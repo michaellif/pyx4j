@@ -206,6 +206,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
         case CoApplicant:
             behaviors.add(PortalResidentBehavior.ResidentSecondary);
             break;
+        case Guarantor:
+            behaviors.add(PortalResidentBehavior.Guarantor);
+            break;
         default:
             break;
         }

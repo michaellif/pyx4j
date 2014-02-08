@@ -62,12 +62,12 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
 
     @Override
     protected VistaBasicBehavior getApplicationBehavior() {
-        return VistaBasicBehavior.ProspectivePortal;
+        return VistaBasicBehavior.ProspectPortal;
     }
 
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
-        return VistaBasicBehavior.ProspectivePortalPasswordChangeRequired;
+        return VistaBasicBehavior.ProspectPortalPasswordChangeRequired;
     }
 
     @Override
