@@ -70,6 +70,7 @@ import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.core.Path;
@@ -1294,6 +1295,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
+        //TODO implement this
+        throw new Error("implement this");
+    }
+
+    @Override
+    public <T extends Serializable> T retrieveMember(IPrimitive<T> member) {
         //TODO implement this
         throw new Error("implement this");
     }

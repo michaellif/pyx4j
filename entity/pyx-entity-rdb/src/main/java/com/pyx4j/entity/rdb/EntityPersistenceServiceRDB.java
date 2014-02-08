@@ -52,6 +52,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.core.ObjectClassType;
@@ -86,6 +87,7 @@ import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -1411,6 +1413,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    @Override
+    public <T extends Serializable> T retrieveMember(IPrimitive<T> member) {
+        // TODO Add proper implementation
+        IEntity entityId = member.getOwner();
+        if (entityId.isValueDetached()) {
+            Persistence.ensureRetrieve(entityId, AttachLevel.Attached);
+        }
+        return member.getValue();
+    }
+
     @SuppressWarnings("unchecked")
     private <T extends IEntity> T cascadeRetrieve(T entity, AttachLevel attachLevel, boolean forUpdate) {
         if (entity.getPrimaryKey() == null) {
@@ -1443,6 +1455,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private <T extends IEntity> T cascadeRetrieveMembers(T entity, AttachLevel attachLevel) {
         entity = entity.cast();
         if (attachLevel == AttachLevel.IdOnly) {
+            entity.setAttachLevel(AttachLevel.IdOnly);
             return entity;
         }
         TableModel tm = tableModel(entity.getEntityMeta());

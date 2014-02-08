@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server;
 
 import java.io.Closeable;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.meta.EntityMeta;
@@ -139,6 +141,8 @@ public interface IEntityPersistenceService {
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember);
 
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel);
+
+    public <T extends Serializable> T retrieveMember(IPrimitive<T> member);
 
     /**
      * @param criteria
