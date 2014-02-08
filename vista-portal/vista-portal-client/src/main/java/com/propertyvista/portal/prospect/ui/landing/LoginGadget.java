@@ -20,14 +20,10 @@ import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.event.logical.shared.AttachEvent.Handler;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -149,12 +145,16 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             CTextField emailField = inject(proto().email(), new CTextField());
             contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build());
             addValidator(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
+            emailField.getWidget().addKeyUpHandler(new EnterKeyHandler());
 
             CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
             contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(passwordField).watermark(LandingViewImpl.i18n.tr("Password")).build());
             addValidator(passwordField, LandingViewImpl.i18n.tr("Enter your password"));
+            passwordField.getWidget().addKeyUpHandler(new EnterKeyHandler());
 
-            contentPanel.setWidget(++row, 0, new CheckBoxDecorator(inject(proto().rememberID(), new CCheckBox())));
+            CCheckBox rememberID = new CCheckBox();
+            contentPanel.setWidget(++row, 0, new CheckBoxDecorator(inject(proto().rememberID(), rememberID)));
+            rememberID.getWidget().addKeyUpHandler(new EnterKeyHandler());
 
             Anchor resetPassword = new Anchor(i18n.tr("Forgot your password?"));
             resetPassword.addClickHandler(new ClickHandler() {
@@ -168,6 +168,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             captchaField = (CCaptcha) inject(proto().captcha());
             contentPanel.setWidget(++row, 0,
                     (new LoginWidgetDecoratorBuilder(captchaField).watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build()));
+            captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
             setEnableCaptcha(false);
 
             contentPanel.setBR(++row, 0, 2);
@@ -239,30 +240,6 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
                 }
             });
 
-            // attach handler to invoke login via ENTER key
-            addAttachHandler(new Handler() {
-
-                private HandlerRegistration handlerRegistration;
-
-                @Override
-                public void onAttachOrDetach(AttachEvent event) {
-                    if (event.isAttached()) {
-                        handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-                            @Override
-                            public void onPreviewNativeEvent(NativePreviewEvent event) {
-                                if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
-                                    if (!Dialog.isDialogOpen()) {
-                                        onLogin();
-                                    }
-                                }
-                            }
-                        });
-                    } else {
-                        handlerRegistration.removeHandler();
-                    }
-                }
-
-            });
         }
 
     }
@@ -299,4 +276,16 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         }
     }
 
+    class EnterKeyHandler implements KeyUpHandler {
+
+        @Override
+        public void onKeyUp(KeyUpEvent event) {
+            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                if (!Dialog.isDialogOpen()) {
+                    onLogin();
+                }
+            }
+        }
+
+    }
 }

@@ -162,9 +162,9 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             contentPanel.setWidget(++row, 0, resetPassword);
 
             captchaField = (CCaptcha) inject(proto().captcha());
-            captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0,
                     (new LoginWidgetDecoratorBuilder(captchaField).watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build()));
+            captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
             setEnableCaptcha(false);
 
             contentPanel.setBR(++row, 0, 2);
