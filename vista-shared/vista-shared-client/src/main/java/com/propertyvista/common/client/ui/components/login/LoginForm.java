@@ -22,6 +22,8 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
@@ -39,12 +41,17 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl.DevLoginData;
@@ -66,6 +73,8 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
     private final Command resetPasswordCommand;
 
     private final List<DevLoginData> devLoginValues;
+
+    private CTextField emailField;
 
     private int devCount = 0;
 
@@ -101,10 +110,21 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         FlowPanel main = new FlowPanel();
         main.add(header);
 
-        main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
-        main.add(new LoginPanelWidgetDecorator(inject(proto().password())));
-        main.add(new LoginPanelWidgetDecorator(inject(proto().captcha()), 30));
-        main.add(new LoginPanelWidgetDecorator(inject(proto().rememberID())));
+        emailField = inject(proto().email(), new CTextField());
+        emailField.getWidget().addKeyUpHandler(new EnterKeyHandler());
+        main.add(new LoginPanelWidgetDecorator(emailField));
+
+        CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
+        passwordField.getWidget().addKeyUpHandler(new EnterKeyHandler());
+        main.add(new LoginPanelWidgetDecorator(passwordField));
+
+        CCaptcha captchaField = (CCaptcha) inject(proto().captcha());
+        captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
+        main.add(new LoginPanelWidgetDecorator(captchaField, 30));
+
+        CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
+        rememberID.getWidget().addKeyUpHandler(new EnterKeyHandler());
+        main.add(new LoginPanelWidgetDecorator(rememberID));
 
         HorizontalPanel buttonPanel = new HorizontalPanel();
         buttonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -143,33 +163,28 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
 
         if ((ApplicationMode.isDevelopment() || VistaDemo.isDemo()) && devLoginValues != null) {
             main.add(createDevMessagePanel());
-        }
+            main.addAttachHandler(new AttachEvent.Handler() {
+                private HandlerRegistration handlerRegistration;
 
-        main.addAttachHandler(new AttachEvent.Handler() {
-            private HandlerRegistration handlerRegistration;
-
-            @Override
-            public void onAttachOrDetach(AttachEvent event) {
-                if (event.isAttached()) {
-                    handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-                        @Override
-                        public void onPreviewNativeEvent(NativePreviewEvent event) {
-                            if ((ApplicationMode.isDevelopment() || VistaDemo.isDemo())
-                                    && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
-                                if (onDevLoginRequest(event.getNativeEvent().getKeyCode())) {
-                                    event.getNativeEvent().preventDefault();
+                @Override
+                public void onAttachOrDetach(AttachEvent event) {
+                    if (event.isAttached()) {
+                        handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+                            @Override
+                            public void onPreviewNativeEvent(NativePreviewEvent event) {
+                                if ((event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
+                                    if (onDevLoginRequest(event.getNativeEvent().getKeyCode())) {
+                                        event.getNativeEvent().preventDefault();
+                                    }
                                 }
                             }
-                            if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
-                                login();
-                            }
-                        }
-                    });
-                } else {
-                    handlerRegistration.removeHandler();
+                        });
+                    } else {
+                        handlerRegistration.removeHandler();
+                    }
                 }
-            }
-        });
+            });
+        }
         return main;
     }
 
@@ -259,9 +274,24 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
                 devCount = (devCount % val.user.getDefaultMax()) + 1;
                 get(proto().email()).setValue(val.user.getEmail(devCount));
                 get(proto().password()).setValue(val.user.getEmail(devCount));
+                ((NFocusField) get(proto().email()).asWidget()).setFocus(true);
                 return true;
             }
         }
         return false;
     }
+
+    class EnterKeyHandler implements KeyUpHandler {
+
+        @Override
+        public void onKeyUp(KeyUpEvent event) {
+            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                if (!Dialog.isDialogOpen()) {
+                    login();
+                }
+            }
+        }
+
+    }
+
 }
