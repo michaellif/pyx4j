@@ -37,6 +37,8 @@ public class DemoData {
 
         TENANT("t", 4),
 
+        GUARANTOR("g", 4),
+
         NEW_TENANT("n", 10),
 
         PM("m", 3),
