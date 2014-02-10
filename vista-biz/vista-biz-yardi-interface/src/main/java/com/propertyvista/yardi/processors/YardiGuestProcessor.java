@@ -167,7 +167,7 @@ public class YardiGuestProcessor {
 
     private AddressType getAddress(AddressStructured as) {
         AddressType addr = new AddressType();
-        addr.setCountry(as.county().getValue());
+        addr.setCountry(as.country().name().getValue());
         if (addr.getCountry().equalsIgnoreCase("Canada")) {
             addr.setProvince(as.province().name().getValue());
         } else {
