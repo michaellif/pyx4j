@@ -291,7 +291,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
         CustomerScreening screening = Persistence.service().retrieve(criteria, attachLevel);
-        if (screening != null && !screening.version().isNull()) {
+        if (screening != null) {
             return screening;
         }
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
