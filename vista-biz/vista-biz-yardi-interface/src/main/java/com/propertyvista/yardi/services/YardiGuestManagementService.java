@@ -15,6 +15,7 @@ package com.propertyvista.yardi.services;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,6 +45,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
@@ -135,7 +137,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
             EventType event = guestProcessor.getNewEvent(type, false);
             if (type == EventTypes.LEASE_SIGN) {
-                event.setQuotes(guestProcessor.getRentQuote(getRentPrice()));
+                event.setQuotes(guestProcessor.getRentQuote(getRentPrice(lease)));
             }
             guestProcessor.setEvent(guest, event);
             submitGuest(yc, guest);
@@ -212,14 +214,19 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return unitInfo;
     }
 
-    private BigDecimal getRentPrice() {
-        // TODO: VladL - return rent price (service only)
-        return new BigDecimal(950);
+    private BigDecimal getRentPrice(Lease lease) {
+        // TODO calculate adjustments?!
+        return lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue();
     }
 
     private List<String> getLeaseProducts(Lease lease) {
-        // TODO: VladL - return list of rentable item types
-        return Arrays.asList("garage", "storage");
+        List<String> productCodes = new ArrayList<>();
+
+        for (BillableItem feature : lease.currentTerm().version().leaseProducts().featureItems()) {
+            productCodes.add(feature.item().product().holder().code().yardiChargeCodes().get(0).yardiChargeCode().getValue());
+        }
+
+        return productCodes;
     }
 
     private void submitGuest(PmcYardiCredential yc, Prospect guest) throws YardiServiceException {
