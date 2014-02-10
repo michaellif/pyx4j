@@ -325,17 +325,17 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void viewDeletedPaps(final Tenant tenantId) {
-        AutopayAgreement proto = EntityFactory.getEntityPrototype(AutopayAgreement.class);
+        AutopayAgreement argProto = EntityFactory.getEntityPrototype(AutopayAgreement.class);
         CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(AutopayAgreement.class);
         place.formListerPlace();
 
-        place.queryArg(proto.tenant().lease().leaseId().getPath().toString(), currentValue.leaseId().getValue().toString());
+        place.queryArg(argProto.tenant().lease().leaseId().getPath().toString(), currentValue.leaseId().getValue().toString());
 
         if (tenantId != null) {
-            place.queryArg(proto.tenant().participantId().getPath().toString(), tenantId.participantId().getValue().toString());
+            place.queryArg(argProto.tenant().participantId().getPath().toString(), tenantId.participantId().getValue().toString());
         }
 
-        place.queryArg(proto.isDeleted().getPath().toString(), Boolean.TRUE.toString());
+        place.queryArg(argProto.isDeleted().getPath().toString(), Boolean.TRUE.toString());
 
         AppSite.getPlaceController().goTo(place);
     }

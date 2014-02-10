@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.financial.paps;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
@@ -24,6 +25,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.financial.paps.PapListerView;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
+import com.propertyvista.domain.payment.AutopayAgreement;
 
 public class PapListerActivity extends AbstractListerActivity<AutoPayDTO> {
 
@@ -35,14 +37,16 @@ public class PapListerActivity extends AbstractListerActivity<AutoPayDTO> {
     protected void parseExternalFilters(AppPlace place, Class<AutoPayDTO> entityClass, EntityFiltersBuilder<AutoPayDTO> filters) {
         super.parseExternalFilters(place, entityClass, filters);
 
+        AutopayAgreement argProto = EntityFactory.getEntityPrototype(AutopayAgreement.class);
+
         String val;
-        if ((val = place.getFirstArg(filters.proto().tenant().participantId().getPath().toString())) != null) {
+        if ((val = place.getFirstArg(argProto.tenant().participantId().getPath().toString())) != null) {
             filters.eq(filters.proto().tenant().participantId(), val);
         }
-        if ((val = place.getFirstArg(filters.proto().tenant().lease().leaseId().getPath().toString())) != null) {
+        if ((val = place.getFirstArg(argProto.tenant().lease().leaseId().getPath().toString())) != null) {
             filters.eq(filters.proto().tenant().lease().leaseId(), val);
         }
-        if ((val = place.getFirstArg(filters.proto().isDeleted().getPath().toString())) != null) {
+        if ((val = place.getFirstArg(argProto.isDeleted().getPath().toString())) != null) {
             filters.eq(filters.proto().isDeleted(), Boolean.valueOf(val));
         }
     }
