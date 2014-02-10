@@ -39,8 +39,6 @@ public interface PmcDnsName extends IEntity {
 
         crm,
 
-        field,
-
         site,
 
         portal;

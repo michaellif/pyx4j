@@ -107,9 +107,6 @@ public class VistaDeployment {
         case crm:
             target = DnsNameTarget.crm;
             break;
-        case field:
-            target = DnsNameTarget.field;
-            break;
         case prospect:
             target = DnsNameTarget.portal;
             break;
