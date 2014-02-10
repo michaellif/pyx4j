@@ -534,6 +534,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }
 
         downloadSignedAgreementItem.setVisible(!value.currentTerm().version().agreementDocument().isNull());
+        signAgreementDocumentItem.setVisible(!value.currentTerm().version().employeeSignature().hasValues());
     }
 
     @Override
