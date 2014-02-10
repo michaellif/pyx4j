@@ -223,7 +223,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         List<String> productCodes = new ArrayList<>();
 
         for (BillableItem feature : lease.currentTerm().version().leaseProducts().featureItems()) {
-            productCodes.add(feature.item().product().holder().code().yardiChargeCodes().get(0).yardiChargeCode().getValue());
+            productCodes.add(feature.item().product().holder().version().name().getValue());
         }
 
         return productCodes;
