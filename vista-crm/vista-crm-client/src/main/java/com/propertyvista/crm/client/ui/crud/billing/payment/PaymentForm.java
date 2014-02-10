@@ -246,6 +246,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().targetDate()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().finalizeDate()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().paymentStatus()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().rejectedWithNSF()), 5).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().convenienceFeeTransactionAuthorizationNumber()), 10).build());
@@ -357,6 +358,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().id()).setVisible(true);
         get(proto().paymentStatus()).setVisible(true);
+        get(proto().rejectedWithNSF()).setVisible(false);
         get(proto().lastStatusChangeDate()).setVisible(true);
         get(proto().finalizeDate()).setVisible(true);
         get(proto().createdBy()).setVisible(true);
@@ -377,6 +379,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         // hide some non-relevant fields:
         get(proto().id()).setVisible(!isNew);
         get(proto().paymentStatus()).setVisible(!isNew);
+        get(proto().rejectedWithNSF()).setVisible(!isNew && !getValue().rejectedWithNSF().isNull());
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
         get(proto().finalizeDate()).setVisible(!isEditable());
         get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
