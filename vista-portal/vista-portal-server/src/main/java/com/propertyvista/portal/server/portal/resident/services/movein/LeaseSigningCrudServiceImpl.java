@@ -68,7 +68,7 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
     @Override
     public void create(AsyncCallback<Key> callback, LeaseAgreementDTO editableEntity) {
         AgreementDigitalSignatures agreementSignatures = EntityFactory.create(AgreementDigitalSignatures.class);
-        agreementSignatures.leaseTermTenant().set(ResidentPortalContext.getLeaseTermTenant());
+        agreementSignatures.leaseTermParticipant().set(ResidentPortalContext.getLeaseTermTenant());
         agreementSignatures.legalTermsSignatures().addAll(editableEntity.legalTerms());
         Persistence.service().persist(agreementSignatures);
         Persistence.service().commit();

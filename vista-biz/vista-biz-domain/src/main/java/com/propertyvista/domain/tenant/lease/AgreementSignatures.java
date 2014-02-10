@@ -33,5 +33,5 @@ public interface AgreementSignatures extends IEntity {
     @Indexed
     @JoinColumn
     @MemberColumn(notNull = true)
-    LeaseTermParticipant<?> leaseTermTenant();
+    LeaseTermParticipant<?> leaseTermParticipant();
 }
