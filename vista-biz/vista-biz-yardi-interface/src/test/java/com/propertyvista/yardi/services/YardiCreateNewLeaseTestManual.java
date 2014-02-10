@@ -49,6 +49,7 @@ import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARPolicyDataModel;
+import com.propertyvista.test.mock.models.AgreementLegalPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.DepositPolicyDataModel;
@@ -92,6 +93,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         models.add(ARPolicyDataModel.class);
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(LeaseDataModel.class);
+        models.add(AgreementLegalPolicyDataModel.class);
         return models;
     }
 
@@ -108,9 +110,9 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         createLease("01-Dec-2013", "30-Nov-2014");
         fixTenantName(null);
         setMoveIn(new LogicalDate());
-        setPropertyCode("prvista2");
-        setFloorplan("prv21b1", 1);
-        setUnitNo("150");
+        setPropertyCode("gran0002");
+        setFloorplan("2bdrm", 2);
+        setUnitNo("0001");
         setCurrentAddress(getAddress());
 
         addOutdoorParking();
@@ -288,25 +290,36 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
     private PriorAddress getAddress() {
         PriorAddress addr = EntityFactory.create(PriorAddress.class);
-        addr.county().setValue("US");
-        addr.province().code().setValue("CA");
-        addr.postalCode().setValue("98765");
-        addr.city().setValue("Hometown");
-        addr.streetName().setValue("Main");
-        addr.streetNumber().setValue("123");
+        addr.county().setValue("Canada");
+        addr.province().name().setValue("Ontario");
+        addr.postalCode().setValue("M5H 1A1");
+        addr.city().setValue("Toronto");
+        addr.streetName().setValue("King");
+        addr.streetNumber().setValue("100");
         addr.streetType().setValue(StreetType.street);
         return addr;
     }
 
     static PmcYardiCredential getTestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
-        cr.propertyListCodes().setValue("prvista2");
-        cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223third_17");
-        cr.username().setValue("propertyvistadb");
-        cr.password().number().setValue("52673");
-        cr.serverName().setValue("aspdb04");
-        cr.database().setValue("afqoml_live");
-        cr.platform().setValue(PmcYardiCredential.Platform.SQL);
+        if (false) {
+            cr.propertyListCodes().setValue("prvista2");
+            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223third_17");
+            cr.username().setValue("propertyvistadb");
+            cr.password().number().setValue("52673");
+            cr.serverName().setValue("aspdb04");
+            cr.database().setValue("afqoml_live");
+            cr.platform().setValue(PmcYardiCredential.Platform.SQL);
+        } else {
+            cr.propertyListCodes().setValue("gran0002");
+            cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
+            cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com:8080/voyager6008sp17");
+            cr.username().setValue("vista_dev");
+            cr.password().number().setValue("vista_dev");
+            cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
+            cr.database().setValue("vista_dev");
+            cr.platform().setValue(PmcYardiCredential.Platform.SQL);
+        }
         return cr;
     }
 }
