@@ -169,6 +169,9 @@ public class RPCManager {
                     caught = wrapper.getOriginal();
                 }
                 if (caught instanceof IncompatibleRemoteServiceException) {
+                    if (callback != null) {
+                        this.callback.onFailure(caught);
+                    }
                     UncaughtHandler.onUnrecoverableError(caught, "RPC." + serviceName(request, serviceInterface));
                 } else if (!(caught instanceof RuntimeExceptionSerializable) && (callback instanceof RecoverableCall)
                         && (RECOVERABLE_CALL_RETRY_MAX >= retryAttempt)) {
