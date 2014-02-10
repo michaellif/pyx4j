@@ -168,9 +168,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     // Actions:
 
     @Override
+    public void newPayment() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.Payment().formNewItemPlace(currentValue.billingAccount().getPrimaryKey()));
+    }
+
+    @Override
     public void startBilling() {
         GWT.<BillingExecutionService> create(BillingExecutionService.class).startBilling(new DefaultAsyncCallback<String>() {
-
             @Override
             public void onSuccess(String deferredCorrelationId) {
                 DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Billing"), i18n.tr("Running Billing.."), false) {

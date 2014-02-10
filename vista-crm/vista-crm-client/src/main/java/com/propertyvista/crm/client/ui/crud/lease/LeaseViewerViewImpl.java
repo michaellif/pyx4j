@@ -103,9 +103,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem viewApplication;
 
-    private final MenuItem viewDeletedPapsAction;
+    private final MenuItem viewDeletedPaps;
 
     private final MenuItem sendMailAction;
+
+    private final MenuItem newPaymentAction;
 
     private final MenuItem runBillAction;
 
@@ -172,14 +174,14 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addView(viewApplication);
 
-        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
+        viewDeletedPaps = new MenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
             }
         });
 
-        addView(viewDeletedPapsAction);
+        addView(viewDeletedPaps);
 
         // Actions:
 
@@ -211,6 +213,24 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(runBillAction);
         }
+
+        newPaymentAction = new MenuItem(i18n.tr("New Payment"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).newPayment();
+            }
+        });
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(newPaymentAction);
+        }
+
+        maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
+            }
+        });
+        addAction(maintenanceAction);
 
         addActionSeparator();
 
@@ -376,14 +396,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             addAction(cancelAction);
         }
 
-        maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
-            }
-        });
-        addAction(maintenanceAction);
-
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));
@@ -480,6 +492,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         setActionVisible(sendMailAction, false);
         setActionVisible(runBillAction, false);
+
+        setActionVisible(newPaymentAction, false);
+        setActionVisible(maintenanceAction, false);
+
         setActionVisible(noticeAction, false);
         setActionVisible(cancelNoticeAction, false);
         setActionVisible(evictAction, false);
@@ -507,6 +523,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         setActionVisible(sendMailAction, status.isCurrent());
         setActionVisible(runBillAction, status.isCurrent());
+
+        setActionVisible(newPaymentAction, !status.isFormer());
+        setActionVisible(maintenanceAction, !status.isFormer());
 
         setActionVisible(noticeAction, status == Status.Active && completion == null);
         setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && value.actualMoveOut().isNull() && !status.isFormer());

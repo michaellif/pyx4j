@@ -47,7 +47,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
             chargesTab = addTab(createChargesTab());
         }
         billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-        paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+        paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Receipts"));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
         legalTab = addTab(createLegalTab().asWidget(), i18n.tr("Legal"));
         communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"));

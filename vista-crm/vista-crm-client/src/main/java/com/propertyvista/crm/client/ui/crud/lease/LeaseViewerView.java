@@ -44,6 +44,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void sendMail(List<LeaseTermParticipant<?>> users, EmailTemplateType emailType);
 
+        void newPayment();
+
         void startBilling();
 
         void createCompletionEvent(Lease.CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate, LogicalDate leseEndDate);
