@@ -252,6 +252,25 @@ BEGIN
         ALTER TABLE company_logo RENAME COLUMN file_size TO file_file_size;
         ALTER TABLE company_logo RENAME COLUMN updated_timestamp TO file_updated_timestamp;
         
+        
+        -- crm_user_signature
+        
+        CREATE TABLE crm_user_signature
+        (
+                id                              BIGINT                  NOT NULL,
+                sign_date                       TIMESTAMP,
+                ip_address                      VARCHAR(39),
+                signature_format                VARCHAR(50),
+                full_name                       VARCHAR(500),
+                initials                        VARCHAR(500),
+                agree                           BOOLEAN,
+                signing_user                    BIGINT,
+                        CONSTRAINT crm_user_signature_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE crm_user_signature OWNER TO vista;
+        
+        
         -- customer_picture
         
         ALTER TABLE customer_picture RENAME COLUMN blob_key TO file_blob_key;
@@ -649,6 +668,11 @@ BEGIN
         );
         
         ALTER TABLE lease_term_agreement_document_blob OWNER TO vista;
+        
+        
+        -- lease_term_v
+        
+        ALTER TABLE lease_term_v ADD COLUMN employee_signature BIGINT;
         
         
         -- lease_term_v$agreement_confirmation_term
@@ -1574,6 +1598,7 @@ BEGIN
                 REFERENCES lease_term_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building ADD CONSTRAINT building_landlord_fk FOREIGN KEY(landlord) REFERENCES landlord(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE community_event ADD CONSTRAINT community_event_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE customer_signature ADD CONSTRAINT customer_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_owner_fk FOREIGN KEY(owner) 
                 REFERENCES identification_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1604,6 +1629,7 @@ BEGIN
                 REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_lease_term_v_fk FOREIGN KEY(lease_term_v) 
                 REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term_v ADD CONSTRAINT lease_term_v_employee_signature_fk FOREIGN KEY(employee_signature) REFERENCES crm_user_signature(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$agreement_legal_terms ADD CONSTRAINT lease_term_v$agreement_legal_terms_owner_fk FOREIGN KEY(owner) 
                 REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$agreement_confirmation_term ADD CONSTRAINT lease_term_v$agreement_confirmation_term_owner_fk FOREIGN KEY(owner) 
@@ -1696,6 +1722,8 @@ BEGIN
         ALTER TABLE building_utility ADD CONSTRAINT building_utility_building_utility_type_e_ck 
                 CHECK ((building_utility_type) IN ('airConditioning', 'cable', 'electricity', 'garbage', 'gas', 'heating', 'hydro', 'internet', 
                 'other', 'sewage', 'telephone', 'television', 'water'));
+        ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signature_format_e_ck 
+                CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE customer_signature ADD CONSTRAINT customer_signature_signature_format_e_ck 
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE dates_policy ADD CONSTRAINT dates_policy_node_discriminator_d_ck 
