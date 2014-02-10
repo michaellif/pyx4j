@@ -22,13 +22,13 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorView;
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
-import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.dto.CustomerScreeningDTO;
 
-public class CustomerScreeningEditorActivity extends CrmEditorActivity<CustomerScreening> {
+public class CustomerScreeningEditorActivity extends CrmEditorActivity<CustomerScreeningDTO> {
 
     @SuppressWarnings("unchecked")
     public CustomerScreeningEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(CustomerScreeningEditorView.class), (AbstractCrudService<CustomerScreening>) GWT
-                .create(CustomerScreeningCrudService.class), CustomerScreening.class);
+        super(place, CrmSite.getViewFactory().getView(CustomerScreeningEditorView.class), (AbstractCrudService<CustomerScreeningDTO>) GWT
+                .create(CustomerScreeningCrudService.class), CustomerScreeningDTO.class);
     }
 }

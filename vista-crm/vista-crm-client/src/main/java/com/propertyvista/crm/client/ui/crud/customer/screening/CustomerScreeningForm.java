@@ -38,10 +38,10 @@ import com.propertyvista.crm.client.ui.crud.lease.application.components.IdUploa
 import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalAssetFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalIncomeFolder;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.dto.CustomerScreeningDTO;
 import com.propertyvista.misc.BusinessRules;
 
-public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
+public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
 
     private static final I18n i18n = I18n.get(CustomerScreeningForm.class);
 
@@ -55,8 +55,8 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
     private IdUploaderFolder fileUpload;
 
-    public CustomerScreeningForm(IForm<CustomerScreening> view) {
-        super(CustomerScreening.class, view);
+    public CustomerScreeningForm(IForm<CustomerScreeningDTO> view) {
+        super(CustomerScreeningDTO.class, view);
 
         Tab tab = addTab(createIdentificationDocumentsTab(i18n.tr("Identification Documents")));
         selectTab(tab);

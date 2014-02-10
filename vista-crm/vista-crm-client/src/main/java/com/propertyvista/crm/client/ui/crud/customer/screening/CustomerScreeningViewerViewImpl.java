@@ -17,17 +17,17 @@ import com.google.gwt.core.client.GWT;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningVersionService;
-import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.dto.CustomerScreeningDTO;
 
-public class CustomerScreeningViewerViewImpl extends CrmViewerViewImplBase<CustomerScreening> implements CustomerScreeningViewerView {
+public class CustomerScreeningViewerViewImpl extends CrmViewerViewImplBase<CustomerScreeningDTO> implements CustomerScreeningViewerView {
 
     public CustomerScreeningViewerViewImpl() {
         setForm(new CustomerScreeningForm(this));
-        enableVersioning(CustomerScreening.CustomerScreeningV.class, GWT.<CustomerScreeningVersionService> create(CustomerScreeningVersionService.class));
+        enableVersioning(CustomerScreeningDTO.CustomerScreeningV.class, GWT.<CustomerScreeningVersionService> create(CustomerScreeningVersionService.class));
     }
 
     @Override
-    public void populate(CustomerScreening value) {
+    public void populate(CustomerScreeningDTO value) {
         super.populate(value);
 
         setCaption(value.screene().getStringView() + " " + getCaption());

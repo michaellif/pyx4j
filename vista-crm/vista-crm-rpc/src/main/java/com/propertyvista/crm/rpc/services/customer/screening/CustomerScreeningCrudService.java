@@ -17,9 +17,9 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.dto.CustomerScreeningDTO;
 
-public interface CustomerScreeningCrudService extends AbstractVersionedCrudService<CustomerScreening> {
+public interface CustomerScreeningCrudService extends AbstractVersionedCrudService<CustomerScreeningDTO> {
 
     @Transient
     public interface CustomerScreeningInitializationData extends InitializationData {

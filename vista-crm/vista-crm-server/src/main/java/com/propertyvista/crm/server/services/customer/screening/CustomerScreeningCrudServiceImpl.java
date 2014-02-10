@@ -16,18 +16,20 @@ package com.propertyvista.crm.server.services.customer.screening;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
+import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.dto.CustomerScreeningDTO;
 
-public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServiceImpl<CustomerScreening> implements CustomerScreeningCrudService {
+public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<CustomerScreening, CustomerScreeningDTO> implements
+        CustomerScreeningCrudService {
 
     public CustomerScreeningCrudServiceImpl() {
-        super(CustomerScreening.class);
+        super(CustomerScreening.class, CustomerScreeningDTO.class);
     }
 
     @Override
@@ -36,17 +38,17 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
     }
 
     @Override
-    protected CustomerScreening init(InitializationData initializationData) {
+    protected CustomerScreeningDTO init(InitializationData initializationData) {
         CustomerScreeningInitializationData initData = (CustomerScreeningInitializationData) initializationData;
 
-        CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
+        CustomerScreeningDTO screening = EntityFactory.create(CustomerScreeningDTO.class);
         screening.screene().set(Persistence.service().retrieve(Customer.class, initData.screene().getPrimaryKey(), AttachLevel.ToStringMembers, false));
 
         return screening;
     }
 
     @Override
-    protected void enhanceRetrieved(CustomerScreening bo, CustomerScreening to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(CustomerScreening bo, CustomerScreeningDTO to, RetrieveTarget retrieveTarget) {
         // load detached entities:        
         Persistence.service().retrieve(to.version().incomes());
         Persistence.service().retrieve(to.version().assets());
@@ -55,9 +57,9 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
     }
 
     @Override
-    protected CustomerScreening duplicateForDraftEdit(CustomerScreening bo) {
-        bo = super.duplicateForDraftEdit(bo);
-        ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(bo);
-        return bo;
+    protected CustomerScreeningDTO duplicateForDraftEdit(CustomerScreeningDTO to) {
+        to = super.duplicateForDraftEdit(to);
+        ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(to);
+        return to;
     }
 }
