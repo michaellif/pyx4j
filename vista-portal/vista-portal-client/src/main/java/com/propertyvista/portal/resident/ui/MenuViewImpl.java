@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
@@ -29,6 +30,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -69,14 +71,17 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
+        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
 
-        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
-                    ThemeColor.contrast3));
+            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
+
+            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+                mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
+                        ThemeColor.contrast3));
+            }
+
+            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
         }
-
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
 
         footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
         footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));

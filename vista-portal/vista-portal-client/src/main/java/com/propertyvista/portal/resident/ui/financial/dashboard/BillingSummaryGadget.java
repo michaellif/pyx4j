@@ -44,11 +44,11 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
     BillingSummaryGadget(FinancialDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4, 1);
-
         view = new BillingView();
         view.setViewable(true);
         view.initContent();
 
+        asWidget().setWidth("100%");
         setContent(view);
 
         setActionsToolbar(new BillingToolbar());

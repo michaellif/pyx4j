@@ -19,8 +19,10 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -58,25 +60,29 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
                 view.populateProfileGadget(result);
             }
         });
-        ((BillingService) GWT.create(BillingService.class)).retreiveBillingSummary(new DefaultAsyncCallback<BillingSummaryDTO>() {
-            @Override
-            public void onSuccess(BillingSummaryDTO result) {
-                view.populateBillingGadget(result);
-            }
-        });
-        ((InsuranceService) GWT.create(InsuranceService.class)).retreiveInsuranceStatus(new DefaultAsyncCallback<InsuranceStatusDTO>() {
-            @Override
-            public void onSuccess(InsuranceStatusDTO result) {
-                view.populateInsuranceGadget(result);
-            }
-        });
-        ((MaintenanceRequestCrudService) GWT.create(MaintenanceRequestCrudService.class))
-                .retreiveMaintenanceSummary(new DefaultAsyncCallback<MaintenanceSummaryDTO>() {
-                    @Override
-                    public void onSuccess(MaintenanceSummaryDTO result) {
-                        view.populateMaintenanceGadget(result);
-                    }
-                });
+
+        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+
+            ((BillingService) GWT.create(BillingService.class)).retreiveBillingSummary(new DefaultAsyncCallback<BillingSummaryDTO>() {
+                @Override
+                public void onSuccess(BillingSummaryDTO result) {
+                    view.populateBillingGadget(result);
+                }
+            });
+            ((InsuranceService) GWT.create(InsuranceService.class)).retreiveInsuranceStatus(new DefaultAsyncCallback<InsuranceStatusDTO>() {
+                @Override
+                public void onSuccess(InsuranceStatusDTO result) {
+                    view.populateInsuranceGadget(result);
+                }
+            });
+            ((MaintenanceRequestCrudService) GWT.create(MaintenanceRequestCrudService.class))
+                    .retreiveMaintenanceSummary(new DefaultAsyncCallback<MaintenanceSummaryDTO>() {
+                        @Override
+                        public void onSuccess(MaintenanceSummaryDTO result) {
+                            view.populateMaintenanceGadget(result);
+                        }
+                    });
+        }
     }
 
     @Override

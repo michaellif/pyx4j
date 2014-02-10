@@ -61,6 +61,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         view.setViewable(true);
         view.initContent();
 
+        asWidget().setWidth("100%");
         setContent(view);
     }
 

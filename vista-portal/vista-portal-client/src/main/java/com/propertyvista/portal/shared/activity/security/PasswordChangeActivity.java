@@ -49,8 +49,8 @@ public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChang
 
     @Override
     protected void onFinish() {
-        Notification message = new Notification(null, i18n.tr("Your password was changed successfully!"), NotificationType.INFO);
-        PortalSite.getPlaceController().showNotification(message);
+        Notification notification = new Notification(null, i18n.tr("Your password was changed successfully!"), NotificationType.INFO);
+        PortalSite.getPlaceController().showNotification(notification);
     }
 
     @Override

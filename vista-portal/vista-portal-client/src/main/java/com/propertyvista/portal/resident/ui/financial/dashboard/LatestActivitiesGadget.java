@@ -47,6 +47,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
         view.setViewable(true);
         view.initContent();
 
+        asWidget().setWidth("100%");
         setContent(view);
     }
 

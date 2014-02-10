@@ -19,13 +19,19 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.shared.domain.Notification;
+import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView;
+import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardViewImpl;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayInfoDTO;
@@ -39,6 +45,8 @@ import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentSe
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class FinancialDashboardActivity extends SecurityAwareActivity implements FinancialDashboardPresenter {
+
+    private static final I18n i18n = I18n.get(FinancialDashboardActivity.class);
 
     private final FinancialDashboardView view = ResidentPortalSite.getViewFactory().getView(FinancialDashboardView.class);
 
@@ -56,25 +64,31 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
         panel.setWidget(view);
         view.setPresenter(this);
 
+        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+            populateBillingSummary();
+            populateLatestActivities();
+            populateAutoPaySummary();
+            populatePaymentMethodSummary();
+        } else {
+            Notification notification = new Notification(null, i18n.tr("Guarantor Online Payment functionality is coming soon."), NotificationType.INFO);
+            ResidentPortalSite.getPlaceController().showNotification(notification);
+        }
+
+    }
+
+    private void populateBillingSummary() {
         billingService.retreiveBillingSummary(new DefaultAsyncCallback<BillingSummaryDTO>() {
             @Override
             public void onSuccess(BillingSummaryDTO result) {
                 view.populate(result);
             }
         });
+    }
 
+    private void populateLatestActivities() {
         billingService.retreiveLatestActivities(new DefaultAsyncCallback<LatestActivitiesDTO>() {
             @Override
             public void onSuccess(LatestActivitiesDTO result) {
-                view.populate(result);
-            }
-        });
-
-        populateAutoPaySummary();
-
-        paymentService.getPaymentMethodSummary(new DefaultAsyncCallback<PaymentMethodSummaryDTO>() {
-            @Override
-            public void onSuccess(PaymentMethodSummaryDTO result) {
                 view.populate(result);
             }
         });
@@ -84,6 +98,15 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
         paymentService.getAutoPaySummary(new DefaultAsyncCallback<AutoPaySummaryDTO>() {
             @Override
             public void onSuccess(AutoPaySummaryDTO result) {
+                view.populate(result);
+            }
+        });
+    }
+
+    private void populatePaymentMethodSummary() {
+        paymentService.getPaymentMethodSummary(new DefaultAsyncCallback<PaymentMethodSummaryDTO>() {
+            @Override
+            public void onSuccess(PaymentMethodSummaryDTO result) {
                 view.populate(result);
             }
         });

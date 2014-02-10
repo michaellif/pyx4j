@@ -152,6 +152,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentProfileCrudService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentAccountCrudService.class));
 
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentProfileCrudService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentAccountCrudService.class));
+
         //========================= Resident Portal
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(BillingService.class));
@@ -167,6 +170,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(BillingService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentSummaryService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentSummaryService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService.class));
@@ -183,6 +187,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(LeaseAgreementService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(LeaseAgreementService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));

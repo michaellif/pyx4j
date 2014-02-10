@@ -16,12 +16,13 @@ package com.propertyvista.portal.resident.ui.financial.dashboard;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActivitiesDTO;
@@ -30,39 +31,26 @@ import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDashboardView {
 
-    @SuppressWarnings("unused")
-    private static final I18n i18n = I18n.get(FinancialDashboardViewImpl.class);
-
     private FinancialDashboardPresenter presenter;
 
-    private final BillingSummaryGadget billingSummarygGadget;
+    private BillingSummaryGadget billingSummarygGadget;
 
-    private final LatestActivitiesGadget latestActivitiesGadget;
+    private LatestActivitiesGadget latestActivitiesGadget;
 
-    private final AutoPayAgreementsGadget autoPayAgreementsGadget;
+    private AutoPayAgreementsGadget autoPayAgreementsGadget;
 
-    private final PaymentMethodsGadget paymentMethodsGadget;
+    private PaymentMethodsGadget paymentMethodsGadget;
 
     public FinancialDashboardViewImpl() {
 
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        billingSummarygGadget = new BillingSummaryGadget(this);
-        billingSummarygGadget.asWidget().setWidth("100%");
-
-        autoPayAgreementsGadget = new AutoPayAgreementsGadget(this);
-        autoPayAgreementsGadget.asWidget().setWidth("100%");
-
-        latestActivitiesGadget = new LatestActivitiesGadget(this);
-        latestActivitiesGadget.asWidget().setWidth("100%");
-
-        paymentMethodsGadget = new PaymentMethodsGadget(this);
-        paymentMethodsGadget.asWidget().setWidth("100%");
-
-        add(billingSummarygGadget);
-        add(autoPayAgreementsGadget);
-        add(latestActivitiesGadget);
-        add(paymentMethodsGadget);
+        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+            add(billingSummarygGadget = new BillingSummaryGadget(this));
+            add(autoPayAgreementsGadget = new AutoPayAgreementsGadget(this));
+            add(latestActivitiesGadget = new LatestActivitiesGadget(this));
+            add(paymentMethodsGadget = new PaymentMethodsGadget(this));
+        }
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {

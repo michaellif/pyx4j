@@ -81,7 +81,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
         panel.setWidget(++row, 0, inject(proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder()));
 
-        panel.setH3(++row, 0, 1, i18n.tr("People Living with You"));
+        panel.setH3(++row, 0, 1, i18n.tr("Tenants"));
         panel.setWidget(++row, 0, inject(proto().leaseTerm().version().tenants(), new TenantsFolder()));
 
         return panel;

@@ -27,8 +27,6 @@ public enum VistaApplication implements Behavior {
 
     crm,
 
-    field,
-
     site,
 
     resident,

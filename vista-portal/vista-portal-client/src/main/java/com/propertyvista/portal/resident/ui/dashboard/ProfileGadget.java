@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.shared.Dimension;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.ImageViewport;
@@ -33,6 +35,7 @@ import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
@@ -42,6 +45,8 @@ import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
+
+    private static final I18n i18n = I18n.get(ProfileGadget.class);
 
     private final PersonInfoPanel personInfoPanel;
 
@@ -76,7 +81,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
         public NavigationBar() {
             if (!VistaFeatures.instance().yardiIntegration()) {
 
-                Anchor anchor = new Anchor("View my Profile", new Command() {
+                Anchor anchor = new Anchor(i18n.tr("View my Profile"), new Command() {
 
                     @Override
                     public void execute() {
@@ -85,7 +90,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
                 });
                 add(anchor);
 
-                anchor = new Anchor("View my Account", new Command() {
+                anchor = new Anchor(i18n.tr("View my Account"), new Command() {
 
                     @Override
                     public void execute() {
@@ -94,7 +99,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
                 });
                 add(anchor);
 
-                anchor = new Anchor("Change my Password", new Command() {
+                anchor = new Anchor(i18n.tr("Change my Password"), new Command() {
 
                     @Override
                     public void execute() {
@@ -131,7 +136,8 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
         }
 
         void setValue(ResidentSummaryDTO value) {
-            nameLabel.setHTML(value.tenantName().getValue());
+            nameLabel.setHTML(value.tenantName().getValue() + "</br><div style=font-size:0.9em>"
+                    + (SecurityController.checkBehavior(PortalResidentBehavior.Resident) ? "" : i18n.tr("(Guarantor)")) + "</div>");
             Image img = value.picture().hasValues() ? new Image(MediaUtils.createCustomerPictureUrl(value.picture())) : new Image(
                     VistaImages.INSTANCE.profilePicture());
             picture.setImage(img);

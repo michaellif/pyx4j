@@ -19,11 +19,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
@@ -68,10 +70,12 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
         insuranceGadget.getElement().getStyle().setFloat(Float.RIGHT);
 
         add(profileGadget);
-        add(billingGadget);
-        add(maintenanceGadget);
-        add(insuranceGadget);
-        add(offersGadget);
+        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+            add(billingGadget);
+            add(maintenanceGadget);
+            add(insuranceGadget);
+            add(offersGadget);
+        }
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
