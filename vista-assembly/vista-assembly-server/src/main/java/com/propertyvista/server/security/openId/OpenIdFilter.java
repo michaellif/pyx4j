@@ -57,7 +57,7 @@ public class OpenIdFilter implements Filter {
         enabled = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdRequired();
         createDefaultOpenPathMap();
         if (!ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdRequiredMedia()) {
-            servletPathNoAuthentication.add(pathNoSlach(DeploymentConsts.mediaImagesServletMapping));
+            servletPathNoAuthentication.addAll(allApplicationsUrls(pathNoSlach(DeploymentConsts.mediaImagesServletMapping)));
         }
     }
 
