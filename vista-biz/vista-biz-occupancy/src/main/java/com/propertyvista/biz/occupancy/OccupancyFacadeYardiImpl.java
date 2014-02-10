@@ -13,6 +13,22 @@
  */
 package com.propertyvista.biz.occupancy;
 
+import com.pyx4j.commons.Key;
+
+import com.propertyvista.domain.tenant.lease.Lease;
+
 public class OccupancyFacadeYardiImpl extends OccupancyFacadeAvailableForRentOnlyImpl {
+
+    @Override
+    public void reserve(Key unitId, Lease lease) {
+        super.reserve(unitId, lease);
+        // TODO Propagate unit reservation to Yardi!
+    }
+
+    @Override
+    public void unreserve(Key unitId) {
+        super.unreserve(unitId);
+        // TODO Propagate unit release to Yardi!
+    }
 
 }
