@@ -58,6 +58,11 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     }
 
     @Override
+    public boolean openIdRequiredMedia() {
+        return openIdRequired() && getConfigProperties().getBooleanValue("openIdrequired.media", true);
+    }
+
+    @Override
     public String getApplicationURLNamespace(boolean secure) {
         return getConfigProperties().getValue("ApplicationURLNamespace");
     }

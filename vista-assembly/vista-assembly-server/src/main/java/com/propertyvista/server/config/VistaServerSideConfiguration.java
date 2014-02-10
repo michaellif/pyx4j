@@ -309,6 +309,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public boolean openIdRequiredMedia() {
+        return openIdRequired();
+    }
+
+    @Override
     public boolean openDBReset() {
         return true;
     }

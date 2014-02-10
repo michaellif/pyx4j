@@ -128,6 +128,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public boolean openIdRequiredMedia() {
+        return false;
+    }
+
+    @Override
     public boolean isVistaDemo() {
         return false;
     }

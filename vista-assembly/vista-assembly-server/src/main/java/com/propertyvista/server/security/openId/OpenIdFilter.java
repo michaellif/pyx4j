@@ -37,6 +37,7 @@ import com.pyx4j.server.contexts.DevSession;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 
 public class OpenIdFilter implements Filter {
@@ -49,9 +50,18 @@ public class OpenIdFilter implements Filter {
 
     private static boolean enabled;
 
-    private static Collection<String> servletPathNoAuthentication = new HashSet<String>();
+    private final Collection<String> servletPathNoAuthentication = new HashSet<String>();
 
-    static {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        enabled = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdRequired();
+        createDefaultOpenPathMap();
+        if (!ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdRequiredMedia()) {
+            servletPathNoAuthentication.add(pathNoSlach(DeploymentConsts.mediaImagesServletMapping));
+        }
+    }
+
+    void createDefaultOpenPathMap() {
         servletPathNoAuthentication.addAll(allApplicationsUrls("o"));
         servletPathNoAuthentication.addAll(allApplicationsUrls("public"));
         servletPathNoAuthentication.addAll(allApplicationsUrls("debug"));
@@ -61,17 +71,20 @@ public class OpenIdFilter implements Filter {
         servletPathNoAuthentication.add("interfaces");
     }
 
+    private String pathNoSlach(String url) {
+        if (url.endsWith("/")) {
+            return url.substring(0, url.length() - 1);
+        } else {
+            return url;
+        }
+    }
+
     private static Collection<String> allApplicationsUrls(String url) {
         ArrayList<String> arlPatterns = new ArrayList<String>();
         for (VistaApplication application : VistaApplication.values()) {
             arlPatterns.add(application.name() + "/" + url);
         }
         return arlPatterns;
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        enabled = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdRequired();
     }
 
     @Override

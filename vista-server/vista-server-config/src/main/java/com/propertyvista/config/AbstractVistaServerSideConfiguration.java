@@ -56,6 +56,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract boolean openIdRequired();
 
+    public abstract boolean openIdRequiredMedia();
+
     public abstract String openIdDomain();
 
     public abstract String openIdDomainIdentifier(String userDomain);
