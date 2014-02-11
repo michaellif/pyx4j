@@ -81,6 +81,7 @@ public class CreateMockLeaseTermAgreementPdf {
                 .append("<div style=\"text-align: center;\">hello world</div><div style=\"text-align: right;\">some text here <span style=\"font-weight: bold; font-style: italic; color: red;\">bold italic red text here</span><br>another line of text</div>");
         for (int i = 0; i < randomLines; ++i) {
             bodyBuilder.append("<br>afsdfasdflsdh aslfkjdshf aslfkjsdaf ;slfkj sdfa;lsdfkjsd f;asdlfkjsdf");
+            bodyBuilder.append("&nbsp;<b>bold</b> <i>italic</i> <u>underlined</u>");
         }
         term.body().setValue(bodyBuilder.toString());
         if (signatures != null) {
