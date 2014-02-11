@@ -33,12 +33,15 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
     @Override
     public void createApplication(final Lease leaseId) throws YardiServiceException {
 
+        final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
+        validateApplicationAcceptance(lease.unit().building());
+
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
 
             @Override
             public Void execute() throws YardiServiceException {
 
-                Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
                 if (!lease.leaseId().isNull()) {
                     throw new UserRuntimeException("New Application should not have id: " + lease.leaseId().getValue());
                 }
@@ -61,6 +64,10 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         if (lease.leaseId().isNull() || !lease.leaseId().getValue().startsWith("p")) {
             throw new UserRuntimeException("Invalid lease id: " + lease.leaseId().getValue());
         }
+
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
+        validateApplicationAcceptance(lease.unit().building());
+
         PmcYardiCredential yc = getPmcYardiCredential(lease);
         YardiGuestManagementService.getInstance().holdUnit(yc, lease);
     }
@@ -75,6 +82,10 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         if (lease.leaseId().isNull() || !lease.leaseId().getValue().startsWith("p")) {
             throw new UserRuntimeException("Invalid lease id: " + lease.leaseId().getValue());
         }
+
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
+        validateApplicationAcceptance(lease.unit().building());
+
         PmcYardiCredential yc = getPmcYardiCredential(lease);
         String tId = YardiGuestManagementService.getInstance().signLease(yc, lease);
         lease.leaseId().setValue(tId);
@@ -83,10 +94,10 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
 
     @Override
     public void validateApplicationAcceptance(Building buildingId) throws UserRuntimeException {
-        Persistence.ensureRetrieve(buildingId, AttachLevel.ToStringMembers);
-        PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(buildingId);
+        Building building = Persistence.service().retrieve(Building.class, buildingId.getPrimaryKey());
+        PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(building);
         try {
-            YardiGuestManagementService.getInstance().validateSettings(yc, buildingId.propertyCode().getValue());
+            YardiGuestManagementService.getInstance().validateSettings(yc, building.propertyCode().getValue());
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(e.getMessage());
         }
