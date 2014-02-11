@@ -77,10 +77,20 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
         // activate, newly created leases:
         activate(leaseId);
         try {
+            // WofW 1 start
             Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-            ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
+            if (lease.leaseId().isNull()) {
+                lease = ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
+                Persistence.service().persist(lease);
+            }
+            // WofW 1 end
+
+            //WofW 2
             ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(lease);
-            ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
+
+            //WofW 3
+            lease = ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
+            Persistence.service().persist(lease);
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
         }
