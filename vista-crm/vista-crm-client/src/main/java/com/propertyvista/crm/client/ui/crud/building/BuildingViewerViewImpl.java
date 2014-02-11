@@ -86,8 +86,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final ButtonMenuBar dashboardsMenu;
 
-    private final MenuItem yardiImportAction;
-
     public BuildingViewerViewImpl() {
 
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister());
@@ -110,42 +108,37 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         // set main form here:
         setForm(new BuildingForm(this));
 
-        Button actionsButton = new Button(i18n.tr("Actions"));
-        ButtonMenuBar actionsMenu = new ButtonMenuBar();
-        actionsMenu.addItem(i18n.tr("Maintenance Requests"), new Command() {
+        Button dashboardButton = new Button(i18n.tr("Dashboard"));
+        dashboardsMenu = new ButtonMenuBar();
+        dashboardButton.setMenu(dashboardsMenu);
+        addHeaderToolbarItem(dashboardButton);
+
+        addAction(new MenuItem(i18n.tr("Maintenance Requests"), new Command() {
             @Override
             public void execute() {
                 if (!isVisorShown()) {
                     ((BuildingViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
                 }
             }
-        });
-        actionsMenu.addItem(i18n.tr("Community Events"), new Command() {
+        }));
+
+        addAction(new MenuItem(i18n.tr("Community Events"), new Command() {
             @Override
             public void execute() {
                 if (!isVisorShown()) {
                     ((BuildingViewerView.Presenter) getPresenter()).getCommunityEventVisorController().show();
                 }
             }
-        });
-        actionsButton.setMenu(actionsMenu);
-        addHeaderToolbarItem(actionsButton);
+        }));
 
-        Button dashboardButton = new Button(i18n.tr("Dashboard"));
-        dashboardsMenu = new ButtonMenuBar();
-        dashboardButton.setMenu(dashboardsMenu);
-        addHeaderToolbarItem(dashboardButton);
-
-        yardiImportAction = new MenuItem(i18n.tr("Update From Yardi"), new Command() {
-            @Override
-            public void execute() {
-                ((BuildingViewerView.Presenter) getPresenter()).updateFromYardi();
-            }
-        });
         if (VistaFeatures.instance().yardiIntegration()) {
-            addAction(yardiImportAction);
+            addAction(new MenuItem(i18n.tr("Update From Yardi"), new Command() {
+                @Override
+                public void execute() {
+                    ((BuildingViewerView.Presenter) getPresenter()).updateFromYardi();
+                }
+            }));
         }
-
     }
 
     @Override
