@@ -8,17 +8,23 @@
 		<band height="20">
 			<staticText>
 				<reportElement x="0" y="0" width="182" height="20"/>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Name:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="194" y="0" width="164" height="20"/>
-				<textElement/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Signature:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="368" y="0" width="82" height="20"/>
-				<textElement/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Date:]]></text>
 			</staticText>
 		</band>

@@ -10,50 +10,50 @@
 	<field name="signDate" class="java.util.Date"/>
 	<field name="ipAddress" class="java.lang.String"/>
 	<detail>
-		<band height="35" splitType="Stretch">
+		<band height="44" splitType="Stretch">
 			<printWhenExpression><![CDATA[$F{signatureFormat} == com.pyx4j.entity.shared.ISignature.SignatureFormat.FullName || $F{signatureFormat} == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName]]></printWhenExpression>
 			<staticText>
-				<reportElement x="0" y="1" width="171" height="14"/>
-				<textElement verticalAlignment="Bottom">
-					<font isBold="true" isUnderline="true"/>
+				<reportElement x="0" y="1" width="182" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Name:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="15" width="171" height="20"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="0" y="21" width="182" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{fullName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="309" y="1" width="141" height="14"/>
+				<reportElement x="368" y="1" width="82" height="20"/>
 				<textElement verticalAlignment="Bottom">
-					<font isBold="true" isUnderline="true"/>
+					<font isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Date:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="171" y="15" width="138" height="20"/>
-				<textElement/>
+				<reportElement x="194" y="21" width="164" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ipAddress}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="171" y="1" width="138" height="14"/>
+				<reportElement x="194" y="1" width="164" height="20"/>
 				<textElement verticalAlignment="Bottom">
-					<font isBold="true" isUnderline="true"/>
+					<font isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[IP:]]></text>
 			</staticText>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="309" y="15" width="141" height="20"/>
-				<textElement/>
+				<reportElement x="368" y="21" width="82" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{signDate}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="16">
+		<band height="15">
 			<printWhenExpression><![CDATA[$F{signatureFormat} == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials]]></printWhenExpression>
 			<textField>
 				<reportElement x="0" y="0" width="450" height="15"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["I Agree to the terms above (" + $F{initials} +")"]]></textFieldExpression>
 			</textField>
 		</band>
