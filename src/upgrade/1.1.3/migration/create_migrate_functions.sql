@@ -1225,6 +1225,37 @@ BEGIN
                 ||'FROM '||v_schema_name||'.insurance_certificate_doc AS d '
                 ||'WHERE s.certificate_doc = d.id ';
                 
+        
+        -- legal_terms_policy_item
+        
+        EXECUTE 'INSERTT INTO '||v_schema_name||'.legal_terms_policy_item(id,caption,enabled,content) '
+                ||'(SELECT nextval(''public.legal_terms_policy_item_seq'') AS id, caption, enabled, content '
+                ||'FROM         _dba_.tmp_policies )';
+                
+                
+        -- legal_terms_policy
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.legal_terms_policy(id,node_discriminator,node) '
+                ||'(SELECT nextval(''public.legal_terms_policy_seq'') AS id, '
+                ||'''OrganizationPoliciesNode'' AS node_discriminator, id AS node '
+                ||'FROM         '||v_schema_name||'.organization_policies_node) ';
+                
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.legal_terms_policy  AS p '
+                ||'SET  resident_portal_terms_and_conditions = a.id, '
+                ||'     resident_portal_privacy_policy = b.id, '
+                ||'     prospect_portal_terms_and_conditions = c.id,'
+                ||'     prospect_portal_privacy_policy = d.id, '
+                ||'     updated = DATE_TRUNC(''second'',current_timestamp)::timestamp '
+                ||'FROM '||v_schema_name||'.legal_terms_policy_item AS a, '
+                ||'     '||v_schema_name||'.legal_terms_policy_item AS b, '
+                ||'     '||v_schema_name||'.legal_terms_policy_item AS c, '
+                ||'     '||v_schema_name||'.legal_terms_policy_item AS d '
+                ||'WHERE        a.caption = ''RESIDENT PORTAL TERMS AND CONDITIONS'' '
+                ||'AND          b.caption = ''RESIDENT PORTAL PRIVACY POLICY'' '
+                ||'AND          c.caption = ''ONLINE APPLICATION TERMS AND CONDITIONS'' '
+                ||'AND          d.caption = ''ONLINE APPLICATION PRIVACY POLICY'' ';
+        
                 
         -- maintenance_request
         
