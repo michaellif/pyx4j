@@ -143,8 +143,10 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
         flexPanel.setWidget(++row, 0, 2, depositPanel);
 
-        adjustmentPanel.setH3(0, 0, 2, proto().adjustments().getMeta().getCaption());
-        adjustmentPanel.setWidget(1, 0, 2, inject(proto().adjustments(), new AdjustmentFolder()));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            adjustmentPanel.setH3(0, 0, 2, proto().adjustments().getMeta().getCaption());
+            adjustmentPanel.setWidget(1, 0, 2, inject(proto().adjustments(), new AdjustmentFolder()));
+        }
 
         depositPanel.setH3(0, 0, 2, proto().deposits().getMeta().getCaption());
         depositPanel.setWidget(1, 0, 2, inject(proto().deposits(), new DepositFolder()));
