@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
+import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
@@ -130,12 +131,13 @@ public class PeopleStep extends ApplicationWizardStep {
 
                 int row = -1;
                 mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().matured())).build());
-                mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().dependent())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
+                mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().dependent())).mockValue(Boolean.FALSE).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).mockValue("John").build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).mockValue("Stiles").build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).mockValue(new LogicalDate(102, 3, 5)).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).mockValue(PersonRelationship.Son).build());
+                mainPanel.setWidget(++row, 0,
+                        new FormWidgetDecoratorBuilder(inject(proto().email())).mockValue("John" + (int) System.currentTimeMillis() + "@Stiles.com").build());
 
                 // tweaks:
                 get(proto().dependent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -155,6 +157,11 @@ public class PeopleStep extends ApplicationWizardStep {
                 });
 
                 return mainPanel;
+            }
+
+            @Override
+            protected void setMockValue() {
+                get(proto().name().firstName()).setValue("John");
             }
 
             @Override

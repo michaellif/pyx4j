@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
+import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -339,6 +340,8 @@ public class PortalTheme extends Theme {
         addTheme(new DashboardTheme());
         addTheme(new EntityViewTheme());
         addTheme(new StepsTheme());
+
+        addTheme(new DevConsoleTheme());
 
     }
 
