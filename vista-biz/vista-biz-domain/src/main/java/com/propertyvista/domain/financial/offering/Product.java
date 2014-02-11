@@ -73,6 +73,11 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     @MemberColumn(notNull = true)
     ARCode code();
 
+    /**
+     * used in yardi-integration mode for storing Rentable Item Type Code
+     */
+    IPrimitive<String> yardiCode();
+
     @AbstractEntity
     @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

@@ -156,7 +156,7 @@ public class YardiProductCatalogProcessor {
         criteria.eq(criteria.proto().catalog(), catalog);
         criteria.eq(criteria.proto().defaultCatalogItem(), false);
         criteria.eq(criteria.proto().code(), typeData.getArCode());
-        criteria.eq(criteria.proto().version().name(), typeData.getItemType().getCode());
+        criteria.eq(criteria.proto().yardiCode(), typeData.getItemType().getCode());
 
         Service service = Persistence.service().retrieve(criteria);
         if (service == null) {
@@ -164,6 +164,7 @@ public class YardiProductCatalogProcessor {
             service.defaultCatalogItem().setValue(false);
             service.catalog().set(catalog);
             service.code().set(typeData.getArCode());
+            service.yardiCode().setValue(typeData.getItemType().getCode());
             service.version().name().setValue(typeData.getItemType().getCode());
             service.version().availableOnline().setValue(true);
         } else {
@@ -219,7 +220,7 @@ public class YardiProductCatalogProcessor {
         criteria.eq(criteria.proto().catalog(), catalog);
         criteria.eq(criteria.proto().defaultCatalogItem(), false);
         criteria.eq(criteria.proto().code(), typeData.getArCode());
-        criteria.eq(criteria.proto().version().name(), typeData.getItemType().getCode());
+        criteria.eq(criteria.proto().yardiCode(), typeData.getItemType().getCode());
 
         Feature feature = Persistence.service().retrieve(criteria);
         if (feature == null) {
@@ -227,6 +228,7 @@ public class YardiProductCatalogProcessor {
             feature.defaultCatalogItem().setValue(false);
             feature.catalog().set(catalog);
             feature.code().set(typeData.getArCode());
+            feature.yardiCode().setValue(typeData.getItemType().getCode());
             feature.version().name().setValue(typeData.getItemType().getCode());
             feature.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(typeData.getArCode().type().getValue()));
             feature.version().mandatory().setValue(false);
