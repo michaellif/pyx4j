@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -49,10 +50,13 @@ public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity
         AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, result));
     }
 
-    // TODO VISTA-3708 create when HasNotesAndAttachments
     public NotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
         if (notesAndAttachmentsController == null) {
-            notesAndAttachmentsController = new NotesAndAttachmentsVisorController(getView(), createNotesParentId());
+            HasNotesAndAttachments parentId = createNotesParentId();
+            if (parentId != null) {
+                notesAndAttachmentsController = new NotesAndAttachmentsVisorController(getView(), parentId);
+            }
+            assert notesAndAttachmentsController != null : SimpleMessageFormat.format("Inapplicable for the entity of {0}", entityClass.getName());
         }
         return notesAndAttachmentsController;
     }
@@ -65,5 +69,4 @@ public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity
             return null;
         }
     }
-
 }

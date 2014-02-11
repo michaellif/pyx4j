@@ -35,6 +35,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> {
 
@@ -76,7 +77,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         this.viewOnly = viewOnly;
 
         // Notes button:
-        // TODO VISTA-3708 create when HasNotesAndAttachments
         addHeaderToolbarItem((notesButton = new Button(i18n.tr("Notes"), new Command() {
             @SuppressWarnings("unchecked")
             @Override
@@ -241,6 +241,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
         viewsButton.setVisible(false);
         actionsButton.setVisible(false);
+        notesButton.setVisible(false);
+
         resetActionHighlighting();
 
         super.reset();
@@ -258,6 +260,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
         viewsButton.setVisible(!viewsMenu.isMenuEmpty());
         actionsButton.setVisible(!actionsMenu.isMenuEmpty());
+        notesButton.setVisible(value instanceof HasNotesAndAttachments);
 
         populateBreadcrumbs(value);
     }
