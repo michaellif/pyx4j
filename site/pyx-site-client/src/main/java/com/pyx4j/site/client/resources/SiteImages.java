@@ -32,4 +32,10 @@ public interface SiteImages extends WidgetsImages {
     @Source("close.gif")
     ImageResource closeButton();
 
+    @Source("close-dev-console.png")
+    ImageResource closeDevConsoleButton();
+
+    @Source("open-dev-console.png")
+    ImageResource openDevConsoleButton();
+
 }

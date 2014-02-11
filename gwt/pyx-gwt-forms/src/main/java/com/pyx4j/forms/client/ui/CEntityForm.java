@@ -421,4 +421,5 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
             log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
         }
     }
+
 }

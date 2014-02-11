@@ -35,14 +35,18 @@ import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
+import com.pyx4j.site.client.ui.devconsole.ResponsiveLayoutDevConsole;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize, LayoutChangeRerquestHandler {
@@ -114,6 +118,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private LayoutType layoutType;
 
+    private DevConsoleTab devConsoleTab;
+
+    @SuppressWarnings("deprecation")
     public ResponsiveLayoutPanel() {
 
         setElement(Document.get().createDivElement());
@@ -230,6 +237,11 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
 
         layoutType = LayoutType.getLayoutType(Window.getClientWidth());
+
+        if (ApplicationMode.isDevelopment()) {
+            devConsoleTab = new DevConsoleTab(new ResponsiveLayoutDevConsole(this));
+            add(devConsoleTab.asWidget(), getElement());
+        }
 
     }
 
@@ -450,6 +462,12 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     public void scrollToTop() {
         if (pageScroll.getVerticalScrollPosition() > getHeaderDisplay().getOffsetHeight()) {
             pageScroll.setVerticalScrollPosition(getHeaderDisplay().getOffsetHeight());
+        }
+    }
+
+    public void setDevConsole(IsWidget widget) {
+        if (devConsoleTab != null) {
+            devConsoleTab.setDevConsole(widget);
         }
     }
 }

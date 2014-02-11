@@ -243,7 +243,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
                 public void onMouseDown(MouseDownEvent event) {
                     if (event.isControlKeyDown()) {
                         try {
-                            ((CComponent<Object>) getComnponent()).setValue(builder.mockValue);
+                            setMockValue();
                         } catch (Exception e) {
                             throw new Error("Failed to set mock value", e);
                         }
@@ -257,7 +257,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
                 public void onMouseOver(MouseOverEvent event) {
                     if (event.isControlKeyDown() && event.isShiftKeyDown()) {
                         try {
-                            ((CComponent<Object>) getComnponent()).setValue(builder.mockValue);
+                            setMockValue();
                         } catch (Exception e) {
                             throw new Error("Failed to set mock value", e);
                         }
@@ -419,6 +419,13 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
     public void setComponent(CComponent<?> component) {
         this.component = component;
 
+    }
+
+    public void setMockValue() {
+        CComponent<Object> component = (CComponent<Object>) getComnponent();
+        if (component.isVisible() && component.isEditable() && component.isEnabled() && !component.isViewable() && component.isValueEmpty()) {
+            component.setValue(builder.mockValue);
+        }
     }
 
     @Override

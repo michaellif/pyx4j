@@ -699,4 +699,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return unconditionalValidationErrorRendering;
     }
 
+    protected void setMockValue() {
+
+    }
 }
