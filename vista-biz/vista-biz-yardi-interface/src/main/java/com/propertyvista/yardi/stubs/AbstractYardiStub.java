@@ -78,6 +78,8 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
             validateWriteAccess(yc.residentTransactionsServiceURL().getValue());
             validateWriteAccess(yc.sysBatchServiceURL().getValue());
             validateWriteAccess(yc.maintenanceRequestsServiceURL().getValue());
+            validateWriteAccess(yc.ilsGuestCardServiceURL().getValue());
+            validateWriteAccess(yc.ilsGuestCard20ServiceURL().getValue());
         }
     }
 
