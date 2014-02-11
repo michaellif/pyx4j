@@ -33,6 +33,7 @@ import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
+import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -95,7 +96,10 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         if (!makeDraft
                 && (signaturesMode == LeaseTermAgreementSignaturesMode.SignaturesOnly || signaturesMode == LeaseTermAgreementSignaturesMode.PlaceholdersAndAvailableSignatures)) {
             if (leaseTerm.version().employeeSignature().hasValues()) {
-                leaseAgreementData.landlordAgentsSignatures().add(leaseTerm.version().employeeSignature());
+                CrmUserSignature signature = leaseTerm.version().employeeSignature();
+                signature.fullName().setValue(
+                        signature.fullName().getValue() + " (Per: " + leaseTerm.lease().unit().building().landlord().name().getValue() + ")");
+                leaseAgreementData.landlordAgentsSignatures().add(signature);
             }
         }
 
