@@ -74,6 +74,7 @@ import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.SimulationService;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
+import com.propertyvista.operations.rpc.services.dev.PmcYardiCredentialService;
 import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportMessageService;
 import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportSectionService;
 import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
@@ -197,6 +198,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));
+            grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcYardiCredentialService.class));
         }
 
         // let Onboarding change their own user info and own password

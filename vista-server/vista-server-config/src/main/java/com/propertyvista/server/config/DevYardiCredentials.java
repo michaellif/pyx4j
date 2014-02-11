@@ -13,53 +13,91 @@
  */
 package com.propertyvista.server.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public class DevYardiCredentials {
 
+    enum YardiCredential {
+        localNew( //
+                "gran0002, aven2175", //
+                "http://yardi.birchwoodsoftwaregroup.com/Voyager60", //
+                "vista_dev", //
+                "vista_dev", //
+                "WIN-CO5DPAKNUA4\\YARDI", //
+                "vista_dev" //
+        ),
+
+        hostedNew(//
+                "prvista2", //
+                "https://www.iyardiasp.com/8223third_17", //
+                "propertyvistadb", //
+                "52673", //
+                "aspdb04", //
+                "afqoml_live" //
+        );
+
+        final String propertyListCodes;
+
+        final String serviceURLBase;
+
+        final String username;
+
+        final String password;
+
+        final String serverName;
+
+        final String database;
+
+        private YardiCredential( //
+                String propertyListCodes, //
+                String serviceURLBase, //
+                String username, //
+                String password, //
+                String serverName, //
+                String database //
+        ) {
+            this.propertyListCodes = propertyListCodes;
+            this.serviceURLBase = serviceURLBase;
+            this.username = username;
+            this.password = password;
+            this.serverName = serverName;
+            this.database = database;
+        }
+    }
+
     public static PmcYardiCredential getTestPmcYardiCredential() {
+        return getTestPmcYardiCredential(YardiCredential.localNew);
+    }
+
+    public static PmcYardiCredential getTestPmcYardiCredential(YardiCredential yc) {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
         // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
-        if (true) {
-            cr.propertyListCodes().setValue("gran0002, aven2175");
-            cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
-            cr.username().setValue("vista_dev");
-            cr.password().number().setValue("vista_dev");
-            cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
-            cr.database().setValue("vista_dev");
-        } else if (false) {
-            cr.propertyListCodes().setValue("prvista2");
-            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
-            cr.username().setValue("propertyvistaws");
-            cr.password().number().setValue("52673");
-            cr.serverName().setValue("aspdb04");
-            cr.database().setValue("afqoml_live");
-        } else if (false) {
-            // ILS QA certification session 1
-            cr.propertyListCodes().setValue("ils000");
-            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirdqa");
-            cr.username().setValue("propertyvistails");
-            cr.password().number().setValue("55318");
-            cr.serverName().setValue("aspdb06\\sql2k5");
-            cr.database().setValue("afqoml_qa6008");
-        } else if (false) {
-            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirdqa");
-            cr.username().setValue("propertyvista");
-            cr.password().number().setValue("52673");
-            cr.serverName().setValue("aspdb06\\sql2k5");
-            cr.database().setValue("afqoml_qa6008");
-        } else if (false) {
-            cr.propertyListCodes().setValue("prvista1");
-            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
-            cr.username().setValue("propertyvista-srws");
-            cr.password().number().setValue("55548");
-            cr.serverName().setValue("aspdb04");
-            cr.database().setValue("afqoml_live");
+        if (yc != null) {
+            cr.propertyListCodes().setValue(yc.propertyListCodes);
+            cr.serviceURLBase().setValue(yc.serviceURLBase);
+            cr.username().setValue(yc.username);
+            cr.password().number().setValue(yc.password);
+            cr.serverName().setValue(yc.serverName);
+            cr.database().setValue(yc.database);
+            cr.platform().setValue(PmcYardiCredential.Platform.SQL);
         }
-        cr.platform().setValue(PmcYardiCredential.Platform.SQL);
 
         return cr;
+    }
+
+    public static List<PmcYardiCredential> getTestPmcYardiCredentialList() {
+        List<PmcYardiCredential> ycList = new ArrayList<PmcYardiCredential>();
+        for (YardiCredential yc : YardiCredential.values()) {
+            PmcYardiCredential cr = getTestPmcYardiCredential(yc);
+            // to go by wire
+            cr.password().obfuscatedNumber().set(cr.password().number());
+            ycList.add(cr);
+        }
+        return ycList;
     }
 }

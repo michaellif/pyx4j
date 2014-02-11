@@ -13,6 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import java.util.List;
+import java.util.Vector;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -23,15 +27,19 @@ import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.operations.rpc.services.dev.PmcYardiCredentialService;
 
 class YardiCredentialEditor extends CEntityForm<PmcYardiCredential> {
 
     private static final I18n i18n = I18n.get(YardiCredentialEditor.class);
+
+    List<PmcYardiCredential> credentialList;
 
     YardiCredentialEditor() {
         super(PmcYardiCredential.class);
@@ -71,7 +79,18 @@ class YardiCredentialEditor extends CEntityForm<PmcYardiCredential> {
                 public void onDevShortcut(DevShortcutEvent event) {
                     if (event.getKeyCode() == 'Q') {
                         event.consume();
-                        devGenerateTestCredencials();
+                        if (credentialList == null) {
+                            PmcYardiCredentialService service = GWT.<PmcYardiCredentialService> create(PmcYardiCredentialService.class);
+                            service.getYardiCredentials(new DefaultAsyncCallback<Vector<PmcYardiCredential>>() {
+                                @Override
+                                public void onSuccess(Vector<PmcYardiCredential> result) {
+                                    credentialList = result;
+                                    devGenerateTestCredencials();
+                                }
+                            });
+                        } else {
+                            devGenerateTestCredencials();
+                        }
                     }
                 }
             });
@@ -93,36 +112,14 @@ class YardiCredentialEditor extends CEntityForm<PmcYardiCredential> {
         get(proto().sysBatchServiceURL()).setValue(null);
         get(proto().maintenanceRequestsServiceURL()).setValue(null);
         get(proto().platform()).setValue(PmcYardiCredential.Platform.SQL);
-        switch (q) {
-        case 0:
-            get(proto().serviceURLBase()).setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
-            get(proto().username()).setValue("vista_dev");
-            ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString("vista_dev");
-            get(proto().serverName()).setValue("WIN-CO5DPAKNUA4\\YARDI");
-            get(proto().database()).setValue("vista_dev");
-            q++;
-            break;
-        case 1:
-            get(proto().serviceURLBase()).setValue("https://www.iyardiasp.com/8223thirddev");
-            get(proto().username()).setValue("propertyvistaws");
-            ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString("52673");
-            get(proto().serverName()).setValue("aspdb04");
-            get(proto().database()).setValue("afqoml_live");
-            q++;
-            break;
-        case 2:
-            get(proto().serviceURLBase()).setValue("https://www.iyardiasp.com/8223thirddev");
-            get(proto().username()).setValue("propertyvista-srws");
-            ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString("55548");
-            get(proto().serverName()).setValue("aspdb04");
-            get(proto().database()).setValue("afqoml_live");
-            q++;
-            break;
-        default:
-            q = 0;
-            devGenerateTestCredencials();
-            break;
-        }
 
+        PmcYardiCredential yc = credentialList.get(q);
+        get(proto().serviceURLBase()).setValue(yc.serviceURLBase().getValue());
+        get(proto().username()).setValue(yc.username().getValue());
+        ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString(yc.password().obfuscatedNumber().getValue());
+        get(proto().serverName()).setValue(yc.serverName().getValue());
+        get(proto().database()).setValue(yc.database().getValue());
+
+        q = (q + 1) % credentialList.size();
     }
 }
