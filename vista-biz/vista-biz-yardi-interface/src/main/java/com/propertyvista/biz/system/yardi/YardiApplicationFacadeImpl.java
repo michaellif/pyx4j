@@ -15,7 +15,10 @@ package com.propertyvista.biz.system.yardi;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -28,14 +31,29 @@ import com.propertyvista.yardi.services.YardiGuestManagementService;
 public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implements YardiApplicationFacade {
 
     @Override
-    public Lease createApplication(Lease lease) throws YardiServiceException {
-        if (!lease.leaseId().isNull()) {
-            throw new UserRuntimeException("New Application should not have id: " + lease.leaseId().getValue());
-        }
-        PmcYardiCredential yc = getPmcYardiCredential(lease);
-        String pId = YardiGuestManagementService.getInstance().createNewProspect(yc, lease);
-        lease.leaseId().setValue(pId);
-        return lease;
+    public void createApplication(final Lease leaseId) throws YardiServiceException {
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+
+            @Override
+            public Void execute() throws YardiServiceException {
+
+                Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+                if (!lease.leaseId().isNull()) {
+                    throw new UserRuntimeException("New Application should not have id: " + lease.leaseId().getValue());
+                }
+                PmcYardiCredential yc = getPmcYardiCredential(lease);
+                String pId = YardiGuestManagementService.getInstance().createNewProspect(yc, lease);
+                lease.leaseApplication().yardiApplicationId().setValue(pId);
+
+                // Consider ...
+                //ServerSideFactory.create(LeaseFacade.class).persist(lease);
+                Persistence.service().persist(lease.leaseApplication());
+
+                return null;
+            }
+
+        });
     }
 
     @Override
@@ -45,6 +63,11 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         }
         PmcYardiCredential yc = getPmcYardiCredential(lease);
         YardiGuestManagementService.getInstance().holdUnit(yc, lease);
+    }
+
+    @Override
+    public void unreserveUnit(Lease leaseId) throws YardiServiceException {
+        // TODO
     }
 
     @Override

@@ -25,13 +25,15 @@ public interface YardiApplicationFacade {
      * 
      * @throws YardiServiceException
      */
-    Lease createApplication(Lease lease) throws YardiServiceException;
+    void createApplication(Lease leaseId) throws YardiServiceException;
 
     /** Tries to hold unit in Yardi; throws exception on failure */
-    void holdUnit(Lease lease) throws YardiServiceException;
+    void holdUnit(Lease leaseId) throws YardiServiceException;
+
+    void unreserveUnit(Lease leaseId) throws YardiServiceException;
 
     /** Create Future Lease; set tId in Lease.leaseId */
-    Lease approveApplication(Lease lease) throws YardiServiceException;
+    Lease approveApplication(Lease leaseId) throws YardiServiceException;
 
     /**
      * @param buildingId

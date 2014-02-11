@@ -43,6 +43,7 @@ import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitReservation;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
@@ -87,6 +88,10 @@ public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachm
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnitOccupancySegment> unitOccupancySegments();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<AptUnitReservation> unitReservation();
 
     // ----------------------------------------------------
     // internals:

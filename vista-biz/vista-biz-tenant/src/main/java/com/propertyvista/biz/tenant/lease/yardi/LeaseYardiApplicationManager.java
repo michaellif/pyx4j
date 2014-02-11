@@ -65,35 +65,31 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
     }
 
     @Override
-    public void activate(Lease leaseId) {
+    public Lease activate(Lease leaseId) {
         // approve, newly created leases:
         super.approve(leaseId, null, null);
-        super.activate(leaseId);
+        return super.activate(leaseId);
     }
 
     @Override
-    public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
+    public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
+        try {
+            ServerSideFactory.create(YardiApplicationFacade.class).createApplication(leaseId);
+        } catch (YardiServiceException e) {
+            throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
+        }
+
         super.approve(leaseId, decidedBy, decisionReason);
         // activate, newly created leases:
-        activate(leaseId);
+        Lease lease = super.activate(leaseId);
         try {
-            // WofW 1 start
-            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-            if (lease.leaseId().isNull()) {
-                lease = ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
-                Persistence.service().persist(lease);
-            }
-            // WofW 1 end
-
-            //WofW 2
-            ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(lease);
-
             //WofW 3
             lease = ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
             Persistence.service().persist(lease);
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
         }
+        return lease;
     }
 
     @Override

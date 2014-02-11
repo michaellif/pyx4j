@@ -21,18 +21,24 @@ import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.spli
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
@@ -905,4 +911,39 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         Persistence.service().merge(segment);
     }
 
+    @Override
+    public void reserve(final Lease lease, final int durationHours) {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() throws RuntimeException {
+                new ReservationManager().reserve(lease, durationHours);
+                return null;
+            }
+
+        });
+    }
+
+    @Override
+    public boolean unreserveIfReservered(Lease lease) {
+        return new ReservationManager().unreserveIfReservered(lease);
+    }
+
+    @Override
+    public Pair<Date, Lease> isReserved(Key unitId) {
+        return new ReservationManager().isReserved(unitId);
+    }
+
+    @Override
+    public void addAvalableCriteria(EntityQueryCriteria<?> criteria, AptUnit unitProto, Status status, Date from, Date fromDeadline) {
+        AndCriterion existsReservation = new AndCriterion();
+        existsReservation.le(unitProto.unitReservation().$().dateTo(), SystemDateManager.getDate());
+        existsReservation.ge(unitProto.unitReservation().$().dateFrom(), SystemDateManager.getDate());
+        criteria.notExists(unitProto.unitReservation().$(), existsReservation);
+
+        criteria.eq(unitProto.unitOccupancySegments().$().status(), status);
+        criteria.eq(unitProto.unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
+        criteria.le(unitProto.unitOccupancySegments().$().dateFrom(), from);
+        criteria.gt(unitProto.unitOccupancySegments().$().dateFrom(), fromDeadline);
+    }
 }

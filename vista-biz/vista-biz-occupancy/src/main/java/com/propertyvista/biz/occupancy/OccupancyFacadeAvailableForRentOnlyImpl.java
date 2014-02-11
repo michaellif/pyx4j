@@ -13,12 +13,25 @@
  */
 package com.propertyvista.biz.occupancy;
 
+import java.util.Date;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Pair;
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.AndCriterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -26,8 +39,11 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.misc.VistaTODO;
 
 public class OccupancyFacadeAvailableForRentOnlyImpl implements OccupancyFacade {
+
+    private final static I18n i18n = I18n.get(OccupancyFacadeAvailableForRentOnlyImpl.class);
 
     @Override
     public AptUnitOccupancySegment getOccupancySegment(AptUnit unitStub, LogicalDate date) {
@@ -211,5 +227,63 @@ public class OccupancyFacadeAvailableForRentOnlyImpl implements OccupancyFacade 
 
     private AptUnit retrieveUnit(AptUnit unitStub) {
         return retrieveUnit(unitStub.getPrimaryKey());
+    }
+
+    @Override
+    public void reserve(final Lease lease, final int durationHours) {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() throws RuntimeException {
+                new ReservationManager().reserve(lease, durationHours);
+                try {
+                    ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(lease);
+                } catch (YardiServiceException e) {
+                    throw new UserRuntimeException(i18n.tr("Reserve Unit failed") + "\n" + e.getMessage(), e);
+                }
+                return null;
+            }
+
+        });
+    }
+
+    @Override
+    public boolean unreserveIfReservered(final Lease lease) {
+        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Boolean, RuntimeException>() {
+
+            @Override
+            public Boolean execute() throws RuntimeException {
+                if (new ReservationManager().unreserveIfReservered(lease)) {
+                    try {
+                        ServerSideFactory.create(YardiApplicationFacade.class).unreserveUnit(lease);
+                    } catch (YardiServiceException e) {
+                        throw new UserRuntimeException(i18n.tr("Unreserve Unit failed") + "\n" + e.getMessage(), e);
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        });
+    }
+
+    @Override
+    public Pair<Date, Lease> isReserved(Key unitId) {
+        return new ReservationManager().isReserved(unitId);
+    }
+
+    @Override
+    public void addAvalableCriteria(EntityQueryCriteria<?> criteria, AptUnit unitProto, Status status, Date from, Date fromDeadline) {
+        AndCriterion existsReservation = new AndCriterion();
+        existsReservation.le(unitProto.unitReservation().$().dateTo(), SystemDateManager.getDate());
+        existsReservation.ge(unitProto.unitReservation().$().dateFrom(), SystemDateManager.getDate());
+        criteria.notExists(unitProto.unitReservation().$(), existsReservation);
+
+        if (VistaTODO.yardi_noUnitOccupancySegments) {
+            criteria.le(unitProto._availableForRent(), from);
+        } else {
+            throw new Error("TODO");
+        }
     }
 }

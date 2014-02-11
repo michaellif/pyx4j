@@ -107,6 +107,8 @@ public interface LeaseApplication extends IEntity {
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> applicationId();
 
+    IPrimitive<String> yardiApplicationId();
+
     @ToString(index = 0)
     IPrimitive<Status> status();
 

@@ -62,17 +62,17 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
     }
 
     @Override
-    public void activate(Lease leaseId) {
+    public Lease activate(Lease leaseId) {
         // approve, newly created leases:
         super.approve(leaseId, null, null);
-        super.activate(leaseId);
+        return super.activate(leaseId);
     }
 
     @Override
-    public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
+    public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         super.approve(leaseId, decidedBy, decisionReason);
         // activate, newly created leases:
-        activate(leaseId);
+        return activate(leaseId);
     }
 
     @Override

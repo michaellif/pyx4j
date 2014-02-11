@@ -115,6 +115,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     protected void setFilters(List<Criterion> filters) {
                         assert (filters != null);
 
+                        //TODO
+                        //filters.add(new UnitAvaliabilitCriteria(dateFrom));
+
                         LeaseTermDTO currentValue = LeaseTermForm.this.getValue();
                         if (currentValue.lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
 

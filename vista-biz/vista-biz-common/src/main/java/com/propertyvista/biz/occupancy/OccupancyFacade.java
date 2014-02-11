@@ -13,8 +13,12 @@
  */
 package com.propertyvista.biz.occupancy;
 
+import java.util.Date;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Pair;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
@@ -98,7 +102,16 @@ public interface OccupancyFacade {
     /**
      * Create lease in draft mode. To create lease it first must be created in draft mode via {@link #reserve()} and then {@link #approveLease()}.
      */
+    @Deprecated
     void reserve(Key unitId, Lease lease);
+
+    void reserve(Lease lease, int durationHours);
+
+    Pair<Date, Lease> isReserved(Key unitId);
+
+    boolean unreserveIfReservered(Lease lease);
+
+    void addAvalableCriteria(EntityQueryCriteria<?> criteria, AptUnit unitProto, AptUnitOccupancySegment.Status status, Date from, Date fromDeadline);
 
     /**
      * @return the starting day of the 'available' segment, i.e. the minimum day that can be given to lease.leasFrom; or null, if it can't be done

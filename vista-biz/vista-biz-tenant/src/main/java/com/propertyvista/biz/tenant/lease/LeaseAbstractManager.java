@@ -359,7 +359,7 @@ public abstract class LeaseAbstractManager {
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
     }
 
-    public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
+    public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
         Set<ValidationFailure> validationFailures = new LeaseApprovalValidator().validate(lease);
@@ -425,10 +425,11 @@ public abstract class LeaseAbstractManager {
         while (cycle.billingCycleStartDate().getValue().before(now)) {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         }
+        return lease;
     }
 
     // TODO review code here
-    public void activate(Lease leaseId) {
+    public Lease activate(Lease leaseId) {
         Lease lease = load(leaseId, false);
 
         if (!EnumSet.of(Lease.Status.ExistingLease, Lease.Status.NewLease, Lease.Status.Approved).contains(lease.status().getValue())) {
@@ -449,6 +450,8 @@ public abstract class LeaseAbstractManager {
         ensureLeaseUniqness(lease);
 
         ServerSideFactory.create(LeadFacade.class).setLeadRentedState(lease);
+
+        return lease;
     }
 
     public void renew(Lease leaseId) {
@@ -882,6 +885,7 @@ public abstract class LeaseAbstractManager {
                 previousLeaseEdition = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
                 if (!EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
                     doRelease = !previousLeaseEdition.unit().isNull();
+                    ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(previousLeaseEdition);
                 }
             }
         }
