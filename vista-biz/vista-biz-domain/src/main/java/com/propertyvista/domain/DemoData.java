@@ -33,11 +33,15 @@ public class DemoData {
 
         PTENANT("p", 6),
 
-        PCOAPPLICANT("c", 6),
+        PCOAPPLICANT("cp", 6),
+
+        PGUARANTOR("gp", 4),
 
         TENANT("t", 4),
 
-        GUARANTOR("g", 4),
+        COAPPLICANT("ct", 6),
+
+        GUARANTOR("gt", 4),
 
         NEW_TENANT("n", 10),
 

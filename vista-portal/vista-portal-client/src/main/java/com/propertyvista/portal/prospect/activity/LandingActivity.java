@@ -42,7 +42,9 @@ public class LandingActivity extends AbstractLoginActivty implements LandingPres
 
     @Override
     protected List<? extends DevLoginCredentials> getDevLoginCredentials() {
-        return Arrays.asList(new DevLoginCredentialsImpl(UserType.PTENANT), new DevLoginCredentialsImpl(UserType.PCOAPPLICANT));
+        return Arrays.asList(new DevLoginCredentialsImpl(UserType.PTENANT), //
+                new DevLoginCredentialsImpl(UserType.PCOAPPLICANT), //
+                new DevLoginCredentialsImpl(UserType.PGUARANTOR));
     }
 
 }

@@ -60,6 +60,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         AptUnitSource aptUnitSource = new AptUnitSource(1);
 
         Customer dualTenantCustomer = null;
+        int tCoApplicantCount = 0;
+        int tGuarantorCount = 0;
         for (int i = 0; i < config().numTenants; i++) {
             AptUnit unit = makeAvailable(aptUnitSource.next());
             Lease lease = generator.createLeaseWithTenants(unit);
@@ -76,6 +78,24 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             } else if (i == DemoData.UserType.TENANT.getDefaultMax()) {
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 mainTenant.leaseParticipant().customer().set(dualTenantCustomer);
+            }
+
+            //Set CoApplicant and Guarantors users that can login using UI
+            if ((lease.currentTerm().version().tenants().size() > 1) && (tCoApplicantCount < DemoData.UserType.COAPPLICANT.getDefaultMax())) {
+                tCoApplicantCount++;
+                LeaseTermTenant participant = lease.currentTerm().version().tenants().get(1);
+                String email = DemoData.UserType.COAPPLICANT.getEmail(tCoApplicantCount);
+                participant.leaseParticipant().customer().person().email().setValue(email);
+
+                // Make sure he is CoApplicant
+                participant.role().setValue(LeaseTermParticipant.Role.CoApplicant);
+            }
+
+            if ((lease.currentTerm().version().guarantors().size() > 0) && (tGuarantorCount < DemoData.UserType.GUARANTOR.getDefaultMax())) {
+                tGuarantorCount++;
+                LeaseTermGuarantor participant = lease.currentTerm().version().guarantors().get(0);
+                String email = DemoData.UserType.GUARANTOR.getEmail(tGuarantorCount);
+                participant.leaseParticipant().customer().person().email().setValue(email);
             }
 
             // Create normal Active Lease first for Shortcut users
@@ -208,6 +228,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         }
 
         Customer dualPotentialCustomer = null;
+        int pCoApplicantCount = 0;
+        int pGuarantorCount = 0;
         for (int i = 0; i < config().numPotentialTenants; i++) {
 
             AptUnit unit = aptUnitSource.next();
@@ -234,17 +256,27 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     mustSelectUnitInApplication = true;
                 }
 
-                //Set PCOAPPLICANT users that can login using UI
-                if (lease.currentTerm().version().tenants().size() > 1) {
-                    LeaseTermTenant tenant = lease.currentTerm().version().tenants().get(1);
-                    String email2 = DemoData.UserType.PCOAPPLICANT.getEmail(i + 1);
-                    tenant.leaseParticipant().customer().person().email().setValue(email2);
-
-                    tenant.role().setValue(LeaseTermParticipant.Role.CoApplicant);
-                }
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 mainTenant.leaseParticipant().customer().set(dualPotentialCustomer);
+            }
+
+            //Set PCOAPPLICANT users that can login using UI
+            if ((lease.currentTerm().version().tenants().size() > 1) && (pCoApplicantCount < DemoData.UserType.PCOAPPLICANT.getDefaultMax())) {
+                pCoApplicantCount++;
+                LeaseTermTenant participant = lease.currentTerm().version().tenants().get(1);
+                String email = DemoData.UserType.PCOAPPLICANT.getEmail(pCoApplicantCount);
+                participant.leaseParticipant().customer().person().email().setValue(email);
+
+                // Make sure he is CoApplicant
+                participant.role().setValue(LeaseTermParticipant.Role.CoApplicant);
+            }
+
+            if ((lease.currentTerm().version().guarantors().size() > 0) && (pGuarantorCount < DemoData.UserType.PGUARANTOR.getDefaultMax())) {
+                pGuarantorCount++;
+                LeaseTermGuarantor participant = lease.currentTerm().version().guarantors().get(0);
+                String email = DemoData.UserType.PGUARANTOR.getEmail(pCoApplicantCount);
+                participant.leaseParticipant().customer().person().email().setValue(email);
             }
 
             if (lease.currentTerm().termFrom().getValue().before(new Date())) {
@@ -297,10 +329,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         return null;
-    }
-
-    private void createApplications() {
-
     }
 
     private AptUnit makeAvailable(final AptUnit unit) {
