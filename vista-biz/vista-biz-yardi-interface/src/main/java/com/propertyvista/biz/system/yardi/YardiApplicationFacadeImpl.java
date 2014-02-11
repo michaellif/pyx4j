@@ -14,9 +14,12 @@
 package com.propertyvista.biz.system.yardi;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -57,9 +60,13 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
 
     @Override
     public void validateApplicationAcceptance(Building buildingId) throws UserRuntimeException {
-        // TODO Stas  throw user Runtime Exception if GetYardiAgentsSourcesResults_LoginResponse not configured with proped error messags.
-        // e.g. Please add "ILS"  as Sources  on building in YArdi
-        // e.g. Please add "Property Vista-ILS"  as Agents on building in Yardi
+        Persistence.ensureRetrieve(buildingId, AttachLevel.ToStringMembers);
+        PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(buildingId);
+        try {
+            YardiGuestManagementService.getInstance().validateSettings(yc, buildingId.propertyCode().getValue());
+        } catch (YardiServiceException e) {
+            throw new UserRuntimeException(e.getMessage());
+        }
     }
 
 }
