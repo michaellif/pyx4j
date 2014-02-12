@@ -373,7 +373,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         return addHandler(handler, DevShortcutEvent.getType());
     }
 
-    class ContainerPanel extends FlowPanel implements RequiresResize, ProvidesResize, IComponentWidget {
+    class ContainerPanel extends FlowPanel implements RequiresResize, ProvidesResize, IComponentWidget<E> {
 
         public ContainerPanel() {
         }
@@ -386,7 +386,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         }
 
         @Override
-        public CComponent<?> getCComponent() {
+        public CComponent<E> getCComponent() {
             return CEntityContainer.this;
         }
     }
