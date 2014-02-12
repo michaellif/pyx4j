@@ -23,7 +23,7 @@ public class OccupancyFacadeFactory implements FacadeFactory<OccupancyFacade> {
     public OccupancyFacade getFacade() {
         if (VistaFeatures.instance().occupancyModel()) {
             if (VistaFeatures.instance().yardiIntegration()) {
-                return new OccupancyFacadeYardiImpl();
+                return new OccupancyFacadeAvailableForRentOnlyImpl();
             } else {
                 return new OccupancyFacadeImpl();
             }
