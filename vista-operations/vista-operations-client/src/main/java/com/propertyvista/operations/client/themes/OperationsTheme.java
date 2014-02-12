@@ -24,6 +24,8 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
+import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme.StyleName;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -91,6 +93,16 @@ public class OperationsTheme extends VistaTheme {
         addTheme(new SiteViewTheme());
         addTheme(new DraggerMixin());
 
+        addTheme(new DevConsoleTheme() {
+            @Override
+            protected void initStyles() {
+                super.initStyles();
+
+                Style style = new Style(".", StyleName.DevConsoleTabPanel);
+                style.addProperty("text-align", "left");
+                addStyle(style);
+            }
+        });
         initGeneralStyles();
         initBodyStyles();
         initCellListStyle();

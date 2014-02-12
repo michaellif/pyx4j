@@ -24,6 +24,8 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
+import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme.StyleName;
 import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
@@ -124,6 +126,17 @@ public class CrmTheme extends VistaTheme {
 
         addTheme(new BillingTheme());
         addTheme(new TransactionHistoryViewerTheme());
+
+        addTheme(new DevConsoleTheme() {
+            @Override
+            protected void initStyles() {
+                super.initStyles();
+
+                Style style = new Style(".", StyleName.DevConsoleTabPanel);
+                style.addProperty("text-align", "left");
+                addStyle(style);
+            }
+        });
 
         initGeneralStyles();
         initBodyStyles();
