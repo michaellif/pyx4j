@@ -34,35 +34,31 @@ import com.pyx4j.site.client.resources.SiteImages;
 
 public class DevConsoleTab implements IsWidget {
 
-    private final SimplePanel containerPanel;
+    private final FlowPanel devConsole;
 
     private final SimplePanel devConsoleContent;
 
     public DevConsoleTab(IsWidget consolePanel) {
 
-        containerPanel = new SimplePanel();
-        containerPanel.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleTab.name());
-
-        FlowPanel devConsolePanel = new FlowPanel();
-        devConsolePanel.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleTabPanel.name());
-        containerPanel.setWidget(devConsolePanel);
+        devConsole = new FlowPanel();
+        devConsole.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsole.name());
 
         FlowPanel devConsoleHandler = new FlowPanel();
         devConsoleHandler.sinkEvents(Event.ONCLICK);
-        devConsoleHandler.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleTabHandler.name());
-        devConsolePanel.add(devConsoleHandler);
+        devConsoleHandler.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleHandler.name());
+        devConsole.add(devConsoleHandler);
 
         HTML devConsoleHandlerLabel = new HTML("Dev. Console");
-        devConsoleHandlerLabel.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleTabHandlerLabel.name());
+        devConsoleHandlerLabel.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleHandlerLabel.name());
         devConsoleHandler.add(devConsoleHandlerLabel);
         final Image devConsoleHandlerImage = new Image(SiteImages.INSTANCE.openDevConsoleButton());
-        devConsoleHandlerImage.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleTabHandlerImage.name());
+        devConsoleHandlerImage.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleHandlerImage.name());
         devConsoleHandler.add(devConsoleHandlerImage);
 
         devConsoleContent = new SimplePanel();
         devConsoleContent.setVisible(false);
-        devConsoleContent.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleTabContent.name());
-        devConsolePanel.add(devConsoleContent);
+        devConsoleContent.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleContent.name());
+        devConsole.add(devConsoleContent);
 
         devConsoleContent.setWidget(consolePanel);
 
@@ -83,7 +79,7 @@ public class DevConsoleTab implements IsWidget {
 
     @Override
     public Widget asWidget() {
-        return containerPanel;
+        return devConsole;
     }
 
     public void setDevConsole(IsWidget widget) {

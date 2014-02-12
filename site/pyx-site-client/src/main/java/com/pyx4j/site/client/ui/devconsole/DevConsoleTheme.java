@@ -30,7 +30,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class DevConsoleTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        DevConsole, DevConsoleTab, DevConsoleTabPanel, DevConsoleTabHandler, DevConsoleTabHandlerLabel, DevConsoleTabHandlerImage, DevConsoleTabContent;
+        DevConsole, DevConsoleHandler, DevConsoleHandlerLabel, DevConsoleHandlerImage, DevConsoleContent;
     }
 
     public DevConsoleTheme() {
@@ -43,37 +43,35 @@ public class DevConsoleTheme extends Theme {
     }
 
     protected void initStyles() {
-        Style style = new Style(".", StyleName.DevConsoleTab);
+        Style style = new Style(".", StyleName.DevConsole);
         style.addProperty("width", "100%");
         style.addProperty("position", "absolute");
         style.addProperty("bottom", "0");
         addStyle(style);
 
-        style = new Style(".", StyleName.DevConsoleTabPanel);
-        style.addProperty("width", "100%");
-        style.addProperty("text-align", "right");
-        style.addProperty("display", "inline-block");
-        addStyle(style);
-
-        style = new Style(".", StyleName.DevConsoleTabHandler);
-        style.addProperty("margin", "0 20px");
-        style.addProperty("padding", "10px");
-        style.addProperty("display", "inline-block");
+        style = new Style(".", StyleName.DevConsoleHandler);
+        style.addProperty("margin", "-34px 20px 0");
+        style.addProperty("line-height", "34px");
+        style.addProperty("padding", "0 10px");
+        style.addProperty("height", "34px");
+        style.addProperty("float", "right");
         style.addProperty("color", ThemeColor.background, 1.0);
         style.addProperty("cursor", "pointer");
         style.addProperty("background-color", ThemeColor.foreground, 1.0);
         addStyle(style);
 
-        style = new Style(".", StyleName.DevConsoleTabHandlerLabel);
+        style = new Style(".", StyleName.DevConsoleHandlerLabel);
         style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
         addStyle(style);
 
-        style = new Style(".", StyleName.DevConsoleTabHandlerImage);
+        style = new Style(".", StyleName.DevConsoleHandlerImage);
         style.addProperty("margin-left", "10px");
         style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
         addStyle(style);
 
-        style = new Style(".", StyleName.DevConsoleTabContent);
+        style = new Style(".", StyleName.DevConsoleContent);
         style.addProperty("text-align", "left");
         style.addProperty("margin", "0 20px");
         style.addProperty("border", "1px solid");
