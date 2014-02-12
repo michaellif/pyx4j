@@ -155,6 +155,7 @@ SET search_path = '_admin_';
         ALTER TABLE admin_pmc_equifax_info      ADD COLUMN member_number_password VARCHAR(500),
                                                 ADD COLUMN security_code_password VARCHAR(500);
                                                 
+                                                      
       
         -- admin_pmc_yardi_credential
         
@@ -242,7 +243,7 @@ SET search_path = '_admin_';
         WHERE   target = 'PMC';
         
         UPDATE  vista_terms
-        SET     target = 'VistaPortalTermsAndConditions'
+        SET     target = 'ResidentPortalTermsAndConditions'
         WHERE   target = 'Tenant';
         
         UPDATE  vista_terms
@@ -258,8 +259,8 @@ SET search_path = '_admin_';
         WHERE   target = 'TenantPaymentCreditCard';
         
         UPDATE  vista_terms
-        SET     target = 'TenantPreAuthorizedPaymentCardTerms'
-        WHERE   target = 'TenantPaymentCreditCard';
+        SET     target = 'TenantPaymentWebPaymentFeeTerms'
+        WHERE   target = 'TenantPaymentConvenienceFee';
         
 
         
@@ -273,7 +274,10 @@ SET search_path = '_admin_';
         ***     ==========================================================================================================
         **/
        
-       
+        -- admin_pmc_vista_features
+        
+        ALTER TABLE admin_pmc_vista_features DROP COLUMN occupancy_model;
+        
         -- dev_card_service_simulation_card
         
         ALTER TABLE dev_card_service_simulation_card DROP COLUMN merchant;
@@ -346,15 +350,10 @@ SET search_path = '_admin_';
                 'paymentsPadProcessReconciliation', 'paymentsPadSend', 'paymentsReceiveAcknowledgment', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 
                 'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 
                 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
-       /*
         ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
-                CHECK ((target) IN ('PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'PmcPropertyVistaService', 
-                'ProspectPortalPrivacyPolicy', 'ProspectPortalTermsAndConditions', 'ResidentPortalPrivacyPolicy', 'ResidentPortalTermsAndConditions', 
-                'TenantBillingTerms', 'TenantPaymentWebPaymentFeeTerms', 'TenantPreAuthorizedPaymentCardTerms', 'TenantPreAuthorizedPaymentECheckTerms', 
-                'TenantSurePreAuthorizedPaymentsAgreement'));
-
-       */
-
+                CHECK ((target) IN ('PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'PmcPropertyVistaService', 'ProspectPortalPrivacyPolicy',
+                 'ProspectPortalTermsAndConditions', 'ResidentPortalPrivacyPolicy', 'ResidentPortalTermsAndConditions', 'TenantBillingTerms', 'TenantPaymentWebPaymentFeeTerms',
+                 'TenantPreAuthorizedPaymentCardTerms', 'TenantPreAuthorizedPaymentECheckTerms', 'TenantSurePreAuthorizedPaymentsAgreement'));
 
 
         

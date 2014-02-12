@@ -154,7 +154,7 @@ BEGIN
         ***     ======================================================================================================
         **/
         
-        
+        DROP INDEX apt_unit__available_for_rent_idx;
         
         /**
         ***    ======================================================================================================
@@ -216,6 +216,36 @@ BEGIN
         );
         
         ALTER TABLE agreement_signatures$legal_terms_signatures OWNER TO vista;
+        
+        
+        -- apt_unit_effective_availability
+        
+        CREATE TABLE apt_unit_effective_availability
+        (
+                id                              BIGINT                  NOT NULL,
+                unit                            BIGINT                  NOT NULL,
+                available_for_rent              DATE,
+                updated                         TIMESTAMP,
+                        CONSTRAINT apt_unit_effective_availability_pk PRIMARY KEY(id)
+        );
+        
+        
+        ALTER TABLE apt_unit_effective_availability OWNER TO vista;
+        
+        
+        -- apt_unit_reservation
+        
+        CREATE TABLE apt_unit_reservation
+        (
+                id                                      BIGINT                  NOT NULL,
+                unit                                    BIGINT                  NOT NULL,
+                date_from                               TIMESTAMP,
+                date_to                                 TIMESTAMP,
+                lease                                   BIGINT,
+                        CONSTRAINT apt_unit_reservation_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE apt_unit_reservation OWNER TO vista;
         
         
         -- building
@@ -542,7 +572,8 @@ BEGIN
         
         ALTER TABLE lease_application   ADD COLUMN created_by BIGINT,
                                         ADD COLUMN application_id VARCHAR(14),
-                                        ADD COLUMN application_id_s VARCHAR(26);
+                                        ADD COLUMN application_id_s VARCHAR(26),
+                                        ADD COLUMN yardi_application_id VARCHAR(500);
                                         
         -- lease_agreement_confirmation_term
         
@@ -648,6 +679,7 @@ BEGIN
                 file_content_mime_type          VARCHAR(500),
                 file_blob_key                   BIGINT,
                 lease_term_v                    BIGINT                  NOT NULL,
+                is_signed_by_ink                BOOLEAN,
                         CONSTRAINT lease_term_agreement_document_pk PRIMARY KEY(id)
         );
         
@@ -668,6 +700,21 @@ BEGIN
         );
         
         ALTER TABLE lease_term_agreement_document_blob OWNER TO vista;
+        
+        
+        -- lease_term_agreement_document$signed_participants
+        
+        CREATE TABLE lease_term_agreement_document$signed_participants
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value_discriminator             VARCHAR(50),
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT lease_term_agreement_document$signed_participants_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_term_agreement_document$signed_participants OWNER TO vista;
         
         
         -- lease_term_v
@@ -1049,7 +1096,8 @@ BEGIN
         -- product
         
         ALTER TABLE product     ADD COLUMN code BIGINT,
-                                ADD COLUMN expired_from DATE;
+                                ADD COLUMN expired_from DATE,
+                                ADD COLUMN yardi_code VARCHAR(500);
                                 
         ALTER TABLE product RENAME COLUMN is_default_catalog_item TO default_catalog_item;
         
@@ -1217,6 +1265,16 @@ BEGIN
                 ||'JOIN         '||v_schema_name||'.marketing$ad_blurbs mb ON (m.id = mb.owner) '
                 ||'JOIN         '||v_schema_name||'.advertising_blurb a ON (a.id = mb.value) '
                 ||'ORDER BY b.id )';
+                
+                
+        -- apt_unit_effective_availability
+        
+        EXECUTE 'INSERT INTO    '||v_schema_name||'.apt_unit_effective_availability(id,unit,available_for_rent,updated) '
+                ||'(SELECT      nextval(''public.apt_unit_effective_availability_seq'') AS id, '
+                ||'             a.id AS unit, a._available_for_rent AS available_for_rent, '
+                ||'             DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated '
+                ||'FROM         '||v_schema_name||'.apt_unit AS a '
+                ||'ORDER BY     a.id )';
         
         -- insurance_certificate_scan
         
@@ -1643,6 +1701,10 @@ BEGIN
                 REFERENCES signed_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_participant_fk FOREIGN KEY(lease_term_participant) 
                 REFERENCES lease_term_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE apt_unit_effective_availability ADD CONSTRAINT apt_unit_effective_availability_unit_fk FOREIGN KEY(unit) 
+                REFERENCES apt_unit(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE apt_unit_reservation ADD CONSTRAINT apt_unit_reservation_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE apt_unit_reservation ADD CONSTRAINT apt_unit_reservation_unit_fk FOREIGN KEY(unit) REFERENCES apt_unit(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building ADD CONSTRAINT building_landlord_fk FOREIGN KEY(landlord) REFERENCES landlord(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE community_event ADD CONSTRAINT community_event_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1676,6 +1738,8 @@ BEGIN
                 REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_lease_term_v_fk FOREIGN KEY(lease_term_v) 
                 REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term_agreement_document$signed_participants ADD CONSTRAINT lease_term_agreement_document$signed_participants_owner_fk FOREIGN KEY(owner) 
+                REFERENCES lease_term_agreement_document(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v ADD CONSTRAINT lease_term_v_employee_signature_fk FOREIGN KEY(employee_signature) REFERENCES crm_user_signature(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$agreement_legal_terms ADD CONSTRAINT lease_term_v$agreement_legal_terms_owner_fk FOREIGN KEY(owner) 
                 REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1897,6 +1961,7 @@ BEGIN
         CREATE INDEX agreement_signatures_lease_term_participant_discriminator_idx ON agreement_signatures USING btree (lease_term_participant_discriminator);
         CREATE INDEX agreement_signatures_lease_term_participant_idx ON agreement_signatures USING btree (lease_term_participant);
         CREATE INDEX agreement_signatures$legal_terms_signatures_owner_idx ON agreement_signatures$legal_terms_signatures USING btree (owner);
+        CREATE INDEX apt_unit_effective_availability_available_for_rent_idx ON apt_unit_effective_availability USING btree (available_for_rent);
         CREATE INDEX ilsprofile_email_building_idx ON ilsprofile_email USING btree (building);
         CREATE INDEX lease_term_v$agreement_confirmation_term_owner_idx ON lease_term_v$agreement_confirmation_term USING btree (owner);
         CREATE INDEX lease_term_v$agreement_legal_terms_owner_idx ON lease_term_v$agreement_legal_terms USING btree (owner);
@@ -1907,6 +1972,7 @@ BEGIN
         CREATE INDEX ilssummary_floorplan_floorplan_idx ON ilssummary_floorplan USING btree (floorplan);
         CREATE UNIQUE INDEX lease_application_application_id_idx ON lease_application USING btree (LOWER(application_id));
         CREATE INDEX lease_term_agreement_document_lease_term_v_idx ON lease_term_agreement_document USING btree (lease_term_v);
+        CREATE INDEX lease_term_agreement_document$signed_participants_owner_idx ON lease_term_agreement_document$signed_participants USING btree (owner);
         CREATE INDEX maintenance_request_status_record_request_idx ON maintenance_request_status_record USING btree (request);
         CREATE INDEX payment_posting_batch_building_idx ON payment_posting_batch USING btree (building);
         CREATE INDEX permission_to_enter_note_policy_idx ON permission_to_enter_note USING btree (policy);
