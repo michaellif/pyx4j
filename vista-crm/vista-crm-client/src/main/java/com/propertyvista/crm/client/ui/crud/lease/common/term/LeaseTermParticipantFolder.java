@@ -25,6 +25,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
@@ -36,8 +37,11 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     private Boolean enforceAgeOfMajority = false;
 
-    public LeaseTermParticipantFolder(Class<E> clazz, boolean modifiable) {
-        super(clazz, modifiable);
+    private final CrmEntityForm<?> parentForm;
+
+    public LeaseTermParticipantFolder(Class<E> clazz, CrmEntityForm<?> parentForm) {
+        super(clazz, parentForm.isEditable());
+        this.parentForm = parentForm;
         setOrderable(false);
         this.ageOfMajority = null;
     }
@@ -71,14 +75,11 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
         MessageDialog.confirm(getAddItemDialogCaption(), getAddItemDialogBody(), new Command() {
             @Override
             public void execute() {
-                new CustomerSelectorDialog(retrieveExistingCustomers()) {
+                new CustomerSelectorDialog(parentForm.getParentView(), retrieveExistingCustomers()) {
                     @Override
-                    public boolean onClickOk() {
-                        if (getSelectedItems().isEmpty()) {
-                            return false;
-                        } else {
+                    public void onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
                             addParticipants(getSelectedItems());
-                            return true;
                         }
                     }
                 }.show();

@@ -49,7 +49,9 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     private final ItemsHolderForm<Item, Holder> itemsHolderForm;
 
-    private final CEntityForm<Settings> settingsForm;
+    private final FlowPanel settingsFormPanel;
+
+    private CEntityForm<Settings> settingsForm;
 
     private Range visibleRange;
 
@@ -58,6 +60,10 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     private int pageIncrement;
 
     private Button searchButton;
+
+    public BulkOperationToolViewImpl(String caption, Class<Holder> holderClass, ItemsHolderForm<Item, Holder> itemsHolderForm) {
+        this(caption, null, holderClass, itemsHolderForm);
+    }
 
     public BulkOperationToolViewImpl(String caption, CEntityForm<Settings> settingsForm, Class<Holder> holderClass,
             ItemsHolderForm<Item, Holder> itemsHolderForm) {
@@ -68,14 +74,13 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         viewPanel.setSize("100%", "100%");
 
-        FlowPanel settingsFormPanel = new FlowPanel();
+        settingsFormPanel = new FlowPanel();
         settingsFormPanel.setStyleName(Styles.BulkOperationSettingsFormPanel.name());
-
-        this.settingsForm = settingsForm;
-        this.settingsForm.initContent();
-        this.settingsForm.populateNew();
-        settingsFormPanel.add(settingsForm);
         viewPanel.add(settingsFormPanel);
+
+        if (settingsForm != null) {
+            setSettingsForm(settingsForm);
+        }
 
         FlowPanel buttonsPanel = new FlowPanel();
         buttonsPanel.setStyleName(Styles.BulkOperationButtonsPanel.name());
@@ -111,6 +116,13 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         setSize("100%", "100%");
 
         visibleRange = new Range(0, pageIncrement);
+    }
+
+    public void setSettingsForm(CEntityForm<Settings> settingsForm) {
+        this.settingsForm = settingsForm;
+        this.settingsForm.initContent();
+        this.settingsForm.populateNew();
+        settingsFormPanel.add(settingsForm);
     }
 
     @Override

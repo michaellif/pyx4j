@@ -216,10 +216,10 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // Tenants/Guarantors: ----------------------------------------------------------------------------------------------------------------------
         flexPanel.setH1(++leftRow, 0, 2, proto().currentTerm().version().tenants().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().tenants(), new TenantInLeaseFolder()));
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().tenants(), new TenantInLeaseFolder(this)));
 
         flexPanel.setH1(++leftRow, 0, 2, proto().currentTerm().version().guarantors().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder()));
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder(this)));
 
         // Insurance: --------------------------------------------------------------------------------------------------------------------------------
         flexPanel.setH1(++leftRow, 0, 2, i18n.tr("Tenant Insurance"));

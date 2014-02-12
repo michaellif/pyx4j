@@ -47,8 +47,8 @@ public class BuildingFolder extends VistaTableFolder<Building> {
         super(Building.class, modifiable);
     }
 
-    public BuildingFolder(boolean modifiable, EmployeeForm employeeForm) {
-        this(modifiable);
+    public BuildingFolder(EmployeeForm employeeForm) {
+        this(employeeForm.isEditable());
         this.employeeForm = employeeForm;
     }
 
@@ -93,13 +93,12 @@ public class BuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(true, getValue()) {
+        new BuildingSelectorDialog(employeeForm.getParentView(), getValue()) {
             @Override
-            public boolean onClickOk() {
+            public void onClickOk() {
                 for (Building selected : getSelectedItems()) {
                     addItem(selected);
                 }
-                return true;
             }
 
             @Override

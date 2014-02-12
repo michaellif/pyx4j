@@ -23,16 +23,16 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -41,9 +41,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
-    private final CEntityForm<Service> parent;
+    private final CrmEntityForm<Service> parent;
 
-    public ServiceItemFolder(CEntityForm<Service> parent) {
+    public ServiceItemFolder(CrmEntityForm<Service> parent) {
         super(ProductItem.class, parent.isEditable());
         this.parent = parent;
     }
@@ -68,13 +68,13 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
     @Override
     protected void addItem() {
-        EntitySelectorTableDialog<?> buildingElementSelectionBox = null;
+        IShowable buildingElementSelectionBox = null;
         if (ARCode.Type.unitRelatedServices().contains(parent.getValue().code().type().getValue())) {
             List<AptUnit> alreadySelected = new ArrayList<AptUnit>(getValue().size());
             for (ProductItem item : getValue()) {
                 alreadySelected.add((AptUnit) item.element().cast());
             }
-            buildingElementSelectionBox = new UnitSelectorDialog(true, alreadySelected) {
+            buildingElementSelectionBox = new UnitSelectorDialog(parent.getParentView(), alreadySelected) {
                 @Override
                 protected void setFilters(List<Criterion> filters) {
                     super.setFilters(filters);
@@ -82,8 +82,12 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 }
 
                 @Override
-                public boolean onClickOk() {
-                    return processSelectedItems(getSelectedItems());
+                public void onClickOk() {
+                    for (BuildingElement element : getSelectedItems()) {
+                        ProductItem item = EntityFactory.create(ProductItem.class);
+                        item.element().set(element);
+                        addItem(item);
+                    }
                 }
             };
         }
@@ -92,19 +96,6 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             buildingElementSelectionBox.show();
         } else {
             super.addItem();
-        }
-    }
-
-    private boolean processSelectedItems(List<? extends BuildingElement> selectedItems) {
-        if (selectedItems.isEmpty()) {
-            return false;
-        } else {
-            for (BuildingElement element : selectedItems) {
-                ProductItem item = EntityFactory.create(ProductItem.class);
-                item.element().set(element);
-                addItem(item);
-            }
-            return true;
         }
     }
 

@@ -178,7 +178,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().credentialUpdated()), 15).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Roles"));
-        content.setWidget(++row, 0, 2, inject(proto().roles(), new CrmRoleFolder(isEditable())));
+        content.setWidget(++row, 0, 2, inject(proto().roles(), new CrmRoleFolder(this)));
 
         content.setH1(++row, 0, 2, i18n.tr("Buildings Access"));
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsAndPortfolios()), 30, 5,
@@ -195,12 +195,12 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().buildingAccess(), new BuildingFolder(isEditable())));
 
         buildingsAccessPanel.setH3(++baRow, 0, 2, i18n.tr("Portfolios"));
-        buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
+        buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().portfolios(), new PortfolioFolder(getParentView(), isEditable())));
 
         content.setWidget(++row, 0, 2, buildingsAccessPanel);
 
         content.setH1(++row, 0, 2, i18n.tr("Subordinates"));
-        content.setWidget(++row, 0, 2, inject(proto().employees(), new EmployeeFolder(isEditable(), new ParentEmployeeGetter() {
+        content.setWidget(++row, 0, 2, inject(proto().employees(), new EmployeeFolder(this, new ParentEmployeeGetter() {
             @Override
             public Key getParentId() {
                 return (getValue() != null ? getValue().getPrimaryKey() : null);
@@ -271,10 +271,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 22, true).build());
 
                 content.setH3(++row, 0, 1, proto().buildings().getMeta().getCaption());
-                content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(isEditable(), EmployeeForm.this)));
+                content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(EmployeeForm.this)));
 
                 content.setH3(++row, 0, 1, proto().portfolios().getMeta().getCaption());
-                content.setWidget(++row, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable(), EmployeeForm.this)));
+                content.setWidget(++row, 0,
+                        inject(proto().portfolios(), new PortfolioFolder(EmployeeForm.this.getParentView(), EmployeeForm.this.isEditable())));
 
                 return content;
             }

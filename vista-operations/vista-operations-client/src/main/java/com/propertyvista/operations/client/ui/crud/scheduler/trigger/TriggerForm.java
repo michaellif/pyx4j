@@ -51,7 +51,7 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().populationType()), 10).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().triggerType())).build());
 
-        main.setWidget(++row, 0, 2, inject(proto().population(), new PopulationFolder(isEditable())));
+        main.setWidget(++row, 0, 2, inject(proto().population(), new PopulationFolder(this)));
 
         main.setH2(++row, 0, 2, i18n.tr("Schedules"));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduleSuspended()), 10).build());

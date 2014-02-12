@@ -20,7 +20,7 @@ import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 public class AvailabilityReportViewImpl extends AbstractReport<AvailabilityReportMetadata> implements AvailabilityReportView {
 
     public AvailabilityReportViewImpl() {
-        super(new AvailabilityReportWidget(), new AvailabilityReportSettingsSimpleForm(), new AvailabilityReportSettingsAdvancedForm());
+        setReportWidget(new AvailabilityReportWidget(), new AvailabilityReportSettingsSimpleForm(), new AvailabilityReportSettingsAdvancedForm());
     }
 
 }

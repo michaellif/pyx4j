@@ -86,18 +86,17 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
             @Override
             public void execute() {
-                new LeaseTermSelectorDialog() {
+                new LeaseTermSelectorDialog(LeaseViewerViewImplBase.this) {
                     {
                         setParentFiltering(getForm().getValue().getPrimaryKey());
                         addFilter(PropertyCriterion.ne(proto().status(), LeaseTerm.Status.Offer));
                     }
 
                     @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItems().get(0));
+                    public void onClickOk() {
+                        if (!getSelectedItem().isNull()) {
+                            ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItem());
                         }
-                        return !getSelectedItems().isEmpty();
                     }
                 }.show();
             }

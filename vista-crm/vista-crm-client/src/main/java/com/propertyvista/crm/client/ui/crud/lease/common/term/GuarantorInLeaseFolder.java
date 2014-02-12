@@ -43,6 +43,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -57,12 +58,8 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
-    public GuarantorInLeaseFolder() {
-        this(false);
-    }
-
-    public GuarantorInLeaseFolder(boolean modifiable) {
-        super(LeaseTermGuarantor.class, modifiable);
+    public GuarantorInLeaseFolder(CrmEntityForm<?> parentForm) {
+        super(LeaseTermGuarantor.class, parentForm);
     }
 
     @Override

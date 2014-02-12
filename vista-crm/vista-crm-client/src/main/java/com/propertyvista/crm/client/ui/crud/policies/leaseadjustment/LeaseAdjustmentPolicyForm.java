@@ -58,7 +58,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
         return panel;
     }
 
-    private static class LeaseAdjustmentPolicyItemFolder extends VistaBoxFolder<LeaseAdjustmentPolicyItem> {
+    class LeaseAdjustmentPolicyItemFolder extends VistaBoxFolder<LeaseAdjustmentPolicyItem> {
 
         public LeaseAdjustmentPolicyItemFolder(boolean modifiable) {
             super(LeaseAdjustmentPolicyItem.class, modifiable);
@@ -82,24 +82,21 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
                 }
             }
 
-            new LeaseAdjustmentReasonSelectorDialog(selected) {
+            new LeaseAdjustmentReasonSelectorDialog(LeaseAdjustmentPolicyForm.this.getParentView()) {
                 @Override
-                public boolean onClickOk() {
-                    if (!getSelectedItems().isEmpty()) {
-                        for (ARCode selected : getSelectedItems()) {
-                            LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
-                            item.code().set(selected);
-                            addItem(item);
-                        }
+                public void onClickOk() {
+                    for (ARCode selected : getSelectedItems()) {
+                        LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
+                        item.code().set(selected);
+                        addItem(item);
                     }
-                    return !getSelectedItems().isEmpty();
                 }
             }.show();
         }
 
         // internals:
 
-        private static class LeaseAdjustmentPolicyItemEditor extends CEntityForm<LeaseAdjustmentPolicyItem> {
+        class LeaseAdjustmentPolicyItemEditor extends CEntityForm<LeaseAdjustmentPolicyItem> {
 
             public LeaseAdjustmentPolicyItemEditor() {
                 super(LeaseAdjustmentPolicyItem.class);
@@ -114,7 +111,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
                 get(proto().code()).setEditable(false);
 
                 content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());
-                content.setWidget(++row, 0, 2, inject(proto().taxes(), new TaxFolder(isEditable())));
+                content.setWidget(++row, 0, 2, inject(proto().taxes(), new TaxFolder(LeaseAdjustmentPolicyForm.this)));
 
                 return content;
             }

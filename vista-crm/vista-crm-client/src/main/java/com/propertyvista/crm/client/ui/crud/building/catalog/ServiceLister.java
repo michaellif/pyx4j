@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService.ServiceInitializationdata;
@@ -34,8 +35,11 @@ public class ServiceLister extends AbstractLister<Service> {
 
     private final static I18n i18n = I18n.get(ServiceLister.class);
 
-    public ServiceLister() {
+    private final IPane parentView;
+
+    public ServiceLister(IPane parentView) {
         super(Service.class, !VistaFeatures.instance().yardiIntegration(), !VistaFeatures.instance().yardiIntegration());
+        this.parentView = parentView;
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
@@ -63,14 +67,13 @@ public class ServiceLister extends AbstractLister<Service> {
 
     @Override
     protected void onItemNew() {
-        new ProductCodeSelectorDialog(ARCode.Type.services(), i18n.tr("Select Service ARCode")) {
+        new ProductCodeSelectorDialog(parentView, ARCode.Type.services(), i18n.tr("Select Service ARCode")) {
             @Override
-            public boolean onClickOk() {
+            public void onClickOk() {
                 ServiceInitializationdata id = EntityFactory.create(ServiceInitializationdata.class);
                 id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
                 id.code().set(getSelectedItem());
                 getPresenter().editNew(getItemOpenPlaceClass(), id);
-                return true;
             }
         }.show();
     }

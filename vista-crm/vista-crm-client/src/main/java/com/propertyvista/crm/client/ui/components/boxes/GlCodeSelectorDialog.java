@@ -24,34 +24,34 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
 import com.propertyvista.domain.financial.GlCode;
 
-public abstract class GlCodeSelectorDialog extends EntitySelectorTableDialog<GlCode> {
+public abstract class GlCodeSelectorDialog extends EntitySelectorTableVisorController<GlCode> {
 
     private final static I18n i18n = I18n.get(GlCodeSelectorDialog.class);
 
-    public GlCodeSelectorDialog() {
-        this(Collections.<GlCode> emptyList());
+    public GlCodeSelectorDialog(IPane parentView) {
+        this(parentView, null);
     }
 
-    public GlCodeSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<GlCode> emptyList());
+    public GlCodeSelectorDialog(IPane parentView, boolean isMultiselect) {
+        this(parentView, isMultiselect, Collections.<GlCode> emptyList());
     }
 
-    public GlCodeSelectorDialog(List<GlCode> alreadySelected) {
-        this(false, alreadySelected);
+    public GlCodeSelectorDialog(IPane parentView, List<GlCode> alreadySelected) {
+        this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public GlCodeSelectorDialog(boolean isMultiselect, List<GlCode> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select GL Code"));
+    public GlCodeSelectorDialog(IPane parentView, boolean isMultiselect, List<GlCode> alreadySelected) {
+        this(parentView, isMultiselect, alreadySelected, i18n.tr("Select GL Code"));
     }
 
-    public GlCodeSelectorDialog(boolean isMultiselect, List<GlCode> alreadySelected, String caption) {
-        super(GlCode.class, isMultiselect, alreadySelected, caption);
-        setDialogPixelWidth(700);
+    public GlCodeSelectorDialog(IPane parentView, boolean isMultiselect, List<GlCode> alreadySelected, String caption) {
+        super(parentView, GlCode.class, isMultiselect, alreadySelected, caption);
     }
 
     @Override

@@ -25,7 +25,8 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -38,14 +39,14 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
 
     private static final I18n i18n = I18n.get(DashboardManagementViewerViewImpl.class);
 
-    public class NewDashboardOwnerSelectionDialog extends EntitySelectorTableDialog<CrmUser> {
+    public class NewDashboardOwnerSelectionDialog extends EntitySelectorTableVisorController<CrmUser> {
 
-        public NewDashboardOwnerSelectionDialog() {
-            super(CrmUser.class, false, new ArrayList<CrmUser>(), i18n.tr("Choose a new dashboard owner"));
+        public NewDashboardOwnerSelectionDialog(IPane parentView) {
+            super(parentView, CrmUser.class, false, new ArrayList<CrmUser>(), i18n.tr("Choose a new dashboard owner"));
         }
 
         @Override
-        public boolean onClickOk() {
+        public void onClickOk() {
             if (!getSelectedItems().isEmpty()) {
                 MessageDialog.confirm("", i18n.tr("Are you sure you want to pass your dashboard to {0}?", getSelectedItems().get(0).getStringView()),
                         new Command() {
@@ -55,9 +56,6 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
                                         .<DashboardMetadata> createIdentityStub(), getSelectedItems().get(0).<CrmUser> createIdentityStub());
                             }
                         });
-                return true;
-            } else {
-                return false;
             }
         }
 
@@ -96,7 +94,7 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
         addHeaderToolbarItem(changeOwnershipButton = new Button(i18n.tr("Change Ownership"), new Command() {
             @Override
             public void execute() {
-                new NewDashboardOwnerSelectionDialog().show();
+                new NewDashboardOwnerSelectionDialog(DashboardManagementViewerViewImpl.this).show();
             }
         }));
     }

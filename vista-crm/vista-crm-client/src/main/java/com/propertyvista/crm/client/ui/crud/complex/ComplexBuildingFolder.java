@@ -38,6 +38,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 
@@ -45,8 +46,11 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
 
     private static final I18n i18n = I18n.get(ComplexBuildingFolder.class);
 
-    public ComplexBuildingFolder(boolean modifyable) {
-        super(Building.class, modifyable);
+    private final CrmEntityForm<?> parentForm;
+
+    public ComplexBuildingFolder(CrmEntityForm<?> parentForm) {
+        super(Building.class, parentForm.isEditable());
+        this.parentForm = parentForm;
     }
 
     @Override
@@ -69,7 +73,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(true, getValue()) {
+        new BuildingSelectorDialog(parentForm.getParentView(), getValue()) {
             @Override
             protected void setFilters(List<Criterion> filters) {
                 super.setFilters(filters);
@@ -77,15 +81,10 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
             }
 
             @Override
-            public boolean onClickOk() {
-                if (getSelectedItems().isEmpty()) {
-                    return false;
-                } else {
-                    for (Building selected : getSelectedItems()) {
-                        selected.complexPrimary().setValue(false);
-                        addItem(selected);
-                    }
-                    return true;
+            public void onClickOk() {
+                for (Building selected : getSelectedItems()) {
+                    selected.complexPrimary().setValue(false);
+                    addItem(selected);
                 }
             }
         }.show();

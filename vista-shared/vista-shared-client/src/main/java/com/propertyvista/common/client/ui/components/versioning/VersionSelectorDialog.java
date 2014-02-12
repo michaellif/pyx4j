@@ -23,16 +23,16 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
-public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends EntitySelectorTableDialog<V> {
+public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends EntitySelectorTableVisorController<V> {
 
     static final I18n i18n = I18n.get(VersionSelectorDialog.class);
 
-    public VersionSelectorDialog(Class<V> entityVersionClass, Key entityId) {
-        super(entityVersionClass, false, Collections.<V> emptyList(), i18n.tr("Select Version"));
+    public VersionSelectorDialog(IPane parentView, Class<V> entityVersionClass, Key entityId) {
+        super(parentView, entityVersionClass, false, Collections.<V> emptyList(), i18n.tr("Select Version"));
         setParentFiltering(entityId);
-        setDialogPixelWidth(700);
     }
 
     public Key getSelectedVersionId() {

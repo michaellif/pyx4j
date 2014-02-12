@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
@@ -48,14 +48,13 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
             }
 
             @Override
-            protected EntitySelectorTableDialog<GlCode> getSelectorDialog() {
-                return new GlCodeSelectorDialog() {
+            protected IShowable getSelectorDialog() {
+                return new GlCodeSelectorDialog(getParentView()) {
                     @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            get(ARCodeForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
+                    public void onClickOk() {
+                        if (!getSelectedItem().isNull()) {
+                            get(ARCodeForm.this.proto().glCode()).setValue(getSelectedItem());
                         }
-                        return !getSelectedItems().isEmpty();
                     }
                 };
             }

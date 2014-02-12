@@ -30,7 +30,8 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -64,7 +65,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
         return panel;
     }
 
-    private static class ProductTaxPolicyItemFolder extends VistaBoxFolder<ProductTaxPolicyItem> {
+    class ProductTaxPolicyItemFolder extends VistaBoxFolder<ProductTaxPolicyItem> {
 
         public ProductTaxPolicyItemFolder(boolean modifiable) {
             super(ProductTaxPolicyItem.class, modifiable);
@@ -88,12 +89,12 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
                 }
             }
 
-            new ProductSelectorDialog(alreadySelectedProducts).show();
+            new ProductSelectorDialog(ProductTaxPolicyForm.this.getParentView(), alreadySelectedProducts).show();
         }
 
         // internals:
 
-        private static class ProductTaxPolicyItemEditor extends CEntityForm<ProductTaxPolicyItem> {
+        class ProductTaxPolicyItemEditor extends CEntityForm<ProductTaxPolicyItem> {
 
             public ProductTaxPolicyItemEditor() {
                 super(ProductTaxPolicyItem.class);
@@ -108,31 +109,24 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
                 get(proto().productCode()).setViewable(true);
 
                 content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());
-                content.setWidget(++row, 0, 2, inject(proto().taxes(), new TaxFolder(isEditable())));
+                content.setWidget(++row, 0, 2, inject(proto().taxes(), new TaxFolder(ProductTaxPolicyForm.this)));
 
                 return content;
             }
         }
 
-        private class ProductSelectorDialog extends EntitySelectorTableDialog<ARCode> {
+        private class ProductSelectorDialog extends EntitySelectorTableVisorController<ARCode> {
 
-            public ProductSelectorDialog(List<ARCode> alreadySelectedProducts) {
-                super(ARCode.class, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
-                setDialogPixelWidth(700);
+            public ProductSelectorDialog(IPane parentView, List<ARCode> alreadySelectedProducts) {
+                super(parentView, ARCode.class, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
             }
 
             @Override
-            public boolean onClickOk() {
-                if (getSelectedItems().isEmpty()) {
-                    return false;
-                } else {
-                    for (ARCode selected : getSelectedItems()) {
-                        ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
-                        item.productCode().set(selected);
-                        ProductTaxPolicyItemFolder.this.addItem(item);
-                    }
-
-                    return true;
+            public void onClickOk() {
+                for (ARCode selected : getSelectedItems()) {
+                    ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
+                    item.productCode().set(selected);
+                    ProductTaxPolicyItemFolder.this.addItem(item);
                 }
             }
 

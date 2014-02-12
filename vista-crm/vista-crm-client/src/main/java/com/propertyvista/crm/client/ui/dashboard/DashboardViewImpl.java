@@ -47,7 +47,7 @@ public class DashboardViewImpl extends AbstractPrimePane implements DashboardVie
     public DashboardViewImpl() {
         this.isReadOnly = true;
 
-        this.buildingsFilterProvider = new BuildingsSelectionToolbar();
+        this.buildingsFilterProvider = new BuildingsSelectionToolbar(this);
         this.dashboard = new AbstractDashboard(//@formatter:off
                 buildingsFilterProvider,
                 GWT.<IGadgetFactory> create(IGadgetFactory.class),

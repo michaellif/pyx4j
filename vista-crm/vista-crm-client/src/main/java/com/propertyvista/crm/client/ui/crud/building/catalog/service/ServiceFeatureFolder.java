@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -34,9 +33,11 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -47,9 +48,9 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
     private static final I18n i18n = I18n.get(ServiceFeatureFolder.class);
 
-    private final CEntityForm<Service> parent;
+    private final CrmEntityForm<Service> parent;
 
-    public ServiceFeatureFolder(boolean modifyable, CEntityForm<Service> parent) {
+    public ServiceFeatureFolder(boolean modifyable, CrmEntityForm<Service> parent) {
         super(Feature.class, modifyable);
         this.parent = parent;
     }
@@ -104,29 +105,23 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
     @Override
     protected void addItem() {
-        new FeatureSelectorDialog().show();
+        new FeatureSelectorDialog(parent.getParentView()).show();
     }
 
-    private class FeatureSelectorDialog extends EntitySelectorTableDialog<Feature> {
+    private class FeatureSelectorDialog extends EntitySelectorTableVisorController<Feature> {
 
-        public FeatureSelectorDialog() {
-            super(Feature.class, true, getValue(), i18n.tr("Select Feature"));
+        public FeatureSelectorDialog(IPane parentView) {
+            super(parentView, Feature.class, true, getValue(), i18n.tr("Select Feature"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
             if (!VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
                 addFilter(PropertyCriterion.eq(proto().defaultCatalogItem(), Boolean.FALSE));
             }
-            setDialogPixelWidth(700);
         }
 
         @Override
-        public boolean onClickOk() {
-            if (getSelectedItems().isEmpty()) {
-                return false;
-            } else {
-                for (Feature selected : getSelectedItems()) {
-                    addItem(selected);
-                }
-                return true;
+        public void onClickOk() {
+            for (Feature selected : getSelectedItems()) {
+                addItem(selected);
             }
         }
 

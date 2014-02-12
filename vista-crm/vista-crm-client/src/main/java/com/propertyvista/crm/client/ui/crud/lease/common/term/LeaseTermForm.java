@@ -47,8 +47,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -110,8 +111,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
 
             @Override
-            protected AbstractEntitySelectorDialog<Building> getSelectorDialog() {
-                return new BuildingSelectorDialog() {
+            protected IShowable getSelectorDialog() {
+                return new BuildingSelectorDialog(LeaseTermForm.this.getParentView()) {
                     @Override
                     protected void setFilters(List<Criterion> filters) {
                         assert (filters != null);
@@ -151,12 +152,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                     @SuppressWarnings("unchecked")
                     @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedBuilding(getSelectedItems()
-                                    .get(0));
+                    public void onClickOk() {
+                        if (!getSelectedItem().isNull()) {
+                            ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedBuilding(getSelectedItem());
                         }
-                        return !getSelectedItems().isEmpty();
                     }
                 };
             }
@@ -170,8 +169,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
 
             @Override
-            protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
-                return new UnitSelectorDialog() {
+            protected IShowable getSelectorDialog() {
+                return new UnitSelectorDialog(LeaseTermForm.this.getParentView()) {
                     @Override
                     protected void setFilters(List<Criterion> filters) {
                         assert (filters != null);
@@ -213,12 +212,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                     @SuppressWarnings("unchecked")
                     @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems()
-                                    .get(0));
+                    public void onClickOk() {
+                        if (!getSelectedItem().isNull()) {
+                            ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
                         }
-                        return !getSelectedItems().isEmpty();
                     }
                 };
             }
@@ -324,7 +321,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         flexPanel.setH1(++leftRow, 0, 2, proto().version().tenants().getMeta().getCaption());
 
         TenantInLeaseFolder tf;
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(isEditable())));
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(this)));
         tf.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
             @Override
             public void onValueChange(ValueChangeEvent<IList<LeaseTermTenant>> event) {
@@ -335,7 +332,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         });
 
         flexPanel.setH1(++leftRow, 0, 2, proto().version().guarantors().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(isEditable()) {
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(this) {
             @Override
             protected IList<LeaseTermTenant> getLeaseTermTenants() {
                 return LeaseTermForm.this.getValue().version().tenants();
@@ -496,7 +493,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             if (LeaseTermForm.this.getValue().unit().isNull()) {
                 MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Unit First"));
             } else {
-                new BuildingUtilitySelectorDialog().show();
+                new BuildingUtilitySelectorDialog(LeaseTermForm.this.getParentView()).show();
             }
         }
 
@@ -508,23 +505,19 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
         }
 
-        private class BuildingUtilitySelectorDialog extends EntitySelectorTableDialog<BuildingUtility> {
+        private class BuildingUtilitySelectorDialog extends EntitySelectorTableVisorController<BuildingUtility> {
 
-            public BuildingUtilitySelectorDialog() {
-                super(BuildingUtility.class, true, getValue(), i18n.tr("Select Building Utility"));
+            public BuildingUtilitySelectorDialog(IPane parentView) {
+                super(parentView, BuildingUtility.class, true, getValue(), i18n.tr("Select Building Utility"));
                 setParentFiltering(LeaseTermForm.this.getValue().unit().building().getPrimaryKey());
-                setDialogPixelWidth(700);
             }
 
             @Override
-            public boolean onClickOk() {
-                if (getSelectedItems().isEmpty()) {
-                    return false;
-                } else {
+            public void onClickOk() {
+                if (!getSelectedItems().isEmpty()) {
                     for (BuildingUtility selected : getSelectedItems()) {
                         addItem(selected);
                     }
-                    return true;
                 }
             }
 

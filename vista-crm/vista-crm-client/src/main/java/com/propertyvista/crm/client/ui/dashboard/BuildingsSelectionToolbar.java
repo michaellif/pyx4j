@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
@@ -56,7 +57,10 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
 
     private Button chooseBuildingsButton;
 
-    public BuildingsSelectionToolbar() {
+    private final IPane parentView;
+
+    public BuildingsSelectionToolbar(IPane parentView) {
+        this.parentView = parentView;
         this.eventBus = new SimpleEventBus();
         this.buildings = new Vector<Building>();
 
@@ -119,11 +123,10 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
     }
 
     private void selectBuildings() {
-        new BuildingSelectorDialog(true, buildings) {
+        new BuildingSelectorDialog(parentView, buildings) {
             @Override
-            public boolean onClickOk() {
+            public void onClickOk() {
                 updateSelection(getSelectedItems());
-                return true;
             }
 
         }.show();

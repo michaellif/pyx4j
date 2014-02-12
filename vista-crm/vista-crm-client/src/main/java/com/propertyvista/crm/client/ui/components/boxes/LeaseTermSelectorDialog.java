@@ -24,34 +24,34 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
-public abstract class LeaseTermSelectorDialog extends EntitySelectorTableDialog<LeaseTerm> {
+public abstract class LeaseTermSelectorDialog extends EntitySelectorTableVisorController<LeaseTerm> {
 
     private final static I18n i18n = I18n.get(LeaseTermSelectorDialog.class);
 
-    public LeaseTermSelectorDialog() {
-        this(Collections.<LeaseTerm> emptyList());
+    public LeaseTermSelectorDialog(IPane parentView) {
+        this(parentView, null);
     }
 
-    public LeaseTermSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<LeaseTerm> emptyList());
+    public LeaseTermSelectorDialog(IPane parentView, boolean isMultiselect) {
+        this(parentView, isMultiselect, Collections.<LeaseTerm> emptyList());
     }
 
-    public LeaseTermSelectorDialog(List<LeaseTerm> alreadySelected) {
-        this(false, alreadySelected);
+    public LeaseTermSelectorDialog(IPane parentView, List<LeaseTerm> alreadySelected) {
+        this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public LeaseTermSelectorDialog(boolean isMultiselect, List<LeaseTerm> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select Term"));
+    public LeaseTermSelectorDialog(IPane parentView, boolean isMultiselect, List<LeaseTerm> alreadySelected) {
+        this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Term"));
     }
 
-    public LeaseTermSelectorDialog(boolean isMultiselect, List<LeaseTerm> alreadySelected, String caption) {
-        super(LeaseTerm.class, true, isMultiselect, alreadySelected, caption);
-        setDialogPixelWidth(700);
+    public LeaseTermSelectorDialog(IPane parentView, boolean isMultiselect, List<LeaseTerm> alreadySelected, String caption) {
+        super(parentView, LeaseTerm.class, true, isMultiselect, alreadySelected, caption);
     }
 
     @Override

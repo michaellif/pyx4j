@@ -35,8 +35,9 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -186,20 +187,19 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         return main;
     }
 
-    private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {
+    private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableVisorController<Floorplan> {
 
         private final AsyncCallback<Floorplan> onSelectedCallback;
 
-        public BuildingBoundFloorplanSelectorDialog(Key ownerBuildingPk, AsyncCallback<Floorplan> onSelectedCallback) {
-            super(Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Select Floorplan"));
+        public BuildingBoundFloorplanSelectorDialog(IPane parentView, Key ownerBuildingPk, AsyncCallback<Floorplan> onSelectedCallback) {
+            super(parentView, Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Select Floorplan"));
             setParentFiltering(ownerBuildingPk);
             this.onSelectedCallback = onSelectedCallback;
         }
 
         @Override
-        public boolean onClickOk() {
-            onSelectedCallback.onSuccess(getSelectedItems().get(0));
-            return true;
+        public void onClickOk() {
+            onSelectedCallback.onSuccess(getSelectedItem());
         }
 
         @Override
@@ -255,13 +255,14 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         @Override
-        protected AbstractEntitySelectorDialog<Floorplan> getSelectorDialog() {
-            return new BuildingBoundFloorplanSelectorDialog(UnitForm.this.getValue().building().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
-                @Override
-                public void onSuccess(Floorplan result) {
-                    get(UnitForm.this.proto().floorplan()).setValue(result);
-                }
-            });
+        protected IShowable getSelectorDialog() {
+            return new BuildingBoundFloorplanSelectorDialog(UnitForm.this.getParentView(), UnitForm.this.getValue().building().getPrimaryKey(),
+                    new DefaultAsyncCallback<Floorplan>() {
+                        @Override
+                        public void onSuccess(Floorplan result) {
+                            get(UnitForm.this.proto().floorplan()).setValue(result);
+                        }
+                    });
         }
     }
 }

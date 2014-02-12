@@ -20,7 +20,7 @@ import com.propertyvista.domain.reports.EftReportMetadata;
 public class EftReportViewImpl extends AbstractReport<EftReportMetadata> implements EftReportView {
 
     public EftReportViewImpl() {
-        super(new EftReportWidget(), new EftReportSettingsForm(), null);
+        setReportWidget(new EftReportWidget(), new EftReportSettingsForm(this), null);
     }
 
 }

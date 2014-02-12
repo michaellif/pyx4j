@@ -20,7 +20,7 @@ import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
 public class ResidentInsuranceReportViewImpl extends AbstractReport<ResidentInsuranceReportMetadata> implements ResidentInsuranceReportView {
 
     public ResidentInsuranceReportViewImpl() {
-        super(new ResidentInsuranceReportWidget(), new ResidentInsuranceReportSettingsForm(), null);
+        setReportWidget(new ResidentInsuranceReportWidget(), new ResidentInsuranceReportSettingsForm(), null);
     }
 
 }

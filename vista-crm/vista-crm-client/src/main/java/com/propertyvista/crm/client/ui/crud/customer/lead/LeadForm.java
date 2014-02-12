@@ -32,7 +32,9 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -72,9 +74,6 @@ public class LeadForm extends CrmEntityForm<Lead> {
         super.addValidations();
 
         get(proto().guests()).addValueValidator(new EditableValueValidator<List<Guest>>() {
-
-
-
 
 
             @Override
@@ -136,20 +135,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
             }
 
             @Override
-            protected EntitySelectorTableDialog<Floorplan> getSelectorDialog() {
-                return new FloorplanSelectorDialogDialog() {
-                    @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItems().get(0));
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-
-                };
-
+            protected IShowable getSelectorDialog() {
+                return new FloorplanSelectorDialogDialog(getParentView());
             }
         }), 20).build());
 
@@ -198,17 +185,15 @@ public class LeadForm extends CrmEntityForm<Lead> {
         return new HTML(); // just stub - not necessary for editing mode!..
     }
 
-    private class FloorplanSelectorDialogDialog extends EntitySelectorTableDialog<Floorplan> {
+    private class FloorplanSelectorDialogDialog extends EntitySelectorTableVisorController<Floorplan> {
 
-        public FloorplanSelectorDialogDialog() {
-            super(Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Building/Floorplan Selection"));
-            setDialogPixelWidth(600);
-
+        public FloorplanSelectorDialogDialog(IPane parentView) {
+            super(parentView, Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Building/Floorplan Selection"));
         }
 
         @Override
-        public boolean onClickOk() {
-            return false;
+        public void onClickOk() {
+            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItems().get(0));
         }
 
         @Override

@@ -90,7 +90,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister());
 
-        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new BuildingUnitLister(true));
+        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new BuildingUnitLister(this, true));
 
         elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister());
         boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister());
@@ -99,8 +99,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         parkingLister = new ListerInternalViewImplBase<ParkingDTO>(new ParkingLister());
         lockerAreaLister = new ListerInternalViewImplBase<LockerAreaDTO>(new LockerAreaLister());
 
-        serviceLister = new ListerInternalViewImplBase<Service>(new ServiceLister());
-        featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister());
+        serviceLister = new ListerInternalViewImplBase<Service>(new ServiceLister(this));
+        featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister(this));
         concessionLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister());
 
         billingCycleLister = new ListerInternalViewImplBase<BillingCycleDTO>(new BillingCycleLister());

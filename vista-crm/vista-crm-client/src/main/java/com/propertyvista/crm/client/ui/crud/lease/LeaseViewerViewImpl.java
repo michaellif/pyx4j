@@ -426,18 +426,17 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             viewOfferedTerms = new MenuItem(i18n.tr("View Offers..."), new Command() {
                 @Override
                 public void execute() {
-                    new LeaseTermSelectorDialog() {
+                    new LeaseTermSelectorDialog(LeaseViewerViewImpl.this) {
                         {
                             setParentFiltering(getForm().getValue().getPrimaryKey());
                             addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Offer));
                         }
 
                         @Override
-                        public boolean onClickOk() {
-                            if (!getSelectedItems().isEmpty()) {
-                                ((LeaseViewerView.Presenter) getPresenter()).viewTerm(getSelectedItems().get(0));
+                        public void onClickOk() {
+                            if (!getSelectedItem().isNull()) {
+                                ((LeaseViewerView.Presenter) getPresenter()).viewTerm(getSelectedItem());
                             }
-                            return !getSelectedItems().isEmpty();
                         }
                     }.show();
                 }

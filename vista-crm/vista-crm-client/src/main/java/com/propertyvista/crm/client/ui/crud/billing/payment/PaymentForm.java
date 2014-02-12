@@ -48,7 +48,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -213,7 +213,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                             }
 
                             @Override
-                            protected AbstractEntitySelectorDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>> getSelectorDialog() {
+                            protected IShowable getSelectorDialog() {
                                 return new EntitySelectorListDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>>(i18n.tr("Select Tenant To Pay"),
                                         false, PaymentForm.this.getValue().participants()) {
                                     @Override

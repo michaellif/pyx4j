@@ -23,7 +23,6 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -33,9 +32,10 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectConcessionListService;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Service;
@@ -44,9 +44,9 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
 
     private static final I18n i18n = I18n.get(ServiceConcessionFolder.class);
 
-    private final CEntityForm<Service> parent;
+    private final CrmEntityForm<Service> parent;
 
-    public ServiceConcessionFolder(boolean modifyable, CEntityForm<Service> parent) {
+    public ServiceConcessionFolder(boolean modifyable, CrmEntityForm<Service> parent) {
         super(Concession.class, modifyable);
         this.parent = parent;
     }
@@ -105,23 +105,19 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
         new ConcessionSelectorDialog().show();
     }
 
-    private class ConcessionSelectorDialog extends EntitySelectorTableDialog<Concession> {
+    private class ConcessionSelectorDialog extends EntitySelectorTableVisorController<Concession> {
 
         public ConcessionSelectorDialog() {
-            super(Concession.class, true, getValue(), i18n.tr("Select Concession"));
+            super(parent.getParentView(), Concession.class, true, getValue(), i18n.tr("Select Concession"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
-            setDialogPixelWidth(700);
         }
 
         @Override
-        public boolean onClickOk() {
-            if (getSelectedItems().isEmpty()) {
-                return false;
-            } else {
+        public void onClickOk() {
+            if (!getSelectedItems().isEmpty()) {
                 for (Concession selected : getSelectedItems()) {
                     addItem(selected);
                 }
-                return true;
             }
         }
 

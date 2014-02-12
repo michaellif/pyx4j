@@ -24,34 +24,34 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public abstract class BuildingSelectorDialog extends EntitySelectorTableDialog<Building> {
+public abstract class BuildingSelectorDialog extends EntitySelectorTableVisorController<Building> {
 
     private final static I18n i18n = I18n.get(BuildingSelectorDialog.class);
 
-    public BuildingSelectorDialog() {
-        this(Collections.<Building> emptyList());
+    public BuildingSelectorDialog(IPane parentView) {
+        this(parentView, null);
     }
 
-    public BuildingSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<Building> emptyList());
+    public BuildingSelectorDialog(IPane parentView, boolean isMultiselect) {
+        this(parentView, isMultiselect, Collections.<Building> emptyList());
     }
 
-    public BuildingSelectorDialog(List<Building> alreadySelected) {
-        this(false, alreadySelected);
+    public BuildingSelectorDialog(IPane parentView, List<Building> alreadySelected) {
+        this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public BuildingSelectorDialog(boolean isMultiselect, List<Building> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select Buildings"));
+    public BuildingSelectorDialog(IPane parentView, boolean isMultiselect, List<Building> alreadySelected) {
+        this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Buildings"));
     }
 
-    public BuildingSelectorDialog(boolean isMultiselect, List<Building> alreadySelected, String caption) {
-        super(Building.class, isMultiselect, alreadySelected, caption);
-        setDialogPixelWidth(700);
+    public BuildingSelectorDialog(IPane parentView, boolean isMultiselect, List<Building> alreadySelected, String caption) {
+        super(parentView, Building.class, isMultiselect, alreadySelected, caption);
     }
 
     @Override

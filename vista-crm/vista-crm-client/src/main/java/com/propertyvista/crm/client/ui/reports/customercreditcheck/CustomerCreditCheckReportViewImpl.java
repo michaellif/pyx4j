@@ -20,7 +20,7 @@ import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 public class CustomerCreditCheckReportViewImpl extends AbstractReport<CustomerCreditCheckReportMetadata> implements CustomerCreditCheckReportView {
 
     public CustomerCreditCheckReportViewImpl() {
-        super(new CustomerCreditCheckReportWidget(), new CustomerCreditCheckReportSettingsForm(), null);
+        setReportWidget(new CustomerCreditCheckReportWidget(), new CustomerCreditCheckReportSettingsForm(), null);
     }
 
 }

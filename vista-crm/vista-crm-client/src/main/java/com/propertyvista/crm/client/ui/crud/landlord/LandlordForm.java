@@ -83,7 +83,7 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
     private TwoColumnFlexFormPanel createBuildingsPanel(String title) {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
 
-        panel.setWidget(0, 0, 2, inject(proto().buildings(), new LandlordBuildingFolder(isEditable())));
+        panel.setWidget(0, 0, 2, inject(proto().buildings(), new LandlordBuildingFolder(this)));
 
         return panel;
     }

@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.reports.eft.SelectedBuildingsFolder;
@@ -28,8 +29,11 @@ import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
 public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChangesReportMetadata> {
 
-    public AutoPayChangesReportSettingsForm() {
+    private final IPane parentView;
+
+    public AutoPayChangesReportSettingsForm(IPane parentView) {
         super(AutoPayChangesReportMetadata.class);
+        this.parentView = parentView;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChanges
             }
         });
 
-        buildingFilterPanel.add(inject(proto().buildings(), new SelectedBuildingsFolder()));
+        buildingFilterPanel.add(inject(proto().buildings(), new SelectedBuildingsFolder(parentView)));
         get(proto().buildings()).setVisible(false);
 
         formPanel.setWidget(0, 0, leftSidePanel);

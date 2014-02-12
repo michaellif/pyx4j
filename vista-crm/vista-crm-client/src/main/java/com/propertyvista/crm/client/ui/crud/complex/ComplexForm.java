@@ -84,7 +84,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
     private TwoColumnFlexFormPanel createBuildingsPanel(String title) {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
 
-        panel.setWidget(0, 0, 2, inject(proto().buildings(), new ComplexBuildingFolder(isEditable())));
+        panel.setWidget(0, 0, 2, inject(proto().buildings(), new ComplexBuildingFolder(this)));
 
         return panel;
     }

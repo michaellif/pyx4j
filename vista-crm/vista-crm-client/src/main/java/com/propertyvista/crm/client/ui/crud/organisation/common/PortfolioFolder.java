@@ -37,7 +37,8 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -50,15 +51,11 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     private final static I18n i18n = I18n.get(PortfolioFolder.class);
 
-    private EmployeeForm employeeForm;
+    private final IPane parentView;
 
-    public PortfolioFolder(boolean modifiable) {
-        super(Portfolio.class, modifiable);
-    }
-
-    public PortfolioFolder(boolean modifiable, EmployeeForm employeeForm) {
-        this(modifiable);
-        this.employeeForm = employeeForm;
+    public PortfolioFolder(IPane parentView, boolean isEditable) {
+        super(Portfolio.class, isEditable);
+        this.parentView = parentView;
     }
 
     @Override
@@ -108,14 +105,13 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     @Override
     protected void addItem() {
-        new PortfolioSelectorDialog(getValue()).show();
+        new PortfolioSelectorDialog(parentView, getValue()).show();
     }
 
-    private class PortfolioSelectorDialog extends EntitySelectorTableDialog<Portfolio> {
+    private class PortfolioSelectorDialog extends EntitySelectorTableVisorController<Portfolio> {
 
-        public PortfolioSelectorDialog(List<Portfolio> alreadySelected) {
-            super(Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
-            setDialogPixelWidth(700);
+        public PortfolioSelectorDialog(IPane parentView, List<Portfolio> alreadySelected) {
+            super(parentView, Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
         }
 
         @Override
@@ -140,7 +136,8 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
         protected void setFilters(List<Criterion> filters) {
             super.setFilters(filters);
 
-            if (employeeForm != null) {
+            if (parentView != null && parentView instanceof EmployeeForm) {
+                EmployeeForm employeeForm = (EmployeeForm) parentView;
                 if (employeeForm.isRestrictAccessSet()) {
                     List<Portfolio> portfolioAccess = employeeForm.getPortfolioAccess();
                     if (portfolioAccess != null && !portfolioAccess.isEmpty()) {
@@ -157,11 +154,10 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
         }
 
         @Override
-        public boolean onClickOk() {
+        public void onClickOk() {
             for (Portfolio selected : getSelectedItems()) {
                 addItem(selected);
             }
-            return true;
         }
     }
 }

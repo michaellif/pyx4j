@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
@@ -42,8 +43,11 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
         );//@formatter:on
     }
 
-    public SelectedBuildingsFolder() {
+    private final IPane parentView;
+
+    public SelectedBuildingsFolder(IPane parentView) {
         super(Building.class);
+        this.parentView = parentView;
         setViewable(true);
         setOrderable(false);
         asWidget().addStyleName(Styles.SelectedBuildingsFolder.name());
@@ -72,9 +76,9 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(true, getValue()) {
+        new BuildingSelectorDialog(parentView, getValue()) {
             @Override
-            public boolean onClickOk() {
+            public void onClickOk() {
                 for (Building building : getSelectedItems()) {
                     Building b = EntityFactory.create(Building.class);
                     b.setPrimaryKey(building.getPrimaryKey());
@@ -83,7 +87,6 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
                     }
                     addItem(b);
                 }
-                return true;
             }
         }.show();
     }

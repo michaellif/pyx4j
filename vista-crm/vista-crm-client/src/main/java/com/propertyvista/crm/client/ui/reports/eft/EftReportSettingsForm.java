@@ -33,6 +33,7 @@ import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -46,8 +47,11 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
 
     private static final I18n i18n = I18n.get(EftReportSettingsForm.class);
 
-    public EftReportSettingsForm() {
+    private final IPane parentView;
+
+    public EftReportSettingsForm(IPane parentView) {
         super(EftReportMetadata.class);
+        this.parentView = parentView;
     }
 
     @Override
@@ -117,7 +121,7 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
 
         FlowPanel buildingFilterPanel = new FlowPanel();
         buildingFilterPanel.add(new FormDecoratorBuilder(inject(proto().filterByPortfolio())).build());
-        buildingFilterPanel.add(inject(proto().selectedPortfolios(), new PortfolioFolder(true)));
+        buildingFilterPanel.add(inject(proto().selectedPortfolios(), new PortfolioFolder(parentView, isEditable())));
         get(proto().filterByPortfolio()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -132,7 +136,7 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
                 get(proto().selectedBuildings()).setVisible(event.getValue());
             }
         });
-        buildingFilterPanel.add(inject(proto().selectedBuildings(), new SelectedBuildingsFolder()));
+        buildingFilterPanel.add(inject(proto().selectedBuildings(), new SelectedBuildingsFolder(parentView)));
 
         panel.setWidget(0, 0, column1);
         panel.setWidget(0, 1, column2);

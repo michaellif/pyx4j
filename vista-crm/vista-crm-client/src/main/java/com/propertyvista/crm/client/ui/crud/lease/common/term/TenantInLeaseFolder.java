@@ -49,6 +49,7 @@ import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolde
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -69,12 +70,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private Boolean maturedOccupantsAreApplicant = false;
 
-    public TenantInLeaseFolder() {
-        this(false);
-    }
-
-    public TenantInLeaseFolder(boolean modifiable) {
-        super(LeaseTermTenant.class, modifiable);
+    public TenantInLeaseFolder(CrmEntityForm<?> parentForm) {
+        super(LeaseTermTenant.class, parentForm);
     }
 
     public void setPadEditable(boolean isPadEditable) {

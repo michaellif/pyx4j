@@ -504,15 +504,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         public BuildingSelectorDialog getSelectorDialog(boolean allowCancel) {
-            BuildingSelectorDialog buildingDialog = new BuildingSelectorDialog(false) {
+            BuildingSelectorDialog buildingDialog = new BuildingSelectorDialog(MaintenanceRequestForm.this.getParentView()) {
                 @Override
-                public boolean onClickOk() {
-                    if (getSelectedItems().isEmpty()) {
-                        return false;
+                public void onClickOk() {
+                    if (!getSelectedItem().isNull()) {
+                        setValue(getSelectedItems().get(0));
+                        setMaintenanceRequestCategoryMeta();
                     }
-                    setValue(getSelectedItems().get(0));
-                    setMaintenanceRequestCategoryMeta();
-                    return true;
                 }
             };
             buildingDialog.getCancelButton().setVisible(allowCancel);
@@ -529,15 +527,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         @Override
         protected UnitSelectorDialog getSelectorDialog() {
-            return new UnitSelectorDialog(false) {
+            return new UnitSelectorDialog(MaintenanceRequestForm.this.getParentView()) {
 
                 @Override
-                public boolean onClickOk() {
-                    if (getSelectedItems().isEmpty()) {
-                        return false;
+                public void onClickOk() {
+                    if (!getSelectedItem().isNull()) {
+                        setValue(getSelectedItems().get(0));
                     }
-                    setValue(getSelectedItems().get(0));
-                    return true;
                 }
 
                 @Override
@@ -562,15 +558,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         @Override
         protected TenantSelectorDialog getSelectorDialog() {
-            return new TenantSelectorDialog(false) {
+            return new TenantSelectorDialog(MaintenanceRequestForm.this.getParentView()) {
 
                 @Override
-                public boolean onClickOk() {
-                    if (getSelectedItems().isEmpty()) {
-                        return false;
+                public void onClickOk() {
+                    if (!getSelectedItem().isNull()) {
+                        setValue(getSelectedItems().get(0));
                     }
-                    setValue(getSelectedItems().get(0));
-                    return true;
                 }
 
                 @Override

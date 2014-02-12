@@ -24,34 +24,34 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public abstract class UnitSelectorDialog extends EntitySelectorTableDialog<AptUnit> {
+public abstract class UnitSelectorDialog extends EntitySelectorTableVisorController<AptUnit> {
 
     private static final I18n i18n = I18n.get(UnitSelectorDialog.class);
 
-    public UnitSelectorDialog() {
-        this(Collections.<AptUnit> emptyList());
+    public UnitSelectorDialog(IPane parentView) {
+        this(parentView, null);
     }
 
-    public UnitSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<AptUnit> emptyList());
+    public UnitSelectorDialog(IPane parentView, boolean isMultiselect) {
+        this(parentView, isMultiselect, Collections.<AptUnit> emptyList());
     }
 
-    public UnitSelectorDialog(List<AptUnit> alreadySelected) {
-        this(false, alreadySelected, i18n.tr("Select Unit"));
+    public UnitSelectorDialog(IPane parentView, List<AptUnit> alreadySelected) {
+        this(parentView, alreadySelected != null, alreadySelected, i18n.tr("Select Unit"));
     }
 
-    public UnitSelectorDialog(boolean isMultiselect, List<AptUnit> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select Unit"));
+    public UnitSelectorDialog(IPane parentView, boolean isMultiselect, List<AptUnit> alreadySelected) {
+        this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Unit"));
     }
 
-    public UnitSelectorDialog(boolean isMultiselect, List<AptUnit> alreadySelected, String caption) {
-        super(AptUnit.class, isMultiselect, alreadySelected, caption);
-        setDialogPixelWidth(700);
+    public UnitSelectorDialog(IPane parentView, boolean isMultiselect, List<AptUnit> alreadySelected, String caption) {
+        super(parentView, AptUnit.class, isMultiselect, alreadySelected, caption);
     }
 
     @Override

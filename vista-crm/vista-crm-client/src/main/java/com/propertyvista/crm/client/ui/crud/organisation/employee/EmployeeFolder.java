@@ -22,8 +22,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -36,10 +36,12 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.company.Employee;
@@ -49,10 +51,13 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
     private static final I18n i18n = I18n.get(EmployeeFolder.class);
 
+    private final CrmEntityForm<?> parent;
+
     private final ParentEmployeeGetter parentEmployeeGetter;
 
-    public EmployeeFolder(boolean modifiable, ParentEmployeeGetter parentEmployeeGetter) {
-        super(Employee.class, modifiable);
+    public EmployeeFolder(CrmEntityForm<?> parent, ParentEmployeeGetter parentEmployeeGetter) {
+        super(Employee.class, parent.isEditable());
+        this.parent = parent;
         this.parentEmployeeGetter = parentEmployeeGetter;
     }
 
@@ -107,14 +112,13 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
     @Override
     protected void addItem() {
-        new EmployeeSelectorDialog().show();
+        new EmployeeSelectorDialog(parent.getParentView()).show();
     }
 
-    private class EmployeeSelectorDialog extends EntitySelectorTableDialog<Employee> {
+    private class EmployeeSelectorDialog extends EntitySelectorTableVisorController<Employee> {
 
-        public EmployeeSelectorDialog() {
-            super(Employee.class, true, getValue(), i18n.tr("Select Employee"));
-            setDialogPixelWidth(700);
+        public EmployeeSelectorDialog(IPane parentView) {
+            super(parentView, Employee.class, true, getValue(), i18n.tr("Select Employee"));
 
             // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
             // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
@@ -122,11 +126,10 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
         }
 
         @Override
-        public boolean onClickOk() {
+        public void onClickOk() {
             for (Employee selected : getSelectedItems()) {
                 addItem(selected);
             }
-            return true;
         }
 
         @Override

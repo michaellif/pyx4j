@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
@@ -63,15 +63,14 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             }
 
             @Override
-            protected AbstractEntitySelectorDialog<ARCode> getSelectorDialog() {
-                return new LeaseAdjustmentReasonSelectorDialog() {
+            protected IShowable getSelectorDialog() {
+                return new LeaseAdjustmentReasonSelectorDialog(getParentView()) {
                     @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            get(LeaseAdjustmentForm.this.proto().code()).setValue(getSelectedItems().get(0));
+                    public void onClickOk() {
+                        if (!getSelectedItem().isNull()) {
+                            get(LeaseAdjustmentForm.this.proto().code()).setValue(getSelectedItem());
                             recalculateTaxesAndTotal();
                         }
-                        return !getSelectedItems().isEmpty();
                     }
                 };
             }

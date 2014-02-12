@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService.FeatureInitializationData;
@@ -34,8 +35,11 @@ public class FeatureLister extends AbstractLister<Feature> {
 
     private final static I18n i18n = I18n.get(FeatureLister.class);
 
-    public FeatureLister() {
+    private final IPane parentView;
+
+    public FeatureLister(IPane parentView) {
         super(Feature.class, !VistaFeatures.instance().yardiIntegration(), !VistaFeatures.instance().yardiIntegration());
+        this.parentView = parentView;
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
@@ -65,14 +69,13 @@ public class FeatureLister extends AbstractLister<Feature> {
 
     @Override
     protected void onItemNew() {
-        new ProductCodeSelectorDialog(ARCode.Type.features(), i18n.tr("Select Feature ARCode")) {
+        new ProductCodeSelectorDialog(parentView, ARCode.Type.features(), i18n.tr("Select Feature ARCode")) {
             @Override
-            public boolean onClickOk() {
+            public void onClickOk() {
                 FeatureInitializationData id = EntityFactory.create(FeatureInitializationData.class);
                 id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
                 id.code().set(getSelectedItem());
                 getPresenter().editNew(getItemOpenPlaceClass(), id);
-                return true;
             }
         }.show();
     }

@@ -36,7 +36,8 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -71,7 +72,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
         return panel;
     }
 
-    private static class DepositPolicyItemEditorFolder extends VistaBoxFolder<DepositPolicyItem> {
+    class DepositPolicyItemEditorFolder extends VistaBoxFolder<DepositPolicyItem> {
 
         public DepositPolicyItemEditorFolder() {
             super(DepositPolicyItem.class);
@@ -86,7 +87,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
             }
         }
 
-        private static class DepositPolicyItemEditor extends CEntityForm<DepositPolicyItem> {
+        class DepositPolicyItemEditor extends CEntityForm<DepositPolicyItem> {
 
             private final SimplePanel valueHolder = new SimplePanel();
 
@@ -160,27 +161,22 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 }
             }
 
-            new ProductSelectorDialog(alreadySelectedProducts).show();
+            new ProductSelectorDialog(DepositPolicyForm.this.getParentView(), alreadySelectedProducts).show();
         }
 
-        private class ProductSelectorDialog extends EntitySelectorTableDialog<ARCode> {
+        private class ProductSelectorDialog extends EntitySelectorTableVisorController<ARCode> {
 
-            public ProductSelectorDialog(List<ARCode> alreadySelectedProducts) {
-                super(ARCode.class, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
+            public ProductSelectorDialog(IPane parentView, List<ARCode> alreadySelectedProducts) {
+                super(parentView, ARCode.class, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
             }
 
             @Override
-            public boolean onClickOk() {
-                if (getSelectedItems().isEmpty()) {
-                    return false;
-                } else {
-                    for (ARCode code : getSelectedItems()) {
-                        DepositPolicyItem newItem = EntityFactory.create(DepositPolicyItem.class);
-                        newItem.depositType().setValue(DepositType.SecurityDeposit);
-                        newItem.productCode().set(code);
-                        DepositPolicyItemEditorFolder.this.addItem(newItem);
-                    }
-                    return true;
+            public void onClickOk() {
+                for (ARCode code : getSelectedItems()) {
+                    DepositPolicyItem newItem = EntityFactory.create(DepositPolicyItem.class);
+                    newItem.depositType().setValue(DepositType.SecurityDeposit);
+                    newItem.productCode().set(code);
+                    DepositPolicyItemEditorFolder.this.addItem(newItem);
                 }
             }
 

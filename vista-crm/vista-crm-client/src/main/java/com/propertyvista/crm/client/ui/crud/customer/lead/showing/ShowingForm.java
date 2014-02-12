@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -102,14 +102,13 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
             }
 
             @Override
-            protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
-                return new UnitSelectorDialog() {
+            protected IShowable getSelectorDialog() {
+                return new UnitSelectorDialog(getParentView()) {
                     @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
+                    public void onClickOk() {
+                        if (!getSelectedItem().isNull()) {
+                            ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
                         }
-                        return !getSelectedItems().isEmpty();
                     }
 
                     @Override

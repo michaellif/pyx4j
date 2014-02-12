@@ -24,34 +24,34 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<Tenant> {
+public abstract class TenantSelectorDialog extends EntitySelectorTableVisorController<Tenant> {
 
     private final static I18n i18n = I18n.get(TenantSelectorDialog.class);
 
-    public TenantSelectorDialog() {
-        this(Collections.<Tenant> emptyList());
+    public TenantSelectorDialog(IPane parentView) {
+        this(parentView, null);
     }
 
-    public TenantSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<Tenant> emptyList());
+    public TenantSelectorDialog(IPane parentView, boolean isMultiselect) {
+        this(parentView, isMultiselect, Collections.<Tenant> emptyList());
     }
 
-    public TenantSelectorDialog(List<Tenant> alreadySelected) {
-        this(true, alreadySelected);
+    public TenantSelectorDialog(IPane parentView, List<Tenant> alreadySelected) {
+        this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public TenantSelectorDialog(boolean isMultiselect, List<Tenant> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select Tenant"));
+    public TenantSelectorDialog(IPane parentView, boolean isMultiselect, List<Tenant> alreadySelected) {
+        this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Tenant"));
     }
 
-    public TenantSelectorDialog(boolean isMultiselect, List<Tenant> alreadySelected, String caption) {
-        super(Tenant.class, isMultiselect, alreadySelected, caption);
-        setDialogPixelWidth(800);
+    public TenantSelectorDialog(IPane parentView, boolean isMultiselect, List<Tenant> alreadySelected, String caption) {
+        super(parentView, Tenant.class, isMultiselect, alreadySelected, caption);
     }
 
     @Override

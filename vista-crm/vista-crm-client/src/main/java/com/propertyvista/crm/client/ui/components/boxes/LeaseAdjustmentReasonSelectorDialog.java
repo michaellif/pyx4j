@@ -24,34 +24,34 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
 import com.propertyvista.domain.financial.ARCode;
 
-public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelectorTableDialog<ARCode> {
+public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelectorTableVisorController<ARCode> {
 
     private final static I18n i18n = I18n.get(LeaseAdjustmentReasonSelectorDialog.class);
 
-    public LeaseAdjustmentReasonSelectorDialog() {
-        this(Collections.<ARCode> emptyList());
+    public LeaseAdjustmentReasonSelectorDialog(IPane parentView) {
+        this(parentView, null);
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<ARCode> emptyList());
+    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, boolean isMultiselect) {
+        this(parentView, isMultiselect, Collections.<ARCode> emptyList());
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(List<ARCode> alreadySelected) {
-        this(false, alreadySelected);
+    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, List<ARCode> alreadySelected) {
+        this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect, List<ARCode> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select Adjustment Code"));
+    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, boolean isMultiselect, List<ARCode> alreadySelected) {
+        this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Adjustment Code"));
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect, List<ARCode> alreadySelected, String caption) {
-        super(ARCode.class, isMultiselect, alreadySelected, caption);
-        setDialogPixelWidth(700);
+    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, boolean isMultiselect, List<ARCode> alreadySelected, String caption) {
+        super(parentView, ARCode.class, isMultiselect, alreadySelected, caption);
     }
 
     @Override

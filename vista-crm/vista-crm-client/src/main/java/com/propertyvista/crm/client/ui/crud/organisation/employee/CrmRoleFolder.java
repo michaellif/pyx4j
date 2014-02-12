@@ -29,10 +29,11 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
 import com.propertyvista.domain.security.CrmRole;
 
@@ -40,8 +41,11 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
 
     private static final I18n i18n = I18n.get(CrmRoleFolder.class);
 
-    public CrmRoleFolder(boolean isModifiable) {
-        super(CrmRole.class, isModifiable);
+    private final CrmEntityForm<?> parent;
+
+    public CrmRoleFolder(CrmEntityForm<?> parent) {
+        super(CrmRole.class, parent.isEditable());
+        this.parent = parent;
         setOrderable(false);
     }
 
@@ -77,22 +81,16 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
         new CrmRoleSelectorDialog().show();
     }
 
-    private class CrmRoleSelectorDialog extends EntitySelectorTableDialog<CrmRole> {
+    private class CrmRoleSelectorDialog extends EntitySelectorTableVisorController<CrmRole> {
 
         public CrmRoleSelectorDialog() {
-            super(CrmRole.class, true, getValue(), i18n.tr("Select roles"));
-            setDialogPixelWidth(700);
+            super(parent.getParentView(), CrmRole.class, true, getValue(), i18n.tr("Select roles"));
         }
 
         @Override
-        public boolean onClickOk() {
-            if (getSelectedItems().isEmpty()) {
-                return false;
-            } else {
-                for (CrmRole selected : getSelectedItems()) {
-                    addItem(selected);
-                }
-                return true;
+        public void onClickOk() {
+            for (CrmRole selected : getSelectedItems()) {
+                addItem(selected);
             }
         }
 

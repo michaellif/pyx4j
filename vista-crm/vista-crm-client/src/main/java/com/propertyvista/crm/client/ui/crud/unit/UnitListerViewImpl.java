@@ -19,6 +19,6 @@ import com.propertyvista.dto.AptUnitDTO;
 public class UnitListerViewImpl extends CrmListerViewImplBase<AptUnitDTO> implements UnitListerView {
 
     public UnitListerViewImpl() {
-        setLister(new UnitLister());
+        setLister(new UnitLister(this));
     }
 }

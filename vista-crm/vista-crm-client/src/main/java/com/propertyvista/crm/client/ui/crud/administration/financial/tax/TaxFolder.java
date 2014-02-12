@@ -28,9 +28,11 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.domain.financial.tax.Tax;
 
@@ -38,8 +40,11 @@ public class TaxFolder extends VistaTableFolder<Tax> {
 
     private static final I18n i18n = I18n.get(TaxFolder.class);
 
-    public TaxFolder(boolean modifyable) {
-        super(Tax.class, modifyable);
+    private final CrmEntityForm<?> parentForm;
+
+    public TaxFolder(CrmEntityForm<?> parentForm) {
+        super(Tax.class, parentForm.isEditable());
+        this.parentForm = parentForm;
     }
 
     @Override
@@ -63,7 +68,7 @@ public class TaxFolder extends VistaTableFolder<Tax> {
 
     @Override
     protected void addItem() {
-        new TaxSelectorDialog().show();
+        new TaxSelectorDialog(parentForm.getParentView()).show();
     }
 
     private class ChargeCodeTaxEditor extends CEntityFolderRowEditor<Tax> {
@@ -79,23 +84,17 @@ public class TaxFolder extends VistaTableFolder<Tax> {
         }
     }
 
-    private class TaxSelectorDialog extends EntitySelectorTableDialog<Tax> {
+    private class TaxSelectorDialog extends EntitySelectorTableVisorController<Tax> {
 
-        public TaxSelectorDialog() {
-            super(Tax.class, true, getValue(), i18n.tr("Select Tax"));
-            setDialogPixelWidth(700);
+        public TaxSelectorDialog(IPane parentView) {
+            super(parentView, Tax.class, true, getValue(), i18n.tr("Select Tax"));
         }
 
         @Override
-        public boolean onClickOk() {
-            if (getSelectedItems().isEmpty()) {
-                return false;
-            } else {
-                for (Tax selected : getSelectedItems()) {
-                    addItem(selected);
-                }
+        public void onClickOk() {
+            for (Tax selected : getSelectedItems()) {
+                addItem(selected);
             }
-            return true;
         }
 
         @Override
