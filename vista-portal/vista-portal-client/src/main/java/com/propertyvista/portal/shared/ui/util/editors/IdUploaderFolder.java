@@ -114,18 +114,6 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
         }
     }
 
-    @Override
-    public void generateMockData() {
-
-        int missingFoldersCount = 2 - getItemCount();
-
-        for (int i = 0; i < missingFoldersCount; i++) {
-            IdentificationDocumentFolder folder = EntityFactory.create(IdentificationDocumentFolder.class);
-            addItem(folder);
-        }
-
-    }
-
     private class IdentificationDocumentEditor extends CEntityForm<IdentificationDocumentFolder> {
 
         public IdentificationDocumentEditor() {
