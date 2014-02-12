@@ -32,7 +32,10 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
+import com.pyx4j.site.client.ui.devconsole.RiaDevConsole;
 
 public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
 
@@ -54,6 +57,8 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
     private final DisplayPanel contentDisplay;
 
     private final DockLayoutPanel menuPanel;
+
+    private DevConsoleTab devConsoleTab;
 
     private boolean menuVisible;
 
@@ -122,7 +127,13 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
             adopt(contentDisplay);
         }
 
+        if (ApplicationMode.isDevelopment()) {
+            devConsoleTab = new DevConsoleTab(new RiaDevConsole(this));
+            add(devConsoleTab.asWidget(), getElement());
+        }
+
         forceLayout();
+
     }
 
     public DisplayPanel getHeaderDisplay() {
