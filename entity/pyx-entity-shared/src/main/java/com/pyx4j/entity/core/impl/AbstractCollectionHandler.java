@@ -83,6 +83,9 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     @Override
     public AttachLevel getAttachLevel() {
+        if (getOwner().isValueDetached()) {
+            return AttachLevel.Detached;
+        }
         Object value = getDetachedValue();
         if (value instanceof Integer) {
             return AttachLevel.CollectionSizeOnly;
