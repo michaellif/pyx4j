@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.server.services.selections;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.UnitAvailabilityCriteria;
 
 public class SelectUnitListServiceImpl extends AbstractListServiceImpl<AptUnit> implements SelectUnitListService {
 
@@ -29,6 +34,17 @@ public class SelectUnitListServiceImpl extends AbstractListServiceImpl<AptUnit> 
     protected void bind() {
         bind(toProto.id(), boProto.id());
         bindCompleteObject();
+    }
+
+    @Override
+    public Criterion convertCriterion(EntityListCriteria<AptUnit> criteria, Criterion cr) {
+        if (cr instanceof UnitAvailabilityCriteria) {
+            UnitAvailabilityCriteria availability = (UnitAvailabilityCriteria) cr;
+            return ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), availability.getStatus(), availability.getFrom(),
+                    null);
+        } else {
+            return super.convertCriterion(criteria, cr);
+        }
     }
 
     @Override

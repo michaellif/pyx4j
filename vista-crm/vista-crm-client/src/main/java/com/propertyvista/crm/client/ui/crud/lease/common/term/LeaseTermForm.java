@@ -74,6 +74,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.UnitAvailabilityCriteria;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -120,28 +121,15 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                         LeaseTermDTO currentValue = LeaseTermForm.this.getValue();
                         if (currentValue.lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
-
-                            filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
-                            filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
-                            filters.add(PropertyCriterion.le(proto().units().$().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
-
+                            filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.pending, ClientContext.getServerDate()));
                             filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), Boolean.TRUE));
-
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
 
                             LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
                             if (!currentValue.termFrom().isNull()) {
                                 dateFrom = currentValue.termFrom().getValue();
                             }
-
-                            if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_noUnitOccupancySegments) {
-                                filters.add(PropertyCriterion.le(proto().units().$().availability().availableForRent(), dateFrom));
-                            } else {
-                                filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().status(),
-                                        AptUnitOccupancySegment.Status.available));
-                                filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
-                                filters.add(PropertyCriterion.le(proto().units().$().unitOccupancySegments().$().dateFrom(), dateFrom));
-                            }
+                            filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.available, dateFrom));
 
                             // TODO: filter by lease type also!!!
 //                            filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().serviceType(), currentValue.lease().type()));
@@ -191,9 +179,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                         LeaseTermDTO currentValue = LeaseTermForm.this.getValue();
                         if (currentValue.lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
 
-                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
-                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
-                            filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+                            filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.pending, ClientContext.getServerDate()));
 
                             filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.TRUE));
 
@@ -203,14 +189,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             if (!currentValue.termFrom().isNull()) {
                                 dateFrom = currentValue.termFrom().getValue();
                             }
-
-                            if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_noUnitOccupancySegments) {
-                                filters.add(PropertyCriterion.le(proto()._availableForRent(), dateFrom));
-                            } else {
-                                filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
-                                filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
-                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), dateFrom));
-                            }
+                            filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.available, dateFrom));
 
                             // TODO: filter by lease type also!!!
 //                            filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().serviceType(), currentValue.lease().type()));

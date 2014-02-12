@@ -23,6 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.AndCriterion;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -248,16 +249,23 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
     }
 
     @Override
-    public void addAvalableCriteria(EntityQueryCriteria<?> criteria, AptUnit unitProto, Status status, Date from, Date fromDeadline) {
+    public Criterion buildAvalableCriteria(AptUnit unitProto, Status status, Date from, Date fromDeadline) {
+        AndCriterion criteria = new AndCriterion();
+
         AndCriterion existsReservation = new AndCriterion();
         existsReservation.le(unitProto.unitReservation().$().dateTo(), SystemDateManager.getDate());
         existsReservation.ge(unitProto.unitReservation().$().dateFrom(), SystemDateManager.getDate());
-        criteria.notExists(unitProto.unitReservation().$(), existsReservation);
+        //criteria.notExists(unitProto.unitReservation().$(), existsReservation);
 
         if (VistaTODO.yardi_noUnitOccupancySegments) {
             criteria.le(unitProto.availability().availableForRent(), from);
+            if (fromDeadline != null) {
+                criteria.gt(unitProto.availability().availableForRent(), fromDeadline);
+            }
         } else {
             throw new Error("TODO");
         }
+
+        return criteria;
     }
 }

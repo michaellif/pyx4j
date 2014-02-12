@@ -33,6 +33,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.AndCriterion;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Executable;
@@ -934,16 +935,20 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void addAvalableCriteria(EntityQueryCriteria<?> criteria, AptUnit unitProto, Status status, Date from, Date fromDeadline) {
+    public Criterion buildAvalableCriteria(AptUnit unitProto, Status status, Date from, Date fromDeadline) {
+        AndCriterion criteria = new AndCriterion();
         AndCriterion existsReservation = new AndCriterion();
         existsReservation.le(unitProto.unitReservation().$().dateTo(), SystemDateManager.getDate());
         existsReservation.ge(unitProto.unitReservation().$().dateFrom(), SystemDateManager.getDate());
-        criteria.notExists(unitProto.unitReservation().$(), existsReservation);
+        //criteria.notExists(unitProto.unitReservation().$(), existsReservation);
 
         criteria.eq(unitProto.unitOccupancySegments().$().status(), status);
         criteria.eq(unitProto.unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
         criteria.le(unitProto.unitOccupancySegments().$().dateFrom(), from);
-        criteria.gt(unitProto.unitOccupancySegments().$().dateFrom(), fromDeadline);
+        if (fromDeadline != null) {
+            criteria.gt(unitProto.unitOccupancySegments().$().dateFrom(), fromDeadline);
+        }
+        return criteria;
     }
 
     @Override

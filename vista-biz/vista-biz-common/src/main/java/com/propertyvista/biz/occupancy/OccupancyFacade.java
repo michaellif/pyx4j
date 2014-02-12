@@ -18,7 +18,7 @@ import java.util.Date;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.Pair;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.Criterion;
 
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
@@ -119,7 +119,7 @@ public interface OccupancyFacade {
     // Used only in Yardi for now
     void setAvailability(AptUnit unit, LogicalDate availableForRent);
 
-    void addAvalableCriteria(EntityQueryCriteria<?> criteria, AptUnit unitProto, AptUnitOccupancySegment.Status status, Date from, Date fromDeadline);
+    Criterion buildAvalableCriteria(AptUnit unitProto, AptUnitOccupancySegment.Status status, Date from, Date fromDeadline);
 
     /**
      * @return the starting day of the 'available' segment, i.e. the minimum day that can be given to lease.leasFrom; or null, if it can't be done

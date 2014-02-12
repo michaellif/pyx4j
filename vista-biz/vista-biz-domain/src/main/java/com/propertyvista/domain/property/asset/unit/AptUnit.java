@@ -17,7 +17,6 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -86,6 +85,9 @@ public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachm
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnitItem> details();
 
+    // ----------------------------------------------------
+    // internals:
+
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnitOccupancySegment> unitOccupancySegments();
@@ -93,12 +95,6 @@ public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachm
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnitReservation> unitReservation();
-
-    // ----------------------------------------------------
-    // internals:
-    //TODO Remove
-    @Deprecated
-    IPrimitive<LogicalDate> _availableForRent();
 
     @Owned(cascade = {}, forceCreation = true)
     AptUnitEffectiveAvailability availability();

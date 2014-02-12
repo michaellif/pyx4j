@@ -38,6 +38,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
@@ -76,7 +77,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
@@ -92,7 +92,6 @@ import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
@@ -976,17 +975,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
         criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
         // availability: 
-        if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_noUnitOccupancySegments) {
-            criteria.le(criteria.proto()._availableForRent(), moveIn);
-            criteria.gt(criteria.proto()._availableForRent(), availabilityDeadline);
-            criteria.sort(new Sort(criteria.proto()._availableForRent(), false));
-        } else {
-            criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
-            criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
-            criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), moveIn);
-            criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityDeadline);
-//          criteria.sort(new Sort(criteria.proto().unitOccupancySegments().$().dateFrom(), false));
-        }
+        criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available, moveIn,
+                availabilityDeadline));
+
+        criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
 
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
@@ -1026,17 +1018,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
         criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
         // availability: 
-        if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_noUnitOccupancySegments) {
-            criteria.gt(criteria.proto()._availableForRent(), availabilityDeadline);
-            criteria.le(criteria.proto()._availableForRent(), availabilityRightBound);
-            criteria.sort(new Sort(criteria.proto()._availableForRent(), false));
-        } else {
-            criteria.eq(criteria.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
-            criteria.eq(criteria.proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
-            criteria.gt(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityDeadline);
-            criteria.le(criteria.proto().unitOccupancySegments().$().dateFrom(), availabilityRightBound);
-//          criteria.sort(new Sort(criteria.proto().unitOccupancySegments().$().dateFrom(), false));
-        }
+        criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available,
+                availabilityDeadline, availabilityRightBound));
+        criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
 
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
