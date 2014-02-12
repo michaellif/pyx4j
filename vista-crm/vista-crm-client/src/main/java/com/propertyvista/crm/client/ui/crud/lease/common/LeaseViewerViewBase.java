@@ -36,5 +36,9 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewer<DTO> 
         void setLegalStatus();
 
         void clearLegalStatus();
+
+        void reserveUnit(int durationHours);
+
+        void unreserveUnit();
     }
 }

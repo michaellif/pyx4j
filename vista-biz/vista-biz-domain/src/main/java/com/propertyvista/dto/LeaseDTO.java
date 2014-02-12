@@ -65,4 +65,5 @@ public interface LeaseDTO extends Lease {
 
     LeaseAgreementSigningProgressDTO agreementSigningProgressDTO();
 
+    IPrimitive<Boolean> isUnitReserved();
 }

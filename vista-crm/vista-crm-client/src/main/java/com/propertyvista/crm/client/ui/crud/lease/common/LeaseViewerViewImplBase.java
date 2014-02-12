@@ -15,19 +15,28 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
@@ -45,6 +54,10 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     protected final MenuItem viewFutureTerm;
 
     protected final MenuItem viewHistoricTerms;
+
+    private final MenuItem reserveUnit;
+
+    private final MenuItem unreserveUnit;
 
     public LeaseViewerViewImplBase() {
         super(true);
@@ -114,6 +127,31 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         legalStatusMenu.addItem(clearLegalStatus);
         addHeaderToolbarItem(legalStatusButton);
 
+        reserveUnit = new MenuItem(i18n.tr("Reserve Unit"), new Command() {
+            @Override
+            public void execute() {
+                new UnitReserveBox() {
+                    @Override
+                    public boolean onClickOk() {
+                        if (getDuration() != null) {
+                            ((LeaseViewerViewBase.Presenter) getPresenter()).reserveUnit(getDuration());
+                            return true;
+                        }
+                        return false;
+                    }
+                }.show();
+            }
+        });
+        addAction(reserveUnit);
+
+        unreserveUnit = new MenuItem(i18n.tr("Unreserve Unit"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).unreserveUnit();
+            }
+        });
+        addAction(unreserveUnit);
+        addActionSeparator();
     }
 
     @Override
@@ -121,6 +159,9 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         viewFutureTerm.setVisible(false);
 
         papsButton.setVisible(false);
+
+        setActionVisible(reserveUnit, false);
+        setActionVisible(unreserveUnit, false);
 
         super.reset();
     }
@@ -131,6 +172,11 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
         viewHistoricTerms.setVisible(value.historyPresent().isBooleanTrue());
+
+        Lease.Status status = value.status().getValue();
+        boolean reservationPreconditions = (!value.unit().isNull() && status.isDraft() && status != Lease.Status.ExistingLease);
+        setActionVisible(reserveUnit, reservationPreconditions && !value.isUnitReserved().isBooleanTrue());
+        setActionVisible(unreserveUnit, reservationPreconditions && value.isUnitReserved().isBooleanTrue());
 
         setupPapsMenu(value);
     }
@@ -152,6 +198,38 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                     }.show();
                 }
             }));
+        }
+    }
+
+    private abstract class UnitReserveBox extends OkCancelDialog {
+
+        private final CIntegerField duration = new CIntegerField();
+
+        public UnitReserveBox() {
+            super(i18n.tr("Unit Reservation"));
+            setBody(createBody());
+            setDialogPixelWidth(300);
+        }
+
+        protected Widget createBody() {
+            HorizontalPanel content = new HorizontalPanel();
+
+            content.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            content.add(new HTML(i18n.tr("Enter the duration (in hours)") + ":"));
+            content.add(new HTML("&nbsp"));
+            content.add(duration);
+
+            duration.setMandatory(true);
+
+            // styling:
+            duration.asWidget().setWidth("5em");
+            content.asWidget().getElement().getStyle().setMargin(1, Unit.EM);
+
+            return new SimplePanel(content);
+        }
+
+        public Integer getDuration() {
+            return duration.getValue();
         }
     }
 }

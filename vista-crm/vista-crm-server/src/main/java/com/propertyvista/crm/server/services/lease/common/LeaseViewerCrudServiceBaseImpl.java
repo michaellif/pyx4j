@@ -13,19 +13,23 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
+import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -57,6 +61,11 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
         if (!to.unit().isNull()) {
             Persistence.service().retrieveMember(to.unit().floorplan(), AttachLevel.ToStringMembers);
+
+            Pair<Date, Lease> result = ServerSideFactory.create(OccupancyFacade.class).isReserved(to.unit().getPrimaryKey());
+            if (result != null && !result.getB().isNull()) {
+                to.isUnitReserved().setValue(result.getB().equals(in));
+            }
 
             checkUnitMoveOut(to);
         }
@@ -106,6 +115,19 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
         if (Persistence.service().exists(criteria)) {
             dto.unitMoveOutNote().setValue("Warning: This unit is not freed completely by previous tenant!");
         }
+    }
 
+    @Override
+    public void reserveUnit(AsyncCallback<VoidSerializable> callback, Key entityId, int durationHours) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, entityId);
+        ServerSideFactory.create(OccupancyFacade.class).reserve(lease, durationHours);
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void unreserveUnit(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, entityId);
+        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
+        callback.onSuccess(null);
     }
 }

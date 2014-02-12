@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -84,5 +85,25 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
     public void clearLegalStatus() {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void reserveUnit(int durationHours) {
+        ((LeaseViewerCrudServiceBase<DTO>) getService()).reserveUnit(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, getEntityId(), durationHours);
+    }
+
+    @Override
+    public void unreserveUnit() {
+        ((LeaseViewerCrudServiceBase<DTO>) getService()).unreserveUnit(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, getEntityId());
     }
 }
