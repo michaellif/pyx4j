@@ -49,7 +49,7 @@ public class BuildingUnitLister extends UnitLister {
                 new MemberColumnDescriptor.Builder(proto().financial()._unitRent()).build(),
                 new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto()._availableForRent()).build()
+                new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build()
        );//@formatter:on
     }
 

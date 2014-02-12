@@ -181,7 +181,7 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
                             unit.financial()._marketRent().setValue(aptUnitIO.marketRent().getValue());
                         }
                         if (aptUnitIO.containsMemberValue(aptUnitIO.availableForRent().getFieldName())) { //if the field was manually set to null
-                            unit._availableForRent().setValue(aptUnitIO.availableForRent().getValue());
+                            unit.availability().availableForRent().setValue(aptUnitIO.availableForRent().getValue());
                         }
                         if (items.contains(unit)) {
                             throw new Error(unit.toString());

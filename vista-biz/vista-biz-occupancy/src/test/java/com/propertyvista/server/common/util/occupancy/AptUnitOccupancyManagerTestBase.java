@@ -257,7 +257,7 @@ public class AptUnitOccupancyManagerTestBase {
     }
 
     protected void assertUnitIsAvailableFrom(LogicalDate date) {
-        Assert.assertEquals(date, Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey())._availableForRent().getValue());
+        Assert.assertEquals(date, Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey()).availability().availableForRent().getValue());
     }
 
     protected void assertUnitIsAvailableFrom(String dateRepr) {

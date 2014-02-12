@@ -48,6 +48,7 @@ import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstrain
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitEffectiveAvailability;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
@@ -878,13 +879,11 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     private void setUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
-        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
-        unit._availableForRent().setValue(newAvaialbleFrom);
-
-        // TODO: unit price zeroed in ADNVANCE! - i.g. TODAY instead newAvaialbleFrom date!!!
-        unit.financial()._unitRent().setValue(null);
-
-        Persistence.service().merge(unit);
+        EntityQueryCriteria<AptUnitEffectiveAvailability> criteria = EntityQueryCriteria.create(AptUnitEffectiveAvailability.class);
+        criteria.eq(criteria.proto().unit(), unitPk);
+        AptUnitEffectiveAvailability availability = Persistence.service().retrieve(criteria);
+        availability.availableForRent().setValue(newAvaialbleFrom);
+        Persistence.service().merge(availability);
     }
 
     private boolean isInProductCatalog(Key unitPk) {
@@ -945,5 +944,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         criteria.eq(unitProto.unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));
         criteria.le(unitProto.unitOccupancySegments().$().dateFrom(), from);
         criteria.gt(unitProto.unitOccupancySegments().$().dateFrom(), fromDeadline);
+    }
+
+    @Override
+    public void setAvailability(AptUnit unit, LogicalDate availableForRent) {
+        throw new Error("unsupported");
     }
 }

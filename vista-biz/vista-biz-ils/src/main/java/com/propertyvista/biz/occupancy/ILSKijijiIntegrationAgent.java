@@ -123,7 +123,7 @@ public class ILSKijijiIntegrationAgent {
         if (floorplanProfileMap.size() > 0) {
             EntityQueryCriteria<AptUnit> critUnit = EntityQueryCriteria.create(AptUnit.class);
             critUnit.in(critUnit.proto().floorplan(), floorplanProfileMap.keySet());
-            critUnit.isNotNull(critUnit.proto()._availableForRent());
+            critUnit.isNotNull(critUnit.proto().availability().availableForRent());
             units = Persistence.service().query(critUnit);
         } else {
             units = new ArrayList<AptUnit>();
@@ -145,7 +145,7 @@ public class ILSKijijiIntegrationAgent {
             }
             // calculate best availability date for each floorplan
             LogicalDate bestAvail = availMap.get(unit.floorplan());
-            LogicalDate dateFrom = unit._availableForRent().getValue();
+            LogicalDate dateFrom = unit.availability().availableForRent().getValue();
             if (bestAvail == null || bestAvail.after(dateFrom)) {
                 availMap.put(unit.floorplan(), dateFrom);
             }

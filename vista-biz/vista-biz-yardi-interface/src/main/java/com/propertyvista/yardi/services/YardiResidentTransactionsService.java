@@ -810,7 +810,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 crit.eq(crit.proto().building(), building);
                 for (AptUnit unit : Persistence.service().query(crit)) {
                     new YardiILSMarketingProcessor().updateAvailability(unit, null);
-                    Persistence.service().persist(unit);
                 }
                 return null;
             }
@@ -823,7 +822,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             @Override
             public Void execute() throws YardiServiceException {
                 new YardiILSMarketingProcessor().updateAvailability(unit, avail);
-                Persistence.service().persist(unit);
                 return null;
             }
         });

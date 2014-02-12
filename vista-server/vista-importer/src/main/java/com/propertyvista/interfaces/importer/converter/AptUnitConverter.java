@@ -33,7 +33,7 @@ public class AptUnitConverter extends EntityBinder<AptUnit, AptUnitIO> {
         bind(toProto.areaUnits(), boProto.info().areaUnits());
         bind(toProto.unitRent(), boProto.financial()._unitRent());
         bind(toProto.marketRent(), boProto.financial()._marketRent());
-        bind(toProto.availableForRent(), boProto._availableForRent());
+        bind(toProto.availableForRent(), boProto.availability().availableForRent());
         bind(toProto.floor(), boProto.info().floor());
     }
 

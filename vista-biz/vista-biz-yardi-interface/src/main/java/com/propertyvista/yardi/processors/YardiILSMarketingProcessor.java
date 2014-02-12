@@ -21,8 +21,10 @@ import com.yardi.entity.ils.MadeReadyDate;
 import com.yardi.entity.ils.VacateDate;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.yardi.mappers.MappingUtils;
@@ -51,7 +53,7 @@ public class YardiILSMarketingProcessor {
                 dateAvail = toDate(avail.getVacateDate());
             }
         }
-        unit._availableForRent().setValue(dateAvail);
+        ServerSideFactory.create(OccupancyFacade.class).setAvailability(unit, dateAvail);
     }
 
     private LogicalDate toDate(VacateDate vacDate) {

@@ -35,6 +35,7 @@ import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitEffectiveAvailability;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
@@ -47,11 +48,13 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public AptUnitOccupancySegment getOccupancySegment(AptUnit unitStub, LogicalDate date) {
-        AptUnit unit = retrieveUnit(unitStub);
+        EntityQueryCriteria<AptUnitEffectiveAvailability> criteria = EntityQueryCriteria.create(AptUnitEffectiveAvailability.class);
+        criteria.eq(criteria.proto().unit(), unitStub);
+        AptUnitEffectiveAvailability availability = Persistence.service().retrieve(criteria);
         AptUnitOccupancySegment s = EntityFactory.create(AptUnitOccupancySegment.class);
-        if (!unit._availableForRent().isNull() && date.compareTo(unit._availableForRent().getValue()) > 0) {
+        if (!availability.availableForRent().isNull() && date.compareTo(availability.availableForRent().getValue()) > 0) {
             s.status().setValue(Status.available);
-            s.dateFrom().setValue(unit._availableForRent().getValue());
+            s.dateFrom().setValue(availability.availableForRent().getValue());
             s.dateTo().setValue(OccupancyFacade.MAX_DATE);
         } else {
             s.status().setValue(Status.pending);
@@ -68,21 +71,17 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void migrateStart(AptUnit unitStub, Lease leaseStub) {
-        AptUnit unit = retrieveUnit(unitStub);
-        unit._availableForRent().setValue(null);
-        Persistence.service().merge(unit);
+        setAvailability(unitStub, null);
     }
 
     @Override
     public boolean isMigrateStartAvailable(AptUnit unitStub) {
-        return isAvailableForRent(Persistence.service().retrieve(AptUnit.class, unitStub.getPrimaryKey()));
+        throw new Error("unsupported");
     }
 
     @Override
     public void migratedApprove(AptUnit unitStub) {
-        AptUnit unit = retrieveUnit(unitStub);
-        unit._availableForRent().setValue(null);
-        Persistence.service().merge(unit);
+        setAvailability(unitStub, null);
     }
 
     @Override
@@ -92,9 +91,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void migratedCancel(AptUnit unitStub) {
-        AptUnit unit = retrieveUnit(unitStub);
-        unit._availableForRent().setValue(now());
-        Persistence.service().merge(unit);
+        setAvailability(unitStub, SystemDateManager.getLogicalDate());
     }
 
     @Override
@@ -114,9 +111,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void scopeRenovation(Key unitId, LogicalDate renovationEndDate) {
-        AptUnit unit = retrieveUnit(unitId);
-        unit._availableForRent().setValue(null);
-        Persistence.service().merge(unit);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), null);
     }
 
     @Override
@@ -126,9 +121,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void scopeAvailable(Key unitId) {
-        AptUnit unit = retrieveUnit(unitId);
-        unit._availableForRent().setValue(now());
-        Persistence.service().merge(unit);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), SystemDateManager.getLogicalDate());
     }
 
     @Override
@@ -138,9 +131,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void makeVacant(Key unitId, LogicalDate vacantFrom) {
-        AptUnit unit = retrieveUnit(unitId);
-        unit._availableForRent().setValue(null);
-        Persistence.service().merge(unit);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), null);
     }
 
     @Override
@@ -153,9 +144,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void reserve(Key unitId, Lease lease) {
-        AptUnit unit = retrieveUnit(unitId);
-        unit._availableForRent().setValue(null);
-        Persistence.service().merge(unit);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), null);
     }
 
     @Override
@@ -165,9 +154,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void unreserve(Key unitId) {
-        AptUnit unit = retrieveUnit(unitId);
-        unit._availableForRent().setValue(now());
-        Persistence.service().merge(unit);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), SystemDateManager.getLogicalDate());
     }
 
     @Override
@@ -177,9 +164,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void approveLease(Key unitId) {
-        AptUnit unit = retrieveUnit(unitId);
-        unit._availableForRent().setValue(null);
-        Persistence.service().merge(unit);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), null);
     }
 
     @Override
@@ -189,16 +174,12 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void moveOut(Key unitId, LogicalDate moveOutDate, Lease leaseId) throws OccupancyOperationException {
-        AptUnit unit = retrieveUnit(unitId);
-        unit._availableForRent().setValue(moveOutDate);
-        Persistence.service().merge(unit);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), moveOutDate);
     }
 
     @Override
     public void cancelMoveOut(Key unitId) throws OccupancyOperationException {
-        AptUnit unit = retrieveUnit(unitId);
-        unit._availableForRent().setValue(null);
-        Persistence.service().merge(unit);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), null);
     }
 
     @Override
@@ -213,20 +194,13 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
         return true;
     }
 
-    private LogicalDate now() {
-        return new LogicalDate(SystemDateManager.getDate());
-    }
-
-    private boolean isAvailableForRent(AptUnit unit) {
-        return !unit._availableForRent().isNull() && unit._availableForRent().getValue().compareTo(now()) <= 0;
-    }
-
-    private AptUnit retrieveUnit(Key unitId) {
-        return Persistence.service().retrieve(AptUnit.class, unitId);
-    }
-
-    private AptUnit retrieveUnit(AptUnit unitStub) {
-        return retrieveUnit(unitStub.getPrimaryKey());
+    @Override
+    public void setAvailability(AptUnit unit, LogicalDate availableForRent) {
+        EntityQueryCriteria<AptUnitEffectiveAvailability> criteria = EntityQueryCriteria.create(AptUnitEffectiveAvailability.class);
+        criteria.eq(criteria.proto().unit(), unit);
+        AptUnitEffectiveAvailability availability = Persistence.service().retrieve(criteria);
+        availability.availableForRent().setValue(availableForRent);
+        Persistence.service().merge(availability);
     }
 
     @Override
@@ -281,7 +255,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
         criteria.notExists(unitProto.unitReservation().$(), existsReservation);
 
         if (VistaTODO.yardi_noUnitOccupancySegments) {
-            criteria.le(unitProto._availableForRent(), from);
+            criteria.le(unitProto.availability().availableForRent(), from);
         } else {
             throw new Error("TODO");
         }

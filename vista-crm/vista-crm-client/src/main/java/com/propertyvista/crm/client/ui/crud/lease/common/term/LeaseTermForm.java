@@ -135,7 +135,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             }
 
                             if (VistaFeatures.instance().yardiIntegration() && VistaTODO.yardi_noUnitOccupancySegments) {
-                                filters.add(PropertyCriterion.le(proto().units().$()._availableForRent(), dateFrom));
+                                filters.add(PropertyCriterion.le(proto().units().$().availability().availableForRent(), dateFrom));
                             } else {
                                 filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().status(),
                                         AptUnitOccupancySegment.Status.available));

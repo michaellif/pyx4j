@@ -65,7 +65,7 @@ public abstract class UnitSelectorDialog extends EntitySelectorTableDialog<AptUn
                 new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
                 new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan")).build(),
                 new MemberColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
-                new MemberColumnDescriptor.Builder(proto()._availableForRent()).build(),
+                new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build(),
 
                 // building data                
                 new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),

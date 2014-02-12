@@ -170,7 +170,8 @@ public class ILSConfigLoader {
             for (AptUnit u : b.units()) {
                 UnitAvailData data = availDataMap.get(b.propertyCode().getValue() + "_" + u.info().number().getValue());
                 if (data != null && u.financial()._marketRent().isNull()) {
-                    u._availableForRent().setValue(toLogicalDate(data.available().getValue()));
+                    u.availability().availableForRent().setValue(toLogicalDate(data.available().getValue()));
+                    Persistence.service().persist(u.availability());
                     u.financial()._marketRent().setValue(new BigDecimal(data.marketRent().getValue()));
                     Persistence.service().persist(u);
                 }

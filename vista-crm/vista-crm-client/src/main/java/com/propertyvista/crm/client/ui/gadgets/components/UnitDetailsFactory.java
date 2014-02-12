@@ -53,7 +53,7 @@ public class UnitDetailsFactory extends AbstractListerDetailsFactory<AptUnitDTO,
                 new MemberColumnDescriptor.Builder(proto.info()._bathrooms()).build(),
                 new MemberColumnDescriptor.Builder(proto.financial()._unitRent()).build(),
                 new MemberColumnDescriptor.Builder(proto.financial()._marketRent()).build(),
-                new MemberColumnDescriptor.Builder(proto._availableForRent()).build()
+                new MemberColumnDescriptor.Builder(proto.availability().availableForRent()).build()
             );//@formatter:on
     }
 

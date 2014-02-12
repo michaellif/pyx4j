@@ -153,7 +153,7 @@ public class YardiSubsequentLeasesTest extends YardiTestBase {
 
         AptUnit unit = getUnit(getBuilding("prop123"), "111");
         assertNotNull(unit);
-        assertTrue("Unit Availability", unit._availableForRent().isNull());
+        assertTrue("Unit Availability", unit.availability().availableForRent().isNull());
     }
 
     public void testCurrent_FormerLeasesImport() throws Exception {
@@ -180,6 +180,6 @@ public class YardiSubsequentLeasesTest extends YardiTestBase {
 
         AptUnit unit = getUnit(getBuilding("prop123"), "111");
         assertNotNull(unit);
-        assertTrue("Unit Availability", unit._availableForRent().isNull());
+        assertTrue("Unit Availability", unit.availability().availableForRent().isNull());
     }
 }

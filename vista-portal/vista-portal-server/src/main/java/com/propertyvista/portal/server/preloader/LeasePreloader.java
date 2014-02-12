@@ -332,7 +332,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
     }
 
     private AptUnit makeAvailable(final AptUnit unit) {
-        if (unit._availableForRent().isNull()) {
+        if (unit.availability().availableForRent().isNull()) {
             SystemDateManager.setDate(getStatusFromDate(unit));
             try {
                 ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unit.getPrimaryKey());

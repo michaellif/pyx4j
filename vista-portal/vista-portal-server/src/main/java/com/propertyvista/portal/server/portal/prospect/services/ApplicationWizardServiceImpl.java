@@ -828,7 +828,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.bathrooms().setValue(unit.floorplan().bathrooms().getValue());
         to.dens().setValue(unit.floorplan().dens().getValue());
 
-        to.available().setValue(unit._availableForRent().getValue());
+        to.available().setValue(unit.availability().availableForRent().getValue());
         to.price().setValue(unit.financial()._marketRent().getValue());
 
         to.display().setValue(to.getStringView());

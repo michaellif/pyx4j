@@ -99,7 +99,7 @@ public class ILSMarketingDevPreloader extends BaseVistaDevDataPreloader {
     }
 
     private AptUnit makeAvailable(final AptUnit unit) {
-        if (unit._availableForRent().isNull()) {
+        if (unit.availability().availableForRent().isNull()) {
             LogicalDate fromDate = getStatusFromDate(unit);
             if (fromDate != null) {
                 SystemDateManager.setDate(fromDate);

@@ -103,9 +103,9 @@ public class BuildingUpdater extends ImportPersister {
                 }
 
                 // Update
-                if (!unit._availableForRent().equals(aptUnitIO.availableForRent())) {
-                    unit._availableForRent().setValue(aptUnitIO.availableForRent().getValue());
-                    Persistence.service().persist(unit);
+                if (!unit.availability().availableForRent().equals(aptUnitIO.availableForRent())) {
+                    unit.availability().availableForRent().setValue(aptUnitIO.availableForRent().getValue());
+                    Persistence.service().persist(unit.availability());
                     counters.units += 1;
                     counters.buildings = 1;
                     log.debug("updated AptUnit {} {}", buildingIO.propertyCode().getValue() + " " + floorplanIO.name().getValue(), aptUnitIO.number()
@@ -243,9 +243,9 @@ public class BuildingUpdater extends ImportPersister {
 
             // Temporary Hack for null values
             if (aptUnitIO.containsMemberValue(aptUnitIO.availableForRent().getFieldName()) && aptUnitIO.availableForRent().isNull()) {
-                if (!unit._availableForRent().isNull()) {
-                    unit._availableForRent().setValue(null);
-                    unitUpdated = true;
+                if (!unit.availability().availableForRent().isNull()) {
+                    unit.availability().availableForRent().setValue(null);
+                    Persistence.service().merge(unit.availability());
                 }
             }
 

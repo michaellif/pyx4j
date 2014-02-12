@@ -192,7 +192,7 @@ public class ILSGottarentIntegrationAgent {
 
     private ILSUnitDTO createDto(AptUnit unit) {
         ILSUnitDTO dto = EntityFactory.create(ILSUnitDTO.class);
-        dto.availability().set(unit._availableForRent());
+        dto.availability().set(unit.availability().availableForRent());
         dto.unitId().set(unit.info().number());
         return dto;
     }

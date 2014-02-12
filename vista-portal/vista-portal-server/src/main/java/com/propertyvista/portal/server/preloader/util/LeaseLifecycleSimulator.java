@@ -150,7 +150,7 @@ public class LeaseLifecycleSimulator {
         }
 
         SystemDateManager.setDate(simStart);
-        if (lease.unit()._availableForRent().isNull()) {
+        if (lease.unit().availability().availableForRent().isNull()) {
             if (!ServerSideFactory.create(OccupancyFacade.class).isScopeAvailableAvailable(lease.unit().getPrimaryKey())) {
                 SystemDateManager.resetDate();
                 throw new IllegalStateException("lease simulation cannot be started because the unit is not available");
@@ -159,7 +159,7 @@ public class LeaseLifecycleSimulator {
             }
         }
 
-        LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()),
+        LogicalDate reservedOn = add(max(simStart, lease.unit().availability().availableForRent().getValue()),
                 LeaseLifecycleSimulatorUtils.rndBetween(random, minAvailableTerm, maxAvailableTerm));
 
         LogicalDate leaseFrom = add(reservedOn, LeaseLifecycleSimulatorUtils.rndBetween(random, minReserveTerm, maxReserveTerm));

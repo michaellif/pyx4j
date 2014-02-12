@@ -42,6 +42,7 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitEffectiveAvailability;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitReservation;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -95,14 +96,12 @@ public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachm
 
     // ----------------------------------------------------
     // internals:
-    /**
-     * Denormalized field used for search, managed by @see AptUnitOccupancyManagerImpl
-     * Used in old Starlinght portal only
-     */
-    @Indexed
+    //TODO Remove
     @Deprecated
-    @Caption(name = "Availability")
     IPrimitive<LogicalDate> _availableForRent();
+
+    @Owned(cascade = {}, forceCreation = true)
+    AptUnitEffectiveAvailability availability();
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = Lease.class)

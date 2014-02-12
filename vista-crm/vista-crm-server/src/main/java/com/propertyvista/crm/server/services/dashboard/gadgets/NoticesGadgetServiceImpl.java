@@ -117,7 +117,7 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
         }
         LogicalDate today = new LogicalDate(SystemDateManager.getDate());
-        criteria.add(PropertyCriterion.le(criteria.proto()._availableForRent(), today));
+        criteria.add(PropertyCriterion.le(criteria.proto().availability().availableForRent(), today));
         return criteria;
     }
 

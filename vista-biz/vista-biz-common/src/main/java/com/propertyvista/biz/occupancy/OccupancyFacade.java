@@ -111,6 +111,9 @@ public interface OccupancyFacade {
 
     boolean unreserveIfReservered(Lease lease);
 
+    // Used only in Yardi for now
+    void setAvailability(AptUnit unit, LogicalDate availableForRent);
+
     void addAvalableCriteria(EntityQueryCriteria<?> criteria, AptUnit unitProto, AptUnitOccupancySegment.Status status, Date from, Date fromDeadline);
 
     /**
