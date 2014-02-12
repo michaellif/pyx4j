@@ -96,28 +96,16 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
             }
         });
 
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateEcheck();
-                    }
-                }
-            });
-        }
     }
 
-    private void devGenerateEcheck() {
-        if (get(proto().nameOn()).isValueEmpty()) {
-            get(proto().nameOn()).setValue("Dev");
-        }
-        get(proto().bankId()).setValue("123");
-        get(proto().branchTransitNumber()).setValue("12345");
+    @Override
+    public void generateMockData() {
+        get(proto().nameOn()).setMockValue("Dev");
+        get(proto().bankId()).setMockValue("123");
+        get(proto().branchTransitNumber()).setMockValue("12345");
 
         CTextFieldBase<?, ?> id = (CTextFieldBase<?, ?>) get(proto().accountNo());
         id.onEditingStop(); // assume new user input; will obfuscate the value if focused
-        id.setValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
+        id.setMockValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
     }
 }

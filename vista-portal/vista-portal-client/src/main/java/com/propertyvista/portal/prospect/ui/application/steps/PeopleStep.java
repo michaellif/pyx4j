@@ -119,6 +119,22 @@ public class PeopleStep extends ApplicationWizardStep {
             }
         }
 
+        @Override
+        public void generateMockData() {
+
+            if (getItemCount() == 0) {
+                CoapplicantDTO cotenant = EntityFactory.create(CoapplicantDTO.class);
+                cotenant.dependent().setValue(false);
+                cotenant.matured().setValue(true);
+                addItem(cotenant);
+
+                CoapplicantDTO occupant = EntityFactory.create(CoapplicantDTO.class);
+                occupant.dependent().setValue(true);
+                occupant.matured().setValue(false);
+                addItem(occupant);
+            }
+        }
+
         class CoapplicantForm extends CEntityForm<CoapplicantDTO> {
 
             public CoapplicantForm() {
@@ -160,12 +176,23 @@ public class PeopleStep extends ApplicationWizardStep {
 
             @Override
             public void generateMockData() {
-                get(proto().dependent()).setMockValue(Boolean.FALSE);
-                get(proto().name().firstName()).setMockValue("John");
-                get(proto().name().lastName()).setMockValue("Stiles");
-                get(proto().birthDate()).setMockValue(new LogicalDate(102, 3, 5));
-                get(proto().relationship()).setMockValue(PersonRelationship.Son);
-                get(proto().email()).setMockValue("JohnStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
+                if (get(proto().dependent()).getValue() == null) {
+                    get(proto().dependent()).setMockValue(false);
+                    get(proto().matured()).setMockValue(true);
+                }
+                if (get(proto().dependent()).getValue()) {
+                    get(proto().name().firstName()).setMockValue("Bob");
+                    get(proto().name().lastName()).setMockValue("Stiles");
+                    get(proto().relationship()).setMockValue(PersonRelationship.Son);
+                    get(proto().birthDate()).setMockValue(new LogicalDate(102, 3, 5));
+                    get(proto().email()).setMockValue("BobStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
+                } else {
+                    get(proto().name().firstName()).setMockValue("Jane");
+                    get(proto().name().lastName()).setMockValue("Stiles");
+                    get(proto().relationship()).setMockValue(PersonRelationship.Spouse);
+                    get(proto().email()).setMockValue("JaneStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
+                }
+
             }
 
             @Override

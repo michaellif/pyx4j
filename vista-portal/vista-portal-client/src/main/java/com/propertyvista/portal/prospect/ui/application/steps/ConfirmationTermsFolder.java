@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
@@ -75,6 +76,13 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedOnlineApplica
                     .contentWidth("250px").componentWidth("250px").build());
 
             return mainPanel;
+        }
+
+        @Override
+        public void generateMockData() {
+            CustomerSignature signature = get(proto().signature()).getValue().duplicate();
+            signature.agree().setValue(true);
+            get(proto().signature()).setMockValue(signature);
         }
     }
 }

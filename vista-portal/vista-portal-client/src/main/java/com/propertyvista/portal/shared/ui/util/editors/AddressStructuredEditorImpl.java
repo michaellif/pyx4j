@@ -95,22 +95,6 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         return content;
     }
 
-    @Override
-    public void addValidations() {
-        super.addValidations();
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateAddress();
-                    }
-                }
-            });
-        }
-    }
-
     private void attachFilters(final AddressStructured proto, CComponent<Province> province, CComponent<Country> country, CComponent<String> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
@@ -157,14 +141,14 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         }
     }
 
-    protected void devGenerateAddress() {
-        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
-        get(proto().city()).setValue("Toronto");
-        get(proto().postalCode()).setValue("M5H 1A1");
-
-        get(proto().streetNumber()).setValue("100");
-        get(proto().streetName()).setValue("King");
-        get(proto().streetType()).setValue(StreetType.street);
-        get(proto().streetDirection()).setValue(StreetDirection.west);
+    @Override
+    public void generateMockData() {
+        get(proto().province()).setMockValueByString("Ontario");
+        get(proto().city()).setMockValue("Toronto");
+        get(proto().postalCode()).setMockValue("M5H 1A1");
+        get(proto().streetNumber()).setMockValue("100");
+        get(proto().streetName()).setMockValue("King");
+        get(proto().streetType()).setMockValue(StreetType.street);
+        get(proto().streetDirection()).setMockValue(StreetDirection.west);
     }
 }

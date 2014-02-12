@@ -62,28 +62,16 @@ public class PetDataEditor extends CEntityForm<Pet> {
     @Override
     public void addValidations() {
         super.addValidations();
-
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateVehicle();
-                    }
-                }
-            });
-        }
-
         get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
     }
 
-    private void devGenerateVehicle() {
-        get(proto().name()).setValue("Sweety");
-        get(proto().color()).setValue("Pink");
-        get(proto().breed()).setValue("Bull Terrier");
-        get(proto().weight()).setValue(222);
-        get(proto().weightUnit()).setValue(WeightUnit.kg);
-        get(proto().birthDate()).setValue(new LogicalDate(1, 1, 1));
+    @Override
+    public void generateMockData() {
+        get(proto().name()).setMockValue("Sweety");
+        get(proto().color()).setMockValue("Pink");
+        get(proto().breed()).setMockValue("Bull Terrier");
+        get(proto().weight()).setMockValue(222);
+        get(proto().weightUnit()).setMockValue(WeightUnit.kg);
+        get(proto().birthDate()).setMockValue(new LogicalDate(1, 1, 1));
     }
 }

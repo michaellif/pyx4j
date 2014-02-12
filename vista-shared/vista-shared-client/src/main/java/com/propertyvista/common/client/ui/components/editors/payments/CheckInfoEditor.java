@@ -54,29 +54,13 @@ public class CheckInfoEditor extends CEntityForm<CheckInfo> {
     }
 
     @Override
-    public void addValidations() {
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateEcheck();
-                    }
-                }
-            });
-        }
-    }
-
-    private void devGenerateEcheck() {
-        if (get(proto().nameOn()).isValueEmpty()) {
-            get(proto().nameOn()).setValue("Dev");
-        }
-        get(proto().bankName()).setValue("Nowhere Bank");
-        get(proto().accountType()).setValue(AccountType.Chequing);
-        get(proto().checkNo()).setValue("1");
-        get(proto().institutionNo()).setValue("123");
-        get(proto().transitNo()).setValue("12345");
-        ((CTextFieldBase<?, ?>) get(proto().accountNo())).setValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
+    public void generateMockData() {
+        get(proto().nameOn()).setMockValue("Dev");
+        get(proto().bankName()).setMockValue("Nowhere Bank");
+        get(proto().accountType()).setMockValue(AccountType.Chequing);
+        get(proto().checkNo()).setMockValue("1");
+        get(proto().institutionNo()).setMockValue("123");
+        get(proto().transitNo()).setMockValue("12345");
+        get(proto().accountNo()).setMockValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
     }
 }

@@ -15,6 +15,7 @@ package com.propertyvista.portal.prospect.ui.application;
 
 import java.util.HashMap;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
@@ -155,6 +156,17 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         }
 
         return true;
+    }
+
+    @Override
+    public void generateMockData() {
+        get(proto().applicant().legalQuestions().suedForRent()).setMockValue(true);
+        get(proto().applicant().legalQuestions().suedForDamages()).setMockValue(true);
+        get(proto().applicant().legalQuestions().everEvicted()).setMockValue(true);
+        get(proto().applicant().legalQuestions().defaultedOnLease()).setMockValue(true);
+        get(proto().applicant().legalQuestions().convictedOfFelony()).setMockValue(true);
+        get(proto().applicant().legalQuestions().legalTroubles()).setMockValue(true);
+        get(proto().applicant().legalQuestions().filedBankruptcy()).setMockValue(true);
     }
 
     class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {

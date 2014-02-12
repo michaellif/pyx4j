@@ -82,28 +82,13 @@ public class VehicleDataEditor extends CEntityForm<Vehicle> {
     }
 
     @Override
-    public void addValidations() {
-        super.addValidations();
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateVehicle();
-                    }
-                }
-            });
-        }
-    }
-
-    private void devGenerateVehicle() {
-        get(proto().make()).setValue("BMW");
-        get(proto().model()).setValue("i666");
-        get(proto().color()).setValue("Rose");
-        get(proto().year()).setValue(new LogicalDate());
-        get(proto().plateNumber()).setValue("LastTimeDrive");
-        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
+    public void generateMockData() {
+        get(proto().make()).setMockValue("BMW");
+        get(proto().model()).setMockValue("i666");
+        get(proto().color()).setMockValue("Rose");
+        get(proto().year()).setMockValue(new LogicalDate());
+        get(proto().plateNumber()).setMockValue("LastTimeDrive");
+        get(proto().province()).setMockValueByString("Ontario");
 
     }
 }

@@ -13,11 +13,14 @@
  */
 package com.propertyvista.portal.shared.ui.util.editors;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -31,6 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -81,27 +85,14 @@ public class VehicleDataEditor extends CEntityForm<Vehicle> {
     }
 
     @Override
-    public void addValidations() {
-        super.addValidations();
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateVehicle();
-                    }
-                }
-            });
-        }
+    public void generateMockData() {
+        get(proto().make()).setMockValue("Rolls Royce");
+        get(proto().model()).setMockValue("Phantom");
+        get(proto().color()).setMockValue("Black");
+        get(proto().year()).setMockValue(new LogicalDate(108, 0, 0));
+        get(proto().plateNumber()).setMockValue("777");
+        get(proto().country()).setMockValueByString("Canada");
+        get(proto().province()).setMockValueByString("Ontario");
     }
 
-    private void devGenerateVehicle() {
-        get(proto().make()).setValue("BMW");
-        get(proto().model()).setValue("i666");
-        get(proto().color()).setValue("Rose");
-        get(proto().year()).setValue(new LogicalDate());
-        get(proto().plateNumber()).setValue("LastTimeDrive");
-        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
-    }
 }

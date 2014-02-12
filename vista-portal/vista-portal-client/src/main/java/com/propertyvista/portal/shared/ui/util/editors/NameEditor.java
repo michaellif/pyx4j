@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -26,6 +27,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class NameEditor extends CEntityForm<Name> {
@@ -79,6 +81,12 @@ public class NameEditor extends CEntityForm<Name> {
         });
 
         return main;
+    }
+
+    @Override
+    public void generateMockData() {
+        get(proto().firstName()).setMockValue("Jane");
+        get(proto().lastName()).setMockValue("Doe");
     }
 
     private void calculateFieldsStatus() {

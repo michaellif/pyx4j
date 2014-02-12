@@ -186,18 +186,6 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
             }
         });
 
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateCreditCard();
-                    }
-                }
-
-            });
-        }
     }
 
     protected Set<CreditCardType> getAllowedCardTypes() {
@@ -243,18 +231,15 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
         cardEditor.revalidate();
     }
 
-    private void devGenerateCreditCard() {
-        if (get(proto().nameOn()).isValueEmpty()) {
-            get(proto().nameOn()).setValue("Dev");
-        }
-        if (get(proto().cardType()).getValue() == null) {
-            get(proto().cardType()).setValue(CreditCardType.Visa);
-        }
-        cardEditor.setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
+    @Override
+    public void generateMockData() {
+        get(proto().nameOn()).setMockValue("Dev");
+        get(proto().cardType()).setMockValue(CreditCardType.Visa);
+        cardEditor.setMockValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
 
         LogicalDate nextMonth = new LogicalDate();
         TimeUtils.addDays(nextMonth, 31);
-        get(proto().expiryDate()).setValue(nextMonth);
-        get(proto().securityCode()).setValue("123");
+        get(proto().expiryDate()).setMockValue(nextMonth);
+        get(proto().securityCode()).setMockValue("123");
     }
 }

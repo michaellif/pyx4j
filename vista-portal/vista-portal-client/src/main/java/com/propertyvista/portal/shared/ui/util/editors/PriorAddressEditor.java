@@ -78,9 +78,10 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
     }
 
     @Override
-    protected void devGenerateAddress() {
-        super.devGenerateAddress();
-        get(proto().moveInDate()).setValue(new LogicalDate(101, 5, 21));
-        get(proto().rented()).setValue(OwnedRented.owned);
+    public void generateMockData() {
+        super.generateMockData();
+        get(proto().moveInDate()).setMockValue(new LogicalDate(101, 5, 21));
+        get(proto().rented()).setMockValue(OwnedRented.owned);
     }
+
 }

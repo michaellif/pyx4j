@@ -17,10 +17,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.events.DevShortcutEvent;
-import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
@@ -95,22 +91,6 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         return content;
     }
 
-    @Override
-    public void addValidations() {
-        super.addValidations();
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateAddress();
-                    }
-                }
-            });
-        }
-    }
-
     private void attachFilters(final AddressStructured proto, CComponent<Province> province, CComponent<Country> country, CComponent<String> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
@@ -157,14 +137,15 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         }
     }
 
-    protected void devGenerateAddress() {
-        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
-        get(proto().city()).setValue("Toronto");
-        get(proto().postalCode()).setValue("M5H 1A1");
+    @Override
+    public void generateMockData() {
+        get(proto().province()).setMockValueByString("Ontario");
+        get(proto().city()).setMockValue("Toronto");
+        get(proto().postalCode()).setMockValue("M5H 1A1");
 
-        get(proto().streetNumber()).setValue("100");
-        get(proto().streetName()).setValue("King");
-        get(proto().streetType()).setValue(StreetType.street);
-        get(proto().streetDirection()).setValue(StreetDirection.west);
+        get(proto().streetNumber()).setMockValue("100");
+        get(proto().streetName()).setMockValue("King");
+        get(proto().streetType()).setMockValue(StreetType.street);
+        get(proto().streetDirection()).setMockValue(StreetDirection.west);
     }
 }

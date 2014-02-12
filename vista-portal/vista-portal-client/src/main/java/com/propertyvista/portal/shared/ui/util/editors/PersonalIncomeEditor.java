@@ -161,25 +161,14 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
             public void addValidations() {
                 super.addValidations();
                 validationOfStartStopDates(this);
-
-                if (ApplicationMode.isDevelopment()) {
-                    this.addDevShortcutHandler(new DevShortcutHandler() {
-                        @Override
-                        public void onDevShortcut(DevShortcutEvent event) {
-                            if (event.getKeyCode() == 'Q') {
-                                event.consume();
-                                devGenerateIncomeInfoEmployer();
-                            }
-                        }
-                    });
-                }
             }
 
-            private void devGenerateIncomeInfoEmployer() {
-                get(proto().name()).setValue("Nowhere");
-                get(proto().supervisorName()).setValue("Bob");
-                get(proto().supervisorPhone()).setValue("1234567890");
-                get(proto().monthlyAmount()).setValue(new BigDecimal("3000"));
+            @Override
+            public void generateMockData() {
+                get(proto().name()).setMockValue("Nowhere");
+                get(proto().supervisorName()).setMockValue("Bob");
+                get(proto().supervisorPhone()).setMockValue("1234567890");
+                get(proto().monthlyAmount()).setMockValue(new BigDecimal("3000"));
             }
         };
     }

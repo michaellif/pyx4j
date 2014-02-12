@@ -85,33 +85,14 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
             }
         });
 
-        if (ApplicationMode.isDevelopment()) {
-            this.addDevShortcutHandler(new DevShortcutHandler() {
-                @Override
-                public void onDevShortcut(DevShortcutEvent event) {
-                    if (event.getKeyCode() == 'Q') {
-                        event.consume();
-                        devGenerateAddress();
-                    }
-                }
-            });
-        }
-
     }
 
-    protected void devGenerateAddress() {
-        get(proto().street1()).setValue("100 King St. W");
-        get(proto().city()).setValue("Toronto");
-        get(proto().postalCode()).setValue("M5H 1A1");
-        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
-
-        // invoke ancestor/outer
-        onDevGenerateAddress();
+    @Override
+    public void generateMockData() {
+        get(proto().street1()).setMockValue("100 King St. W");
+        get(proto().city()).setMockValue("Toronto");
+        get(proto().postalCode()).setMockValue("M5H 1A1");
+        get(proto().province()).setMockValueByString("Ontario");
     }
 
-    /**
-     * override in ancestor/outer class to implement some additional data generation
-     */
-    protected void onDevGenerateAddress() {
-    }
 }

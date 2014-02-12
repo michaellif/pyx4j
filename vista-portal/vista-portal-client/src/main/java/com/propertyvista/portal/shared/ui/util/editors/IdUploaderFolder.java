@@ -211,22 +211,12 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                 }
             });
 
-            if (ApplicationMode.isDevelopment()) {
-                this.addDevShortcutHandler(new DevShortcutHandler() {
-                    @Override
-                    public void onDevShortcut(DevShortcutEvent event) {
-                        if (event.getKeyCode() == 'Q') {
-                            event.consume();
-                            devGenerateNumbers();
-                        }
-                    }
-                });
-            }
         }
 
-        private void devGenerateNumbers() {
+        @Override
+        public void generateMockData() {
             if (getValue().idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) {
-                get(proto().idNumber()).setValue(CreditCardNumberGenerator.generateCanadianSin());
+                get(proto().idNumber()).setMockValue(CreditCardNumberGenerator.generateCanadianSin());
             }
         }
     }

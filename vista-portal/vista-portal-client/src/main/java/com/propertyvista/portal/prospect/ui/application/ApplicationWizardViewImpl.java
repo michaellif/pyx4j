@@ -46,4 +46,5 @@ public class ApplicationWizardViewImpl extends AbstractWizardFormView<OnlineAppl
     public ApplicationWizard getApplicationWizard() {
         return applicationWizard;
     }
+
 }
