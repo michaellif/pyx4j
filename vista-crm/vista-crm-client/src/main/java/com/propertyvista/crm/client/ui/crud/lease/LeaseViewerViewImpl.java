@@ -554,7 +554,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             renewButton.setVisible(status == Status.Active && completion == null);
         }
 
-        downloadSignedAgreementItem.setVisible(!value.currentTerm().version().agreementDocument().isNull());
         signAgreementDocumentItem.setVisible(!value.currentTerm().version().employeeSignature().hasValues());
     }
 
@@ -859,7 +858,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         MessageDialog.confirm(i18n.tr("Sign Agreement Document"), i18n.tr("Are you sure?"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).signAgreementDocument();
+                ((LeaseViewerView.Presenter) getPresenter()).digitallySignAgreementDocument();
             }
         });
     }
@@ -868,15 +867,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement Document"));
         ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
 
-        signingProgressItem = new MenuItem(i18n.tr("Signing Progress..."), new Command() {
-            @Override
-            public void execute() {
-                displaySigningProgress();
-            }
-        });
-        leaseAgreementDocumentMenu.addItem(signingProgressItem);
-
-        signAgreementDocumentItem = new MenuItem(i18n.tr("Sign..."), new Command() {
+        signAgreementDocumentItem = new MenuItem(i18n.tr("Sign Digitally..."), new Command() {
             @Override
             public void execute() {
                 signLeaseTermAgreement();
@@ -884,23 +875,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         leaseAgreementDocumentMenu.addItem(signAgreementDocumentItem);
 
-        uploadSignedAgreementItem = new MenuItem(i18n.tr("Upload..."), new Command() {
+        uploadSignedAgreementItem = new MenuItem(i18n.tr("Signing Progress/Upload..."), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).uploadSignedAgreement();
+                ((LeaseViewerView.Presenter) getPresenter()).signingProgressOrUploadAgreement();
             }
         });
         leaseAgreementDocumentMenu.addItem(uploadSignedAgreementItem);
 
         leaseAgreementDocumentMenu.addSeparator();
-
-        downloadSignedAgreementItem = new MenuItem(i18n.tr("Download Signed"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).downloadSignedAgreement(getForm().getValue().currentTerm().version().agreementDocument());
-            }
-        });
-        leaseAgreementDocumentMenu.addItem(downloadSignedAgreementItem);
 
         MenuItem downloadBlankAgreementItem = new MenuItem(i18n.tr("Download for Signing"), new Command() {
             @Override
@@ -912,10 +895,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
         addHeaderToolbarItem(leaseAgreementDocument);
-    }
-
-    private void displaySigningProgress() {
-
     }
 
     private abstract class RenewLeaseBox extends OkCancelDialog {

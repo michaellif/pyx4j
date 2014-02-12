@@ -19,6 +19,8 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
@@ -33,5 +35,9 @@ public interface LeaseTermAgreementDocument extends IHasFile<LeaseTermAgreementD
     @JoinColumn
     @MemberColumn(notNull = true)
     LeaseTermV leaseTermV();
+
+    IPrimitive<Boolean> isSignedByInk();
+
+    IList<LeaseTermParticipant<?>> signedParticipants();
 
 }

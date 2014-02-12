@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
@@ -27,13 +26,9 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
-import com.pyx4j.gwt.client.upload.FileUploadDialog;
-import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -45,9 +40,9 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.billing.bill.BillListerController;
+import com.propertyvista.crm.client.activity.crud.lease.agreement.LeaseAgreementDocumentSigningController;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -58,12 +53,10 @@ import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
-import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.legal.LegalStatus;
@@ -74,7 +67,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
-import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
@@ -397,24 +389,12 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void downloadSignedAgreement(LeaseTermAgreementDocument doc) {
-        String downloadUrl = new VistaFileURLBuilder(LeaseTermAgreementDocument.class).getUrl(doc.file());
-        Window.open(downloadUrl, "_blank", "");
+    public void signingProgressOrUploadAgreement() {
+        new LeaseAgreementDocumentSigningController((LeaseViewerView) this.getView()).show();
     }
 
     @Override
-    public void uploadSignedAgreement() {
-        new FileUploadDialog(i18n.tr("Upload Signed Lease Agreement Document"), EntityFactory.createIdentityStub(Lease.class, getEntityId()),
-                GWT.<UploadService<Lease, LeaseTermAgreementDocumentBlob>> create(LeaseTermAgreementDocumentUploadService.class), new UploadReceiver() {
-                    @Override
-                    public void onUploadComplete(IFile<?> uploadResponse) {
-                        populate();
-                    }
-                }).show();
-    }
-
-    @Override
-    public void signAgreementDocument() {
+    public void digitallySignAgreementDocument() {
         ((LeaseViewerCrudService) getService()).signLease(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
