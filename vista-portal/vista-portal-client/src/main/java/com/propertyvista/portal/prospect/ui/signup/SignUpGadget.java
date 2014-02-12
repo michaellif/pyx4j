@@ -226,14 +226,14 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         }
 
         @Override
-        public void setMockValue() {
-            get(proto().firstName()).setValue("John");
-            get(proto().middleName()).setValue("A");
-            get(proto().lastName()).setValue("Doe");
+        public void generateMockData() {
+            get(proto().firstName()).setMockValue("John");
+            get(proto().middleName()).setMockValue("A");
+            get(proto().lastName()).setMockValue("Doe");
             String email = "johndoe" + (int) System.currentTimeMillis() + "@pyx4j.com";
-            get(proto().email()).setValue(email);
-            get(proto().password()).setValue(email);
-            get(proto().passwordConfirm()).setValue(email);
+            get(proto().email()).setMockValue(email);
+            get(proto().password()).setMockValue(email);
+            get(proto().passwordConfirm()).setMockValue(email);
         }
 
         public void init() {

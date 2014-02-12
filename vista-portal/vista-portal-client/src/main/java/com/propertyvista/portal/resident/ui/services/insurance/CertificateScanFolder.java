@@ -70,8 +70,8 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateSc
         }
 
         @Override
-        public void setMockValue() {
-            get(proto().description()).setValue("Description");
+        public void generateMockData() {
+            get(proto().description()).setMockValue("Description");
         }
 
         @Override

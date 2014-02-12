@@ -219,10 +219,10 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     }
 
     @Override
-    public void setMockValue() {
-        get(proto().reportedForOwnUnit()).setValue(true);
-        get(proto().summary()).setValue("Maintenance Request Summary");
-        get(proto().permissionToEnter()).setValue(true);
+    public void generateMockData() {
+        get(proto().reportedForOwnUnit()).setMockValue(true);
+        get(proto().summary()).setMockValue("Maintenance Request Summary");
+        get(proto().permissionToEnter()).setMockValue(true);
     }
 
     @Override

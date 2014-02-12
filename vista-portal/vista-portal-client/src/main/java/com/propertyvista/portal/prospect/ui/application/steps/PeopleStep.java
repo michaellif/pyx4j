@@ -159,13 +159,13 @@ public class PeopleStep extends ApplicationWizardStep {
             }
 
             @Override
-            public void setMockValue() {
-                get(proto().dependent()).setValue(Boolean.FALSE);
-                get(proto().name().firstName()).setValue("John");
-                get(proto().name().lastName()).setValue("Stiles");
-                get(proto().birthDate()).setValue(new LogicalDate(102, 3, 5));
-                get(proto().relationship()).setValue(PersonRelationship.Son);
-                get(proto().email()).setValue("JohnStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
+            public void generateMockData() {
+                get(proto().dependent()).setMockValue(Boolean.FALSE);
+                get(proto().name().firstName()).setMockValue("John");
+                get(proto().name().lastName()).setMockValue("Stiles");
+                get(proto().birthDate()).setMockValue(new LogicalDate(102, 3, 5));
+                get(proto().relationship()).setMockValue(PersonRelationship.Son);
+                get(proto().email()).setMockValue("JohnStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
             }
 
             @Override

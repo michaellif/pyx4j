@@ -73,12 +73,12 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
     }
 
     @Override
-    public void setMockValue() {
-        get(proto().certificate().insuranceProvider()).setValue("Insurance Provider");
-        get(proto().certificate().insuranceCertificateNumber()).setValue("ABC123");
-        get(proto().certificate().liabilityCoverage()).setValue(new BigDecimal("222.33"));
-        get(proto().certificate().inceptionDate()).setValue(new LogicalDate(System.currentTimeMillis() - (long) 182 * 24 * 60 * 60 * 1000));
-        get(proto().certificate().expiryDate()).setValue(new LogicalDate(System.currentTimeMillis() + (long) 182 * 24 * 60 * 60 * 1000));
+    public void generateMockData() {
+        get(proto().certificate().insuranceProvider()).setMockValue("Insurance Provider");
+        get(proto().certificate().insuranceCertificateNumber()).setMockValue("ABC123");
+        get(proto().certificate().liabilityCoverage()).setMockValue(new BigDecimal("222.33"));
+        get(proto().certificate().inceptionDate()).setMockValue(new LogicalDate(System.currentTimeMillis() - (long) 182 * 24 * 60 * 60 * 1000));
+        get(proto().certificate().expiryDate()).setMockValue(new LogicalDate(System.currentTimeMillis() + (long) 182 * 24 * 60 * 60 * 1000));
     }
 
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
