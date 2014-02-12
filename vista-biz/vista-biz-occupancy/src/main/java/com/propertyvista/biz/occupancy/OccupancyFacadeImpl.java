@@ -31,6 +31,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -413,27 +414,44 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void approveLease(Key unitPk) {
+    public void approveLease(Lease leaseId) {
+        Lease lease = leaseId.duplicate();
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, now);
-        for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.reserved) {
-                split(segment, segment.lease().currentTerm().termFrom().getValue(), new SplittingHandler() {
-                    @Override
-                    public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-                        // already checked that we are in 'reserved'
-                    }
+        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
+        List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(lease.unit().getPrimaryKey(), now);
+        AptUnitOccupancySegment segmentToOccupy = null;
 
-                    @Override
-                    public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                        segment.status().setValue(Status.occupied);
-                    }
-                });
-                new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
-                return;
+        Pair<Date, Lease> reservation = isReserved(lease.unit().getPrimaryKey());
+        if (reservation != null && !reservation.getB().getPrimaryKey().equals(lease.getPrimaryKey())) {
+            throw new IllegalStateException("the unit pk=" + lease.unit().getPrimaryKey() + " is reserved for lease pk=" + reservation.getB().getPrimaryKey()
+                    + ": cannot occupy it for lease pk=" + lease.getPrimaryKey());
+        }
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.available || segment.status().getValue() == Status.reserved) {
+                segmentToOccupy = segment;
+                break;
             }
         }
-        throw new IllegalStateException("'approveLease' operation failed: a 'reserved' segment was not found");
+
+        if (segmentToOccupy != null) {
+            split(segmentToOccupy, lease.currentTerm().termFrom().getValue(), new SplittingHandler() {
+                @Override
+                public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+                    // already checked that we are in 'reserved'
+                }
+
+                @Override
+                public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                    segment.status().setValue(Status.occupied);
+                }
+            });
+
+            new AvailabilityReportManager(lease.unit().getPrimaryKey()).generateUnitAvailablity(now);
+            return;
+        } else {
+            throw new IllegalStateException("'approveLease' operation failed: a 'reserved' or 'available' segment was not found");
+        }
     }
 
     @Override

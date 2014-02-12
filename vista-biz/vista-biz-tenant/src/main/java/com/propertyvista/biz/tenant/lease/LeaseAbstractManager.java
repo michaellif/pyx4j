@@ -406,11 +406,11 @@ public abstract class LeaseAbstractManager {
                 }
             }
 
-            ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+            ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.<Lease> createIdentityStub());
             break;
 
         case NewLease:
-            ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+            ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.<Lease> createIdentityStub());
             break;
 
         case ExistingLease:

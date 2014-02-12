@@ -133,7 +133,7 @@ public interface OccupancyFacade {
 
     boolean isUnreserveAvailable(Key unitId);
 
-    void approveLease(Key unitId);
+    void approveLease(Lease leaseId);
 
     boolean isApproveLeaseAvaialble(Key unitId);
 

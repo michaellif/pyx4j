@@ -21,6 +21,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
@@ -164,8 +165,10 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
     }
 
     @Override
-    public void approveLease(Key unitId) {
-        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), null);
+    public void approveLease(Lease leaseId) {
+        Lease lease = leaseId.createIdentityStub();
+        Persistence.ensureRetrieve(lease.unit(), AttachLevel.IdOnly);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, lease.unit().getPrimaryKey()), null);
     }
 
     @Override

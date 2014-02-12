@@ -25,7 +25,6 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerService {
 
@@ -78,27 +77,4 @@ public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerServ
         callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).getMakeVacantConstraints(unitPk));
     }
 
-    @Override
-    public void reserve(AsyncCallback<VoidSerializable> callback, Key unitPk, Lease lease) {
-        ServerSideFactory.create(OccupancyFacade.class).reserve(unitPk, lease);
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
-    public void canReserve(AsyncCallback<LogicalDate> callback, Key unitPk) {
-        callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).isReserveAvailable(unitPk));
-    }
-
-    @Override
-    public void approveLease(AsyncCallback<VoidSerializable> callback, Key unitPk) {
-        ServerSideFactory.create(OccupancyFacade.class).approveLease(unitPk);
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
-    public void canApproveLease(AsyncCallback<Boolean> callback, Key unitPk) {
-        callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).isApproveLeaseAvaialble(unitPk));
-    }
 }

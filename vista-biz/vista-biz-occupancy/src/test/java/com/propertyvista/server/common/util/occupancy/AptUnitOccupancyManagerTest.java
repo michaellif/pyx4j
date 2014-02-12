@@ -145,7 +145,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-02-10");
 
-        getUOM().approveLease(unitId);
+        getUOM().approveLease(lease.<Lease> createIdentityStub());
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
