@@ -131,13 +131,12 @@ public class PeopleStep extends ApplicationWizardStep {
 
                 int row = -1;
                 mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().matured())).build());
-                mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().dependent())).mockValue(Boolean.FALSE).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).mockValue("John").build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).mockValue("Stiles").build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).mockValue(new LogicalDate(102, 3, 5)).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).mockValue(PersonRelationship.Son).build());
-                mainPanel.setWidget(++row, 0,
-                        new FormWidgetDecoratorBuilder(inject(proto().email())).mockValue("John" + (int) System.currentTimeMillis() + "@Stiles.com").build());
+                mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().dependent())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
 
                 // tweaks:
                 get(proto().dependent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -160,8 +159,13 @@ public class PeopleStep extends ApplicationWizardStep {
             }
 
             @Override
-            protected void setMockValue() {
+            public void setMockValue() {
+                get(proto().dependent()).setValue(Boolean.FALSE);
                 get(proto().name().firstName()).setValue("John");
+                get(proto().name().lastName()).setValue("Stiles");
+                get(proto().birthDate()).setValue(new LogicalDate(102, 3, 5));
+                get(proto().relationship()).setValue(PersonRelationship.Son);
+                get(proto().email()).setValue("JohnStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
             }
 
             @Override

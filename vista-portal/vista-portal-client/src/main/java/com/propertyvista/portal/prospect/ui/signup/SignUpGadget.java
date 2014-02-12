@@ -162,26 +162,25 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
             flexPanel.setH4(row, 1, 1, i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().firstName())).mockValue("John").build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().firstName())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().middleName())).mockValue("A").build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().middleName())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().lastName())).mockValue("Doe").build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().lastName())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) inject(proto().email());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
-            Widget widget = new LoginWidgetDecoratorBuilder(emailField).mockValue("johndoe@pyx4j.com").build();
+            Widget widget = new LoginWidgetDecoratorBuilder(emailField).build();
             flexPanel.setWidget(++row, 0, widget);
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0,
-                    new LoginWidgetDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).mockValue("johndoe@pyx4j.com").build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().passwordConfirm())).mockValue("johndoe@pyx4j.com").build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().passwordConfirm())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
@@ -224,6 +223,17 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             flexPanel.setBR(++row, 0, 2);
 
             return flexPanel;
+        }
+
+        @Override
+        public void setMockValue() {
+            get(proto().firstName()).setValue("John");
+            get(proto().middleName()).setValue("A");
+            get(proto().lastName()).setValue("Doe");
+            String email = "johndoe" + (int) System.currentTimeMillis() + "@pyx4j.com";
+            get(proto().email()).setValue(email);
+            get(proto().password()).setValue(email);
+            get(proto().passwordConfirm()).setValue(email);
         }
 
         public void init() {

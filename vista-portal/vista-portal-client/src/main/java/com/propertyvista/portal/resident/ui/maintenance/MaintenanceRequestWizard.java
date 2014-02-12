@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -22,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -118,7 +121,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 250).build());
         content.setBR(++row, 0, 1);
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).mockValue(true).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).build());
         content.setBR(++row, 0, 1);
 
         // category panel
@@ -128,7 +131,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         content.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
         // Description
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().summary()), 250).mockValue("Maintenance Request Summary").build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().summary()), 250).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 250).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority(), prioritySelector), 250).build());
 
@@ -172,7 +175,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         ((CDatePicker) get(proto().preferredDate2())).setPastDateSelectionAllowed(false);
         accessPanel.setWidget(1, 0, schedulePanel);
 
-        permissionPanel.setWidget(2, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).mockValue(true).build());
+        permissionPanel.setWidget(2, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).build());
         permissionPanel.setWidget(3, 0, accessPanel);
         content.setWidget(++row, 0, permissionPanel);
         content.setBR(++row, 0, 1);
@@ -213,6 +216,13 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         });
 
         return content;
+    }
+
+    @Override
+    public void setMockValue() {
+        get(proto().reportedForOwnUnit()).setValue(true);
+        get(proto().summary()).setValue("Maintenance Request Summary");
+        get(proto().permissionToEnter()).setValue(true);
     }
 
     @Override

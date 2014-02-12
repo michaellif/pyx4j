@@ -64,9 +64,14 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateSc
                             new CFile(GWT.<InsuranceCertificateScanResidentUploadService> create(InsuranceCertificateScanResidentUploadService.class),
                                     new VistaFileURLBuilder(InsuranceCertificateScan.class))), 250).build());
 
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).mockValue("Description").build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).build());
 
             return content;
+        }
+
+        @Override
+        public void setMockValue() {
+            get(proto().description()).setValue("Description");
         }
 
         @Override

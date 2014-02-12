@@ -59,28 +59,26 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).mockValue("Insurance Provider")
-                .build());
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).mockValue("ABC123")
-                .build());
-        contentPanel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).mockValue(new BigDecimal("222.33")).build());
-        contentPanel.setWidget(
-                ++row,
-                0,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).mockValue(
-                        new LogicalDate(System.currentTimeMillis() - (long) 182 * 24 * 60 * 60 * 1000)).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
 
-        contentPanel.setWidget(
-                ++row,
-                0,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).mockValue(
-                        new LogicalDate(System.currentTimeMillis() + (long) 182 * 24 * 60 * 60 * 1000)).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
 
         contentPanel.setH1(++row, 0, 1, "Attach Scanned Insurance Certificate Documents");
         contentPanel.setWidget(++row, 0, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));
 
         return contentPanel;
+    }
+
+    @Override
+    public void setMockValue() {
+        get(proto().certificate().insuranceProvider()).setValue("Insurance Provider");
+        get(proto().certificate().insuranceCertificateNumber()).setValue("ABC123");
+        get(proto().certificate().liabilityCoverage()).setValue(new BigDecimal("222.33"));
+        get(proto().certificate().inceptionDate()).setValue(new LogicalDate(System.currentTimeMillis() - (long) 182 * 24 * 60 * 60 * 1000));
+        get(proto().certificate().expiryDate()).setValue(new LogicalDate(System.currentTimeMillis() + (long) 182 * 24 * 60 * 60 * 1000));
     }
 
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {

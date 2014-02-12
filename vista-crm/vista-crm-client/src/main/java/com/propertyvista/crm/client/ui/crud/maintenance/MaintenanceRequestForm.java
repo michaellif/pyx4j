@@ -180,7 +180,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.setH1(++row, 0, 2, i18n.tr("Issue Location"));
 
         int rowAnchor = row;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportedForOwnUnit()), 20).mockValue(true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportedForOwnUnit()), 20).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reporter(), reporterSelector), 20).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reporterPhone()), 20).build());
         panel.getRowFormatter().setVerticalAlign(row, HasVerticalAlignment.ALIGN_TOP);
