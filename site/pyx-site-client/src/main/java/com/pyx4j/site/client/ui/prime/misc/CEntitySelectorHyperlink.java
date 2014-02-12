@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.prime.misc;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
+import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 
 /**
@@ -35,7 +35,7 @@ public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextF
 
     protected abstract AppPlace getTargetPlace();
 
-    protected abstract AbstractEntitySelectorDialog<E> getSelectorDialog();
+    protected abstract IShowable getSelectorDialog();
 
     public CEntitySelectorHyperlink() {
         setNativeWidget(new NEntitySelectorHyperlink<E>(this));

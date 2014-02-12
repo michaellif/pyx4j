@@ -120,39 +120,39 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     private IReportsView.Presenter<R> presenter;
 
-    private final FlowPanel viewPanel;
+    private FlowPanel viewPanel;
 
-    private final SimplePanel settingsFormPanel;
+    private SimplePanel settingsFormPanel;
 
-    private final SimplePanel reportPanel;
+    private SimplePanel reportPanel;
 
-    private final ReportSettingsFormControlBar reportSettingsFormControlBar;
+    private ReportSettingsFormControlBar reportSettingsFormControlBar;
 
     private Button exportButton;
 
-    private final FlowPanel reportProgressControlPanel;
+    private FlowPanel reportProgressControlPanel;
 
     private Button abortReportGenerationButton;
 
-    private final SimplePanel reportProgressHolderPanel;
+    private SimplePanel reportProgressHolderPanel;
 
     private DeferredProgressPanel progressPanel;
 
-    private final FlowPanel errorPanel;
+    private FlowPanel errorPanel;
 
-    private final ReportWidget reportWidget;
+    private ReportWidget reportWidget;
 
     private CEntityForm<R> activeSettingsForm;
 
-    private final CEntityForm<R> simpleSettingsForm;
+    private CEntityForm<R> simpleSettingsForm;
 
-    private final CEntityForm<R> advancedSettingsForm;
+    private CEntityForm<R> advancedSettingsForm;
 
     /**
      * @param advancedSettingsForm
      *            this is optional, and in this case ReportMetadata has to implement HasAdvancedSettings
      */
-    public AbstractReport(ReportWidget reportWidget, CEntityForm<R> simpleSettingsForm, CEntityForm<R> advancedSettingsForm) {
+    public void setReportWidget(ReportWidget reportWidget, CEntityForm<R> simpleSettingsForm, CEntityForm<R> advancedSettingsForm) {
         setSize("100%", "100%");
 
         this.reportWidget = reportWidget;
