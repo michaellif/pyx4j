@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -30,18 +30,18 @@ public class ResidentSummaryServiceImpl implements ResidentSummaryService {
     public void retreiveProfileSummary(AsyncCallback<ResidentSummaryDTO> callback) {
         ResidentSummaryDTO profileSummary = EntityFactory.create(ResidentSummaryDTO.class);
 
-        LeaseTermTenant tenantInLease = ResidentPortalContext.getLeaseTermTenant();
-        Persistence.service().retrieve(tenantInLease.leaseTermV());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
-        Persistence.service().retrieve(tenantInLease.leaseParticipant().customer().picture());
+        LeaseTermParticipant<?> leaseTermParticipant = ResidentPortalContext.getLeaseTermParticipant();
+        Persistence.service().retrieve(leaseTermParticipant.leaseTermV());
+        Persistence.service().retrieve(leaseTermParticipant.leaseTermV().holder().lease());
+        Persistence.service().retrieve(leaseTermParticipant.leaseTermV().holder().lease().unit().floorplan());
+        Persistence.service().retrieve(leaseTermParticipant.leaseParticipant().customer().picture());
 
-        profileSummary.tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
-        profileSummary.floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
-        profileSummary.tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
+        profileSummary.tenantName().setValue(leaseTermParticipant.leaseParticipant().customer().person().name().getStringView());
+        profileSummary.floorplanName().set(leaseTermParticipant.leaseTermV().holder().lease().unit().floorplan().marketingName());
+        profileSummary.tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(leaseTermParticipant).getStringView());
 
-        if (tenantInLease.leaseParticipant().customer().picture().hasValues()) {
-            profileSummary.picture().set(tenantInLease.leaseParticipant().customer().picture());
+        if (leaseTermParticipant.leaseParticipant().customer().picture().hasValues()) {
+            profileSummary.picture().set(leaseTermParticipant.leaseParticipant().customer().picture());
         }
 
         callback.onSuccess(profileSummary);

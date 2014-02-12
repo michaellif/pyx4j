@@ -19,6 +19,8 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
@@ -48,8 +50,26 @@ public class ResidentPortalContext extends PortalVistaContext {
         return Persistence.service().retrieve(criteria);
     }
 
+    @SuppressWarnings("rawtypes")
+    public static LeaseParticipant<?> getLeaseParticipant() {
+        EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
+        criteria.eq(criteria.proto().lease(), getLeaseIdStub());
+        criteria.eq(criteria.proto().customer().user(), getCustomerUserIdStub());
+        return Persistence.service().retrieve(criteria);
+    }
+
     public static LeaseTermTenant getLeaseTermTenant() {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+        criteria.eq(criteria.proto().leaseParticipant().customer().user(), getCustomerUserIdStub());
+        criteria.eq(criteria.proto().leaseParticipant().lease(), getLeaseIdStub());
+        criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
+        criteria.isCurrent(criteria.proto().leaseTermV());
+        return Persistence.service().retrieve(criteria);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static LeaseTermParticipant<?> getLeaseTermParticipant() {
+        EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
         criteria.eq(criteria.proto().leaseParticipant().customer().user(), getCustomerUserIdStub());
         criteria.eq(criteria.proto().leaseParticipant().lease(), getLeaseIdStub());
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
