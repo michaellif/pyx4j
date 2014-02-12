@@ -36,6 +36,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.uibinder.elementparsers.IsEmptyParser;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -699,8 +700,14 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return unconditionalValidationErrorRendering;
     }
 
-    public void setMockValue() {
+    public void generateMockData() {
 
+    }
+
+    public final void setMockValue(DATA_TYPE value) {
+        if (isVisible() && isEditable() && isEnabled() && !isViewable() && isValueEmpty()) {
+            setValue(value);
+        }
     }
 
 }

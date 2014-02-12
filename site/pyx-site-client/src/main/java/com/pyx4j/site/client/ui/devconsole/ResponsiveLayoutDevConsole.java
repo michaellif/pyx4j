@@ -57,7 +57,7 @@ public class ResponsiveLayoutDevConsole extends FlowPanel {
 
         if (widget instanceof IComponentWidget) {
             CComponent<?> component = ((IComponentWidget) widget).getCComponent();
-            component.setMockValue();
+            component.generateMockData();
         }
     }
 }
