@@ -149,6 +149,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private MenuItem signAgreementDocumentItem;
 
+    private MenuItem signingProgressItem;
+
     public LeaseViewerViewImpl() {
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
         billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
@@ -866,6 +868,14 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement Document"));
         ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
 
+        signingProgressItem = new MenuItem(i18n.tr("Signing Progress..."), new Command() {
+            @Override
+            public void execute() {
+                displaySigningProgress();
+            }
+        });
+        leaseAgreementDocumentMenu.addItem(signingProgressItem);
+
         signAgreementDocumentItem = new MenuItem(i18n.tr("Sign..."), new Command() {
             @Override
             public void execute() {
@@ -902,6 +912,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
         addHeaderToolbarItem(leaseAgreementDocument);
+    }
+
+    private void displaySigningProgress() {
+
     }
 
     private abstract class RenewLeaseBox extends OkCancelDialog {
