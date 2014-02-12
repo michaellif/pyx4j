@@ -45,8 +45,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 public class YardiProductCatalogProcessor {
 
     public void processCatalog(Building building, RentableItems rentableItems, Key yardiInterfaceId) {
-        Persistence.ensureRetrieve(building, AttachLevel.Attached);
-        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
 
@@ -57,7 +55,6 @@ public class YardiProductCatalogProcessor {
     }
 
     public void updateUnits(Building building) {
-        assert (!building.productCatalog().isValueDetached());
         assert (!building.productCatalog().services().isValueDetached());
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
@@ -75,7 +72,6 @@ public class YardiProductCatalogProcessor {
     }
 
     public void persistCatalog(Building building) {
-        assert (!building.productCatalog().isValueDetached());
         assert (!building.productCatalog().services().isValueDetached());
         assert (!building.productCatalog().features().isValueDetached());
 
