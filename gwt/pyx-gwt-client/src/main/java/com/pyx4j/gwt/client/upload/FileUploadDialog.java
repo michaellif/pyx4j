@@ -46,7 +46,6 @@ public class FileUploadDialog<U extends IEntity, B extends AbstractIFileBlob> ex
     public FileUploadDialog(String dialogTitle, U uploadData, UploadService<U, B> service, final UploadReceiver uploadReceiver) {
 
         dialog = new Dialog(dialogTitle, this, null);
-        dialog.setDialogPixelWidth(500);
 
         this.uploadData = uploadData;
 
@@ -83,7 +82,6 @@ public class FileUploadDialog<U extends IEntity, B extends AbstractIFileBlob> ex
 
         };
 
-        uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
         uploadPanel.getElement().getStyle().setPadding(20, Style.Unit.PX);
 
     }
