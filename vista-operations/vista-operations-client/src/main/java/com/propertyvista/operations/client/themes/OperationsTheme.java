@@ -98,8 +98,8 @@ public class OperationsTheme extends VistaTheme {
             protected void initStyles() {
                 super.initStyles();
 
-                Style style = new Style(".", StyleName.DevConsoleTabPanel);
-                style.addProperty("text-align", "left");
+                Style style = new Style(".", StyleName.DevConsoleHandler);
+                style.addProperty("float", "left");
                 addStyle(style);
             }
         });
