@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -64,6 +65,14 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     protected void bind() {
         bindCompleteObject();
+    }
+
+    @Override
+    protected Path convertPropertyDTOPathToDBOPath(String path, PaymentRecord boProto, PaymentRecordDTO toProto) {
+        if (path.equals(toProto.rejectedWithNSF().getPath().toString())) {
+            return boProto.invoicePaymentBackOut().applyNSF().getPath();
+        }
+        return super.convertPropertyDTOPathToDBOPath(path, boProto, toProto);
     }
 
     @Override

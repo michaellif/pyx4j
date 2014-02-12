@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.financial;
 
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -32,6 +33,14 @@ public class PaymentRecordListServiceImpl extends AbstractCrudServiceDtoImpl<Pay
     @Override
     protected void bind() {
         bindCompleteObject();
+    }
+
+    @Override
+    protected Path convertPropertyDTOPathToDBOPath(String path, PaymentRecord boProto, PaymentRecordDTO toProto) {
+        if (path.equals(toProto.rejectedWithNSF().getPath().toString())) {
+            return boProto.invoicePaymentBackOut().applyNSF().getPath();
+        }
+        return super.convertPropertyDTOPathToDBOPath(path, boProto, toProto);
     }
 
     @Override
