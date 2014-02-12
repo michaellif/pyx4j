@@ -48,7 +48,9 @@ public class OpenIdFilter implements Filter {
 
     static String REQUESTED_URL_ATTRIBUTE = "access-requested";
 
-    private static boolean enabled;
+    private boolean enabled;
+
+    private boolean openIdRequiredMedia;
 
     private final Collection<String> servletPathNoAuthentication = new HashSet<String>();
 
@@ -56,8 +58,10 @@ public class OpenIdFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         enabled = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdRequired();
         createDefaultOpenPathMap();
-        if (!ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdRequiredMedia()) {
+        openIdRequiredMedia = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdRequiredMedia();
+        if (!openIdRequiredMedia) {
             servletPathNoAuthentication.addAll(allApplicationsUrls(pathNoSlach(DeploymentConsts.mediaImagesServletMapping)));
+
         }
     }
 
@@ -98,6 +102,8 @@ public class OpenIdFilter implements Filter {
         } else if ((servletPathParts.length >= 3) && servletPathNoAuthentication.contains(servletPathParts[1] + "/" + servletPathParts[2])) {
             return true;
         } else if (servletPath.endsWith("/robots.txt") || servletPath.endsWith("/favicon.ico")) {
+            return true;
+        } else if (!openIdRequiredMedia && servletPath.endsWith(DeploymentConsts.siteImageResourceServletMapping)) {
             return true;
         } else {
             return false;
