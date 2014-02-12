@@ -18,10 +18,14 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,7 +42,6 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
 
     public CrmRoleFolder(boolean isModifiable) {
         super(CrmRole.class, isModifiable);
-        setViewable(true);
         setOrderable(false);
     }
 
@@ -48,6 +51,20 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
                 new EntityFolderColumnDescriptor(proto().name(), "20em"),
                 new EntityFolderColumnDescriptor(proto().behaviors(), "40em")
         );//@formatter:on
+    }
+
+    @Override
+    public CComponent<?> create(IObject<?> member) {
+        if (member instanceof CrmRole) {
+            return new CEntityFolderRowEditor<CrmRole>(CrmRole.class, columns()) {
+                @SuppressWarnings("rawtypes")
+                @Override
+                protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                    return inject(column.getObject(), new CLabel<String>());
+                }
+            };
+        }
+        return super.create(member);
     }
 
     @Override

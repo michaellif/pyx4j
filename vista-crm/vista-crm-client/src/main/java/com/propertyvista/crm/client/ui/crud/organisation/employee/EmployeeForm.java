@@ -113,18 +113,12 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().enabled()).setVisible(isManager);
         get(proto().requiredPasswordChangeOnNextLogIn()).setVisible(isManager);
 
-        get(proto().roles()).setEditable(!isSelfEditor);
-
         boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
-
         get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);
         get(proto().buildingAccess()).setEditable(permitPortfoliosEditing);
-        get(proto().buildingAccess()).setEditable(permitPortfoliosEditing);
-
-        get(proto().portfolios()).setEditable(permitPortfoliosEditing);
         get(proto().portfolios()).setEditable(permitPortfoliosEditing);
 
-        get(proto().employees()).setEditable(isManager);
+        get(proto().roles()).setEditable(!isSelfEditor);
         get(proto().employees()).setEditable(isManager);
 
         get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor || isManager);
@@ -133,6 +127,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().homePhone()).setVisible(isManager || isSelfEditor);
         get(proto().mobilePhone()).setVisible(isManager || isSelfEditor);
         get(proto().signature().file()).setVisible(isManager || isSelfEditor);
+
         privilegesTab.setTabVisible(isSelfEditor || isManager);
         auditingTab.setTabVisible(VistaTODO.VISTA_4066_EmployeeAuditingEmailNotificationsImplemented && (isSelfEditor || isManager));
         alertsTab.setTabVisible(isSelfEditor || isManager);
@@ -186,7 +181,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         content.setWidget(++row, 0, 2, inject(proto().roles(), new CrmRoleFolder(isEditable())));
 
         content.setH1(++row, 0, 2, i18n.tr("Buildings Access"));
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsAndPortfolios()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsAndPortfolios()), 30, 5,
+                FormDecoratorBuilder.CONTENT_WIDTH_DUAL).build());
         get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

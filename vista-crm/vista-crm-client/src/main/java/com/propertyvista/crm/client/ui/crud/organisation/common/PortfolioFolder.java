@@ -24,8 +24,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
@@ -93,9 +93,8 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
                     return comp;
                 }
             };
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 
     @Override

@@ -82,9 +82,8 @@ public class BuildingFolder extends VistaTableFolder<Building> {
                     return comp;
                 }
             };
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 
     @Override
