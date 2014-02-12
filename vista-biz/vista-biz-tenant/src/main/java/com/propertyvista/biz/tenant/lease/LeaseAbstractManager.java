@@ -876,16 +876,20 @@ public abstract class LeaseAbstractManager {
 
     private Lease persist(Lease lease, boolean finalize, boolean reserve) {
         boolean doReserve = false;
-        boolean doRelease = false;
-        Lease previousLeaseEdition = null;
 
         if (lease.status().getValue().isDraft()) {
             doReserve = !lease.unit().isNull();
             if (lease.getPrimaryKey() != null) {
-                previousLeaseEdition = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
+                Lease previousLeaseEdition = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
                 if (!EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
-                    doRelease = !previousLeaseEdition.unit().isNull();
-                    ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(previousLeaseEdition);
+                    boolean doRelease = !previousLeaseEdition.unit().isNull();
+                    if (doRelease) {
+                        releaseUnit(previousLeaseEdition);
+                    }
+
+                    if (!previousLeaseEdition.unit().isNull()) {
+                        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(previousLeaseEdition);
+                    }
                 }
             }
         }
@@ -904,11 +908,6 @@ public abstract class LeaseAbstractManager {
         // sync. unit:
         if (!lease.currentTerm().unit().isNull()) {
             lease.unit().set(lease.currentTerm().unit());
-
-            // double check reservation logic:
-            if (previousLeaseEdition != null && !EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
-                doRelease = !previousLeaseEdition.unit().isNull();
-            }
         }
 
         if (finalize) {
@@ -932,9 +931,6 @@ public abstract class LeaseAbstractManager {
         ServerSideFactory.create(PaymentMethodFacade.class).terminateAutopayAgreements(lease);
 
         // update reservation if necessary:
-        if (doRelease) {
-            releaseUnit(lease);
-        }
         if (reserve && doReserve) {
             reserveUnit(lease);
         }
