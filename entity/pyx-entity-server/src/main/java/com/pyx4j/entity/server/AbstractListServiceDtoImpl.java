@@ -32,9 +32,9 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
@@ -70,37 +70,40 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         throw new Error("Unsupported query property path " + path);
     }
 
-    private Collection<Criterion> convertFilters(Collection<Criterion> toFilters) {
+    private Collection<Criterion> convertFilters(EntityListCriteria<BO> criteria, Collection<Criterion> toFilters) {
         Collection<Criterion> boFilters = new ArrayList<Criterion>();
         for (Criterion cr : toFilters) {
-            boFilters.add(convertCriterion(cr));
+            Criterion criterion = convertCriterion(criteria, cr);
+            if (criterion != null) {
+                boFilters.add(criterion);
+            }
         }
         return boFilters;
     }
 
-    public Criterion convertCriterion(Criterion cr) {
+    public Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
         if (cr instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
             Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
             if (path == null) {
                 path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), boProto, toProto);
             }
-            return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(propertyCriterion));
+            return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(criteria, propertyCriterion));
         } else if (cr instanceof OrCriterion) {
             OrCriterion criterion = new OrCriterion();
-            criterion.addRight(convertFilters(((OrCriterion) cr).getFiltersRight()));
-            criterion.addLeft(convertFilters(((OrCriterion) cr).getFiltersLeft()));
+            criterion.addRight(convertFilters(criteria, ((OrCriterion) cr).getFiltersRight()));
+            criterion.addLeft(convertFilters(criteria, ((OrCriterion) cr).getFiltersLeft()));
             return criterion;
         } else if (cr instanceof AndCriterion) {
             AndCriterion criterion = new AndCriterion();
-            criterion.addAll(convertFilters(((AndCriterion) cr).getFilters()));
+            criterion.addAll(convertFilters(criteria, ((AndCriterion) cr).getFilters()));
             return criterion;
         } else {
             throw new IllegalArgumentException("Can't convert " + cr.getClass() + " criteria");
         }
     }
 
-    public Serializable convertValue(PropertyCriterion propertyCriterion) {
+    public Serializable convertValue(EntityListCriteria<BO> criteria, PropertyCriterion propertyCriterion) {
         Serializable value = propertyCriterion.getValue();
         if (value instanceof Path) {
             Path path = getBoundDboMemberPath((Path) value);
@@ -109,7 +112,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             }
             return path;
         } else if (value instanceof Criterion) {
-            return convertCriterion((Criterion) value);
+            return convertCriterion(criteria, (Criterion) value);
         } else {
             return value;
         }
@@ -117,7 +120,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     protected void enhanceListCriteria(EntityListCriteria<BO> boCriteria, EntityListCriteria<TO> toCriteria) {
         if ((toCriteria.getFilters() != null) && (!toCriteria.getFilters().isEmpty())) {
-            boCriteria.addAll(convertFilters(toCriteria.getFilters()));
+            boCriteria.addAll(convertFilters(boCriteria, toCriteria.getFilters()));
         }
         if ((toCriteria.getSorts() != null) && (!toCriteria.getSorts().isEmpty())) {
             for (Sort s : toCriteria.getSorts()) {
