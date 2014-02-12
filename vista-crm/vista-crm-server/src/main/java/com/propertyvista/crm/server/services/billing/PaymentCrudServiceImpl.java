@@ -27,6 +27,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -62,6 +64,16 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     protected void bind() {
         bindCompleteObject();
+    }
+
+    @Override
+    protected void enhanceListCriteria(EntityListCriteria<PaymentRecord> boCriteria, EntityListCriteria<PaymentRecordDTO> toCriteria) {
+        PropertyCriterion nsfCriteria = toCriteria.getCriterion(toCriteria.proto().rejectedWithNSF());
+        if (nsfCriteria != null) {
+            toCriteria.getFilters().remove(nsfCriteria);
+            boCriteria.eq(boCriteria.proto().invoicePaymentBackOut().applyNSF(), nsfCriteria.getValue());
+        }
+        super.enhanceListCriteria(boCriteria, toCriteria);
     }
 
     @Override
@@ -111,25 +123,31 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         to.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.billingAccount(), VistaApplication.crm));
 
         to.participants().addAll(retrievePayableUsers(to.billingAccount().lease()));
+
     }
 
     @Override
-    protected void enhanceListRetrieved(PaymentRecord entity, PaymentRecordDTO dto) {
-        super.enhanceListRetrieved(entity, dto);
+    protected void enhanceListRetrieved(PaymentRecord bo, PaymentRecordDTO to) {
+        super.enhanceListRetrieved(bo, to);
 
-        Persistence.service().retrieve(dto.billingAccount());
-        Persistence.service().retrieve(dto.billingAccount().lease());
-        Persistence.service().retrieve(dto.billingAccount().lease().unit());
-        Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
-        Persistence.service().retrieve(dto.leaseTermParticipant());
-        Persistence.service().retrieve(dto.paymentMethod());
-        Persistence.service().retrieve(dto.preauthorizedPayment());
+        Persistence.service().retrieve(to.billingAccount());
+        Persistence.service().retrieve(to.billingAccount().lease());
+        Persistence.service().retrieve(to.billingAccount().lease().unit());
+        Persistence.service().retrieve(to.billingAccount().lease().unit().building());
+        Persistence.service().retrieve(to.leaseTermParticipant());
+        Persistence.service().retrieve(to.paymentMethod());
+        Persistence.service().retrieve(to.preauthorizedPayment());
 
-        dto.leaseId().set(dto.billingAccount().lease().leaseId());
-        dto.leaseStatus().set(dto.billingAccount().lease().status());
-        dto.propertyCode().set(dto.billingAccount().lease().unit().building().propertyCode());
-        dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
-        dto.storeInProfile().setValue(entity.paymentMethod().isProfiledMethod().getValue());
+        to.leaseId().set(to.billingAccount().lease().leaseId());
+        to.leaseStatus().set(to.billingAccount().lease().status());
+        to.propertyCode().set(to.billingAccount().lease().unit().building().propertyCode());
+        to.unitNumber().set(to.billingAccount().lease().unit().info().number());
+        to.storeInProfile().setValue(bo.paymentMethod().isProfiledMethod().getValue());
+
+        Persistence.ensureRetrieve(bo.invoicePaymentBackOut(), AttachLevel.Attached);
+        if (!bo.invoicePaymentBackOut().isNull()) {
+            to.rejectedWithNSF().setValue(bo.invoicePaymentBackOut().applyNSF().getValue());
+        }
     }
 
     @Override
