@@ -198,11 +198,6 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         }
     }
 
-    @Deprecated
-    public void setValueByItemName(String name) {
-        setValueByString(name);
-    }
-
     @Override
     public void setValueByString(String name) {
         setValueByString(name, true, false);

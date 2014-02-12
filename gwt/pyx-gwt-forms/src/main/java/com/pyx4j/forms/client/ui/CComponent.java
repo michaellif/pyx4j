@@ -704,9 +704,15 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     }
 
-    public final void setMockValue(DATA_TYPE value) {
+    public void setMockValue(DATA_TYPE value) {
         if (isVisible() && isEditable() && isEnabled() && !isViewable() && isValueEmpty()) {
             setValue(value);
+        }
+    }
+
+    public void setMockValueByString(String value) {
+        if (this instanceof IAcceptText && isVisible() && isEditable() && isEnabled() && !isViewable() && isValueEmpty()) {
+            ((IAcceptText) this).setValueByString(value);
         }
     }
 

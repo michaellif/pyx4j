@@ -274,12 +274,6 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     @Override
-    @Deprecated
-    public void setValueByItemName(final String name) {
-        setValueByString(name);
-    }
-
-    @Override
     public void setValueByString(String name) {
         setValueByString(name, true, false);
     }

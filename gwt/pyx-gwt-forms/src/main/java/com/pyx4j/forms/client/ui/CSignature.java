@@ -92,4 +92,11 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
         return descriptionWidget;
     }
 
+    @Override
+    public void setMockValue(ISignature value) {
+        if (isVisible() && isEditable() && isEnabled() && !isViewable()) {
+            setValue(value);
+        }
+    }
+
 }
