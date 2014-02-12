@@ -22,7 +22,6 @@ package com.pyx4j.widgets.client.tabpanel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -40,7 +39,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -53,8 +51,8 @@ import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 
-public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesResize, IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<Tab>,
-        HasSelectionHandlers<Tab>, HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab> {
+public class TabPanel extends ResizeComposite implements ProvidesResize, IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>,
+        HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab> {
 
     private static final Logger log = LoggerFactory.getLogger(TabPanel.class);
 
@@ -132,12 +130,6 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
     @Override
     public boolean remove(int index) {
         return removeTab(tabs.get(index));
-    }
-
-    @Override
-    public void clear() {
-        // TODO Auto-generated method stub
-
     }
 
     public void setTabEnabled(Tab tab, boolean enabled) {
@@ -301,22 +293,6 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
     @Override
     public int getWidgetIndex(IsWidget child) {
         return getWidgetIndex(asWidgetOrNull(child));
-    }
-
-    @Override
-    public void add(Widget w) {
-        throw new UnsupportedOperationException("Use TabPanel.add(Tab tab) instead");
-    }
-
-    @Override
-    public boolean remove(Widget w) {
-        throw new UnsupportedOperationException("Use TabPanel.remove(Tab tab) instead");
-    }
-
-    @Override
-    public Iterator<Widget> iterator() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }
