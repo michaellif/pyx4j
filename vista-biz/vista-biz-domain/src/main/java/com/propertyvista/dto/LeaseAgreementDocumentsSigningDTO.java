@@ -22,6 +22,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 @Transient
 public interface LeaseAgreementDocumentsSigningDTO extends IEntity {
 
-    IList<LeaseTermAgreementDocument> documents();
+    LeaseTermAgreementDocument digitallySignedDocument();
+
+    IList<LeaseTermAgreementDocument> inkSignedDocuments();
 
 }

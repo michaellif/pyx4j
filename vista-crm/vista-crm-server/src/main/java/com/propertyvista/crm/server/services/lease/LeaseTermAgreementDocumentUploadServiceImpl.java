@@ -16,22 +16,19 @@ package com.propertyvista.crm.server.services.lease;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentUploadService;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 
-public class LeaseTermAgreementDocumentUploadServiceImpl extends AbstractUploadServiceImpl<Lease, LeaseTermAgreementDocumentBlob> implements
+public class LeaseTermAgreementDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, LeaseTermAgreementDocumentBlob> implements
         LeaseTermAgreementDocumentUploadService {
 
     private static final I18n i18n = I18n.get(LeaseTermAgreementDocumentUploadServiceImpl.class);
@@ -59,26 +56,13 @@ public class LeaseTermAgreementDocumentUploadServiceImpl extends AbstractUploadS
     }
 
     @Override
-    protected void processUploadedData(Lease lease, UploadedData uploadedData, IFile<LeaseTermAgreementDocumentBlob> response) {
+    protected void processUploadedData(IEntity entity, UploadedData uploadedData, IFile<LeaseTermAgreementDocumentBlob> response) {
         LeaseTermAgreementDocumentBlob blob = EntityFactory.create(LeaseTermAgreementDocumentBlob.class);
         blob.contentType().setValue(uploadedData.contentMimeType);
         blob.data().setValue(uploadedData.binaryContent);
         Persistence.service().persist(blob);
-
-        LeaseTermAgreementDocument agreementDocument = EntityFactory.create(LeaseTermAgreementDocument.class);
-        Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.Attached);
-        agreementDocument.leaseTermV().set(lease.currentTerm().version());
-
-        agreementDocument.file().fileName().setValue(uploadedData.fileName);
-        agreementDocument.file().fileSize().setValue(uploadedData.binaryContent.length);
-        agreementDocument.file().blobKey().set(blob.id());
-
-        FileUploadRegistry.register(agreementDocument.file());
-        Persistence.service().persist(agreementDocument);
-
         Persistence.service().commit();
 
         response.blobKey().setValue(blob.getPrimaryKey());
-
     }
 }

@@ -32,8 +32,14 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     @Override
     public IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setH1(0, 0, 2, i18n.tr("Signing Progress"));
-        panel.setH1(1, 0, 2, i18n.tr("Signed Agreement Documents"));
+        int row = -1;
+        panel.setH1(++row, 0, 2, i18n.tr("Signing Progress"));
+
+        panel.setH1(++row, 0, 2, i18n.tr("Digitally Signed Agreement Document"));
+        panel.setWidget(++row, 0, 2, inject(proto().digitallySignedDocument(), new LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm(true)));
+
+        panel.setH1(++row, 0, 2, i18n.tr("Ink Signed Agreement Documents"));
+        panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), new LeaseAgreementDocumentFolder()));
         return panel;
     }
 

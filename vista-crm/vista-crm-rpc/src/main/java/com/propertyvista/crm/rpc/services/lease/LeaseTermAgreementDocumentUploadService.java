@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.rpc.services.lease;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
-import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface LeaseTermAgreementDocumentUploadService extends UploadService<Lease, LeaseTermAgreementDocumentBlob> {
+public interface LeaseTermAgreementDocumentUploadService extends UploadService<IEntity, LeaseTermAgreementDocumentBlob> {
 
 }
