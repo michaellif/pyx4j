@@ -44,6 +44,7 @@ public interface AptUnitReservation extends IEntity {
 
     IPrimitive<Date> dateTo();
 
+    @Detached
     Lease lease();
 
 }

@@ -109,6 +109,11 @@ public interface OccupancyFacade {
 
     Pair<Date, Lease> isReserved(Key unitId);
 
+    /**
+     * @param lease
+     *            with unit Id
+     * @return true if unit was unreserved
+     */
     boolean unreserveIfReservered(Lease lease);
 
     // Used only in Yardi for now
