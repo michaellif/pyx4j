@@ -128,9 +128,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     @Override
     public void onReset() {
         super.onReset();
-        if (get(proto().type()).isEditable() && get(proto().type()) instanceof CRadioGroup) {
-            setPaymentTypesEnabled(EnumSet.allOf(PaymentType.class), true);
-        }
+        setPaymentTypesEnabled(EnumSet.allOf(PaymentType.class), true);
         get(proto().type()).setNote(null);
         setBillingAddressVisible(false);
 
@@ -377,7 +375,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     }
 
     public void setPaymentTypesEnabled(Collection<PaymentType> opt, boolean enabled) {
-        if (get(proto().type()).isEditable() && get(proto().type()) instanceof CRadioGroup) {
+        if (get(proto().type()) instanceof CRadioGroup) {
             ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(opt, enabled);
         }
     }

@@ -95,7 +95,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> getPaymentTypes() {
-            return PaymentType.availableInCrm();
+            return PaymentForm.this.getValue().allowedPaymentsSetup().allowedPaymentTypes().getValue();
         }
 
         @Override
