@@ -40,7 +40,6 @@ public class PmcCreatorDev {
         pmc.name().setValue(pmcName + " Demo");
         pmc.dnsName().setValue(pmcName);
 
-        pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
@@ -54,7 +53,6 @@ public class PmcCreatorDev {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         }
         if (!mini && pmcName.equals(DemoPmc.star.name())) {
-            pmc.features().occupancyModel().setValue(Boolean.FALSE);
             pmc.features().yardiIntegration().setValue(Boolean.TRUE);
             pmc.features().defaultProductCatalog().setValue(Boolean.TRUE);
         }

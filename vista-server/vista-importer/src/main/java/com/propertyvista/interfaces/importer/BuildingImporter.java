@@ -237,17 +237,16 @@ public class BuildingImporter extends ImportPersister {
                         i.info().floor().set(aptUnitIO.floor());
                         items.add(i);
 
-                        if (VistaFeatures.instance().occupancyModel()) {
-                            for (AptUnitOccupancyIO occupancyIO : aptUnitIO.AptUnitOccupancySegment()) {
-                                AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
-                                occupancySegment.dateFrom().setValue(occupancyIO.dateFrom().getValue());
-                                occupancySegment.dateTo().setValue(occupancyIO.dateTo().getValue());
-                                occupancySegment.status().setValue(occupancyIO.status().getValue());
-                                occupancySegment.offMarket().setValue(occupancyIO.offMarket().getValue());
-                                i.unitOccupancySegments().add(occupancySegment);
-                                occupancySegment.unit().set(i);
-                            }
+                        for (AptUnitOccupancyIO occupancyIO : aptUnitIO.AptUnitOccupancySegment()) {
+                            AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
+                            occupancySegment.dateFrom().setValue(occupancyIO.dateFrom().getValue());
+                            occupancySegment.dateTo().setValue(occupancyIO.dateTo().getValue());
+                            occupancySegment.status().setValue(occupancyIO.status().getValue());
+                            occupancySegment.offMarket().setValue(occupancyIO.offMarket().getValue());
+                            i.unitOccupancySegments().add(occupancySegment);
+                            occupancySegment.unit().set(i);
                         }
+
                         try {
                             Persistence.service().merge(i);
                         } catch (UniqueConstraintUserRuntimeException e) {

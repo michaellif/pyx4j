@@ -183,7 +183,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().tenantSureIntegration()), 5).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().occupancyModel()), 5).build());
 
         content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));

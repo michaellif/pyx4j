@@ -41,9 +41,9 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
 
-public class OccupancyFacadeAvailableForRentOnlyImpl implements OccupancyFacade {
+public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
-    private final static I18n i18n = I18n.get(OccupancyFacadeAvailableForRentOnlyImpl.class);
+    private final static I18n i18n = I18n.get(OccupancyFacadeYardiImpl.class);
 
     @Override
     public AptUnitOccupancySegment getOccupancySegment(AptUnit unitStub, LogicalDate date) {

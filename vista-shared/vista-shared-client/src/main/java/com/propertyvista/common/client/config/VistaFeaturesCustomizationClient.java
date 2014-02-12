@@ -28,11 +28,6 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     public static boolean enviromentTitleVisible;
 
     @Override
-    public boolean occupancyModel() {
-        return features.occupancyModel().getValue(Boolean.FALSE);
-    }
-
-    @Override
     public boolean productCatalog() {
         return features.productCatalog().getValue(Boolean.FALSE);
     }

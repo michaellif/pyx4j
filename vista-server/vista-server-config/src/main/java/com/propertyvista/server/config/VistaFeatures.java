@@ -66,11 +66,6 @@ public class VistaFeatures {
         }
 
         @Override
-        public boolean occupancyModel() {
-            return threadLocale.get().occupancyModel().getValue(Boolean.FALSE);
-        }
-
-        @Override
         public boolean productCatalog() {
             return threadLocale.get().productCatalog().getValue(Boolean.FALSE);
         }

@@ -77,7 +77,6 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.NotRequested);
 
                 pmc.features().countryOfOperation().setValue(request.countryOfOperation().getValue());
-                pmc.features().occupancyModel().setValue(Boolean.TRUE);
                 pmc.features().productCatalog().setValue(Boolean.TRUE);
                 pmc.features().leases().setValue(Boolean.TRUE);
                 pmc.features().onlineApplication().setValue(Boolean.FALSE);

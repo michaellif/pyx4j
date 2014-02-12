@@ -26,8 +26,6 @@ public class VistaFeatures {
 
         boolean tenantSure();
 
-        boolean occupancyModel();
-
         boolean productCatalog();
 
         boolean leases();

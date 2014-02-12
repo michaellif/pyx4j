@@ -28,9 +28,6 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 public interface PmcVistaFeatures extends IEntity {
 
     @NotNull
-    IPrimitive<Boolean> occupancyModel();
-
-    @NotNull
     IPrimitive<Boolean> productCatalog();
 
     @NotNull

@@ -72,7 +72,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
         setTabEnabled(tab, !isEditable());
 
-        if (VistaFeatures.instance().occupancyModel() && !VistaFeatures.instance().yardiIntegration()) {
+        if (!VistaFeatures.instance().yardiIntegration()) {
             tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancy"));
             setTabEnabled(tab, !isEditable());
         }

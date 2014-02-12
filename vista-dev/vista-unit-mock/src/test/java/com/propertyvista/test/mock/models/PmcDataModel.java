@@ -60,7 +60,6 @@ public class PmcDataModel extends MockDataModel<Pmc> {
         final Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.namespace().setValue(NamespaceManager.getNamespace());
 
-        pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
@@ -70,7 +69,6 @@ public class PmcDataModel extends MockDataModel<Pmc> {
         if (getConfig().yardiIntegration) {
             pmc.yardiCredentials().add(DevYardiCredentials.getTestPmcYardiCredential());
             pmc.features().yardiIntegration().setValue(Boolean.TRUE);
-            pmc.features().occupancyModel().setValue(Boolean.FALSE);
         }
 
         orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
