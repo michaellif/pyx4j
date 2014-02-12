@@ -194,10 +194,10 @@ BEGIN
         
         CREATE TABLE agreement_signatures
         (
-                id                              BIGINT                  NOT NULL,
-                id_discriminator                VARCHAR(64)             NOT NULL,
-                lease_term_tenant_discriminator VARCHAR(50)             NOT NULL,
-                lease_term_tenant               BIGINT                  NOT NULL,
+                id                                      BIGINT                  NOT NULL,
+                id_discriminator                        VARCHAR(64)             NOT NULL,
+                lease_term_participant_discriminator    VARCHAR(50)             NOT NULL,
+                lease_term_participant                  BIGINT                  NOT NULL,
                         CONSTRAINT agreement_signatures_pk PRIMARY KEY(id)
         );
         
@@ -1049,8 +1049,9 @@ BEGIN
         -- product
         
         ALTER TABLE product     ADD COLUMN code BIGINT,
-                                ADD COLUMN default_catalog_item BOOLEAN,
                                 ADD COLUMN expired_from DATE;
+                                
+        ALTER TABLE product RENAME COLUMN is_default_catalog_item TO default_catalog_item;
         
         
         -- product_item
@@ -1228,7 +1229,7 @@ BEGIN
         
         -- legal_terms_policy_item
         
-        EXECUTE 'INSERTT INTO '||v_schema_name||'.legal_terms_policy_item(id,caption,enabled,content) '
+        EXECUTE 'INSERT INTO '||v_schema_name||'.legal_terms_policy_item(id,caption,enabled,content) '
                 ||'(SELECT nextval(''public.legal_terms_policy_item_seq'') AS id, caption, enabled, content '
                 ||'FROM         _dba_.tmp_policies )';
                 
@@ -1331,22 +1332,6 @@ BEGIN
         ***     ============================================================================================================
         **/
         
-        -- Temporary code !!! 
-        /*
-        EXECUTE 'DELETE FROM '||v_schema_name||'.product_item '
-                ||'WHERE id NOT IN      (SELECT DISTINCT item '
-                ||'                     FROM '||v_schema_name||'.billable_item)';
-                
-        EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
-                ||'WHERE id NOT IN      (SELECT DISTINCT product '
-                ||'                     FROM '||v_schema_name||'.product_item)';
-                
-        
-        EXECUTE 'DELETE FROM '||v_schema_name||'.product '
-                ||'WHERE id NOT IN      (SELECT DISTINCT holder '
-                ||'                     FROM '||v_schema_name||'.product_v)';
-                
-        */        
         
         -- Insert into arcode - if necessary
         
@@ -1381,7 +1366,39 @@ BEGIN
                 ||'SET  price = 0.00 '
                 ||'WHERE holder IN      (SELECT DISTINCT id FROM '||v_schema_name||'.product '
                 ||'                     WHERE   id_discriminator  = ''service'' )';   
-                        
+                
+                
+      
+        -- Update existing features in product table 
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
+                ||'SET  code = t.min_code '
+                ||'FROM         (SELECT pv.holder,MIN(pi.code) AS min_code '
+                ||'             FROM    '||v_schema_name||'.product_v pv '
+                ||'             JOIN    '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
+                ||'             WHERE   pi.product_discriminator = ''feature'' '
+                ||'             AND     pv.to_date IS NULL '
+                ||'             AND     pv.from_date IS NOT NULL '
+                ||'             GROUP BY pv.holder ) AS t '
+                ||'WHERE p.id = t.holder ';
+                
+        
+        -- insert new records into product_table 
+        
+        ALTER TABLE product ALTER COLUMN code_type DROP NOT NULL;
+        
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.product (id,id_discriminator,catalog,updated,code) '
+                ||'(SELECT      nextval(''public.product_seq'') AS id, pi.product_discriminator AS id_discriminator,'
+                ||'             p.catalog,DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated,'
+                ||'             pi.code '
+                ||'FROM '||v_schema_name||'.product p '
+                ||'JOIN '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
+                ||'JOIN '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
+                ||'WHERE        pi.product_discriminator = ''feature'' '
+                ||'AND          pv.to_date IS NULL '
+                ||'AND          pv.from_date IS NOT NULL '
+                ||'AND          pi.code != p.code ) ';             
         
                         
         SET CONSTRAINTS ALL IMMEDIATE;
@@ -1576,8 +1593,7 @@ BEGIN
         
         -- product
         /*
-        ALTER TABLE product     DROP COLUMN code_type,
-                                DROP COLUMN is_default_catalog_item;
+        ALTER TABLE product     DROP COLUMN code_type;
                                 
         */                       
         -- product_item
@@ -1625,7 +1641,7 @@ BEGIN
                 REFERENCES agreement_signatures(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_signatures$legal_terms_signatures ADD CONSTRAINT agreement_signatures$legal_terms_signatures_value_fk FOREIGN KEY(value) 
                 REFERENCES signed_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_tenant_fk FOREIGN KEY(lease_term_tenant) 
+        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_participant_fk FOREIGN KEY(lease_term_participant) 
                 REFERENCES lease_term_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building ADD CONSTRAINT building_landlord_fk FOREIGN KEY(landlord) REFERENCES landlord(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE community_event ADD CONSTRAINT community_event_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1740,8 +1756,8 @@ BEGIN
         -- check constraints
         
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_id_discriminator_ck CHECK ((id_discriminator) IN ('Digital', 'Ink'));
-        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_tenant_discriminator_d_ck 
-                CHECK ((lease_term_tenant_discriminator) IN ('Guarantor', 'Tenant'));
+        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_participant_discriminator_d_ck 
+                CHECK ((lease_term_participant_discriminator) IN ('Guarantor', 'Tenant'));
         ALTER TABLE application_documentation_policy ADD CONSTRAINT application_documentation_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE arpolicy ADD CONSTRAINT arpolicy_node_discriminator_d_ck 
@@ -1878,6 +1894,8 @@ BEGIN
         ***     ====================================================================================================
         **/
         
+        CREATE INDEX agreement_signatures_lease_term_participant_discriminator_idx ON agreement_signatures USING btree (lease_term_participant_discriminator);
+        CREATE INDEX agreement_signatures_lease_term_participant_idx ON agreement_signatures USING btree (lease_term_participant);
         CREATE INDEX agreement_signatures$legal_terms_signatures_owner_idx ON agreement_signatures$legal_terms_signatures USING btree (owner);
         CREATE INDEX ilsprofile_email_building_idx ON ilsprofile_email USING btree (building);
         CREATE INDEX lease_term_v$agreement_confirmation_term_owner_idx ON lease_term_v$agreement_confirmation_term USING btree (owner);
@@ -1885,8 +1903,6 @@ BEGIN
         CREATE INDEX lease_term_v$utilities_owner_idx ON lease_term_v$utilities USING btree (owner);
         CREATE INDEX online_application$confirmation_terms_owner_idx ON online_application$confirmation_terms USING btree (owner);
         CREATE INDEX online_application$legal_terms_owner_idx ON online_application$legal_terms USING btree (owner);
-        CREATE INDEX agreement_signatures_lease_term_tenant_discriminator_idx ON agreement_signatures USING btree (lease_term_tenant_discriminator);
-        CREATE INDEX agreement_signatures_lease_term_tenant_idx ON agreement_signatures USING btree (lease_term_tenant);
         CREATE INDEX ilssummary_building_building_idx ON ilssummary_building USING btree (building);
         CREATE INDEX ilssummary_floorplan_floorplan_idx ON ilssummary_floorplan USING btree (floorplan);
         CREATE UNIQUE INDEX lease_application_application_id_idx ON lease_application USING btree (LOWER(application_id));

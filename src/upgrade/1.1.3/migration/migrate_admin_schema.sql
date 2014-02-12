@@ -317,8 +317,8 @@ SET search_path = '_admin_';
 
 
         -- check constraints
-        ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck CHECK ((target) IN ('crm', 'field', 'portal', 'site'));
-        ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
+        ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck CHECK ((target) IN ('crm', 'portal', 'site'));
+        ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
         ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_processing_status_e_ck CHECK ((processing_status) IN ('Invalid', 'Processed', 'Received', 'Refunded'));
         ALTER TABLE funds_reconciliation_file ADD CONSTRAINT funds_reconciliation_file_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
@@ -338,7 +338,7 @@ SET search_path = '_admin_';
                 CHECK ((status) IN ('Acknowledged', 'Canceled', 'Creating', 'Invalid', 'SendError', 'Sending', 'Sent'));
         ALTER TABLE funds_transfer_record ADD CONSTRAINT funds_transfer_record_processing_status_e_ck 
                 CHECK ((processing_status) IN ('AcknowledgeProcessed', 'AcknowledgeReject', 'AcknowledgedReceived', 'ReconciliationProcessed', 'ReconciliationReceived'));
-        ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
+        ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'ilsEmailFeed', 'ilsUpdate', 
                 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcess', 'paymentsDbpProcessAcknowledgment', 
@@ -347,11 +347,13 @@ SET search_path = '_admin_';
                 'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 
                 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
        /*
-       ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
-                CHECK ((target) IN ('ApplicantTermsAndConditions', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 
-                                        'PmcPropertyVistaService', 'TenantBillingTerms', 'TenantPaymentWebPaymentFeeTerms', 'TenantPreAuthorizedPaymentCardTerms',
-                                         'TenantPreAuthorizedPaymentECheckTerms', 'TenantSurePreAuthorizedPaymentsAgreement', 'VistaPortalTermsAndConditions'));
-        */
+        ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
+                CHECK ((target) IN ('PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'PmcPropertyVistaService', 
+                'ProspectPortalPrivacyPolicy', 'ProspectPortalTermsAndConditions', 'ResidentPortalPrivacyPolicy', 'ResidentPortalTermsAndConditions', 
+                'TenantBillingTerms', 'TenantPaymentWebPaymentFeeTerms', 'TenantPreAuthorizedPaymentCardTerms', 'TenantPreAuthorizedPaymentECheckTerms', 
+                'TenantSurePreAuthorizedPaymentsAgreement'));
+
+       */
 
 
 
