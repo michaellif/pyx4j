@@ -26,9 +26,11 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.IComponentWidget;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
 import com.pyx4j.widgets.client.Button;
 
@@ -40,20 +42,22 @@ public class ResponsiveLayoutDevConsole extends FlowPanel {
 
             @Override
             public void execute() {
-                setWidgetDecoratorsMockValues(responsiveLayoutPanel.getContentDisplay());
+                setMockValues(responsiveLayoutPanel.getContentDisplay());
             }
         });
         add(setMocksButton);
     }
 
-    private void setWidgetDecoratorsMockValues(Widget widget) {
-        if (widget instanceof WidgetDecorator) {
-            WidgetDecorator decorator = (WidgetDecorator) widget;
-            decorator.setMockValue();
-        } else if (widget instanceof HasWidgets) {
+    private void setMockValues(IsWidget widget) {
+        if (widget instanceof HasWidgets) {
             for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
-                setWidgetDecoratorsMockValues(iterator.next());
+                setMockValues(iterator.next());
             }
+        }
+
+        if (widget instanceof IComponentWidget) {
+            CComponent<?> component = ((IComponentWidget) widget).getCComponent();
+            component.setMockValue();
         }
     }
 }

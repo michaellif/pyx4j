@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,33 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Feb 11, 2014
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.google.gwt.user.client.Command;
+public interface IComponentWidget<E> extends IsWidget {
 
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.IWidget;
-
-public interface INativeComponent<E> extends IComponentWidget<E>, IWidget {
-
-    boolean isViewable();
-
-    void setViewable(boolean editable);
-
-    void setNativeValue(E value);
-
-    E getNativeValue() throws ParseException;
-
-    void setNavigationCommand(Command navigationCommand);
-
-    void setDebugId(IDebugId debugId);
-
-    void init();
+    CComponent<E> getCComponent();
 
 }
