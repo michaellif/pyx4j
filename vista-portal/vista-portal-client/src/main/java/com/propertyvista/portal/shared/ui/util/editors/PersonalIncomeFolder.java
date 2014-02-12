@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeSource;
@@ -84,5 +85,14 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
                 return null;
             }
         });
+    }
+
+    @Override
+    public void generateMockData() {
+        if (getItemCount() == 0) {
+            CustomerScreeningIncome income = EntityFactory.create(CustomerScreeningIncome.class);
+            income.incomeSource().setValue(IncomeSource.fulltime);
+            addItem(income);
+        }
     }
 }

@@ -169,6 +169,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 get(proto().supervisorName()).setMockValue("Bob");
                 get(proto().supervisorPhone()).setMockValue("1234567890");
                 get(proto().monthlyAmount()).setMockValue(new BigDecimal("3000"));
+                get(proto().position()).setMockValue("Director");
             }
         };
     }
