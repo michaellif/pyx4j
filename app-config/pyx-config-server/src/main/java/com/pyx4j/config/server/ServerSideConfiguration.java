@@ -106,6 +106,8 @@ public class ServerSideConfiguration {
             }
         }
         ServerSideConfiguration.instance = instance;
+        // Initialize the UnitTest detection
+        ServerSideConfiguration.isStartedUnderUnitTest();
         instanceDefinedFrom = new Throwable("ServerSideConfiguration initialized from");
     }
 
