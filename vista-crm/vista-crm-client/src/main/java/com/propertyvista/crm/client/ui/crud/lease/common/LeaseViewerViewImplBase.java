@@ -15,13 +15,12 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -207,24 +206,23 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         public UnitReserveBox() {
             super(i18n.tr("Unit Reservation"));
             setBody(createBody());
-            setDialogPixelWidth(300);
+            setDialogPixelWidth(260);
         }
 
         protected Widget createBody() {
             HorizontalPanel content = new HorizontalPanel();
 
             content.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            content.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
             content.add(new HTML(i18n.tr("Enter the duration (in hours)") + ":"));
-            content.add(new HTML("&nbsp"));
             content.add(duration);
 
             duration.setMandatory(true);
-
-            // styling:
             duration.asWidget().setWidth("5em");
-            content.asWidget().getElement().getStyle().setMargin(1, Unit.EM);
 
-            return new SimplePanel(content);
+            content.setHeight("3em");
+            content.setWidth("20em");
+            return content;
         }
 
         public Integer getDuration() {
