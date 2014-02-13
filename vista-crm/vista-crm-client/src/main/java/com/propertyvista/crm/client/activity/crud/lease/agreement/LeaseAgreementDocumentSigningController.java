@@ -21,7 +21,8 @@ import com.pyx4j.site.client.ui.visor.IVisorEditor;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentSigningVisor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.dto.LeaseAgreementDocumentsSigningDTO;
+import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
+import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
 
 public class LeaseAgreementDocumentSigningController implements IVisorEditor.Controller {
 
@@ -39,7 +40,27 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
 
     @Override
     public void show() {
-        this.visor.populate(EntityFactory.create(LeaseAgreementDocumentsSigningDTO.class));
+        LeaseAgreementDocumentsDTO leaseAgreementDocuments = EntityFactory.create(LeaseAgreementDocumentsDTO.class);
+        LeaseAgreementStackholderSigningProgressDTO stackholder1 = leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().$();
+        stackholder1.name().setValue("Jerry Sienfield");
+        stackholder1.role().setValue("Applicant");
+        stackholder1.hasSigned().setValue(true);
+
+        LeaseAgreementStackholderSigningProgressDTO stackholder2 = leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().$();
+        stackholder2.name().setValue("George Costanza");
+        stackholder2.role().setValue("Co-Applicant");
+        stackholder2.hasSigned().setValue(false);
+
+        LeaseAgreementStackholderSigningProgressDTO stackholder3 = leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().$();
+        stackholder3.name().setValue("Elane");
+        stackholder3.role().setValue("Guarantor");
+        stackholder3.hasSigned().setValue(false);
+
+        leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().add(stackholder1);
+        leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().add(stackholder2);
+        leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().add(stackholder3);
+
+        this.visor.populate(leaseAgreementDocuments);
         this.view.showVisor(this.visor);
         this.visor.setParticipantsOptions(leaseTermParticipantOptions);
     }

@@ -20,7 +20,9 @@ import com.pyx4j.entity.core.IList;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 
 @Transient
-public interface LeaseAgreementDocumentsSigningDTO extends IEntity {
+public interface LeaseAgreementDocumentsDTO extends IEntity {
+
+    LeaseAgreementSigningProgressDTO signingProgress();
 
     LeaseTermAgreementDocument digitallySignedDocument();
 

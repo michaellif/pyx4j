@@ -24,9 +24,9 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.dto.LeaseAgreementDocumentsSigningDTO;
+import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 
-public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreementDocumentsSigningDTO> {
+public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreementDocumentsDTO> {
 
     private static final I18n i18n = I18n.get(LeaseAgreementDocumentSigningForm.class);
 
@@ -37,7 +37,7 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     private Label notSignedDigitallyLabel;
 
     public LeaseAgreementDocumentSigningForm() {
-        super(LeaseAgreementDocumentsSigningDTO.class);
+        super(LeaseAgreementDocumentsDTO.class);
     }
 
     @Override
@@ -46,6 +46,8 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         panel.setWidth("100%");
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Signing Progress"));
+        panel.setWidget(++row, 0, 2, inject(proto().signingProgress().stackholdersProgressBreakdown(), new LeaseAgreementSigningProgressFolder()));
+        get(proto().signingProgress().stackholdersProgressBreakdown()).setViewable(true);
 
         panel.setH1(++row, 0, 2, i18n.tr("Digitally Signed Agreement Document"));
         panel.setWidget(++row, 0, 2,

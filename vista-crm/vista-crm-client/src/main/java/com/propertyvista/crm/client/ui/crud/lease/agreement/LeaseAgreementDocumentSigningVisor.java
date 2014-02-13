@@ -19,9 +19,9 @@ import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.dto.LeaseAgreementDocumentsSigningDTO;
+import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 
-public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<LeaseAgreementDocumentsSigningDTO> {
+public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<LeaseAgreementDocumentsDTO> {
 
     private LeaseAgreementDocumentSigningForm form;
 
