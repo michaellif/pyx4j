@@ -13,16 +13,25 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.agreement;
 
+import java.util.List;
+
 import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsSigningDTO;
 
 public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<LeaseAgreementDocumentsSigningDTO> {
 
+    private LeaseAgreementDocumentSigningForm form;
+
     public LeaseAgreementDocumentSigningVisor(IVisorEditor.Controller controller) {
         super(controller);
-        setForm(new LeaseAgreementDocumentSigningForm());
+        setForm(form = new LeaseAgreementDocumentSigningForm());
+    }
+
+    public void setParticipantsOptions(List<LeaseTermParticipant<?>> participantsOptions) {
+        form.setLeaseTermParticipantsOptions(participantsOptions);
     }
 
 }

@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.agreement;
 
+import java.util.List;
+
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentSigningVisor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsSigningDTO;
 
 public class LeaseAgreementDocumentSigningController implements IVisorEditor.Controller {
@@ -26,15 +29,19 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
 
     private final LeaseViewerView view;
 
-    public LeaseAgreementDocumentSigningController(LeaseViewerView view) {
+    private final List<LeaseTermParticipant<?>> leaseTermParticipantOptions;
+
+    public LeaseAgreementDocumentSigningController(LeaseViewerView view, List<LeaseTermParticipant<?>> leaseTermParticipantOptions) {
         this.visor = new LeaseAgreementDocumentSigningVisor(this);
         this.view = view;
+        this.leaseTermParticipantOptions = leaseTermParticipantOptions;
     }
 
     @Override
     public void show() {
         this.visor.populate(EntityFactory.create(LeaseAgreementDocumentsSigningDTO.class));
         this.view.showVisor(this.visor);
+        this.visor.setParticipantsOptions(leaseTermParticipantOptions);
     }
 
     @Override

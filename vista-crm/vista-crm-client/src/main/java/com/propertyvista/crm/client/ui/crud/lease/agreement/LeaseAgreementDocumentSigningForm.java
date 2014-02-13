@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.agreement;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -35,6 +37,7 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     @Override
     public IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        panel.setWidth("100%");
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Signing Progress"));
 
@@ -47,7 +50,7 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         return panel;
     }
 
-    public void setLeaseTermParticipantsOptions(LeaseTermParticipant<?> participantsOptions) {
+    public void setLeaseTermParticipantsOptions(List<LeaseTermParticipant<?>> participantsOptions) {
         this.leaseAgreementDocumentFolder.setParticipantOptions(participantsOptions);
     }
 

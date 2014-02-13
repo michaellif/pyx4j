@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.crud.lease;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
@@ -390,7 +391,10 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void signingProgressOrUploadAgreement() {
-        new LeaseAgreementDocumentSigningController((LeaseViewerView) this.getView()).show();
+        List<LeaseTermParticipant<?>> participants = new LinkedList<>();
+        participants.addAll(currentValue.currentTerm().version().tenants());
+        participants.addAll(currentValue.currentTerm().version().guarantors());
+        new LeaseAgreementDocumentSigningController((LeaseViewerView) this.getView(), participants).show();
     }
 
     @Override
@@ -402,4 +406,5 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             }
         }, EntityFactory.createIdentityStub(Lease.class, getEntityId()));
     }
+
 }
