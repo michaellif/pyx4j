@@ -25,19 +25,15 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -64,11 +60,9 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.resources.VistaResources;
-import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -99,7 +93,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
-    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(
+            LeasePaymentMethod.class) {
 
         @Override
         public Set<PaymentType> getPaymentTypes() {
@@ -476,12 +471,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         panel.add(new HTML("<br/>"));
 
-        panel.add(new Anchor(i18n.tr("How to pay..."), new Command() {
-            @Override
-            public void execute() {
-                new DirectBankingInstructionDialog().show();
-            }
-        }));
+        panel.add(new TermsAnchor(i18n.tr("Click here for detailed payment instructions"), PortalSiteMap.PortalTerms.DirectBankingInstruction.class));
 
         return panel;
     }
@@ -515,7 +505,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     }
 
     private Widget createLegalTermsPanel() {
-
         SafeHtmlBuilder legalTermsBuilder = new SafeHtmlBuilder();
         final String termsOfUseAnchorId = HTMLPanel.createUniqueId();
         final String billingPolicyAnchorId = HTMLPanel.createUniqueId();
@@ -531,33 +520,5 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         legalTermsLinkPanel.addAndReplaceElement(billingPolicyAnchor, billingPolicyAnchorId);
 
         return legalTermsLinkPanel;
-    }
-
-    private class DirectBankingInstructionDialog extends OkDialog {
-
-        public DirectBankingInstructionDialog() {
-            super(i18n.tr("Direct Banking Instruction"));
-            setBody(createBody());
-            setDialogPixelWidth(700);
-        }
-
-        private IsWidget createBody() {
-            HTML legalTerms = new HTML();
-            legalTerms.setHTML(VistaResources.INSTANCE.directBankingInstruction().getText());
-
-            FlowPanel content = new FlowPanel();
-            content.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
-
-            Widget w;
-            content.add(w = new ScrollPanel(legalTerms));
-            w.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTermsContent.name());
-
-            return content;
-        }
-
-        @Override
-        public boolean onClickOk() {
-            return true;
-        }
     }
 }

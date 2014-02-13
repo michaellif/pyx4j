@@ -85,5 +85,8 @@ public class PortalSiteMap implements SiteMap {
 
         public static class BillingTerms extends AppPlace implements PublicPlace {
         }
+
+        public static class DirectBankingInstruction extends AppPlace implements PublicPlace {
+        }
     }
 }

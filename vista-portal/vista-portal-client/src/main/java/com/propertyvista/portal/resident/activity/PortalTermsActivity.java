@@ -19,8 +19,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.common.client.resources.VistaResources;
 import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
@@ -78,7 +80,14 @@ public class PortalTermsActivity extends AbstractActivity {
         } else if (place instanceof ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms) {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
                     TermsAndPoliciesType.TenantSurePreAuthorizedPaymentsAgreement);
+
+        } else if (place instanceof PortalSiteMap.PortalTerms.DirectBankingInstruction) {
+            LegalTermTO result = EntityFactory.create(LegalTermTO.class);
+            result.caption().setValue("Direct Banking Instruction");
+            result.content().setValue(VistaResources.INSTANCE.directBankingInstruction().getText());
+            callback.onSuccess(result);
         }
+
         panel.setWidget(view);
     }
 }
