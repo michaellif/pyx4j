@@ -22,6 +22,8 @@ package com.pyx4j.site.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
@@ -38,4 +40,29 @@ public interface SiteImages extends WidgetsImages {
     @Source("open-dev-console.png")
     ImageResource openDevConsoleButton();
 
+    //=============== Devices ====================
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Huge.gif")
+    ImageResource huge();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Monitor.gif")
+    ImageResource monitor();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("TabletL.gif")
+    ImageResource tabletL();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Tablet.gif")
+    ImageResource tablet();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("PhoneL.gif")
+    ImageResource phoneL();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Phone.gif")
+    ImageResource phone();
 }
