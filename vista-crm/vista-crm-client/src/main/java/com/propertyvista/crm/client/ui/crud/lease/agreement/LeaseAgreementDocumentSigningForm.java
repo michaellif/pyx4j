@@ -20,7 +20,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsSigningDTO;
 
@@ -29,6 +31,10 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     private static final I18n i18n = I18n.get(LeaseAgreementDocumentSigningForm.class);
 
     private LeaseAgreementDocumentFolder leaseAgreementDocumentFolder;
+
+    private LeaseAgreementDocumentForm digitallySignedDocumentForm;
+
+    private Label notSignedDigitallyLabel;
 
     public LeaseAgreementDocumentSigningForm() {
         super(LeaseAgreementDocumentsSigningDTO.class);
@@ -42,7 +48,9 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         panel.setH1(++row, 0, 2, i18n.tr("Signing Progress"));
 
         panel.setH1(++row, 0, 2, i18n.tr("Digitally Signed Agreement Document"));
-        panel.setWidget(++row, 0, 2, inject(proto().digitallySignedDocument(), new LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm(true)));
+        panel.setWidget(++row, 0, 2,
+                inject(proto().digitallySignedDocument(), digitallySignedDocumentForm = new LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm(true)));
+        panel.setWidget(++row, 0, 2, notSignedDigitallyLabel = new Label(i18n.tr("Not Signed Digitally")));
 
         panel.setH1(++row, 0, 2, i18n.tr("Ink Signed Agreement Documents"));
         panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder()));
@@ -52,6 +60,13 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
 
     public void setLeaseTermParticipantsOptions(List<LeaseTermParticipant<?>> participantsOptions) {
         this.leaseAgreementDocumentFolder.setParticipantOptions(participantsOptions);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        get(proto().digitallySignedDocument()).setVisible(!getValue().digitallySignedDocument().isNull());
+        notSignedDigitallyLabel.setVisible(getValue().digitallySignedDocument().isNull());
     }
 
 }
