@@ -70,13 +70,19 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
             if ((newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) || (newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation)) {
                 return null;
             }
-            if (!(newPlace instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage || newPlace == AppPlace.NOWHERE)) {
+            if (!(newPlace instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage
+                    || newPlace instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage || newPlace == AppPlace.NOWHERE)) {
                 MessageDialog.info(i18n.tr("Sorry"), i18n.tr("In order to access that functionality you have to complete Move-In Wizard first."));
             }
-            return new ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage();
-        } else {
-            return null;
+            if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+                return new ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage();
+            } else if (SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
+                return new ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage();
+            }
         }
+
+        return null;
+
     }
 
 }

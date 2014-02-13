@@ -44,7 +44,8 @@ import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequest
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
 import com.propertyvista.portal.resident.activity.movein.LeaseSigningConfirmationActivity;
 import com.propertyvista.portal.resident.activity.movein.LeaseSigningWizardActivity;
-import com.propertyvista.portal.resident.activity.movein.NewResidentWelcomePageActivity;
+import com.propertyvista.portal.resident.activity.movein.NewGuarantorWelcomePageActivity;
+import com.propertyvista.portal.resident.activity.movein.NewTenantWelcomePageActivity;
 import com.propertyvista.portal.resident.activity.offers.dashboard.OffersDashboardActivity;
 import com.propertyvista.portal.resident.activity.profile.AccountPageActivity;
 import com.propertyvista.portal.resident.activity.profile.ProfilePageActivity;
@@ -162,7 +163,9 @@ public class ContentActivityMapper implements AppActivityMapper {
 
 // Move-in
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage) {
-                        activity = new NewResidentWelcomePageActivity(appPlace);
+                        activity = new NewTenantWelcomePageActivity(appPlace);
+                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage) {
+                        activity = new NewGuarantorWelcomePageActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
                         activity = new LeaseSigningWizardActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation) {

@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-11
- * @author VladL
+ * Created on Feb 13, 2014
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.resident.activity.movein;
@@ -19,16 +19,16 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.movein.NewResidentWelcomePageView;
-import com.propertyvista.portal.resident.ui.movein.NewResidentWelcomePageView.NewResidentWelcomePagePresenter;
+import com.propertyvista.portal.resident.ui.movein.NewGuarantorWelcomePageView;
+import com.propertyvista.portal.resident.ui.movein.NewGuarantorWelcomePageView.NewGuarantorWelcomePagePresenter;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
-public class NewResidentWelcomePageActivity extends SecurityAwareActivity implements NewResidentWelcomePagePresenter {
+public class NewGuarantorWelcomePageActivity extends SecurityAwareActivity implements NewGuarantorWelcomePagePresenter {
 
-    private final NewResidentWelcomePageView view;
+    private final NewGuarantorWelcomePageView view;
 
-    public NewResidentWelcomePageActivity(AppPlace place) {
-        this.view = ResidentPortalSite.getViewFactory().getView(NewResidentWelcomePageView.class);
+    public NewGuarantorWelcomePageActivity(AppPlace place) {
+        this.view = ResidentPortalSite.getViewFactory().getView(NewGuarantorWelcomePageView.class);
     }
 
     @Override

@@ -47,7 +47,8 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
         view.setUserName(ClientContext.getUserVisit().getName());
         view.setLeasesSelectorEnabled(SecurityController.checkAnyBehavior(PortalResidentBehavior.HasMultipleLeases));
         view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard)
-                && !(place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage) && !(place instanceof ResidentPortalSiteMap.LeaseContextSelection));
+                && !(place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage)
+                && !(place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage) && !(place instanceof ResidentPortalSiteMap.LeaseContextSelection));
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 

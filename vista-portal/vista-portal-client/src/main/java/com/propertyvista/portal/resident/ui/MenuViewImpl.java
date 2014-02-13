@@ -80,8 +80,9 @@ public class MenuViewImpl extends DockPanel implements MenuView {
                         ThemeColor.contrast3));
             }
 
-            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
         }
+
+        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
 
         footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
         footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));

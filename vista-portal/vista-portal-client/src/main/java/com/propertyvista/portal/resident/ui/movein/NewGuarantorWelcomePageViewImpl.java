@@ -23,14 +23,14 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
-public class NewResidentWelcomePageViewImpl extends FlowPanel implements NewResidentWelcomePageView {
+public class NewGuarantorWelcomePageViewImpl extends FlowPanel implements NewGuarantorWelcomePageView {
 
-    private final NewResidentWelcomeGadget gadget;
+    private final NewGuarantorWelcomeGadget gadget;
 
-    public NewResidentWelcomePageViewImpl() {
+    public NewGuarantorWelcomePageViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        gadget = new NewResidentWelcomeGadget(this);
+        gadget = new NewGuarantorWelcomeGadget(this);
         add(gadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));

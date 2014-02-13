@@ -23,15 +23,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.shared.domain.Notification;
-import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView;
-import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardViewImpl;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayInfoDTO;
@@ -69,11 +66,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
             populateLatestActivities();
             populateAutoPaySummary();
             populatePaymentMethodSummary();
-        } else {
-            Notification notification = new Notification(null, i18n.tr("Guarantor Online Payment functionality is coming soon."), NotificationType.INFO);
-            ResidentPortalSite.getPlaceController().showNotification(notification);
         }
-
     }
 
     private void populateBillingSummary() {

@@ -163,6 +163,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class NewTenantWelcomePage extends AppPlace {
         }
 
+        public static class NewGuarantorWelcomePage extends AppPlace {
+        }
+
         public static class MoveInWizard extends AppPlace {
         }
 

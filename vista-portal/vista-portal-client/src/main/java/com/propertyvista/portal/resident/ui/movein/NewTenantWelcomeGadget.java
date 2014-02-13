@@ -32,15 +32,15 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class NewResidentWelcomeGadget extends AbstractGadget<NewResidentWelcomePageView> {
+public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageView> {
 
-    private static final I18n i18n = I18n.get(NewResidentWelcomeGadget.class);
+    private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
     private final Image buildingImage;
 
     private final Image helpImage;
 
-    public NewResidentWelcomeGadget(NewResidentWelcomePageViewImpl view) {
+    public NewTenantWelcomeGadget(NewTenantWelcomePageViewImpl view) {
         super(view, null, i18n.tr("Move-In Wizard"), ThemeColor.contrast2, 1);
         setActionsToolbar(new NewResidentWelcomeToolbar());
 
@@ -62,7 +62,7 @@ public class NewResidentWelcomeGadget extends AbstractGadget<NewResidentWelcomeP
                         row,
                         1,
                         new HTML(
-                                i18n.tr("<b>Congratulations You’ve been Approved!</b><p/>Use this Move-In Wizard to ease your move-in experience . After a few simple steps you’ll be ready for your new home.")));
+                                i18n.tr("<b>Congratulations You’ve been Approved!</b><p/><div style=text-align:left>Use this Move-In Wizard to ease your move-in experience . After a few simple steps you’ll be ready for your new home.</div>")));
 
         helpImage = new Image(PortalImages.INSTANCE.signUpPersonal());
         welcomePanel.setWidget(++row, 0, helpImage);

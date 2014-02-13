@@ -50,6 +50,8 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
             add(autoPayAgreementsGadget = new AutoPayAgreementsGadget(this));
             add(latestActivitiesGadget = new LatestActivitiesGadget(this));
             add(paymentMethodsGadget = new PaymentMethodsGadget(this));
+        } else if (SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
+            add(new ComingSoonGadget(this));
         }
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
