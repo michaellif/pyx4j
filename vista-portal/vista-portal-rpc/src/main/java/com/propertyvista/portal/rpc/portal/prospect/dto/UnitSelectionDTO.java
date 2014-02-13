@@ -121,7 +121,7 @@ public interface UnitSelectionDTO extends IEntity {
     IPrimitive<BathroomNumber> bathrooms();
 
     @Transient
-    @ToStringFormat("{0} ({1} beds, {2} dens, {3} baths, Availability {4}, Price ${5})")
+    @ToStringFormat("{0} ({1} beds, {2} dens, {3} baths, available {4}, price ${5})")
     public interface UnitTO extends IEntity {
 
         @Editor(type = Editor.EditorType.label)
