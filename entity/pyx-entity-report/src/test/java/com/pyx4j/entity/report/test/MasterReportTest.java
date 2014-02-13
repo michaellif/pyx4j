@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.report.test;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.report.master.MasterReportEntry;
 import com.pyx4j.entity.report.master.MasterReportModel;
+import com.pyx4j.gwt.server.IOUtils;
 
 public class MasterReportTest extends ReportsTestBase {
 
@@ -46,8 +46,7 @@ public class MasterReportTest extends ReportsTestBase {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put(MasterReportModel.REPORT_TITLE, "Master Report");
         try {
-            parameters.put(MasterReportModel.REPORT_LOGO,
-                    new URL("http://jasperforge.org/uploads/publish/jasperreportswebsite/trunk/images/logo_new.png").openStream());
+            parameters.put(MasterReportModel.REPORT_LOGO, IOUtils.getResource("logo.png", this.getClass()).openStream());
         } catch (Exception e) {
             log.warn("Warning", e);
         }
