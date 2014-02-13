@@ -63,7 +63,5 @@ public interface LeaseDTO extends Lease {
 
     IList<LegalStatus> legalStatusHistory();
 
-    LeaseAgreementSigningProgressDTO agreementSigningProgressDTO();
-
     IPrimitive<Boolean> isUnitReserved();
 }

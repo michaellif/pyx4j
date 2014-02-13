@@ -28,6 +28,7 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<LeaseDTO> {
@@ -69,5 +70,9 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     void setLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatus status);
 
     void signLease(AsyncCallback<VoidSerializable> callback, Lease leaseId);
+
+    void getLeaseAgreementDocuments(AsyncCallback<LeaseAgreementDocumentsDTO> callback, Lease leaseId);
+
+    void updateLeaseAgreementDocuments(AsyncCallback<VoidSerializable> callback, Lease leaseId, LeaseAgreementDocumentsDTO documents);
 
 }

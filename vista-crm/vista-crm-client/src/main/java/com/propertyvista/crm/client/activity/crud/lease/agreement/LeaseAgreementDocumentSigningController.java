@@ -15,14 +15,19 @@ package com.propertyvista.crm.client.activity.crud.lease.agreement;
 
 import java.util.List;
 
-import com.pyx4j.entity.core.EntityFactory;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentSigningVisor;
+import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
-import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
 
 public class LeaseAgreementDocumentSigningController implements IVisorEditor.Controller {
 
@@ -32,37 +37,23 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
 
     private final List<LeaseTermParticipant<?>> leaseTermParticipantOptions;
 
-    public LeaseAgreementDocumentSigningController(LeaseViewerView view, List<LeaseTermParticipant<?>> leaseTermParticipantOptions) {
+    private final Lease leaseId;
+
+    public LeaseAgreementDocumentSigningController(LeaseViewerView view, Lease leaseId, List<LeaseTermParticipant<?>> leaseTermParticipantOptions) {
         this.visor = new LeaseAgreementDocumentSigningVisor(this);
         this.view = view;
+        this.leaseId = leaseId;
         this.leaseTermParticipantOptions = leaseTermParticipantOptions;
     }
 
     @Override
     public void show() {
-        LeaseAgreementDocumentsDTO leaseAgreementDocuments = EntityFactory.create(LeaseAgreementDocumentsDTO.class);
-        LeaseAgreementStackholderSigningProgressDTO stackholder1 = leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().$();
-        stackholder1.name().setValue("Jerry Sienfield");
-        stackholder1.role().setValue("Applicant");
-        stackholder1.hasSigned().setValue(true);
-
-        LeaseAgreementStackholderSigningProgressDTO stackholder2 = leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().$();
-        stackholder2.name().setValue("George Costanza");
-        stackholder2.role().setValue("Co-Applicant");
-        stackholder2.hasSigned().setValue(false);
-
-        LeaseAgreementStackholderSigningProgressDTO stackholder3 = leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().$();
-        stackholder3.name().setValue("Elane");
-        stackholder3.role().setValue("Guarantor");
-        stackholder3.hasSigned().setValue(false);
-
-        leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().add(stackholder1);
-        leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().add(stackholder2);
-        leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown().add(stackholder3);
-
-        this.visor.populate(leaseAgreementDocuments);
-        this.view.showVisor(this.visor);
-        this.visor.setParticipantsOptions(leaseTermParticipantOptions);
+        populate(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                LeaseAgreementDocumentSigningController.this.view.showVisor(LeaseAgreementDocumentSigningController.this.visor);
+            }
+        });
     }
 
     @Override
@@ -72,12 +63,43 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
 
     @Override
     public void apply() {
-        // TODO 
+        GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class).updateLeaseAgreementDocuments(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // do nothing
+            }
+        }, this.leaseId, this.visor.getValue());
     }
 
     @Override
     public void save() {
-        // TODO Auto-generated method stub
+        GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class).updateLeaseAgreementDocuments(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate(new DefaultAsyncCallback<VoidSerializable>() {
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        LeaseAgreementDocumentSigningController.this.view.hideVisor();
+                    }
+                });
+            }
+        }, this.leaseId, this.visor.getValue());
+    }
+
+    private void populate(final AsyncCallback<VoidSerializable> callback) {
+        GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class).getLeaseAgreementDocuments(new DefaultAsyncCallback<LeaseAgreementDocumentsDTO>() {
+            @Override
+            public void onSuccess(LeaseAgreementDocumentsDTO leaseAgreementDocuments) {
+                LeaseAgreementDocumentSigningController.this.visor.setParticipantsOptions(leaseTermParticipantOptions);
+                LeaseAgreementDocumentSigningController.this.visor.populate(leaseAgreementDocuments);
+                callback.onSuccess(null);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+        }, this.leaseId);
     }
 
 }

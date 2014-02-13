@@ -394,7 +394,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         List<LeaseTermParticipant<?>> participants = new LinkedList<>();
         participants.addAll(currentValue.currentTerm().version().tenants());
         participants.addAll(currentValue.currentTerm().version().guarantors());
-        new LeaseAgreementDocumentSigningController((LeaseViewerView) this.getView(), participants).show();
+        new LeaseAgreementDocumentSigningController((LeaseViewerView) this.getView(), EntityFactory.createIdentityStub(Lease.class, getEntityId()),
+                participants).show();
     }
 
     @Override
