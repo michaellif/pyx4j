@@ -149,8 +149,6 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
 
         private final Image vistaImage;
 
-        private final Image deviceImage;
-
         public BrandPanel() {
 
             getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -163,15 +161,6 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
             vistaImage = new Image(PortalImages.INSTANCE.vistaFooterLogo());
             vistaImage.getElement().getStyle().setDisplay(Display.BLOCK);
             add(vistaImage);
-
-            deviceImage = new Image();
-            SimplePanel deviceImageHolder = new SimplePanel(deviceImage);
-            deviceImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            deviceImageHolder.getElement().getStyle().setProperty("margin", "5px 5px 5px auto");
-            deviceImageHolder.getElement().getStyle().setProperty("borderRadius", "5px");
-            deviceImageHolder.getElement().getStyle().setProperty("background", "white");
-            deviceImageHolder.getElement().getStyle().setProperty("padding", "5px");
-            add(deviceImageHolder);
 
         }
 
@@ -191,28 +180,6 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
                 break;
             }
 
-            if (ApplicationMode.isDevelopment()) {
-                switch (layoutType) {
-                case phonePortrait:
-                    deviceImage.setResource(PortalImages.INSTANCE.phone());
-                    break;
-                case phoneLandscape:
-                    deviceImage.setResource(PortalImages.INSTANCE.phoneL());
-                    break;
-                case tabletPortrait:
-                    deviceImage.setResource(PortalImages.INSTANCE.tablet());
-                    break;
-                case tabletLandscape:
-                    deviceImage.setResource(PortalImages.INSTANCE.tabletL());
-                    break;
-                case monitor:
-                    deviceImage.setResource(PortalImages.INSTANCE.monitor());
-                    break;
-                case huge:
-                    deviceImage.setResource(PortalImages.INSTANCE.huge());
-                    break;
-                }
-            }
         }
     }
 
