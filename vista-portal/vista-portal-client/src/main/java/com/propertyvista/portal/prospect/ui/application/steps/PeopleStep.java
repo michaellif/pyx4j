@@ -38,6 +38,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
@@ -60,8 +61,11 @@ public class PeopleStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
 
-        panel.setH3(++row, 0, 1, i18n.tr("People Living with You"));
+        panel.setH3(++row, 0, 1, i18n.tr("Co-Applicant"));
         panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getWizard())));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Dependents"));
+        panel.setWidget(++row, 0, inject(proto().dependents(), new DependentsFolder(getWizard())));
 
         panel.setWidget(++row, 0, warningMessage);
         warningMessage.setStyleName(StyleName.WarningMessage.name());
@@ -84,7 +88,7 @@ public class PeopleStep extends ApplicationWizardStep {
         private final ApplicationWizard wizard;
 
         public CoapplicantsFolder(ApplicationWizard applicationWizard) {
-            super(CoapplicantDTO.class, i18n.tr("Occupant"));
+            super(CoapplicantDTO.class, i18n.tr("Co-Applicant"));
             this.wizard = applicationWizard;
         }
 
@@ -101,36 +105,17 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         @Override
-        protected void createNewEntity(AsyncCallback<CoapplicantDTO> callback) {
-            CoapplicantDTO entity = EntityFactory.create(CoapplicantDTO.class);
-
-            entity.dependent().setValue(true);
-            entity.matured().setValue(false);
-
-            callback.onSuccess(entity);
-        }
-
-        @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof CoapplicantDTO) {
                 return new CoapplicantForm();
-            } else {
-                return super.create(member);
             }
+            return super.create(member);
         }
 
         @Override
         public void generateMockData() {
-
             if (getItemCount() == 0) {
-                CoapplicantDTO cotenant = EntityFactory.create(CoapplicantDTO.class);
-                cotenant.dependent().setValue(false);
-                cotenant.matured().setValue(true);
-                addItem(cotenant);
-
                 CoapplicantDTO occupant = EntityFactory.create(CoapplicantDTO.class);
-                occupant.dependent().setValue(true);
-                occupant.matured().setValue(false);
                 addItem(occupant);
             }
         }
@@ -146,8 +131,86 @@ public class PeopleStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
+
+                return mainPanel;
+            }
+
+            @Override
+            public void generateMockData() {
+                get(proto().name().firstName()).setMockValue("Jane");
+                get(proto().name().lastName()).setMockValue("Stiles");
+                get(proto().relationship()).setMockValue(PersonRelationship.Spouse);
+                get(proto().email()).setMockValue("JaneStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
+            }
+        }
+    }
+
+    private class DependentsFolder extends PortalBoxFolder<DependentDTO> {
+
+        private final ApplicationWizard wizard;
+
+        public DependentsFolder(ApplicationWizard applicationWizard) {
+            super(DependentDTO.class, i18n.tr("Dependent"));
+            this.wizard = applicationWizard;
+        }
+
+        public Integer ageOfMajority() {
+            return wizard.getValue().ageOfMajority().getValue();
+        }
+
+        public boolean enforceAgeOfMajority() {
+            return wizard.getValue().enforceAgeOfMajority().isBooleanTrue();
+        }
+
+        public boolean maturedOccupantsAreApplicants() {
+            return wizard.getValue().maturedOccupantsAreApplicants().isBooleanTrue();
+        }
+
+        @Override
+        protected void createNewEntity(AsyncCallback<DependentDTO> callback) {
+            DependentDTO entity = EntityFactory.create(DependentDTO.class);
+
+            entity.matured().setValue(false);
+
+            callback.onSuccess(entity);
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof DependentDTO) {
+                return new DependentForm();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        @Override
+        public void generateMockData() {
+            if (getItemCount() == 0) {
+                DependentDTO occupant = EntityFactory.create(DependentDTO.class);
+
+                occupant.matured().setValue(false);
+
+                addItem(occupant);
+            }
+        }
+
+        class DependentForm extends CEntityForm<DependentDTO> {
+
+            public DependentForm() {
+                super(DependentDTO.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+
+                int row = -1;
                 mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().matured())).build());
-                mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().dependent())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
@@ -155,21 +218,12 @@ public class PeopleStep extends ApplicationWizardStep {
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
 
                 // tweaks:
-                get(proto().dependent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<Boolean> event) {
-                        get(proto().birthDate()).setVisible(getValue().dependent().getValue());
-                        get(proto().birthDate()).setMandatory(getValue().dependent().getValue());
-                        get(proto().email()).setVisible(!getValue().dependent().getValue());
-                    }
-                });
                 get(proto().matured()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
-                        get(proto().dependent()).setValue(!event.getValue());
-                        get(proto().birthDate()).setVisible(getValue().dependent().getValue());
-                        get(proto().birthDate()).setMandatory(getValue().dependent().getValue());
-                        get(proto().email()).setVisible(!getValue().dependent().getValue());
+                        get(proto().birthDate()).setVisible(!getValue().matured().getValue());
+                        get(proto().birthDate()).setMandatory(!getValue().matured().getValue());
+                        get(proto().email()).setVisible(getValue().matured().getValue());
                     }
                 });
 
@@ -178,23 +232,18 @@ public class PeopleStep extends ApplicationWizardStep {
 
             @Override
             public void generateMockData() {
-                if (get(proto().dependent()).getValue() == null) {
-                    get(proto().dependent()).setMockValue(false);
-                    get(proto().matured()).setMockValue(true);
-                }
-                if (get(proto().dependent()).getValue()) {
+                if (!get(proto().matured()).getValue()) {
                     get(proto().name().firstName()).setMockValue("Bob");
                     get(proto().name().lastName()).setMockValue("Stiles");
                     get(proto().relationship()).setMockValue(PersonRelationship.Son);
                     get(proto().birthDate()).setMockValue(new LogicalDate(102, 3, 5));
                     get(proto().email()).setMockValue("BobStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
                 } else {
-                    get(proto().name().firstName()).setMockValue("Jane");
+                    get(proto().name().firstName()).setMockValue("Ellen");
                     get(proto().name().lastName()).setMockValue("Stiles");
-                    get(proto().relationship()).setMockValue(PersonRelationship.Spouse);
-                    get(proto().email()).setMockValue("JaneStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
+                    get(proto().relationship()).setMockValue(PersonRelationship.Daughter);
+                    get(proto().email()).setMockValue("EllenStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
                 }
-
             }
 
             @Override
@@ -202,10 +251,9 @@ public class PeopleStep extends ApplicationWizardStep {
                 super.onValueSet(populate);
 
                 get(proto().matured()).setVisible(maturedOccupantsAreApplicants());
-                get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
-                get(proto().birthDate()).setVisible(getValue().dependent().getValue());
-                get(proto().birthDate()).setMandatory(getValue().dependent().getValue());
-                get(proto().email()).setVisible(!getValue().dependent().getValue());
+                get(proto().birthDate()).setVisible(!getValue().matured().getValue());
+                get(proto().birthDate()).setMandatory(!getValue().matured().getValue());
+                get(proto().email()).setVisible(getValue().matured().getValue());
 
                 get(proto().matured()).setTitle(i18n.tr("Is this occupant {0} or over?", ageOfMajority()));
             }

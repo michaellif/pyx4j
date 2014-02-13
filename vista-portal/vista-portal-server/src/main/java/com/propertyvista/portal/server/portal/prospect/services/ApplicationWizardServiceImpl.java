@@ -79,6 +79,7 @@ import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentDTO;
@@ -118,7 +119,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillApplicantData(bo, to);
 
-        fillCoApplicants(bo, to);
+        fillOccupants(bo, to);
         fillGuarantors(bo, to);
 
         fillTerms(bo, to);
@@ -319,42 +320,52 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.service().merge(screening);
     }
 
-    private void fillCoApplicants(OnlineApplication bo, OnlineApplicationDTO to) {
+    private void fillOccupants(OnlineApplication bo, OnlineApplicationDTO to) {
         EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
         criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
 
         for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
-            CoapplicantDTO cap = EntityFactory.create(CoapplicantDTO.class);
+            if (ltt.role().getValue() == Role.CoApplicant) {
+                CoapplicantDTO cap = EntityFactory.create(CoapplicantDTO.class);
 
-            cap.dependent().setValue(ltt.role().getValue() == Role.Dependent);
-            cap.relationship().setValue(ltt.relationship().getValue());
+                cap.relationship().setValue(ltt.relationship().getValue());
 
-            cap.name().set(ltt.leaseParticipant().customer().person().name());
-            cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
-            cap.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
+                cap.name().set(ltt.leaseParticipant().customer().person().name());
+                cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
 
-            // update matured/dependent states:
-            if (!cap.birthDate().isNull()) {
-                Integer ageOfMajority = (to.ageOfMajority().isNull() ? 18 : to.ageOfMajority().getValue());
-                cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority));
-            } else {
-                cap.matured().setValue(!cap.dependent().isBooleanTrue());
+                // remember corresponding tenant: 
+                cap.set(cap.tenantId(), ltt);
+                cap.tenantId().setAttachLevel(AttachLevel.IdOnly);
+
+                to.coapplicants().add(cap);
+            } else if (ltt.role().getValue() == Role.Dependent) {
+                DependentDTO cap = EntityFactory.create(DependentDTO.class);
+
+                cap.relationship().setValue(ltt.relationship().getValue());
+
+                cap.name().set(ltt.leaseParticipant().customer().person().name());
+                cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
+                cap.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
+
+                // update matured/dependent states:
+                if (!cap.birthDate().isNull()) {
+                    Integer ageOfMajority = (to.ageOfMajority().isNull() ? 18 : to.ageOfMajority().getValue());
+                    cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority));
+                } else {
+                    cap.matured().setValue(false);
+                }
+
+                // remember corresponding tenant: 
+                cap.set(cap.tenantId(), ltt);
+                cap.tenantId().setAttachLevel(AttachLevel.IdOnly);
+
+                to.dependents().add(cap);
             }
-            // force dependency if needed:
-            if (to.maturedOccupantsAreApplicants().isBooleanTrue()) {
-                cap.dependent().setValue(!cap.matured().getValue());
-            }
-
-            // remember corresponding tenant: 
-            cap.set(cap.tenantId(), ltt);
-            cap.tenantId().setAttachLevel(AttachLevel.IdOnly);
-
-            to.coapplicants().add(cap);
         }
     }
 
-    private void saveCoApplicants(OnlineApplication bo, OnlineApplicationDTO to) {
+    private void saveOccupants(OnlineApplication bo, OnlineApplicationDTO to) {
         LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
         // clear removed:
@@ -370,6 +381,15 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                         break;
                     }
                 }
+                if (!present) {
+                    for (DependentDTO dep : to.dependents()) {
+                        if (!dep.tenantId().isNull() && dep.tenantId().getPrimaryKey().equals(ltt.getPrimaryKey())) {
+                            present = true;
+                            break;
+                        }
+                    }
+                }
+
                 if (!present) {
                     it.remove();
                 }
@@ -394,15 +414,40 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 }
             }
         }
+        for (DependentDTO dep : to.dependents()) {
+            if (dep.tenantId().isNull()) {
+                // create new:
+                LeaseTermTenant ltt = EntityFactory.create(LeaseTermTenant.class);
+                updateDependent(ltt, dep);
+                leaseTerm.version().tenants().add(ltt);
+            } else {
+                // update current:
+                for (LeaseTermTenant ltt : leaseTerm.version().tenants()) {
+                    if (ltt.getPrimaryKey().equals(dep.tenantId().getPrimaryKey())) {
+                        Persistence.ensureRetrieve(ltt, AttachLevel.Attached);
+                        updateDependent(ltt, dep);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void updateCoApplicant(LeaseTermTenant ltt, CoapplicantDTO cap) {
-        ltt.role().setValue(cap.dependent().isBooleanTrue() ? Role.Dependent : Role.CoApplicant);
+        ltt.role().setValue(Role.CoApplicant);
         ltt.relationship().setValue(cap.relationship().getValue());
 
         ltt.leaseParticipant().customer().person().name().set(cap.name());
         ltt.leaseParticipant().customer().person().email().setValue(cap.email().getValue());
-        ltt.leaseParticipant().customer().person().birthDate().setValue(cap.birthDate().getValue());
+    }
+
+    private void updateDependent(LeaseTermTenant ltt, DependentDTO dep) {
+        ltt.role().setValue(Role.Dependent);
+        ltt.relationship().setValue(dep.relationship().getValue());
+
+        ltt.leaseParticipant().customer().person().name().set(dep.name());
+        ltt.leaseParticipant().customer().person().email().setValue(dep.email().getValue());
+        ltt.leaseParticipant().customer().person().birthDate().setValue(dep.birthDate().getValue());
     }
 
     private void fillGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -746,7 +791,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.yearsAdd(leaseTerm.termFrom().getValue(), 1)));
             }
             saveUnitOptionsData(bo, to);
-            saveCoApplicants(bo, to);
+            saveOccupants(bo, to);
             saveGuarantors(bo, to);
             break;
 

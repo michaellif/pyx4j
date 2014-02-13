@@ -21,32 +21,32 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> {
+public class DependentsReadonlyFolder extends PortalBoxFolder<DependentDTO> {
 
-    private static final I18n i18n = I18n.get(CoapplicantsReadonlyFolder.class);
+    private static final I18n i18n = I18n.get(DependentsReadonlyFolder.class);
 
-    public CoapplicantsReadonlyFolder() {
-        super(CoapplicantDTO.class, i18n.tr("Co-Applicant"));
+    public DependentsReadonlyFolder() {
+        super(DependentDTO.class, i18n.tr("Dependent"));
         setViewable(true);
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof CoapplicantDTO) {
+        if (member instanceof DependentDTO) {
             return new CoapplicantForm();
         } else {
             return super.create(member);
         }
     }
 
-    class CoapplicantForm extends CEntityForm<CoapplicantDTO> {
+    class CoapplicantForm extends CEntityForm<DependentDTO> {
 
         public CoapplicantForm() {
-            super(CoapplicantDTO.class);
+            super(DependentDTO.class);
         }
 
         @Override
@@ -55,11 +55,12 @@ public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> 
 
             int row = -1;
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name())).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().matured())).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
 
             return mainPanel;
         }
-
     }
 }

@@ -17,6 +17,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.CoapplicantsReadonlyFolder;
+import com.propertyvista.portal.prospect.ui.application.steps.DependentsReadonlyFolder;
 import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
 
 public class PeopleSectionPanel extends AbstractSectionPanel {
@@ -27,7 +28,6 @@ public class PeopleSectionPanel extends AbstractSectionPanel {
         super(index, OnlineApplicationWizardStepMeta.People.toString(), form, step);
         addCaption(i18n.tr("People Living with You"));
         addField(proto().coapplicants(), new CoapplicantsReadonlyFolder(), false);
-
+        addField(proto().dependents(), new DependentsReadonlyFolder(), false);
     }
-
 }
