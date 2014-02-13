@@ -121,7 +121,7 @@ public interface UnitSelectionDTO extends IEntity {
     IPrimitive<BathroomNumber> bathrooms();
 
     @Transient
-    @ToStringFormat("{0} ({1} beds, {2} baths, Available from {3}, Price is ${4})")
+    @ToStringFormat("{0} ({1} beds, {2} dens, {3} baths, Availability {4}, Price ${5})")
     public interface UnitTO extends IEntity {
 
         @Editor(type = Editor.EditorType.label)
@@ -141,18 +141,19 @@ public interface UnitSelectionDTO extends IEntity {
         @Editor(type = Editor.EditorType.label)
         IPrimitive<Integer> bedrooms();
 
+        @ToString(index = 2)
         @Editor(type = Editor.EditorType.label)
         IPrimitive<Integer> dens();
 
-        @ToString(index = 2)
+        @ToString(index = 3)
         @Editor(type = Editor.EditorType.label)
         IPrimitive<Integer> bathrooms();
 
-        @ToString(index = 3)
+        @ToString(index = 4)
         @Editor(type = Editor.EditorType.label)
         IPrimitive<LogicalDate> available();
 
-        @ToString(index = 4)
+        @ToString(index = 5)
         @Format("#,##0.00")
         @Editor(type = EditorType.label)
         IPrimitive<BigDecimal> price();

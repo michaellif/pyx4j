@@ -80,6 +80,8 @@ public class PeopleStep extends ApplicationWizardStep {
         if (getValue().maturedOccupantsAreApplicants().isBooleanTrue()) {
             warningMessage.setHTML(SimpleMessageFormat.format(warningText, getValue().ageOfMajority()));
             warningMessage.setVisible(true);
+        } else {
+            warningMessage.setVisible(false);
         }
     }
 
@@ -90,18 +92,6 @@ public class PeopleStep extends ApplicationWizardStep {
         public CoapplicantsFolder(ApplicationWizard applicationWizard) {
             super(CoapplicantDTO.class, i18n.tr("Co-Applicant"));
             this.wizard = applicationWizard;
-        }
-
-        public Integer ageOfMajority() {
-            return wizard.getValue().ageOfMajority().getValue();
-        }
-
-        public boolean enforceAgeOfMajority() {
-            return wizard.getValue().enforceAgeOfMajority().isBooleanTrue();
-        }
-
-        public boolean maturedOccupantsAreApplicants() {
-            return wizard.getValue().maturedOccupantsAreApplicants().isBooleanTrue();
         }
 
         @Override

@@ -353,7 +353,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                     Integer ageOfMajority = (to.ageOfMajority().isNull() ? 18 : to.ageOfMajority().getValue());
                     cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority));
                 } else {
-                    cap.matured().setValue(false);
+                    cap.matured().setValue(!cap.email().isNull());
                 }
 
                 // remember corresponding tenant: 
@@ -1018,8 +1018,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         // correct service type:
         criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
         criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
-        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
         criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
+        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
         // availability: 
         criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available, moveIn,
                 availabilityDeadline));
@@ -1028,8 +1028,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
-            availableUnits.add(createUnitDTO(unit));
-            if (availableUnits.size() > policy.maxExactMatchUnits().getValue()) {
+            if (availableUnits.size() < policy.maxExactMatchUnits().getValue()) {
+                availableUnits.add(createUnitDTO(unit));
+            } else {
                 break; // list no more
             }
         }
@@ -1061,17 +1062,18 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         // correct service type:
         criteria.in(criteria.proto().productItems().$().product().holder().code().type(), ARCode.Type.Residential);
         criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
-        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
         criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
+        criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
         // availability: 
         criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available,
-                availabilityDeadline, availabilityRightBound));
+                availabilityRightBound, availabilityDeadline));
         criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
 
         List<UnitTO> availableUnits = new ArrayList<UnitTO>();
         for (AptUnit unit : Persistence.service().query(criteria)) {
-            availableUnits.add(createUnitDTO(unit));
-            if (availableUnits.size() > policy.maxPartialMatchUnits().getValue()) {
+            if (availableUnits.size() < policy.maxPartialMatchUnits().getValue()) {
+                availableUnits.add(createUnitDTO(unit));
+            } else {
                 break; // list no more
             }
         }
