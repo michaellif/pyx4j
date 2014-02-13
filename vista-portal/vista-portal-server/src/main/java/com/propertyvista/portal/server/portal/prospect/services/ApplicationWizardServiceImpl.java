@@ -327,18 +327,19 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
             CoapplicantDTO cap = EntityFactory.create(CoapplicantDTO.class);
 
-            cap.matured().setValue(false);
-
             cap.dependent().setValue(ltt.role().getValue() == Role.Dependent);
-            cap.name().set(ltt.leaseParticipant().customer().person().name());
-            cap.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
             cap.relationship().setValue(ltt.relationship().getValue());
+
+            cap.name().set(ltt.leaseParticipant().customer().person().name());
             cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
+            cap.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
 
             // update matured/dependent states:
             if (!cap.birthDate().isNull()) {
                 Integer ageOfMajority = (to.ageOfMajority().isNull() ? 18 : to.ageOfMajority().getValue());
                 cap.matured().setValue(DateUtils.isOlderThan(cap.birthDate().getValue(), ageOfMajority));
+            } else {
+                cap.matured().setValue(!cap.dependent().isBooleanTrue());
             }
             // force dependency if needed:
             if (to.maturedOccupantsAreApplicants().isBooleanTrue()) {
@@ -397,8 +398,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void updateCoApplicant(LeaseTermTenant ltt, CoapplicantDTO cap) {
         ltt.role().setValue(cap.dependent().isBooleanTrue() ? Role.Dependent : Role.CoApplicant);
+        ltt.relationship().setValue(cap.relationship().getValue());
+
         ltt.leaseParticipant().customer().person().name().set(cap.name());
         ltt.leaseParticipant().customer().person().email().setValue(cap.email().getValue());
+        ltt.leaseParticipant().customer().person().birthDate().setValue(cap.birthDate().getValue());
     }
 
     private void fillGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -409,9 +413,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         for (LeaseTermGuarantor ltg : Persistence.service().query(criteria)) {
             GuarantorDTO grnt = EntityFactory.create(GuarantorDTO.class);
 
-            grnt.firstName().setValue(ltg.leaseParticipant().customer().person().name().firstName().getValue());
-            grnt.lastName().setValue(ltg.leaseParticipant().customer().person().name().lastName().getValue());
-
+            grnt.name().setValue(ltg.leaseParticipant().customer().person().name().getValue());
             grnt.email().setValue(ltg.leaseParticipant().customer().person().email().getValue());
 
             // remember corresponding customer: 
@@ -480,8 +482,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void updateGuarantor(LeaseTermGuarantor ltg, GuarantorDTO grt) {
-        ltg.leaseParticipant().customer().person().name().firstName().setValue(grt.firstName().getValue());
-        ltg.leaseParticipant().customer().person().name().lastName().setValue(grt.lastName().getValue());
+        ltg.leaseParticipant().customer().person().name().setValue(grt.getValue());
         ltg.leaseParticipant().customer().person().email().setValue(grt.email().getValue());
 
         ltg.tenant().set(ProspectPortalContext.getTenant());

@@ -159,6 +159,7 @@ public class PeopleStep extends ApplicationWizardStep {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
                         get(proto().birthDate()).setVisible(getValue().dependent().getValue());
+                        get(proto().birthDate()).setMandatory(getValue().dependent().getValue());
                         get(proto().email()).setVisible(!getValue().dependent().getValue());
                     }
                 });
@@ -167,6 +168,7 @@ public class PeopleStep extends ApplicationWizardStep {
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
                         get(proto().dependent()).setValue(!event.getValue());
                         get(proto().birthDate()).setVisible(getValue().dependent().getValue());
+                        get(proto().birthDate()).setMandatory(getValue().dependent().getValue());
                         get(proto().email()).setVisible(!getValue().dependent().getValue());
                     }
                 });
@@ -202,6 +204,7 @@ public class PeopleStep extends ApplicationWizardStep {
                 get(proto().matured()).setVisible(maturedOccupantsAreApplicants());
                 get(proto().dependent()).setVisible(!maturedOccupantsAreApplicants());
                 get(proto().birthDate()).setVisible(getValue().dependent().getValue());
+                get(proto().birthDate()).setMandatory(getValue().dependent().getValue());
                 get(proto().email()).setVisible(!getValue().dependent().getValue());
 
                 get(proto().matured()).setTitle(i18n.tr("Is this occupant {0} or over?", ageOfMajority()));

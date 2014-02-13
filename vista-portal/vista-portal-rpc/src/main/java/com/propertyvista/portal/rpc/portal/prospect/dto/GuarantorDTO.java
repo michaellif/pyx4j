@@ -15,18 +15,21 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 
 @Transient
 public interface GuarantorDTO extends IEntity {
 
-    IPrimitive<String> firstName();
-
-    IPrimitive<String> lastName();
+    @EmbeddedEntity
+    @ToString()
+    Name name();
 
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
