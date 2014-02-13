@@ -19,11 +19,14 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsSigningDTO;
 
 public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreementDocumentsSigningDTO> {
 
     private static final I18n i18n = I18n.get(LeaseAgreementDocumentSigningForm.class);
+
+    private LeaseAgreementDocumentFolder leaseAgreementDocumentFolder;
 
     public LeaseAgreementDocumentSigningForm() {
         super(LeaseAgreementDocumentsSigningDTO.class);
@@ -39,8 +42,13 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         panel.setWidget(++row, 0, 2, inject(proto().digitallySignedDocument(), new LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm(true)));
 
         panel.setH1(++row, 0, 2, i18n.tr("Ink Signed Agreement Documents"));
-        panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), new LeaseAgreementDocumentFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder()));
+
         return panel;
+    }
+
+    public void setLeaseTermParticipantsOptions(LeaseTermParticipant<?> participantsOptions) {
+        this.leaseAgreementDocumentFolder.setParticipantOptions(participantsOptions);
     }
 
 }

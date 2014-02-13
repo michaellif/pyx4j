@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.agreement;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,6 +25,8 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.CListBox;
+import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -38,7 +42,9 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreementDocument> {
 
-    private static final I18n i18n = I18n.get(LeaseAgreementDocumentFolder.class);;
+    private static final I18n i18n = I18n.get(LeaseAgreementDocumentFolder.class);
+
+    private LeaseTermParticipant<?> participantOptions;
 
     public LeaseAgreementDocumentFolder() {
         super(LeaseTermAgreementDocument.class);
@@ -69,6 +75,8 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
 
         private final boolean viewOnly;
 
+        private CListBox<LeaseTermParticipant<?>> signedParticipantsListBox;
+
         public LeaseAgreementDocumentForm(boolean viewOnly) {
             super(LeaseTermAgreementDocument.class);
             if (viewOnly) {
@@ -91,9 +99,17 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
             panel.setH3(++row, 0, 2, i18n.tr("Signed Participants"));
             if (viewOnly) {
                 panel.setWidget(++row, 0, 2, inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer()));
+            } else {
+                panel.setWidget(++row, 0, 2,
+                        inject(proto().signedParticipants(), signedParticipantsListBox = new CListBox<LeaseTermParticipant<?>>(SelectionMode.TWO_PANEL)));
             }
             return panel;
         }
+
+        public void setParticipantOptions(List<LeaseTermParticipant<?>> participant) {
+            signedParticipantsListBox.setOptions(participant);
+        }
+
     }
 
     public static class LeaseAgreementSignedParticipantsViewer extends CViewer<IList<LeaseTermParticipant<?>>> {
@@ -137,4 +153,9 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
         public abstract void accept(LeaseTermAgreementDocument document);
 
     }
+
+    public void setParticipantOptions(LeaseTermParticipant<?> participantOptions) {
+        this.participantOptions = participantOptions;
+    }
+
 }
