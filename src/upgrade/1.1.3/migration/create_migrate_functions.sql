@@ -1491,7 +1491,8 @@ BEGIN
         
         -- apt_unit
         
-        ALTER TABLE apt_unit DROP COLUMN marketing;
+        ALTER TABLE apt_unit    DROP COLUMN marketing,
+                                DROP COLUMN _available_for_rent;
         
         -- billing_account
         

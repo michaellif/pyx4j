@@ -18,6 +18,9 @@
 -- _expiring_ schema migration 
 --\i migrate_expiring_schema.sql;
 
+-- Import legal_policy_items to temp table
+\i insert_tmp_policies.sql 
+
 -- create migration function
 \i create_migrate_functions.sql;
 
@@ -266,5 +269,6 @@ COMMIT;
 
 DROP FUNCTION _dba_.migrate_pmc_113(text);
 DROP FUNCTION _dba_.update_policy_tables(text);
+DROP TABLE _dba_.tmp_policies;
 
 
