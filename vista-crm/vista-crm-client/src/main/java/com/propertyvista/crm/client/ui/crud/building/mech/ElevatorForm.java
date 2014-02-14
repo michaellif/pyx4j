@@ -53,6 +53,6 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().build()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().build()).addComponentValidator(new PastDateIncludeTodayValidator());
     }
 }

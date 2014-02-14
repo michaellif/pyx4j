@@ -111,8 +111,8 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         // ------------------------------------------------------------------------------------------------
         CEntityForm<PriorAddress> currentAF = ((CEntityForm<PriorAddress>) get(proto().applicant().currentAddress()));
 
-        currentAF.get(currentAF.proto().moveInDate()).addValueValidator(new PastDateIncludeTodayValidator());
-        currentAF.get(currentAF.proto().moveOutDate()).addValueValidator(new FutureDateIncludeTodayValidator());
+        currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
+        currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
         new StartEndDateValidation(currentAF.get(currentAF.proto().moveInDate()), currentAF.get(currentAF.proto().moveOutDate()),
                 i18n.tr("Move In date must be before Move Out date"));
 
@@ -126,8 +126,8 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         // ------------------------------------------------------------------------------------------------
         CEntityForm<PriorAddress> previousAF = ((CEntityForm<PriorAddress>) get(proto().applicant().previousAddress()));
 
-        previousAF.get(previousAF.proto().moveInDate()).addValueValidator(new PastDateValidator());
-        previousAF.get(previousAF.proto().moveOutDate()).addValueValidator(new PastDateValidator());
+        previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
+        previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());
         new StartEndDateValidation(previousAF.get(previousAF.proto().moveInDate()), previousAF.get(previousAF.proto().moveOutDate()),
                 i18n.tr("Move In date must be before Move Out date"));
 

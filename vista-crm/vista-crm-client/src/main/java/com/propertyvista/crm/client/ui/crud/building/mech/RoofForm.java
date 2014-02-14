@@ -43,6 +43,6 @@ public class RoofForm extends MechBaseForm<RoofDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().year()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().year()).addComponentValidator(new PastDateIncludeTodayValidator());
     }
 }

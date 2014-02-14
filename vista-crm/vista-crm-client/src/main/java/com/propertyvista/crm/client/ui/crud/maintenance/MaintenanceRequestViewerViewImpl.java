@@ -171,7 +171,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo()), 10).build());
                     main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription()), 25).build());
 
-                    get(proto().scheduledDate()).addValueValidator(new FutureDateIncludeTodayValidator());
+                    get(proto().scheduledDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
 
                     return main;
                 }

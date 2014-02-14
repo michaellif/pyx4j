@@ -68,7 +68,7 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
         @SuppressWarnings("unchecked")
         CTextFieldBase<String, ?> postalCode = (CTextFieldBase<String, ?>) get(proto().postalCode());
         postalCode.setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
-        postalCode.addValueValidator(new ZipCodeValueValidator(this, proto().country()));
+        postalCode.addComponentValidator(new ZipCodeValueValidator(this, proto().country()));
 
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 

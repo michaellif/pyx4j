@@ -275,8 +275,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         accessPanel.setWidget(innerRow, 1, new FormDecoratorBuilder(inject(proto().preferredDate2()), 10).build());
         accessPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().preferredTime1()), 10).build());
         accessPanel.setWidget(innerRow, 1, new FormDecoratorBuilder(inject(proto().preferredTime2()), 10).build());
-        get(proto().preferredDate1()).addValueValidator(new FutureDateValidator());
-        get(proto().preferredDate2()).addValueValidator(new FutureDateValidator());
+        get(proto().preferredDate1()).addComponentValidator(new FutureDateValidator());
+        get(proto().preferredDate2()).addComponentValidator(new FutureDateValidator());
 
         accessPanel.setWidget(++innerRow, 0, 2, new FormDecoratorBuilder(inject(proto().petInstructions()), 50, true)
                 .customLabel(i18n.tr("Entry Instructions")).build());

@@ -91,7 +91,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
             }
         });
 
-        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
+        get(proto().birthDate()).addComponentValidator(new BirthdayDateValidator());
     }
 
     @Override

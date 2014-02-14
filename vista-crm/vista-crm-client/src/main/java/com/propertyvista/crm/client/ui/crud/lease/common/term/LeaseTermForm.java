@@ -41,6 +41,7 @@ import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -393,20 +394,20 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         crossValidate(get(proto().termFrom()), get(proto().termTo()), null);
 
-        get(proto().termFrom()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+        get(proto().termFrom()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value != null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
                     LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
                             .lease().creationDate().getValue();
                     if (getValue().lease().status().getValue() == Lease.Status.Application) {
                         return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Application Creation Date"))
-                                .isValid(component, value);
+                                .isValid();
                     } else if (getValue().lease().status().getValue() == Lease.Status.NewLease) {
                         return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Lease Creation Date"))
-                                .isValid(component, value);
+                                .isValid();
                     } else if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) {
-                        return new PastDateValidator(dateToCompare, i18n.tr("The Date Must Be Earlier Than Lease Creation Date")).isValid(component, value);
+                        return new PastDateValidator(dateToCompare, i18n.tr("The Date Must Be Earlier Than Lease Creation Date")).isValid();
                     }
                 }
                 return null;
@@ -416,7 +417,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
-        get(proto().termTo()).addValueValidator(new FutureDateValidator());
+        get(proto().termTo()).addComponentValidator(new FutureDateValidator());
 
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));

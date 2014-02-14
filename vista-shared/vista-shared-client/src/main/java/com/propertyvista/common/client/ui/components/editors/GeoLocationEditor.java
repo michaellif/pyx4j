@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,21 +61,23 @@ public class GeoLocationEditor extends CEntityForm<GeoLocation> {
     public void addValidations() {
         ((CTextFieldBase<Double, ?>) get(proto().latitude())).setFormat(new GeoNumberFormat());
 
-        get(proto().latitude()).addValueValidator(new EditableValueValidator<Double>() {
+        get(proto().latitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
-            public FieldValidationError isValid(CComponent<Double> component, Double value) {
+            public FieldValidationError isValid() {
                 CComponent<LatitudeType> latitudeType = get(proto().latitudeType());
-                return ((value == null && latitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 90))) ? null : new FieldValidationError(
-                        component, i18n.tr("Latitude may be in range [0-90] degree"));
+                Double value = getComponent().getValue();
+                return ((value == null && latitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 90))) ? null
+                        : new FieldValidationError(getComponent(), i18n.tr("Latitude may be in range [0-90] degree"));
             }
         });
         get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeType())));
 
-        get(proto().latitudeType()).addValueValidator(new EditableValueValidator<LatitudeType>() {
+        get(proto().latitudeType()).addComponentValidator(new AbstractComponentValidator<LatitudeType>() {
             @Override
-            public FieldValidationError isValid(CComponent<LatitudeType> component, LatitudeType value) {
+            public FieldValidationError isValid() {
                 CComponent<Double> latitude = get(proto().latitude());
-                return (value != null || latitude.getValue() == null) ? null : new FieldValidationError(component, i18n.tr("This field is Mandatory"));
+                return (getComponent().getValue() != null || latitude.getValue() == null) ? null : new FieldValidationError(getComponent(), i18n
+                        .tr("This field is Mandatory"));
             }
         });
         get(proto().latitudeType()).addValueChangeHandler(new RevalidationTrigger<LatitudeType>(get(proto().latitude())));
@@ -85,8 +88,8 @@ public class GeoLocationEditor extends CEntityForm<GeoLocation> {
             @Override
             public FieldValidationError isValid(CComponent<Double> component, Double value) {
                 CComponent<LongitudeType> longitudeType = get(proto().longitudeType());
-                return ((value == null && longitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 180))) ? null : new FieldValidationError(
-                        component, i18n.tr("Longitude may be in range [0-180] degree"));
+                return ((value == null && longitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 180))) ? null
+                        : new FieldValidationError(component, i18n.tr("Longitude may be in range [0-180] degree"));
             }
         });
         get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeType())));

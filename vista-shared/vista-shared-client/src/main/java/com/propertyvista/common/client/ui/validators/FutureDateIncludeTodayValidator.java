@@ -14,13 +14,12 @@
 package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-public class FutureDateIncludeTodayValidator implements EditableValueValidator<LogicalDate> {
+public class FutureDateIncludeTodayValidator extends AbstractComponentValidator<LogicalDate> {
 
     private static final I18n i18n = I18n.get(FutureDateIncludeTodayValidator.class);
 
@@ -42,8 +41,8 @@ public class FutureDateIncludeTodayValidator implements EditableValueValidator<L
     }
 
     @Override
-    public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        return (value == null) || !value.before(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null : new FieldValidationError(component,
-                message);
+    public FieldValidationError isValid() {
+        return (getComponent().getValue() == null) || !getComponent().getValue().before(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null
+                : new FieldValidationError(getComponent(), message);
     }
 }

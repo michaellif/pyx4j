@@ -460,14 +460,14 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (value != null) {
-                    return (value.compareTo(BigDecimal.ZERO) > 0 ? null
-                            : new FieldValidationError(component, i18n.tr("Payment amount should be greater then zero!")));
+                    return (value.compareTo(BigDecimal.ZERO) > 0 ? null : new FieldValidationError(component, i18n
+                            .tr("Payment amount should be greater then zero!")));
                 }
                 return null;
             }
         });
 
-        get(proto().targetDate()).addValueValidator(new FutureDateIncludeTodayValidator());
+        get(proto().targetDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {

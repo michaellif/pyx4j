@@ -96,7 +96,7 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
     }
 
     private void attachFilters(final AddressStructured proto, CComponent<Province> province, CComponent<Country> country, CComponent<String> postalCode) {
-        postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
+        postalCode.addComponentValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 
         // The filter does not use the CEditableComponent<Country, ?> and use Model directly. So it work fine on populate.

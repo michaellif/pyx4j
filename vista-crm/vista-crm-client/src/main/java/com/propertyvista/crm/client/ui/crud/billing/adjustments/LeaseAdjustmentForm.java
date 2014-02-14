@@ -144,7 +144,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().targetDate()).addValueValidator(new FutureDateIncludeTodayValidator());
+        get(proto().targetDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
     }
 
     @Override

@@ -60,8 +60,8 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().flooringInstallDate()).addValueValidator(new PastDateIncludeTodayValidator());
-        get(proto().counterTopInstallDate()).addValueValidator(new PastDateIncludeTodayValidator());
-        get(proto().cabinetsInstallDate()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().flooringInstallDate()).addComponentValidator(new PastDateIncludeTodayValidator());
+        get(proto().counterTopInstallDate()).addComponentValidator(new PastDateIncludeTodayValidator());
+        get(proto().cabinetsInstallDate()).addComponentValidator(new PastDateIncludeTodayValidator());
     }
 }

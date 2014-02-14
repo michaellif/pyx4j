@@ -73,6 +73,6 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
     @Override
     public void addValidations() {
         super.addValidations();
-        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
+        get(proto().birthDate()).addComponentValidator(new BirthdayDateValidator());
     }
 }

@@ -168,8 +168,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().financial().dateAcquired()).addValueValidator(new PastDateIncludeTodayValidator());
-        get(proto().financial().lastAppraisalDate()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().financial().dateAcquired()).addComponentValidator(new PastDateIncludeTodayValidator());
+        get(proto().financial().lastAppraisalDate()).addComponentValidator(new PastDateIncludeTodayValidator());
 
         get(proto().complex()).addValueChangeHandler(new ValueChangeHandler<Complex>() {
             @Override

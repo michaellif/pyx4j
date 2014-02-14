@@ -144,9 +144,9 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
             }
         });
 
-        p1.addValueValidator(new PastDateValidator());
-        c1.addValueValidator(new PastDateIncludeTodayValidator());
-        c2.addValueValidator(new FutureDateIncludeTodayValidator());
+        p1.addComponentValidator(new PastDateValidator());
+        c1.addComponentValidator(new PastDateIncludeTodayValidator());
+        c2.addComponentValidator(new FutureDateIncludeTodayValidator());
 
         new StartEndDateValidation(c1, c2);
         new StartEndDateValidation(p1, p2);

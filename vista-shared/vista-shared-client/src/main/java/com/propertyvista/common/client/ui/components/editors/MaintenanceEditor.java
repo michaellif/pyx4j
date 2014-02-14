@@ -51,7 +51,7 @@ public class MaintenanceEditor extends CEntityForm<Maintenance> {
     }
 
     private void validateMaintenanceDates() {
-        get(proto().lastService()).addValueValidator(new PastDateIncludeTodayValidator());
-        get(proto().nextService()).addValueValidator(new FutureDateValidator());
+        get(proto().lastService()).addComponentValidator(new PastDateIncludeTodayValidator());
+        get(proto().nextService()).addComponentValidator(new FutureDateValidator());
     }
 }

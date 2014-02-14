@@ -172,7 +172,7 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
             }
         });
 
-        get(proto().expiryDate()).addValueValidator(new FutureDateValidator());
+        get(proto().expiryDate()).addComponentValidator(new FutureDateValidator());
 
         get(proto().securityCode()).addValueValidator(new EditableValueValidator<String>() {
             @Override

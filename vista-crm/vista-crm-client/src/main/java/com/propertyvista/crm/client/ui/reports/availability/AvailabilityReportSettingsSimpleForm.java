@@ -42,19 +42,19 @@ public class AvailabilityReportSettingsSimpleForm extends CEntityForm<Availabili
                 0,
                 new FormDecoratorBuilder(inject(proto().vacancyStatus(), new CEnumSubsetSelector<UnitAvailabilityStatus.Vacancy>(
                         UnitAvailabilityStatus.Vacancy.class, Layout.Horizontal))).labelWidth(10).componentWidth(10).build());
-        get(proto().vacancyStatus()).addValueValidator(new NotEmptySetValidator());
+        get(proto().vacancyStatus()).addComponentValidator(new NotEmptySetValidator());
         panel.setWidget(
                 ++row,
                 0,
                 new FormDecoratorBuilder(inject(proto().rentedStatus(), new CEnumSubsetSelector<UnitAvailabilityStatus.RentedStatus>(
                         UnitAvailabilityStatus.RentedStatus.class, Layout.Vertical))).labelWidth(10).componentWidth(10).build());
-        get(proto().rentedStatus()).addValueValidator(new NotEmptySetValidator());
+        get(proto().rentedStatus()).addComponentValidator(new NotEmptySetValidator());
         panel.setWidget(
                 row,
                 1,
                 new FormDecoratorBuilder(inject(proto().rentReadinessStatus(), new CEnumSubsetSelector<UnitAvailabilityStatus.RentReadiness>(
                         UnitAvailabilityStatus.RentReadiness.class, Layout.Vertical))).labelWidth(10).componentWidth(15).build());
-        get(proto().rentReadinessStatus()).addValueValidator(new NotEmptySetValidator());
+        get(proto().rentReadinessStatus()).addComponentValidator(new NotEmptySetValidator());
         return panel;
     }
 }

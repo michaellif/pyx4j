@@ -16,23 +16,23 @@ package com.propertyvista.common.client.ui.validators;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-public class OldAgeValidator implements EditableValueValidator<LogicalDate> {
+public class OldAgeValidator extends AbstractComponentValidator<LogicalDate> {
 
-    private static final I18n i18n = I18n.get(EditableValueValidator.class);
+    private static final I18n i18n = I18n.get(OldAgeValidator.class);
 
     @SuppressWarnings("deprecation")
     @Override
-    public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+    public FieldValidationError isValid() {
+        LogicalDate value = getComponent().getValue();
         if (value == null) {
             return null;
         }
         Date current = new Date();
-        return current.getYear() - value.getYear() < 150 ? null : new FieldValidationError(component, i18n.tr("Age cannot be greater than 150 years"));
+        return current.getYear() - value.getYear() < 150 ? null : new FieldValidationError(getComponent(), i18n.tr("Age cannot be greater than 150 years"));
     }
 
 }

@@ -14,22 +14,22 @@
 package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class CreditCardNumberValidator implements EditableValueValidator<CreditCardNumberIdentity> {
+public class CreditCardNumberValidator extends AbstractComponentValidator<CreditCardNumberIdentity> {
 
     private static final I18n i18n = I18n.get(CreditCardNumberValidator.class);
 
     @Override
-    public FieldValidationError isValid(CComponent<CreditCardNumberIdentity> component, CreditCardNumberIdentity value) {
+    public FieldValidationError isValid() {
+        CreditCardNumberIdentity value = getComponent().getValue();
         if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
-            return ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue()) ? null : new FieldValidationError(component,
+            return ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue()) ? null : new FieldValidationError(getComponent(),
                     i18n.tr("Invalid Credit Card Number"));
         } else {
             return null;

@@ -13,17 +13,17 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
+public class YouTubeVideoIdValidator extends AbstractComponentValidator<String> {
 
     private static final I18n i18n = I18n.get(YouTubeVideoIdValidator.class);
 
     @Override
-    public FieldValidationError isValid(CComponent<String> component, String value) {
+    public FieldValidationError isValid() {
+        String value = getComponent().getValue();
         if (value == null) {
             return null;
         }
@@ -35,7 +35,7 @@ public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
             }
         }
         value = value.trim();
-        return value.matches("[a-zA-Z0-9_-]{11}") ? null : new FieldValidationError(component, i18n.tr("This Is Not A Valid YouTube Video ID"));
+        return value.matches("[a-zA-Z0-9_-]{11}") ? null : new FieldValidationError(getComponent(), i18n.tr("This Is Not A Valid YouTube Video ID"));
     }
 
 }

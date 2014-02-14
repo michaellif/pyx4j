@@ -113,7 +113,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     @Override
     public void addValidations() {
-        get(proto().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
+        get(proto().customer().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
         get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {

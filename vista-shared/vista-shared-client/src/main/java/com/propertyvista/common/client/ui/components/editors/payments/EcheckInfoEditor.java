@@ -19,15 +19,11 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.events.DevShortcutEvent;
-import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -73,23 +69,24 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
 
     @Override
     public void addValidations() {
-        get(proto().accountNo()).addValueValidator(new EcheckAccountNumberValidator());
-        get(proto().branchTransitNumber()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().accountNo()).addComponentValidator(new EcheckAccountNumberValidator());
+        get(proto().branchTransitNumber()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String value) {
-                if (CommonsStringUtils.isStringSet(value)) {
-                    return ValidationUtils.isBranchTransitNumberValid(value) ? null : new FieldValidationError(component, i18n
+            public FieldValidationError isValid() {
+                if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
+                    return ValidationUtils.isBranchTransitNumberValid(getComponent().getValue()) ? null : new FieldValidationError(getComponent(), i18n
                             .tr("Number should consist of 5 digits"));
                 } else {
                     return null;
                 }
             }
         });
-        get(proto().bankId()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().bankId()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String value) {
-                if (CommonsStringUtils.isStringSet(value)) {
-                    return ValidationUtils.isBankIdNumberValid(value) ? null : new FieldValidationError(component, i18n.tr("Number should consist of 3 digits"));
+            public FieldValidationError isValid() {
+                if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
+                    return ValidationUtils.isBankIdNumberValid(getComponent().getValue()) ? null : new FieldValidationError(getComponent(), i18n
+                            .tr("Number should consist of 3 digits"));
                 } else {
                     return null;
                 }

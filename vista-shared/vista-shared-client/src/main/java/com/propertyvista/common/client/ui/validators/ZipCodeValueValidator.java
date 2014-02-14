@@ -17,13 +17,13 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.ref.Country;
 
-public class ZipCodeValueValidator implements EditableValueValidator<String> {
+public class ZipCodeValueValidator extends AbstractComponentValidator<String> {
 
     private static final I18n i18n = I18n.get(ZipCodeValueValidator.class);
 
@@ -45,7 +45,9 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     }
 
     @Override
-    public FieldValidationError isValid(CComponent<String> component, String value) {
+    public FieldValidationError isValid() {
+        String value = getComponent().getValue();
+        CComponent<String> component = getComponent();
         if (value == null) {
             return null;
         }
