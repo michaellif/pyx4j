@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
@@ -43,11 +42,6 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(PeopleStep.class);
 
-    private final HTML warningMessage = new HTML();
-
-    private final String warningText = i18n
-            .tr("Each tenant that is {0} or older is required to complete an additional application form. Access details will be emailed to them upon completion of this application.");
-
     public PeopleStep() {
         super(OnlineApplicationWizardStepMeta.People);
     }
@@ -57,28 +51,16 @@ public class PeopleStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
 
+        panel.setWidget(++row, 0, new HTML(i18n.tr("Everyone living in the residence must be listed below.")));
+        panel.getWidget(row, 0).setStyleName(StyleName.WarningMessage.name());
+
         panel.setH3(++row, 0, 1, i18n.tr("Co-Applicant"));
         panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getWizard())));
 
         panel.setH3(++row, 0, 1, i18n.tr("Dependents"));
         panel.setWidget(++row, 0, inject(proto().dependents(), new DependentsFolder(getWizard())));
 
-        panel.setWidget(++row, 0, warningMessage);
-        warningMessage.setStyleName(StyleName.WarningMessage.name());
-
         return panel;
-    }
-
-    @Override
-    public void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        if (getValue().maturedOccupantsAreApplicants().isBooleanTrue()) {
-            warningMessage.setHTML(SimpleMessageFormat.format(warningText, getValue().ageOfMajority()));
-            warningMessage.setVisible(true);
-        } else {
-            warningMessage.setVisible(false);
-        }
     }
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
