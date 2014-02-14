@@ -83,9 +83,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
     public String createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         String prospectId = null;
 
-        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
@@ -114,6 +112,9 @@ public class YardiGuestManagementService extends YardiAbstractService {
     }
 
     public boolean holdUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getProspect(lease);
         // add unit hold event

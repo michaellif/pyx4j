@@ -209,6 +209,19 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public void reserve(final Lease lease, final int durationHours) {
+        if (!lease.leaseId().isNull()) {
+            throw new UserRuntimeException("Reservation can't be made for Lease");
+        }
+        if (lease.leaseApplication().yardiApplicationId().isNull()) {
+            // Application not created, Create it first
+            try {
+                ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
+            } catch (YardiServiceException e) {
+                throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
+            }
+            lease.set(Persistence.service().retrieve(Lease.class, lease.getPrimaryKey()));
+        }
+
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
             @Override

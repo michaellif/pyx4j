@@ -68,7 +68,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
     @Override
     public void holdUnit(Lease lease) throws YardiServiceException {
         if ((!lease.leaseId().isNull()) || (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p"))) {
-            throw new UserRuntimeException("Invalid lease id: " + lease.leaseApplication().yardiApplicationId().getValue());
+            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
 
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
@@ -86,7 +86,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
     @Override
     public Lease approveApplication(Lease lease) throws YardiServiceException {
         if ((!lease.leaseId().isNull()) || (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p"))) {
-            throw new UserRuntimeException("Invalid lease id: " + lease.leaseApplication().yardiApplicationId().getValue());
+            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
 
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
