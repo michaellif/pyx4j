@@ -58,6 +58,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                     // participant.yardiApplicantId().setValue("");
                     Persistence.service().persist(participant);
                 }
+                lease.leaseParticipants().setAttachLevel(AttachLevel.Detached);
 
                 return null;
             }
@@ -89,7 +90,9 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
             throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
 
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+
         validateApplicationAcceptance(lease.unit().building());
 
         PmcYardiCredential yc = getPmcYardiCredential(lease);
@@ -100,6 +103,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
             //participant.participantId().setValue("");
             Persistence.service().persist(participant);
         }
+        lease.leaseParticipants().setAttachLevel(AttachLevel.Detached);
         return lease;
     }
 
