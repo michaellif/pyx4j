@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -67,11 +67,11 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
 
         @Override
         public void addValidations() {
-            get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
+            get(proto().percent()).addComponentValidator(new AbstractComponentValidator<Double>() {
                 @Override
-                public FieldValidationError isValid(CComponent<Double> component, Double value) {
-                    return (value == null) || ((value >= 0) && (value <= 100)) ? null : new FieldValidationError(component, i18n
-                            .tr("Value Should Be In Range Of 0-100%"));
+                public FieldValidationError isValid() {
+                    return (getComponent().getValue() == null) || ((getComponent().getValue() >= 0) && (getComponent().getValue() <= 100)) ? null
+                            : new FieldValidationError(getComponent(), i18n.tr("Value Should Be In Range Of 0-100%"));
                 }
 
             });

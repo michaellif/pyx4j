@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -125,11 +125,11 @@ public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreatio
                 }
             }
         });
-        get(proto().dnsName()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().dnsName()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String value) {
-                if (value != null && !isDnsAvailable && isDnsCheckResponseRecieved) {
-                    return new FieldValidationError(component, i18n.tr("DNS is not available"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && !isDnsAvailable && isDnsCheckResponseRecieved) {
+                    return new FieldValidationError(getComponent(), i18n.tr("DNS is not available"));
                 } else {
                     return null;
                 }
@@ -155,12 +155,12 @@ public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreatio
                 .mandatoryMarker(false).build());
         contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().confirmEmail())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
-        get(proto().confirmEmail()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().confirmEmail()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String emailConfirmationValue) {
+            public FieldValidationError isValid() {
                 String email = get(proto().email()).getValue();
-                if (email != null && !email.equals(emailConfirmationValue)) {
-                    return new FieldValidationError(component, i18n.tr("Email and Email Confirmation don't match"));
+                if (email != null && !email.equals(getComponent().getValue())) {
+                    return new FieldValidationError(getComponent(), i18n.tr("Email and Email Confirmation don't match"));
                 } else {
                     return null;
                 }
@@ -172,12 +172,12 @@ public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreatio
                 .mandatoryMarker(false).build());
         contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().confirmPassword())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
-        get(proto().confirmPassword()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().confirmPassword()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String passwordConfirmationValue) {
+            public FieldValidationError isValid() {
                 String password = get(proto().password()).getValue();
-                if (password != null && !password.equals(passwordConfirmationValue)) {
-                    return new FieldValidationError(component, i18n.tr("Password and Password Confirmation don't match"));
+                if (password != null && !password.equals(getComponent().getValue())) {
+                    return new FieldValidationError(getComponent(), i18n.tr("Password and Password Confirmation don't match"));
                 } else {
                     return null;
                 }

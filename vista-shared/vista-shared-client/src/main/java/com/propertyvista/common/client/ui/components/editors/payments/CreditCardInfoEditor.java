@@ -26,9 +26,6 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.events.DevShortcutEvent;
-import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -39,7 +36,7 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -137,18 +134,18 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
         });
 
         // set up async validation for credit card number:
-        cardEditor.addValueValidator(new EditableValueValidator<CreditCardNumberIdentity>() {
+        cardEditor.addComponentValidator(new AbstractComponentValidator<CreditCardNumberIdentity>() {
             @Override
-            public FieldValidationError isValid(CComponent<CreditCardNumberIdentity> component, CreditCardNumberIdentity value) {
-                if (value != null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
                     if (isCreditCardNumberCheckRecieved) {
                         isCreditCardNumberCheckRecieved = false;
                         isCreditCardNumberCheckSent = false;
                         return isCreditCardNumberValid;
                     } else if (!isCreditCardNumberCheckSent) {
-                        return CreditCardInfoEditor.this.validateCreditCardNumberAsync(component, value);
+                        return CreditCardInfoEditor.this.validateCreditCardNumberAsync(getComponent(), getComponent().getValue());
                     } else {
-                        return new FieldValidationError(component, i18n.tr("Validation in progress"));
+                        return new FieldValidationError(getComponent(), i18n.tr("Validation in progress"));
                     }
                 } else {
                     return null;
@@ -174,11 +171,11 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
 
         get(proto().expiryDate()).addComponentValidator(new FutureDateValidator());
 
-        get(proto().securityCode()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().securityCode()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String value) {
-                if (CommonsStringUtils.isStringSet(value)) {
-                    return ValidationUtils.isCreditCardCodeValid(value) ? null : new FieldValidationError(component, i18n
+            public FieldValidationError isValid() {
+                if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
+                    return ValidationUtils.isCreditCardCodeValid(getComponent().getValue()) ? null : new FieldValidationError(getComponent(), i18n
                             .tr("Security Code should consist of 3 to 4 digits"));
                 } else {
                     return null;

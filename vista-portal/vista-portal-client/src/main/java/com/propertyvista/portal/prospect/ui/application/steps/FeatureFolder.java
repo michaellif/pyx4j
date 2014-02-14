@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -197,14 +197,14 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
     @Override
     public void addValidations() {
-        addValueValidator(new EditableValueValidator<IList<BillableItem>>() {
+        addComponentValidator(new AbstractComponentValidator<IList<BillableItem>>() {
             @Override
-            public FieldValidationError isValid(CComponent<IList<BillableItem>> component, IList<BillableItem> value) {
-                if (value == null || getMaxCount() < 0) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() == null || getMaxCount() < 0) {
                     return null;
                 }
-                return (value.size() < getMaxCount()) ? null : new FieldValidationError(component,
-                        i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
+                return (getComponent().getValue().size() < getMaxCount()) ? null : new FieldValidationError(getComponent(), i18n.tr(
+                        "You cannot add more than {0} items here!", getMaxCount()));
             }
         });
         super.addValidations();

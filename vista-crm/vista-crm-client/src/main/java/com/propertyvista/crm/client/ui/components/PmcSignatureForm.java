@@ -23,7 +23,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
@@ -81,11 +81,11 @@ public class PmcSignatureForm extends CEntityForm<PmcSignature> {
         get(proto().fullName()).setTitle("");
 
         ((CTextField) get(proto().fullName())).setWatermark(i18n.tr("SIGN FULL NAME HERE"));
-        get(proto().fullName()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().fullName()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String userSignature) {
-                if (realFullName != null && userSignature != null && !realFullName.equals(userSignature)) {
-                    return new FieldValidationError(component, i18n.tr("The signature doesn't match the name"));
+            public FieldValidationError isValid() {
+                if (realFullName != null && getComponent().getValue() != null && !realFullName.equals(getComponent().getValue())) {
+                    return new FieldValidationError(getComponent(), i18n.tr("The signature doesn't match the name"));
                 } else {
                     return null;
                 }

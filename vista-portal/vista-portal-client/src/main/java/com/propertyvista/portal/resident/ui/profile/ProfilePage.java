@@ -21,11 +21,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -88,20 +87,20 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
     public void addValidations() {
         get(proto().person().birthDate()).addComponentValidator(new PastDateIncludeTodayValidator());
 
-        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
+        get(proto().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
             @Override
-            public FieldValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
-                if (value == null || getValue() == null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() == null || getValue() == null) {
                     return null;
                 }
 
                 if (!VistaFeatures.instance().yardiIntegration()) {
-                    if (value.isEmpty()) {
-                        return new FieldValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                    if (getComponent().getValue().isEmpty()) {
+                        return new FieldValidationError(getComponent(), i18n.tr("Empty Emergency Contacts list"));
                     }
                 }
 
-                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new FieldValidationError(component, i18n
+                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new FieldValidationError(getComponent(), i18n
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });

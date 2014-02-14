@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -149,34 +149,34 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     @Override
     public void addValidations() {
 
-        this.addValueValidator(new EditableValueValidator<IList<LeaseTermTenant>>() {
+        this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
-            public FieldValidationError isValid(CComponent<IList<LeaseTermTenant>> component, IList<LeaseTermTenant> value) {
-                if (value != null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
                     boolean applicant = false;
-                    for (LeaseTermTenant item : value) {
+                    for (LeaseTermTenant item : getComponent().getValue()) {
                         if (applicant) {
                             if (item.role().getValue() == LeaseTermParticipant.Role.Applicant) {
-                                return new FieldValidationError(component, i18n.tr("Just one person with role 'Tenant' could be selected!"));
+                                return new FieldValidationError(getComponent(), i18n.tr("Just one person with role 'Tenant' could be selected!"));
                             }
                         } else {
                             applicant = (item.role().getValue() == LeaseTermParticipant.Role.Applicant);
                         }
                     }
                     if (!applicant) {
-                        return new FieldValidationError(component, i18n.tr("A person with role 'Tenant' should be present!"));
+                        return new FieldValidationError(getComponent(), i18n.tr("A person with role 'Tenant' should be present!"));
                     }
                 }
                 return null;
             }
         });
 
-        this.addValueValidator(new EditableValueValidator<IList<LeaseTermTenant>>() {
+        this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
-            public FieldValidationError isValid(CComponent<IList<LeaseTermTenant>> component, IList<LeaseTermTenant> value) {
-                if (value != null) {
-                    if (value.isEmpty()) {
-                        return new FieldValidationError(component, i18n.tr("At least one Tenant should be present!"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    if (getComponent().getValue().isEmpty()) {
+                        return new FieldValidationError(getComponent(), i18n.tr("At least one Tenant should be present!"));
                     }
                 }
                 return null;
@@ -273,24 +273,24 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 }
             });
             get(proto().role()).addValueChangeHandler(new RevalidationTrigger<Role>(get(proto().leaseParticipant().customer().person().birthDate())));
-            get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
+            get(proto().role()).addComponentValidator(new AbstractComponentValidator<LeaseTermParticipant.Role>() {
                 @Override
-                public FieldValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
-                    if (role != null && getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                public FieldValidationError isValid() {
+                    if (getComponent().getValue() != null && getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
                         if (getEnforceAgeOfMajority()) {
-                            if (Role.resposible().contains(role)) {
+                            if (Role.resposible().contains(getComponent().getValue())) {
                                 if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
                                     return new FieldValidationError(
-                                            component,
+                                            getComponent(),
                                             i18n.tr("This person is too young to be an tenant or co-tenant: the minimum age required is {0}. Please mark the person as Dependent instead.",
                                                     getAgeOfMajority()));
                                 }
                             }
                         }
                         if (getMaturedOccupantsAreApplicants()) {
-                            if (Role.Dependent == role) {
+                            if (Role.Dependent == getComponent().getValue()) {
                                 if (TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
-                                    return new FieldValidationError(component, i18n
+                                    return new FieldValidationError(getComponent(), i18n
                                             .tr("According to internal regulations and age this person cannot be a Dependent."));
                                 }
                             }

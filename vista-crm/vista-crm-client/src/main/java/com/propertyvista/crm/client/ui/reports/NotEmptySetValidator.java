@@ -19,13 +19,13 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-public class NotEmptySetValidator extends AbstractComponentValidator<Set<?>> {
+public class NotEmptySetValidator<DATA_TYPE> extends AbstractComponentValidator<Set<DATA_TYPE>> {
 
     private static final I18n i18n = I18n.get(NotEmptySetValidator.class);
 
     @Override
     public FieldValidationError isValid() {
-        Set<?> value = getComponent().getValue();
+        Set<DATA_TYPE> value = getComponent().getValue();
         boolean isEmpty = value == null;
         if (value != null) {
             isEmpty = value.isEmpty();

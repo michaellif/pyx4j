@@ -19,11 +19,10 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -33,7 +32,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> extends CEntityForm<E> {
+public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> extends CEntityForm<E> {
 
     final static I18n i18n = I18n.get(TenantInsuranceCertificateForm.class);
 
@@ -90,41 +89,42 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insuranceProvider()), 10, true).build());
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), 20, true).build());
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), 20, true).build());
-        get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+        get(proto().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
-            public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
-                if (TenantInsuranceCertificateForm.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
-                    return new FieldValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
+            public FieldValidationError isValid() {
+                if (TenantInsuranceCertificateForm.this.minRequiredLiability != null && getComponent().getValue() != null
+                        && getComponent().getValue().compareTo(minRequiredLiability) < 0) {
+                    return new FieldValidationError(getComponent(), i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;
             }
         });
-        get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+        get(proto().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
-            public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
-                if (value != null && value.compareTo(BigDecimal.ZERO) <= 0) {
-                    return new FieldValidationError(component, i18n.tr("Please enter a positive value"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+                    return new FieldValidationError(getComponent(), i18n.tr("Please enter a positive value"));
                 }
                 return null;
             }
         });
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().inceptionDate()), 10, true).build());
 
-        get(proto().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+        get(proto().inceptionDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value != null && value.compareTo(new LogicalDate()) > 0) {
-                    return new FieldValidationError(component, i18n.tr("Please provide a date less than or equal of today"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) > 0) {
+                    return new FieldValidationError(getComponent(), i18n.tr("Please provide a date less than or equal of today"));
                 }
                 return null;
             }
         });
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate()), 10, true).build());
-        get(proto().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+        get(proto().expiryDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value != null && value.compareTo(new LogicalDate()) < 0) {
-                    return new FieldValidationError(component, i18n.tr("Please provide a date greater than or equal of today"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) < 0) {
+                    return new FieldValidationError(getComponent(), i18n.tr("Please provide a date greater than or equal of today"));
                 }
                 return null;
             }

@@ -21,9 +21,8 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
@@ -54,12 +53,12 @@ public class ProofOfEmploymentUploaderFolder extends PortalBoxFolder<ProofOfEmpl
     public void addValidations() {
         super.addValidations();
 
-        addValueValidator(new EditableValueValidator<IList<ProofOfEmploymentDocumentFolder>>() {
+        addComponentValidator(new AbstractComponentValidator<IList<ProofOfEmploymentDocumentFolder>>() {
             @Override
-            public FieldValidationError isValid(CComponent<IList<ProofOfEmploymentDocumentFolder>> component, IList<ProofOfEmploymentDocumentFolder> value) {
-                if (value != null && documentationPolicy != null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && documentationPolicy != null) {
                     if (documentationPolicy.mandatoryProofOfIncome().isBooleanTrue() && getValue().isEmpty()) {
-                        return new FieldValidationError(component, i18n.tr("Proof of Employment should be supplied!"));
+                        return new FieldValidationError(getComponent(), i18n.tr("Proof of Employment should be supplied!"));
                     }
                 }
                 return null;

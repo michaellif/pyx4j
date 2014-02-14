@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -64,12 +64,12 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSumma
         });
         CComponent<Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.copyOf(PaymentStatus.processed()),
                 Layout.Horizontal);
-        paymentStatusSelector.addValueValidator(new EditableValueValidator<Set<PaymentStatus>>() {
+        paymentStatusSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentStatus>>() {
 
             @Override
-            public FieldValidationError isValid(CComponent<Set<PaymentStatus>> component, Set<PaymentStatus> value) {
-                if (value != null && value.isEmpty()) {
-                    return new FieldValidationError(component, i18n.tr("Please select at least one payment status option"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
+                    return new FieldValidationError(getComponent(), i18n.tr("Please select at least one payment status option"));
                 } else {
                     return null;
                 }

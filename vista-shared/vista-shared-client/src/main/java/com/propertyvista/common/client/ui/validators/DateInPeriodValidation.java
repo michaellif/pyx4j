@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -44,26 +44,26 @@ public class DateInPeriodValidation {
         }
         final String msg = message;
 
-        value2.addValueValidator(new EditableValueValidator<LogicalDate>() {
+        value2.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid() {
                 if (value2.getValue() == null || value3.getValue() == null) {
                     return null;
                 }
                 LogicalDate end = value3.getValue();
-                return (value != null) && !value.after(end) ? null : new FieldValidationError(component, msg);
+                return (getComponent().getValue() != null) && !getComponent().getValue().after(end) ? null : new FieldValidationError(getComponent(), msg);
             }
 
         });
 
-        value2.addValueValidator(new EditableValueValidator<LogicalDate>() {
+        value2.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid() {
                 if (value1.getValue() == null || value2.getValue() == null) {
                     return null;
                 }
                 LogicalDate start = value1.getValue();
-                return (value != null) && !value.before(start) ? null : new FieldValidationError(component, msg);
+                return (getComponent().getValue() != null) && !getComponent().getValue().before(start) ? null : new FieldValidationError(getComponent(), msg);
             }
 
         });

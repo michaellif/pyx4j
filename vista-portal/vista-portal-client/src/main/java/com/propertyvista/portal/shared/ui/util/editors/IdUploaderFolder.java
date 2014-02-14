@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -74,13 +74,13 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
     public void addValidations() {
         super.addValidations();
 
-        addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
+        addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
             @Override
-            public FieldValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
-                if (value != null && documentationPolicy != null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && documentationPolicy != null) {
                     int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                     if (numOfRemainingDocs > 0) {
-                        return new FieldValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                        return new FieldValidationError(getComponent(), i18n.tr("{0} more documents are required", numOfRemainingDocs));
                     }
                 }
                 return null;
@@ -132,11 +132,11 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().notes())).build());
 
             IdentificationDocumentFolderUploaderFolder docPagesFolder = new IdentificationDocumentFolderUploaderFolder();
-            docPagesFolder.addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFile>>() {
+            docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                 @Override
-                public FieldValidationError isValid(CComponent<IList<IdentificationDocumentFile>> component, IList<IdentificationDocumentFile> value) {
-                    if (value != null && value.size() < 1) {
-                        return new FieldValidationError(component, i18n.tr("at least one document file is required"));
+                public FieldValidationError isValid() {
+                    if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
+                        return new FieldValidationError(getComponent(), i18n.tr("at least one document file is required"));
                     } else {
                         return null;
                     }
@@ -180,14 +180,14 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
         public void addValidations() {
             super.addValidations();
 
-            get(proto().idNumber()).addValueValidator(new EditableValueValidator<String>() {
+            get(proto().idNumber()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
-                public FieldValidationError isValid(CComponent<String> component, String value) {
+                public FieldValidationError isValid() {
                     if (get(proto().idType()).getValue() != null) {
                         switch (get(proto().idType()).getValue().type().getValue()) {
                         case canadianSIN:
-                            if (!ValidationUtils.isSinValid(value.trim().replaceAll(" ", ""))) {
-                                return new FieldValidationError(component, i18n.tr("Invalid SIN"));
+                            if (!ValidationUtils.isSinValid(getComponent().getValue().trim().replaceAll(" ", ""))) {
+                                return new FieldValidationError(getComponent(), i18n.tr("Invalid SIN"));
                             }
                             break;
                         case citizenship:

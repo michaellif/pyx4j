@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -47,19 +47,19 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
         content.setWidget(++row, 0, inject(proto().paymentMethods(), new PmcPaymentMethodFolder()));
         selectTab(addTab(content));
 
-        addValueValidator(new EditableValueValidator<PmcPaymentMethodsDTO>() {
+        addComponentValidator(new AbstractComponentValidator<PmcPaymentMethodsDTO>() {
             @Override
-            public FieldValidationError isValid(CComponent<PmcPaymentMethodsDTO> component, PmcPaymentMethodsDTO paymentMethodsHolder) {
-                if (paymentMethodsHolder != null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
                     boolean hasEquifaxMethod = false;
-                    for (PmcPaymentMethod pmcPaymentMethod : paymentMethodsHolder.paymentMethods()) {
+                    for (PmcPaymentMethod pmcPaymentMethod : getComponent().getValue().paymentMethods()) {
                         if (pmcPaymentMethod.selectForEquifaxPayments().isBooleanTrue()) {
                             hasEquifaxMethod = true;
                             break;
                         }
                     }
                     if (!hasEquifaxMethod) {
-                        return new FieldValidationError(component, i18n.tr("Please select a payment method for Equifax"));
+                        return new FieldValidationError(getComponent(), i18n.tr("Please select a payment method for Equifax"));
                     } else {
                         return null;
                     }
@@ -68,11 +68,11 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
                 }
             }
         });
-        addValueValidator(new EditableValueValidator<PmcPaymentMethodsDTO>() {
+        addComponentValidator(new AbstractComponentValidator<PmcPaymentMethodsDTO>() {
             @Override
-            public FieldValidationError isValid(CComponent<PmcPaymentMethodsDTO> component, PmcPaymentMethodsDTO value) {
-                if (value != null && value.paymentMethods().isEmpty()) {
-                    return new FieldValidationError(component, i18n.tr("At least one payment method is required"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().paymentMethods().isEmpty()) {
+                    return new FieldValidationError(getComponent(), i18n.tr("At least one payment method is required"));
                 } else {
                     return null;
                 }

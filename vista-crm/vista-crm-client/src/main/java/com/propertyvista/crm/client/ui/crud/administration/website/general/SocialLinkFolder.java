@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -146,17 +146,17 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            CLabel site = new CLabel();
+            CLabel<String> site = new CLabel<String>();
             site.setEditable(false);
             main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().socialSite(), site), 10, true).build());
             main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().siteUrl()), 35, true).build());
-            get(proto().siteUrl()).addValueValidator(new EditableValueValidator<String>() {
+            get(proto().siteUrl()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
-                public FieldValidationError isValid(CComponent<String> component, String url) {
-                    if (url == null || url.length() == 0) {
-                        return new FieldValidationError(component, i18n.tr("URL should not be empty"));
-                    } else if (!ValidationUtils.isCorrectUrl(url)) {
-                        return new FieldValidationError(component, i18n.tr("Please use proper URL format"));
+                public FieldValidationError isValid() {
+                    if (getComponent().getValue() == null || getComponent().getValue().length() == 0) {
+                        return new FieldValidationError(getComponent(), i18n.tr("URL should not be empty"));
+                    } else if (!ValidationUtils.isCorrectUrl(getComponent().getValue())) {
+                        return new FieldValidationError(getComponent(), i18n.tr("Please use proper URL format"));
                     }
                     return null;
                 }

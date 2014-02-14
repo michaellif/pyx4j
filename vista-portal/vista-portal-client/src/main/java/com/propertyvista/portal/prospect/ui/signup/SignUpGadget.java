@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
@@ -182,12 +182,13 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().passwordConfirm())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
+            get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
-                public FieldValidationError isValid(CComponent<String> component, String confirmPassword) {
+                public FieldValidationError isValid() {
                     String password = (get(proto().password())).getValue();
-                    if ((password == null & confirmPassword != null) | (password != null & confirmPassword == null) || (!password.equals(confirmPassword))) {
-                        return new FieldValidationError(component, i18n.tr("Passwords don't match"));
+                    if ((password == null & getComponent().getValue() != null) | (password != null & getComponent().getValue() == null)
+                            || (!password.equals(getComponent().getValue()))) {
+                        return new FieldValidationError(getComponent(), i18n.tr("Passwords don't match"));
                     }
                     return null;
                 }
@@ -203,13 +204,13 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
                     // just skip the unbound member
                 }
                 if (boundMember != null) {
-                    boundMember.addValueValidator(new EditableValueValidator() {
+                    boundMember.addComponentValidator(new AbstractComponentValidator() {
                         @Override
-                        public FieldValidationError isValid(CComponent component, Object value) {
+                        public FieldValidationError isValid() {
                             if (SignUpForm.this.entityValidationError != null) {
                                 for (MemberValidationError memberValidationError : SignUpForm.this.entityValidationError.getErrors()) {
                                     if (memberValidationError.getMember().getPath().equals(member.getPath())) {
-                                        return new FieldValidationError(component, memberValidationError.getMessage());
+                                        return new FieldValidationError(getComponent(), memberValidationError.getMessage());
                                     }
                                 }
                             }

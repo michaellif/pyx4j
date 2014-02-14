@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -83,13 +83,13 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
     public void addValidations() {
         super.addValidations();
 
-        this.addValueValidator(new EditableValueValidator<IList<CustomerScreeningIncome>>() {
+        this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningIncome>>() {
 
             @SuppressWarnings("incomplete-switch")
             @Override
-            public FieldValidationError isValid(CComponent<IList<CustomerScreeningIncome>> component, IList<CustomerScreeningIncome> value) {
-                if (value != null && value.size() == 1) {
-                    CustomerScreeningIncome income = value.get(0);
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().size() == 1) {
+                    CustomerScreeningIncome income = getComponent().getValue().get(0);
                     if (!income.details().isEmpty()) {
                         switch (income.incomeSource().getValue()) {
                         case fulltime:
@@ -99,7 +99,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                                 return null;
                             }
                             return (employer.ends().getValue().getTime() - employer.starts().getValue().getTime()) > 365 * 24 * 60 * 60 * 1000l ? null
-                                    : new FieldValidationError(component, i18n.tr("You need to enter previous employment information"));
+                                    : new FieldValidationError(getComponent(), i18n.tr("You need to enter previous employment information"));
                             // valid, if more than 1 year, otherwise - previous employment needed! 
                         }
                     }

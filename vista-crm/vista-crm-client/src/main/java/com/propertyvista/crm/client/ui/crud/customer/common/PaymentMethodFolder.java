@@ -157,7 +157,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
 //    public void addValidations() {
 //        super.addValidations();
 //
-//        this.addValueValidator(new EditableValueValidator<List<PaymentMethod>>() {
+//        this.addComponentValidator(new AbstractComponentValidator<List<PaymentMethod>>() {
 //            @Override
 //            public ValidationFailure isValid(CComponent<List<PaymentMethod>> component, List<PaymentMethod> value) {
 //                if (value != null && !value.isEmpty()) {

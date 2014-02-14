@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -84,21 +84,23 @@ public class GeoLocationEditor extends CEntityForm<GeoLocation> {
 
         ((CTextFieldBase<Double, ?>) get(proto().longitude())).setFormat(new GeoNumberFormat());
 
-        get(proto().longitude()).addValueValidator(new EditableValueValidator<Double>() {
+        get(proto().longitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
-            public FieldValidationError isValid(CComponent<Double> component, Double value) {
+            public FieldValidationError isValid() {
                 CComponent<LongitudeType> longitudeType = get(proto().longitudeType());
-                return ((value == null && longitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 180))) ? null
-                        : new FieldValidationError(component, i18n.tr("Longitude may be in range [0-180] degree"));
+                return ((getComponent().getValue() == null && longitudeType.getValue() == null) || (getComponent().getValue() != null && (getComponent()
+                        .getValue() >= 0 && getComponent().getValue() <= 180))) ? null : new FieldValidationError(getComponent(), i18n
+                        .tr("Longitude may be in range [0-180] degree"));
             }
         });
         get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeType())));
 
-        get(proto().longitudeType()).addValueValidator(new EditableValueValidator<LongitudeType>() {
+        get(proto().longitudeType()).addComponentValidator(new AbstractComponentValidator<LongitudeType>() {
             @Override
-            public FieldValidationError isValid(CComponent<LongitudeType> component, LongitudeType value) {
+            public FieldValidationError isValid() {
                 CComponent<Double> longitude = get(proto().longitude());
-                return (value != null || longitude.getValue() == null) ? null : new FieldValidationError(component, i18n.tr("This field is Mandatory"));
+                return (getComponent().getValue() != null || longitude.getValue() == null) ? null : new FieldValidationError(getComponent(), i18n
+                        .tr("This field is Mandatory"));
             }
         });
         get(proto().longitudeType()).addValueChangeHandler(new RevalidationTrigger<LongitudeType>(get(proto().longitude())));

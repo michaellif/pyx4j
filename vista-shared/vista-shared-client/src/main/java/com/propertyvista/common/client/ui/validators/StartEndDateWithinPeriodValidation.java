@@ -18,7 +18,7 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -37,26 +37,26 @@ public class StartEndDateWithinPeriodValidation {
         }
         final String msg = message;
 
-        start.addValueValidator(new EditableValueValidator<LogicalDate>() {
+        start.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value == null || !end.isVisible() || end.getValue() == null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() == null || !end.isVisible() || end.getValue() == null) {
                     return null;
                 }
                 LogicalDate endDate = add(end.getValue(), -months, -days);
-                return (!value.before(endDate) ? null : new FieldValidationError(component, msg));
+                return (!getComponent().getValue().before(endDate) ? null : new FieldValidationError(getComponent(), msg));
             }
         });
         start.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(end));
 
-        end.addValueValidator(new EditableValueValidator<LogicalDate>() {
+        end.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value == null || !start.isVisible() || start.getValue() == null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() == null || !start.isVisible() || start.getValue() == null) {
                     return null;
                 }
                 LogicalDate startDate = add(start.getValue(), months, days);
-                return (!value.after(startDate) ? null : new FieldValidationError(component, msg));
+                return (!getComponent().getValue().after(startDate) ? null : new FieldValidationError(getComponent(), msg));
             }
         });
         end.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(start));

@@ -23,12 +23,11 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -117,11 +116,11 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
                 0,
                 new FormWidgetDecoratorBuilder(inject(proto().personalDisclaimerSignature())).customLabel("").labelPosition(LabelPosition.hidden)
                         .contentWidth("250px").componentWidth("250px").build());
-        get(proto().personalDisclaimerSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
+        get(proto().personalDisclaimerSignature()).addComponentValidator(new AbstractComponentValidator<CustomerSignature>() {
             @Override
-            public FieldValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
-                if (!value.agree().isBooleanTrue()) {
-                    return new FieldValidationError(component, i18n.tr("You must agree to the personal disclaimer terms to continue"));
+            public FieldValidationError isValid() {
+                if (!getComponent().getValue().agree().isBooleanTrue()) {
+                    return new FieldValidationError(getComponent(), i18n.tr("You must agree to the personal disclaimer terms to continue"));
                 }
                 return null;
             }

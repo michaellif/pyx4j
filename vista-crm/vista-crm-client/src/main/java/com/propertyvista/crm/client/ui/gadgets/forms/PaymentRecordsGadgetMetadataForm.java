@@ -24,7 +24,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -66,11 +67,11 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
         p.setWidget(++row, 0, new HTML("&nbsp"));
 
         CComponent<Set<PaymentType>> paymentTypeSelector = new CEnumSubsetSelector<PaymentType>(PaymentType.class, Layout.Horizontal);
-        paymentTypeSelector.addValueValidator(new EditableValueValidator<Set<PaymentType>>() {
+        paymentTypeSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentType>>() {
             @Override
-            public FieldValidationError isValid(CComponent<Set<PaymentType>> component, Set<PaymentType> value) {
-                if (value != null && value.isEmpty()) {
-                    return new FieldValidationError(component, i18n.tr("Please select at least one payment method option"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
+                    return new FieldValidationError(getComponent(), i18n.tr("Please select at least one payment method option"));
                 } else {
                     return null;
                 }
@@ -81,11 +82,11 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
         // TODO we don't use PaymentStatus.Processing that's why we choose this constructor
         CComponent<Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(
                 EnumSet.complementOf(EnumSet.of(PaymentStatus.Processing)), Layout.Horizontal);
-        paymentStatusSelector.addValueValidator(new EditableValueValidator<Set<PaymentRecord.PaymentStatus>>() {
+        paymentStatusSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentRecord.PaymentStatus>>() {
             @Override
-            public FieldValidationError isValid(CComponent<Set<PaymentStatus>> component, Set<PaymentStatus> value) {
-                if (value != null && value.isEmpty()) {
-                    return new FieldValidationError(component, i18n.tr("Please select at least one payment status option"));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
+                    return new FieldValidationError(getComponent(), i18n.tr("Please select at least one payment status option"));
                 } else {
                     return null;
                 }

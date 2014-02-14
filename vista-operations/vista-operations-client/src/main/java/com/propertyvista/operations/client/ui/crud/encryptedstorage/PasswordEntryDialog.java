@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -48,11 +48,11 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
             contentPanel.add(new FormDecoratorBuilder(inject(proto().password())).build());
             if (requirePasswordConfirm) {
                 contentPanel.add(new FormDecoratorBuilder(inject(proto().passwordConfirm())).build());
-                get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
+                get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                     @Override
-                    public FieldValidationError isValid(CComponent<String> component, String value) {
-                        if (value != null && !value.equals(get(proto().password()).getValue())) {
-                            return new FieldValidationError(component, "Password and Password confirmation don't match");
+                    public FieldValidationError isValid() {
+                        if (getComponent().getValue() != null && !getComponent().getValue().equals(get(proto().password()).getValue())) {
+                            return new FieldValidationError(getComponent(), "Password and Password confirmation don't match");
                         }
                         return null;
                     }

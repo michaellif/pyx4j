@@ -24,7 +24,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -194,13 +194,13 @@ public class PeopleStep extends ApplicationWizardStep {
             public void addValidations() {
                 super.addValidations();
 
-                get(proto().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+                get(proto().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
-                    public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                        if (value != null && getValue() != null) {
+                    public FieldValidationError isValid() {
+                        if (getComponent().getValue() != null && getValue() != null) {
                             if (maturedOccupantsAreApplicants()) {
-                                if (TimeUtils.isOlderThan(value, ageOfMajority())) {
-                                    return new FieldValidationError(component, i18n.tr(
+                                if (TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
+                                    return new FieldValidationError(getComponent(), i18n.tr(
                                             "This person is matured and should be Co-Applicant!. According to regulations age of majority is {0}.",
                                             ageOfMajority()));
                                 }

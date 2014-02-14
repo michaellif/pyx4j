@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -86,7 +86,8 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     private final SimplePanel detailsTotalHolder = new SimplePanel();
 
-    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(
+            LeasePaymentMethod.class) {
 
         @Override
         public Set<PaymentType> getPaymentTypes() {
@@ -311,12 +312,12 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     public void addValidations() {
         super.addValidations();
 
-        profiledPaymentMethodsCombo.addValueValidator(new EditableValueValidator<LeasePaymentMethod>() {
+        profiledPaymentMethodsCombo.addComponentValidator(new AbstractComponentValidator<LeasePaymentMethod>() {
             @Override
-            public FieldValidationError isValid(CComponent<LeasePaymentMethod> component, LeasePaymentMethod value) {
-                if (value != null) {
-                    return (paymentMethodEditor.getPaymentTypes().contains(value.type().getValue()) ? null : new FieldValidationError(component, i18n
-                            .tr("Not allowed payment type!")));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    return (paymentMethodEditor.getPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null : new FieldValidationError(
+                            getComponent(), i18n.tr("Not allowed payment type!")));
                 }
                 return null;
             }

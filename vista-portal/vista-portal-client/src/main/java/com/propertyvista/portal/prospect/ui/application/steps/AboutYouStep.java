@@ -21,7 +21,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -86,13 +86,13 @@ public class AboutYouStep extends ApplicationWizardStep {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().applicant().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+        get(proto().applicant().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value != null && getValue() != null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getValue() != null) {
                     if (enforceAgeOfMajority()) {
-                        if (!TimeUtils.isOlderThan(value, ageOfMajority())) {
-                            return new FieldValidationError(component, i18n.tr(
+                        if (!TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
+                            return new FieldValidationError(getComponent(), i18n.tr(
                                     "You are too young to be an Applicant or co-Applicant: the minimum age required is {0}.", ageOfMajority()));
                         }
                     }

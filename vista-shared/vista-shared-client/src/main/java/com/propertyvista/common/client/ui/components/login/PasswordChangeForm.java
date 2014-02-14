@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.NTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.HasDescription;
@@ -107,11 +107,11 @@ public class PasswordChangeForm extends CEntityForm<PasswordChangeRequest> {
 
     @Override
     public void addValidations() {
-        get(proto().newPasswordConfirm()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().newPasswordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String value) {
-                if (value == null || !value.equals(get(proto().newPassword()).getValue())) {
-                    return new FieldValidationError(component, i18n.tr("The passwords don't match."));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() == null || !getComponent().getValue().equals(get(proto().newPassword()).getValue())) {
+                    return new FieldValidationError(getComponent(), i18n.tr("The passwords don't match."));
                 } else {
                     return null;
                 }

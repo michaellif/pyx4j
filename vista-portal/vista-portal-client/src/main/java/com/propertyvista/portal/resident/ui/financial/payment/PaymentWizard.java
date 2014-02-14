@@ -52,7 +52,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
@@ -272,11 +271,11 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         });
 
         panel.setWidget(++row, 0, new SignatureDecorator(inject(proto().convenienceFeeSignature(), cSignature)));
-        get(proto().convenienceFeeSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
+        get(proto().convenienceFeeSignature()).addComponentValidator(new AbstractComponentValidator<CustomerSignature>() {
             @Override
-            public FieldValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
-                if (value != null && !value.agree().isBooleanTrue()) {
-                    return new FieldValidationError(component, i18n
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && !getComponent().getValue().agree().isBooleanTrue()) {
+                    return new FieldValidationError(getComponent(), i18n
                             .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment."));
                 }
                 return null;
@@ -295,23 +294,23 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().amount()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+        get(proto().amount()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
-            public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
-                if (value != null) {
-                    return (value.compareTo(BigDecimal.ZERO) > 0 ? null : new FieldValidationError(component, i18n
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new FieldValidationError(getComponent(), i18n
                             .tr("Payment amount should be greater then zero!")));
                 }
                 return null;
             }
         });
 
-        profiledPaymentMethodsCombo.addValueValidator(new EditableValueValidator<LeasePaymentMethod>() {
+        profiledPaymentMethodsCombo.addComponentValidator(new AbstractComponentValidator<LeasePaymentMethod>() {
             @Override
-            public FieldValidationError isValid(CComponent<LeasePaymentMethod> component, LeasePaymentMethod value) {
-                if (value != null) {
-                    return (paymentMethodEditor.getPaymentTypes().contains(value.type().getValue()) ? null : new FieldValidationError(component, i18n
-                            .tr("Not allowed payment type!")));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    return (paymentMethodEditor.getPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null : new FieldValidationError(
+                            getComponent(), i18n.tr("Not allowed payment type!")));
                 }
                 return null;
             }
