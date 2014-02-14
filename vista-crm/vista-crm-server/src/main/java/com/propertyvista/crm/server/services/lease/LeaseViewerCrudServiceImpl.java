@@ -70,6 +70,7 @@ import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 import com.propertyvista.dto.LeaseAgreementSigningProgressDTO;
 import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
+import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO.SignatureType;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
@@ -422,9 +423,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
                 if (legalTerm.signatureFormat().getValue() != SignatureFormat.None) {
                     if (!participant.agreementSignatures().isNull()
                             && participant.agreementSignatures().getInstanceValueClass().equals(AgreementInkSignatures.class)) {
-                        stakeholdersProgress.singatureType().setValue(i18n.tr("Ink"));
+                        stakeholdersProgress.singatureType().setValue(SignatureType.Ink);
                     } else if (participant.agreementSignatures().getInstanceValueClass().equals(AgreementDigitalSignatures.class)) {
-                        stakeholdersProgress.singatureType().setValue(i18n.tr("Digital"));
+                        stakeholdersProgress.singatureType().setValue(SignatureType.Digital);
                         AgreementDigitalSignatures signatures = participant.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
 
                         boolean foundSignedTerm = false;

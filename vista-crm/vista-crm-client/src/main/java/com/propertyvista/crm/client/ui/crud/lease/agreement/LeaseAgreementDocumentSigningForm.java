@@ -15,16 +15,20 @@ package com.propertyvista.crm.client.ui.crud.lease.agreement;
 
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
+import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
+import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO.SignatureType;
 
 public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreementDocumentsDTO> {
 
@@ -35,6 +39,8 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     private LeaseAgreementDocumentForm digitallySignedDocumentForm;
 
     private Label notSignedDigitallyLabel;
+
+    private Button signDigitallyButton;
 
     public LeaseAgreementDocumentSigningForm() {
         super(LeaseAgreementDocumentsDTO.class);
@@ -53,6 +59,12 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         panel.setWidget(++row, 0, 2,
                 inject(proto().digitallySignedDocument(), digitallySignedDocumentForm = new LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm(true)));
         panel.setWidget(++row, 0, 2, notSignedDigitallyLabel = new Label(i18n.tr("A signed document will be appear here when every party signs digitally")));
+        panel.setWidget(++row, 0, 2, signDigitallyButton = new Button(i18n.tr("Sign Digitally"), new Command() {
+            @Override
+            public void execute() {
+                onSignDigitally();
+            }
+        }));
 
         panel.setH1(++row, 0, 2, i18n.tr("Ink Signed Agreement Documents"));
         panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder()));
@@ -64,11 +76,21 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         this.leaseAgreementDocumentFolder.setParticipantOptions(participantsOptions);
     }
 
+    public void onSignDigitally() {
+
+    }
+
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         get(proto().digitallySignedDocument()).setVisible(!getValue().digitallySignedDocument().isNull());
         notSignedDigitallyLabel.setVisible(getValue().digitallySignedDocument().isNull());
-    }
 
+        // TODO this should be part of Visor controller
+        boolean canBeSignedDigitally = true;
+        for (LeaseAgreementStackholderSigningProgressDTO siginingProgress : getValue().signingProgress().stackholdersProgressBreakdown()) {
+            canBeSignedDigitally &= siginingProgress.hasSigned().isBooleanTrue() && siginingProgress.singatureType().getValue() == SignatureType.Digital;
+        }
+        signDigitallyButton.setVisible(canBeSignedDigitally);
+    }
 }

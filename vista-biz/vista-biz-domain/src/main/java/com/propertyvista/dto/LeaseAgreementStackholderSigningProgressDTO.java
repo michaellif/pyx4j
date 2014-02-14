@@ -13,12 +13,28 @@
  */
 package com.propertyvista.dto;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 public interface LeaseAgreementStackholderSigningProgressDTO extends IEntity {
+
+    @I18n(context = "Signature Type")
+    @XmlType(name = "SignatureType")
+    public enum SignatureType {
+
+        Digital, Ink;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        };
+    }
 
     IPrimitive<String> name();
 
@@ -26,6 +42,6 @@ public interface LeaseAgreementStackholderSigningProgressDTO extends IEntity {
 
     IPrimitive<Boolean> hasSigned();
 
-    IPrimitive<String> singatureType();
+    IPrimitive<SignatureType> singatureType();
 
 }
