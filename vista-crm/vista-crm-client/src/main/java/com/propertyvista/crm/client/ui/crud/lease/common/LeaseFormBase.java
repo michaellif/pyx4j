@@ -41,6 +41,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
@@ -80,8 +81,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         get(proto().leaseId()).setVisible(false);
         get(proto().leaseApplication().applicationId()).setVisible(false);
 
-        get(proto().carryforwardBalance()).setVisible(!getValue().carryforwardBalance().isNull());
-
+        get(proto().isUnitReserved()).setVisible(
+                !getValue().unit().isNull() && getValue().status().getValue().isDraft() && getValue().status().getValue() != Lease.Status.ExistingLease);
         get(proto().carryforwardBalance()).setVisible(!getValue().carryforwardBalance().isNull());
 
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
@@ -141,8 +142,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
                 new FormDecoratorBuilder(
                         inject(proto().currentTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 25).build());
 
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().isUnitReserved())).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().currentLegalStatus())).build());
-
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
 
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseId()), 10).build());
