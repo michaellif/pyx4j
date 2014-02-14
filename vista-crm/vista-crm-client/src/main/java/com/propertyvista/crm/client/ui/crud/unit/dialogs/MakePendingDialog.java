@@ -17,11 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -53,13 +52,13 @@ public class MakePendingDialog extends OkCancelDialog {
                 if (minMakeVacantStartDay.equals(maxMakeVacantStartDay)) {
                     get(proto().pendingStartDay()).setViewable(true);
                 } else {
-                    EditableValueValidator<LogicalDate> validator = null;
+                    AbstractComponentValidator<LogicalDate> validator = null;
                     if (maxMakeVacantStartDay == null) {
-                        validator = new EditableValueValidator<LogicalDate>() {
+                        validator = new AbstractComponentValidator<LogicalDate>() {
                             @Override
-                            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                                if (value == null || value.before(minMakeVacantStartDay)) {
-                                    return new FieldValidationError(component, i18n.tr("please enter a date greater or equal to {0,date,short}",
+                            public FieldValidationError isValid() {
+                                if (getComponent().getValue() == null || getComponent().getValue().before(minMakeVacantStartDay)) {
+                                    return new FieldValidationError(getComponent(), i18n.tr("please enter a date greater or equal to {0,date,short}",
                                             minMakeVacantStartDay));
                                 } else {
                                     return null;
@@ -67,11 +66,12 @@ public class MakePendingDialog extends OkCancelDialog {
                             }
                         };
                     } else {
-                        validator = new EditableValueValidator<LogicalDate>() {
+                        validator = new AbstractComponentValidator<LogicalDate>() {
                             @Override
-                            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                                if (value == null || (value.before(minMakeVacantStartDay) | value.after(maxMakeVacantStartDay))) {
-                                    return new FieldValidationError(component, i18n.tr("please enter a date between {0,date,short} and {1,date,short}",
+                            public FieldValidationError isValid() {
+                                if (getComponent().getValue() == null
+                                        || (getComponent().getValue().before(minMakeVacantStartDay) | getComponent().getValue().after(maxMakeVacantStartDay))) {
+                                    return new FieldValidationError(getComponent(), i18n.tr("please enter a date between {0,date,short} and {1,date,short}",
                                             minMakeVacantStartDay, maxMakeVacantStartDay));
                                 } else {
                                     return null;
@@ -79,7 +79,7 @@ public class MakePendingDialog extends OkCancelDialog {
                             }
                         };
                     }
-                    get(proto().pendingStartDay()).addValueValidator(validator);
+                    get(proto().pendingStartDay()).addComponentValidator(validator);
                 }
 
                 return content;

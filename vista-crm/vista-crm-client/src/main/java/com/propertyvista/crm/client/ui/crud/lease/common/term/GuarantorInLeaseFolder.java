@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -201,13 +201,14 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             super.addValidations();
 
             get(proto().leaseParticipant().customer().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
-            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+            get(proto().leaseParticipant().customer().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                 @Override
-                public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                public FieldValidationError isValid() {
                     if (getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
                         if (getEnforceAgeOfMajority()) {
                             if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
-                                return new FieldValidationError(component, i18n.tr("The minimum age requirement for a guarantor is {0}.", getAgeOfMajority()));
+                                return new FieldValidationError(getComponent(), i18n.tr("The minimum age requirement for a guarantor is {0}.",
+                                        getAgeOfMajority()));
                             }
                         }
                     }

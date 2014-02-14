@@ -19,11 +19,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.ValidationUtils;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -90,15 +89,15 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().website()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().website()).addComponentValidator(new AbstractComponentValidator<String>() {
 
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String url) {
-                if (url != null) {
-                    if (ValidationUtils.isSimpleUrl(url)) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    if (ValidationUtils.isSimpleUrl(getComponent().getValue())) {
                         return null;
                     } else {
-                        return new FieldValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                        return new FieldValidationError(getComponent(), i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                     }
                 }
                 return null;

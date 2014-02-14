@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
@@ -130,12 +130,12 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
         public void addValidations() {
             super.addValidations();
             get(proto().file()).setMandatory(true);
-            get(proto().signedParticipants()).addValueValidator(new EditableValueValidator<List<LeaseTermParticipant<?>>>() {
+            get(proto().signedParticipants()).addComponentValidator(new AbstractComponentValidator<List<LeaseTermParticipant<?>>>() {
 
                 @Override
-                public FieldValidationError isValid(CComponent<List<LeaseTermParticipant<?>>> component, List<LeaseTermParticipant<?>> value) {
-                    if (value != null && value.isEmpty()) {
-                        return new FieldValidationError(component, i18n.tr("Please select signed lease participants"));
+                public FieldValidationError isValid() {
+                    if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
+                        return new FieldValidationError(getComponent(), i18n.tr("Please select signed lease participants"));
                     }
                     return null;
                 }

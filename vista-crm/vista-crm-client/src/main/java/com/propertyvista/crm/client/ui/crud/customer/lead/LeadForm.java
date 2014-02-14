@@ -23,12 +23,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -73,14 +72,13 @@ public class LeadForm extends CrmEntityForm<Lead> {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().guests()).addValueValidator(new EditableValueValidator<List<Guest>>() {
-
+        get(proto().guests()).addComponentValidator(new AbstractComponentValidator<List<Guest>>() {
 
             @Override
-            public FieldValidationError isValid(CComponent<List<Guest>> component, List<Guest> value) {
+            public FieldValidationError isValid() {
                 Boolean hasContact = false;
-                if (value != null) {
-                    for (Guest g : value) {
+                if (getComponent().getValue() != null) {
+                    for (Guest g : getComponent().getValue()) {
                         //@formatter:off
                         if (!g.person().email().isNull() || 
                             !g.person().homePhone().isNull() || 
@@ -92,7 +90,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
                         }
                     }
                 }
-                return hasContact ? null : new FieldValidationError(component, i18n.tr("No contact information (email and/or phone #) has been provided"));
+                return hasContact ? null : new FieldValidationError(getComponent(), i18n.tr("No contact information (email and/or phone #) has been provided"));
             }
         });
     }

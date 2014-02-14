@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -114,13 +114,13 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     @Override
     public void addValidations() {
         get(proto().customer().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
-        get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+        get(proto().customer().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value != null && !getValue().ageOfMajority().isNull()) {
-                    if (!TimeUtils.isOlderThan(value, getValue().ageOfMajority().getValue())) {
-                        return new FieldValidationError(component, i18n.tr("This lease participant is too young: the minimum age required is {0}.", getValue()
-                                .ageOfMajority().getValue()));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && !getValue().ageOfMajority().isNull()) {
+                    if (!TimeUtils.isOlderThan(getComponent().getValue(), getValue().ageOfMajority().getValue())) {
+                        return new FieldValidationError(getComponent(), i18n.tr("This lease participant is too young: the minimum age required is {0}.",
+                                getValue().ageOfMajority().getValue()));
                     }
                 }
                 return null;

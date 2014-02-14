@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -179,18 +179,18 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         // ------------------------------------------------------------------------------------------------
 
         if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
-            get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
+            get(proto().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
                 @Override
-                public FieldValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
-                    if (value == null || getValue() == null) {
+                public FieldValidationError isValid() {
+                    if (getComponent().getValue() == null || getValue() == null) {
                         return null;
                     }
 
-                    if (value.isEmpty()) {
-                        return new FieldValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                    if (getComponent().getValue().isEmpty()) {
+                        return new FieldValidationError(getComponent(), i18n.tr("Empty Emergency Contacts list"));
                     }
 
-                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new FieldValidationError(component, i18n
+                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new FieldValidationError(getComponent(), i18n
                             .tr("Duplicate Emergency Contacts specified"));
                 }
             });
@@ -213,18 +213,19 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
     }
 
     private void StartEndDateWithinMonth(final CComponent<LogicalDate> value1, final CComponent<LogicalDate> value2, final String message) {
-        value1.addValueValidator(new EditableValueValidator<LogicalDate>() {
+        value1.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
 
             @Override
-            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (value == null || getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() == null || getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
                     return null;
                 }
 
                 Date date = value2.getValue();
                 long limit1 = date.getTime() + 2678400000L; //limits date1 to be within a month of date2
                 long limit2 = date.getTime() - 2678400000L;
-                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new FieldValidationError(component, message);
+                return (date == null || (getComponent().getValue().getTime() > limit2 && getComponent().getValue().getTime() < limit1)) ? null
+                        : new FieldValidationError(getComponent(), message);
             }
         });
     }

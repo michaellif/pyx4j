@@ -42,7 +42,6 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -422,11 +421,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
-        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<LeaseTermTenant>>() {
+        get(proto().version().tenants()).addComponentValidator(new AbstractComponentValidator<List<LeaseTermTenant>>() {
             @Override
-            public FieldValidationError isValid(CComponent<List<LeaseTermTenant>> component, List<LeaseTermTenant> value) {
-                if (value != null) {
-                    return (value.isEmpty() ? new FieldValidationError(component, i18n.tr("At least one tenant should be selected!")) : null);
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    return (getComponent().getValue().isEmpty() ? new FieldValidationError(getComponent(), i18n.tr("At least one tenant should be selected!"))
+                            : null);
                 }
                 return null;
             }

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -61,11 +61,11 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
 
     @Override
     public void addValidations() {
-        this.addValueValidator(new EditableValueValidator<TenantFinancialDTO>() {
+        this.addComponentValidator(new AbstractComponentValidator<TenantFinancialDTO>() {
             @Override
-            public FieldValidationError isValid(CComponent<TenantFinancialDTO> component, TenantFinancialDTO value) {
-                return (value.assets().size() > 0) || (value.incomes().size() > 0) ? null : new FieldValidationError(component, i18n
-                        .tr("At least one source of income or one asset is required"));
+            public FieldValidationError isValid() {
+                return (getComponent().getValue().assets().size() > 0) || (getComponent().getValue().incomes().size() > 0) ? null : new FieldValidationError(
+                        getComponent(), i18n.tr("At least one source of income or one asset is required"));
             }
         });
     }

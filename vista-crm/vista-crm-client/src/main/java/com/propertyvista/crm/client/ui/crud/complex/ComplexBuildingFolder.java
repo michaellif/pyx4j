@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -144,19 +144,19 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
     public void addValidations() {
         super.addValidations();
 
-        this.addValueValidator(new EditableValueValidator<IList<Building>>() {
+        this.addComponentValidator(new AbstractComponentValidator<IList<Building>>() {
             @Override
-            public FieldValidationError isValid(CComponent<IList<Building>> component, IList<Building> value) {
-                if (value != null && !value.isEmpty()) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && !getComponent().getValue().isEmpty()) {
                     boolean primaryFound = false;
-                    for (Building item : value) {
+                    for (Building item : getComponent().getValue()) {
                         if (item.complexPrimary().isBooleanTrue()) {
                             primaryFound = true;
                             break;
                         }
                     }
                     if (!primaryFound) {
-                        return new FieldValidationError(component, i18n.tr("Primary building should be selected"));
+                        return new FieldValidationError(getComponent(), i18n.tr("Primary building should be selected"));
                     }
                 }
                 return null;

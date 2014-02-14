@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -101,11 +101,11 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
     @Override
     public void addValidations() {
         super.addValidations();
-        addValueValidator(new EditableValueValidator<N4CandidateSearchCriteriaDTO>() {
+        addComponentValidator(new AbstractComponentValidator<N4CandidateSearchCriteriaDTO>() {
             @Override
-            public FieldValidationError isValid(CComponent<N4CandidateSearchCriteriaDTO> component, N4CandidateSearchCriteriaDTO value) {
-                if (value != null && !CommonsStringUtils.isEmpty(value.n4PolicyErrors().getValue())) {
-                    return new FieldValidationError(component, value.n4PolicyErrors().getValue());
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && !CommonsStringUtils.isEmpty(getComponent().getValue().n4PolicyErrors().getValue())) {
+                    return new FieldValidationError(getComponent(), getComponent().getValue().n4PolicyErrors().getValue());
                 }
                 return null;
             }

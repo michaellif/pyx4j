@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -225,11 +225,11 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
                     CComponent<LogicalDate> datePicker = get(proto().resolvedDate());
                     datePicker.setMandatory(true);
-                    datePicker.addValueValidator(new EditableValueValidator<LogicalDate>() {
+                    datePicker.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                         @Override
-                        public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                            return (value.before(new LogicalDate(mr.submitted().getValue())) ? new FieldValidationError(component, i18n
-                                    .tr("Request cannot be Resolved before it was Submitted")) : null);
+                        public FieldValidationError isValid() {
+                            return (getComponent().getValue().before(new LogicalDate(mr.submitted().getValue())) ? new FieldValidationError(getComponent(),
+                                    i18n.tr("Request cannot be Resolved before it was Submitted")) : null);
                         }
                     });
 

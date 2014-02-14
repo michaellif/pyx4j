@@ -42,7 +42,7 @@ import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -255,14 +255,14 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasFireAlarm()), 15).build());
 
         flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().contacts().website()), true).build());
-        get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
+        get(proto().contacts().website()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String url) {
-                if (url != null) {
-                    if (ValidationUtils.isSimpleUrl(url)) {
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    if (ValidationUtils.isSimpleUrl(getComponent().getValue())) {
                         return null;
                     } else {
-                        return new FieldValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                        return new FieldValidationError(getComponent(), i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                     }
                 }
                 return null;
