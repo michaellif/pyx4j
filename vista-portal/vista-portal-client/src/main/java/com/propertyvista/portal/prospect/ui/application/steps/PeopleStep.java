@@ -54,7 +54,7 @@ public class PeopleStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, new HTML(i18n.tr("Everyone living in the residence must be listed below.")));
         panel.getWidget(row, 0).setStyleName(StyleName.WarningMessage.name());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Co-Applicant"));
+        panel.setH3(++row, 0, 1, i18n.tr("Co-Applicants"));
         panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getWizard())));
 
         panel.setH3(++row, 0, 1, i18n.tr("Dependents"));
