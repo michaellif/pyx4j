@@ -81,6 +81,10 @@ public interface LeaseTermParticipant<LP extends LeaseParticipant<?>> extends IE
         public static Collection<Role> portalAccess() {
             return EnumSet.of(Applicant, CoApplicant);
         }
+
+        public static Collection<Role> roommates() {
+            return EnumSet.of(CoApplicant, Dependent);
+        }
     }
 
     interface LeaseParticipantHolderId extends ColumnId {

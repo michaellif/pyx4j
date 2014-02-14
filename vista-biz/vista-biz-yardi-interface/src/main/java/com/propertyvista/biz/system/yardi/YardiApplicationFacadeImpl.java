@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.system.yardi;
 
+import java.util.Map;
+
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Executable;
@@ -47,15 +49,16 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                     throw new UserRuntimeException("New Application should not have id: " + lease.leaseId().getValue());
                 }
                 PmcYardiCredential yc = getPmcYardiCredential(lease);
-                String pId = YardiGuestManagementService.getInstance().createNewProspect(yc, lease);
-                lease.leaseApplication().yardiApplicationId().setValue(pId);
 
-                // Consider ...
+                Map<String, String> participants = YardiGuestManagementService.getInstance().createNewProspect(yc, lease);
+
+                String pId = participants.get(lease.getPrimaryKey().toString());
+                lease.leaseApplication().yardiApplicationId().setValue(pId);
                 Persistence.service().persist(lease.leaseApplication());
+
                 Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
                 for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-                    //TODO
-                    // participant.yardiApplicantId().setValue("");
+                    participant.yardiApplicantId().setValue(participants.get(participant.getPrimaryKey().toString()));
                     Persistence.service().persist(participant);
                 }
                 lease.leaseParticipants().setAttachLevel(AttachLevel.Detached);
@@ -90,17 +93,15 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
             throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
 
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
-
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
         PmcYardiCredential yc = getPmcYardiCredential(lease);
         String tId = YardiGuestManagementService.getInstance().signLease(yc, lease);
         lease.leaseId().setValue(tId);
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-            //TODO
-            //participant.participantId().setValue("");
+            // application must be updated (yardi sync) before approval
+            participant.participantId().set(participant.yardiApplicantId());
             Persistence.service().persist(participant);
         }
         lease.leaseParticipants().setAttachLevel(AttachLevel.Detached);

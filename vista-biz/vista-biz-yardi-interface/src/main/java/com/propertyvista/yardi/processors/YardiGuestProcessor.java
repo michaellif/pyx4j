@@ -15,7 +15,9 @@ package com.propertyvista.yardi.processors;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.yardi.entity.guestcard40.AdditionalPreference;
 import com.yardi.entity.guestcard40.AddressInfo;
@@ -43,10 +45,13 @@ import com.yardi.entity.mits.Information;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 
 public class YardiGuestProcessor {
 
@@ -58,13 +63,16 @@ public class YardiGuestProcessor {
     }
 
     public Prospect getProspect(Lease lease) {
-        return getProspect( //
+        Prospect prospect = getProspect( //
                 lease._applicant().customer().person().name().firstName().getValue(), //
                 lease._applicant().customer().person().name().lastName().getValue(), //
-                getCurrentAddress(lease), //
+                getCurrentAddress(lease._applicant().customer()), //
                 lease.getPrimaryKey().toString(), // use primary key as third-party guest id
                 lease.unit().building().propertyCode().getValue() //
         );
+        prospect.getCustomers().getCustomer().addAll(getCoApplicants(lease));
+        prospect.getCustomers().getCustomer().addAll(getGuarantors(lease));
+        return prospect;
     }
 
     public Prospect getProspect(String firstName, String lastName, AddressStructured addr, String prospectId, String propertyId) {
@@ -72,10 +80,48 @@ public class YardiGuestProcessor {
         guest.setLastUpdateDate(new Timestamp(new Date().getTime()));
         // add prospect
         Customers customers = new Customers();
-        customers.getCustomer().add(getCustomer(firstName, lastName, addr, propertyId, prospectId));
+        customers.getCustomer().add(getCustomer(CustomerInfo.PROSPECT, firstName, lastName, addr, propertyId, prospectId));
         guest.setCustomers(customers);
 
         return guest;
+    }
+
+    public List<Customer> getCoApplicants(Lease lease) {
+        List<Customer> result = new ArrayList<Customer>();
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        for (LeaseParticipant<?> lp : lease.leaseParticipants()) {
+            Persistence.ensureRetrieve(lp.leaseTermParticipants(), AttachLevel.Attached);
+            if (Role.roommates().contains(lp.leaseTermParticipants().iterator().next().role().getValue())) {
+                result.add(getCustomer( //
+                        CustomerInfo.ROOMMATE, //
+                        lp.customer().person().name().firstName().getValue(), //
+                        lp.customer().person().name().lastName().getValue(), //
+                        getCurrentAddress(lp.customer()), //
+                        lease.unit().building().propertyCode().getValue(), //
+                        lp.getPrimaryKey().toString() // third-party room mate id
+                ));
+            }
+        }
+        return result;
+    }
+
+    public List<Customer> getGuarantors(Lease lease) {
+        List<Customer> result = new ArrayList<Customer>();
+        Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
+        for (LeaseParticipant<?> lp : lease.leaseParticipants()) {
+            Persistence.ensureRetrieve(lp.leaseTermParticipants(), AttachLevel.Attached);
+            if (Role.Guarantor.equals(lp.leaseTermParticipants().iterator().next().role().getValue())) {
+                result.add(getCustomer( //
+                        CustomerInfo.GUARANTOR, //
+                        lp.customer().person().name().firstName().getValue(), //
+                        lp.customer().person().name().lastName().getValue(), //
+                        getCurrentAddress(lp.customer()), //
+                        lease.unit().building().propertyCode().getValue(), //
+                        lp.getPrimaryKey().toString() //
+                ));
+            }
+        }
+        return result;
     }
 
     public YardiGuestProcessor clearPreferences(Prospect guest) {
@@ -150,9 +196,9 @@ public class YardiGuestProcessor {
         return appEvent;
     }
 
-    private Customer getCustomer(String firstName, String lastName, AddressStructured addr, String propertyId, String thirdPartyId) {
+    private Customer getCustomer(CustomerInfo type, String firstName, String lastName, AddressStructured addr, String propertyId, String thirdPartyId) {
         Customer customer = new Customer();
-        customer.setType(CustomerInfo.PROSPECT);
+        customer.setType(type);
         customer.getIdentification().add(getThirdPartyId(thirdPartyId));
         customer.getIdentification().add(getPropertyId(propertyId));
         customer.setName(getName(firstName, lastName));
@@ -160,23 +206,30 @@ public class YardiGuestProcessor {
         return customer;
     }
 
-    private AddressStructured getCurrentAddress(Lease lease) {
-        return ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftOrFinal(lease._applicant().customer(), AttachLevel.Attached)
-                .version().currentAddress();
+    private AddressStructured getCurrentAddress(com.propertyvista.domain.tenant.Customer customer) {
+        try {
+            return ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftOrFinal(customer, AttachLevel.Attached).version()
+                    .currentAddress();
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     private AddressType getAddress(AddressStructured as) {
-        AddressType addr = new AddressType();
-        addr.setCountry(as.country().name().getValue());
-        if (addr.getCountry().equalsIgnoreCase("Canada")) {
-            addr.setProvince(as.province().name().getValue());
-        } else {
-            addr.setState(as.province().name().getValue());
+        AddressType addr = null;
+        if (as != null) {
+            addr = new AddressType();
+            addr.setCountry(as.country().name().getValue());
+            if (addr.getCountry().equalsIgnoreCase("Canada")) {
+                addr.setProvince(as.province().name().getValue());
+            } else {
+                addr.setState(as.province().name().getValue());
+            }
+            addr.setPostalCode(as.postalCode().getValue());
+            addr.setCity(as.city().getValue());
+            addr.setAddressLine1(as.streetNumber().getValue() + " " + as.streetName().getValue() + " " + as.streetType().getValue().name());
+            addr.setAddressType(AddressInfo.CURRENT);
         }
-        addr.setPostalCode(as.postalCode().getValue());
-        addr.setCity(as.city().getValue());
-        addr.setAddressLine1(as.streetNumber().getValue() + " " + as.streetName().getValue() + " " + as.streetType().getValue().name());
-        addr.setAddressType(AddressInfo.CURRENT);
         return addr;
     }
 

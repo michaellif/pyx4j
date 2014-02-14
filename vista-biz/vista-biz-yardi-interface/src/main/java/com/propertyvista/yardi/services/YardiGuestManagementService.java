@@ -15,9 +15,13 @@ package com.propertyvista.yardi.services;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,9 +84,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private static final String ILS_SOURCE = "ILS";
 
-    public String createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
-        String prospectId = null;
-
+    public Map<String, String> createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
@@ -101,14 +103,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         log.info("Created Prospect tenant with rentable items");
 
         // do guest search to retrieve lease id
-        String guestId = lease.getPrimaryKey().toString();
-        prospectId = getTenantId(yc, lease.unit().building(), guestId, ApplicantType.Prospect);
-        if (prospectId == null) {
-            throw new YardiServiceException("Prospect not found: " + guestId);
-        }
-        log.info("Created Prospect: {}", prospectId);
-
-        return prospectId;
+        return getParticipants(yc, lease);
     }
 
     public boolean holdUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
@@ -120,6 +115,24 @@ public class YardiGuestManagementService extends YardiAbstractService {
         // add unit hold event
         guestProcessor.clearPreferences(guest);
         EventType event = guestProcessor.getNewEvent(EventTypes.HOLD, false);
+        Identification holdId = new Identification();
+        holdId.setIDType(lease.unit().info().number().getValue());
+        holdId.setIDValue("0");
+        event.setEventID(holdId);
+        event.setEventDate(new Timestamp(new Date().getTime() + 2 * 24 * 3600 * 1000));
+        guestProcessor.setEvent(guest, event);
+        submitGuest(yc, guest);
+        log.info("Reserved unit: {}", lease.unit().info().number().getValue());
+        // TODO - handle negative case
+        return true;
+    }
+
+    public boolean releaseUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
+        Prospect guest = guestProcessor.getProspect(lease);
+        // add unit hold event
+        guestProcessor.clearPreferences(guest);
+        EventType event = guestProcessor.getNewEvent(EventTypes.RELEASE, false);
         Identification holdId = new Identification();
         holdId.setIDType(lease.unit().info().number().getValue());
         holdId.setIDValue("0");
@@ -156,16 +169,22 @@ public class YardiGuestManagementService extends YardiAbstractService {
     }
 
     public String createFutureLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
-        String pId = createNewProspect(yc, lease);
+        Map<String, String> participants = createNewProspect(yc, lease);
+
+        String pId = participants.get(lease.getPrimaryKey().toString());
         log.info("Created Prospect: {}", pId);
 
         holdUnit(yc, lease);
         log.info("Unit held for: {}", pId);
 
-        String tId = signLease(yc, lease);
-        log.info("Signed lease: {}", tId);
+        if (true) {
+            return pId;
+        } else {
+            String tId = signLease(yc, lease);
+            log.info("Signed lease: {}", tId);
 
-        return tId;
+            return tId;
+        }
     }
 
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
@@ -235,28 +254,54 @@ public class YardiGuestManagementService extends YardiAbstractService {
     }
 
     private String getTenantId(PmcYardiCredential yc, Building building, String guestId, ApplicantType type) throws YardiServiceException {
-        Prospect t = null;
-        String tenantId = null;
         LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc, building.propertyCode().getValue(), guestId);
-        for (Prospect p : guestActivity.getProspects().getProspect()) {
-            Customer c = p.getCustomers().getCustomer().get(0);
+        if (guestActivity.getProspects().getProspect().size() != 1) {
+            throw new YardiServiceException("Prospect not found: " + guestId);
+        }
+        String tenantId = null;
+        Prospect p = guestActivity.getProspects().getProspect().get(0);
+        for (Customer c : p.getCustomers().getCustomer()) {
             for (Identification id : c.getIdentification()) {
-                if ("ThirdPartyID".equals(id.getIDType()) && guestId.equals(id.getIDValue())) {
-                    t = p;
+                if ("ThirdPartyID".equals(id.getIDType()) && guestId.equals(id.getIDValue()) && type.id.equals(id.getIDType())) {
+                    tenantId = id.getIDValue();
                     break;
                 }
             }
         }
-        if (t == null) {
-            return null;
+        return tenantId;
+    }
+
+    private Map<String, String> getParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        String tenantId = lease.getPrimaryKey().toString();
+        LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc,
+                lease.unit().building().propertyCode().getValue(), tenantId);
+        if (guestActivity.getProspects().getProspect().size() != 1) {
+            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", tenantId));
         }
-        Customer c = t.getCustomers().getCustomer().get(0);
-        for (Identification id : c.getIdentification()) {
-            if (type.id.equals(id.getIDType())) {
-                tenantId = id.getIDValue();
-                break;
+        Map<String, String> participants = new HashMap<String, String>();
+        Prospect p = guestActivity.getProspects().getProspect().get(0);
+        for (Customer c : p.getCustomers().getCustomer()) {
+            String tpId = null, pId = null;
+            for (Identification id : c.getIdentification()) {
+                if ("ThirdPartyID".equals(id.getIDType())) {
+                    tpId = id.getIDValue();
+                } else if ("ProspectID".equals(id.getIDType())) {
+                    pId = id.getIDValue();
+                }
+            }
+            if (tpId != null && pId != null) {
+                participants.put(tpId, pId);
             }
         }
-        return tenantId;
+        String pId = participants.get(tenantId);
+        if (pId == null) {
+            throw new YardiServiceException(SimpleMessageFormat.format("Main applicant is missing: {0}", tenantId));
+        }
+        if (lease.leaseParticipants().size() != participants.size()) {
+            String msg = SimpleMessageFormat.format("Missing or invalid participants: found {0} instead of {1}", participants.size(), lease.leaseParticipants()
+                    .size());
+            throw new YardiServiceException(msg);
+        }
+        return participants;
     }
 }
