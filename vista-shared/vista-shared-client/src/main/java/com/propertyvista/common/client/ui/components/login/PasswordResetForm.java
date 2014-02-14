@@ -111,7 +111,7 @@ public class PasswordResetForm extends CEntityForm<PasswordChangeRequest> {
             }
         });
 
-        get(proto().newPassword()).addValueValidator(passwordStrengthValidator = new PasswordStrengthValueValidator(passwordStrengthRule));
+        get(proto().newPassword()).addComponentValidator(passwordStrengthValidator = new PasswordStrengthValueValidator(passwordStrengthRule));
     }
 
     public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {

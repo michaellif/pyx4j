@@ -92,7 +92,7 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
             }
         });
 
-        get(proto().newPassword()).addValueValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+        get(proto().newPassword()).addComponentValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
     }
 
 }

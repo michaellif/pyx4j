@@ -58,8 +58,8 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
         mainPanel.setBR(++row, 0, 1);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().newPassword())).componentWidth("180px").assistantWidget(passwordStrengthWidget)
-                .build());
+        mainPanel.setWidget(++row, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().newPassword())).componentWidth("180px").assistantWidget(passwordStrengthWidget).build());
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth("180px").build());
 
         return mainPanel;
@@ -88,7 +88,7 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
             }
         });
 
-        get(proto().newPassword()).addValueValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+        get(proto().newPassword()).addComponentValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
     }
 
 }

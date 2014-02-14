@@ -138,7 +138,7 @@ public class PasswordChangeForm extends CEntityForm<PasswordChangeRequest> {
             }
         });
 
-        get(proto().newPassword()).addValueValidator(passwordStrengthValidator = new PasswordStrengthValueValidator(passwordStrengthRule));
+        get(proto().newPassword()).addComponentValidator(passwordStrengthValidator = new PasswordStrengthValueValidator(passwordStrengthRule));
     }
 
     public void setAskForCurrentPassword(boolean isCurrentPasswordRequired) {
@@ -191,7 +191,7 @@ public class PasswordChangeForm extends CEntityForm<PasswordChangeRequest> {
         unbind(proto().newPassword());
         CTextFieldBase<String, ? extends NTextFieldBase<String, ?, CTextFieldBase<String, ?>>> c = maskPassword ? new CPasswordTextField() : new CTextField();
         c.addNValueChangeHandler(passwordValueChangeHandler);
-        c.addValueValidator(passwordStrengthValidator);
+        c.addComponentValidator(passwordStrengthValidator);
         c.addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
 
         mainPanel.setWidget(newPasswordFieldRow, 0, 2, new FormDecoratorBuilder(inject(proto().newPassword(), c)).componentWidth(15).labelWidth(15)

@@ -156,7 +156,7 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
             }
         });
 
-        cardEditor.addValueValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
+        cardEditor.addComponentValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
             @Override
             public CreditCardType getCreditCardType() {
                 return (get(proto().cardType()).getValue() == null ? null : get(proto().cardType()).getValue());

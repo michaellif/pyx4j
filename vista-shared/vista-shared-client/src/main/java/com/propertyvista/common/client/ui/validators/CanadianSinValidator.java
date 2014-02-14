@@ -14,21 +14,21 @@
 package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class CanadianSinValidator implements EditableValueValidator<String> {
+public class CanadianSinValidator extends AbstractComponentValidator<String> {
 
     private static final I18n i18n = I18n.get(CanadianSinValidator.class);
 
     @Override
-    public FieldValidationError isValid(CComponent<String> component, String value) {
-        if (CommonsStringUtils.isStringSet(value)) {
-            return ValidationUtils.isSinValid(value.trim().replaceAll(" ", "")) ? null : new FieldValidationError(component, i18n.tr("Invalid SIN"));
+    public FieldValidationError isValid() {
+        if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
+            return ValidationUtils.isSinValid(getComponent().getValue().trim().replaceAll(" ", "")) ? null : new FieldValidationError(getComponent(),
+                    i18n.tr("Invalid SIN"));
         } else {
             return null;
         }

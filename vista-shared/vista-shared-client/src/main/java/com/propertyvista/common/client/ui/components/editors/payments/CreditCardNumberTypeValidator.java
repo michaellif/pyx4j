@@ -13,8 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -22,7 +21,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class CreditCardNumberTypeValidator implements EditableValueValidator<CreditCardNumberIdentity> {
+public class CreditCardNumberTypeValidator extends AbstractComponentValidator<CreditCardNumberIdentity> {
 
     private static final I18n i18n = I18n.get(CreditCardNumberTypeValidator.class);
 
@@ -39,12 +38,13 @@ public class CreditCardNumberTypeValidator implements EditableValueValidator<Cre
     }
 
     @Override
-    public FieldValidationError isValid(CComponent<CreditCardNumberIdentity> component, CreditCardNumberIdentity value) {
-        if ((value == null) || value.newNumber().isNull()) {
+    public FieldValidationError isValid() {
+        if ((getComponent().getValue() == null) || getComponent().getValue().newNumber().isNull()) {
             return null; // editing tokenized credit card.
         } else if (creditCardTypeProvider.getCreditCardType() == null
-                || (!ValidationUtils.isCreditCardNumberIinValid(creditCardTypeProvider.getCreditCardType().iinsPatterns, value.newNumber().getValue()))) {
-            return new FieldValidationError(component, i18n.tr("The credit card number doesn't match the credit card type"));
+                || (!ValidationUtils.isCreditCardNumberIinValid(creditCardTypeProvider.getCreditCardType().iinsPatterns, getComponent().getValue().newNumber()
+                        .getValue()))) {
+            return new FieldValidationError(getComponent(), i18n.tr("The credit card number doesn't match the credit card type"));
         } else {
             return null;
         }
