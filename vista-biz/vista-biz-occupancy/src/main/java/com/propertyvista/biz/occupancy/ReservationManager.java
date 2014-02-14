@@ -69,9 +69,9 @@ public class ReservationManager {
     public Pair<Date, Lease> isReserved(Key unitId) {
         AptUnitReservation reservation = getCurrentReserved(unitId);
         if (reservation == null) {
-            return null;
+            return new Pair<>();
         } else {
-            return new Pair<Date, Lease>(reservation.dateTo().getValue(), reservation.lease());
+            return new Pair<>(reservation.dateTo().getValue(), reservation.lease());
         }
     }
 
