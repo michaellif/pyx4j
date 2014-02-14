@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
@@ -35,7 +36,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @EmbeddedEntity
 public interface ISignature extends IEntity {
 
-    public static enum SignatureFormat {
+    public static enum SignatureFormat implements Serializable {
         FullName, Initials, AgreeBox, AgreeBoxAndFullName, None
     }
 
