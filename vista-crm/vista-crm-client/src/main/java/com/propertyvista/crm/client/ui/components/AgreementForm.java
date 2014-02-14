@@ -17,10 +17,9 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
@@ -50,11 +49,11 @@ public class AgreementForm extends CEntityForm<AgreementDTO> {
         contentPanel.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().isAgreed()), 2, 40));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(20, Unit.PX);
-        get(proto().isAgreed()).addValueValidator(new EditableValueValidator<Boolean>() {
+        get(proto().isAgreed()).addComponentValidator(new AbstractComponentValidator<Boolean>() {
             @Override
-            public FieldValidationError isValid(CComponent<Boolean> component, Boolean value) {
-                if (value != null && !value) {
-                    return new FieldValidationError(component, i18n.tr("You must agree with the above terms to continue."));
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && !getComponent().getValue()) {
+                    return new FieldValidationError(getComponent(), i18n.tr("You must agree with the above terms to continue."));
                 } else {
                     return null;
                 }

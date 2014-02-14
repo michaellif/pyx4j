@@ -15,10 +15,9 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -40,17 +39,17 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityForm<ArrearsYOY
         int row = -1;
         p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
         p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yearsToCompare())).build());
-        get(proto().yearsToCompare()).addValueValidator(new EditableValueValidator<Integer>() {
+        get(proto().yearsToCompare()).addComponentValidator(new AbstractComponentValidator<Integer>() {
             @Override
-            public FieldValidationError isValid(CComponent<Integer> component, Integer value) {
-                if (value != null & value >= 0) {
-                    if (value > ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
-                        return new FieldValidationError(component, i18n.tr("Please enter a value between 0 and {0}",
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null & getComponent().getValue() >= 0) {
+                    if (getComponent().getValue() > ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
+                        return new FieldValidationError(getComponent(), i18n.tr("Please enter a value between 0 and {0}",
                                 ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
                     }
                     return null;
                 } else {
-                    return new FieldValidationError(component, i18n.tr("Non-negative value expected"));
+                    return new FieldValidationError(getComponent(), i18n.tr("Non-negative value expected"));
                 }
             }
         });
