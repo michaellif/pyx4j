@@ -19,12 +19,13 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeSource;
@@ -34,14 +35,24 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
+    private ApplicationDocumentationPolicy documentationPolicy;
+
     public PersonalIncomeFolder() {
         super(CustomerScreeningIncome.class, i18n.tr("Personal Income"));
+    }
+
+    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
+        this.documentationPolicy = policy;
+
+        for (CComponent<?> item : getComponents()) {
+            ((PersonalIncomeEditor) ((CEntityFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
+        }
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof CustomerScreeningIncome) {
-            return new PersonalIncomeEditor();
+            return new PersonalIncomeEditor(documentationPolicy);
         }
         return super.create(member);
     }

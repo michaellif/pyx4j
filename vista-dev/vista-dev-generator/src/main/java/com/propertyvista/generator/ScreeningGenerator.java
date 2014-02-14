@@ -36,9 +36,12 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
+import com.propertyvista.domain.blob.ProofOfAssetDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
+import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
@@ -210,6 +213,7 @@ public class ScreeningGenerator {
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
             asset.percent().setValue((double) RandomUtil.randomInt(100));
             asset.assetValue().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
+            asset.documents().add(createProofOfAssetDocument());
 
             assets.add(asset);
         }
@@ -283,6 +287,13 @@ public class ScreeningGenerator {
         return document;
     }
 
+    private ProofOfAssetDocumentFolder createProofOfAssetDocument() {
+        ProofOfAssetDocumentFolder document = EntityFactory.create(ProofOfAssetDocumentFolder.class);
+        document.description().setValue("proof of employment document " + RandomUtil.randomLetters(10));
+        document.files().add(createDocumentPage(ProofOfAssetDocumentFile.class, "doc-asset" + RandomUtil.randomInt(3) + ".jpg"));
+        return document;
+    }
+
     public <T extends IHasFile<?>> T createDocumentPage(Class<T> fileClass, String fileName) {
         T applicationDocument = EntityFactory.create(fileClass);
         applicationDocument.file().fileName().setValue(fileName);
@@ -295,6 +306,11 @@ public class ScreeningGenerator {
         }
         for (CustomerScreeningIncome income : screening.version().incomes()) {
             for (ProofOfEmploymentDocumentFolder document : income.documents()) {
+                attachDocumentData(document);
+            }
+        }
+        for (CustomerScreeningPersonalAsset asset : screening.version().assets()) {
+            for (ProofOfAssetDocumentFolder document : asset.documents()) {
                 attachDocumentData(document);
             }
         }
@@ -350,4 +366,28 @@ public class ScreeningGenerator {
         }
     }
 
+    private static void attachDocumentData(ProofOfAssetDocumentFolder document) {
+        for (ProofOfAssetDocumentFile applicationDocument : document.files()) {
+            String fileName = applicationDocument.file().fileName().getValue();
+            ProofOfAssetDocumentBlob applicationDocumentData;
+            try {
+                byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, ScreeningGenerator.class);
+                if (data == null) {
+                    throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
+                }
+                String contentType = MimeMap.getContentType(FilenameUtils.getExtension(fileName));
+                applicationDocumentData = EntityFactory.create(ProofOfAssetDocumentBlob.class);
+                applicationDocumentData.data().setValue(data);
+                applicationDocumentData.contentType().setValue(contentType);
+
+            } catch (IOException e) {
+                throw new Error("Failed to read the file [" + fileName + "]", e);
+            }
+
+            Persistence.service().persist(applicationDocumentData);
+            applicationDocument.file().fileSize().setValue(applicationDocumentData.data().getValue().length);
+            applicationDocument.file().blobKey().set(applicationDocumentData.id());
+            FileUploadRegistry.register(applicationDocument.file());
+        }
+    }
 }

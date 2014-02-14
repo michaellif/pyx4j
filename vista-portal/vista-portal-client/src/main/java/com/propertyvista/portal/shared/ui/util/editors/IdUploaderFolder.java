@@ -45,37 +45,21 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
     final static I18n i18n = I18n.get(IdUploaderFolder.class);
 
-    protected ApplicationDocumentationPolicy documentationPolicy = null;
+    private ApplicationDocumentationPolicy documentationPolicy;
 
     public IdUploaderFolder() {
         super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
-
-        addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
-            @Override
-            public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
-                if (value != null) {
-//                    assert (documentsPolicy != null);
-                    if (documentationPolicy != null) {
-                        int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
-                        if (numOfRemainingDocs > 0) {
-                            return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
-                        }
-                    }
-                }
-                return null;
-            }
-        });
-
         asWidget().setSize("100%", "100%");
     }
 
-    public void setDocumentsPolicy(ApplicationDocumentationPolicy documentsPolicy) {
-        this.documentationPolicy = documentsPolicy;
+    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
+        this.documentationPolicy = policy;
 
-        if (documentsPolicy != null) {
-            StringBuilder rule = new StringBuilder(i18n.tr("{0} ID(s) required", documentsPolicy.numberOfRequiredIDs().getValue()));
+        setNoDataNotificationWidget(null);
+        if (documentationPolicy != null) {
+            StringBuilder rule = new StringBuilder(i18n.tr("{0} ID(s) required", documentationPolicy.numberOfRequiredIDs().getValue()));
             rule.append(" (");
-            for (IdentificationDocumentType docType : documentsPolicy.allowedIDs()) {
+            for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
                 rule.append(docType.name().getStringView());
                 rule.append(", ");
             }
@@ -85,6 +69,24 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
             setNoDataNotificationWidget(new Label(rule.toString()));
         }
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
+            @Override
+            public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
+                if (value != null && documentationPolicy != null) {
+                    int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                    if (numOfRemainingDocs > 0) {
+                        return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     @Override

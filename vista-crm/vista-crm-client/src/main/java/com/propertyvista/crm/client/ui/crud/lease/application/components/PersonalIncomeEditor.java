@@ -33,6 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -48,12 +49,17 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
     private static final I18n i18n = I18n.get(PersonalIncomeEditor.class);
 
-    protected final SimplePanel detailsHolder = new SimplePanel();
+    private final SimplePanel detailsHolder = new SimplePanel();
 
-    private ProofOfEmploymentUploaderFolder fileUpload;
+    private final ProofOfEmploymentUploaderFolder fileUpload = new ProofOfEmploymentUploaderFolder();
 
-    public PersonalIncomeEditor() {
+    public PersonalIncomeEditor(ApplicationDocumentationPolicy policy) {
         super(CustomerScreeningIncome.class);
+        setDocumentsPolicy(policy);
+    }
+
+    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
+        fileUpload.setDocumentsPolicy(policy);
     }
 
     @Override
@@ -63,7 +69,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().incomeSource(), new CEnumLabel()), 25, true).build());
         main.setWidget(++row, 0, 2, detailsHolder);
-        main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder()));
+        main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload));
 
         return main;
     }

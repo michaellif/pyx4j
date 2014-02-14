@@ -76,6 +76,7 @@ public class AboutYouStep extends ApplicationWizardStep {
     @Override
     public void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
         if (getWizard().isEditable()) {
             fileUpload.setDocumentsPolicy(getValue().applicant().documentsPolicy());
         }

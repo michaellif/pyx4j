@@ -52,6 +52,15 @@ public class FinancialStep extends ApplicationWizardStep {
     }
 
     @Override
+    public void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (getWizard().isEditable()) {
+            ((PersonalIncomeFolder) (CComponent<?>) get(proto().applicant().incomes())).setDocumentsPolicy(getValue().applicant().documentsPolicy());
+        }
+    }
+
+    @Override
     public void addValidations() {
         super.addValidations();
 

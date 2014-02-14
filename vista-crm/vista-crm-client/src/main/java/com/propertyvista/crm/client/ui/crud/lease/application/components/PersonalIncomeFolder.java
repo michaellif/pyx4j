@@ -16,15 +16,20 @@ package com.propertyvista.crm.client.ui.crud.lease.application.components;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeSource;
@@ -33,14 +38,30 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
 
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
+    private ApplicationDocumentationPolicy documentationPolicy;
+
     public PersonalIncomeFolder(boolean modifyable) {
         super(CustomerScreeningIncome.class, modifyable);
+    }
+
+    public void setParentEntity(IEntity parentEntity) {
+        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
+                new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
+                    @Override
+                    public void onSuccess(ApplicationDocumentationPolicy result) {
+                        documentationPolicy = result;
+
+                        for (CComponent<?> item : getComponents()) {
+                            ((PersonalIncomeEditor) ((CEntityFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
+                        }
+                    }
+                });
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof CustomerScreeningIncome) {
-            return new PersonalIncomeEditor();
+            return new PersonalIncomeEditor(documentationPolicy);
         }
         return super.create(member);
     }

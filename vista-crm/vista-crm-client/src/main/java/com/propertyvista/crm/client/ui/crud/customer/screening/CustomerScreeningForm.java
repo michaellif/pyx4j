@@ -53,7 +53,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
         }
     };
 
-    private IdUploaderFolder fileUpload;
+    private final IdUploaderFolder fileUpload = new IdUploaderFolder();
 
     public CustomerScreeningForm(IForm<CustomerScreeningDTO> view) {
         super(CustomerScreeningDTO.class, view);
@@ -74,6 +74,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
 
         if (isEditable()) {
             fileUpload.setParentEntity(getValue());
+            ((PersonalIncomeFolder) (CComponent<?>) get(proto().version().incomes())).setParentEntity(getValue());
         }
 
         enablePreviousAddress();
@@ -115,7 +116,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().version().documents(), fileUpload = new IdUploaderFolder()));
+        main.setWidget(++row, 0, 2, inject(proto().version().documents(), fileUpload));
 
         return main;
     }

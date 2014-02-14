@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
@@ -48,7 +49,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
 
     final static I18n i18n = I18n.get(IdUploaderFolder.class);
 
-    protected ApplicationDocumentationPolicy documentationPolicy = null;
+    private ApplicationDocumentationPolicy documentationPolicy;
 
     public IdUploaderFolder() {
         super(IdentificationDocumentFolder.class);
@@ -61,8 +62,41 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
                     @Override
                     public void onSuccess(ApplicationDocumentationPolicy result) {
                         documentationPolicy = result;
+
+                        setNoDataNotificationWidget(null);
+                        if (documentationPolicy != null) {
+                            StringBuilder rule = new StringBuilder(i18n.tr("{0} ID(s) required", documentationPolicy.numberOfRequiredIDs().getValue()));
+                            rule.append(" (");
+                            for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
+                                rule.append(docType.name().getStringView());
+                                rule.append(", ");
+                            }
+                            rule.deleteCharAt(rule.length() - 1);
+                            rule.deleteCharAt(rule.length() - 1);
+                            rule.append(")");
+
+                            setNoDataNotificationWidget(new Label(rule.toString()));
+                        }
                     }
                 });
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
+            @Override
+            public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
+                if (value != null && documentationPolicy != null) {
+                    int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                    if (numOfRemainingDocs > 0) {
+                        return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     @Override

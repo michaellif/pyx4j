@@ -15,6 +15,8 @@ package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
@@ -26,12 +28,17 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 @DiscriminatorValue("ApplicationDocumentationPolicy")
 public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessiblePolicy {
 
-    @Caption(description = "The number of the IDs that is required for an application")
     @NotNull
+    @Caption(description = "The number of the IDs that is required for an application")
     IPrimitive<Integer> numberOfRequiredIDs();
 
-    @Caption(description = "IDs/Documentations that accepted as valid IDs")
     @Owned
     @NotNull
+    @Caption(description = "IDs/Documentations that accepted as valid IDs")
     IList<IdentificationDocumentType> allowedIDs();
+
+    @NotNull
+    @Editor(type = EditorType.radiogroup)
+    @Caption(description = "Is the proof of income documents are mandatory")
+    IPrimitive<Boolean> mandatoryProofOfIncome();
 }

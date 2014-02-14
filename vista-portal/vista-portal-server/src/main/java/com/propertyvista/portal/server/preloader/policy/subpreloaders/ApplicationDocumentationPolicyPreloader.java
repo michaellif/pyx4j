@@ -55,6 +55,8 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         id.type().setValue(Type.license);
         policy.allowedIDs().add(id);
 
+        policy.mandatoryProofOfIncome().setValue(false);
+
         return policy;
     }
 }

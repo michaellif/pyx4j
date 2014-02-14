@@ -14,23 +14,56 @@
 package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 
 public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmploymentDocumentFolder> {
 
     private final static I18n i18n = I18n.get(ProofOfEmploymentUploaderFolder.class);
 
+    private ApplicationDocumentationPolicy documentationPolicy;
+
     public ProofOfEmploymentUploaderFolder() {
         super(ProofOfEmploymentDocumentFolder.class);
+    }
+
+    public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
+        this.documentationPolicy = policy;
+
+        setNoDataNotificationWidget(null);
+        if (documentationPolicy != null && documentationPolicy.mandatoryProofOfIncome().isBooleanTrue()) {
+            setNoDataNotificationWidget(new Label(i18n.tr("Proof of Employment should be supplied!")));
+        }
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        addValueValidator(new EditableValueValidator<IList<ProofOfEmploymentDocumentFolder>>() {
+            @Override
+            public ValidationError isValid(CComponent<IList<ProofOfEmploymentDocumentFolder>> component, IList<ProofOfEmploymentDocumentFolder> value) {
+                if (value != null && documentationPolicy != null) {
+                    if (documentationPolicy.mandatoryProofOfIncome().isBooleanTrue() && getValue().isEmpty()) {
+                        return new ValidationError(component, i18n.tr("Proof of Employment should be supplied!"));
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     @Override

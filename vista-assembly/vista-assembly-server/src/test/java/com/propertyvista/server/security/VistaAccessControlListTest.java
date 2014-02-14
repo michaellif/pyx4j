@@ -36,9 +36,9 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -112,6 +112,7 @@ public class VistaAccessControlListTest {
         TestLifecycle.beginRequest();
 
         assertEntityPermission(false, ProofOfEmploymentDocumentFile.class, null);
+        assertEntityPermission(false, ProofOfAssetDocumentFile.class, null);
         assertEntityPermission(false, TenantInLeaseListDTO.class, null);
         assertEntityPermission(false, LeaseTermTenant.class, null);
         assertEntityPermission(false, TenantFinancialDTO.class, null);
@@ -129,6 +130,7 @@ public class VistaAccessControlListTest {
         ProspectPortalContext.setOnlineApplication(application);
 
         assertEntityPermission(true, ProofOfEmploymentDocumentFile.class, application);
+        assertEntityPermission(true, ProofOfAssetDocumentFile.class, application);
         assertEntityPermission(true, TenantInLeaseListDTO.class, application);
         assertEntityPermission(true, LeaseTermTenant.class, application);
         assertEntityPermission(true, TenantFinancialDTO.class, application);
@@ -136,6 +138,7 @@ public class VistaAccessControlListTest {
         OnlineApplication application2 = EntityFactory.create(OnlineApplication.class);
         application2.setPrimaryKey(new Key(-252));
         assertEntityPermission(false, ProofOfEmploymentDocumentFile.class, application2);
+        assertEntityPermission(false, ProofOfAssetDocumentFile.class, application2);
         assertEntityPermission(false, TenantInLeaseListDTO.class, application2);
         assertEntityPermission(false, LeaseTermTenant.class, application2);
         assertEntityPermission(false, TenantFinancialDTO.class, application2);

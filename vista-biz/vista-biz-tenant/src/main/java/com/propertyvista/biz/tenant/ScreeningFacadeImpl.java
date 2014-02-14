@@ -43,6 +43,8 @@ import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
+import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
@@ -56,6 +58,7 @@ import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -279,6 +282,13 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         for (CustomerScreeningIncome income : screening.version().incomes()) {
             for (ProofOfEmploymentDocumentFolder document : income.documents()) {
                 for (ProofOfEmploymentDocumentFile applicationDocument : document.files()) {
+                    FileUploadRegistry.register(applicationDocument.file());
+                }
+            }
+        }
+        for (CustomerScreeningPersonalAsset asset : screening.version().assets()) {
+            for (ProofOfAssetDocumentFolder document : asset.documents()) {
+                for (ProofOfAssetDocumentFile applicationDocument : document.files()) {
                     FileUploadRegistry.register(applicationDocument.file());
                 }
             }

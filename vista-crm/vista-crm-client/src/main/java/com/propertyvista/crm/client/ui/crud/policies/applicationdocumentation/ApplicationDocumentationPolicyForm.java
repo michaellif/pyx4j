@@ -52,6 +52,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfRequiredIDs()), 3).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().mandatoryProofOfIncome()), 10).build());
 
         content.setH3(++row, 0, 2, proto().allowedIDs().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().allowedIDs(), new IdentificationDocumentFolder()));

@@ -60,6 +60,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
             main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().assetType()), 180).build());
             main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().percent()), 60).build());
             main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().assetValue()), 100).build());
+            main.setWidget(++row, 0, inject(proto().documents(), new ProofOfAssetUploaderFolder()));
 
             return main;
         }

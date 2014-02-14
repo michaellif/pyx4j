@@ -69,4 +69,13 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
             }
         });
     }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (isEditable()) {
+            ((PersonalIncomeFolder) (CComponent<?>) get(proto().incomes())).setParentEntity(getValue());
+        }
+    }
 }

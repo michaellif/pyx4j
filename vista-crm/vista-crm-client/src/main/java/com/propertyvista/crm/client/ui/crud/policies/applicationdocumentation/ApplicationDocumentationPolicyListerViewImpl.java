@@ -31,7 +31,9 @@ public class ApplicationDocumentationPolicyListerViewImpl extends CrmListerViewI
         public ApplicationDocumentationPolicyLister() {
             super(ApplicationDocumentationPolicyDTO.class);
             setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().numberOfRequiredIDs()).build()
+                    new MemberColumnDescriptor.Builder(proto().numberOfRequiredIDs()).build(),
+                    new MemberColumnDescriptor.Builder(proto().allowedIDs()).build(),
+                    new MemberColumnDescriptor.Builder(proto().mandatoryProofOfIncome()).build()
             );//@formatter:on
         }
     }
