@@ -22,15 +22,12 @@ package com.pyx4j.server.mail;
 
 import static com.pyx4j.server.mail.SMTPMailUtils.email;
 import static com.pyx4j.server.mail.SMTPMailUtils.emails;
-import static com.pyx4j.server.mail.SMTPMailUtils.filterDestinations;
-import static com.pyx4j.server.mail.SMTPMailUtils.forwardEmails;
 import static com.pyx4j.server.mail.SMTPMailUtils.isEmptyList;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -42,6 +39,7 @@ import javax.mail.Multipart;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -71,9 +69,8 @@ class SMTPMailServiceImpl implements IMailService {
     }
 
     @Override
-    public MailMessage filter(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig) {
-        //TODO  implement this 
-        return mailMessage;
+    public MailMessage filter(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig) throws AddressException {
+        return SMTPMailUtils.filter(mailMessage, (SMTPMailServiceConfig) mailConfig);
     }
 
     @Override
@@ -82,12 +79,19 @@ class SMTPMailServiceImpl implements IMailService {
     }
 
     @Override
-    public void queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
+    public boolean queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
         if (disabled) {
-            return;
+            return true;
         }
         IMailServiceConfigConfiguration config = (mailConfig != null) ? mailConfig : ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
-        MailQueue.queue(filter(mailMessage, config), callbackClass, config);
+        try {
+            mailMessage = filter(mailMessage, config);
+        } catch (AddressException e) {
+            log.error("email address error", e);
+            return false;
+        }
+        MailQueue.queue(mailMessage, callbackClass, config);
+        return true;
     }
 
     @Override
@@ -128,35 +132,21 @@ class SMTPMailServiceImpl implements IMailService {
         try {
             message.setFrom(email(mailMessage.getSender()));
         } catch (MessagingException e) {
-            log.error("Error", e);
+            log.error("email address error", e);
             return MailDeliveryStatus.MessageDataError;
         }
 
         try {
-            List<InternetAddress> address;
-            List<InternetAddress> recipientsCc;
-            List<InternetAddress> recipientsBcc;
+            mailMessage = filter(mailMessage, config);
+        } catch (AddressException e) {
+            log.error("email address error", e);
+            return MailDeliveryStatus.MessageDataError;
+        }
 
-            if (CommonsStringUtils.isStringSet(config.getForwardAllTo())) {
-                address = forwardEmails(mailMessage.getTo(), config.getForwardAllTo());
-                recipientsCc = forwardEmails(mailMessage.getCc(), config.getForwardAllTo());
-                recipientsBcc = forwardEmails(mailMessage.getBcc(), config.getForwardAllTo());
-            } else {
-                String emailFilter = config.getAllowSendToEmailSufix();
-                if (!CommonsStringUtils.isStringSet(emailFilter)) {
-                    address = emails(mailMessage.getTo());
-                    recipientsCc = emails(mailMessage.getCc());
-                    recipientsBcc = emails(mailMessage.getBcc());
-                } else {
-                    address = filterDestinations(emailFilter, emails(mailMessage.getTo()));
-                    if (isEmptyList(address) && (config.getBlockedMailForwardTo() != null)) {
-                        address = new Vector<InternetAddress>();
-                        address.addAll(SMTPMailUtils.emails(MailMessage.getAddressList(config.getBlockedMailForwardTo())));
-                    }
-                    recipientsCc = filterDestinations(emailFilter, emails(mailMessage.getCc()));
-                    recipientsBcc = filterDestinations(emailFilter, emails(mailMessage.getBcc()));
-                }
-            }
+        try {
+            List<InternetAddress> address = emails(mailMessage.getTo());
+            List<InternetAddress> recipientsCc = emails(mailMessage.getCc());
+            List<InternetAddress> recipientsBcc = emails(mailMessage.getBcc());
 
             if (isEmptyList(address) && SMTPMailUtils.isEmptyList(recipientsCc) && isEmptyList(recipientsBcc)) {
                 log.debug("addresses filtered {} {} {}", mailMessage.getTo(), mailMessage.getCc(), mailMessage.getBcc());

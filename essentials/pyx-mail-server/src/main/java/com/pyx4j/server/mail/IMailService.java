@@ -20,6 +20,8 @@
  */
 package com.pyx4j.server.mail;
 
+import javax.mail.internet.AddressException;
+
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 
 public interface IMailService {
@@ -36,8 +38,9 @@ public interface IMailService {
      *            optional class that will be instantiated and called once email was sent
      * @param mailConfig
      *            optional default configuration will be used
+     * @return false if message can't be sent because address is invalid, You may get exception by calling filter function on the same message
      */
-    public void queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig);
+    public boolean queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig);
 
     /**
      * Apply address restrictions to the messages
@@ -45,7 +48,7 @@ public interface IMailService {
      * @param mailMessage
      * @return
      */
-    public MailMessage filter(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig);
+    public MailMessage filter(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig) throws AddressException;
 
     public boolean isDisabled();
 
