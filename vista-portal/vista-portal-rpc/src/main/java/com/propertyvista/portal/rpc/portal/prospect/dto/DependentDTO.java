@@ -15,8 +15,6 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
@@ -31,19 +29,11 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 @Transient
 public interface DependentDTO extends IEntity {
 
-    @Editor(type = EditorType.radiogroup)
-    @Caption(name = "Is this occupant 18 or over?")
-    IPrimitive<Boolean> matured();
-
     @EmbeddedEntity
     @ToString()
     Name name();
 
     IPrimitive<LogicalDate> birthDate();
-
-    @NotNull
-    @Editor(type = EditorType.email)
-    IPrimitive<String> email();
 
     @NotNull
     @Caption(description = "Relation to the Main Applicant")

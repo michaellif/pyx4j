@@ -55,10 +55,8 @@ public class DependentsReadonlyFolder extends PortalBoxFolder<DependentDTO> {
 
             int row = -1;
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().matured())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate())).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
 
             return mainPanel;
         }

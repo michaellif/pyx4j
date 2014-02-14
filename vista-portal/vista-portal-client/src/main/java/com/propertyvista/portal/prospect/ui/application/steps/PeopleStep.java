@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -26,7 +24,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -41,7 +38,6 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
-import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
 
 public class PeopleStep extends ApplicationWizardStep {
 
@@ -164,8 +160,6 @@ public class PeopleStep extends ApplicationWizardStep {
         protected void createNewEntity(AsyncCallback<DependentDTO> callback) {
             DependentDTO entity = EntityFactory.create(DependentDTO.class);
 
-            entity.matured().setValue(false);
-
             callback.onSuccess(entity);
         }
 
@@ -183,8 +177,6 @@ public class PeopleStep extends ApplicationWizardStep {
             if (getItemCount() == 0) {
                 DependentDTO occupant = EntityFactory.create(DependentDTO.class);
 
-                occupant.matured().setValue(false);
-
                 addItem(occupant);
             }
         }
@@ -200,69 +192,35 @@ public class PeopleStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, new RadioButtonGroupDecoratorBuilder(inject(proto().matured())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
-
-                // tweaks:
-                get(proto().matured()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<Boolean> event) {
-                        get(proto().birthDate()).setVisible(!getValue().matured().getValue());
-                        get(proto().birthDate()).setMandatory(!getValue().matured().getValue());
-                        get(proto().email()).setVisible(getValue().matured().getValue() && maturedOccupantsAreApplicants());
-                    }
-                });
 
                 return mainPanel;
             }
 
             @Override
             public void generateMockData() {
-                if (!get(proto().matured()).getValue()) {
-                    get(proto().name().firstName()).setMockValue("Bob");
-                    get(proto().name().lastName()).setMockValue("Stiles");
-                    get(proto().relationship()).setMockValue(PersonRelationship.Son);
-                    get(proto().birthDate()).setMockValue(new LogicalDate(102, 3, 5));
-                    get(proto().email()).setMockValue("BobStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
-                } else {
-                    get(proto().name().firstName()).setMockValue("Ellen");
-                    get(proto().name().lastName()).setMockValue("Stiles");
-                    get(proto().relationship()).setMockValue(PersonRelationship.Daughter);
-                    get(proto().email()).setMockValue("EllenStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
-                }
-            }
-
-            @Override
-            protected void onValueSet(boolean populate) {
-                super.onValueSet(populate);
-
-                get(proto().matured()).setVisible(maturedOccupantsAreApplicants());
-                get(proto().birthDate()).setVisible(!getValue().matured().getValue());
-                get(proto().birthDate()).setMandatory(!getValue().matured().getValue());
-                get(proto().email()).setVisible(getValue().matured().getValue() && maturedOccupantsAreApplicants());
-
-                get(proto().matured()).setTitle(i18n.tr("Is this occupant {0} or over?", ageOfMajority()));
+                get(proto().name().firstName()).setMockValue("Bob");
+                get(proto().name().lastName()).setMockValue("Stiles");
+                get(proto().relationship()).setMockValue(PersonRelationship.Son);
+                get(proto().birthDate()).setMockValue(new LogicalDate(102, 3, 5));
             }
 
             @Override
             public void addValidations() {
                 super.addValidations();
 
-                get(proto().matured()).addValueChangeHandler(new RevalidationTrigger<Boolean>(get(proto().birthDate())));
                 get(proto().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                     @Override
                     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                         if (value != null && getValue() != null) {
                             if (maturedOccupantsAreApplicants()) {
-                                if (!getValue().matured().getValue()) {
-                                    if (TimeUtils.isOlderThan(value, ageOfMajority())) {
-                                        return new ValidationError(component, i18n.tr(
-                                                "This person is matured. According to regulations age of majority is {0}.", ageOfMajority()));
-                                    }
+                                if (TimeUtils.isOlderThan(value, ageOfMajority())) {
+                                    return new ValidationError(component, i18n.tr(
+                                            "This person is matured and should be Co-Applicant!. According to regulations age of majority is {0}.",
+                                            ageOfMajority()));
                                 }
                             }
                         }
