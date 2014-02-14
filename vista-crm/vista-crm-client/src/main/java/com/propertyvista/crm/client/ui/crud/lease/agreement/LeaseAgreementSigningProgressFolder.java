@@ -32,7 +32,8 @@ public class LeaseAgreementSigningProgressFolder extends VistaTableFolder<LeaseA
         return Arrays.asList(//@formatter:off
                 new EntityFolderColumnDescriptor(proto().name(), "200px"),
                 new EntityFolderColumnDescriptor(proto().role(), "150px"),
-                new EntityFolderColumnDescriptor(proto().hasSigned(), "150px")
+                new EntityFolderColumnDescriptor(proto().hasSigned(), "150px"),
+                new EntityFolderColumnDescriptor(proto().singatureType(), "150px")
         );//@formatter:on
     }
 }

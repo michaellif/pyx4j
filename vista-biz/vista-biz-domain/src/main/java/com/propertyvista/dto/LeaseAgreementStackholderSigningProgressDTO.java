@@ -26,4 +26,6 @@ public interface LeaseAgreementStackholderSigningProgressDTO extends IEntity {
 
     IPrimitive<Boolean> hasSigned();
 
+    IPrimitive<String> singatureType();
+
 }

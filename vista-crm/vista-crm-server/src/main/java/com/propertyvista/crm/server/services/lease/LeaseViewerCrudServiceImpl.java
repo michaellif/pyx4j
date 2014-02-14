@@ -420,10 +420,13 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
             while (hasSigned && legalTerms.hasNext()) {
                 LeaseAgreementLegalTerm legalTerm = legalTerms.next();
                 if (legalTerm.signatureFormat().getValue() != SignatureFormat.None) {
-                    if (participant.agreementSignatures().getInstanceValueClass().equals(AgreementInkSignatures.class)) {
-
+                    if (!participant.agreementSignatures().isNull()
+                            && participant.agreementSignatures().getInstanceValueClass().equals(AgreementInkSignatures.class)) {
+                        stakeholdersProgress.singatureType().setValue(i18n.tr("Ink"));
                     } else if (participant.agreementSignatures().getInstanceValueClass().equals(AgreementDigitalSignatures.class)) {
+                        stakeholdersProgress.singatureType().setValue(i18n.tr("Digital"));
                         AgreementDigitalSignatures signatures = participant.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
+
                         boolean foundSignedTerm = false;
                         for (SignedAgreementLegalTerm signedTerm : signatures.legalTermsSignatures()) {
                             if (signedTerm.term().getPrimaryKey().equals(legalTerm.getPrimaryKey())) {
