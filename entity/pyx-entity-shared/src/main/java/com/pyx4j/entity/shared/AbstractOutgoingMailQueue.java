@@ -50,6 +50,8 @@ public interface AbstractOutgoingMailQueue extends IEntity {
 
     IPrimitive<MailQueueStatus> status();
 
+    IPrimitive<String> namespace();
+
     IPrimitive<String> configurationId();
 
     IPrimitive<String> statusCallbackClass();

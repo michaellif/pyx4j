@@ -98,6 +98,7 @@ public class MailQueue implements Runnable {
         if (persistable == null) {
             throw new Error("MailQueue Persistence not configured for '" + mailConfig.configurationId() + "'");
         }
+        persistable.namespace().setValue(NamespaceManager.getNamespace());
         persistable.status().setValue(MailQueueStatus.Queued);
         persistable.attempts().setValue(0);
         persistable.configurationId().setValue(mailConfig.configurationId());
@@ -166,7 +167,9 @@ public class MailQueue implements Runnable {
                             break;
                         }
                         persistableUpdate.attempts().setValue(persistable.attempts().getValue(0) + 1);
-
+                        if (persistable.attempts().getValue() > 40) {
+                            persistableUpdate.status().setValue(MailQueueStatus.GiveUp);
+                        }
                         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
                             @Override
@@ -181,12 +184,47 @@ public class MailQueue implements Runnable {
                                 return null;
                             }
                         });
+                        if (!persistable.statusCallbackClass().isNull()) {
+                            invokeCallback(persistable.statusCallbackClass().getValue(), persistable.namespace().getValue(), mailMessage, status);
+                        }
                     }
                 } while (continueDelivery && !shutdown);
             } catch (Throwable t) {
                 log.error("MailQueue delivery error", t);
             }
         } while (!shutdown);
+    }
+
+    private void invokeCallback(String statusCallbackClass, String targetNamespace, final MailMessage mailMessage, final MailDeliveryStatus status) {
+        Class<?> callbackClass;
+        try {
+            callbackClass = Thread.currentThread().getContextClassLoader().loadClass(statusCallbackClass);
+        } catch (ClassNotFoundException e) {
+            log.error("Error loading Mail statusCallback Class", e);
+            return;
+        }
+        final MailDeliveryCallback callback;
+        try {
+            callback = (MailDeliveryCallback) callbackClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassCastException e) {
+            log.error("Error loading Mail statusCallback Class", e);
+            return;
+        }
+
+        if (targetNamespace == null) {
+            targetNamespace = NamespaceManager.getNamespace();
+        }
+        NamespaceManager.runInTargetNamespace(targetNamespace, new Callable<Void>() {
+            @Override
+            public Void call() {
+                try {
+                    callback.onDeliveryCompleted(mailMessage, status);
+                } catch (Throwable e) {
+                    log.error("Mail statusCallback invocation error", e);
+                }
+                return null;
+            }
+        });
     }
 
     private AbstractOutgoingMailQueue peek() {
