@@ -64,5 +64,4 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
             return main;
         }
     }
-
 }

@@ -36,14 +36,14 @@ public class ProofOfAssetUploaderFolder extends PortalBoxFolder<ProofOfAssetDocu
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof ProofOfAssetDocumentFolder) {
-            return new ProofOfEmploymentDocumentEditor();
+            return new ProofOfAssetDocumentEditor();
         }
         return super.create(member);
     }
 
-    private class ProofOfEmploymentDocumentEditor extends CEntityForm<ProofOfAssetDocumentFolder> {
+    private class ProofOfAssetDocumentEditor extends CEntityForm<ProofOfAssetDocumentFolder> {
 
-        public ProofOfEmploymentDocumentEditor() {
+        public ProofOfAssetDocumentEditor() {
             super(ProofOfAssetDocumentFolder.class);
         }
 
