@@ -165,14 +165,14 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
     }
 
     @Override
-    public void approveLease(Lease leaseId) {
+    public void occupy(Lease leaseId) {
         Lease lease = leaseId.createIdentityStub();
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.IdOnly);
         setAvailability(EntityFactory.createIdentityStub(AptUnit.class, lease.unit().getPrimaryKey()), null);
     }
 
     @Override
-    public boolean isApproveLeaseAvaialble(Key unitId) {
+    public boolean isOccupyAvaialble(Key unitId) {
         return true;
     }
 

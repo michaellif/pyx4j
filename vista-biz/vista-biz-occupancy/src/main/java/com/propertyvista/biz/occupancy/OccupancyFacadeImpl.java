@@ -414,7 +414,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void approveLease(Lease leaseId) {
+    public void occupy(Lease leaseId) {
         Lease lease = leaseId.duplicate();
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
@@ -724,7 +724,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public boolean isApproveLeaseAvaialble(Key unitPk) {
+    public boolean isOccupyAvaialble(Key unitPk) {
         LogicalDate start = new LogicalDate(SystemDateManager.getDate());
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             return true; // newly created unit - can be scoped to any state!..

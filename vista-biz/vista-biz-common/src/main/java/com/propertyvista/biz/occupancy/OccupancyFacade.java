@@ -139,13 +139,15 @@ public interface OccupancyFacade {
     /**
      * Cancel lease draft.
      */
+    @Deprecated
     void unreserve(Key unitId);
 
+    @Deprecated
     boolean isUnreserveAvailable(Key unitId);
 
-    void approveLease(Lease leaseId);
+    void occupy(Lease leaseId);
 
-    boolean isApproveLeaseAvaialble(Key unitId);
+    boolean isOccupyAvaialble(Key unitId);
 
     /**
      * Defines the ending date of a lease, and sets the rest of unit occupancy as {@link Status#pending}

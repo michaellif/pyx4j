@@ -301,10 +301,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
         now("2010-01-01");
-        Assert.assertTrue(getUOM().isApproveLeaseAvaialble(unitId));
+        Assert.assertTrue(getUOM().isOccupyAvaialble(unitId));
 
         now("2010-01-11");
-        Assert.assertTrue(getUOM().isApproveLeaseAvaialble(unitId));
+        Assert.assertTrue(getUOM().isOccupyAvaialble(unitId));
     }
 
     @Test
@@ -313,10 +313,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-01");
-        Assert.assertFalse(getUOM().isApproveLeaseAvaialble(unitId));
+        Assert.assertFalse(getUOM().isOccupyAvaialble(unitId));
 
         now("2010-01-11");
-        Assert.assertFalse(getUOM().isApproveLeaseAvaialble(unitId));
+        Assert.assertFalse(getUOM().isOccupyAvaialble(unitId));
     }
 
     /** check that constraints returned permit move out operation */

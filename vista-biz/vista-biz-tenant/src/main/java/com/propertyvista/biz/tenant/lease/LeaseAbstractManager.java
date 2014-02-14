@@ -406,11 +406,11 @@ public abstract class LeaseAbstractManager {
                 }
             }
 
-            ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.<Lease> createIdentityStub());
+            ServerSideFactory.create(OccupancyFacade.class).occupy(lease.<Lease> createIdentityStub());
             break;
 
         case NewLease:
-            ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.<Lease> createIdentityStub());
+            ServerSideFactory.create(OccupancyFacade.class).occupy(lease.<Lease> createIdentityStub());
             break;
 
         case ExistingLease:
@@ -940,12 +940,14 @@ public abstract class LeaseAbstractManager {
 
     private void reserveUnit(Lease lease) {
         switch (lease.status().getValue()) {
+        // TODO: remove this cases:
         case NewLease:
         case Application:
             if (ServerSideFactory.create(OccupancyFacade.class).isReserveAvailable(lease.unit().getPrimaryKey()) != null) {
                 ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
             }
             break;
+        // =================================
         case ExistingLease:
             ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
             break;
