@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class StartEndDateWithinPeriodValidation {
@@ -39,24 +39,24 @@ public class StartEndDateWithinPeriodValidation {
 
         start.addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value == null || !end.isVisible() || end.getValue() == null) {
                     return null;
                 }
                 LogicalDate endDate = add(end.getValue(), -months, -days);
-                return (!value.before(endDate) ? null : new ValidationError(component, msg));
+                return (!value.before(endDate) ? null : new FieldValidationError(component, msg));
             }
         });
         start.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(end));
 
         end.addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value == null || !start.isVisible() || start.getValue() == null) {
                     return null;
                 }
                 LogicalDate startDate = add(start.getValue(), months, days);
-                return (!value.after(startDate) ? null : new ValidationError(component, msg));
+                return (!value.after(startDate) ? null : new FieldValidationError(component, msg));
             }
         });
         end.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(start));

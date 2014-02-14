@@ -46,7 +46,7 @@ public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEnti
             @Override
             protected void onSave() {
                 if (!isValid()) {
-                    setUnconditionalValidationErrorRendering(true);
+                    setVisited(true);
                     MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
                 } else {
                     getView().getPresenter().save();

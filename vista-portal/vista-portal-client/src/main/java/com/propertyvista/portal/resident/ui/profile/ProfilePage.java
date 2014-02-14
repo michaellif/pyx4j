@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
@@ -90,18 +90,18 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
 
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
             @Override
-            public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
+            public FieldValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }
 
                 if (!VistaFeatures.instance().yardiIntegration()) {
                     if (value.isEmpty()) {
-                        return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                        return new FieldValidationError(component, i18n.tr("Empty Emergency Contacts list"));
                     }
                 }
 
-                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationError(component, i18n
+                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new FieldValidationError(component, i18n
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });

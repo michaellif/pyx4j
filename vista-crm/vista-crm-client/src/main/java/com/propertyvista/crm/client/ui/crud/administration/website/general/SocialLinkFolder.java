@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -152,11 +152,11 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().siteUrl()), 35, true).build());
             get(proto().siteUrl()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
-                public ValidationError isValid(CComponent<String> component, String url) {
+                public FieldValidationError isValid(CComponent<String> component, String url) {
                     if (url == null || url.length() == 0) {
-                        return new ValidationError(component, i18n.tr("URL should not be empty"));
+                        return new FieldValidationError(component, i18n.tr("URL should not be empty"));
                     } else if (!ValidationUtils.isCorrectUrl(url)) {
-                        return new ValidationError(component, i18n.tr("Please use proper URL format"));
+                        return new FieldValidationError(component, i18n.tr("Please use proper URL format"));
                     }
                     return null;
                 }

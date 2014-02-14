@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -52,12 +52,12 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         get(proto().website()).addValueValidator(new EditableValueValidator<String>() {
 
             @Override
-            public ValidationError isValid(CComponent<String> component, String url) {
+            public FieldValidationError isValid(CComponent<String> component, String url) {
                 if (url != null) {
                     if (ValidationUtils.isSimpleUrl(url)) {
                         return null;
                     } else {
-                        return new ValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                        return new FieldValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                     }
                 }
                 return null;

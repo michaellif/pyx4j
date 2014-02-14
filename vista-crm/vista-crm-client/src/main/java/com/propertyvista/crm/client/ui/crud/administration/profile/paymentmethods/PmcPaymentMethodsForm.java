@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Label;
@@ -49,7 +49,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
         addValueValidator(new EditableValueValidator<PmcPaymentMethodsDTO>() {
             @Override
-            public ValidationError isValid(CComponent<PmcPaymentMethodsDTO> component, PmcPaymentMethodsDTO paymentMethodsHolder) {
+            public FieldValidationError isValid(CComponent<PmcPaymentMethodsDTO> component, PmcPaymentMethodsDTO paymentMethodsHolder) {
                 if (paymentMethodsHolder != null) {
                     boolean hasEquifaxMethod = false;
                     for (PmcPaymentMethod pmcPaymentMethod : paymentMethodsHolder.paymentMethods()) {
@@ -59,7 +59,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
                         }
                     }
                     if (!hasEquifaxMethod) {
-                        return new ValidationError(component, i18n.tr("Please select a payment method for Equifax"));
+                        return new FieldValidationError(component, i18n.tr("Please select a payment method for Equifax"));
                     } else {
                         return null;
                     }
@@ -70,9 +70,9 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
         });
         addValueValidator(new EditableValueValidator<PmcPaymentMethodsDTO>() {
             @Override
-            public ValidationError isValid(CComponent<PmcPaymentMethodsDTO> component, PmcPaymentMethodsDTO value) {
+            public FieldValidationError isValid(CComponent<PmcPaymentMethodsDTO> component, PmcPaymentMethodsDTO value) {
                 if (value != null && value.paymentMethods().isEmpty()) {
-                    return new ValidationError(component, i18n.tr("At least one payment method is required"));
+                    return new FieldValidationError(component, i18n.tr("At least one payment method is required"));
                 } else {
                     return null;
                 }

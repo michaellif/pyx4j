@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -76,9 +76,9 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
         get(proto().accountNo()).addValueValidator(new EcheckAccountNumberValidator());
         get(proto().branchTransitNumber()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String> component, String value) {
+            public FieldValidationError isValid(CComponent<String> component, String value) {
                 if (CommonsStringUtils.isStringSet(value)) {
-                    return ValidationUtils.isBranchTransitNumberValid(value) ? null : new ValidationError(component, i18n
+                    return ValidationUtils.isBranchTransitNumberValid(value) ? null : new FieldValidationError(component, i18n
                             .tr("Number should consist of 5 digits"));
                 } else {
                     return null;
@@ -87,9 +87,9 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
         });
         get(proto().bankId()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String> component, String value) {
+            public FieldValidationError isValid(CComponent<String> component, String value) {
                 if (CommonsStringUtils.isStringSet(value)) {
-                    return ValidationUtils.isBankIdNumberValid(value) ? null : new ValidationError(component, i18n.tr("Number should consist of 3 digits"));
+                    return ValidationUtils.isBankIdNumberValid(value) ? null : new FieldValidationError(component, i18n.tr("Number should consist of 3 digits"));
                 } else {
                     return null;
                 }

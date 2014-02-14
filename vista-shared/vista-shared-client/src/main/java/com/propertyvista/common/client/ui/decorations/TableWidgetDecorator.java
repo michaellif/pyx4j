@@ -225,8 +225,8 @@ public class TableWidgetDecorator extends FlowPanel implements IDecorator<CCompo
                     updateTooltip();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
                     updateNote();
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
-                        PropertyName.enabled, PropertyName.editable)) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled,
+                        PropertyName.editable)) {
                     renderValidationMessage();
                     if (builder.mandatoryMarker) {
                         renderMandatoryStar();
@@ -335,7 +335,7 @@ public class TableWidgetDecorator extends FlowPanel implements IDecorator<CCompo
     }
 
     protected void renderValidationMessage() {
-        if ((this.component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
+        if (!component.isValid()) {
             validationLabel.setText(component.getValidationResults().getValidationMessage(false, false, false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);

@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
@@ -77,11 +77,11 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
         addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFolder>>() {
             @Override
-            public ValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
+            public FieldValidationError isValid(CComponent<IList<IdentificationDocumentFolder>> component, IList<IdentificationDocumentFolder> value) {
                 if (value != null && documentationPolicy != null) {
                     int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                     if (numOfRemainingDocs > 0) {
-                        return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                        return new FieldValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
                     }
                 }
                 return null;
@@ -135,9 +135,9 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             IdentificationDocumentFolderUploaderFolder docPagesFolder = new IdentificationDocumentFolderUploaderFolder();
             docPagesFolder.addValueValidator(new EditableValueValidator<IList<IdentificationDocumentFile>>() {
                 @Override
-                public ValidationError isValid(CComponent<IList<IdentificationDocumentFile>> component, IList<IdentificationDocumentFile> value) {
+                public FieldValidationError isValid(CComponent<IList<IdentificationDocumentFile>> component, IList<IdentificationDocumentFile> value) {
                     if (value != null && value.size() < 1) {
-                        return new ValidationError(component, i18n.tr("at least one document file is required"));
+                        return new FieldValidationError(component, i18n.tr("at least one document file is required"));
                     } else {
                         return null;
                     }
@@ -183,12 +183,12 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
             get(proto().idNumber()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
-                public ValidationError isValid(CComponent<String> component, String value) {
+                public FieldValidationError isValid(CComponent<String> component, String value) {
                     if (get(proto().idType()).getValue() != null) {
                         switch (get(proto().idType()).getValue().type().getValue()) {
                         case canadianSIN:
                             if (!ValidationUtils.isSinValid(value.trim().replaceAll(" ", ""))) {
-                                return new ValidationError(component, i18n.tr("Invalid SIN"));
+                                return new FieldValidationError(component, i18n.tr("Invalid SIN"));
                             }
                             break;
                         case citizenship:

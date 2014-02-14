@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -50,9 +50,9 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
                 contentPanel.add(new FormDecoratorBuilder(inject(proto().passwordConfirm())).build());
                 get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
                     @Override
-                    public ValidationError isValid(CComponent<String> component, String value) {
+                    public FieldValidationError isValid(CComponent<String> component, String value) {
                         if (value != null && !value.equals(get(proto().password()).getValue())) {
-                            return new ValidationError(component, "Password and Password confirmation don't match");
+                            return new FieldValidationError(component, "Password and Password confirmation don't match");
                         }
                         return null;
                     }
@@ -79,8 +79,7 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
     }
 
     public char[] getPassword() {
-        form.revalidate();
-        form.setUnconditionalValidationErrorRendering(true);
+        form.setVisited(true);
         if (form.isValid()) {
             return form.getValue().password().getValue().toCharArray();
         } else {

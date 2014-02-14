@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -92,18 +92,18 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), 20, true).build());
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
+            public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (TenantInsuranceCertificateForm.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
-                    return new ValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
+                    return new FieldValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;
             }
         });
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
+            public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (value != null && value.compareTo(BigDecimal.ZERO) <= 0) {
-                    return new ValidationError(component, i18n.tr("Please enter a positive value"));
+                    return new FieldValidationError(component, i18n.tr("Please enter a positive value"));
                 }
                 return null;
             }
@@ -112,9 +112,9 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
 
         get(proto().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && value.compareTo(new LogicalDate()) > 0) {
-                    return new ValidationError(component, i18n.tr("Please provide a date less than or equal of today"));
+                    return new FieldValidationError(component, i18n.tr("Please provide a date less than or equal of today"));
                 }
                 return null;
             }
@@ -122,9 +122,9 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate()), 10, true).build());
         get(proto().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && value.compareTo(new LogicalDate()) < 0) {
-                    return new ValidationError(component, i18n.tr("Please provide a date greater than or equal of today"));
+                    return new FieldValidationError(component, i18n.tr("Please provide a date greater than or equal of today"));
                 }
                 return null;
             }

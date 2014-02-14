@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.validators;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -42,8 +42,8 @@ public class FutureDateValidator implements EditableValueValidator<LogicalDate> 
     }
 
     @Override
-    public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        return (value == null) || value.after(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component,
+    public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+        return (value == null) || value.after(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null : new FieldValidationError(component,
                 message);
     }
 }

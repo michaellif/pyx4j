@@ -86,7 +86,7 @@ public abstract class AbstractLoginViewImpl extends TwoColumnFlexFormPanel imple
 
     private void submit() {
         if (!form.isValid()) {
-            form.setUnconditionalValidationErrorRendering(true);
+            form.setVisited(true);
             showValidationDialog();
         } else {
             presenter.login(form.getValue());

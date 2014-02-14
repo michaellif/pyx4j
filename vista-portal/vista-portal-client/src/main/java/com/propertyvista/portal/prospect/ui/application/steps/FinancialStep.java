@@ -16,7 +16,7 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -66,9 +66,9 @@ public class FinancialStep extends ApplicationWizardStep {
 
         getWizard().addValueValidator(new EditableValueValidator<OnlineApplicationDTO>() {
             @Override
-            public ValidationError isValid(CComponent<OnlineApplicationDTO> component, OnlineApplicationDTO value) {
+            public FieldValidationError isValid(CComponent<OnlineApplicationDTO> component, OnlineApplicationDTO value) {
                 if (value != null) {
-                    return (value.applicant().assets().size() > 0) || (value.applicant().incomes().size() > 0) ? null : new ValidationError(component, i18n
+                    return (value.applicant().assets().size() > 0) || (value.applicant().incomes().size() > 0) ? null : new FieldValidationError(component, i18n
                             .tr("At least one source of income or one asset is required"));
                 }
                 return null;

@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
@@ -76,7 +76,7 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
         this.addValueValidator(new EditableValueValidator<IList<CustomerScreeningIncome>>() {
             @Override
-            public ValidationError isValid(CComponent<IList<CustomerScreeningIncome>> component, IList<CustomerScreeningIncome> value) {
+            public FieldValidationError isValid(CComponent<IList<CustomerScreeningIncome>> component, IList<CustomerScreeningIncome> value) {
                 if (value != null && value.size() == 1) {
                     CustomerScreeningIncome income = value.get(0);
                     if (!income.details().isEmpty()) {
@@ -88,7 +88,7 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
                                 return null;
                             }
                             return (employer.ends().getValue().getTime() - employer.starts().getValue().getTime()) > 365 * 24 * 60 * 60 * 1000l ? null
-                                    : new ValidationError(component, i18n.tr("You need to enter previous employment information"));
+                                    : new FieldValidationError(component, i18n.tr("You need to enter previous employment information"));
                             // valid, if more than 1 year, otherwise - previous employment needed! 
                         }
                     }

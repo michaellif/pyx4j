@@ -42,7 +42,7 @@ import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -458,10 +458,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     public void addValidations() {
         get(proto().amount()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
+            public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (value != null) {
                     return (value.compareTo(BigDecimal.ZERO) > 0 ? null
-                            : new ValidationError(component, i18n.tr("Payment amount should be greater then zero!")));
+                            : new FieldValidationError(component, i18n.tr("Payment amount should be greater then zero!")));
                 }
                 return null;
             }

@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -55,10 +55,10 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
 
         addValueValidator(new EditableValueValidator<IList<ProofOfEmploymentDocumentFolder>>() {
             @Override
-            public ValidationError isValid(CComponent<IList<ProofOfEmploymentDocumentFolder>> component, IList<ProofOfEmploymentDocumentFolder> value) {
+            public FieldValidationError isValid(CComponent<IList<ProofOfEmploymentDocumentFolder>> component, IList<ProofOfEmploymentDocumentFolder> value) {
                 if (value != null && documentationPolicy != null) {
                     if (documentationPolicy.mandatoryProofOfIncome().isBooleanTrue() && getValue().isEmpty()) {
-                        return new ValidationError(component, i18n.tr("Proof of Employment should be supplied!"));
+                        return new FieldValidationError(component, i18n.tr("Proof of Employment should be supplied!"));
                     }
                 }
                 return null;

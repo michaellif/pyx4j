@@ -206,7 +206,6 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     @Override
     public void setSettings(Settings settings) {
         settingsForm.populate(settings);
-        settingsForm.setUnconditionalValidationErrorRendering(false);
         settingsForm.setVisited(false);
     }
 
@@ -229,7 +228,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     private void acceptMarked() {
         visibleRange = new Range(0, pageIncrement);
 
-        itemsHolderForm.setUnconditionalValidationErrorRendering(true);
+        itemsHolderForm.setVisited(true);
         boolean isEditable = itemsHolderForm.isEditable(); // validations can fail only when form is editable so we force it to be editable
         itemsHolderForm.setEditable(true);
         boolean isValid = itemsHolderForm.isValid();
@@ -244,7 +243,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     }
 
     private void search() {
-        settingsForm.setUnconditionalValidationErrorRendering(true);
+        settingsForm.setVisited(true);
         if (settingsForm.isValid()) {
             presenter.search();
         }

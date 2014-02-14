@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.widgets.client.Anchor;
@@ -104,8 +104,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     }
 
     private void onLogin() {
-        loginForm.revalidate();
-        loginForm.setUnconditionalValidationErrorRendering(true);
+        loginForm.setVisited(true);
         if (loginForm.isValid()) {
             presenter.login(loginForm.getValue());
         }
@@ -184,9 +183,9 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             component.setMandatory(false);
             component.addValueValidator(new EditableValueValidator<E>() {
                 @Override
-                public ValidationError isValid(CComponent<E> component, E value) {
+                public FieldValidationError isValid(CComponent<E> component, E value) {
                     if (value == null || ((value instanceof String) && CommonsStringUtils.isEmpty((String) value))) {
-                        return new ValidationError(component, message);
+                        return new FieldValidationError(component, message);
                     } else {
                         return null;
                     }

@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
@@ -176,8 +176,8 @@ public class PeopleStep extends ApplicationWizardStep {
                 int row = -1;
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
                 mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
+                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 150).build());
 
                 return mainPanel;
             }
@@ -196,11 +196,11 @@ public class PeopleStep extends ApplicationWizardStep {
 
                 get(proto().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                     @Override
-                    public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                    public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                         if (value != null && getValue() != null) {
                             if (maturedOccupantsAreApplicants()) {
                                 if (TimeUtils.isOlderThan(value, ageOfMajority())) {
-                                    return new ValidationError(component, i18n.tr(
+                                    return new FieldValidationError(component, i18n.tr(
                                             "This person is matured and should be Co-Applicant!. According to regulations age of majority is {0}.",
                                             ageOfMajority()));
                                 }

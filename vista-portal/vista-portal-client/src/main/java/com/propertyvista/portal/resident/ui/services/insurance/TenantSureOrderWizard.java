@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPositio
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -119,9 +119,9 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
                         .contentWidth("250px").componentWidth("250px").build());
         get(proto().personalDisclaimerSignature()).addValueValidator(new EditableValueValidator<CustomerSignature>() {
             @Override
-            public ValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
+            public FieldValidationError isValid(CComponent<CustomerSignature> component, CustomerSignature value) {
                 if (!value.agree().isBooleanTrue()) {
-                    return new ValidationError(component, i18n.tr("You must agree to the personal disclaimer terms to continue"));
+                    return new FieldValidationError(component, i18n.tr("You must agree to the personal disclaimer terms to continue"));
                 }
                 return null;
             }

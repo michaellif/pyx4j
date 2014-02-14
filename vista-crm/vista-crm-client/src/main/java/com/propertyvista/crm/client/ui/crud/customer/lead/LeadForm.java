@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
@@ -77,7 +77,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
 
             @Override
-            public ValidationError isValid(CComponent<List<Guest>> component, List<Guest> value) {
+            public FieldValidationError isValid(CComponent<List<Guest>> component, List<Guest> value) {
                 Boolean hasContact = false;
                 if (value != null) {
                     for (Guest g : value) {
@@ -92,7 +92,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
                         }
                     }
                 }
-                return hasContact ? null : new ValidationError(component, i18n.tr("No contact information (email and/or phone #) has been provided"));
+                return hasContact ? null : new FieldValidationError(component, i18n.tr("No contact information (email and/or phone #) has been provided"));
             }
         });
     }

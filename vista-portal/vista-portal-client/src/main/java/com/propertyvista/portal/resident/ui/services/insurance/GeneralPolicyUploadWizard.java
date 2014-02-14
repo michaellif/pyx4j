@@ -21,7 +21,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
@@ -90,45 +90,45 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         super.addValidations();
         get(proto().certificate().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
+            public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (GeneralPolicyUploadWizard.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
-                    return new ValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
+                    return new FieldValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;
             }
         });
         get(proto().certificate().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
+            public FieldValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (value != null && value.compareTo(BigDecimal.ZERO) <= 0) {
-                    return new ValidationError(component, i18n.tr("Please enter a positive value"));
+                    return new FieldValidationError(component, i18n.tr("Please enter a positive value"));
                 }
                 return null;
             }
         });
         get(proto().certificate().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && value.compareTo(new LogicalDate()) > 0) {
-                    return new ValidationError(component, i18n.tr("Please provide a date less than or equal of today"));
+                    return new FieldValidationError(component, i18n.tr("Please provide a date less than or equal of today"));
                 }
                 return null;
             }
         });
         get(proto().certificate().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && value.compareTo(new LogicalDate()) < 0) {
-                    return new ValidationError(component, i18n.tr("Please provide a date greater than or equal of today"));
+                    return new FieldValidationError(component, i18n.tr("Please provide a date greater than or equal of today"));
                 }
                 return null;
             }
         });
         get(proto().certificate().certificateDocs()).addValueValidator(new EditableValueValidator<List<InsuranceCertificateScan>>() {
             @Override
-            public ValidationError isValid(CComponent<List<InsuranceCertificateScan>> component, List<InsuranceCertificateScan> value) {
+            public FieldValidationError isValid(CComponent<List<InsuranceCertificateScan>> component, List<InsuranceCertificateScan> value) {
                 if (value != null && value.isEmpty()) {
-                    return new ValidationError(component, i18n.tr("Please upload a scan of your insurance certificate"));
+                    return new FieldValidationError(component, i18n.tr("Please upload a scan of your insurance certificate"));
                 }
                 return null;
             }

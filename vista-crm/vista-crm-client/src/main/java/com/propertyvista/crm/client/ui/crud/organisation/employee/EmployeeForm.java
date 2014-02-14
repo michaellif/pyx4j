@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -82,11 +82,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         super.addValidations();
         get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String> component, String value) {
+            public FieldValidationError isValid(CComponent<String> component, String value) {
                 if (value.equals(get(proto().password()).getValue())) {
                     return null;
                 } else {
-                    return new ValidationError(component, i18n.tr("The passwords don't match. Please retype the passwords."));
+                    return new FieldValidationError(component, i18n.tr("The passwords don't match. Please retype the passwords."));
                 }
             }
         });

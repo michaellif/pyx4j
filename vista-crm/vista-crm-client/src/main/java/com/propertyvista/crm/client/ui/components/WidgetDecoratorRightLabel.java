@@ -111,8 +111,7 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
                     // TODO                     
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
                     // TODO
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
-                        PropertyName.enabled, PropertyName.editable)) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
                     renderValidationMessage();
                 }
             }
@@ -137,7 +136,7 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
     }
 
     private void renderValidationMessage() {
-        if ((this.component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
+        if (!component.isValid()) {
             validationLabel.setText(component.getValidationResults().getValidationMessage(false, true, false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
         } else {

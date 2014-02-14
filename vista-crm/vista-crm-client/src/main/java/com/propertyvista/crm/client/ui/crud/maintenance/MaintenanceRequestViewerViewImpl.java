@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -192,7 +192,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             if (content.isValid()) {
                 return true;
             } else {
-                content.setUnconditionalValidationErrorRendering(true);
+                content.setVisited(true);
                 MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true, true));
                 return false;
             }
@@ -227,8 +227,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     datePicker.setMandatory(true);
                     datePicker.addValueValidator(new EditableValueValidator<LogicalDate>() {
                         @Override
-                        public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                            return (value.before(new LogicalDate(mr.submitted().getValue())) ? new ValidationError(component, i18n
+                        public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                            return (value.before(new LogicalDate(mr.submitted().getValue())) ? new FieldValidationError(component, i18n
                                     .tr("Request cannot be Resolved before it was Submitted")) : null);
                         }
                     });
@@ -250,7 +250,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             if (content.isValid()) {
                 return true;
             } else {
-                content.setUnconditionalValidationErrorRendering(true);
+                content.setVisited(true);
                 MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true, true));
                 return false;
             }

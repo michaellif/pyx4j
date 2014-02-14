@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
@@ -73,9 +73,9 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
     public void addValidations() {
         get(proto().newPasswordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String> component, String value) {
+            public FieldValidationError isValid(CComponent<String> component, String value) {
                 if (value == null || !value.equals(get(proto().newPassword()).getValue())) {
-                    return new ValidationError(component, i18n.tr("The passwords don't match."));
+                    return new FieldValidationError(component, i18n.tr("The passwords don't match."));
                 } else {
                     return null;
                 }

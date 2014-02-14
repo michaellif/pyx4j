@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -57,9 +57,9 @@ public class MakePendingDialog extends OkCancelDialog {
                     if (maxMakeVacantStartDay == null) {
                         validator = new EditableValueValidator<LogicalDate>() {
                             @Override
-                            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                                 if (value == null || value.before(minMakeVacantStartDay)) {
-                                    return new ValidationError(component, i18n.tr("please enter a date greater or equal to {0,date,short}",
+                                    return new FieldValidationError(component, i18n.tr("please enter a date greater or equal to {0,date,short}",
                                             minMakeVacantStartDay));
                                 } else {
                                     return null;
@@ -69,9 +69,9 @@ public class MakePendingDialog extends OkCancelDialog {
                     } else {
                         validator = new EditableValueValidator<LogicalDate>() {
                             @Override
-                            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                                 if (value == null || (value.before(minMakeVacantStartDay) | value.after(maxMakeVacantStartDay))) {
-                                    return new ValidationError(component, i18n.tr("please enter a date between {0,date,short} and {1,date,short}",
+                                    return new FieldValidationError(component, i18n.tr("please enter a date between {0,date,short} and {1,date,short}",
                                             minMakeVacantStartDay, maxMakeVacantStartDay));
                                 } else {
                                     return null;

@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
@@ -133,9 +133,9 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
             get(proto().signedParticipants()).addValueValidator(new EditableValueValidator<List<LeaseTermParticipant<?>>>() {
 
                 @Override
-                public ValidationError isValid(CComponent<List<LeaseTermParticipant<?>>> component, List<LeaseTermParticipant<?>> value) {
+                public FieldValidationError isValid(CComponent<List<LeaseTermParticipant<?>>> component, List<LeaseTermParticipant<?>> value) {
                     if (value != null && value.isEmpty()) {
-                        return new ValidationError(component, i18n.tr("Please select signed lease participants"));
+                        return new FieldValidationError(component, i18n.tr("Please select signed lease participants"));
                     }
                     return null;
                 }
@@ -180,7 +180,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
 
         @Override
         public boolean onClickOk() {
-            form.setUnconditionalValidationErrorRendering(true);
+            form.setVisited(true);
             form.revalidate();
             if (form.isValid()) {
                 accept(form.getValue());

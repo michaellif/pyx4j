@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -69,8 +69,8 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
         public void addValidations() {
             get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
                 @Override
-                public ValidationError isValid(CComponent<Double> component, Double value) {
-                    return (value == null) || ((value >= 0) && (value <= 100)) ? null : new ValidationError(component, i18n
+                public FieldValidationError isValid(CComponent<Double> component, Double value) {
+                    return (value == null) || ((value >= 0) && (value <= 100)) ? null : new FieldValidationError(component, i18n
                             .tr("Value Should Be In Range Of 0-100%"));
                 }
 

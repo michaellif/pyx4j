@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.ref.Country;
@@ -45,17 +45,17 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     }
 
     @Override
-    public ValidationError isValid(CComponent<String> component, String value) {
+    public FieldValidationError isValid(CComponent<String> component, String value) {
         if (value == null) {
             return null;
         }
         String c = countryName();
         if ("Canada".equals(c)) {
-            return ValidationUtils.isCanadianPostalCodeValid(value) ? null : new ValidationError(component, i18n.tr("Invalid Canadian Postal Code"));
+            return ValidationUtils.isCanadianPostalCodeValid(value) ? null : new FieldValidationError(component, i18n.tr("Invalid Canadian Postal Code"));
         } else if ("United States".equals(c)) {
-            return ValidationUtils.isUSZipCodeValid(value) ? null : new ValidationError(component, i18n.tr("Invalid US Zip Code"));
+            return ValidationUtils.isUSZipCodeValid(value) ? null : new FieldValidationError(component, i18n.tr("Invalid US Zip Code"));
         } else if ("United Kingdom".equals(c)) {
-            return ValidationUtils.isUKPostalCodeValid(value) ? null : new ValidationError(component, i18n.tr("Invalid UK Postal Code"));
+            return ValidationUtils.isUKPostalCodeValid(value) ? null : new FieldValidationError(component, i18n.tr("Invalid UK Postal Code"));
         } else {
             return null;
         }

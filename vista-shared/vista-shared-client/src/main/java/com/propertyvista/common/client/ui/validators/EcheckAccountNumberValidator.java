@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.validators;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.AccountNumberIdentity;
@@ -27,11 +27,11 @@ public class EcheckAccountNumberValidator implements EditableValueValidator<Acco
     private static final I18n i18n = I18n.get(EcheckAccountNumberValidator.class);
 
     @Override
-    public ValidationError isValid(CComponent<AccountNumberIdentity> component, AccountNumberIdentity value) {
+    public FieldValidationError isValid(CComponent<AccountNumberIdentity> component, AccountNumberIdentity value) {
         if (value == null) {
             return null;
         } else if (CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
-            return ValidationUtils.isAccountNumberValid(value.newNumber().getValue()) ? null : new ValidationError(component,
+            return ValidationUtils.isAccountNumberValid(value.newNumber().getValue()) ? null : new FieldValidationError(component,
                     i18n.tr("Account Number should consist of up to 12 digits"));
         } else {
             return null;

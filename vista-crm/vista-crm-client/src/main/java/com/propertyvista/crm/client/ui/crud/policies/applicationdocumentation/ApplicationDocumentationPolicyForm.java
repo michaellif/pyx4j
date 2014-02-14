@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -66,11 +66,11 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
 
         get(proto().numberOfRequiredIDs()).addValueValidator(new EditableValueValidator<Integer>() {
             @Override
-            public ValidationError isValid(CComponent<Integer> component, Integer value) {
+            public FieldValidationError isValid(CComponent<Integer> component, Integer value) {
                 if (value == null || value == 0) {
-                    return new ValidationError(component, i18n.tr("At least one ID is required"));
+                    return new FieldValidationError(component, i18n.tr("At least one ID is required"));
                 } else if (getValue() != null && (getValue().allowedIDs().isEmpty() || value > getValue().allowedIDs().size())) {
-                    return new ValidationError(component, i18n.tr("The number of required IDs must not exceed the number of allowed IDs"));
+                    return new FieldValidationError(component, i18n.tr("The number of required IDs must not exceed the number of allowed IDs"));
                 } else {
                     return null;
                 }

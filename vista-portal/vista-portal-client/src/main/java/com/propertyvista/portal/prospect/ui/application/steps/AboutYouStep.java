@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
@@ -88,11 +88,11 @@ public class AboutYouStep extends ApplicationWizardStep {
 
         get(proto().applicant().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && getValue() != null) {
                     if (enforceAgeOfMajority()) {
                         if (!TimeUtils.isOlderThan(value, ageOfMajority())) {
-                            return new ValidationError(component, i18n.tr(
+                            return new FieldValidationError(component, i18n.tr(
                                     "You are too young to be an Applicant or co-Applicant: the minimum age required is {0}.", ageOfMajority()));
                         }
                     }

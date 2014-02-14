@@ -75,7 +75,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
 
             @Override
             public void execute() {
-                form.setUnconditionalValidationErrorRendering(true);
+                form.setVisited(true);
                 if (form.isValid()) {
                     presenter.changePassword(form.getValue());
                 } else {

@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
@@ -67,9 +67,9 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSumma
         paymentStatusSelector.addValueValidator(new EditableValueValidator<Set<PaymentStatus>>() {
 
             @Override
-            public ValidationError isValid(CComponent<Set<PaymentStatus>> component, Set<PaymentStatus> value) {
+            public FieldValidationError isValid(CComponent<Set<PaymentStatus>> component, Set<PaymentStatus> value) {
                 if (value != null && value.isEmpty()) {
-                    return new ValidationError(component, i18n.tr("Please select at least one payment status option"));
+                    return new FieldValidationError(component, i18n.tr("Please select at least one payment status option"));
                 } else {
                     return null;
                 }

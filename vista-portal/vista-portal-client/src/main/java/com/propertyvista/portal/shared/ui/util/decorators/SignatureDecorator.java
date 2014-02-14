@@ -62,8 +62,8 @@ public class SignatureDecorator extends FlowPanel implements IDecorator<CSignatu
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
-                        PropertyName.enabled, PropertyName.editable)) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled,
+                        PropertyName.editable)) {
                     renderValidationMessage();
                 }
             }
@@ -71,7 +71,7 @@ public class SignatureDecorator extends FlowPanel implements IDecorator<CSignatu
     }
 
     protected void renderValidationMessage() {
-        if ((this.component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
+        if (!component.isValid()) {
             validationLabel.setText(component.getValidationResults().getValidationMessage(false, false, false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);

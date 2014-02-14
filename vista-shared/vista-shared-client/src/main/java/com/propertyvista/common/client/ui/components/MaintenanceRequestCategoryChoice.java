@@ -114,10 +114,10 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     }
 
     @Override
-    public void setUnconditionalValidationErrorRendering(boolean flag) {
-        super.setUnconditionalValidationErrorRendering(flag);
+    public void setVisited(boolean flag) {
+        super.setVisited(flag);
         if (parent != null) {
-            parent.setUnconditionalValidationErrorRendering(flag);
+            parent.setVisited(flag);
         }
     }
 

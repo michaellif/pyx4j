@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -181,16 +181,16 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
             get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
                 @Override
-                public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
+                public FieldValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
                     if (value == null || getValue() == null) {
                         return null;
                     }
 
                     if (value.isEmpty()) {
-                        return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                        return new FieldValidationError(component, i18n.tr("Empty Emergency Contacts list"));
                     }
 
-                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationError(component, i18n
+                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new FieldValidationError(component, i18n
                             .tr("Duplicate Emergency Contacts specified"));
                 }
             });
@@ -216,7 +216,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         value1.addValueValidator(new EditableValueValidator<LogicalDate>() {
 
             @Override
-            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value == null || getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
                     return null;
                 }
@@ -224,7 +224,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
                 Date date = value2.getValue();
                 long limit1 = date.getTime() + 2678400000L; //limits date1 to be within a month of date2
                 long limit2 = date.getTime() - 2678400000L;
-                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationError(component, message);
+                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new FieldValidationError(component, message);
             }
         });
     }

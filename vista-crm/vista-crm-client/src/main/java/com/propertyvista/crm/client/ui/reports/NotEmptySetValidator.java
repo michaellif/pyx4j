@@ -17,7 +17,7 @@ import java.util.Set;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class NotEmptySetValidator implements EditableValueValidator {
@@ -25,13 +25,13 @@ public class NotEmptySetValidator implements EditableValueValidator {
     private static final I18n i18n = I18n.get(NotEmptySetValidator.class);
 
     @Override
-    public ValidationError isValid(CComponent component, Object value) {
+    public FieldValidationError isValid(CComponent component, Object value) {
         boolean isEmpty = value == null;
         if (value != null) {
             isEmpty = ((Set<?>) value).isEmpty();
         }
         if (isEmpty) {
-            return new ValidationError(component, i18n.tr("at least one status is required"));
+            return new FieldValidationError(component, i18n.tr("at least one status is required"));
         } else {
             return null;
         }

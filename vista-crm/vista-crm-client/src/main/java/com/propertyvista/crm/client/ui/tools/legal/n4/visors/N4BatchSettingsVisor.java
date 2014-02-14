@@ -36,7 +36,7 @@ public class N4BatchSettingsVisor extends AbstractVisorForm<N4BatchRequestDTO> {
         Button createBatch = new Button(i18n.tr("Create Batch"), new Command() {
             @Override
             public void execute() {
-                getForm().setUnconditionalValidationErrorRendering(true);
+                getForm().setVisited(true);
                 if (getForm().isValid()) {
                     getController().save();
                 }

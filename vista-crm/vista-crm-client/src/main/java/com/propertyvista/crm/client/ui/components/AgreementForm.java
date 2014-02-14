@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -52,9 +52,9 @@ public class AgreementForm extends CEntityForm<AgreementDTO> {
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(20, Unit.PX);
         get(proto().isAgreed()).addValueValidator(new EditableValueValidator<Boolean>() {
             @Override
-            public ValidationError isValid(CComponent<Boolean> component, Boolean value) {
+            public FieldValidationError isValid(CComponent<Boolean> component, Boolean value) {
                 if (value != null && !value) {
-                    return new ValidationError(component, i18n.tr("You must agree with the above terms to continue."));
+                    return new FieldValidationError(component, i18n.tr("You must agree with the above terms to continue."));
                 } else {
                     return null;
                 }

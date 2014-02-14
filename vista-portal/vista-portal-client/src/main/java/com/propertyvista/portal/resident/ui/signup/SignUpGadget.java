@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
@@ -119,8 +119,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                 @Override
                 public void execute() {
                     signupForm.setEntityValidationError(null);
-                    signupForm.revalidate();
-                    signupForm.setUnconditionalValidationErrorRendering(true);
+                    signupForm.setVisited(true);
                     if (signupForm.isValid()) {
                         presenter.register(signupForm.getValue());
                     }
@@ -219,10 +218,10 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
             get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
-                public ValidationError isValid(CComponent<String> component, String confirmPassword) {
+                public FieldValidationError isValid(CComponent<String> component, String confirmPassword) {
                     String password = (get(proto().password())).getValue();
                     if ((password == null & confirmPassword != null) | (password != null & confirmPassword == null) || (!password.equals(confirmPassword))) {
-                        return new ValidationError(component, i18n.tr("Passwords don't match"));
+                        return new FieldValidationError(component, i18n.tr("Passwords don't match"));
                     }
                     return null;
                 }
@@ -240,11 +239,11 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                 if (boundMember != null) {
                     boundMember.addValueValidator(new EditableValueValidator() {
                         @Override
-                        public ValidationError isValid(CComponent component, Object value) {
+                        public FieldValidationError isValid(CComponent component, Object value) {
                             if (SignUpForm.this.entityValidationError != null) {
                                 for (MemberValidationError memberValidationError : SignUpForm.this.entityValidationError.getErrors()) {
                                     if (memberValidationError.getMember().getPath().equals(member.getPath())) {
-                                        return new ValidationError(component, memberValidationError.getMessage());
+                                        return new FieldValidationError(component, memberValidationError.getMessage());
                                     }
                                 }
                             }
@@ -261,15 +260,13 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         public void init(List<SelfRegistrationBuildingDTO> buildings) {
             buildingSelector.setOptions(buildings);
-            setUnconditionalValidationErrorRendering(false);
             setVisited(false);
             populateNew();
         }
 
         public void setEntityValidationError(EntityValidationException caught) {
             this.entityValidationError = caught;
-            setUnconditionalValidationErrorRendering(true);
-            revalidate();
+            setVisited(true);
         }
 
     }

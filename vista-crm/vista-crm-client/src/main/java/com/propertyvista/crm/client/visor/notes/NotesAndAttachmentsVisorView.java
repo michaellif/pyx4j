@@ -234,7 +234,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                         @Override
                         public void execute() {
                             if (!isValid()) {
-                                setUnconditionalValidationErrorRendering(true);
+                                setVisited(true);
                                 MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
                             } else {
                                 if (getValue().created().getValue() == null) {

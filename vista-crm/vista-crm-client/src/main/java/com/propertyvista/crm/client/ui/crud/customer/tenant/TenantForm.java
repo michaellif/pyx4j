@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
@@ -98,12 +98,12 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
             @Override
-            public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
+            public FieldValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }
 
-                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
+                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new FieldValidationError(component, i18n
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });

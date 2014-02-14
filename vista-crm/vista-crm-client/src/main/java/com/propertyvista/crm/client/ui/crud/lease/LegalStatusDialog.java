@@ -36,7 +36,7 @@ public class LegalStatusDialog extends OkCancelDialog {
 
     @Override
     public boolean onClickOk() {
-        form.setUnconditionalValidationErrorRendering(true);
+        form.setVisited(true);
         form.revalidate();
         if (form.isValid()) {
             onSetLegalStatus(form.getValue());
