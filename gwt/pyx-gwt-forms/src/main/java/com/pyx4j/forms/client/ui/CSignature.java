@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CSignature extends CFocusComponent<ISignature, NSignature> {
@@ -49,7 +49,7 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
 
         setSignatureCompletionValidator(new EditableValueValidator<ISignature>() {
             @Override
-            public ValidationError isValid(CComponent<ISignature> component, ISignature value) {
+            public FieldValidationError isValid(CComponent<ISignature> component, ISignature value) {
                 if (value != null) {
                     SignatureFormat signatureFormat = value.signatureFormat().isNull() ? SignatureFormat.None : value.signatureFormat().getValue();
                     switch (signatureFormat) {
@@ -57,21 +57,21 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
                         break;
                     case AgreeBox:
                         if (!value.agree().isBooleanTrue()) {
-                            return new ValidationError(component, i18n.tr("You must agree to the Terms to continue"));
+                            return new FieldValidationError(component, i18n.tr("You must agree to the Terms to continue"));
                         }
                         break;
                     case AgreeBoxAndFullName:
                         if (!value.agree().isBooleanTrue()) {
-                            return new ValidationError(component, i18n.tr("You must agree to the Terms to continue"));
+                            return new FieldValidationError(component, i18n.tr("You must agree to the Terms to continue"));
                         }
                     case FullName:
                         if (value.fullName().getValue() == null || value.fullName().getValue().trim().equals("")) {
-                            return new ValidationError(component, i18n.tr("You must agree to the Terms by typing your First and Last name to continue"));
+                            return new FieldValidationError(component, i18n.tr("You must agree to the Terms by typing your First and Last name to continue"));
                         }
                         break;
                     case Initials:
                         if (value.initials().getValue() == null || value.initials().getValue().trim().equals("")) {
-                            return new ValidationError(component, i18n.tr("You must agree to the Terms by typing your Initials to continue"));
+                            return new FieldValidationError(component, i18n.tr("You must agree to the Terms by typing your Initials to continue"));
                         }
                         break;
                     }

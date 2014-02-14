@@ -26,7 +26,7 @@ import java.util.Set;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -48,7 +48,7 @@ public class PasswordStrengthValueValidator implements EditableValueValidator<St
     }
 
     @Override
-    public ValidationError isValid(CComponent<String> component, String value) {
+    public FieldValidationError isValid(CComponent<String> component, String value) {
         if (rule == null) {
             return null;
         }
@@ -56,7 +56,7 @@ public class PasswordStrengthValueValidator implements EditableValueValidator<St
         if (acceptVerdict == null || acceptVerdict.contains(verdict)) {
             return null;
         } else {
-            return new ValidationError(component, i18n.tr("Password is {0}", verdict));
+            return new FieldValidationError(component, i18n.tr("Password is {0}", verdict));
         }
     }
 

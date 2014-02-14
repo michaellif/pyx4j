@@ -21,11 +21,26 @@
 package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityContainer;
 
-public interface ValidationError {
+public class EntityContainerValidator implements ComponentValidator {
 
-    CComponent<?> getOriginator();
+    private final CEntityContainer<?> container;
 
-    String getLocationHint();
+    public EntityContainerValidator(CEntityContainer<?> container) {
+        this.container = container;
+    }
+
+    @Override
+    public FieldValidationError isValid() {
+        if (container.getComponents() != null) {
+            for (CComponent<?> ccomponent : container.getComponents()) {
+                if (!ccomponent.isValid()) {
+                    return new FieldValidationError(container, "");
+                }
+            }
+        }
+        return null;
+    }
 
 }

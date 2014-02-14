@@ -47,6 +47,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerDecoratorToolbar;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.BrowserType;
@@ -131,21 +132,9 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                 if (event.isEventOfType(PropertyName.repopulated)) {
                     toolbar.update(collapsablePanel.isExpended());
                 }
-                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.visited)) {
                     String message = null;
-                    if (folderItem.isUnconditionalValidationErrorRendering()) {
-                        message = folderItem.getValidationResults().getValidationShortMessage();
-                    } else {
-                        ArrayList<ValidationError> errors = folderItem.getValidationResults().getValidationErrors();
-                        ValidationResults results = new ValidationResults();
-                        for (ValidationError validationError : errors) {
-                            CComponent<?> originator = validationError.getOriginator();
-                            if ((originator.isUnconditionalValidationErrorRendering() || originator.isVisited()) && !originator.isValid()) {
-                                results.appendValidationError(validationError);
-                            }
-                        }
-                        message = results.getValidationShortMessage();
-                    }
+                    message = folderItem.getValidationResults().getValidationShortMessage();
                     toolbar.setWarningMessage(message.isEmpty() ? null : message);
                 }
             }

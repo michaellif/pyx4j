@@ -527,7 +527,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
                 }
             });
         } else {
-            activeSettingsForm.setUnconditionalValidationErrorRendering(true);
+            activeSettingsForm.setVisited(true);
         }
     }
 

@@ -72,7 +72,7 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
 
     private void apply() {
         if (!getForm().isValid()) {
-            getForm().setUnconditionalValidationErrorRendering(true);
+            getForm().setVisited(true);
             showValidationDialog();
         } else {
             getController().apply();
@@ -81,7 +81,7 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
 
     private void save() {
         if (!getForm().isValid()) {
-            getForm().setUnconditionalValidationErrorRendering(true);
+            getForm().setVisited(true);
             showValidationDialog();
         } else {
             getController().save();

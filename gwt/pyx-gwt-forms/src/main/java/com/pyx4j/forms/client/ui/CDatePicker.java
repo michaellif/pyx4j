@@ -30,7 +30,7 @@ import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
@@ -87,12 +87,12 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
         @Override
         @SuppressWarnings("deprecation")
-        public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+        public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
             LogicalDate selectedDate = getValue();
             if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();
                 Date today = new Date(now.getYear(), now.getMonth(), now.getDate());
-                return selectedDate.compareTo(today) >= 0 ? null : new ValidationError(CDatePicker.this, getValidationMessage());
+                return selectedDate.compareTo(today) >= 0 ? null : new FieldValidationError(CDatePicker.this, getValidationMessage());
             } else {
                 return null;
             }

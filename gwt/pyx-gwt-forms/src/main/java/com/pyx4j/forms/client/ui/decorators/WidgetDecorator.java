@@ -34,6 +34,8 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
@@ -97,6 +99,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         this(new Builder(component));
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected WidgetDecorator(final Builder builder) {
         this.builder = builder;
 
@@ -133,9 +136,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
 
-        if (builder.mandatoryMarker) {
-            renderMandatoryStar();
-        }
+        renderMandatoryStar();
 
         FlowPanel labelContent = new FlowPanel();
         labelContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -214,13 +215,18 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
                     updateTooltip();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
                     updateNote();
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
-                        PropertyName.enabled, PropertyName.editable)) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
                     renderValidationMessage();
-                    if (builder.mandatoryMarker) {
-                        renderMandatoryStar();
-                    }
+                    renderMandatoryStar();
                 }
+            }
+        });
+
+        component.addValueChangeHandler(new ValueChangeHandler() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent event) {
+                renderMandatoryStar();
             }
         });
 
@@ -253,8 +259,9 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
     }
 
     protected void renderMandatoryStar() {
-        if (mandatoryImageHolder != null) {
-            if (!((CComponent<?>) component).isMandatoryConditionMet()) {
+        if (builder.mandatoryMarker && mandatoryImageHolder != null) {
+            if (component.isVisible() && component.isEditable() && component.isEnabled() && !component.isViewable() && component.isMandatory()
+                    && component.isValueEmpty()) {
                 if (mandatoryImage == null) {
                     mandatoryImage = new Image();
                     mandatoryImage.setResource(ImageFactory.getImages().mandatory());
@@ -272,7 +279,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
     }
 
     protected void renderValidationMessage() {
-        if ((this.component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
+        if (!component.isValid()) {
             validationLabel.setText(component.getValidationResults().getValidationMessage(false, false, false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);

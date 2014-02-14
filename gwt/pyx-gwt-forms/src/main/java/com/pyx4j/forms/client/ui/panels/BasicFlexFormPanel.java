@@ -199,7 +199,7 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
         for (CComponent<?> component : locateCComponents(this)) {
-            if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
+            if (!component.isValid()) {
                 results.appendValidationErrors(component.getValidationResults());
             }
         }
@@ -209,7 +209,7 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
     @Override
     public void showErrors(boolean show) {
         for (CComponent<?> component : locateCComponents(this)) {
-            component.setUnconditionalValidationErrorRendering(show);
+            component.setVisited(show);
         }
     }
 }

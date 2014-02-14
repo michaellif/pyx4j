@@ -14,25 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 17, 2012
+ * Created on Dec 10, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.forms.client.validators;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.pyx4j.forms.client.ui.CComponent;
 
-public class RevalidationTrigger<E> implements ValueChangeHandler<E> {
+public class EntityContainerValidationError implements ValidationError {
 
-    private final CComponent<?> targetComponent;
+    private final CComponent<?> originator;
 
-    public RevalidationTrigger(CComponent<?> targetComponent) {
-        this.targetComponent = targetComponent;
+    private final String locationHint;
+
+    public EntityContainerValidationError(CComponent<?> originator, String locationHint) {
+        this.originator = originator;
+        this.locationHint = locationHint;
     }
 
     @Override
-    public void onValueChange(ValueChangeEvent<E> event) {
-        targetComponent.revalidate();
+    public CComponent<?> getOriginator() {
+        return originator;
     }
+
+    @Override
+    public String getLocationHint() {
+        return locationHint;
+    }
+
 }

@@ -47,7 +47,7 @@ import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -202,8 +202,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                 unavailableValidator = new EditableValueValidator<E>() {
 
                     @Override
-                    public ValidationError isValid(CComponent<E> component, E value) {
-                        return !isUnavailable ? null : new ValidationError(component, i18n.tr("Reference data unavailable"));
+                    public FieldValidationError isValid(CComponent<E> component, E value) {
+                        return !isUnavailable ? null : new FieldValidationError(component, i18n.tr("Reference data unavailable"));
                     }
                 };
             }

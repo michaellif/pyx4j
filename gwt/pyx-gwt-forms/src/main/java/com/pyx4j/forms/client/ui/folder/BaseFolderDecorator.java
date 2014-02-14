@@ -101,14 +101,10 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
                 if (event.getPropertyName() == PropertyName.debugId) {
                     onSetDebugId(folder.getDebugId());
                 }
-                if (event.isEventOfType(PropertyName.valid, PropertyName.showErrorsUnconditional, PropertyName.repopulated)) {
-                    if (folder.isUnconditionalValidationErrorRendering()) {
-                        ValidationResults validationResults = folder.getValidationResults();
-                        ValidationResults results = validationResults.getValidationResultsByOriginator(folder);
-                        validationMessageHolder.setHTML(results.getValidationMessage(true, true, false));
-                    } else {
-                        validationMessageHolder.setHTML("");
-                    }
+                if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
+                    ValidationResults validationResults = folder.getValidationResults();
+                    ValidationResults results = validationResults.getValidationResultsByOriginator(folder);
+                    validationMessageHolder.setHTML(results.getValidationMessage(true, true, false));
                 }
             }
         });

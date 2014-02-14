@@ -20,40 +20,12 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-
 public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent<DATA>> extends CField<DATA, WIDGET> {
 
     private int tabIndex = 0;
 
     public CFocusComponent() {
         super();
-    }
-
-    @Override
-    protected void setNativeWidget(WIDGET widget) {
-        super.setNativeWidget(widget);
-        //TDOD !!!! Remove after all TEXT components migrated
-        if (!(widget instanceof NFocusField)) {
-            widget.addFocusHandler(new FocusHandler() {
-
-                @Override
-                public void onFocus(FocusEvent event) {
-                    onEditingStart();
-                }
-            });
-
-            widget.addBlurHandler(new BlurHandler() {
-
-                @Override
-                public void onBlur(BlurEvent event) {
-                    onEditingStop();
-                }
-            });
-        }
     }
 
     public int getTabIndex() {

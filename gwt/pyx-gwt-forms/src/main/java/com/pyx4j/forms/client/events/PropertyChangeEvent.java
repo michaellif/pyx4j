@@ -67,9 +67,7 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         repopulated,
 
-        reset,
-
-        showErrorsUnconditional
+        reset
 
     };
 

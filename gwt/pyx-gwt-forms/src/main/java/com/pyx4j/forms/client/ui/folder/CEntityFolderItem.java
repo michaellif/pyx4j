@@ -20,10 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -34,7 +32,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
@@ -55,7 +52,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private boolean removable = true;
 
-    private final List<HandlerRegistration> handlerRegistrations;
+    private HandlerRegistration folderHandlerRegistration;
 
     private CEntityForm<E> editor;
 
@@ -73,7 +70,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         this.movable = movable;
         this.removable = removable;
 
-        handlerRegistrations = new ArrayList<HandlerRegistration>();
         actionsBar = new ItemActionsBar(removable);
 
         addAction(ActionType.Remove, i18n.tr("Delete Item"), null, null);
@@ -130,20 +126,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         return editor;
     }
 
-    @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
-        HandlerRegistration handlerRegistration = super.addValueChangeHandler(handler);
-        handlerRegistrations.add(handlerRegistration);
-        return handlerRegistration;
-    }
-
-    @Override
-    public HandlerRegistration addPropertyChangeHandler(PropertyChangeHandler handler) {
-        HandlerRegistration handlerRegistration = super.addPropertyChangeHandler(handler);
-        handlerRegistrations.add(handlerRegistration);
-        return handlerRegistration;
-    }
-
     public void addAction(ActionType action, String title, ButtonImages images, Command command) {
         actionsBar.addAction(action, title, images, command);
     }
@@ -163,10 +145,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     @Override
     public void onAbandon() {
         super.onAbandon();
-        for (HandlerRegistration handlerRegistration : handlerRegistrations) {
-            handlerRegistration.removeHandler();
-        }
-        handlerRegistrations.clear();
+        folderHandlerRegistration.removeHandler();
     }
 
     @Override
@@ -175,16 +154,13 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
         final CEntityFolder<E> folder = (CEntityFolder<E>) parent;
 
-        handlerRegistrations.clear();
-
-        HandlerRegistration handlerRegistration = folder.addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
+        folderHandlerRegistration = folder.addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<IList<E>> event) {
                 calculateActionsState();
             }
         });
-        handlerRegistrations.add(handlerRegistration);
 
         setActionCommand(ActionType.Remove, new Command() {
             @Override

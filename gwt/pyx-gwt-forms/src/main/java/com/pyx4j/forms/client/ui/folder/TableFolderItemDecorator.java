@@ -22,8 +22,6 @@ package com.pyx4j.forms.client.ui.folder;
 
 import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderRowItemDecorator;
 
-import java.util.ArrayList;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -40,11 +38,8 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
-import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.forms.client.validators.ValidationResults;
 
 public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
@@ -98,20 +93,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated)) {
-                    if (folderItem.isUnconditionalValidationErrorRendering()) {
-                        validationMessageHolder.setHTML(folderItem.getValidationResults().getValidationMessage(true, true, false));
-                    } else {
-                        ArrayList<ValidationError> errors = folderItem.getValidationResults().getValidationErrors();
-                        ValidationResults results = new ValidationResults();
-                        for (ValidationError validationError : errors) {
-                            CComponent<?> component = validationError.getOriginator();
-                            if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
-                                results.appendValidationError(validationError);
-                            }
-                        }
-                        validationMessageHolder.setHTML(results.getValidationMessage(true, true, false));
-                    }
+                if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.visited, PropertyName.repopulated)) {
+                    validationMessageHolder.setHTML(folderItem.getValidationResults().getValidationMessage(true, true, false));
                 }
             }
 

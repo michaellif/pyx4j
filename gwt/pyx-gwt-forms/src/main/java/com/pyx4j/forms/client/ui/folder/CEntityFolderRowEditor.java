@@ -107,9 +107,8 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
             component.addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent event) {
-                    if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
-                            PropertyName.enabled, PropertyName.editable)) {
-                        if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
+                    if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
+                        if (!component.isValid()) {
                             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
                         } else {
                             component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());

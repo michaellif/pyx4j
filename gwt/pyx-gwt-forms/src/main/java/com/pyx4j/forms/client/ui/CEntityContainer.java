@@ -49,6 +49,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.validators.EntityContainerValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.Button;
 
@@ -68,6 +69,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     private final ContainerPanel containerPanel;
 
+    @SuppressWarnings("unchecked")
     public CEntityContainer() {
         containerPanel = new ContainerPanel();
 
@@ -91,6 +93,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         containerPanel.add(contentHolder);
         applyAccessibilityRules();
 
+        addComponentValidator(new EntityContainerValidator(this));
     }
 
     public abstract Collection<? extends CComponent<?>> getComponents();
@@ -131,8 +134,11 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
                         @Override
                         public void execute() {
                             if (event.isEventOfType(PropertyName.valid)) {
+                                boolean wasValid = isValid();
                                 CEntityContainer.super.revalidate();
-                                PropertyChangeEvent.fire(CEntityContainer.this, PropertyName.valid);
+                                if (wasValid != isValid()) {
+                                    PropertyChangeEvent.fire(CEntityContainer.this, PropertyName.valid);
+                                }
                             }
                             sheduled = false;
                         }
@@ -187,28 +193,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     }
 
     @Override
-    public void setUnconditionalValidationErrorRendering(boolean flag) {
-        super.setUnconditionalValidationErrorRendering(flag);
-        if (getComponents() != null) {
-            for (CComponent<?> ccomponent : getComponents()) {
-                ((CComponent<?>) ccomponent).setUnconditionalValidationErrorRendering(flag);
-            }
-        }
-    }
-
-    @Override
-    public boolean isValid() {
-        if (getComponents() != null) {
-            for (CComponent<?> ccomponent : getComponents()) {
-                if (!ccomponent.isValid()) {
-                    return false;
-                }
-            }
-        }
-        return super.isValid();
-    }
-
-    @Override
     protected void onReset() {
         if (getComponents() != null) {
             for (CComponent<?> ccomponent : getComponents()) {
@@ -221,7 +205,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     @Override
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = super.getValidationResults();
-        if (getComponents() != null) {
+        if (!isValid()) {
             for (CComponent<?> component : this.getComponents()) {
                 if (!component.isValid()) {
                     validationResults.appendValidationErrors(component.getValidationResults());
@@ -285,16 +269,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         //TODO Workaround to fire editable event for container - that should be reviewed - event should be fired 
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
-    }
-
-    @Override
-    public void revalidate() {
-        if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
-                component.revalidate();
-            }
-        }
-        super.revalidate();
     }
 
     @Override

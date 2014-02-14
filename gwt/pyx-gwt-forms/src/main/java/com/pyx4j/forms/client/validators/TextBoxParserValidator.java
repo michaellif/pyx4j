@@ -23,13 +23,13 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public ValidationError isValid(CComponent<E> component, E value) {
+    public FieldValidationError isValid(CComponent<E> component, E value) {
         if (component instanceof CTextFieldBase) {
             CTextFieldBase<E, ?> field = (CTextFieldBase) component;
             try {
                 field.getWidget().getNativeValue();
             } catch (ParseException e) {
-                return new ValidationError(component, e.getMessage());
+                return new FieldValidationError(component, e.getMessage());
             }
         }
         return null;

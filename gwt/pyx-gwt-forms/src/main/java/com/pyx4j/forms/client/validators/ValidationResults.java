@@ -35,10 +35,6 @@ public class ValidationResults {
     public ValidationResults() {
     }
 
-    public void appendValidationError(CComponent<?> component, String message, String location) {
-        validationErrors.add(new ValidationError(component, message, location));
-    }
-
     public void appendValidationErrors(ValidationResults results) {
         if (results != null) {
             validationErrors.addAll(results.getValidationErrors());
@@ -69,22 +65,27 @@ public class ValidationResults {
         if (html) {
             messagesBuffer.append("<ul style='text-align:left'>");
             for (ValidationError ve : validationErrors) {
-                messagesBuffer.append("<li>").append(ve.getMessageString(showFieldName, showLocation)).append("</li>");
+                if (ve instanceof FieldValidationError) {
+                    messagesBuffer.append("<li>").append(((FieldValidationError) ve).getMessageString(showFieldName, showLocation)).append("</li>");
+                }
             }
             messagesBuffer.append("</ul>");
         } else {
             for (ValidationError ve : validationErrors) {
-                switch (c.next()) {
-                case SINGLE:
-                    messagesBuffer.append(ve.getMessageString(showFieldName, showLocation));
-                    break;
-                case FIRST:
-                case ITEM:
-                    messagesBuffer.append("- ").append(ve.getMessageString(showFieldName, showLocation)).append(";\n");
-                    break;
-                case LAST:
-                    messagesBuffer.append("- ").append(ve.getMessageString(showFieldName, showLocation));
-                    break;
+                FieldValidationError fve = (FieldValidationError) ve;
+                if (ve instanceof FieldValidationError) {
+                    switch (c.next()) {
+                    case SINGLE:
+                        messagesBuffer.append(fve.getMessageString(showFieldName, showLocation));
+                        break;
+                    case FIRST:
+                    case ITEM:
+                        messagesBuffer.append("- ").append(fve.getMessageString(showFieldName, showLocation)).append(";\n");
+                        break;
+                    case LAST:
+                        messagesBuffer.append("- ").append(fve.getMessageString(showFieldName, showLocation));
+                        break;
+                    }
                 }
             }
         }
@@ -96,11 +97,7 @@ public class ValidationResults {
         ArrayList<ValidationError> validationErrors = getValidationErrors();
 
         if (validationErrors.size() > 1) {
-            messagesBuffer.append(i18n.tr("error 1 of {0}", (validationErrors.size()))).append(" - ");
-        }
-
-        if (validationErrors.size() > 0) {
-            messagesBuffer.append(validationErrors.get(0).getMessageString(true, false));
+            messagesBuffer.append(i18n.tr("there are {0} error", validationErrors.size()));
         }
 
         return messagesBuffer.toString();

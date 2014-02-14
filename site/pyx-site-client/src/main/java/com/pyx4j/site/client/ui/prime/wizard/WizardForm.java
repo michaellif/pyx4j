@@ -69,7 +69,7 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
 
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.visited)) {
 
                     if (!sheduled) {
                         sheduled = true;
@@ -166,7 +166,7 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
 
     protected final void finish() {
         if (!isValid()) {
-            setUnconditionalValidationErrorRendering(true);
+            setVisited(true);
             MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
         } else {
             view.getPresenter().finish();

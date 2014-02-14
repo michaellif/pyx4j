@@ -64,7 +64,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
 
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.visited)) {
 
                     if (!scheduled) {
                         scheduled = true;
@@ -176,7 +176,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
 
     protected final void finish() {
         if (!isValid()) {
-            setUnconditionalValidationErrorRendering(true);
+            setVisited(true);
             MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
         } else {
             onFinish();

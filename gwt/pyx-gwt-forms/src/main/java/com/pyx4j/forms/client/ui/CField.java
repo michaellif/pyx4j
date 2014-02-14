@@ -78,7 +78,11 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
 
     @Override
     public Widget asWidget() {
-        return nativeWidget.asWidget();
+        if (nativeWidget == null) {
+            return null;
+        } else {
+            return nativeWidget.asWidget();
+        }
     }
 
     public final WIDGET_TYPE getWidget() {

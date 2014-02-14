@@ -36,19 +36,21 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.uibinder.elementparsers.IsEmptyParser;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme.StyleDependent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.validators.ComponentValidator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -106,7 +108,10 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private DATA_TYPE value = null;
 
-    private List<EditableValueValidator<DATA_TYPE>> validators;
+    @Deprecated
+    private List<EditableValueValidator<DATA_TYPE>> valueValidators;
+
+    private List<ComponentValidator> componentValidators;
 
     // Have been changed after population
     private boolean visited = false;
@@ -116,8 +121,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     private ValidationError validationError;
 
     private IDecorator<?> decorator;
-
-    private boolean unconditionalValidationErrorRendering;
 
     public CComponent() {
         this(null);
@@ -129,6 +132,28 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         containerAccessAdapter = new ContainerAccessAdapter();
         addAccessAdapter(componentAccessAdapter);
         addAccessAdapter(containerAccessAdapter);
+
+        if (ApplicationMode.isDevelopment()) {
+            addPropertyChangeHandler(new PropertyChangeHandler() {
+
+                @Override
+                public void onPropertyChange(PropertyChangeEvent event) {
+                    if (asWidget() != null) {
+                        asWidget().getElement().setAttribute("DevAttr", CComponent.this.toString());
+                    }
+                }
+            });
+
+            addValueChangeHandler(new ValueChangeHandler<DATA_TYPE>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<DATA_TYPE> event) {
+                    if (asWidget() != null) {
+                        asWidget().getElement().setAttribute("DevAttr", CComponent.this.toString());
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -305,10 +330,10 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     }
 
     public boolean isMandatory() {
-        if (validators == null) {
+        if (valueValidators == null) {
             return false;
         }
-        for (EditableValueValidator<DATA_TYPE> validator : validators) {
+        for (EditableValueValidator<DATA_TYPE> validator : valueValidators) {
             if (validator instanceof MandatoryValidator) {
                 return true;
             }
@@ -322,7 +347,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
                 addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
             } else {
                 Collection<MandatoryValidator<DATA_TYPE>> validatorsForRemoval = new LinkedList<MandatoryValidator<DATA_TYPE>>();
-                for (EditableValueValidator<DATA_TYPE> validator : validators) {
+                for (EditableValueValidator<DATA_TYPE> validator : valueValidators) {
                     if (validator instanceof MandatoryValidator) {
                         validatorsForRemoval.add((MandatoryValidator<DATA_TYPE>) validator);
                     }
@@ -457,19 +482,30 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
         ValidationError newValidationError = null;
 
-        if (isVisible() && isEditable() && isEnabled() && !isViewable()) {
+        if (isVisible() && isEditable() && isEnabled() && !isViewable() && (isVisited() || !isValueEmpty() || isEditingInProgress())) {
 
-            if (validators != null) {
-                for (EditableValueValidator<DATA_TYPE> validator : validators) {
-                    ValidationError ve = validator.isValid(this, getValue());
+            if (valueValidators != null) {
+                for (EditableValueValidator<DATA_TYPE> validator : valueValidators) {
+                    FieldValidationError ve = validator.isValid(this, getValue());
                     if (ve != null) {
-                        ve.setLocationHint(getLocationHint());
                         newValidationError = ve;
                         break;
                     }
                 }
             }
 
+            if (componentValidators != null) {
+                for (ComponentValidator validator : componentValidators) {
+                    ValidationError ve = validator.isValid();
+                    if (ve != null) {
+                        newValidationError = ve;
+                        break;
+                    }
+                }
+            }
+
+        } else {
+            newValidationError = null;
         }
 
         if (newValidationError != validationError) {
@@ -586,8 +622,8 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
-        if (validationError != null && !isValid()) {
-            results.appendValidationError(this, validationError.getMessage(), getLocationHint());
+        if (!isValid()) {
+            results.appendValidationError(validationError);
         }
         return results;
     }
@@ -599,9 +635,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     public void setVisited(boolean newVisited) {
         if (newVisited != visited) {
             visited = newVisited;
-            if (this.visited) {
-                revalidate();
-            }
+            revalidate();
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visited);
         }
     }
@@ -611,24 +645,51 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
+    @Deprecated
+    /**
+     * Use componentValidator
+     */
     public void addValueValidator(EditableValueValidator<DATA_TYPE> validator) {
-        if (validators == null) {
-            validators = new Vector<EditableValueValidator<DATA_TYPE>>();
+        if (valueValidators == null) {
+            valueValidators = new Vector<EditableValueValidator<DATA_TYPE>>();
         }
-        validators.add(validator);
+        valueValidators.add(validator);
     }
 
+    @Deprecated
     public boolean removeValueValidator(EditableValueValidator<DATA_TYPE> validator) {
-        if (validators != null) {
-            return validators.remove(validator);
+        if (valueValidators != null) {
+            return valueValidators.remove(validator);
         } else {
             return false;
         }
     }
 
+    @Deprecated
     public void removeAllValueValidators() {
-        if (validators != null) {
-            validators.clear();
+        if (valueValidators != null) {
+            valueValidators.clear();
+        }
+    }
+
+    public void addComponentValidator(ComponentValidator validator) {
+        if (componentValidators == null) {
+            componentValidators = new Vector<ComponentValidator>();
+        }
+        componentValidators.add(validator);
+    }
+
+    public boolean removeComponentValidator(ComponentValidator validator) {
+        if (componentValidators != null) {
+            return componentValidators.remove(validator);
+        } else {
+            return false;
+        }
+    }
+
+    public void removeAllComponentValidators() {
+        if (componentValidators != null) {
+            componentValidators.clear();
         }
     }
 
@@ -641,9 +702,10 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             adaptersReport.append("isEditable ").append(adapter.isEditable()).append(" ");
         }
 
-        return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="
-                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isVisited=" + isVisited() + "; isValid=" + isValid()
-                + "; toolTip=" + getTooltip() + "; adapters=[" + adaptersReport.toString() + "]";
+        return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n isMandatory=" + isMandatory() + ";\n isMandatoryConditionMet="
+                + isMandatoryConditionMet() + ";\n isEnabled=" + isEnabled() + ";\n isEditable=" + isEditable() + ";\n isVisible=" + isVisible()
+                + ";\n isVisited=" + isVisited() + ";\n isValid=" + isValid() + ";\n toolTip=" + getTooltip() + ";\n adapters=[" + adaptersReport.toString()
+                + "]";
     }
 
     public String shortDebugInfo() {
@@ -662,18 +724,23 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     public void onEditingStop() {
         if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
-            boolean isOrigEmpty = isValueEmpty();
+            boolean wasEmpty = isValueEmpty();
+            boolean wasVisited = isVisited();
             editingInProgress = false;
+            setVisited(true);
             try {
                 update(getEditorValue());
             } catch (ParseException e) {
                 update(null);
             }
 
-            if (!isOrigEmpty || (isOrigEmpty && !isValueEmpty())) {
+            if (!wasEmpty || (wasEmpty && !isValueEmpty())) {
                 setVisited(true);
+            } else {
+                setVisited(wasVisited);
             }
         }
+
     }
 
     protected abstract void setEditorValue(DATA_TYPE value);
@@ -689,17 +756,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         decorator.setComponent(this);
     }
 
-    public void setUnconditionalValidationErrorRendering(boolean flag) {
-        if (flag != unconditionalValidationErrorRendering) {
-            unconditionalValidationErrorRendering = flag;
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.showErrorsUnconditional);
-        }
-    }
-
-    public boolean isUnconditionalValidationErrorRendering() {
-        return unconditionalValidationErrorRendering;
-    }
-
     public void generateMockData() {
 
     }
@@ -707,12 +763,14 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     public void setMockValue(DATA_TYPE value) {
         if (isVisible() && isEditable() && isEnabled() && !isViewable() && isValueEmpty()) {
             setValue(value);
+            setVisited(true);
         }
     }
 
     public void setMockValueByString(String value) {
         if (this instanceof IAcceptText && isVisible() && isEditable() && isEnabled() && !isViewable() && isValueEmpty()) {
             ((IAcceptText) this).setValueByString(value);
+            setVisited(true);
         }
     }
 

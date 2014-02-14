@@ -48,7 +48,7 @@ import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -217,9 +217,9 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         EditableValueValidator<String> passwordConfirmValidator = new EditableValueValidator<String>() {
 
             @Override
-            public ValidationError isValid(CComponent<String> component, String value) {
+            public FieldValidationError isValid(CComponent<String> component, String value) {
                 return CommonsStringUtils.equals(get(proto().enterPassword()).getValue(), get(proto().confirmPassword()).getValue()) ? null
-                        : new ValidationError(component, "Passwords do not match.");
+                        : new FieldValidationError(component, "Passwords do not match.");
             }
 
         };

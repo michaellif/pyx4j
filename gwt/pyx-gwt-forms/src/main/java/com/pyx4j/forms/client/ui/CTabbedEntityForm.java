@@ -61,7 +61,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
 
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.visited)) {
                     if (!sheduled) {
                         sheduled = true;
                         Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {

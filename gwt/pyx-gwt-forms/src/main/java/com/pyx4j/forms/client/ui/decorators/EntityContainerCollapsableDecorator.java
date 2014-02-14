@@ -98,21 +98,9 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
                 if (event.isEventOfType(PropertyName.repopulated)) {
                     toolbar.update(isExpended());
                 }
-                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.visited)) {
                     String message = null;
-                    if (entityContainer.isUnconditionalValidationErrorRendering()) {
-                        message = entityContainer.getValidationResults().getValidationShortMessage();
-                    } else {
-                        ArrayList<ValidationError> errors = entityContainer.getValidationResults().getValidationErrors();
-                        ValidationResults results = new ValidationResults();
-                        for (ValidationError validationError : errors) {
-                            CComponent<?> originator = validationError.getOriginator();
-                            if ((originator.isUnconditionalValidationErrorRendering() || originator.isVisited()) && !originator.isValid()) {
-                                results.appendValidationError(validationError);
-                            }
-                        }
-                        message = results.getValidationShortMessage();
-                    }
+                    message = entityContainer.getValidationResults().getValidationShortMessage();
                     toolbar.setWarningMessage(message.isEmpty() ? null : message);
                 }
             }

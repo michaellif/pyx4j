@@ -25,12 +25,17 @@ import com.pyx4j.forms.client.ui.CComponent;
 /**
  * Created on 2008-08-01
  */
+@Deprecated
+/**
+ * 
+ * Use ComponentValidator
+ */
 public interface EditableValueValidator<E> {
 
     /**
      * 
      * null if valid, validation message if not
      */
-    public ValidationError isValid(CComponent<E> component, E value);
+    public FieldValidationError isValid(CComponent<E> component, E value);
 
 }
