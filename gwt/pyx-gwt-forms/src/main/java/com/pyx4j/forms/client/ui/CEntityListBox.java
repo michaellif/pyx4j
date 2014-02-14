@@ -40,7 +40,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -65,7 +65,7 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
 
     private boolean isUnavailable = false;
 
-    private EditableValueValidator<List<E>> unavailableValidator;
+    private AbstractComponentValidator<List<E>> unavailableValidator;
 
     private EntityDataSource<E> optionsDataSource;
 
@@ -190,7 +190,7 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
             isLoading = false;
             isUnavailable = false;
             if (unavailableValidator != null) {
-                removeValueValidator(unavailableValidator);
+                removeComponentValidator(unavailableValidator);
             }
             setOptions(result);
             optionsLoaded = true;
@@ -208,15 +208,15 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
             isUnavailable = true;
             log.error("can't load {} {}", getTitle(), caught);
             if (unavailableValidator == null) {
-                unavailableValidator = new EditableValueValidator<List<E>>() {
+                unavailableValidator = new AbstractComponentValidator<List<E>>() {
 
                     @Override
-                    public FieldValidationError isValid(CComponent<List<E>> component, List<E> value) {
-                        return !isUnavailable ? null : new FieldValidationError(component, i18n.tr("Reference data unavailable"));
+                    public FieldValidationError isValid() {
+                        return !isUnavailable ? null : new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
                     }
                 };
             }
-            addValueValidator(unavailableValidator);
+            addComponentValidator(unavailableValidator);
             setOptions(null);
         }
     }

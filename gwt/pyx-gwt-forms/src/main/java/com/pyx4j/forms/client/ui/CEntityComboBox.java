@@ -46,7 +46,7 @@ import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.i18n.shared.I18n;
@@ -73,7 +73,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     private boolean useNamesComparison = false;
 
-    private EditableValueValidator<E> unavailableValidator;
+    private AbstractComponentValidator<E> unavailableValidator;
 
     private boolean hasAsyncValue = false;
 
@@ -181,7 +181,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
             isLoading = false;
             isUnavailable = false;
             if (unavailableValidator != null) {
-                removeValueValidator(unavailableValidator);
+                removeComponentValidator(unavailableValidator);
             }
             setOptions(result);
             optionsLoaded = true;
@@ -199,15 +199,15 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
             isUnavailable = true;
             log.error("can't load {} {}", getTitle(), caught);
             if (unavailableValidator == null) {
-                unavailableValidator = new EditableValueValidator<E>() {
+                unavailableValidator = new AbstractComponentValidator<E>() {
 
                     @Override
-                    public FieldValidationError isValid(CComponent<E> component, E value) {
-                        return !isUnavailable ? null : new FieldValidationError(component, i18n.tr("Reference data unavailable"));
+                    public FieldValidationError isValid() {
+                        return !isUnavailable ? null : new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
                     }
                 };
             }
-            addValueValidator(unavailableValidator);
+            addComponentValidator(unavailableValidator);
             setOptions(null);
         }
     }
