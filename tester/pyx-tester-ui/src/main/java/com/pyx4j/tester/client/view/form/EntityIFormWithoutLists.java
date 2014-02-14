@@ -34,7 +34,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityListBox;
@@ -47,7 +46,7 @@ import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
@@ -214,16 +213,16 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
 
     @Override
     public void addValidations() {
-        EditableValueValidator<String> passwordConfirmValidator = new EditableValueValidator<String>() {
+        AbstractComponentValidator<String> passwordConfirmValidator = new AbstractComponentValidator<String>() {
 
             @Override
-            public FieldValidationError isValid(CComponent<String> component, String value) {
+            public FieldValidationError isValid() {
                 return CommonsStringUtils.equals(get(proto().enterPassword()).getValue(), get(proto().confirmPassword()).getValue()) ? null
-                        : new FieldValidationError(component, "Passwords do not match.");
+                        : new FieldValidationError(getComponent(), "Passwords do not match.");
             }
 
         };
-        get(proto().confirmPassword()).addValueValidator(passwordConfirmValidator);
+        get(proto().confirmPassword()).addComponentValidator(passwordConfirmValidator);
 
         get(proto().enterPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().confirmPassword())));
 

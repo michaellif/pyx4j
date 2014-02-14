@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -35,7 +35,7 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
 
     private IsWidget descriptionWidget;
 
-    private EditableValueValidator<ISignature> signatureComplitionsValidator;
+    private AbstractComponentValidator<ISignature> signatureComplitionsValidator;
 
     public CSignature(String text) {
         this(new Label(text));
@@ -47,9 +47,10 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
         setNativeWidget(new NSignature(this));
         asWidget().setWidth("100%");
 
-        setSignatureCompletionValidator(new EditableValueValidator<ISignature>() {
+        setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
-            public FieldValidationError isValid(CComponent<ISignature> component, ISignature value) {
+            public FieldValidationError isValid() {
+                ISignature value = getComponent().getValue();
                 if (value != null) {
                     SignatureFormat signatureFormat = value.signatureFormat().isNull() ? SignatureFormat.None : value.signatureFormat().getValue();
                     switch (signatureFormat) {
@@ -57,21 +58,22 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
                         break;
                     case AgreeBox:
                         if (!value.agree().isBooleanTrue()) {
-                            return new FieldValidationError(component, i18n.tr("You must agree to the Terms to continue"));
+                            return new FieldValidationError(getComponent(), i18n.tr("You must agree to the Terms to continue"));
                         }
                         break;
                     case AgreeBoxAndFullName:
                         if (!value.agree().isBooleanTrue()) {
-                            return new FieldValidationError(component, i18n.tr("You must agree to the Terms to continue"));
+                            return new FieldValidationError(getComponent(), i18n.tr("You must agree to the Terms to continue"));
                         }
                     case FullName:
                         if (value.fullName().getValue() == null || value.fullName().getValue().trim().equals("")) {
-                            return new FieldValidationError(component, i18n.tr("You must agree to the Terms by typing your First and Last name to continue"));
+                            return new FieldValidationError(getComponent(),
+                                    i18n.tr("You must agree to the Terms by typing your First and Last name to continue"));
                         }
                         break;
                     case Initials:
                         if (value.initials().getValue() == null || value.initials().getValue().trim().equals("")) {
-                            return new FieldValidationError(component, i18n.tr("You must agree to the Terms by typing your Initials to continue"));
+                            return new FieldValidationError(getComponent(), i18n.tr("You must agree to the Terms by typing your Initials to continue"));
                         }
                         break;
                     }
@@ -82,10 +84,10 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
 
     }
 
-    public void setSignatureCompletionValidator(EditableValueValidator<ISignature> validator) {
-        removeValueValidator(signatureComplitionsValidator);
+    public void setSignatureCompletionValidator(AbstractComponentValidator<ISignature> validator) {
+        removeComponentValidator(signatureComplitionsValidator);
         signatureComplitionsValidator = validator;
-        addValueValidator(signatureComplitionsValidator);
+        addComponentValidator(signatureComplitionsValidator);
     }
 
     public IsWidget getDescriptionWidget() {
