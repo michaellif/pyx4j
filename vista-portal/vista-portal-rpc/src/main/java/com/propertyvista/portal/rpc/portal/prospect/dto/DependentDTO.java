@@ -33,6 +33,7 @@ public interface DependentDTO extends IEntity {
     @ToString()
     Name name();
 
+    @NotNull
     IPrimitive<LogicalDate> birthDate();
 
     @NotNull

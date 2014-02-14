@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -31,6 +32,7 @@ public interface GuarantorDTO extends IEntity {
     @ToString()
     Name name();
 
+    @NotNull
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
 
