@@ -34,7 +34,7 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
     private static final I18n i18n = I18n.get(ProofOfAssetDocumentFileFolder.class);
 
     public ProofOfAssetDocumentFileFolder() {
-        super(ProofOfAssetDocumentFile.class, i18n.tr("Document"));
+        super(ProofOfAssetDocumentFile.class, i18n.tr("File"));
     }
 
     @Override

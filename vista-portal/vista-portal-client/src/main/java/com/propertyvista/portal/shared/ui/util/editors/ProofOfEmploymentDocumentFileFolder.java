@@ -34,7 +34,7 @@ public class ProofOfEmploymentDocumentFileFolder extends PortalBoxFolder<ProofOf
     private static final I18n i18n = I18n.get(ProofOfEmploymentDocumentFileFolder.class);
 
     public ProofOfEmploymentDocumentFileFolder() {
-        super(ProofOfEmploymentDocumentFile.class, i18n.tr("Document"));
+        super(ProofOfEmploymentDocumentFile.class, i18n.tr("File"));
     }
 
     @Override

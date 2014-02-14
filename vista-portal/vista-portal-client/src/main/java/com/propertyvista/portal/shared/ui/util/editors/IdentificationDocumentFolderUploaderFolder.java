@@ -35,7 +35,7 @@ public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<
     private static final I18n i18n = I18n.get(IdentificationDocumentFolderUploaderFolder.class);
 
     public IdentificationDocumentFolderUploaderFolder() {
-        super(IdentificationDocumentFile.class, i18n.tr("Document"));
+        super(IdentificationDocumentFile.class, i18n.tr("File"));
     }
 
     @Override
