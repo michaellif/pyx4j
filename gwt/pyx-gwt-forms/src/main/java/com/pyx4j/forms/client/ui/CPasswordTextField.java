@@ -41,7 +41,7 @@ public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox>
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {
-        this.addValueValidator(new RegexValidator<String>(regex, regexValidationMessage));
+        this.addComponentValidator(new RegexValidator<String>(regex, regexValidationMessage));
     }
 
     @Override

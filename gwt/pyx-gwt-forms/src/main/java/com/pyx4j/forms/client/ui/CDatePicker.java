@@ -28,9 +28,9 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
@@ -48,7 +48,7 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
     public CDatePicker() {
         super();
         setFormat(new DateFormat(defaultDateFormat));
-        addValueValidator(new TextBoxParserValidator<LogicalDate>());
+        addComponentValidator(new TextBoxParserValidator<LogicalDate>());
         setNativeWidget(new NDatePicker(this));
         asWidget().setWidth("100%");
     }
@@ -68,14 +68,14 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
     public void setPastDateSelectionAllowed(boolean pastDateSelectionAllowed) {
         this.pastDateSelectionAllowed = pastDateSelectionAllowed;
         if (pastDateSelectionAllowed) {
-            this.removeValueValidator(pastDateSelectionAllowedValidator);
+            this.removeComponentValidator(pastDateSelectionAllowedValidator);
         } else {
-            this.addValueValidator(pastDateSelectionAllowedValidator);
+            this.addComponentValidator(pastDateSelectionAllowedValidator);
         }
 
     }
 
-    class PastDateSelectionAllowedValidator implements EditableValueValidator<LogicalDate> {
+    class PastDateSelectionAllowedValidator extends AbstractComponentValidator<LogicalDate> {
 
         private String getValidationMessage() {
             if (dateConditionValidationMessage == null) {
@@ -87,7 +87,7 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
         @Override
         @SuppressWarnings("deprecation")
-        public FieldValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+        public FieldValidationError isValid() {
             LogicalDate selectedDate = getValue();
             if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();

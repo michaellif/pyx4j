@@ -69,7 +69,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     public void setPersonalIdentityFormatter(PersonalIdentityFormatter formatter) {
         setFormat(new PersonalIdentityFormat<T>(this, formatter));
-        addValueValidator(new TextBoxParserValidator<T>());
+        addComponentValidator(new TextBoxParserValidator<T>());
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {
-        this.addValueValidator(new RegexValidator<T>(regex, regexValidationMessage));
+        this.addComponentValidator(new RegexValidator<T>(regex, regexValidationMessage));
     }
 
     @Override

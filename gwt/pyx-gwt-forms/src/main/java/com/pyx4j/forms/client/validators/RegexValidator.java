@@ -14,7 +14,7 @@ import com.pyx4j.i18n.shared.I18n;
 /**
  *
  */
-public class RegexValidator<E> implements EditableValueValidator<E> {
+public class RegexValidator<E> extends AbstractComponentValidator<E> {
 
     private static final I18n i18n = I18n.get(RegexValidator.class);
 
@@ -34,9 +34,10 @@ public class RegexValidator<E> implements EditableValueValidator<E> {
     }
 
     @Override
-    public FieldValidationError isValid(CComponent<E> component, E value) {
-        return (component.isValueEmpty() && !component.isMandatory()) || ((value != null) && (value.toString().matches(regex))) ? null : new FieldValidationError(
-                component, getValidationMessage());
+    public FieldValidationError isValid() {
+        E value = getComponent().getValue();
+        return (getComponent().isValueEmpty() && !getComponent().isMandatory()) || ((value != null) && (value.toString().matches(regex))) ? null
+                : new FieldValidationError(getComponent(), getValidationMessage());
     }
 
     private String getValidationMessage() {

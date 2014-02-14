@@ -35,7 +35,7 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
     public CMoneyField() {
         super();
         setFormat(new MoneyFormat());
-        addValueValidator(new TextBoxParserValidator<BigDecimal>());
+        addComponentValidator(new TextBoxParserValidator<BigDecimal>());
         setNativeWidget(new NTextBox<BigDecimal>(this));
         asWidget().setWidth("100%");
     }

@@ -38,15 +38,15 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         super();
         numberFormat = NumberFormat.getDecimalFormat();
         validator = new TextBoxParserValidator<E>();
-        addValueValidator(validator);
+        addComponentValidator(validator);
         setNativeWidget(new NTextBox<E>(this));
         asWidget().setWidth("100%");
     }
 
     public void setRange(E from, E to) {
-        removeValueValidator(validator);
+        removeComponentValidator(validator);
         validator = new NumberFieldRangeValidator(from, to);
-        addValueValidator(validator);
+        addComponentValidator(validator);
     }
 
     protected String dataTypeName() {
@@ -66,12 +66,12 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         }
 
         @Override
-        public FieldValidationError isValid(CComponent<E> component, E value) {
-            FieldValidationError failure = super.isValid(component, value);
+        public FieldValidationError isValid() {
+            FieldValidationError failure = super.isValid();
             if (failure == null) {
-                if (value == null) {
+                if (getComponent().getValue() == null) {
                     return null;
-                } else if (isInRange(value, from, to)) {
+                } else if (isInRange(getComponent().getValue(), from, to)) {
                     return null;
                 } else {
                     return new FieldValidationError(CNumberField.this, i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));

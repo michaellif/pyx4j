@@ -41,7 +41,7 @@ public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {
-        this.addValueValidator(new RegexValidator<String>(regex, regexValidationMessage));
+        this.addComponentValidator(new RegexValidator<String>(regex, regexValidationMessage));
     }
 
     @Override

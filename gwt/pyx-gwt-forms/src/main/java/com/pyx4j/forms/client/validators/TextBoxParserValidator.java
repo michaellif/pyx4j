@@ -10,26 +10,25 @@ package com.pyx4j.forms.client.validators;
 
 import java.text.ParseException;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 
 /**
  * This validator is used to check that text inside textBox was successfully parsed.
  */
-public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
+public class TextBoxParserValidator<E> extends AbstractComponentValidator<E> {
 
     public TextBoxParserValidator() {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public FieldValidationError isValid(CComponent<E> component, E value) {
-        if (component instanceof CTextFieldBase) {
-            CTextFieldBase<E, ?> field = (CTextFieldBase) component;
+    public FieldValidationError isValid() {
+        if (getComponent() instanceof CTextFieldBase) {
+            CTextFieldBase<E, ?> field = (CTextFieldBase) getComponent();
             try {
                 field.getWidget().getNativeValue();
             } catch (ParseException e) {
-                return new FieldValidationError(component, e.getMessage());
+                return new FieldValidationError(getComponent(), e.getMessage());
             }
         }
         return null;

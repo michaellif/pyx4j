@@ -22,10 +22,9 @@ package com.pyx4j.forms.client.validators;
 
 import java.util.ArrayList;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 
-public class EmailListTextBoxValidator implements EditableValueValidator<String> {
+public class EmailListTextBoxValidator extends AbstractComponentValidator<String> {
 
     public static class EmailAddress {
 
@@ -66,14 +65,14 @@ public class EmailListTextBoxValidator implements EditableValueValidator<String>
     }
 
     @Override
-    public FieldValidationError isValid(CComponent<String> component, String value) {
-        EmailAddress[] adr = parse(value);
+    public FieldValidationError isValid() {
+        EmailAddress[] adr = parse(getComponent().getValue());
         if (adr == null) {
             return null;
         } else {
             for (EmailAddress a : adr) {
                 if (!a.valid) {
-                    return new FieldValidationError(component, getValidationMessage(value));
+                    return new FieldValidationError(getComponent(), getValidationMessage(getComponent().getValue()));
                 }
             }
             return null;
@@ -111,6 +110,8 @@ public class EmailListTextBoxValidator implements EditableValueValidator<String>
                     state = State.ERROR;
                     return;
                 }
+                break;
+            default:
                 break;
             }
             state = newState;

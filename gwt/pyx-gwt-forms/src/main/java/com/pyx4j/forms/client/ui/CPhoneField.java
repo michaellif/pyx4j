@@ -31,7 +31,7 @@ public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
     public CPhoneField() {
         super();
         setFormat(new PhoneFormat());
-        addValueValidator(new TextBoxParserValidator<String>());
+        addComponentValidator(new TextBoxParserValidator<String>());
         setNativeWidget(new NTextBox<String>(this));
         setWatermark("(___) ___-____ x___");
         asWidget().setWidth("100%");

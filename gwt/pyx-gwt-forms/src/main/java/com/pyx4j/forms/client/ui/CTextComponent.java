@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
@@ -35,9 +35,9 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
     }
 
     public void setMaxLength(int length) {
-        removeValueValidator(validator);
+        removeComponentValidator(validator);
         validator = new TextComponentLengthValidator(length);
-        addValueValidator(validator);
+        addComponentValidator(validator);
     }
 
     public void setWatermark(String watermark) {
@@ -51,7 +51,7 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
         return watermark;
     }
 
-    class TextComponentLengthValidator implements EditableValueValidator<DATA> {
+    class TextComponentLengthValidator extends AbstractComponentValidator<DATA> {
 
         private final String validationMessage;
 
@@ -63,7 +63,8 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
         }
 
         @Override
-        public FieldValidationError isValid(CComponent<DATA> component, DATA value) {
+        public FieldValidationError isValid() {
+            DATA value = getComponent().getValue();
             if (value == null) {
                 return null;
             }

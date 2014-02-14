@@ -42,7 +42,7 @@ public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
         super();
         numberFormat = NumberFormat.getDecimalFormat();
         validator = new TextBoxParserValidator<Key>();
-        addValueValidator(validator);
+        addComponentValidator(validator);
         setNativeWidget(new NTextBox<Key>(this));
         asWidget().setWidth("100%");
 
