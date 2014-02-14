@@ -21,7 +21,6 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -34,7 +33,6 @@ import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -101,11 +99,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (BillableItem item : dto.currentTerm().version().leaseProducts().featureItems()) {
             Persistence.service().retrieve(item.item().product());
         }
-
-        EntityQueryCriteria<LeaseTermAgreementDocument> agreementDocumentCriteria = EntityQueryCriteria.create(LeaseTermAgreementDocument.class);
-        agreementDocumentCriteria.eq(agreementDocumentCriteria.proto().leaseTermV(), dto.currentTerm().version());
-
-        dto.currentTerm().version().agreementDocument().set(Persistence.service().retrieve(agreementDocumentCriteria));
     }
 
     private void loadTenantInsurance(LeaseDTO lease) {

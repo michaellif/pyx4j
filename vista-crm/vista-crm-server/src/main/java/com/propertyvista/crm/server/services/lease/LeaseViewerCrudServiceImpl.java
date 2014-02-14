@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.lease;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
@@ -50,6 +51,7 @@ import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstr
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -59,6 +61,7 @@ import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.AgreementInkSignatures;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -327,7 +330,74 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         LeaseAgreementDocumentsDTO leaseAgreementDocuments = EntityFactory.create(LeaseAgreementDocumentsDTO.class);
         leaseAgreementDocuments.signingProgress().set(getLeaseAgreementSigningProgress(leaseId));
 
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Persistence.ensureRetrieve(lease.currentTerm().version().agreementDocuments(), AttachLevel.Attached);
+
+        leaseAgreementDocuments.inkSignedDocuments().addAll(lease.currentTerm().version().agreementDocuments());
+        Iterator<LeaseTermAgreementDocument> i = leaseAgreementDocuments.inkSignedDocuments().iterator();
+        while (i.hasNext()) {
+            LeaseTermAgreementDocument doc = i.next();
+            if (!doc.isSignedByInk().isBooleanTrue()) {
+                leaseAgreementDocuments.digitallySignedDocument().set(doc);
+                i.remove();
+                break;
+            }
+        }
         callback.onSuccess(leaseAgreementDocuments);
+    }
+
+    @Override
+    public void updateLeaseAgreementDocuments(AsyncCallback<VoidSerializable> callback, Lease leaseId, LeaseAgreementDocumentsDTO documents) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Persistence.ensureRetrieve(lease.currentTerm().version().agreementDocuments(), AttachLevel.Attached);
+
+        List<LeaseTermAgreementDocument> newDocs = new LinkedList<>();
+        for (LeaseTermAgreementDocument incomingDoc : documents.inkSignedDocuments()) {
+            if (incomingDoc.getPrimaryKey() == null) {
+                newDocs.add(incomingDoc);
+            }
+        }
+
+        List<LeaseTermAgreementDocument> deletedDocs = new LinkedList<>();
+        for (LeaseTermAgreementDocument doc : lease.currentTerm().version().agreementDocuments()) {
+            boolean found = false;
+            for (LeaseTermAgreementDocument inkSignedDocument : documents.inkSignedDocuments()) {
+                if (doc.getPrimaryKey().equals(inkSignedDocument.getPrimaryKey())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                deletedDocs.add(doc);
+            }
+        }
+
+        for (LeaseTermAgreementDocument deletedDoc : deletedDocs) {
+            Persistence.service().delete(LeaseTermAgreementDocumentBlob.class, deletedDoc.file().blobKey().getValue());
+            Persistence.service().delete(LeaseTermAgreementDocument.class, deletedDoc.getPrimaryKey());
+
+            for (LeaseTermParticipant<?> participant : deletedDoc.signedParticipants()) {
+                Persistence.ensureRetrieve(participant.agreementSignatures(), AttachLevel.IdOnly);
+                AgreementInkSignatures inkSignature = participant.agreementSignatures().duplicate(AgreementInkSignatures.class);
+                Persistence.service().delete(inkSignature);
+            }
+        }
+
+        for (LeaseTermAgreementDocument newDoc : newDocs) {
+            newDoc.leaseTermV().set(lease.currentTerm().version());
+            newDoc.isSignedByInk().setValue(true);
+            Persistence.service().merge(newDoc);
+
+            for (LeaseTermParticipant<?> participant : newDoc.signedParticipants()) {
+                AgreementInkSignatures signature = EntityFactory.create(AgreementInkSignatures.class);
+                signature.leaseTermParticipant().set(participant);
+                Persistence.service().persist(signature);
+            }
+        }
+
+        Persistence.service().commit();
+
+        callback.onSuccess(null);
     }
 
     private LeaseAgreementSigningProgressDTO getLeaseAgreementSigningProgress(Lease leaseId) {
@@ -399,12 +469,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         // TODO put this in a facade
         return participant.role().getValue() == Role.Guarantor || participant.role().getValue() == Role.Applicant
                 || participant.role().getValue() == Role.CoApplicant;
-    }
-
-    @Override
-    public void updateLeaseAgreementDocuments(AsyncCallback<VoidSerializable> callback, Lease leaseId, LeaseAgreementDocumentsDTO documents) {
-        // TODO 
-        callback.onSuccess(null);
     }
 
 }

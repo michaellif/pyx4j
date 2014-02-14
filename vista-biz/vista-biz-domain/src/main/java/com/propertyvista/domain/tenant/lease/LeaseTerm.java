@@ -37,6 +37,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
@@ -151,7 +152,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
         @Owned(cascade = {})
         @Detached(level = AttachLevel.IdOnly)
-        LeaseTermAgreementDocument agreementDocument();
+        ISet<LeaseTermAgreementDocument> agreementDocuments();
 
         @Owned
         CrmUserSignature employeeSignature();
