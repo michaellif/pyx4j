@@ -37,7 +37,7 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
     private ApplicationDocumentationPolicy documentationPolicy;
 
     public ProofOfEmploymentUploaderFolder() {
-        super(ProofOfEmploymentDocumentFolder.class);
+        super(ProofOfEmploymentDocumentFolder.class, i18n.tr("Proof Of Employment"));
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {

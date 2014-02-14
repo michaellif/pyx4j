@@ -52,8 +52,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
     private ApplicationDocumentationPolicy documentationPolicy;
 
     public IdUploaderFolder() {
-        super(IdentificationDocumentFolder.class);
-        asWidget().setSize("100%", "100%");
+        super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
     }
 
     public void setParentEntity(IEntity parentEntity) {

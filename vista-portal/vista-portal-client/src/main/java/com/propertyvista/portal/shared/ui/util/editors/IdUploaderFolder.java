@@ -49,7 +49,6 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
     public IdUploaderFolder() {
         super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
-        asWidget().setSize("100%", "100%");
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
