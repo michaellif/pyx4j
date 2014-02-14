@@ -202,71 +202,93 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         log.info("STEP 1. Loading domain entities...");
         loadDomain();
 
-        log.info("STEP 2. Validating generated emails...");
-        EmailTemplateType type = EmailTemplateType.ApplicationApproved;
-        String expected = getTemplateContent(type, true);
+        EmailTemplateType type;
+        String expected;
         MailMessage email = null;
-        email = MessageTemplatesCustomizable.createApplicationStatusEmail(mainApplicant, type);
-        String received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
-        log.debug(type.toString() + " content: " + received);
+        String received;
 
-        type = EmailTemplateType.ApplicationDeclined;
-        expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createApplicationStatusEmail(mainApplicant, type);
-        received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
-        log.debug(type.toString() + " content: " + received);
+        log.info("STEP 2. Validating generated emails...");
+        {
+            type = EmailTemplateType.ApplicationApproved;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createApplicationStatusEmail(mainApplicant, type);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+            log.debug(type.toString() + " content: " + received);
+        }
 
-        type = EmailTemplateType.PasswordRetrievalTenant;
-        expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainApplicant.leaseParticipant()
-                .customer().user(), token);
-        received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
-        log.debug(type.toString() + " content: " + received);
+        {
+            type = EmailTemplateType.ApplicationDeclined;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createApplicationStatusEmail(mainApplicant, type);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+            log.debug(type.toString() + " content: " + received);
+        }
 
-        type = EmailTemplateType.PasswordRetrievalProspect;
-        expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainApplicant.leaseParticipant()
-                .customer().user(), token);
-        received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
-        log.debug(type.toString() + " content: " + received);
+        {
+            type = EmailTemplateType.PasswordRetrievalTenant;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainApplicant.leaseParticipant()
+                    .customer().user(), token);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+            log.debug(type.toString() + " content: " + received);
+        }
 
-        type = EmailTemplateType.PasswordRetrievalCrm;
-        expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createCrmPasswordResetEmail(crmUser, token);
-        received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
-        log.debug(type.toString() + " content: " + received);
+        {
+            type = EmailTemplateType.PasswordRetrievalProspect;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainApplicant.leaseParticipant()
+                    .customer().user(), token);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+            log.debug(type.toString() + " content: " + received);
+        }
 
-        type = EmailTemplateType.TenantInvitation;
-        expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createTenantInvitationEmail(mainApplicant, type, token);
-        received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
-        log.debug(type.toString() + " content: " + received);
+        {
+            type = EmailTemplateType.PasswordRetrievalCrm;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createCrmPasswordResetEmail(crmUser, token);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+            log.debug(type.toString() + " content: " + received);
+        }
 
-        type = EmailTemplateType.ApplicationCreatedApplicant;
-        expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createTenantInvitationEmail(mainApplicant, type, token);
-        received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
-        log.debug(type.toString() + " content: " + received);
+        {
+            type = EmailTemplateType.TenantInvitation;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createTenantInvitationEmail(mainApplicant, type, token);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+            log.debug(type.toString() + " content: " + received);
+        }
 
-        type = EmailTemplateType.ApplicationCreatedCoApplicant;
-        expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createTenantInvitationEmail(coApplicant, type, token);
-        received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
-        log.debug(type.toString() + " content: " + received);
+        {
+            type = EmailTemplateType.ApplicationCreatedApplicant;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createTenantInvitationEmail(mainApplicant, type, token);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+            log.debug(type.toString() + " content: " + received);
+        }
 
-        type = EmailTemplateType.ApplicationCreatedGuarantor;
-        expected = getTemplateContent(type, true);
-        email = MessageTemplatesCustomizable.createTenantInvitationEmail(guarantor, type, token);
-        received = email.getHtmlBody();
-        assertEquals(type.toString(), expected, received);
+        {
+            type = EmailTemplateType.ApplicationCreatedCoApplicant;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createTenantInvitationEmail(coApplicant, type, token);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+            log.debug(type.toString() + " content: " + received);
+        }
+
+        {
+            type = EmailTemplateType.ApplicationCreatedGuarantor;
+            expected = getTemplateContent(type, true);
+            email = MessageTemplatesCustomizable.createTenantInvitationEmail(guarantor, type, token);
+            received = email.getHtmlBody();
+            assertEquals(type.toString(), expected, received);
+        }
 
         // Maintenance Request templates
         for (EmailTemplateType emailType : EmailTemplateType.maintenanceTemplates()) {
@@ -615,7 +637,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     coApplicant.leaseParticipant().customer().user().name().getValue(),
-                    coApp.id().getStringView(),
+                    lease.leaseApplication().applicationId().getStringView(),
                     appUrl,
                     officePhone,
                     building.marketing().name().getValue(),
@@ -1206,6 +1228,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         // create applications
         MasterOnlineApplication mApp = EntityFactory.create(MasterOnlineApplication.class);
+        mApp.leaseApplication().set(lease.leaseApplication());
         Persistence.service().persist(mApp);
         mainApp = EntityFactory.create(OnlineApplication.class);
         mainApp.masterOnlineApplication().set(mApp);
