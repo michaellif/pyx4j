@@ -34,6 +34,12 @@ public interface YardiApplicationFacade {
     void unreserveUnit(Lease leaseId) throws YardiServiceException;
 
     /**
+     * NOTE. Once added, Lease participants cannot be deleted via Yardi ILS/GuestCard API.
+     * It is recommended to call this method only once when Lease Participants are finalized.
+     */
+    void addLeaseParticipants(Lease lease) throws YardiServiceException;
+
+    /**
      * Create Future Lease; set tId in Lease.leaseId
      * Rely on External UnitOfWork
      */

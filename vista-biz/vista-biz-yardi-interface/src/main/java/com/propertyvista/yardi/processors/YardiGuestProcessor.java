@@ -55,6 +55,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 
 public class YardiGuestProcessor {
 
+    public static final String PV_ORG_NAME = "PV";
+
     private final String agent, source;
 
     public YardiGuestProcessor(String agent, String source) {
@@ -70,6 +72,11 @@ public class YardiGuestProcessor {
                 lease.getPrimaryKey().toString(), // use primary key as third-party guest id
                 lease.unit().building().propertyCode().getValue() //
         );
+        return prospect;
+    }
+
+    public Prospect getAllLeaseParticipants(Lease lease) {
+        Prospect prospect = getProspect(lease);
         prospect.getCustomers().getCustomer().addAll(getCoApplicants(lease));
         prospect.getCustomers().getCustomer().addAll(getGuarantors(lease));
         return prospect;
@@ -88,7 +95,7 @@ public class YardiGuestProcessor {
 
     public List<Customer> getCoApplicants(Lease lease) {
         List<Customer> result = new ArrayList<Customer>();
-        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         for (LeaseParticipant<?> lp : lease.leaseParticipants()) {
             Persistence.ensureRetrieve(lp.leaseTermParticipants(), AttachLevel.Attached);
             if (Role.roommates().contains(lp.leaseTermParticipants().iterator().next().role().getValue())) {
@@ -251,10 +258,10 @@ public class YardiGuestProcessor {
 
     private Identification getThirdPartyId(String thirdPartyId) {
         Identification id = new Identification();
-        id.setIDValue(thirdPartyId == null ? "PV-" + (new Date().getTime() / 1000) : thirdPartyId);
+        id.setIDValue(thirdPartyId == null ? PV_ORG_NAME + "-" + (new Date().getTime() / 1000) : thirdPartyId);
         id.setIDType("ThirdPartyID");
         id.setIDScopeType(IDScopeType.SENDER);
-        id.setOrganizationName("PV");
+        id.setOrganizationName(PV_ORG_NAME);
         return id;
     }
 
@@ -263,7 +270,7 @@ public class YardiGuestProcessor {
         id.setIDValue(propertyId);
         id.setIDType("PropertyID");
         id.setIDScopeType(IDScopeType.SENDER);
-        id.setOrganizationName("PV");
+        id.setOrganizationName(PV_ORG_NAME);
         return id;
     }
 

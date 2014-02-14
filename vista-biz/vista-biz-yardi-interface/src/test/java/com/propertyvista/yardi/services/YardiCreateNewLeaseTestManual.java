@@ -24,15 +24,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
+import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -45,6 +49,10 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
@@ -72,7 +80,7 @@ import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
     private final static Logger log = LoggerFactory.getLogger(YardiCreateNewLeaseTestManual.class);
 
-    private static PmcYardiCredential yc = getTestPmcYardiCredential();
+    private PmcYardiCredential yc;
 
     private Building building;
 
@@ -118,10 +126,34 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         addOutdoorParking();
         addLargeLocker();
 
-        Lease lease = getLease();
+        Lease lease = retrieveLease();
+
         try {
-            YardiGuestManagementService.getInstance().createFutureLease(yc, lease);
+            ServerSideFactory.create(YardiApplicationFacade.class).validateApplicationAcceptance(lease.unit().building());
+            // clear guests if added earlier
+            ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
+            log.info("Created Guest: {}", retrieveLease().leaseApplication().yardiApplicationId().getValue());
+
+            addCoTenant();
+            addGuarantor();
+
+            ServerSideFactory.create(YardiApplicationFacade.class).addLeaseParticipants(lease);
+            Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
+            for (LeaseParticipant<?> p : lease.leaseParticipants()) {
+                Persistence.ensureRetrieve(p.leaseTermParticipants(), AttachLevel.Attached);
+                log.info("  Participant {} = {}", p.leaseTermParticipants().iterator().next().role().getValue().name(), p.yardiApplicantId().getValue());
+            }
+
+            if (false) {
+                ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(lease);
+                log.info("Unit held for: {}", lease.leaseApplication().yardiApplicationId().getValue());
+
+                ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
+                log.info("Signed lease: {}", lease.leaseId().getValue());
+            }
         } catch (YardiServiceException e) {
+            throw new UserRuntimeException(e.getMessage(), e);
+        } catch (UserRuntimeException e) {
             log.info("ERROR: {}", e.getMessage());
         }
     }
@@ -149,6 +181,11 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
     protected Building getBuilding() {
         if (building == null) {
             building = getDataModel(BuildingDataModel.class).addBuilding();
+
+            // yardi credential setup
+            building.integrationSystemId().setValue(getTestPmcYardiCredential().getPrimaryKey());
+
+            Persistence.service().persist(building);
             Persistence.service().commit();
         }
         return building;
@@ -173,6 +210,26 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
     protected Lease retrieveLeaseDraft() {
         return ServerSideFactory.create(LeaseFacade.class).load(getLease(), true);
+    }
+
+    protected void addCoTenant() {
+        Lease lease = retrieveLeaseDraft();
+        LeaseTermTenant coTenant = EntityFactory.create(LeaseTermTenant.class);
+        coTenant.leaseParticipant().customer().set(getDataModel(CustomerDataModel.class).addCustomer());
+        coTenant.role().setValue(LeaseTermParticipant.Role.CoApplicant);
+        lease.currentTerm().version().tenants().add(coTenant);
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+        Persistence.service().commit();
+    }
+
+    protected void addGuarantor() {
+        Lease lease = retrieveLeaseDraft();
+        LeaseTermGuarantor guarantor = EntityFactory.create(LeaseTermGuarantor.class);
+        guarantor.leaseParticipant().customer().set(getDataModel(CustomerDataModel.class).addCustomer());
+        guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
+        lease.currentTerm().version().guarantors().add(guarantor);
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+        Persistence.service().commit();
     }
 
     private BillableItem addBillableItem(ARCodeDataModel.Code code) {
@@ -290,7 +347,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
     private PriorAddress getAddress() {
         PriorAddress addr = EntityFactory.create(PriorAddress.class);
-        addr.county().setValue("Canada");
+        addr.country().name().setValue("Canada");
         addr.province().name().setValue("Ontario");
         addr.postalCode().setValue("M5H 1A1");
         addr.city().setValue("Toronto");
@@ -300,26 +357,35 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         return addr;
     }
 
-    static PmcYardiCredential getTestPmcYardiCredential() {
-        PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
-        if (false) {
-            cr.propertyListCodes().setValue("prvista2");
-            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223third_17");
-            cr.username().setValue("propertyvistadb");
-            cr.password().number().setValue("52673");
-            cr.serverName().setValue("aspdb04");
-            cr.database().setValue("afqoml_live");
-            cr.platform().setValue(PmcYardiCredential.Platform.SQL);
-        } else {
-            cr.propertyListCodes().setValue("gran0002");
-            cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
-            cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com:8080/voyager6008sp17");
-            cr.username().setValue("vista_dev");
-            cr.password().number().setValue("vista_dev");
-            cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
-            cr.database().setValue("vista_dev");
-            cr.platform().setValue(PmcYardiCredential.Platform.SQL);
+    private PmcYardiCredential getTestPmcYardiCredential() {
+        if (yc == null) {
+            yc = EntityFactory.create(PmcYardiCredential.class);
+            if (false) {
+                yc.propertyListCodes().setValue("prvista2");
+                yc.serviceURLBase().setValue("https://www.iyardiasp.com/8223third_17");
+                yc.username().setValue("propertyvistadb");
+                yc.password().number().setValue("52673");
+                yc.serverName().setValue("aspdb04");
+                yc.database().setValue("afqoml_live");
+                yc.platform().setValue(PmcYardiCredential.Platform.SQL);
+            } else {
+                yc.propertyListCodes().setValue("gran0002");
+                yc.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
+                yc.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com:8080/voyager6008sp17");
+                yc.serviceURLBase().setValue("http://192.168.50.100/voyager6008sp17");
+                yc.username().setValue("vista_dev");
+                yc.password().number().setValue("vista_dev");
+                yc.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
+                yc.database().setValue("vista_dev");
+                yc.platform().setValue(PmcYardiCredential.Platform.SQL);
+            }
+            yc.pmc().set(getDataModel(PmcDataModel.class).getItem(0));
+            String namespace = NamespaceManager.getNamespace();
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+            Persistence.service().persist(yc);
+            Persistence.service().commit();
+            NamespaceManager.setNamespace(namespace);
         }
-        return cr;
+        return yc;
     }
 }

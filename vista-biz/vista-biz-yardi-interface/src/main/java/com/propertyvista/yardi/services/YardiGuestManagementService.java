@@ -59,13 +59,13 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private static final Logger log = LoggerFactory.getLogger(YardiGuestManagementService.class);
 
-    public enum ApplicantType {
-        Prospect("ProspectID"), Tenant("TenantID");
+    public enum IdentityType {
+        Prospect("ProspectID"), Tenant("TenantID"), ThirdParty("ThirdPartyID");
 
-        public final String id;
+        public final String ID;
 
-        private ApplicantType(String id) {
-            this.id = id;
+        private IdentityType(String id) {
+            this.ID = id;
         }
     }
 
@@ -84,7 +84,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private static final String ILS_SOURCE = "ILS";
 
-    public Map<String, String> createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public String createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
@@ -100,10 +100,17 @@ public class YardiGuestManagementService extends YardiAbstractService {
                 .addMoveInDate(guest, lease.expectedMoveIn().getValue()) //
                 .setEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
         submitGuest(yc, guest);
-        log.info("Created Prospect tenant with rentable items");
 
         // do guest search to retrieve lease id
-        return getParticipants(yc, lease);
+        // do tenant search to retrieve lease id
+        String guestId = lease.getPrimaryKey().toString();
+        String prospectId = getTenantId(yc, lease.unit().building(), guestId, IdentityType.Prospect);
+        if (prospectId == null) {
+            throw new YardiServiceException("Prospect not found: " + guestId);
+        }
+        log.info("Created Prospect tenant with rentable items: " + prospectId);
+
+        return prospectId;
     }
 
     public boolean holdUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
@@ -144,6 +151,20 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return true;
     }
 
+    public Map<String, String> addLeaseParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+
+        // create guest with co-tenants and guarantors
+        YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
+        Prospect guest = guestProcessor.getAllLeaseParticipants(lease);
+        submitGuest(yc, guest);
+        log.info("Added Lease Participants");
+
+        // do guest search to retrieve lease id
+        return getParticipants(yc, lease);
+    }
+
     public String signLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getProspect(lease);
@@ -159,32 +180,13 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
         // do tenant search to retrieve lease id
         String guestId = lease.getPrimaryKey().toString();
-        String tenantId = getTenantId(yc, lease.unit().building(), guestId, ApplicantType.Tenant);
+        String tenantId = getTenantId(yc, lease.unit().building(), guestId, IdentityType.Tenant);
         if (tenantId == null) {
-            throw new YardiServiceException("Prospect not found: " + guestId);
+            throw new YardiServiceException("Tenant not found: " + guestId);
         }
         log.info("Created Lease: {}", tenantId);
 
         return tenantId;
-    }
-
-    public String createFutureLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
-        Map<String, String> participants = createNewProspect(yc, lease);
-
-        String pId = participants.get(lease.getPrimaryKey().toString());
-        log.info("Created Prospect: {}", pId);
-
-        holdUnit(yc, lease);
-        log.info("Unit held for: {}", pId);
-
-        if (true) {
-            return pId;
-        } else {
-            String tId = signLease(yc, lease);
-            log.info("Signed lease: {}", tId);
-
-            return tId;
-        }
     }
 
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
@@ -253,22 +255,26 @@ public class YardiGuestManagementService extends YardiAbstractService {
         ServerSideFactory.create(YardiGuestManagementStub.class).importGuestInfo(yc, lead);
     }
 
-    private String getTenantId(PmcYardiCredential yc, Building building, String guestId, ApplicantType type) throws YardiServiceException {
+    private String getTenantId(PmcYardiCredential yc, Building building, String guestId, IdentityType type) throws YardiServiceException {
         LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc, building.propertyCode().getValue(), guestId);
         if (guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException("Prospect not found: " + guestId);
         }
-        String tenantId = null;
         Prospect p = guestActivity.getProspects().getProspect().get(0);
         for (Customer c : p.getCustomers().getCustomer()) {
+            String tpId = null, tId = null;
             for (Identification id : c.getIdentification()) {
-                if ("ThirdPartyID".equals(id.getIDType()) && guestId.equals(id.getIDValue()) && type.id.equals(id.getIDType())) {
-                    tenantId = id.getIDValue();
-                    break;
+                if (IdentityType.ThirdParty.ID.equals(id.getIDType())) {
+                    tpId = id.getIDValue();
+                } else if (type.ID.equals(id.getIDType())) {
+                    tId = id.getIDValue();
+                }
+                if (tpId != null && tId != null && guestId.equals(tpId)) {
+                    return tId;
                 }
             }
         }
-        return tenantId;
+        return null;
     }
 
     private Map<String, String> getParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
@@ -283,9 +289,9 @@ public class YardiGuestManagementService extends YardiAbstractService {
         for (Customer c : p.getCustomers().getCustomer()) {
             String tpId = null, pId = null;
             for (Identification id : c.getIdentification()) {
-                if ("ThirdPartyID".equals(id.getIDType())) {
+                if (IdentityType.ThirdParty.ID.equals(id.getIDType())) {
                     tpId = id.getIDValue();
-                } else if ("ProspectID".equals(id.getIDType())) {
+                } else if (IdentityType.Prospect.ID.equals(id.getIDType())) {
                     pId = id.getIDValue();
                 }
             }
