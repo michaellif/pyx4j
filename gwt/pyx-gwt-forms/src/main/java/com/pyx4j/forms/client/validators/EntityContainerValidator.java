@@ -23,7 +23,8 @@ package com.pyx4j.forms.client.validators;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 
-public class EntityContainerValidator extends AbstractComponentValidator<CEntityContainer<?>> {
+@SuppressWarnings("rawtypes")
+public class EntityContainerValidator extends AbstractComponentValidator {
 
     public EntityContainerValidator() {
 

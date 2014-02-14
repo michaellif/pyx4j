@@ -48,8 +48,6 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme.StyleDependent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.ComponentValidator;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -107,12 +105,9 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private DATA_TYPE value = null;
 
-    @Deprecated
-    private List<EditableValueValidator<DATA_TYPE>> valueValidators;
+    private List<ComponentValidator<DATA_TYPE>> componentValidators;
 
-    private List<ComponentValidator> componentValidators;
-
-    private MandatoryValidator mandatoryValidator;
+    private MandatoryValidator<DATA_TYPE> mandatoryValidator;
 
     // Have been changed after population
     private boolean visited = false;
@@ -331,26 +326,16 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     }
 
     public boolean isMandatory() {
-        if (valueValidators == null) {
-            return false;
-        }
-        for (EditableValueValidator<DATA_TYPE> validator : valueValidators) {
-            if (validator instanceof MandatoryValidator) {
-                return true;
-            }
-        }
-        return false;
+        return mandatoryValidator != null;
     }
 
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
             if (mandatory) {
-                if (mandatoryValidator == null) {
-                    mandatoryValidator = new MandatoryValidator();
-                }
-                addComponentValidator(mandatoryValidator);
+                addComponentValidator(mandatoryValidator = new MandatoryValidator<DATA_TYPE>());
             } else {
                 removeComponentValidator(mandatoryValidator);
+                mandatoryValidator = null;
             }
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
             revalidate();
@@ -483,19 +468,8 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         ValidationError newValidationError = null;
 
         if (isVisible() && isEditable() && isEnabled() && !isViewable() && (isVisited() || !isValueEmpty() || isEditingInProgress())) {
-
-            if (valueValidators != null) {
-                for (EditableValueValidator<DATA_TYPE> validator : valueValidators) {
-                    FieldValidationError ve = validator.isValid(this, getValue());
-                    if (ve != null) {
-                        newValidationError = ve;
-                        break;
-                    }
-                }
-            }
-
             if (componentValidators != null) {
-                for (ComponentValidator validator : componentValidators) {
+                for (ComponentValidator<DATA_TYPE> validator : componentValidators) {
                     ValidationError ve = validator.isValid();
                     if (ve != null) {
                         newValidationError = ve;
@@ -645,42 +619,15 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
-    @Deprecated
-    /**
-     * Use componentValidator
-     */
-    public void addValueValidator(EditableValueValidator<DATA_TYPE> validator) {
-        if (valueValidators == null) {
-            valueValidators = new Vector<EditableValueValidator<DATA_TYPE>>();
-        }
-        valueValidators.add(validator);
-    }
-
-    @Deprecated
-    public boolean removeValueValidator(EditableValueValidator<DATA_TYPE> validator) {
-        if (valueValidators != null) {
-            return valueValidators.remove(validator);
-        } else {
-            return false;
-        }
-    }
-
-    @Deprecated
-    public void removeAllValueValidators() {
-        if (valueValidators != null) {
-            valueValidators.clear();
-        }
-    }
-
-    public void addComponentValidator(ComponentValidator validator) {
+    public void addComponentValidator(ComponentValidator<DATA_TYPE> validator) {
         if (componentValidators == null) {
-            componentValidators = new Vector<ComponentValidator>();
+            componentValidators = new Vector<ComponentValidator<DATA_TYPE>>();
         }
         componentValidators.add(validator);
         validator.setComponent(this);
     }
 
-    public boolean removeComponentValidator(ComponentValidator validator) {
+    public boolean removeComponentValidator(ComponentValidator<DATA_TYPE> validator) {
         if (componentValidators != null) {
             return componentValidators.remove(validator);
         } else {

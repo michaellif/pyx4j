@@ -8,9 +8,7 @@
  */
 package com.pyx4j.forms.client.validators;
 
-import com.pyx4j.forms.client.ui.CComponent;
-
-public class MandatoryValidator extends AbstractComponentValidator<CComponent<?>> {
+public class MandatoryValidator<E> extends AbstractComponentValidator<E> {
 
     public MandatoryValidator() {
     }
