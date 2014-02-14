@@ -257,6 +257,10 @@ public class MailQueue implements Runnable {
     }
 
     private static String getNamespace(Class<? extends IEntity> entityClass) {
+        Class<? extends IEntity> persistableEntityClass = EntityFactory.getEntityMeta(entityClass).getPersistableSuperClass();
+        if (persistableEntityClass != null) {
+            entityClass = persistableEntityClass;
+        }
         Table table = entityClass.getAnnotation(Table.class);
         if (table == null) {
             return null;
