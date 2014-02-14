@@ -24,13 +24,12 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 
-public class PasswordStrengthValueValidator implements EditableValueValidator<String> {
+public class PasswordStrengthValueValidator extends AbstractComponentValidator<String> {
 
     private static I18n i18n = I18n.get(PasswordStrengthValueValidator.class);
 
@@ -48,15 +47,15 @@ public class PasswordStrengthValueValidator implements EditableValueValidator<St
     }
 
     @Override
-    public FieldValidationError isValid(CComponent<String> component, String value) {
+    public FieldValidationError isValid() {
         if (rule == null) {
             return null;
         }
-        PasswordStrengthVerdict verdict = rule.getPasswordVerdict(value);
+        PasswordStrengthVerdict verdict = rule.getPasswordVerdict(getComponent().getValue());
         if (acceptVerdict == null || acceptVerdict.contains(verdict)) {
             return null;
         } else {
-            return new FieldValidationError(component, i18n.tr("Password is {0}", verdict));
+            return new FieldValidationError(getComponent(), i18n.tr("Password is {0}", verdict));
         }
     }
 

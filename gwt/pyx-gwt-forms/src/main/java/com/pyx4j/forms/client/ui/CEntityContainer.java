@@ -93,7 +93,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         containerPanel.add(contentHolder);
         applyAccessibilityRules();
 
-        addComponentValidator(new EntityContainerValidator(this));
+        addComponentValidator(new EntityContainerValidator());
     }
 
     public abstract Collection<? extends CComponent<?>> getComponents();

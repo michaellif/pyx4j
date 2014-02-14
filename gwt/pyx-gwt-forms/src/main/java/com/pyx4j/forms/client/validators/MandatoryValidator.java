@@ -12,8 +12,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class MandatoryValidator extends AbstractComponentValidator<CComponent<?>> {
 
-    public MandatoryValidator(CComponent<?> container) {
-        super(container);
+    public MandatoryValidator() {
     }
 
     @Override

@@ -346,7 +346,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         if (isMandatory() != mandatory) {
             if (mandatory) {
                 if (mandatoryValidator == null) {
-                    mandatoryValidator = new MandatoryValidator(this);
+                    mandatoryValidator = new MandatoryValidator();
                 }
                 addComponentValidator(mandatoryValidator);
             } else {
@@ -677,6 +677,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             componentValidators = new Vector<ComponentValidator>();
         }
         componentValidators.add(validator);
+        validator.setComponent(this);
     }
 
     public boolean removeComponentValidator(ComponentValidator validator) {

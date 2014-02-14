@@ -25,13 +25,16 @@ import com.pyx4j.forms.client.ui.CEntityContainer;
 
 public class EntityContainerValidator extends AbstractComponentValidator<CEntityContainer<?>> {
 
-    public EntityContainerValidator(CEntityContainer<?> container) {
-        super(container);
+    public EntityContainerValidator() {
+
     }
 
     @Override
     public FieldValidationError isValid() {
-        CEntityContainer<?> container = getComponent();
+        if (!(getComponent() instanceof CEntityContainer)) {
+            throw new Error("EntityContainerValidator can be added only to CEntityContainer");
+        }
+        CEntityContainer<?> container = (CEntityContainer<?>) getComponent();
         if (container.getComponents() != null) {
             for (CComponent<?> ccomponent : container.getComponents()) {
                 if (!ccomponent.isValid()) {

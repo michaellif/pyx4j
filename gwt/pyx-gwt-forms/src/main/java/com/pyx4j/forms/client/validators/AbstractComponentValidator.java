@@ -22,16 +22,20 @@ package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-public abstract class AbstractComponentValidator<E extends CComponent<?>> implements ComponentValidator {
+public abstract class AbstractComponentValidator<DATA_TYPE> implements ComponentValidator<DATA_TYPE> {
 
-    private final E component;
+    private CComponent<DATA_TYPE> component;
 
-    public AbstractComponentValidator(E component) {
-        this.component = component;
+    public AbstractComponentValidator() {
     }
 
-    public E getComponent() {
+    public CComponent<DATA_TYPE> getComponent() {
         return component;
+    }
+
+    @Override
+    public void setComponent(CComponent<DATA_TYPE> component) {
+        this.component = component;
     }
 
 }

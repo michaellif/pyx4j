@@ -20,11 +20,15 @@
  */
 package com.pyx4j.forms.client.validators;
 
+import com.pyx4j.forms.client.ui.CComponent;
+
 /**
  * Created on 2008-08-01
  */
-public interface ComponentValidator {
+public interface ComponentValidator<DATA_TYPE> {
 
     public ValidationError isValid();
+
+    void setComponent(CComponent<DATA_TYPE> component);
 
 }
