@@ -955,10 +955,11 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public Criterion buildAvalableCriteria(AptUnit unitProto, Status status, Date from, Date fromDeadline) {
         AndCriterion criteria = new AndCriterion();
+
         AndCriterion existsReservation = new AndCriterion();
-        existsReservation.le(unitProto.unitReservation().$().dateTo(), SystemDateManager.getDate());
-        existsReservation.ge(unitProto.unitReservation().$().dateFrom(), SystemDateManager.getDate());
-        //criteria.notExists(unitProto.unitReservation().$(), existsReservation);
+        existsReservation.ge(unitProto.unitReservation().$().dateTo(), SystemDateManager.getDate());
+        existsReservation.le(unitProto.unitReservation().$().dateFrom(), SystemDateManager.getDate());
+        criteria.notExists(unitProto.unitReservation(), existsReservation);
 
         criteria.eq(unitProto.unitOccupancySegments().$().status(), status);
         criteria.eq(unitProto.unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1));

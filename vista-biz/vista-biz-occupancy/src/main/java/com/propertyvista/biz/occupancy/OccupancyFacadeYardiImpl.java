@@ -269,9 +269,9 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
         AndCriterion criteria = new AndCriterion();
 
         AndCriterion existsReservation = new AndCriterion();
-        existsReservation.le(unitProto.unitReservation().$().dateTo(), SystemDateManager.getDate());
-        existsReservation.ge(unitProto.unitReservation().$().dateFrom(), SystemDateManager.getDate());
-        //criteria.notExists(unitProto.unitReservation().$(), existsReservation);
+        existsReservation.ge(unitProto.unitReservation().$().dateTo(), SystemDateManager.getDate());
+        existsReservation.le(unitProto.unitReservation().$().dateFrom(), SystemDateManager.getDate());
+        criteria.notExists(unitProto.unitReservation(), existsReservation);
 
         if (VistaTODO.yardi_noUnitOccupancySegments) {
             criteria.le(unitProto.availability().availableForRent(), from);
