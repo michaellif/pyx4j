@@ -129,6 +129,7 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     public void unreserveUnit(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, entityId);
         ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 }

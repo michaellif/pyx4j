@@ -105,6 +105,9 @@ public interface OccupancyFacade {
     @Deprecated
     void reserve(Key unitId, Lease lease);
 
+    /**
+     * Has UofW
+     */
     void reserve(Lease lease, int durationHours);
 
     Pair<Date, Lease> isReserved(Key unitId);
@@ -113,6 +116,7 @@ public interface OccupancyFacade {
      * @param lease
      *            with unit Id
      * @return true if unit was unreserved
+     *         do not have UofW
      */
     boolean unreserveIfReservered(Lease lease);
 

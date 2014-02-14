@@ -78,8 +78,8 @@ public class ReservationManager {
     public AptUnitReservation getCurrentReserved(Key unitId) {
         EntityQueryCriteria<AptUnitReservation> criteria = EntityQueryCriteria.create(AptUnitReservation.class);
         criteria.eq(criteria.proto().unit(), unitId);
-        criteria.le(criteria.proto().dateTo(), SystemDateManager.getDate());
-        criteria.ge(criteria.proto().dateFrom(), SystemDateManager.getDate());
+        criteria.ge(criteria.proto().dateTo(), SystemDateManager.getDate());
+        criteria.le(criteria.proto().dateFrom(), SystemDateManager.getDate());
         return Persistence.service().retrieve(criteria);
     }
 }
