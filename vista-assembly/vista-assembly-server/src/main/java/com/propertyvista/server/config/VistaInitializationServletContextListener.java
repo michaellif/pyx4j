@@ -18,18 +18,23 @@ import javax.servlet.ServletContextEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.mail.MailQueue;
 
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AuditRecordEventType;
+import com.propertyvista.operations.domain.mail.DefaultOutgoingMailQueue;
+import com.propertyvista.operations.domain.mail.TenantSureOutgoingMailQueue;
 import com.propertyvista.operations.server.proc.PmcProcessMonitor;
 import com.propertyvista.sshd.InterfaceSSHDServer;
 
@@ -50,6 +55,11 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
             SchedulerHelper.init();
             SchedulerHelper.setActive(!VistaDeployment.isVistaStaging());
             InterfaceSSHDServer.init();
+
+            MailQueue.initialize(ServerSideConfiguration.instance().getMailServiceConfigConfiguration(), DefaultOutgoingMailQueue.class);
+            MailQueue.initialize(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getTenantSureMailServiceConfiguration(),
+                    TenantSureOutgoingMailQueue.class);
+
         } catch (Throwable e) {
             Logger log = LoggerFactory.getLogger(VistaInitializationServletContextListener.class);
             log.error("VistaServer initialization error", e);
@@ -67,6 +77,7 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
         } catch (Throwable readOnly) {
         }
         try {
+            MailQueue.shutdown();
             InterfaceSSHDServer.shutdown();
             PmcProcessMonitor.shutdown();
             SchedulerHelper.shutdown();

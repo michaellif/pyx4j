@@ -32,9 +32,12 @@ import com.propertyvista.shared.config.VistaDemo;
 
 class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
+    private String configurationId;
+
     static VistaSMTPMailServiceConfig getGmailConfig(VistaServerSideConfiguration sideConfiguration) {
 
         VistaSMTPMailServiceConfig config = new VistaSMTPMailServiceConfig();
+        config.configurationId = "Default";
 
         config.host = "smtp.gmail.com";
         config.port = 465;
@@ -66,6 +69,8 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
     static IMailServiceConfigConfiguration getCustomConfig(String prefix, VistaServerSideConfiguration serverSideConfiguration) {
         VistaSMTPMailServiceConfig config = getGmailConfig(serverSideConfiguration);
+        config.configurationId = prefix;
+
         config.readProperties(prefix, serverSideConfiguration.getConfigProperties().getProperties());
         File mailCredentialsFile = new File(serverSideConfiguration.getConfigDirectory(), prefix.replace('.', '-') + "-credentials.properties");
         if (mailCredentialsFile.canRead()) {
@@ -74,6 +79,11 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
             config.password = credentials.password;
         }
         return config;
+    }
+
+    @Override
+    public String configurationId() {
+        return configurationId;
     }
 
 }

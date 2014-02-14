@@ -184,63 +184,63 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     private static IMailServiceConfigConfiguration getTenantSureConfig() {
-        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureMailServiceConfiguration();
+        return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getTenantSureMailServiceConfiguration();
     }
 
     @Override
     public void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
         MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentNotProcessedEmail(gracePeriodEndDate, cancellationDate);
         m.setTo(tenantEmail);
-        Mail.send(m, getTenantSureConfig());
+        Mail.queue(m, null, getTenantSureConfig());
     }
 
     @Override
     public void sendTenantSurePaymentsResumedEmail(String tenantEmail) {
         MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumedEmail();
         m.setTo(tenantEmail);
-        Mail.send(m, getTenantSureConfig());
+        Mail.queue(m, null, getTenantSureConfig());
     }
 
     @Override
     public void sendPaymentRejectedNotification(List<String> targetEmails, PaymentRecord paymentRecord, boolean applyNSF) {
         MailMessage m = MessageTemplatesCrmNotification.createPaymentRejectedNotificationEmail(paymentRecord, applyNSF);
         m.setTo(targetEmails);
-        Mail.send(m);
+        Mail.queue(m, null, null);
     }
 
     @Override
     public void sendPaymentYardiUnableToRejectNotification(List<String> targetEmails, PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage) {
         MailMessage m = MessageTemplatesCrmNotification.createPostToYardiFailedNotificationEmail(paymentRecord, applyNSF, yardiErrorMessage);
         m.setTo(targetEmails);
-        Mail.send(m);
+        Mail.queue(m, null, null);
     }
 
     @Override
     public void sendAutoPayReviewRequiredNotification(List<String> targetEmails, List<Lease> leaseIds) {
         MailMessage m = MessageTemplatesCrmNotification.createAutoPayReviewRequiredNotificationEmail(leaseIds);
         m.setTo(targetEmails);
-        Mail.send(m);
+        Mail.queue(m, null, null);
     }
 
     @Override
     public void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds, Map<Lease, List<AutopayAgreement>> canceledAgreements) {
         MailMessage m = MessageTemplatesCrmNotification.createAutoPayCancelledBySystemNotificationEmail(leaseIds, canceledAgreements);
         m.setTo(targetEmails);
-        Mail.send(m);
+        Mail.queue(m, null, null);
     }
 
     @Override
     public void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId, List<AutopayAgreement> canceledAgreements) {
         MailMessage m = MessageTemplatesCrmNotification.createAutoPayCancelledByResidentNotificationEmail(leaseId, canceledAgreements);
         m.setTo(targetEmails);
-        Mail.send(m);
+        Mail.queue(m, null, null);
     }
 
     @Override
     public void sendTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord) {
         MailMessage m = MessageTemplatesCustomizable.createTenantOneTimePaymentSubmitted(paymentRecord);
         if (m != null) {
-            Mail.send(m);
+            Mail.queue(m, null, null);
         }
     }
 
@@ -248,7 +248,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     public void sendTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF) {
         MailMessage m = MessageTemplatesCustomizable.createTenantPaymenttRejected(paymentRecord, applyNSF);
         if (m != null) {
-            Mail.send(m);
+            Mail.queue(m, null, null);
         }
     }
 
@@ -256,7 +256,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     public void sendTenantPaymentCleared(PaymentRecord paymentRecord) {
         MailMessage m = MessageTemplatesCustomizable.createTenantPaymentCleared(paymentRecord);
         if (m != null) {
-            Mail.send(m);
+            Mail.queue(m, null, null);
         }
     }
 
@@ -264,19 +264,15 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     public void sendTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement) {
         MailMessage m = MessageTemplatesCustomizable.createTenantAutopaySetupCompleted(autopayAgreement);
         if (m != null) {
-            Mail.send(m);
+            Mail.queue(m, null, null);
         }
     }
 
     @Override
     public void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail) {
         MailMessage m = MessageTemplatesCrmNotification.createOnlinePaymentSetupCompletedEmail(userName);
-
         m.setTo(userEmail);
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
-        }
+        Mail.queue(m, null, null);
     }
 
     @Override
