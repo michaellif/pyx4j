@@ -22,7 +22,7 @@ package com.pyx4j.server.mail;
 
 import com.pyx4j.config.server.Credentials;
 
-public class SMTPGmailMailServiceConfig extends SMTPMailServiceConfig {
+public abstract class SMTPGmailMailServiceConfig extends SMTPMailServiceConfig {
 
     public SMTPGmailMailServiceConfig(Credentials credentials) {
         super("smtp.gmail.com", 465, credentials.userName, credentials.password);

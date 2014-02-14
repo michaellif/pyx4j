@@ -28,6 +28,25 @@ public interface IMailService {
 
     public MailDeliveryStatus send(MailMessage mailMessage);
 
+    /**
+     * External transaction is used to persist the message, no attempt to deliver message will be made until transaction is committed
+     * 
+     * @param mailMessage
+     * @param callbackClass
+     *            optional class that will be instantiated and called once email was sent
+     * @param mailConfig
+     *            optional default configuration will be used
+     */
+    public void queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig);
+
+    /**
+     * Apply address restrictions to the messages
+     * 
+     * @param mailMessage
+     * @return
+     */
+    public MailMessage filter(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig);
+
     public boolean isDisabled();
 
     public void setDisabled(boolean disabled);

@@ -25,7 +25,7 @@ import java.util.Map;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.PropertiesConfiguration;
 
-public class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
+public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
 
     protected String host;
 

@@ -21,6 +21,9 @@
 package com.pyx4j.server.mail;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 
 public class Mail {
 
@@ -36,4 +39,27 @@ public class Mail {
         return new SMTPMailServiceImpl();
     }
 
+    /**
+     * External transaction is used to persist the message, no attempt to deliver message will be made until transaction is committed
+     * 
+     * @param mailMessage
+     * @param callbackClass
+     *            optional class that will be instantiated and called once email was sent
+     */
+    public static void queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
+        getMailService().queue(mailMessage, callbackClass, mailConfig);
+    }
+
+    public static void queueUofW(final MailMessage mailMessage, final Class<MailDeliveryCallback> callbackClass,
+            final IMailServiceConfigConfiguration mailConfig) {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() throws RuntimeException {
+                getMailService().queue(mailMessage, callbackClass, mailConfig);
+                return null;
+            }
+        });
+
+    }
 }

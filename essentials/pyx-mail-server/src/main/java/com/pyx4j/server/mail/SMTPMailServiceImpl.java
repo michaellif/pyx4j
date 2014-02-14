@@ -71,8 +71,23 @@ class SMTPMailServiceImpl implements IMailService {
     }
 
     @Override
+    public MailMessage filter(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig) {
+        //TODO  implement this 
+        return mailMessage;
+    }
+
+    @Override
     public MailDeliveryStatus send(MailMessage mailMessage) {
         return send(mailMessage, ServerSideConfiguration.instance().getMailServiceConfigConfiguration());
+    }
+
+    @Override
+    public void queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
+        if (disabled) {
+            return;
+        }
+        IMailServiceConfigConfiguration config = (mailConfig != null) ? mailConfig : ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+        MailQueue.queue(filter(mailMessage, config), callbackClass, config);
     }
 
     @Override

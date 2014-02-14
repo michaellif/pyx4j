@@ -22,6 +22,6 @@ package com.pyx4j.server.mail;
 
 public enum MailDeliveryStatus {
 
-    Success, Queued, ConfigurationError, ConnectionError, MessageDataError;
+    Success, ConfigurationError, ConnectionError, MessageDataError;
 
 }

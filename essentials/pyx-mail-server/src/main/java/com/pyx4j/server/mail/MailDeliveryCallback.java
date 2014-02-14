@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,14 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-02-20
+ * Created on Feb 14, 2014
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.config.server;
+package com.pyx4j.server.mail;
 
-public interface IMailServiceConfigConfiguration {
+public interface MailDeliveryCallback {
 
-    String configurationId();
+    public void onDeliveryCompleted(MailMessage mailMessage, MailDeliveryStatus status);
 
 }
