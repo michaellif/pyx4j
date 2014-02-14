@@ -89,7 +89,6 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
     protected void persist(Service bo, Service to) {
         super.persist(bo, to);
 
-        // update unit market prices here:
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(bo);
     }
 }

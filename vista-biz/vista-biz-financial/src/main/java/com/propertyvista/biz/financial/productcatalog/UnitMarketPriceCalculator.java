@@ -46,7 +46,7 @@ public class UnitMarketPriceCalculator {
             productCatalog = Persistence.service().retrieve(criteria);
             Persistence.service().retrieveMember(productCatalog.services());
             for (Service service : productCatalog.services()) {
-                if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
+                if (!service.defaultCatalogItem().isBooleanTrue() && ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
                 }
             }
@@ -77,7 +77,7 @@ public class UnitMarketPriceCalculator {
 
         //Find only first Service/ ProductItem that apply to units
         for (Service service : productCatalog.services()) {
-            if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
+            if (!service.defaultCatalogItem().isBooleanTrue() && ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                 for (ProductItem item : service.version().items()) {
                     if (item.element().isInstanceOf(AptUnit.class)) {
                         if (!firstItemsInCatalog.containsKey(item.element())) {
@@ -94,13 +94,14 @@ public class UnitMarketPriceCalculator {
     }
 
     private static void updateUnitMarketPrice(AptUnit unit, ProductItem productItem) {
-        BigDecimal origPrice = unit.financial()._marketRent().getValue();
-        BigDecimal currentPrice = calculateUnitMarketPrice(productItem);
-        if (!EqualsHelper.equals(origPrice, currentPrice)) {
-            unit.financial()._marketRent().setValue(currentPrice);
-            Persistence.service().merge(unit);
+        if (productItem != null) {
+            BigDecimal origPrice = unit.financial()._marketRent().getValue();
+            BigDecimal currentPrice = calculateUnitMarketPrice(productItem);
+            if (!EqualsHelper.equals(origPrice, currentPrice)) {
+                unit.financial()._marketRent().setValue(currentPrice);
+                Persistence.service().merge(unit);
+            }
         }
-
     }
 
     private static BigDecimal calculateUnitMarketPrice(ProductItem productItem) {
