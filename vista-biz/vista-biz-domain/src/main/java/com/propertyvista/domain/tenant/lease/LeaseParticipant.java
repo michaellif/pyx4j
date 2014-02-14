@@ -65,6 +65,8 @@ public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEn
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> participantId();
 
+    IPrimitive<String> yardiApplicantId();
+
     //TODO
     @Transient
     @Detached(level = AttachLevel.Detached)
