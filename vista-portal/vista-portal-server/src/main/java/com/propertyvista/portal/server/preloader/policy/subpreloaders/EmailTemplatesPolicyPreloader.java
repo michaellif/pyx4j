@@ -325,7 +325,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{6}<br/>"+
                 "{7}<br/>"+
                 "{8}<br/>",
-                EmailTemplateManager.getVarname(appT.CoApplicant().Name()),
+                EmailTemplateManager.getVarname(appT.CoApplicant().FirstName()),
                 EmailTemplateManager.getVarname(appT.Applicant().Name()),
                 EmailTemplateManager.getVarname(appT.UnitAddress()),
                 EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
@@ -381,7 +381,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{6}<br/>"+
                 "{7}<br/>"+
                 "{8}<br/>",
-                EmailTemplateManager.getVarname(appT.Guarantor().Name()),
+                EmailTemplateManager.getVarname(appT.Guarantor().FirstName()),
                 EmailTemplateManager.getVarname(appT.GuarantorRequester().Name()),
                 EmailTemplateManager.getVarname(appT.UnitAddress()),
                 EmailTemplateManager.getVarname(bldT.Administrator().Phone()),

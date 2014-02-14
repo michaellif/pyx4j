@@ -294,7 +294,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     private void inviteGuarantors(Lease lease, Customer tenant) {
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
         for (LeaseTermGuarantor guarantor : lease.currentTerm().version().guarantors()) {
             if (guarantor.tenant().customer().equals(tenant)) {
                 if (guarantor.leaseParticipant().customer().user().isNull()) {

@@ -226,7 +226,7 @@ public class EmailTemplateRootObjectLoader {
             t.ApplicantsAndGuarantorsNames().setValue(ConverterUtils.convertStringCollection(applicantsNames, ", "));
             t.ApplicantsAndGuarantorsNames().setValue(ConverterUtils.convertStringCollection(applicantsAndGuarantorsNames, ", "));
 
-            t.ReferenceNumber().setValue(app.getPrimaryKey().toString());
+            t.ReferenceNumber().setValue(context.lease().leaseApplication().applicationId().getStringView());
             if (!context.accessToken().isNull()) {
                 t.SignUpUrl().setValue(getProspectAccessUrl(context.accessToken().getValue()));
             } else {
