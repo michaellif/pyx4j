@@ -22,6 +22,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public interface YardiApplicationFacade {
     /**
      * Create GuestCard; set pId in Lease.leaseId
+     * Inside is UnitOfWork
      * 
      * @throws YardiServiceException
      */
@@ -32,7 +33,10 @@ public interface YardiApplicationFacade {
 
     void unreserveUnit(Lease leaseId) throws YardiServiceException;
 
-    /** Create Future Lease; set tId in Lease.leaseId */
+    /**
+     * Create Future Lease; set tId in Lease.leaseId
+     * Rely on External UnitOfWork
+     */
     Lease approveApplication(Lease leaseId) throws YardiServiceException;
 
     /**

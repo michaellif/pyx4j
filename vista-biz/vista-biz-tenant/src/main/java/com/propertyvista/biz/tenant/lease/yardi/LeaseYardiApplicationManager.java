@@ -83,9 +83,7 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
         // activate, newly created leases:
         Lease lease = super.activate(leaseId);
         try {
-            //WofW 3
             lease = ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
-            Persistence.service().persist(lease);
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
         }
