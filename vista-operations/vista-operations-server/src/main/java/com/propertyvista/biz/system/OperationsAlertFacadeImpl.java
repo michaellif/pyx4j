@@ -76,7 +76,7 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
                     m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
                     m.setSubject("Vista Operations Alert");
                     m.setTextBody(details);
-                    Mail.send(m);
+                    Mail.queueUofW(m, null, null);
                 }
                 return null;
             }

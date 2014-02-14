@@ -59,7 +59,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendProspectWelcome(LeaseTermTenant tenant) {
         MailMessage m = MessageTemplatesCustomizable.createProspectWelcome(tenant);
-        Mail.send(m);
+        Mail.queue(m, null, null);
     }
 
     @Override
@@ -83,9 +83,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
         MailMessage m = MessageTemplatesCustomizable.createTenantInvitationEmail(leaseParticipant, emailTemplateType, token);
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
-        }
+        Mail.queue(m, null, null);
     }
 
     @Override
@@ -106,10 +104,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             throw new IllegalArgumentException();
         }
         MailMessage m = MessageTemplatesCustomizable.createApplicationStatusEmail(tenant, emailType);
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
-        }
-
+        Mail.queue(m, null, null);
     }
 
     @Override
@@ -125,9 +120,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         EmailTemplateType emailType = EmailTemplateType.TenantInvitation;
 
         MailMessage m = MessageTemplatesCustomizable.createTenantInvitationEmail(tenant, emailType, token);
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException("Mail delivery failed: " + user.email().getValue());
-        }
+        Mail.queue(m, null, null);
     }
 
     @Override
@@ -175,12 +168,8 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendNewPmcEmail(OnboardingUser user, Pmc pmc) {
         MailMessage m = MessageTemplatesCrmNotification.createNewPmcEmail(user, pmc);
-
         m.setTo(user.email().getValue());
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
-        }
+        Mail.queue(m, null, null);
     }
 
     private static IMailServiceConfigConfiguration getTenantSureConfig() {

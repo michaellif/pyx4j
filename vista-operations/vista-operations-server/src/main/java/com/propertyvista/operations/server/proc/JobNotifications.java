@@ -123,6 +123,6 @@ public class JobNotifications {
             m.setHeader("X-Priority", "1");
         }
 
-        Mail.send(m);
+        Mail.queueUofW(m, null, null);
     }
 }

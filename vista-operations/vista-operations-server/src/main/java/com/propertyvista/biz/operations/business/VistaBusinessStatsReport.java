@@ -402,6 +402,6 @@ class VistaBusinessStatsReport {
         String fileName = "OperationsStatistics-" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".xlsx";
         m.addAttachment(new MailAttachment(fileName, formater.getContentType(), formater.getBinaryData()));
 
-        Mail.send(m);
+        Mail.queueUofW(m, null, null);
     }
 }

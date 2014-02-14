@@ -41,7 +41,7 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
     public void sendOperationsPasswordRetrievalToken(OperationsUser user) {
         String token = AccessKey.createAccessToken(user, OperationsUserCredential.class, 1);
         if (token != null) {
-            send(OperationsNotificationManager.createOperationsPasswordResetEmail(user, token));
+            sendOrFaile(OperationsNotificationManager.createOperationsPasswordResetEmail(user, token));
         } else {
             log.error(GENERIC_FAILED_MESSAGE);
         }
@@ -49,21 +49,17 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
 
     @Override
     public void invalidDirectDebitReceived(DirectDebitRecord paymentRecord) {
-        send(OperationsNotificationManager.createInvalidDirectDebitReceivedEmail(paymentRecord));
+        Mail.queueUofW(OperationsNotificationManager.createInvalidDirectDebitReceivedEmail(paymentRecord), null, null);
     }
 
     @Override
     public void sendTenantSureCfcOperationProblem(Throwable error) {
-        send(OperationsNotificationManager.createCfcErrorMessage(error));
+        Mail.queueUofW(OperationsNotificationManager.createCfcErrorMessage(error), null, null);
     }
 
-    private void send(MailMessage m) {
-        try {
-            if (MailDeliveryStatus.Success != Mail.send(m)) {
-                throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
-            }
-        } catch (Throwable t) {
-            log.error("Could not send message", t);
+    private void sendOrFaile(MailMessage m) throws UserRuntimeException {
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
     }
 }
