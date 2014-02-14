@@ -422,7 +422,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         AptUnitOccupancySegment segmentToOccupy = null;
 
         Pair<Date, Lease> reservation = isReserved(lease.unit().getPrimaryKey());
-        if (reservation != null && !reservation.getB().getPrimaryKey().equals(lease.getPrimaryKey())) {
+        if (reservation.getB() != null && !reservation.getB().equals(lease)) {
             throw new IllegalStateException("the unit pk=" + lease.unit().getPrimaryKey() + " is reserved for lease pk=" + reservation.getB().getPrimaryKey()
                     + ": cannot occupy it for lease pk=" + lease.getPrimaryKey());
         }

@@ -940,9 +940,9 @@ public abstract class LeaseAbstractManager {
 
     private void reserveUnit(Lease lease) {
         switch (lease.status().getValue()) {
-        // TODO: remove this cases:
         case NewLease:
         case Application:
+// TODO: remove this :
             if (ServerSideFactory.create(OccupancyFacade.class).isReserveAvailable(lease.unit().getPrimaryKey()) != null) {
                 ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
             }

@@ -115,7 +115,6 @@ public interface OccupancyFacade {
      * @param unitId
      * @return empty pair in case of no reservation exist; Date - reservation to (until);
      */
-
     Pair<Date, Lease> isReserved(Key unitId);
 
     /**
