@@ -328,15 +328,15 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             break;
         case ApplicationDeclined:
             templateFmt = "Dear {0},<br/><br/>" +
-                "Unfortunately, based on the information provided your application has been DECLINED.<br/><br/>" +
-                "We do encourage you to add more information to your application that could assist us in re-assessing this application.<br/>" +
-                "Typically, additional Proof of Income or Guarantor(s)can change the application decision and allow us to re-evaluate the entire application.<br/>" +
+                "Unfortunately, based on the information provided your application has been DECLINED.<br/><br/>\n" +
+                "We do encourage you to add more information to your application that could assist us in re-assessing this application.<br/>\n" +
+                "Typically, additional Proof of Income or Guarantor(s)can change the application decision and allow us to re-evaluate the entire application.<br/>\n" +
                 "We welcome you to access the application again utilizing the username and password you have previously created at {1} " +
-                "to add more information.<br/>" +
-                "Should you wish the cancel the application procedure at this time completely, no further actions are required.<br/><br/>" +
+                "to add more information.<br/>\n" +
+                "Should you wish the cancel the application procedure at this time completely, no further actions are required.<br/><br/>\n" +
                 "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly and reference your " +
-                "Application Reference Number {2}<br/><br/>" +
-                "Sincerely,<br/><br/>" +
+                "Application Reference Number {2}<br/><br/>\n" +
+                "Sincerely,<br/><br/>\n" +
                 "{3}<br/>" +
                 "{4}<br/>";
             break;
@@ -590,7 +590,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainApplicant.leaseParticipant().customer().user().name().getValue(),
-                    mainApp.id().getStringView(),
+                    lease.leaseApplication().applicationId().getStringView(),
                     appUrl,
                     officePhone,
                     building.marketing().name().getValue(),
@@ -640,7 +640,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     guarantor.leaseParticipant().customer().user().name().getValue(),
-                    guarantorApp.id().getStringView(),
+                    lease.leaseApplication().applicationId().getStringView(),
                     appUrl,
                     officePhone,
                     building.marketing().name().getValue(),
@@ -694,8 +694,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainApplicant.leaseParticipant().customer().user().name().getValue(),
-                    mainApp.id().getStringView(),
                     ptappHomeUrl,
+                    lease.leaseApplication().applicationId().getStringView(),
                     building.marketing().name().getValue(),
                     adminName
                 };
@@ -706,8 +706,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
                     EmailTemplateManager.getVarname(appT.Applicant().Name()),
-                    EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
+                    EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                     EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
@@ -1147,6 +1147,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         lease = ServerSideFactory.create(LeaseFacade.class).create(Status.Application);
         lease.unit().set(unit);
         lease.currentTerm().termFrom().setValue(new LogicalDate());
+        lease.leaseApplication().applicationId().setValue("331");
 
         // main applicant
         {
