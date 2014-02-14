@@ -10,17 +10,15 @@ package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class MandatoryValidator<E> implements EditableValueValidator<E> {
+public class MandatoryValidator extends AbstractComponentValidator<CComponent<?>> {
 
-    private final String validationMessage;
-
-    public MandatoryValidator(String validationMessage) {
-        this.validationMessage = validationMessage;
+    public MandatoryValidator(CComponent<?> container) {
+        super(container);
     }
 
     @Override
-    public MandatoryValidationFailure isValid(CComponent<E> component, E value) {
-        return !component.isValueEmpty() ? null : new MandatoryValidationFailure(component, validationMessage);
+    public MandatoryValidationFailure isValid() {
+        return !getComponent().isValueEmpty() ? null : new MandatoryValidationFailure(getComponent(), getComponent().getMandatoryValidationMessage());
     }
 
 }

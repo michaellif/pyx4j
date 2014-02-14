@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
@@ -112,6 +111,8 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     private List<EditableValueValidator<DATA_TYPE>> valueValidators;
 
     private List<ComponentValidator> componentValidators;
+
+    private MandatoryValidator mandatoryValidator;
 
     // Have been changed after population
     private boolean visited = false;
@@ -344,17 +345,12 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
             if (mandatory) {
-                addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
+                if (mandatoryValidator == null) {
+                    mandatoryValidator = new MandatoryValidator(this);
+                }
+                addComponentValidator(mandatoryValidator);
             } else {
-                Collection<MandatoryValidator<DATA_TYPE>> validatorsForRemoval = new LinkedList<MandatoryValidator<DATA_TYPE>>();
-                for (EditableValueValidator<DATA_TYPE> validator : valueValidators) {
-                    if (validator instanceof MandatoryValidator) {
-                        validatorsForRemoval.add((MandatoryValidator<DATA_TYPE>) validator);
-                    }
-                }
-                for (MandatoryValidator<DATA_TYPE> validator : validatorsForRemoval) {
-                    removeValueValidator(validator);
-                }
+                removeComponentValidator(mandatoryValidator);
             }
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
             revalidate();
@@ -367,6 +363,10 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     public void setMandatoryValidationMessage(String message) {
         mandatoryValidationMessage = message;
+    }
+
+    public String getMandatoryValidationMessage() {
+        return mandatoryValidationMessage;
     }
 
     @Override

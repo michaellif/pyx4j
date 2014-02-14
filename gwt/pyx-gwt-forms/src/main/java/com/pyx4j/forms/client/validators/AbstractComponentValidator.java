@@ -21,24 +21,17 @@
 package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityContainer;
 
-public class EntityContainerValidator extends AbstractComponentValidator<CEntityContainer<?>> {
+public abstract class AbstractComponentValidator<E extends CComponent<?>> implements ComponentValidator {
 
-    public EntityContainerValidator(CEntityContainer<?> container) {
-        super(container);
+    private final E component;
+
+    public AbstractComponentValidator(E component) {
+        this.component = component;
     }
 
-    @Override
-    public FieldValidationError isValid() {
-        CEntityContainer<?> container = getComponent();
-        if (container.getComponents() != null) {
-            for (CComponent<?> ccomponent : container.getComponents()) {
-                if (!ccomponent.isValid()) {
-                    return new FieldValidationError(container, "");
-                }
-            }
-        }
-        return null;
+    public E getComponent() {
+        return component;
     }
+
 }
