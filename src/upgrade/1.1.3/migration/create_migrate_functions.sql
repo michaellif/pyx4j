@@ -667,6 +667,11 @@ BEGIN
         ALTER TABLE lease_application_legal_term OWNER TO vista;
         
         
+        -- lease_participant
+        
+        ALTER TABLE lease_participant ADD COLUMN yardi_applicant_id VARCHAR(500);
+        
+        
         -- lease_term_agreement_document
         
         CREATE TABLE lease_term_agreement_document

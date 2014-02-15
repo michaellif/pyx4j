@@ -61,7 +61,7 @@ BEGIN TRANSACTION;
 
         -- New sequences
         
-        
+        CREATE SEQUENCE abstract_outgoing_mail_queue_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_signatures$legal_terms_signatures_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_signatures_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE apt_unit_effective_availability_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -119,6 +119,7 @@ BEGIN TRANSACTION;
 
         -- Change owner to vista
         
+        ALTER SEQUENCE abstract_outgoing_mail_queue_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_signatures$legal_terms_signatures_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_signatures_seq OWNER TO vista ;
         ALTER SEQUENCE apt_unit_effective_availability_seq OWNER TO vista ;
