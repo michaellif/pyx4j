@@ -188,11 +188,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     }
 
     @Override
-    public boolean isVisited() {
-        return true;
-    }
-
-    @Override
     protected void onReset() {
         if (getComponents() != null) {
             for (CComponent<?> ccomponent : getComponents()) {

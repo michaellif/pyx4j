@@ -387,11 +387,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         itemsList.clear();
     };
 
-    @Override
-    public boolean isVisited() {
-        return false;
-    }
-
     public void setNoDataNotificationWidget(IsWidget widget) {
         noDataNotificationHolder.setWidget(widget);
     }

@@ -413,27 +413,19 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     protected abstract void setDebugId(IDebugId debugId);
 
     public void applyVisibilityRules() {
-        if (!isVisible()) {
-            setVisited(false);
-        }
+
     }
 
     public void applyEnablingRules() {
-        if (!isEnabled()) {
-            setVisited(false);
-        }
+
     }
 
     public void applyEditabilityRules() {
-        if (!isEditable()) {
-            setVisited(false);
-        }
+
     }
 
     public void applyViewabilityRules() {
-        if (!isViewable()) {
-            setVisited(false);
-        }
+
     }
 
     public void applyAccessibilityRules() {
@@ -521,8 +513,16 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         }
         onValuePropagation(this.value, fireEvent, populate);
         onValueSet(populate);
+
+        if (this instanceof CField) {
+            if ((value == null) && populate) {
+                setVisited(false);
+            } else {
+                setVisited(true);
+            }
+        }
+
         if (populate) {
-            setVisited(false);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
         }
     }
@@ -594,7 +594,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return results;
     }
 
-    public boolean isVisited() {
+    public final boolean isVisited() {
         return visited;
     }
 
