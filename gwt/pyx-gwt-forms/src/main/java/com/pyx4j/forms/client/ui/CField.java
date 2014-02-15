@@ -22,10 +22,13 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>> extends CComponent<DATA_TYPE> {
@@ -36,6 +39,18 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
 
     public CField() {
         super();
+
+        if (ApplicationMode.isDevelopment()) {
+            addValueChangeHandler(new ValueChangeHandler<DATA_TYPE>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<DATA_TYPE> event) {
+                    if (asWidget() != null) {
+                        asWidget().getElement().setAttribute(DEV_ATTR, CField.this.getDebugInfo());
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -133,5 +148,12 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     @Override
     protected void setDebugId(IDebugId debugId) {
         nativeWidget.setDebugId(debugId);
+    }
+
+    @Override
+    protected String getDebugInfo() {
+        StringBuilder info = new StringBuilder(super.getDebugInfo());
+        info.append("value").append("=").append(getValue()).append(";");
+        return info.toString();
     }
 }

@@ -58,6 +58,8 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private static final I18n i18n = I18n.get(CComponent.class);
 
+    protected static final String DEV_ATTR = "devAttr";
+
     public static enum NoteStyle {
 
         Info(CComponentTheme.StyleDependent.info),
@@ -135,17 +137,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
                 @Override
                 public void onPropertyChange(PropertyChangeEvent event) {
                     if (asWidget() != null) {
-                        asWidget().getElement().setAttribute("DevAttr", CComponent.this.toString());
-                    }
-                }
-            });
-
-            addValueChangeHandler(new ValueChangeHandler<DATA_TYPE>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<DATA_TYPE> event) {
-                    if (asWidget() != null) {
-                        asWidget().getElement().setAttribute("DevAttr", CComponent.this.toString());
+                        asWidget().getElement().setAttribute(DEV_ATTR, CComponent.this.getDebugInfo());
                     }
                 }
             });
@@ -689,6 +681,19 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             }
         }
 
+    }
+
+    protected String getDebugInfo() {
+        StringBuilder info = new StringBuilder();
+        info.append("type").append("=").append(getClass().getSimpleName()).append(";");
+        info.append("title").append("=").append(getTitle()).append(";");
+        info.append("mandatory").append("=").append(isMandatory()).append(";");
+        info.append("enabled").append("=").append(isEnabled()).append(";");
+        info.append("editable").append("=").append(isEditable()).append(";");
+        info.append("visible").append("=").append(isVisible()).append(";");
+        info.append("visited").append("=").append(isVisited()).append(";");
+        info.append("valid").append("=").append(isValid()).append(";");
+        return info.toString();
     }
 
     protected abstract void setEditorValue(DATA_TYPE value);
