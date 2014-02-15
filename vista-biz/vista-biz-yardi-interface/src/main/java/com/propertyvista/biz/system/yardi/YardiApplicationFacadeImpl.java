@@ -47,6 +47,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                 String pID = YardiGuestManagementService.getInstance().createNewProspect(getPmcYardiCredential(lease), lease);
 
                 // save primary tenant pID
+                // TODO - should we copy pID to tenant.yardiApplicantId()?
                 lease.leaseApplication().yardiApplicationId().setValue(pID);
                 Persistence.service().persist(lease.leaseApplication());
 
