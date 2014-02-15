@@ -27,7 +27,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
-import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;

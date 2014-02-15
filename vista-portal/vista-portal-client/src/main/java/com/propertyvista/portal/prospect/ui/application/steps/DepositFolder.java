@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -26,7 +24,6 @@ import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 

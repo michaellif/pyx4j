@@ -90,7 +90,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
     @Override
     protected void addItem() {
-        Collection<IdentificationDocumentType> usedTypes = new ArrayList<IdentificationDocumentType>();
+        Collection<IdentificationDocumentType> usedTypes = new ArrayList<>();
         for (IdentificationDocumentFolder doc : getValue()) {
             usedTypes.add(doc.idType());
         }

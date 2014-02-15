@@ -24,7 +24,6 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 

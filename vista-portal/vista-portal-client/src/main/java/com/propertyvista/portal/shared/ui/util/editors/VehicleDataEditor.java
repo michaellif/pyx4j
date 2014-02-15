@@ -13,17 +13,10 @@
  */
 package com.propertyvista.portal.shared.ui.util.editors;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.events.DevShortcutEvent;
-import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
@@ -34,7 +27,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 

@@ -14,10 +14,6 @@
 package com.propertyvista.portal.prospect.ui.application;
 
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -25,7 +21,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,7 +33,6 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
-import com.propertyvista.portal.shared.themes.StepsTheme;
 
 public class NavigStepItem implements IsWidget {
 

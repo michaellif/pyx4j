@@ -15,7 +15,6 @@ package com.propertyvista.portal.prospect.ui.application;
 
 import java.util.HashMap;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;

@@ -17,24 +17,18 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ui.financial.autopay.AutoPayWizardView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;

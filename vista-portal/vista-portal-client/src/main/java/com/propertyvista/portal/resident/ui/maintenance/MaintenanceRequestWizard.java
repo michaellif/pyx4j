@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -24,7 +22,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;

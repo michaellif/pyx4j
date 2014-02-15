@@ -32,7 +32,7 @@ public class MenuList implements IsWidget {
 
     public MenuList() {
         contentPanel = new ContentPanel();
-        items = new ArrayList<MenuItem>();
+        items = new ArrayList<>();
     }
 
     @Override

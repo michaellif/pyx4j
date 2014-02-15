@@ -16,9 +16,6 @@ package com.propertyvista.portal.shared.ui.util.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.events.DevShortcutEvent;
-import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;

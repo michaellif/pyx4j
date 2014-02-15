@@ -45,7 +45,7 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
         super(OnlineApplicationDTO.class);
         this.applicationWizard = applicationWizard;
 
-        sections = new ArrayList<AbstractSectionPanel>();
+        sections = new ArrayList<>();
 
         asWidget().setStyleName(SummaryStepTheme.StyleName.SummaryStepForm.name());
 

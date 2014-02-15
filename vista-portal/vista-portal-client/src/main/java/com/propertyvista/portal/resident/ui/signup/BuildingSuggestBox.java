@@ -63,7 +63,7 @@ public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuil
     @Override
     public void setOptions(Collection<SelfRegistrationBuildingDTO> opt) {
         super.setOptions(opt);
-        List<Suggestion> defaultSuggestions = new ArrayList<Suggestion>();
+        List<Suggestion> defaultSuggestions = new ArrayList<>();
         for (final SelfRegistrationBuildingDTO option : opt) {
             defaultSuggestions.add(new Suggestion() {
                 @Override

@@ -30,7 +30,7 @@ import com.propertyvista.portal.resident.ui.CommunicationView;
 
 public class CommunicationActivity extends AbstractActivity implements CommunicationView.CommunicationPresenter {
 
-    private static List<Message> messages = new ArrayList<Message>();
+    private static List<Message> messages = new ArrayList<>();
 
     static {
         for (int i = 0; i < 6; i++) {

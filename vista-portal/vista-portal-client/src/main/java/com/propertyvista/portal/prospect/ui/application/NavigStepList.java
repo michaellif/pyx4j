@@ -35,7 +35,7 @@ public class NavigStepList implements IsWidget {
 
     public NavigStepList() {
         contentPanel = new ContentPanel();
-        items = new ArrayList<NavigStepItem>();
+        items = new ArrayList<>();
     }
 
     @Override
