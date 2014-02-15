@@ -228,7 +228,7 @@ public class Slideshow extends LayoutPanel {
 
     class ControlPanel extends HorizontalPanel {
 
-        private final ArrayList<Action> itemActionList = new ArrayList<Action>();
+        private final ArrayList<Action> itemActionList = new ArrayList<>();
 
         private final Action leftAction;
 

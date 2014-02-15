@@ -46,7 +46,7 @@ public class BarChart extends Group {
 
         List<String> positions = model.getPositions();
 
-        ArrayList<GraphicsElement> components = new ArrayList<GraphicsElement>();
+        ArrayList<GraphicsElement> components = new ArrayList<>();
 
         double x = 0;
 

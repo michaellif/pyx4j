@@ -259,7 +259,7 @@ class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
             }
         }
 
-        private final ArrayList<IteratorData> iteratorDataList = new ArrayList<IteratorData>();
+        private final ArrayList<IteratorData> iteratorDataList = new ArrayList<>();
 
         // constructor-initializer:
 

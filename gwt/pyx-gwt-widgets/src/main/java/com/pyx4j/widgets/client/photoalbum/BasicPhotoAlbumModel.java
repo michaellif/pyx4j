@@ -25,27 +25,31 @@ import java.util.List;
 
 public class BasicPhotoAlbumModel implements PhotoAlbumModel {
 
-    private final ArrayList<Photo> photoList = new ArrayList<Photo>();
+    private final ArrayList<Photo> photoList = new ArrayList<>();
 
     private PhotoAlbum photoAlbum;
 
     public BasicPhotoAlbumModel() {
     }
 
+    @Override
     public void setPhotoAlbum(PhotoAlbum photoAlbum) {
         this.photoAlbum = photoAlbum;
     }
 
+    @Override
     public void addPhoto(Photo photo) {
         photoList.add(photo);
         photoAlbum.onPhotoAdded(photo, photoList.size() - 1);
     }
 
+    @Override
     public void removePhoto(int index) {
         photoList.remove(index);
         photoAlbum.onPhotoRemoved(index);
     }
 
+    @Override
     public void updateCaption(int index, String caption) {
         photoList.get(index).setCaption(caption);
         photoAlbum.onCaptionUpdated(caption, index);
@@ -60,6 +64,7 @@ public class BasicPhotoAlbumModel implements PhotoAlbumModel {
         return photoAlbum;
     }
 
+    @Override
     public void clear() {
         photoList.clear();
         photoAlbum.onClear();

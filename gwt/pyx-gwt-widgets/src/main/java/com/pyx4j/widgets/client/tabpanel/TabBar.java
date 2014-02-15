@@ -328,7 +328,7 @@ public class TabBar extends DockLayoutPanel {
         }
 
         List<Tab> getAllTabs() {
-            ArrayList<Tab> ordererList = new ArrayList<Tab>();
+            ArrayList<Tab> ordererList = new ArrayList<>();
             for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
                 ordererList.add(((TabBarItem) tabsHolder.getWidget(i)).getTab());
             }

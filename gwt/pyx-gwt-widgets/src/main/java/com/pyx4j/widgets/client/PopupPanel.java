@@ -56,7 +56,7 @@ public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel {
 
     public static void hideAll() {
         if (openPopups != null) {
-            ArrayList<PopupPanel> popups = new ArrayList<PopupPanel>(openPopups);
+            ArrayList<PopupPanel> popups = new ArrayList<>(openPopups);
             for (PopupPanel popupPanel : popups) {
                 popupPanel.hide(true);
             }
@@ -70,7 +70,7 @@ public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel {
         }
         // Add this to the set of open panels.
         if (openPopups == null) {
-            openPopups = new ArrayList<PopupPanel>();
+            openPopups = new ArrayList<>();
         }
         openPopups.add(this);
         super.show();

@@ -39,7 +39,7 @@ public class Dashboard extends SimplePanel implements IBoard, IBoardRoot {
 
     private final HTML placeholder = new HTML("dashboard_placeholder");
 
-    private final List<BoardEvent> handlers = new ArrayList<BoardEvent>();
+    private final List<BoardEvent> handlers = new ArrayList<>();
 
     private boolean inhibitEvents = false;
 

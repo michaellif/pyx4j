@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ListBox<E> extends ComboBox<E> {
 
-    private final List<E> options = new ArrayList<E>();
+    private final List<E> options = new ArrayList<>();
 
     private final TextBoxViewerPanel<E> textBox;
 

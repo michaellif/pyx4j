@@ -40,7 +40,7 @@ public class BarChartModel {
         for (String position : positions) {
             items.put(position, new ArrayList<BarChartItem>());
         }
-        colors = new ArrayList<String>();
+        colors = new ArrayList<>();
         colors.add("red");
         colors.add("yellow");
         colors.add("blue");

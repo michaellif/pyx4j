@@ -171,7 +171,7 @@ public class LinearLayoutPanel extends FlowPanel implements RequiresResize, Prov
         return ((SimplePanel) super.getWidget(index)).getWidget();
     }
 
-    private final ArrayList<LayoutData> cache = new ArrayList<LayoutData>();
+    private final ArrayList<LayoutData> cache = new ArrayList<>();
 
     /**
      * Do layout.

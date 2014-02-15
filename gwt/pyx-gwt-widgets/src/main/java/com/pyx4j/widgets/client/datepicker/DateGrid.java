@@ -48,7 +48,7 @@ public class DateGrid extends Grid {
 
     private final ArrayList<LogicalDate> disabledDates;
 
-    private final ArrayList<DateCell> cellList = new ArrayList<DateCell>();
+    private final ArrayList<DateCell> cellList = new ArrayList<>();
 
     private final ElementMapperImpl<DateCell> elementToCell = new ElementMapperImpl<DateCell>();
 
@@ -174,7 +174,7 @@ public class DateGrid extends Grid {
     public DateCell getCell(Event e) {
         // Find out which cell was actually clicked.
         Element td = getEventTargetCell(e);
-        return td != null ? elementToCell.get((com.google.gwt.user.client.Element) td) : null;
+        return td != null ? elementToCell.get(td) : null;
     }
 
     public int getNumCells() {

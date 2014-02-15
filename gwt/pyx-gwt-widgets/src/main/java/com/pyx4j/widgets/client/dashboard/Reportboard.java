@@ -43,7 +43,7 @@ public class Reportboard extends SimplePanel implements IBoard, IBoardRoot {
 
     private final HTML placeholder = new HTML("report_placeholder");
 
-    private final List<BoardEvent> handlers = new ArrayList<BoardEvent>();
+    private final List<BoardEvent> handlers = new ArrayList<>();
 
     public Reportboard() {
         addStyleName(CSSNames.BASE_NAME);

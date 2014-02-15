@@ -34,7 +34,7 @@ public class TreeNode {
     private boolean selectable;
 
     public TreeNode() {
-        children = new ArrayList<TreeNode>();
+        children = new ArrayList<>();
     }
 
     public TreeNode getChildAt(int childIndex) {

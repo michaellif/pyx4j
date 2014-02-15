@@ -72,7 +72,7 @@ public class TabBanner extends AbsolutePanel {
         this.height = height;
         this.initPosition = initPosition;
         this.runOnInit = runOnInit;
-        items = new ArrayList<BannerItem>();
+        items = new ArrayList<>();
         setSize(width + "px", height + "px");
         setStyleName(CSSClass.pyx4j_Banner.name());
     }
@@ -196,7 +196,7 @@ public class TabBanner extends AbsolutePanel {
 
     class ControlPanel extends HorizontalPanel {
 
-        private final ArrayList<Button> itemActionList = new ArrayList<Button>();
+        private final ArrayList<Button> itemActionList = new ArrayList<>();
 
         ControlPanel() {
 

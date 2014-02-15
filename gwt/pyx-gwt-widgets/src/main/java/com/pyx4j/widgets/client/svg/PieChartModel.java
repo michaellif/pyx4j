@@ -30,7 +30,7 @@ public class PieChartModel {
     private boolean withLegend;
 
     public PieChartModel() {
-        this.segments = new ArrayList<PieChartSegment>();
+        this.segments = new ArrayList<>();
         this.withLegend = true;
     }
 

@@ -55,7 +55,7 @@ public class PieChart extends Group {
 
         double startangle = Math.PI;
 
-        ArrayList<GraphicsElement> components = new ArrayList<GraphicsElement>();
+        ArrayList<GraphicsElement> components = new ArrayList<>();
 
         int legY = -radius + V_SHIFT;
         int legX = radius + R_SHIFT;

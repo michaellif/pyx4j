@@ -75,7 +75,7 @@ public class DatePickerComposite extends Composite implements HasHandlers {
 
     HorizontalPanel panel = new HorizontalPanel();
 
-    ArrayList<DatePickerExtended> pickers = new ArrayList<DatePickerExtended>();
+    ArrayList<DatePickerExtended> pickers = new ArrayList<>();
 
     ArrayList<LogicalDate> disabledDates;
 

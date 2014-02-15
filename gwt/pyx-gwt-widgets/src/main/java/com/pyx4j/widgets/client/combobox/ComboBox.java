@@ -78,7 +78,7 @@ public abstract class ComboBox<E> extends HorizontalPanel {
                         optionsGrabber.obtainOptions(new Request(), new Callback<E>() {
                             @Override
                             public void onOptionsReady(Request request, Response<E> response) {
-                                pickerPanel.setOptions(new ArrayList<E>(response.getOptions()));
+                                pickerPanel.setOptions(new ArrayList<>(response.getOptions()));
                                 pickerPanel.setSelection(getSelection());
                                 pickerPopup.show(pickerPanel, ComboBox.this);
                             }
