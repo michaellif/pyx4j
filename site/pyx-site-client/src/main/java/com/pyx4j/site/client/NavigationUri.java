@@ -74,7 +74,7 @@ public class NavigationUri {
         if (queryString.startsWith(NavigNode.ARGS_GROUP_SEPARATOR)) {
             queryString = queryString.substring(1);
         }
-        Map<String, String> args = new HashMap<String, String>();
+        Map<String, String> args = new HashMap<>();
         if (queryString.length() == 0) {
             return args;
         }
@@ -150,7 +150,7 @@ public class NavigationUri {
             }
         }
         if (args == null) {
-            args = new HashMap<String, String>();
+            args = new HashMap<>();
         }
         int siteIndex = pageUri.indexOf(NavigNode.PAGE_SEPARATOR);
         if (siteIndex > 0) {
@@ -194,7 +194,7 @@ public class NavigationUri {
 
     public void addArg(String name, String value) {
         if (args == null) {
-            args = new HashMap<String, String>();
+            args = new HashMap<>();
         }
         this.args.put(name, value);
         path = null;

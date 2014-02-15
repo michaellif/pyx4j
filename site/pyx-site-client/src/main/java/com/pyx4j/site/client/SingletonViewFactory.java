@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public class SingletonViewFactory implements ViewFactory {
 
-    private final HashMap<Class<?>, IsWidget> map = new HashMap<Class<?>, IsWidget>();
+    private final HashMap<Class<?>, IsWidget> map = new HashMap<>();
 
     private static ViewFactory factory = GWT.create(ViewFactory.class);
 

@@ -125,7 +125,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         setElement(Document.get().createDivElement());
 
-        displays = new HashMap<Display, DisplayPanel>();
+        displays = new HashMap<>();
         for (Display display : Display.values()) {
             displays.put(display, new DisplayPanel());
         }

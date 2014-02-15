@@ -47,7 +47,7 @@ public class BreadcrumbsBar extends HorizontalPanel {
 
         if (breadcrumbTrail != null) {
             // filter out breadcrumbs that don't have associated place
-            List<IEntity> filteredTrail = new ArrayList<IEntity>(breadcrumbTrail.size());
+            List<IEntity> filteredTrail = new ArrayList<>(breadcrumbTrail.size());
             for (IEntity breadcrumb : breadcrumbTrail) {
                 if (AppPlaceEntityMapper.resolvePlace(breadcrumb.getInstanceValueClass()) != null) {
                     filteredTrail.add(breadcrumb);

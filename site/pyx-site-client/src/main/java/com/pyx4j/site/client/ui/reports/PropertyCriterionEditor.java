@@ -48,7 +48,7 @@ public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCrit
     private static Map<Class<?>, Collection<PropertyCriterion.Restriction>> DATA_TYPE_RESTRICTIONS;
 
     static {
-        COLUMN_DESCRIPTORS = new ArrayList<EntityFolderColumnDescriptor>();
+        COLUMN_DESCRIPTORS = new ArrayList<>();
         PropertyCriterionEntity proto = EntityFactory.getEntityPrototype(PropertyCriterionEntity.class);
         COLUMN_DESCRIPTORS.add(new EntityFolderColumnDescriptor(proto.criterionName(), "15em", true));
         COLUMN_DESCRIPTORS.add(new EntityFolderColumnDescriptor(proto.restriction(), "20em"));
@@ -63,7 +63,7 @@ public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCrit
                 PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL
         );//@formatter:on 
 
-        DATA_TYPE_RESTRICTIONS = new HashMap<Class<?>, Collection<PropertyCriterion.Restriction>>();
+        DATA_TYPE_RESTRICTIONS = new HashMap<>();
         DATA_TYPE_RESTRICTIONS.put(Integer.class, numberRestriction);
         DATA_TYPE_RESTRICTIONS.put(Double.class, numberRestriction);
         DATA_TYPE_RESTRICTIONS.put(BigDecimal.class, numberRestriction);

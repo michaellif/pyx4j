@@ -156,7 +156,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
     }
 
     protected List<Criterion> createRestrictionFilterForAlreadySelected() {
-        List<Criterion> restrictAlreadySelected = new ArrayList<Criterion>(alreadySelected.size());
+        List<Criterion> restrictAlreadySelected = new ArrayList<>(alreadySelected.size());
 
         E proto = EntityFactory.getEntityPrototype(entityClass);
 

@@ -29,11 +29,11 @@ import com.pyx4j.site.shared.meta.SiteMap;
 
 public abstract class AppPlaceListingImplBase implements AppPlaceListing {
 
-    protected final HashMap<String, AppPlaceFactory<?>> mappedPlaces = new HashMap<String, AppPlaceFactory<?>>();
+    protected final HashMap<String, AppPlaceFactory<?>> mappedPlaces = new HashMap<>();
 
-    protected final HashMap<Class<? extends AppPlace>, AppPlaceFactory<?>> placesFactories = new HashMap<Class<? extends AppPlace>, AppPlaceFactory<?>>();
+    protected final HashMap<Class<? extends AppPlace>, AppPlaceFactory<?>> placesFactories = new HashMap<>();
 
-    protected final HashMap<Class<? extends AppPlace>, AppPlaceInfo> placesInfo = new HashMap<Class<? extends AppPlace>, AppPlaceInfo>();
+    protected final HashMap<Class<? extends AppPlace>, AppPlaceInfo> placesInfo = new HashMap<>();
 
     protected static final I18n i18n = I18n.get(AppPlace.class);
 

@@ -43,7 +43,7 @@ public class ViewFactoryGenerator extends Generator {
 
         JClassType instantiableType = oracle.findType(IsView.class.getName());
 
-        List<JClassType> classes = new ArrayList<JClassType>();
+        List<JClassType> classes = new ArrayList<>();
 
         for (JClassType classType : oracle.getTypes()) {
             if (classType.isAssignableTo(instantiableType) //@formatter:off

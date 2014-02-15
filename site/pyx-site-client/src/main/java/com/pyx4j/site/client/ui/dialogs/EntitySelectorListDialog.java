@@ -94,7 +94,7 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
     }
 
     protected List<E> getSelectedItems() {
-        ArrayList<E> selected = new ArrayList<E>(data.size());
+        ArrayList<E> selected = new ArrayList<>(data.size());
         for (E item : data) {
             if (selectionModel.isSelected(item)) {
                 selected.add(item);
@@ -114,7 +114,7 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
 
     protected Widget initBody(boolean isMultiselectAllowed, List<E> data) {
 
-        List<HasCell<E, ?>> cells = new ArrayList<HasCell<E, ?>>(2);
+        List<HasCell<E, ?>> cells = new ArrayList<>(2);
         if (isMultiselectAllowed) {
             cells.add(new HasCell<E, Boolean>() {
                 private final CheckboxCell cell = new CheckboxCell(true, false);

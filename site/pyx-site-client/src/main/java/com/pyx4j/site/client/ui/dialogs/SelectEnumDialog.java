@@ -74,7 +74,7 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
         list.setWidth("100%");
         list.setSelectionModel(selectionModel);
 
-        ArrayList<E> listOfValues = new ArrayList<E>(values);
+        ArrayList<E> listOfValues = new ArrayList<>(values);
         list.setRowData(listOfValues);
         selectionModel.setSelected(listOfValues.get(0), true);
         ScrollPanel panel = new ScrollPanel(list);

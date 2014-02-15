@@ -26,7 +26,7 @@ import com.google.gwt.place.shared.Place;
 
 public class MementoImpl implements IMemento {
 
-    private final HashMap<String, Object> values = new HashMap<String, Object>();
+    private final HashMap<String, Object> values = new HashMap<>();
 
     private Place currentPlace;
 

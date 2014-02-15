@@ -217,7 +217,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
         final String METADATA_KEY = "METADATA";
 
-        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+        HashMap<String, Serializable> parameters = new HashMap<>();
         parameters.put(METADATA_KEY, view.getReportMetadata());
 
         request.setParameters(parameters);

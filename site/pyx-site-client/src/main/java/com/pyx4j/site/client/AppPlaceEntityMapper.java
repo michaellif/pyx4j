@@ -36,7 +36,7 @@ public class AppPlaceEntityMapper {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlaceEntityMapper.class);
 
-    private static HashMap<Class<? extends IEntity>, AppPlaceData> map = new HashMap<Class<? extends IEntity>, AppPlaceData>();
+    private static HashMap<Class<? extends IEntity>, AppPlaceData> map = new HashMap<>();
 
     public static void register(Class<? extends IEntity> type, Class<? extends CrudAppPlace> placeClass, ImageResource image) {
         AppPlaceData data = new AppPlaceData(placeClass, image);
