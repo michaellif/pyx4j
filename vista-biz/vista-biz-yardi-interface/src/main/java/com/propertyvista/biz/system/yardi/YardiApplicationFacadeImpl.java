@@ -46,8 +46,8 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
             public Void execute() throws YardiServiceException {
                 String pID = YardiGuestManagementService.getInstance().createNewProspect(getPmcYardiCredential(lease), lease);
 
-                // save primary tenant pID
-                // TODO - should we copy pID to tenant.yardiApplicantId()?
+                // save primary tenant pID as yardiApplicationId
+                // We should not copy pID to tenant.yardiApplicantId() since this is indicator if we sent applicants to yardi or not
                 lease.leaseApplication().yardiApplicationId().setValue(pID);
                 Persistence.service().persist(lease.leaseApplication());
 
@@ -92,7 +92,6 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                     participant.yardiApplicantId().setValue(participants.get(participant.getPrimaryKey().toString()));
                     Persistence.service().persist(participant);
                 }
-                lease.leaseParticipants().setAttachLevel(AttachLevel.Detached);
 
                 return null;
             }
@@ -123,7 +122,6 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                     participant.participantId().set(participant.yardiApplicantId());
                     Persistence.service().persist(participant);
                 }
-                lease.leaseParticipants().setAttachLevel(AttachLevel.Detached);
                 return null;
             }
         });

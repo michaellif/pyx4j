@@ -21,6 +21,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -82,6 +83,17 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
         super.approve(leaseId, decidedBy, decisionReason);
         // activate, newly created leases:
         Lease lease = super.activate(leaseId);
+
+        // Send Participants to yardi after activation validation if we have not done so in previous attempt
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+        if (lease._applicant().yardiApplicantId().isNull()) {
+            try {
+                ServerSideFactory.create(YardiApplicationFacade.class).addLeaseParticipants(leaseId);
+            } catch (YardiServiceException e) {
+                throw new UserRuntimeException(i18n.tr("Posting Applicants to Yardi failed") + "\n" + e.getMessage(), e);
+            }
+        }
+
         try {
             lease = ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
         } catch (YardiServiceException e) {

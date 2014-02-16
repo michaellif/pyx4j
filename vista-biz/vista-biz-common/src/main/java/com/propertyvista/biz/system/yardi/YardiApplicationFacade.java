@@ -35,7 +35,7 @@ public interface YardiApplicationFacade {
 
     /**
      * NOTE. Once added, Lease participants cannot be deleted via Yardi ILS/GuestCard API.
-     * It is recommended to call this method only once when Lease Participants are finalized.
+     * It is required to call this method only once when Lease Participants are finalized.
      */
     void addLeaseParticipants(Lease lease) throws YardiServiceException;
 
