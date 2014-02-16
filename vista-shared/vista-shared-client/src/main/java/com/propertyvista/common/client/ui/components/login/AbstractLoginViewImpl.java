@@ -74,8 +74,8 @@ public abstract class AbstractLoginViewImpl extends TwoColumnFlexFormPanel imple
     public void reset(String userId, boolean rememberUser) {
         form.reset();
         form.populateNew();
-        form.get(form.proto().email()).setValue(userId);
-        form.get(form.proto().rememberID()).setValue(rememberUser);
+        form.get(form.proto().email()).setValue(userId, true, true);
+        form.get(form.proto().rememberID()).setValue(rememberUser, true, true);
         form.disableCaptcha();
     }
 
