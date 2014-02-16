@@ -43,6 +43,7 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -395,18 +396,18 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         get(proto().termFrom()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public ValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
                             .lease().creationDate().getValue();
                     if (getValue().lease().status().getValue() == Lease.Status.Application) {
                         return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Application Creation Date"))
-                                .isValid();
+                                .isValid(getComponent());
                     } else if (getValue().lease().status().getValue() == Lease.Status.NewLease) {
                         return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Lease Creation Date"))
-                                .isValid();
+                                .isValid(getComponent());
                     } else if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) {
-                        return new PastDateValidator(dateToCompare, i18n.tr("The Date Must Be Earlier Than Lease Creation Date")).isValid();
+                        return new PastDateValidator(dateToCompare, i18n.tr("The Date Must Be Earlier Than Lease Creation Date")).isValid(getComponent());
                     }
                 }
                 return null;
