@@ -22,7 +22,6 @@ package com.pyx4j.server.mail;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
@@ -107,9 +106,9 @@ public class MailQueue implements Runnable {
             persistable.statusCallbackClass().setValue(callbackClass.getName());
         }
 
-        runInTargetNamespace(persistable, new Callable<Void>() {
+        runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
             @Override
-            public Void call() {
+            public Void execute() {
                 Persistence.service().persist(persistable);
                 return null;
             }
@@ -118,7 +117,7 @@ public class MailQueue implements Runnable {
         Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
 
             @Override
-            public Void execute() throws RuntimeException {
+            public Void execute() {
                 sendQueued();
                 return null;
             }
@@ -173,10 +172,10 @@ public class MailQueue implements Runnable {
                         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
                             @Override
-                            public Void execute() throws RuntimeException {
-                                runInTargetNamespace(persistable, new Callable<Void>() {
+                            public Void execute() {
+                                runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
                                     @Override
-                                    public Void call() {
+                                    public Void execute() {
                                         Persistence.service().update(EntityCriteriaByPK.create(persistable), persistableUpdate);
                                         return null;
                                     }
@@ -211,12 +210,9 @@ public class MailQueue implements Runnable {
             return;
         }
 
-        if (targetNamespace == null) {
-            targetNamespace = NamespaceManager.getNamespace();
-        }
-        NamespaceManager.runInTargetNamespace(targetNamespace, new Callable<Void>() {
+        Executable<Void, RuntimeException> call = new Executable<Void, RuntimeException>() {
             @Override
-            public Void call() {
+            public Void execute() {
                 try {
                     callback.onDeliveryCompleted(mailMessage, status);
                 } catch (Throwable e) {
@@ -224,28 +220,35 @@ public class MailQueue implements Runnable {
                 }
                 return null;
             }
-        });
+        };
+
+        if (targetNamespace == null) {
+            call.execute();
+        } else {
+            NamespaceManager.runInTargetNamespace(targetNamespace, call);
+        }
     }
 
     private AbstractOutgoingMailQueue peek() {
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
 
             @Override
-            public AbstractOutgoingMailQueue execute() throws RuntimeException {
+            public AbstractOutgoingMailQueue execute() {
                 for (final Class<? extends AbstractOutgoingMailQueue> persistableEntityClass : persistableEntities.values()) {
 
-                    AbstractOutgoingMailQueue persistable = runInTargetNamespace(persistableEntityClass, new Callable<AbstractOutgoingMailQueue>() {
-                        @Override
-                        public AbstractOutgoingMailQueue call() {
-                            @SuppressWarnings("unchecked")
-                            EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
-                                    .create(persistableEntityClass);
-                            criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
-                            criteria.asc(criteria.proto().attempts());
-                            criteria.asc(criteria.proto().updated());
-                            return Persistence.service().retrieve(criteria);
-                        }
-                    });
+                    AbstractOutgoingMailQueue persistable = runInEntityNamespace(persistableEntityClass,
+                            new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
+                                @Override
+                                public AbstractOutgoingMailQueue execute() {
+                                    @SuppressWarnings("unchecked")
+                                    EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
+                                            .create(persistableEntityClass);
+                                    criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
+                                    criteria.asc(criteria.proto().attempts());
+                                    criteria.asc(criteria.proto().updated());
+                                    return Persistence.service().retrieve(criteria);
+                                }
+                            });
 
                     if (persistable != null) {
                         return persistable;
@@ -273,19 +276,13 @@ public class MailQueue implements Runnable {
         }
     }
 
-    private static <T> T runInTargetNamespace(Class<? extends IEntity> entityClass, final Callable<T> task) {
+    private static <T> T runInEntityNamespace(Class<? extends IEntity> entityClass, final Executable<T, RuntimeException> task) {
         String targetNamespace = getNamespace(entityClass);
-        if (targetNamespace == null) {
-            targetNamespace = NamespaceManager.getNamespace();
+        if (targetNamespace != null) {
+            return NamespaceManager.runInTargetNamespace(targetNamespace, task);
+        } else {
+            return task.execute();
         }
-        return NamespaceManager.runInTargetNamespace(targetNamespace, task);
     }
 
-    private static <T> T runInTargetNamespace(AbstractOutgoingMailQueue persistable, final Callable<T> task) {
-        String targetNamespace = getNamespace(persistable.getEntityMeta().getEntityClass());
-        if (targetNamespace == null) {
-            targetNamespace = NamespaceManager.getNamespace();
-        }
-        return NamespaceManager.runInTargetNamespace(targetNamespace, task);
-    }
 }

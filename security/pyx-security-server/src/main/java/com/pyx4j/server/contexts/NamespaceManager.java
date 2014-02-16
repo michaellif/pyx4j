@@ -22,6 +22,9 @@ package com.pyx4j.server.contexts;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.log4j.LoggerConfig;
 
 public class NamespaceManager {
@@ -67,5 +70,29 @@ public class NamespaceManager {
                 NamespaceManager.remove();
             }
         }
+    }
+
+    public static <R, E extends Throwable> R runInTargetNamespace(final String targetNamespace, final Executable<R, E> task) throws E {
+        final String namespace = NamespaceManager.getNamespace();
+        try {
+            NamespaceManager.setNamespace(targetNamespace);
+            return task.execute();
+        } finally {
+            if (namespace != null) {
+                NamespaceManager.setNamespace(namespace);
+            } else {
+                NamespaceManager.remove();
+            }
+        }
+    }
+
+    public static <R, E extends Exception> R runUnitOfWorkInTargetNamespace(final String targetNamespace, final TransactionScopeOption transactionScopeOption,
+            final Executable<R, E> task) {
+        return NamespaceManager.runInTargetNamespace(targetNamespace, new Callable<R>() {
+            @Override
+            public R call() throws E {
+                return new UnitOfWork(transactionScopeOption).execute(task);
+            }
+        });
     }
 }
