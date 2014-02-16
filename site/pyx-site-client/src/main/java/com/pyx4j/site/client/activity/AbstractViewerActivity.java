@@ -148,7 +148,6 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
         if (activeTab < 0) {
             activeTab = view.getActiveTab();
         }
-        view.reset();
         view.populate(result);
         view.setActiveTab(activeTab);
     }

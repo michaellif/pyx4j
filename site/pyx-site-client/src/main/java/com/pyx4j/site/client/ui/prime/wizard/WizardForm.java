@@ -165,8 +165,8 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
     }
 
     protected final void finish() {
+        setVisited(true);
         if (!isValid()) {
-            setVisited(true);
             MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
         } else {
             view.getPresenter().finish();

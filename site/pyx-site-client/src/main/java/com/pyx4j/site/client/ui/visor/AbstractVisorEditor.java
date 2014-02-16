@@ -80,8 +80,8 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
     }
 
     private void save() {
+        getForm().setVisited(true);
         if (!getForm().isValid()) {
-            getForm().setVisited(true);
             showValidationDialog();
         } else {
             getController().save();

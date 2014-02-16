@@ -175,8 +175,8 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     protected final void finish() {
+        setVisited(true);
         if (!isValid()) {
-            setVisited(true);
             MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
         } else {
             onFinish();

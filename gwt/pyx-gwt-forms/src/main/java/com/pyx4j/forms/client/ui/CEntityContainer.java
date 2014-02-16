@@ -179,12 +179,12 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     @Override
     public void setVisited(boolean visited) {
-        super.setVisited(visited);
         if (getComponents() != null) {
             for (CComponent<?> ccomponent : getComponents()) {
                 ((CComponent<?>) ccomponent).setVisited(visited);
             }
         }
+        super.setVisited(visited);
     }
 
     @Override

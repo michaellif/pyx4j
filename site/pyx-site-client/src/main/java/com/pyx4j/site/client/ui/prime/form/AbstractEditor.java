@@ -77,8 +77,8 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     private void apply() {
+        getForm().setVisited(true);
         if (!getForm().isValid()) {
-            getForm().setVisited(true);
             showValidationDialog();
         } else {
             getPresenter().apply();
@@ -86,8 +86,8 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     private void save() {
+        getForm().setVisited(true);
         if (!getForm().isValid()) {
-            getForm().setVisited(true);
             showValidationDialog();
         } else {
             getPresenter().save();
@@ -95,8 +95,8 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     private void saveAsNew() {
+        getForm().setVisited(true);
         if (!getForm().isValid()) {
-            getForm().setVisited(true);
             showValidationDialog();
         } else {
             getForm().setValue((E) VersionedEntityUtils.createNextVersion((IVersionedEntity<?>) getForm().getValue()));
