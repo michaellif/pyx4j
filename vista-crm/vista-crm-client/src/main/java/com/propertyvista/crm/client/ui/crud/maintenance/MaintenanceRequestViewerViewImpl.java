@@ -189,10 +189,10 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         }
 
         public boolean validate() {
+            content.setVisited(true);
             if (content.isValid()) {
                 return true;
             } else {
-                content.setVisited(true);
                 MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true, true));
                 return false;
             }
@@ -247,10 +247,10 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         }
 
         public boolean validate() {
+            content.setVisited(true);
             if (content.isValid()) {
                 return true;
             } else {
-                content.setVisited(true);
                 MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true, true));
                 return false;
             }

@@ -233,8 +233,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     btnSave = new Button(i18n.tr("Save"), new Command() {
                         @Override
                         public void execute() {
+                            setVisited(true);
                             if (!isValid()) {
-                                setVisited(true);
                                 MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
                             } else {
                                 if (getValue().created().getValue() == null) {

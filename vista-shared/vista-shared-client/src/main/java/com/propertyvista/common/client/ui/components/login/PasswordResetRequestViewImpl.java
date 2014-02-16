@@ -28,8 +28,8 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
         form = new RetrievePasswordForm(new Command() {
             @Override
             public void execute() {
+                form.setVisited(true);
                 if (!form.isValid()) {
-                    form.setVisited(true);
                     throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, true, false));
                 }
                 presenter.requestPasswordReset(form.getValue());
