@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -34,6 +35,8 @@ public interface CrmRole extends IEntity {
 
     @ToString
     @Length(50)
+    @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<String> name();
 
     @Length(100)
