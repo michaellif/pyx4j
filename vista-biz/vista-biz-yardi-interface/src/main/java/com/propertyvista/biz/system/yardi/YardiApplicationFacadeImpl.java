@@ -133,31 +133,31 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
 
         //TODO VladsS change it later to use External Id
         // External transaction will Lock lease. So Lease can't be update in RequiresNew
-        new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
+//        new UnitOfWork(TransactionScopeOption.Mandatory).execute(new Executable<Void, YardiServiceException>() {
+//
+//            @Override
+//            public Void execute() throws YardiServiceException {
+        //TODO stas  change signLease  return value
+        final SignLeaseResults signLeaseResults = new SignLeaseResults();
+        signLeaseResults.tID = YardiGuestManagementService.getInstance().signLease(getPmcYardiCredential(lease), lease);
+        for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
+            signLeaseResults.participants.put(participant.getPrimaryKey(), participant.yardiApplicantId().getValue());
+        }
+
+        saveLeaseId(lease, signLeaseResults);
+
+        // Save even if external transaction failed
+        UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
 
             @Override
-            public Void execute() throws YardiServiceException {
-                //TODO stas  change signLease  return value
-                final SignLeaseResults signLeaseResults = new SignLeaseResults();
-                signLeaseResults.tID = YardiGuestManagementService.getInstance().signLease(getPmcYardiCredential(lease), lease);
-                for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-                    signLeaseResults.participants.put(participant.getPrimaryKey(), participant.yardiApplicantId().getValue());
-                }
-
+            public Void execute() throws RuntimeException {
                 saveLeaseId(lease, signLeaseResults);
-
-                // Save even if external transaction failed
-                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
-
-                    @Override
-                    public Void execute() throws RuntimeException {
-                        saveLeaseId(lease, signLeaseResults);
-                        return null;
-                    }
-                });
                 return null;
             }
         });
+//                return null;
+//            }
+//        });
         return lease;
     }
 
