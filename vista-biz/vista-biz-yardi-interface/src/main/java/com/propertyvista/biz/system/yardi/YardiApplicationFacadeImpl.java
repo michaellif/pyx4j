@@ -135,7 +135,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         try {
             YardiGuestManagementService.getInstance().validateSettings(yc, building.propertyCode().getValue());
         } catch (YardiServiceException e) {
-            throw new UserRuntimeException(e.getMessage());
+            throw new UserRuntimeException(e.getMessage(), e);
         }
     }
 

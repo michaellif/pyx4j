@@ -88,7 +88,7 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
         if (lease._applicant().yardiApplicantId().isNull()) {
             try {
-                ServerSideFactory.create(YardiApplicationFacade.class).addLeaseParticipants(leaseId);
+                ServerSideFactory.create(YardiApplicationFacade.class).addLeaseParticipants(lease);
             } catch (YardiServiceException e) {
                 throw new UserRuntimeException(i18n.tr("Posting Applicants to Yardi failed") + "\n" + e.getMessage(), e);
             }

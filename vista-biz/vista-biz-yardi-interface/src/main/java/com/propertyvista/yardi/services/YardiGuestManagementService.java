@@ -215,10 +215,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
 
         if (agentName == null) {
-            String msg = SimpleMessageFormat.format("Yardi Marketing Agent {0} is not configured for property {1}.", ILS_AGENT, propertyCode);
+            String msg = SimpleMessageFormat.format("Yardi Marketing Agent ''{0}'' is not configured for property ''{1}''.", ILS_AGENT, propertyCode);
             throw new YardiServiceException(msg);
         } else if (sourceName == null) {
-            String msg = SimpleMessageFormat.format("Yardi Marketing Source {0} is not configured for property {1}.", ILS_SOURCE, propertyCode);
+            String msg = SimpleMessageFormat.format("Yardi Marketing Source ''{0}'' is not configured for property ''{1}''.", ILS_SOURCE, propertyCode);
             throw new YardiServiceException(msg);
         }
     }

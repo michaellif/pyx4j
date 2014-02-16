@@ -143,6 +143,7 @@ class MessageTemplatesCustomizable {
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type
         context.leaseTermParticipant().set(tenantInLease);
+        context.lease().set(tenantInLease.leaseTermV().holder().lease());
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
