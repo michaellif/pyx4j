@@ -21,6 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
@@ -98,7 +99,13 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         public CrmRolePermissionsFolder() {
             super(VistaCrmBehaviorDTO.class);
             setOrderable(false);
-            setViewable(true);
+        }
+
+        @Override
+        protected CEntityFolderItem<VistaCrmBehaviorDTO> createItem(boolean first) {
+            CEntityFolderItem<VistaCrmBehaviorDTO> folderItem = super.createItem(first);
+            folderItem.setViewable(true);
+            return folderItem;
         }
 
         @Override
