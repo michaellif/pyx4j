@@ -13,10 +13,13 @@
  */
 package com.propertyvista.biz.system.yardi;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -99,6 +102,26 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         });
     }
 
+    class SignLeaseResults {
+
+        String tID;
+
+        Map<Key, String> participants = new HashMap<>();
+    }
+
+    private void saveLeaseId(final Lease leaseId, SignLeaseResults signLeaseResults) {
+        final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        lease.leaseId().setValue(signLeaseResults.tID);
+        Persistence.service().persist(lease);
+
+        Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
+        for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
+            // application must be updated (yardi sync) before approval
+            participant.participantId().setValue(signLeaseResults.participants.get(participant.getPrimaryKey()));
+            Persistence.service().persist(participant);
+        }
+    }
+
     @Override
     public Lease approveApplication(final Lease lease) throws YardiServiceException {
         if ((!lease.leaseId().isNull()) || (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p"))) {
@@ -108,20 +131,30 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+        //TODO VladsS change it later to use External Id
+        // External transaction will Lock lease. So Lease can't be update in RequiresNew
+        new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
 
             @Override
             public Void execute() throws YardiServiceException {
-                String tID = YardiGuestManagementService.getInstance().signLease(getPmcYardiCredential(lease), lease);
-
-                lease.leaseId().setValue(tID);
-                Persistence.service().persist(lease);
-
+                //TODO stas  change signLease  return value
+                final SignLeaseResults signLeaseResults = new SignLeaseResults();
+                signLeaseResults.tID = YardiGuestManagementService.getInstance().signLease(getPmcYardiCredential(lease), lease);
                 for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-                    // application must be updated (yardi sync) before approval
-                    participant.participantId().set(participant.yardiApplicantId());
-                    Persistence.service().persist(participant);
+                    signLeaseResults.participants.put(participant.getPrimaryKey(), participant.yardiApplicantId().getValue());
                 }
+
+                saveLeaseId(lease, signLeaseResults);
+
+                // Save even if external transaction failed
+                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+
+                    @Override
+                    public Void execute() throws RuntimeException {
+                        saveLeaseId(lease, signLeaseResults);
+                        return null;
+                    }
+                });
                 return null;
             }
         });
