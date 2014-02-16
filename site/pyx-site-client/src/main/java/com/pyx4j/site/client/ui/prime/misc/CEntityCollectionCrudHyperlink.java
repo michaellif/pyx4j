@@ -122,4 +122,16 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
         return value1 == value2;
     }
 
+    @Override
+    protected String getDebugInfo() {
+        //TODO overrides CField.getDebugInfo() because of error - investigate
+        //  java.lang.ClassCastException: java.lang.Integer cannot be cast to java.util.Set
+        //  at com.pyx4j.entity.core.impl.SetHandler.getValue(SetHandler.java:90)
+        //  at com.pyx4j.entity.core.impl.SetHandler.getValue(SetHandler.java:1)
+        //  at com.pyx4j.entity.core.impl.AbstractCollectionHandler.toString(AbstractCollectionHandler.java:274)
+        //  at java.lang.String.valueOf(String.java:2854)
+        //  at java.lang.StringBuilder.append(StringBuilder.java:128)
+        //  at com.pyx4j.forms.client.ui.CField.getDebugInfo(CField.java:156)
+        return "";
+    }
 }
