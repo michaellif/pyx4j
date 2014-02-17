@@ -48,6 +48,7 @@ public class StartEndDateWithinPeriodValidation {
             }
         });
         start.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(end));
+        start.addPropertyChangeHandler(new RevalidationTrigger<LogicalDate>(end));
 
         end.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
@@ -60,6 +61,8 @@ public class StartEndDateWithinPeriodValidation {
             }
         });
         end.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(start));
+        end.addPropertyChangeHandler(new RevalidationTrigger<LogicalDate>(start));
+
     }
 
     private static LogicalDate add(LogicalDate date, int months, int days) {
