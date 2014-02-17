@@ -18,14 +18,10 @@ import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 @ExtendsBO
 public interface BillDTO extends Bill {
-
-    @Override
-    Lease lease();
 
     @Caption(name = "Lease Charges")
     InvoiceLineItemGroupDTO serviceChargeLineItems();

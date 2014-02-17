@@ -22,7 +22,6 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
@@ -35,7 +34,6 @@ import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCovered
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -89,11 +87,14 @@ import com.propertyvista.portal.server.security.access.prospect.IdentificationDo
 import com.propertyvista.portal.server.security.access.prospect.LeasePaymentMethodProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.ProofOfAssetDocumentFileProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.ProofOfEmploymentDocumentFileProspectDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.AutopayAgreementCoveredItemTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.BillTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.CustomerPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.InsuranceCertificateScanDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.LeasePaymentMethodTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.PaymentRecordTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
@@ -200,7 +201,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
-        grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
 
         //========================= Prospect Portal
 
@@ -223,30 +223,34 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         //=======================================
 
         // Tenant Insurance and TenantSure
+        boolean VISTA_4158 = false; //  //TODO ArtyomB Need DatasetAccessRule
+
         grant(PortalResidentBehavior.Resident, new EntityPermission(GeneralInsurancePolicy.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(InsuranceCertificateScan.class, EntityPermission.READ));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
 
-        grant(PortalResidentBehavior.Resident, new EntityPermission(TenantSureInsurancePolicy.class, CRUD));
+        if (VISTA_4158) {
+            //TODO ArtyomB
+            grant(PortalResidentBehavior.Resident, new EntityPermission(TenantSureInsurancePolicy.class, CRUD));
+        }
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSureInsurancePolicyCrudService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSurePaymentMethodCrudService.class));
 
-        // Policy Node
-        grant(PortalResidentBehavior.Resident, new EntityPermission(Building.class, EntityPermission.READ));
-
         // Billing and Payments
         grant(PortalResidentBehavior.Resident, new EntityPermission(Bill.class, EntityPermission.READ));
-        grant(PortalResidentBehavior.Resident, new EntityPermission(InvoiceLineItem.class, EntityPermission.READ));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(PaymentRecord.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(LeasePaymentMethod.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(AutopayAgreement.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(AutopayAgreementCoveredItem.class, CRUD));
 
-        grant(PortalResidentBehavior.Resident, new EntityPermission(YardiServiceRequest.class, CRUD));
-
-        grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequest.class, CRUD));
+        boolean VISTA_4157 = false; //  //TODO StanP Need DatasetAccessRule
+        if (VISTA_4157) {
+            grant(PortalResidentBehavior.Resident, new EntityPermission(YardiServiceRequest.class, CRUD));
+            grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
+            grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequest.class, CRUD));
+        }
         grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestCategory.class, EntityPermission.READ));
 
         grant(PortalResidentBehavior.ResidentPrimary, PortalResidentBehavior.Resident);
@@ -255,8 +259,11 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         // Data Access
         grant(PortalResidentBehavior.Resident, VistaDataAccessBehavior.ResidentInPortal);
         grant(VistaDataAccessBehavior.ResidentInPortal, new CustomerPictureTenantDatasetAccessRule(), CustomerPicture.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new PaymentRecordTenantDatasetAccessRule(), PaymentRecord.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new AutopayAgreementTenantDatasetAccessRule(), AutopayAgreement.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new AutopayAgreementCoveredItemTenantDatasetAccessRule(), AutopayAgreementCoveredItem.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new BillTenantDatasetAccessRule(), Bill.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
 
