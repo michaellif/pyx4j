@@ -145,7 +145,10 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     @Override
     public void onAbandon() {
         super.onAbandon();
-        folderHandlerRegistration.removeHandler();
+        if (folderHandlerRegistration != null) {
+            folderHandlerRegistration.removeHandler();
+            folderHandlerRegistration = null;
+        }
     }
 
     @Override

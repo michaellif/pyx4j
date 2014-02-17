@@ -292,11 +292,13 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     }
 
     protected void onApplySuccess(Key result) {
+        view.reset();
         // switch new item to regular editing after successful apply!..
         goToEditor(result);
     }
 
     protected void onSaveSuccess(Key result) {
+        view.reset();
         goToViewer(result);
     }
 
