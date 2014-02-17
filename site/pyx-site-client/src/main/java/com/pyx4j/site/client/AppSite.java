@@ -32,7 +32,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -46,7 +45,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
@@ -66,8 +65,6 @@ public abstract class AppSite implements EntryPoint {
     }
 
     private static final Logger log = LoggerFactory.getLogger(AppSite.class);
-
-    private static final I18n i18n = I18n.get(AppSite.class);
 
     private static AppSite instance;
 
@@ -240,11 +237,12 @@ public abstract class AppSite implements EntryPoint {
         // Remove the loading icon
         RootPanel loading = RootPanel.get("loading");
         if (loading != null) {
-            com.google.gwt.user.client.Element elem = loading.getElement();
+            com.google.gwt.dom.client.Element elem = loading.getElement();
             UIObject.setVisible(elem, false);
-            DOM.setInnerHTML(elem, "");
+            elem.setInnerHTML("");
             loading.removeFromParent();
             elem.getParentElement().removeChild(elem);
         }
+        DefaultUnrecoverableErrorHandler.setApplicationInitialized();
     }
 }

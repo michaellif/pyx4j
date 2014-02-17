@@ -37,6 +37,8 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
 
     private ClosingEvent lastClosingEvent;
 
+    private static boolean applicationInitialized = false;
+
     protected DefaultUnrecoverableErrorHandler() {
         Window.addWindowClosingHandler(new ClosingHandler() {
 
@@ -105,7 +107,19 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
         return false;
     }
 
+    /**
+     * Since we stuck in development with old Firefox 26 lets ignore its errors.
+     */
+    public static void setApplicationInitialized() {
+        applicationInitialized = true;
+    }
+
     protected void selectError(final Throwable caught, final String errorCode) {
+        // Ignore Old firefox 26 initialization errors
+        if (!applicationInitialized && BrowserType.isFirefox() && caught.getMessage() != null && caught.getMessage().contains("gwt$exception: <skipped>")
+                && caught.getMessage().contains("Permission denied to access property")) {
+            return;
+        }
         Throwable cause = unwrapCause(caught);
         if (cause instanceof IsWarningException) {
             showWarning(cause.getMessage());
