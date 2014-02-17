@@ -33,9 +33,9 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -141,7 +141,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
             contentPanel.setBR(++row, 0, 2);
 
-            CTextField emailField = inject(proto().email(), new CTextField());
+            CEmailField emailField = inject(proto().email(), new CEmailField());
             emailField.getWidget().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build());
             addValidator(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
