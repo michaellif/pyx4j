@@ -110,6 +110,11 @@ class MessageTemplatesCrmNotification {
         email.setSubject(i18n.tr("Payment Rejected Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId,
                 tenantName));
 
+        email.addKeywords(paymentRecord.id().getStringView());
+        email.addKeywords(buildingId);
+        email.addKeywords(leaseId);
+        email.addKeywords(tenantId);
+
         MessageTemplate template = new MessageTemplate("email/notification/payment-rejected-notification.html");
 
         template.variable("${buildingId}", buildingId);
@@ -164,6 +169,11 @@ class MessageTemplatesCrmNotification {
         email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4} -  failed to post into Yardi, needs to be posted manually",
                 buildingId, unitId, leaseId, tenantId, tenantName));
 
+        email.addKeywords(paymentRecord.id().getStringView());
+        email.addKeywords(buildingId);
+        email.addKeywords(leaseId);
+        email.addKeywords(tenantId);
+
         MessageTemplate template = new MessageTemplate("email/notification/payment-post-to-yardi-failed-notification.html");
 
         template.variable("${buildingId}", buildingId);
@@ -210,6 +220,7 @@ class MessageTemplatesCrmNotification {
             } else {
                 email.setSubject(i18n.tr("Auto Pay Review Required for building {0}", buildingName));
             }
+            email.addKeywords(building.propertyCode().getStringView());
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
@@ -222,7 +233,10 @@ class MessageTemplatesCrmNotification {
             }
             leaseLinks.append("<a href=\"" + leaseUrl + "\">" + lease.getStringView() + "</a>");
 
+            email.addKeywords(lease.id().getStringView());
+            email.addKeywords(lease.leaseId().getStringView());
         }
+
         template.variable("${leaseLinks}", leaseLinks);
         template.variable("${autoPaysReviewLink}", AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.AutoPayReview()));
 
@@ -257,6 +271,7 @@ class MessageTemplatesCrmNotification {
             } else {
                 email.setSubject(i18n.tr("Auto Pay Cancelled in building {0}", buildingName));
             }
+            email.addKeywords(building.propertyCode().getStringView());
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
@@ -274,6 +289,8 @@ class MessageTemplatesCrmNotification {
                 leaseLinks.append(" <a href=\"" + agreementUrl + "\">Agreement ID" + autopayAgreement.getPrimaryKey() + "</a>");
             }
 
+            email.addKeywords(lease.id().getStringView());
+            email.addKeywords(lease.leaseId().getStringView());
         }
         template.variable("${leaseLinks}", leaseLinks);
 
@@ -304,6 +321,10 @@ class MessageTemplatesCrmNotification {
             template.variable("${buildingAddress}", building.info().address().getStringView());
 
             email.setSubject(i18n.tr("Auto Pay Cancelled by Resident for lease {0}, building {0}", lease, buildingName));
+
+            email.addKeywords(lease.id().getStringView());
+            email.addKeywords(lease.leaseId().getStringView());
+            email.addKeywords(building.propertyCode().getStringView());
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
@@ -326,5 +347,4 @@ class MessageTemplatesCrmNotification {
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;
     }
-
 }

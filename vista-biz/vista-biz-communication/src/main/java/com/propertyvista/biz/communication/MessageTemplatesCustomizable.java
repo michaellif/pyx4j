@@ -128,7 +128,7 @@ class MessageTemplatesCustomizable {
         Persistence.ensureRetrieve(tenantInLease.leaseParticipant().customer().user(), AttachLevel.Attached);
         email.setTo(tenantInLease.leaseParticipant().customer().user().email().getValue());
         email.setSender(getSender());
-        buildEmail(email, emailTemplate, data);
+        buildEmail(email, emailTemplate, context, data);
         return email;
     }
 
@@ -158,7 +158,7 @@ class MessageTemplatesCustomizable {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        buildEmail(email, emailTemplate, data);
+        buildEmail(email, emailTemplate, context, data);
 
         return email;
     }
@@ -184,7 +184,7 @@ class MessageTemplatesCustomizable {
         email.setTo(leaseParticipant.leaseParticipant().customer().user().email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        buildEmail(email, emailTemplate, data);
+        buildEmail(email, emailTemplate, context, data);
         return email;
     }
 
@@ -224,7 +224,7 @@ class MessageTemplatesCustomizable {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        buildEmail(email, emailTemplate, data);
+        buildEmail(email, emailTemplate, context, data);
 
         return email;
     }
@@ -248,7 +248,7 @@ class MessageTemplatesCustomizable {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        buildEmail(email, emailTemplate, data);
+        buildEmail(email, emailTemplate, context, data);
 
         return email;
     }
@@ -275,8 +275,10 @@ class MessageTemplatesCustomizable {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
 
+        email.addKeywords(paymentRecord.id().getStringView());
+
         email.setSender(getSender());
-        buildEmail(email, emailTemplate, data);
+        buildEmail(email, emailTemplate, context, data);
 
         return email;
     }
@@ -321,7 +323,7 @@ class MessageTemplatesCustomizable {
         }
 
         email.setSender(getSender());
-        buildEmail(email, emailTemplate, data);
+        buildEmail(email, emailTemplate, context, data);
 
         return email;
     }
@@ -341,7 +343,7 @@ class MessageTemplatesCustomizable {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
         // set email subject and body from the template
-        buildEmail(email, emailTemplate, data);
+        buildEmail(email, emailTemplate, context, data);
         return email;
     }
 
@@ -358,8 +360,14 @@ class MessageTemplatesCustomizable {
         return bodyRaw;
     }
 
-    private static void buildEmail(MailMessage email, EmailTemplate emailTemplate, Collection<IEntity> data) {
+    private static void buildEmail(MailMessage email, EmailTemplate emailTemplate, EmailTemplateContext context, Collection<IEntity> data) {
         email.setSubject(EmailTemplateManager.parseTemplate(emailTemplate.subject().getValue(), data));
+
+        email.addKeywords(emailTemplate.type().getStringView());
+        if (!context.lease().isEmpty()) {
+            email.addKeywords(context.lease().id().getStringView());
+            email.addKeywords(context.lease().leaseId().getStringView());
+        }
 
         Object contentHtml = EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data);
 
