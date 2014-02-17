@@ -863,6 +863,31 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
     }
 
+    public void testBidirectionalOneToManyFistChildPersist() {
+        testBidirectionalOneToManyFistChildSave(TestCaseMethod.Persist);
+    }
+
+    public void testBidirectionalOneToManyFistChildMerge() {
+        testBidirectionalOneToManyFistChildSave(TestCaseMethod.Merge);
+    }
+
+    public void testBidirectionalOneToManyFistChildSave(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        BidirectionalOneToManyParent o = EntityFactory.create(BidirectionalOneToManyParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        o.children().add(EntityFactory.create(BidirectionalOneToManyChild.class));
+        o.children().get(0).testId().setValue(testId);
+        o.children().get(0).name().setValue("c0-" + uniqueString());
+
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+        Assert.assertNotNull("Id Assigned", o.children().get(0).getPrimaryKey());
+        Assert.assertEquals("order is set", Integer.valueOf(0), o.children().get(0).orderInParent().getValue());
+    }
+
     public void testBidirectionalOneToManyPersist() {
         testBidirectionalOneToManySave(TestCaseMethod.Persist);
     }
