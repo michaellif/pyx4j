@@ -520,10 +520,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         onValuePropagation(this.value, fireEvent, populate);
         onValueSet(populate);
 
-        if (this instanceof CField && (!populate || (value != null))) {
-            setVisited(true);
-        }
-
         if (populate) {
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
         }

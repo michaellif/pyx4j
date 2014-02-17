@@ -61,6 +61,8 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
 
     private int tabIndex;
 
+    private boolean mayStop;
+
     public AbstractEditorActivity(CrudAppPlace place, IEditor<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
@@ -139,6 +141,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        mayStop = false;
         // should be called first in start - some views can set appropriate form according to the current mode
         view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
         view.setPresenter(this);
@@ -292,13 +295,13 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     }
 
     protected void onApplySuccess(Key result) {
-        view.reset();
+        mayStop = true;
         // switch new item to regular editing after successful apply!..
         goToEditor(result);
     }
 
     protected void onSaveSuccess(Key result) {
-        view.reset();
+        mayStop = true;
         goToViewer(result);
     }
 
@@ -318,7 +321,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
 
     @Override
     public String mayStop() {
-        if (view.isDirty()) {
+        if (!mayStop && view.isDirty()) {
             String entityName = view.getValue().getStringView();
             if (CommonsStringUtils.isEmpty(entityName)) {
                 return i18n.tr("Changes to {0} were not saved", view.getValue().getEntityMeta().getCaption());
