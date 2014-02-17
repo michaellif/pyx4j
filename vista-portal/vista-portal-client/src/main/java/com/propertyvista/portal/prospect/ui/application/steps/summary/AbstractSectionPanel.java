@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
@@ -60,23 +61,25 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
 
         setStyleName(SummaryStepTheme.StyleName.SummaryStepSection.name());
 
-        FlowPanel mainPanel = new FlowPanel();
+        final FlowPanel mainPanel = new FlowPanel();
         mainPanel.setWidth("100%");
         setWidget(mainPanel);
         mainPanel.add(captionBar);
 
+        final FlowPanel expandedBoxPanel = new FlowPanel();
+        mainPanel.add(expandedBoxPanel);
+
         errorMessageBar = new HTML();
         errorMessageBar.setStyleName(VistaTheme.StyleName.ErrorMessage.name());
-        mainPanel.add(errorMessageBar);
+        expandedBoxPanel.add(errorMessageBar);
 
-        mainPanel.add(contentPanel);
+        expandedBoxPanel.add(contentPanel);
 
         addToggleHandler(new ToggleHandler() {
 
             @Override
             public void onToggle(ToggleEvent event) {
-                errorMessageBar.setVisible(event.isToggleOn());
-                contentPanel.setVisible(event.isToggleOn());
+                expandedBoxPanel.setVisible(event.isToggleOn());
 
             }
         });
@@ -106,7 +109,13 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
 
     public void onValueSet() {
         captionBar.updateState();
-        errorMessageBar.setHTML(step.getValidationResults().getValidationMessage(true, true, false));
+        ValidationResults validationResults = step.getValidationResults();
+        errorMessageBar.setHTML(validationResults.getValidationMessage(true, true, false));
+        if (validationResults.isValid()) {
+            contentPanel.setVisible(true);
+        } else {
+            contentPanel.setVisible(false);
+        }
     }
 
     class SectionCaptionBar extends FlowPanel {
