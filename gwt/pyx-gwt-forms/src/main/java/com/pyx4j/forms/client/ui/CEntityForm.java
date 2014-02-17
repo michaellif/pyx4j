@@ -324,7 +324,6 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
                 }
             } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
                 log.debug("changed {}", memberName);
-                EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName));
                 log.debug("[{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
                 return false;
             }
