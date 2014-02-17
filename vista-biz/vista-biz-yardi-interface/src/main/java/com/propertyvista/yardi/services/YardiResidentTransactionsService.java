@@ -177,16 +177,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            // product catalog:
-            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
-                for (Building building : importedBuildings) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                    updateProductCatalog(yc, building);
-                }
-            }
-
             // availability
             if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
                 YardiILSGuestCardStub ilsStub = ServerSideFactory.create(YardiILSGuestCardStub.class);
@@ -197,6 +187,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     }
                     // process each property info
                     importPropertyMarketingInfo(yardiInterfaceId, property, executionMonitor, ilsStub);
+                }
+            }
+
+            // product catalog:
+            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
+                for (Building building : importedBuildings) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
+                    updateProductCatalog(yc, building);
                 }
             }
 
