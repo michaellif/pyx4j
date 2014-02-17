@@ -22,6 +22,7 @@ package com.pyx4j.server.mail;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +32,9 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+/**
+ * N.B. Do not add rename members this objects is serialized in production database
+ */
 public class MailMessage implements Serializable {
 
     private static final long serialVersionUID = -104910075896758956L;
@@ -54,6 +58,8 @@ public class MailMessage implements Serializable {
     private List<MailAttachment> attachments;
 
     private Map<String, String> headers;
+
+    private Collection<String> keywords;
 
     public MailMessage() {
 
@@ -102,20 +108,24 @@ public class MailMessage implements Serializable {
 
     public void setTo(String to) {
         if (this.to == null) {
-            this.to = new Vector<String>();
+            this.to = new ArrayList<>();
         }
         this.to.add(to);
     }
 
     public void addToList(String comaSeparatedAddresses) {
         if (this.to == null) {
-            this.to = new Vector<String>();
+            this.to = new ArrayList<>();
         }
         this.to.addAll(getAddressList(comaSeparatedAddresses));
     }
 
     public Collection<String> getCc() {
-        return cc;
+        if (this.cc == null) {
+            return Collections.emptyList();
+        } else {
+            return cc;
+        }
     }
 
     public void setCc(Collection<String> cc) {
@@ -124,13 +134,17 @@ public class MailMessage implements Serializable {
 
     public void addCcList(String comaSeparatedAddresses) {
         if (this.cc == null) {
-            this.cc = new Vector<String>();
+            this.cc = new ArrayList<>();
         }
         this.cc.addAll(getAddressList(comaSeparatedAddresses));
     }
 
     public Collection<String> getBcc() {
-        return bcc;
+        if (this.bcc == null) {
+            return Collections.emptyList();
+        } else {
+            return bcc;
+        }
     }
 
     public void setBcc(Collection<String> bcc) {
@@ -139,7 +153,7 @@ public class MailMessage implements Serializable {
 
     public void addBccList(String comaSeparatedAddresses) {
         if (this.bcc == null) {
-            this.bcc = new Vector<String>();
+            this.bcc = new ArrayList<>();
         }
         this.bcc.addAll(getAddressList(comaSeparatedAddresses));
     }
@@ -181,9 +195,31 @@ public class MailMessage implements Serializable {
 
     public void setHeader(String name, String value) {
         if (headers == null) {
-            headers = new HashMap<String, String>();
+            headers = new HashMap<>();
         }
         headers.put(name, value);
+    }
+
+    /**
+     * Maps to RFC 2822 Keywords
+     */
+    public Collection<String> getKeywords() {
+        if (this.keywords == null) {
+            return Collections.emptyList();
+        } else {
+            return keywords;
+        }
+    }
+
+    public void setKeywords(Collection<String> keywords) {
+        this.keywords = keywords;
+    }
+
+    public void addKeywords(String... keyword) {
+        if (this.keywords == null) {
+            this.keywords = new ArrayList<>();
+        }
+        this.keywords.addAll(Arrays.asList(keyword));
     }
 
     public List<MailAttachment> getAttachments() {
@@ -192,7 +228,7 @@ public class MailMessage implements Serializable {
 
     public void addAttachment(MailAttachment attachment) {
         if (attachments == null) {
-            attachments = new ArrayList<MailAttachment>();
+            attachments = new ArrayList<>();
         }
         attachments.add(attachment);
     }

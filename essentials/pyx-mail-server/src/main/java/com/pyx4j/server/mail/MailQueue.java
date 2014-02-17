@@ -20,15 +20,18 @@
  */
 package com.pyx4j.server.mail;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.annotations.Table;
@@ -105,6 +108,9 @@ public class MailQueue implements Runnable {
         if (callbackClass != null) {
             persistable.statusCallbackClass().setValue(callbackClass.getName());
         }
+        Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
+        persistable.sendTo().setValue(ConverterUtils.convertStringCollection(sendTo, ", "));
+        persistable.keywords().setValue(ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));
 
         runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
             @Override
@@ -154,6 +160,8 @@ public class MailQueue implements Runnable {
                         switch (status) {
                         case Success:
                             persistableUpdate.status().setValue(MailQueueStatus.Success);
+                            persistableUpdate.messageId().setValue(mailMessage.getHeader("Message-ID"));
+                            persistableUpdate.sentDate().setValue(mailMessage.getHeader("Date"));
                             break;
                         case ConfigurationError:
                             continueDelivery = false;

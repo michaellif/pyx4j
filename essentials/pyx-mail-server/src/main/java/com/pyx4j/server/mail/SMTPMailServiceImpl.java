@@ -49,6 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
@@ -173,6 +174,9 @@ class SMTPMailServiceImpl implements IMailService {
             }
             for (Map.Entry<String, String> me : mailMessage.getHeaders()) {
                 message.addHeader(me.getKey(), me.getValue());
+            }
+            if (mailMessage.getKeywords().size() > 0) {
+                message.addHeader("Keywords", ConverterUtils.convertStringCollection(mailMessage.getKeywords(), ", "));
             }
 
             Multipart content;

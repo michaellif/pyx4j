@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -57,11 +58,20 @@ public interface AbstractOutgoingMailQueue extends IEntity {
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    /// last delivery attempt
+    // last delivery attempt
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
     IPrimitive<Integer> attempts();
+
+    IPrimitive<String> sendTo();
+
+    IPrimitive<String> keywords();
+
+    IPrimitive<String> sentDate();
+
+    @Caption(name = "Message-ID")
+    IPrimitive<String> messageId();
 
     @Length(15 * 1024 * 1024)
     @RpcTransient
