@@ -32,8 +32,6 @@ import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -85,6 +83,7 @@ import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.IdentificationDocumentFileProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.LeasePaymentMethodProspectDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.prospect.LeaseTermTenantProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.ProofOfAssetDocumentFileProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.ProofOfEmploymentDocumentFileProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementCoveredItemTenantDatasetAccessRule;
@@ -141,8 +140,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
         grant(PortalProspectBehavior.Prospect, new EntityPermission(OnlineApplication.class, userEntityAccess, CRUD));
 
-        grant(PortalProspectBehavior.Prospect, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
-        grant(PortalProspectBehavior.Prospect, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(LeaseTermTenant.class, CRUD));
 
         grant(PortalProspectBehavior.Applicant, PortalProspectBehavior.Prospect);
@@ -273,6 +270,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfEmploymentDocumentFileProspectDatasetAccessRule(), ProofOfEmploymentDocumentFile.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfAssetDocumentFileProspectDatasetAccessRule(), ProofOfAssetDocumentFile.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new LeasePaymentMethodProspectDatasetAccessRule(), LeasePaymentMethod.class);
+        grant(VistaDataAccessBehavior.ProspectInPortal, new LeaseTermTenantProspectDatasetAccessRule(), LeaseTermTenant.class);
 
         grant(new IServiceExecutePermission(PortalContentService.class));
         freeze();

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.resident.security;
+package com.propertyvista.portal.server.portal.prospect.security;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,13 +31,12 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.domain.security.PortalProspectBehavior;
 
-public class ResidentAccessControlListTest {
+public class ProspectAccessControlListTest {
 
     @BeforeClass
     public static void init() throws Exception {
@@ -50,21 +49,19 @@ public class ResidentAccessControlListTest {
     }
 
     @Test
-    public void testResidentEntityPermissions() {
-        TestLifecycle.testSession(null, PortalResidentBehavior.Resident);
+    public void testProspectEntityPermissions() {
+        TestLifecycle.testSession(null, PortalProspectBehavior.Prospect);
         TestLifecycle.beginRequest();
 
         Set<Class<?>> noAccessRules = new HashSet<>();
         noAccessRules.add(Country.class);
         noAccessRules.add(City.class);
         noAccessRules.add(Province.class);
-        noAccessRules.add(MaintenanceRequestCategory.class);
 
         for (Class<? extends IEntity> entityClass : ServerEntityFactory.getAllEntityClasses()) {
             if (noAccessRules.contains(entityClass)) {
                 continue;
             }
-
             IEntity ent = EntityFactory.create(entityClass);
             if (SecurityController.checkPermission(EntityPermission.permissionRead(ent))) {
                 @SuppressWarnings("rawtypes")
@@ -77,5 +74,4 @@ public class ResidentAccessControlListTest {
         }
         TestLifecycle.endRequest();
     }
-
 }
