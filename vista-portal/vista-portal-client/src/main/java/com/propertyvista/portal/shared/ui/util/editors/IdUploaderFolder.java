@@ -26,6 +26,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -126,7 +127,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idType())).build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idType(), new CEntityLabel<IdentificationDocumentType>())).build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().donotHave())).componentWidth("auto").build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idNumber())).build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().notes())).build());
@@ -142,9 +143,6 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                     }
                 }
             });
-
-            // Tune ups:
-            get(proto().idType()).setViewable(true);
 
             get(proto().donotHave()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override

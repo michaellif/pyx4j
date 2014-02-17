@@ -43,7 +43,7 @@ public interface IdentificationDocumentFolder extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    @Caption(name = "Identification Document Type")
+    @Caption(name = "Document Type")
     IdentificationDocumentType idType();
 
     @Caption(name = "I do not have it", description = "Check here if you do not have this Document")
