@@ -279,6 +279,10 @@ public class YardiProductCatalogProcessor {
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
             if (!service.defaultCatalogItem().isBooleanTrue()) {
+                Persistence.ensureRetrieve(service.version().features(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(service.version().concessions(), AttachLevel.Attached);
+
+                service.version().features().clear();
                 for (Feature feature : catalog.features()) {
                     Persistence.ensureRetrieve(feature, AttachLevel.Attached);
                     if (!feature.defaultCatalogItem().isBooleanTrue()) {
