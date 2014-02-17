@@ -88,7 +88,7 @@ class PolicyManager {
         if (policy == null) {
             String nodeStringView = null;
             if (node.isValueDetached()) {
-                nodeStringView = ((PolicyNode) Persistence.secureRetrieve(node.getInstanceValueClass(), node.getPrimaryKey())).getStringView();
+                nodeStringView = ((PolicyNode) Persistence.service().retrieve(node.getInstanceValueClass(), node.getPrimaryKey())).getStringView();
             } else {
                 nodeStringView = node.getStringView();
             }
@@ -115,6 +115,7 @@ class PolicyManager {
      * @return <code>null</code> for organizational policy node, otherwise parent node or if there's not a parent node organizational policy node
      */
     public static PolicyNode parentOf(PolicyNode node) {
+        @SuppressWarnings("unchecked")
         Class<? extends PolicyNode> nodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
         if (OrganizationPoliciesNode.class.equals(nodeClass)) {
             return null;
