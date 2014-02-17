@@ -114,8 +114,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     // Have been changed after population
     private boolean visited = false;
 
-    private boolean reset = true;
-
     private boolean editingInProgress = false;
 
     protected ValidationError validationError;
@@ -482,7 +480,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         }
         onReset();
         setVisited(false);
-        reset = false;
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.reset);
     }
 
@@ -502,8 +499,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     }
 
     public final void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
-
-        reset = false;
 
         //In case of CComponent model represented by IEntity, disable check for equality because value may be the same instance that is returned by getValue()
         if (value instanceof IEntity || !isValuesEquals(getValue(), value)) {
@@ -590,10 +585,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             results.appendValidationError(validationError);
         }
         return results;
-    }
-
-    public boolean isReset() {
-        return reset;
     }
 
     public final boolean isVisited() {
@@ -695,7 +686,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         info.append("visible").append("=").append(isVisible()).append(";");
         info.append("visited").append("=").append(isVisited()).append(";");
         info.append("valid").append("=").append(isValid()).append(";");
-        info.append("reset").append("=").append(isReset()).append(";");
         return info.toString();
     }
 
