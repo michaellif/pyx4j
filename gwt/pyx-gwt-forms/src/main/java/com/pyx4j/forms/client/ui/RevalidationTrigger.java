@@ -23,7 +23,11 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-public class RevalidationTrigger<E> implements ValueChangeHandler<E> {
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+
+public class RevalidationTrigger<E> implements ValueChangeHandler<E>, PropertyChangeHandler {
 
     private final CComponent<?> targetComponent;
 
@@ -34,5 +38,12 @@ public class RevalidationTrigger<E> implements ValueChangeHandler<E> {
     @Override
     public void onValueChange(ValueChangeEvent<E> event) {
         targetComponent.revalidate();
+    }
+
+    @Override
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.enabled, PropertyName.editable, PropertyName.visible, PropertyName.viewable)) {
+            targetComponent.revalidate();
+        }
     }
 }
