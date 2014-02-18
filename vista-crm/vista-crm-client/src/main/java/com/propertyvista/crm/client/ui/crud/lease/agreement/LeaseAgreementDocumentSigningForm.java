@@ -58,7 +58,7 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         panel.setH1(++row, 0, 2, i18n.tr("Digitally Signed Agreement Document"));
         panel.setWidget(++row, 0, 2,
                 inject(proto().digitallySignedDocument(), digitallySignedDocumentForm = new LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm(true)));
-        panel.setWidget(++row, 0, 2, notSignedDigitallyLabel = new Label(i18n.tr("A signed document will be appear here when every party signs digitally")));
+        panel.setWidget(++row, 0, 2, notSignedDigitallyLabel = new Label(i18n.tr("A signed document will appear here when every party signs digitally")));
         panel.setWidget(++row, 0, 2, signDigitallyButton = new Button(i18n.tr("Sign Digitally"), new Command() {
             @Override
             public void execute() {
