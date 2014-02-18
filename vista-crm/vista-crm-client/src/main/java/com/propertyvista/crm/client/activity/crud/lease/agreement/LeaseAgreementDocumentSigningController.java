@@ -31,6 +31,8 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
+import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
+import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO.SignatureType;
 
 public class LeaseAgreementDocumentSigningController implements IVisorEditor.Controller {
 
@@ -43,7 +45,12 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
     private final Lease leaseId;
 
     public LeaseAgreementDocumentSigningController(LeaseViewerView view, Lease leaseId, List<LeaseTermParticipant<?>> leaseTermParticipantOptions) {
-        this.visor = new LeaseAgreementDocumentSigningVisor(this);
+        this.visor = new LeaseAgreementDocumentSigningVisor(this) {
+            @Override
+            public void onSignDigitally() {
+                signDigitally();
+            }
+        };
         this.view = view;
         this.leaseId = leaseId;
         this.leaseTermParticipantOptions = leaseTermParticipantOptions;
@@ -69,7 +76,12 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
         GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class).updateLeaseAgreementDocuments(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                // do nothing
+                populate(new DefaultAsyncCallback<VoidSerializable>() {
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        // DO NoTHING
+                    }
+                });
             }
         }, this.leaseId, this.visor.getValue());
     }
@@ -96,6 +108,16 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
                 LeaseAgreementDocumentSigningController.this.visor.setParticipantsOptions(leaseTermParticipantOptions);
                 LeaseAgreementDocumentSigningController.this.visor.setUploader(ClientContext.getUserVisit(CrmUserVisit.class).getCurrentUser()
                         .duplicate(CrmUser.class));
+
+                // TODO this should be part of Visor controller
+                boolean canBeSignedDigitally = true;
+                for (LeaseAgreementStackholderSigningProgressDTO siginingProgress : leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown()) {
+                    canBeSignedDigitally &= siginingProgress.hasSigned().isBooleanTrue()
+                            && siginingProgress.singatureType().getValue() == SignatureType.Digital;
+                }
+                canBeSignedDigitally &= leaseAgreementDocuments.digitallySignedDocument().signedEmployeeUploader().isNull();
+
+                LeaseAgreementDocumentSigningController.this.visor.setCanBeSignedDigitally(canBeSignedDigitally);
                 LeaseAgreementDocumentSigningController.this.visor.populate(leaseAgreementDocuments);
                 callback.onSuccess(null);
             }
@@ -103,6 +125,20 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
             @Override
             public void onFailure(Throwable caught) {
                 callback.onFailure(caught);
+            }
+        }, this.leaseId);
+    }
+
+    private void signDigitally() {
+        GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class).signLease(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate(new DefaultAsyncCallback<VoidSerializable>() {
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        // DO NOTHING
+                    }
+                });
             }
         }, this.leaseId);
     }

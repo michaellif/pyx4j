@@ -28,7 +28,12 @@ public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<Leas
 
     public LeaseAgreementDocumentSigningVisor(IVisorEditor.Controller controller) {
         super(controller);
-        setForm(form = new LeaseAgreementDocumentSigningForm());
+        setForm(form = new LeaseAgreementDocumentSigningForm() {
+            @Override
+            public void onSignDigitally() {
+                LeaseAgreementDocumentSigningVisor.this.onSignDigitally();
+            }
+        });
     }
 
     public void setParticipantsOptions(List<LeaseTermParticipant<?>> participantsOptions) {
@@ -37,6 +42,14 @@ public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<Leas
 
     public void setUploader(CrmUser uploader) {
         form.setUploader(uploader);
+    }
+
+    public void onSignDigitally() {
+
+    }
+
+    public void setCanBeSignedDigitally(boolean canBeSignedDigitally) {
+        form.setCanBeSignedDigitally(canBeSignedDigitally);
     }
 
 }

@@ -398,14 +398,4 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 participants).show();
     }
 
-    @Override
-    public void digitallySignAgreementDocument() {
-        ((LeaseViewerCrudService) getService()).signLease(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, EntityFactory.createIdentityStub(Lease.class, getEntityId()));
-    }
-
 }
