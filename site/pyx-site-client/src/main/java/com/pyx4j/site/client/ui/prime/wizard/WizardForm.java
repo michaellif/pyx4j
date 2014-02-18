@@ -165,7 +165,7 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
     }
 
     protected final void finish() {
-        setVisited(true);
+        setVisitedRecursive();
         if (!isValid()) {
             MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
         } else {

@@ -176,14 +176,24 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         component.onAbandon();
     }
 
-    @Override
-    public void setVisited(boolean visited) {
+    public void setVisitedRecursive() {
         if (getComponents() != null) {
             for (CComponent<?> ccomponent : getComponents()) {
-                ((CComponent<?>) ccomponent).setVisited(visited);
+                if (ccomponent instanceof CField) {
+                    ((CField<?, ?>) ccomponent).setVisited(true);
+                } else if (ccomponent instanceof CEntityContainer) {
+                    ((CEntityContainer<?>) ccomponent).setVisitedRecursive();
+                }
             }
         }
-        super.setVisited(visited);
+        setVisited(true);
+    }
+
+    @Override
+    public void revalidate() {
+        if (isVisible() && isEditable() && isEnabled() && !isViewable() && isVisited()) {
+            super.revalidate();
+        }
     }
 
     @Override

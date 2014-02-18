@@ -232,6 +232,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         adopt(item);
         getValue().add(newEntity);
         item.populate(newEntity);
+        setVisited(true);
 
         revalidate();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
@@ -245,6 +246,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     protected void removeItem(CEntityFolderItem<E> item) {
         abandon(item);
         getValue().remove(item.getValue());
+        setVisited(true);
         revalidate();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
 
@@ -272,6 +274,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         itemsList.add(indexAfter, item);
         container.insert(item, indexAfter);
 
+        setVisited(true);
         revalidate();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
         return;

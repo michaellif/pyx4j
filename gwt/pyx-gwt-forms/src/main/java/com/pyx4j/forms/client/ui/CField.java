@@ -105,6 +105,13 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     }
 
     @Override
+    public void revalidate() {
+        if (isVisible() && isEditable() && isEnabled() && !isViewable() && (isVisited() || !isValueEmpty() || isEditingInProgress())) {
+            super.revalidate();
+        }
+    }
+
+    @Override
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         boolean visible = isVisible();

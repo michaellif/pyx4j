@@ -175,7 +175,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     protected final void finish() {
-        setVisited(true);
+        setVisitedRecursive();
         if (!isValid()) {
             MessageDialog.error(i18n.tr("Error"),
                     i18n.tr("Application is not complete! Please correct all errors or omissions and try to submit application again."));

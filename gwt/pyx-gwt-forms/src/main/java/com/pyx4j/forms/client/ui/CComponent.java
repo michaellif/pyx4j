@@ -445,24 +445,20 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     public void revalidate() {
 
         Set<AbstractValidationError> origValidationErrors = validationErrors;
-
         validationErrors = new HashSet<>();
 
-        if (isVisible() && isEditable() && isEnabled() && !isViewable() && (isVisited() || !isValueEmpty() || isEditingInProgress())) {
-            if (componentValidators != null) {
-                for (ComponentValidator<DATA_TYPE> validator : componentValidators) {
-                    AbstractValidationError ve = validator.isValid();
-                    if (ve != null) {
-                        validationErrors.add(ve);
-                    }
+        if (componentValidators != null) {
+            for (ComponentValidator<DATA_TYPE> validator : componentValidators) {
+                AbstractValidationError ve = validator.isValid();
+                if (ve != null) {
+                    validationErrors.add(ve);
                 }
             }
-
         }
-
         if (!origValidationErrors.equals(validationErrors)) {
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         }
+
     }
 
     public final void reset() {
@@ -584,9 +580,9 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return visited;
     }
 
-    public void setVisited(boolean newVisited) {
-        if (newVisited != visited) {
-            visited = newVisited;
+    public void setVisited(boolean visited) {
+        if (this.visited != visited) {
+            this.visited = visited;
             revalidate();
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visited);
         }

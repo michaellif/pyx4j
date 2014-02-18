@@ -527,7 +527,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
                 }
             });
         } else {
-            activeSettingsForm.setVisited(true);
+            activeSettingsForm.setVisitedRecursive();
         }
     }
 

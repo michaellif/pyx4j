@@ -101,7 +101,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
                 if (event.getPropertyName() == PropertyName.debugId) {
                     onSetDebugId(folder.getDebugId());
                 }
-                if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
+                if (event.isEventOfType(PropertyName.valid)) {
                     ValidationResults results = folder.getValidationResults();
                     validationMessageHolder.setHTML(results.getValidationMessage(true));
                 }

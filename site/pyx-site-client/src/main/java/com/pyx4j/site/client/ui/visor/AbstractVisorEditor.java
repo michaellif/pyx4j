@@ -72,7 +72,7 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
 
     private void apply() {
         if (!getForm().isValid()) {
-            getForm().setVisited(true);
+            getForm().setVisitedRecursive();
             showValidationDialog();
         } else {
             getController().apply();
@@ -80,7 +80,7 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
     }
 
     private void save() {
-        getForm().setVisited(true);
+        getForm().setVisitedRecursive();
         if (!getForm().isValid()) {
             showValidationDialog();
         } else {

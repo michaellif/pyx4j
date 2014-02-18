@@ -77,7 +77,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     private void apply() {
-        getForm().setVisited(true);
+        getForm().setVisitedRecursive();
         if (!getForm().isValid()) {
             showValidationDialog();
         } else {
@@ -86,7 +86,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     private void save() {
-        getForm().setVisited(true);
+        getForm().setVisitedRecursive();
         if (!getForm().isValid()) {
             showValidationDialog();
         } else {
@@ -95,7 +95,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     private void saveAsNew() {
-        getForm().setVisited(true);
+        getForm().setVisitedRecursive();
         if (!getForm().isValid()) {
             showValidationDialog();
         } else {

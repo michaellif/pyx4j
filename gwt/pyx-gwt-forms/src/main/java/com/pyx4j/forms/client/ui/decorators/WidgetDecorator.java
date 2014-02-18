@@ -216,8 +216,9 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
                     updateTooltip();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
                     updateNote();
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
+                } else if (event.isEventOfType(PropertyName.valid)) {
                     renderValidationMessage();
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
                     renderMandatoryStar();
                 }
             }

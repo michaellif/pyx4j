@@ -182,7 +182,8 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
         if (widget instanceof IComponentWidget) {
             CComponent<?> comp = ((IComponentWidget<?>) widget).getCComponent();
             components.add(comp);
-        } else if (widget instanceof HasWidgets) {
+        }
+        if (widget instanceof HasWidgets) {
             for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
                 components.addAll(locateCComponents(iterator.next()));
             }
