@@ -96,8 +96,8 @@ public class ValidationResults {
         StringBuilder messagesBuffer = new StringBuilder();
         ArrayList<ValidationError> validationErrors = getValidationErrors();
 
-        if (validationErrors.size() > 1) {
-            messagesBuffer.append(i18n.tr("there are {0} error", validationErrors.size()));
+        if (validationErrors.size() > 0) {
+            messagesBuffer.append(i18n.tr("{0} error(s)", validationErrors.size()));
         }
 
         return messagesBuffer.toString();
