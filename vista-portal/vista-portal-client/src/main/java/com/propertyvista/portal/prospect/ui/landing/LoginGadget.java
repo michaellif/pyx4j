@@ -142,14 +142,14 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             contentPanel.setBR(++row, 0, 2);
 
             CEmailField emailField = inject(proto().email(), new CEmailField());
+            emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
             emailField.getWidget().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build());
-            addValidator(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
 
             CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
+            passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
             passwordField.getWidget().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(passwordField).watermark(LandingViewImpl.i18n.tr("Password")).build());
-            addValidator(passwordField, LandingViewImpl.i18n.tr("Enter your password"));
 
             CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
             rememberID.getWidget().addKeyUpHandler(new EnterKeyHandler());
@@ -183,20 +183,6 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
         }
 
-        private <E> void addValidator(CComponent<E> component, final String message) {
-            component.setMandatory(false);
-            component.addComponentValidator(new AbstractComponentValidator<E>() {
-                @Override
-                public FieldValidationError isValid() {
-                    if (getComponent().getValue() == null
-                            || ((getComponent().getValue() instanceof String) && CommonsStringUtils.isEmpty((String) getComponent().getValue()))) {
-                        return new FieldValidationError(getComponent(), message);
-                    } else {
-                        return null;
-                    }
-                }
-            });
-        }
     }
 
     class LoginToolbar extends GadgetToolbar {
