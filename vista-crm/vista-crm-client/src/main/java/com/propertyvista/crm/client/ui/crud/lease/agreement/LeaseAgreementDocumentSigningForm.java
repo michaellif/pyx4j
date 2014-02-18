@@ -25,6 +25,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
@@ -74,6 +75,10 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
 
     public void setLeaseTermParticipantsOptions(List<LeaseTermParticipant<?>> participantsOptions) {
         this.leaseAgreementDocumentFolder.setParticipantOptions(participantsOptions);
+    }
+
+    public void setUploader(CrmUser uploader) {
+        this.leaseAgreementDocumentFolder.setUploaderEmployee(uploader);
     }
 
     public void onSignDigitally() {

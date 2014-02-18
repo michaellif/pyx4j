@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
 public interface LeaseTermAgreementDocument extends IHasFile<LeaseTermAgreementDocumentBlob> {
@@ -40,4 +42,6 @@ public interface LeaseTermAgreementDocument extends IHasFile<LeaseTermAgreementD
 
     IList<LeaseTermParticipant<?>> signedParticipants();
 
+    @Caption(name = "Signed Employee / Uploader")
+    CrmUser signedEmployeeUploader();
 }

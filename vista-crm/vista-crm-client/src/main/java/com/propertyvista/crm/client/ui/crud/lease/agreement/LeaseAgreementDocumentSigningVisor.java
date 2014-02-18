@@ -18,6 +18,7 @@ import java.util.List;
 import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 
@@ -32,6 +33,10 @@ public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<Leas
 
     public void setParticipantsOptions(List<LeaseTermParticipant<?>> participantsOptions) {
         form.setLeaseTermParticipantsOptions(participantsOptions);
+    }
+
+    public void setUploader(CrmUser uploader) {
+        form.setUploader(uploader);
     }
 
 }

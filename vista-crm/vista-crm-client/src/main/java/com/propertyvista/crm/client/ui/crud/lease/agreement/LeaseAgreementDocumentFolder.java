@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -41,6 +42,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentUploadService;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
@@ -49,6 +51,8 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
     private static final I18n i18n = I18n.get(LeaseAgreementDocumentFolder.class);
 
     private List<LeaseTermParticipant<?>> participantOptions;
+
+    private CrmUser uploader;
 
     public LeaseAgreementDocumentFolder() {
         super(LeaseTermAgreementDocument.class);
@@ -119,6 +123,9 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                             }
                         })).labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participant")).componentWidth("350px").build());
             }
+            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().signedEmployeeUploader().name())).labelPosition(LabelPosition.top)
+                    .customLabel(i18n.tr("Signed Employee / Uploader")).componentWidth("350px").build());
+            get(proto().signedEmployeeUploader().name()).setViewable(true);
             return panel;
         }
 
@@ -147,6 +154,10 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
         this.participantOptions = participantOptions;
     }
 
+    public void setUploaderEmployee(CrmUser uploader) {
+        this.uploader = uploader;
+    }
+
     public static String formatParticipant(LeaseTermParticipant<?> participant) {
         return SimpleMessageFormat.format("{0} ({1})", participant.leaseParticipant().customer().person().name().getStringView(), participant.role().getValue()
                 .toString());
@@ -173,7 +184,10 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
             super(i18n.tr("Upload Agreement Document"));
             form = new LeaseAgreementDocumentForm(false);
             form.initContent();
-            form.populateNew();
+
+            LeaseTermAgreementDocument newDoc = EntityFactory.create(LeaseTermAgreementDocument.class);
+            newDoc.signedEmployeeUploader().set(uploader);
+            form.populate(newDoc);
             form.setParticipantOptions(LeaseAgreementDocumentFolder.this.participantOptions);
             setBody(form);
         }

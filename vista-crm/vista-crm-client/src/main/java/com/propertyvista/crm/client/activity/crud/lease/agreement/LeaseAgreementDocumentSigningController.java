@@ -20,11 +20,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentSigningVisor;
+import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
@@ -91,6 +94,8 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
             @Override
             public void onSuccess(LeaseAgreementDocumentsDTO leaseAgreementDocuments) {
                 LeaseAgreementDocumentSigningController.this.visor.setParticipantsOptions(leaseTermParticipantOptions);
+                LeaseAgreementDocumentSigningController.this.visor.setUploader(ClientContext.getUserVisit(CrmUserVisit.class).getCurrentUser()
+                        .duplicate(CrmUser.class));
                 LeaseAgreementDocumentSigningController.this.visor.populate(leaseAgreementDocuments);
                 callback.onSuccess(null);
             }
