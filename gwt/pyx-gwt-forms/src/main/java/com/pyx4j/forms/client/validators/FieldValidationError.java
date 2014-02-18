@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class FieldValidationError implements ValidationError {
+public class FieldValidationError extends AbstractValidationError {
 
     private CComponent<?> originator;
 
@@ -36,6 +36,7 @@ public class FieldValidationError implements ValidationError {
         this.message = message;
     }
 
+    @Override
     public String getMessage() {
         return message;
     }

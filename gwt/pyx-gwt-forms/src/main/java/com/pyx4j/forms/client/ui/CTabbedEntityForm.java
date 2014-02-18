@@ -89,10 +89,10 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
     private ValidationResults getValidationResults(Widget widget) {
         ValidationResults results = new ValidationResults();
         if (widget instanceof IValidatable) {
-            results.appendValidationErrors(((IValidatable) widget).getValidationResults());
+            results.appendValidationResults(((IValidatable) widget).getValidationResults());
         } else if (widget instanceof HasWidgets) {
             for (Widget childWidget : ((HasWidgets) widget)) {
-                results.appendValidationErrors(getValidationResults(childWidget));
+                results.appendValidationResults(getValidationResults(childWidget));
             }
         }
         return results;

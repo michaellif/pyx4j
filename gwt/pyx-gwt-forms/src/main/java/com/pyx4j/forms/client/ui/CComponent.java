@@ -23,7 +23,9 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -50,7 +52,7 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.ComponentValidator;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -113,7 +115,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private boolean editingInProgress = false;
 
-    protected ValidationError validationError;
+    protected Set<AbstractValidationError> validationErrors = new HashSet<>();
 
     private IDecorator<?> decorator;
 
@@ -323,7 +325,12 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     }
 
     public boolean isMandatoryConditionMet() {
-        return !(validationError instanceof MandatoryValidationFailure);
+        for (AbstractValidationError error : validationErrors) {
+            if (error instanceof MandatoryValidationFailure) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setMandatoryValidationMessage(String message) {
@@ -432,30 +439,28 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     }
 
     public boolean isValid() {
-        return validationError == null;
+        return validationErrors.size() == 0;
     }
 
     public void revalidate() {
 
-        ValidationError newValidationError = null;
+        Set<AbstractValidationError> origValidationErrors = validationErrors;
+
+        validationErrors = new HashSet<>();
 
         if (isVisible() && isEditable() && isEnabled() && !isViewable() && (isVisited() || !isValueEmpty() || isEditingInProgress())) {
             if (componentValidators != null) {
                 for (ComponentValidator<DATA_TYPE> validator : componentValidators) {
-                    ValidationError ve = validator.isValid();
+                    AbstractValidationError ve = validator.isValid();
                     if (ve != null) {
-                        newValidationError = ve;
-                        break;
+                        validationErrors.add(ve);
                     }
                 }
             }
 
-        } else {
-            newValidationError = null;
         }
 
-        if (newValidationError != validationError) {
-            validationError = newValidationError;
+        if (!origValidationErrors.equals(validationErrors)) {
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         }
     }
@@ -570,7 +575,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
         if (!isValid()) {
-            results.appendValidationError(validationError);
+            results.appendValidationErrors(validationErrors);
         }
         return results;
     }
@@ -675,7 +680,12 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         info.append("visited").append("=").append(isVisited()).append(";");
         info.append("valid").append("=").append(isValid()).append(";");
         if (!isValid()) {
-            info.append("validationError").append("=").append(validationError.getMessage()).append(";");
+            info.append("validationErrors").append("=[");
+            for (AbstractValidationError error : validationErrors) {
+                info.append(error.getMessage()).append(", ");
+            }
+            info.substring(0, info.length() - 2);
+            info.append("];");
         }
         return info.toString();
     }

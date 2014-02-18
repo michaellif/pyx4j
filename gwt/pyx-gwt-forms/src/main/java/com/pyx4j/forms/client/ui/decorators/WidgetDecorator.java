@@ -39,6 +39,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.Image;
@@ -81,7 +82,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     private Image mandatoryImage;
 
-    private final Label validationLabel;
+    private final HTML validationLabel;
 
     private final Label noteLabel;
 
@@ -159,7 +160,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         componentHolder.setWidth(builder.componentWidth);
         componentHolder.add(nativeComponent);
 
-        validationLabel = new Label();
+        validationLabel = new HTML();
         validationLabel.setVisible(false);
         validationLabel.setWidth(builder.contentWidth);
         validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
@@ -280,7 +281,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     protected void renderValidationMessage() {
         if (!component.isValid()) {
-            validationLabel.setText(component.getValidationResults().getValidationMessage(false));
+            validationLabel.setHTML(component.getValidationResults().getValidationMessage(true));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);
         } else {

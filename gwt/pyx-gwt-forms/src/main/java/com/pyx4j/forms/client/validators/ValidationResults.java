@@ -21,71 +21,61 @@
 package com.pyx4j.forms.client.validators;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.pyx4j.commons.LoopCounter;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 
 public class ValidationResults {
 
     private static final I18n i18n = I18n.get(ValidationResults.class);
 
-    private final ArrayList<ValidationError> validationErrors = new ArrayList<ValidationError>();
+    private final ArrayList<AbstractValidationError> validationErrors = new ArrayList<AbstractValidationError>();
 
     public ValidationResults() {
     }
 
-    public void appendValidationErrors(ValidationResults results) {
+    public void appendValidationResults(ValidationResults results) {
         if (results != null) {
             validationErrors.addAll(results.getValidationErrors());
         }
     }
 
-    public void appendValidationError(ValidationError error) {
-        validationErrors.add(error);
+    public void appendValidationErrors(Set<AbstractValidationError> errors) {
+        validationErrors.addAll(errors);
     }
 
-    public ArrayList<ValidationError> getValidationErrors() {
+    public ArrayList<AbstractValidationError> getValidationErrors() {
         return validationErrors;
-    }
-
-    public ValidationResults getValidationResultsByOriginator(CComponent<?> component) {
-        ValidationResults results = new ValidationResults();
-        for (ValidationError validationError : validationErrors) {
-            if (component == validationError.getOriginator()) {
-                results.appendValidationError(validationError);
-            }
-        }
-        return results;
     }
 
     public String getValidationMessage(boolean html) {
         StringBuilder messagesBuffer = new StringBuilder();
         LoopCounter c = new LoopCounter(validationErrors);
         if (html) {
-            messagesBuffer.append("<ul style='text-align:left'>");
-            for (ValidationError ve : validationErrors) {
-                if (ve instanceof FieldValidationError) {
-                    messagesBuffer.append("<li>").append(((FieldValidationError) ve).getMessage()).append("</li>");
+            if (validationErrors.size() == 0) {
+            } else if (validationErrors.size() == 1) {
+                messagesBuffer.append(validationErrors.get(0).getMessage());
+            } else {
+                messagesBuffer.append("<ul style='text-align:left'>");
+                for (AbstractValidationError ve : validationErrors) {
+                    messagesBuffer.append("<li>").append(ve.getMessage()).append("</li>");
                 }
+                messagesBuffer.append("</ul>");
             }
-            messagesBuffer.append("</ul>");
         } else {
-            for (ValidationError ve : validationErrors) {
-                FieldValidationError fve = (FieldValidationError) ve;
-                if (ve instanceof FieldValidationError) {
-                    switch (c.next()) {
-                    case SINGLE:
-                        messagesBuffer.append(fve.getMessage());
-                        break;
-                    case FIRST:
-                    case ITEM:
-                        messagesBuffer.append("- ").append(fve.getMessage()).append(";\n");
-                        break;
-                    case LAST:
-                        messagesBuffer.append("- ").append(fve.getMessage());
-                        break;
-                    }
+            for (AbstractValidationError ve : validationErrors) {
+                switch (c.next()) {
+                case SINGLE:
+                    messagesBuffer.append(ve.getMessage());
+                    break;
+                case FIRST:
+                case ITEM:
+                    messagesBuffer.append("- ").append(ve.getMessage()).append(";\n");
+                    break;
+                case LAST:
+                    messagesBuffer.append("- ").append(ve.getMessage());
+                    break;
                 }
             }
         }
@@ -93,22 +83,11 @@ public class ValidationResults {
     }
 
     public String getValidationShortMessage() {
-        StringBuilder messagesBuffer = new StringBuilder();
-        ArrayList<ValidationError> validationErrors = getValidationErrors();
-
-        int fieldValidationErrorsCounter = 0;
-
-        for (ValidationError validationError : validationErrors) {
-            if (validationError instanceof FieldValidationError) {
-                fieldValidationErrorsCounter++;
-            }
-        }
-
         if (validationErrors.size() > 0) {
-            messagesBuffer.append(i18n.tr("{0} error(s)", fieldValidationErrorsCounter));
+            return i18n.tr("Error");
+        } else {
+            return "";
         }
-
-        return messagesBuffer.toString();
     }
 
     public boolean isValid() {

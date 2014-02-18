@@ -34,7 +34,7 @@ public class EntityContainerValidator extends AbstractComponentValidator {
     }
 
     @Override
-    public ValidationError isValid() {
+    public AbstractValidationError isValid() {
         if (!(getComponent() instanceof CEntityContainer)) {
             throw new Error("EntityContainerValidator can be added only to CEntityContainer");
         }
@@ -42,7 +42,7 @@ public class EntityContainerValidator extends AbstractComponentValidator {
         if (container.getComponents() != null) {
             for (CComponent<?> ccomponent : container.getComponents()) {
                 if (!ccomponent.isValid()) {
-                    return new EntityContainerValidationError(container, i18n.tr("Form is not valid."));
+                    return new EntityContainerValidationError(container, i18n.tr("Form is not valid"));
                 }
             }
         }

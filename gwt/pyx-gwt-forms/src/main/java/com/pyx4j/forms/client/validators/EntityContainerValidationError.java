@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class EntityContainerValidationError implements ValidationError {
+public class EntityContainerValidationError extends AbstractValidationError {
 
     private final CComponent<?> originator;
 

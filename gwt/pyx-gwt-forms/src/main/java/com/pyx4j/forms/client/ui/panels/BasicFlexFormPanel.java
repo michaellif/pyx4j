@@ -200,7 +200,7 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
         ValidationResults results = new ValidationResults();
         for (CComponent<?> component : locateCComponents(this)) {
             if (!component.isValid()) {
-                results.appendValidationErrors(component.getValidationResults());
+                results.appendValidationResults(component.getValidationResults());
             }
         }
         return results;

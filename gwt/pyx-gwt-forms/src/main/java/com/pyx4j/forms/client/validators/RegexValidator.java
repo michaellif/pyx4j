@@ -8,7 +8,6 @@
  */
 package com.pyx4j.forms.client.validators;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 
 /**
