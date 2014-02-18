@@ -64,6 +64,9 @@ public interface AbstractOutgoingMailQueue extends IEntity {
 
     IPrimitive<Integer> attempts();
 
+    @Length(4000)
+    IPrimitive<String> lastAttemptErrorMessage();
+
     IPrimitive<String> sendTo();
 
     IPrimitive<String> keywords();

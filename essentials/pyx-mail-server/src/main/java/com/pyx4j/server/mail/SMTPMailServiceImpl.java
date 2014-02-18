@@ -37,6 +37,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.NoSuchProviderException;
+import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -168,9 +169,8 @@ class SMTPMailServiceImpl implements IMailService {
             message.setSubject(mailMessage.getSubject());
             message.setSentDate(new Date());
             message.addHeader("MIME-Version", "1.0");
-            if (mailMessage.getReplyTo() != null) {
-                //TODO
-                // message.setReplyTo(email(mailMessage.getReplyTo()));
+            if (mailMessage.getReplyTo().size() > 0) {
+                message.setReplyTo(emails(mailMessage.getReplyTo()).toArray(new InternetAddress[mailMessage.getReplyTo().size()]));
             }
             for (Map.Entry<String, String> me : mailMessage.getHeaders()) {
                 message.addHeader(me.getKey(), me.getValue());
@@ -238,15 +238,18 @@ class SMTPMailServiceImpl implements IMailService {
         try {
             transport.connect();
         } catch (MessagingException e) {
-            log.error("Error", e);
+            mailMessage.setDeliveryErrorMessage(e.getMessage());
+            log.error("send mail connection error", e);
             return MailDeliveryStatus.ConnectionError;
         }
 
         try {
             Address[] allRecipients = message.getAllRecipients();
             transport.sendMessage(message, allRecipients);
+
+            String messageID = message.getMessageID();
             mailMessage.setHeader("Date", message.getHeader("Date", null));
-            mailMessage.setHeader("Message-ID", message.getMessageID());
+            mailMessage.setHeader("Message-ID", messageID);
 
             StringBuffer sendTo = new StringBuffer();
             for (Address a : allRecipients) {
@@ -255,11 +258,21 @@ class SMTPMailServiceImpl implements IMailService {
                 }
                 sendTo.append(a.toString());
             }
-            log.info("mail sent to '{}'", sendTo);
+            log.info("mail {} sent to '{}'", messageID, sendTo);
             return MailDeliveryStatus.Success;
+        } catch (SendFailedException e) {
+            mailMessage.setDeliveryErrorMessage(e.getMessage());
+            if ((e.getInvalidAddresses() != null) && (e.getInvalidAddresses().length > 0)) {
+                log.error("send mail invalid addresses error", e);
+                return MailDeliveryStatus.MessageDataError;
+            } else {
+                log.error("send mail error", e);
+                return MailDeliveryStatus.ConnectionError;
+            }
         } catch (MessagingException e) {
-            log.error("Error", e);
-            return MailDeliveryStatus.MessageDataError;
+            mailMessage.setDeliveryErrorMessage(e.getMessage());
+            log.error("send mail error", e);
+            return MailDeliveryStatus.ConnectionError;
         } finally {
             try {
                 transport.close();
@@ -267,5 +280,4 @@ class SMTPMailServiceImpl implements IMailService {
             }
         }
     }
-
 }

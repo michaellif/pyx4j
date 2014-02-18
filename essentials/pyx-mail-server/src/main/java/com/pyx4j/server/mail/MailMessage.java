@@ -37,11 +37,11 @@ import java.util.Vector;
  */
 public class MailMessage implements Serializable {
 
-    private static final long serialVersionUID = -104910075896758956L;
+    private static final long serialVersionUID = 3457527924951058240L;
 
     private String sender;
 
-    private String replyTo;
+    private Collection<String> replyTo;
 
     private Collection<String> to;
 
@@ -61,6 +61,8 @@ public class MailMessage implements Serializable {
 
     private Collection<String> keywords;
 
+    private transient String deliveryErrorMessage;
+
     public MailMessage() {
 
     }
@@ -73,12 +75,19 @@ public class MailMessage implements Serializable {
         this.sender = sender;
     }
 
-    public String getReplyTo() {
-        return replyTo;
+    public Collection<String> getReplyTo() {
+        if (this.replyTo == null) {
+            return Collections.emptyList();
+        } else {
+            return replyTo;
+        }
     }
 
-    public void setReplyTo(String replyTo) {
-        this.replyTo = replyTo;
+    public void addReplyTo(String replyTo) {
+        if (this.replyTo == null) {
+            this.replyTo = new ArrayList<>();
+        }
+        this.replyTo.add(replyTo);
     }
 
     public static List<String> getAddressList(String comaSeparatedAddresses) {
@@ -232,4 +241,13 @@ public class MailMessage implements Serializable {
         }
         attachments.add(attachment);
     }
+
+    public String getDeliveryErrorMessage() {
+        return deliveryErrorMessage;
+    }
+
+    public void setDeliveryErrorMessage(String deliveryErrorMessage) {
+        this.deliveryErrorMessage = deliveryErrorMessage;
+    }
+
 }

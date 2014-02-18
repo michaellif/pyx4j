@@ -49,6 +49,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 //TODO re-read configuration upon errors
 //TODO Cleanup old records
+//TODO reuse SMTP session for perfomance
 //TODO separate delivery wait for different configurations
 //TODO add Throttling support, e.g.  2000 messages per day
 public class MailQueue implements Runnable {
@@ -209,21 +210,30 @@ public class MailQueue implements Runnable {
                                 persistableUpdate.messageId().setValue(mailMessage.getHeader("Message-ID"));
                                 persistableUpdate.sentDate().setValue(mailMessage.getHeader("Date"));
                                 deliveryErrorCount = 0;
+                                log.debug("message {} was sent", persistable.getPrimaryKey());
                                 break;
                             case ConfigurationError:
                                 continueDelivery = false;
+                                deliveryErrorCount++;
+                                log.error("message {} was not sent because of the configuration error, administrator review required",
+                                        persistable.getPrimaryKey());
                                 break;
                             case ConnectionError:
                                 continueDelivery = false;
                                 deliveryErrorCount++;
+                                log.debug("message {} was not sent", persistable.getPrimaryKey());
                                 break;
                             case MessageDataError:
                                 persistableUpdate.status().setValue(MailQueueStatus.Cancelled);
+                                log.warn("message {} was not sent because of the data problem, delivery attempts Cancelled", persistable.getPrimaryKey());
                                 break;
                             }
+                            persistableUpdate.lastAttemptErrorMessage().setValue(
+                                    trunkLength(mailMessage.getDeliveryErrorMessage(), persistableUpdate.lastAttemptErrorMessage().getMeta().getLength()));
                             persistableUpdate.attempts().setValue(persistable.attempts().getValue(0) + 1);
-                            if (persistable.attempts().getValue() > 40) {
+                            if ((persistable.attempts().getValue() > 40) && (persistableUpdate.status().getValue() != MailQueueStatus.Success)) {
                                 persistableUpdate.status().setValue(MailQueueStatus.GiveUp);
+                                log.warn("message {} was not sent, delivery attempts stoppered", persistable.getPrimaryKey());
                             }
                             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
@@ -245,7 +255,7 @@ public class MailQueue implements Runnable {
                         }
                     } while (continueDelivery && !shutdown);
                 } catch (Throwable t) {
-                    log.error("MailQueue delivery error", t);
+                    log.error("MailQueue delivery implementation error", t);
                 }
             } while (!shutdown);
         } finally {
@@ -253,6 +263,14 @@ public class MailQueue implements Runnable {
             synchronized (monitor) {
                 monitor.notifyAll();
             }
+        }
+    }
+
+    private String trunkLength(String message, int length) {
+        if ((message != null) && (message.length() > length)) {
+            return message.substring(0, length);
+        } else {
+            return message;
         }
     }
 
