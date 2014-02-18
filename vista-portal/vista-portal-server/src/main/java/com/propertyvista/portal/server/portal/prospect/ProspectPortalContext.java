@@ -56,13 +56,13 @@ public class ProspectPortalContext extends PortalVistaContext {
     public static Tenant getTenant() {
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
-        criteria.eq(criteria.proto().customer().user(), getCustomerUserIdStub());
+        criteria.eq(criteria.proto().customer(), getCustomer());
         return Persistence.service().retrieve(criteria);
     }
 
     public static LeaseTermTenant getLeaseTermTenant() {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
-        criteria.eq(criteria.proto().leaseParticipant().customer().user(), getCustomerUserIdStub());
+        criteria.eq(criteria.proto().leaseParticipant().customer(), getCustomer());
         criteria.eq(criteria.proto().leaseParticipant().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
         criteria.isDraft(criteria.proto().leaseTermV());
@@ -72,13 +72,13 @@ public class ProspectPortalContext extends PortalVistaContext {
     public static Guarantor getGuarantor() {
         EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
         criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
-        criteria.eq(criteria.proto().customer().user(), getCustomerUserIdStub());
+        criteria.eq(criteria.proto().customer(), getCustomer());
         return Persistence.service().retrieve(criteria);
     }
 
     public static LeaseTermGuarantor getLeaseTermGuarantor() {
         EntityQueryCriteria<LeaseTermGuarantor> criteria = EntityQueryCriteria.create(LeaseTermGuarantor.class);
-        criteria.eq(criteria.proto().leaseParticipant().customer().user(), getCustomerUserIdStub());
+        criteria.eq(criteria.proto().leaseParticipant().customer(), getCustomer());
         criteria.eq(criteria.proto().leaseParticipant().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
         criteria.isDraft(criteria.proto().leaseTermV());

@@ -269,24 +269,13 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         switch (bo.role().getValue()) {
         case Applicant:
         case CoApplicant:
-            Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
-            for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
-                if (tenant.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
-                    saveLeaseTermParticipant(bo, to, tenant);
-                    break;
-                }
-            }
+            saveLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermTenant());
             break;
 
         case Guarantor:
-            Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
-            for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
-                if (guarantor.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
-                    saveLeaseTermParticipant(bo, to, guarantor);
-                    break;
-                }
-            }
+            saveLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermGuarantor());
             break;
+
         case Dependent:
             throw new IllegalArgumentException();
         }
@@ -323,15 +312,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void fillOccupants(OnlineApplication bo, OnlineApplicationDTO to) {
         EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
-        criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
-        List<LeaseTermTenant> tenants = Persistence.service().query(criteria);
+        criteria.ne(criteria.proto().leaseParticipant().customer(), bo.customer());
 
-//        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
-//                .getPrimaryKey());
-//        Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
-//        for (LeaseTermTenant ltt : leaseTerm.version().tenants()) {
-
-        for (LeaseTermTenant ltt : tenants) {
+        for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
             if (ltt.role().getValue() == Role.CoApplicant) {
                 CoapplicantDTO cap = EntityFactory.create(CoapplicantDTO.class);
 
@@ -371,7 +354,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             Boolean present = false;
             LeaseTermTenant ltt = it.next();
             Persistence.ensureRetrieve(ltt, AttachLevel.Attached);
-            if (!ltt.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
+            if (!ltt.leaseParticipant().customer().equals(bo.customer())) {
                 for (CoapplicantDTO cap : to.coapplicants()) {
                     if (!cap.tenantId().isNull() && cap.tenantId().getPrimaryKey().equals(ltt.getPrimaryKey())) {
                         present = true;
@@ -449,7 +432,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void fillGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
         EntityQueryCriteria<LeaseTermGuarantor> criteria = new EntityQueryCriteria<LeaseTermGuarantor>(LeaseTermGuarantor.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
-        criteria.eq(criteria.proto().tenant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
+        criteria.eq(criteria.proto().tenant().customer(), bo.customer());
 
         for (LeaseTermGuarantor ltg : Persistence.service().query(criteria)) {
             GuarantorDTO grnt = EntityFactory.create(GuarantorDTO.class);
@@ -468,36 +451,21 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void saveGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
         LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
-        EntityQueryCriteria<LeaseTermGuarantor> criteria = new EntityQueryCriteria<LeaseTermGuarantor>(LeaseTermGuarantor.class);
-        criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
-        criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
-
-        // find removed:
-        List<LeaseTermGuarantor> removedGuarantors = new ArrayList<LeaseTermGuarantor>();
-        for (LeaseTermGuarantor ltg : Persistence.service().query(criteria)) {
-            Boolean present = false;
-            for (GuarantorDTO grnt : to.guarantors()) {
-                if (!grnt.guarantorId().isNull() && grnt.guarantorId().getPrimaryKey().equals(ltg.getPrimaryKey())) {
-                    present = true;
-                    break;
-                }
-            }
-            if (!present) {
-                removedGuarantors.add(ltg);
-            }
-        }
-
         // clear removed:
         Iterator<LeaseTermGuarantor> it = leaseTerm.version().guarantors().iterator();
         while (it.hasNext()) {
+            Boolean present = false;
             LeaseTermGuarantor ltg = it.next();
             Persistence.ensureRetrieve(ltg, AttachLevel.Attached);
-            if (!ltg.leaseParticipant().customer().user().equals(ProspectPortalContext.getCustomerUserIdStub())) {
-                for (LeaseTermGuarantor removed : removedGuarantors) {
-                    if (removed.getPrimaryKey().equals(ltg.getPrimaryKey())) {
-                        it.remove();
+            if (!ltg.leaseParticipant().customer().equals(bo.customer())) {
+                for (GuarantorDTO grnt : to.guarantors()) {
+                    if (!grnt.guarantorId().isNull() && grnt.guarantorId().getPrimaryKey().equals(ltg.getPrimaryKey())) {
+                        present = true;
                         break;
                     }
+                }
+                if (!present) {
+                    it.remove();
                 }
             }
         }
