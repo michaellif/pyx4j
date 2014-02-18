@@ -48,7 +48,6 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
     public SelectedBuildingsFolder(IPane parentView) {
         super(Building.class);
         this.parentView = parentView;
-        setViewable(true);
         setOrderable(false);
         asWidget().addStyleName(Styles.SelectedBuildingsFolder.name());
     }
