@@ -47,6 +47,10 @@ import com.pyx4j.entity.shared.AbstractOutgoingMailQueue;
 import com.pyx4j.entity.shared.AbstractOutgoingMailQueue.MailQueueStatus;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+//TODO re-read configuration upon errors
+//TODO Cleanup old records
+//TODO separate delivery wait for different configurations
+//TODO add Throttling support, e.g.  2000 messages per day
 public class MailQueue implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(MailQueue.class);
@@ -57,9 +61,11 @@ public class MailQueue implements Runnable {
 
     private static MailQueue instance;
 
-    private boolean shutdown = false;
-
     private final Object monitor = new Object();
+
+    private volatile boolean shutdown = false;
+
+    private volatile boolean running = false;
 
     private MailQueue() {
     }
@@ -81,11 +87,24 @@ public class MailQueue implements Runnable {
 
     public static void shutdown() {
         if (instance != null) {
-            instance.shutdown = true;
-            synchronized (instance.monitor) {
-                instance.monitor.notifyAll();
-            }
+            instance.notifyAndWaitCompletion();
             instance = null;
+        }
+    }
+
+    private void notifyAndWaitCompletion() {
+        shutdown = true;
+        synchronized (monitor) {
+            monitor.notifyAll();
+        }
+        while (running) {
+            synchronized (monitor) {
+                try {
+                    monitor.wait(100);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
         }
     }
 
@@ -120,6 +139,7 @@ public class MailQueue implements Runnable {
             }
         });
 
+        // Transaction is actually completed, wake up the delivery thread.
         Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
 
             @Override
@@ -132,74 +152,108 @@ public class MailQueue implements Runnable {
 
     @Override
     public void run() {
-        do {
-            synchronized (monitor) {
-                try {
-                    monitor.wait(2 * Consts.MIN2MSEC);
-                } catch (InterruptedException e) {
-                    log.info("MailQueue Interrupted");
-                    return;
-                }
-            }
-            try {
-                boolean continueDelivery = true;
-                do {
-                    final AbstractOutgoingMailQueue persistable = peek();
-                    if (persistable == null) {
-                        continueDelivery = false;
-                    } else {
-                        final AbstractOutgoingMailQueue persistableUpdate = (AbstractOutgoingMailQueue) EntityFactory.create(persistable.getEntityMeta()
-                                .getEntityClass());
-                        persistableUpdate.status().setValue(persistable.status().getValue());
-                        persistableUpdate.updated().setValue(SystemDateManager.getDate());
+        try {
+            running = true;
+            int deliveryErrorCount = 0;
+            int mailQueueEmptyCount = 0;
+            do {
 
-                        IMailServiceConfigConfiguration mailConfig = configurations.get(persistable.configurationId().getValue());
-                        MailMessage mailMessage = (MailMessage) SerializationUtils.deserialize(persistable.data().getValue());
-                        MailDeliveryStatus status = Mail.send(mailMessage, mailConfig);
-
-                        switch (status) {
-                        case Success:
-                            persistableUpdate.status().setValue(MailQueueStatus.Success);
-                            persistableUpdate.messageId().setValue(mailMessage.getHeader("Message-ID"));
-                            persistableUpdate.sentDate().setValue(mailMessage.getHeader("Date"));
-                            break;
-                        case ConfigurationError:
-                            continueDelivery = false;
-                            break;
-                        case ConnectionError:
-                            continueDelivery = false;
-                            break;
-                        case MessageDataError:
-                            persistableUpdate.status().setValue(MailQueueStatus.Cancelled);
-                            break;
-                        }
-                        persistableUpdate.attempts().setValue(persistable.attempts().getValue(0) + 1);
-                        if (persistable.attempts().getValue() > 40) {
-                            persistableUpdate.status().setValue(MailQueueStatus.GiveUp);
-                        }
-                        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-                            @Override
-                            public Void execute() {
-                                runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
-                                    @Override
-                                    public Void execute() {
-                                        Persistence.service().update(EntityCriteriaByPK.create(persistable), persistableUpdate);
-                                        return null;
-                                    }
-                                });
-                                return null;
-                            }
-                        });
-                        if (!persistable.statusCallbackClass().isNull()) {
-                            invokeCallback(persistable.statusCallbackClass().getValue(), persistable.namespace().getValue(), mailMessage, status);
-                        }
+                long sleepMinutes = 2; // default upon application startup
+                if (deliveryErrorCount > 0) {
+                    // Slow down retry attempts if there are communication outage
+                    if (deliveryErrorCount > 10) { // 20 minutes outage
+                        sleepMinutes = 10;
+                    } else if (deliveryErrorCount > 26) { // 2 hours outage (180m = 2m * 10 + 10m * 16)
+                        sleepMinutes = 60;
                     }
-                } while (continueDelivery && !shutdown);
-            } catch (Throwable t) {
-                log.error("MailQueue delivery error", t);
+                } else if (mailQueueEmptyCount > 10) {
+                    // There should be no way to put records in to DB Queue without calling notification, in any case we will check it every now and then.
+                    sleepMinutes = 30;
+                }
+
+                // Wait for sendQueued notifications or shutdown
+                synchronized (monitor) {
+                    try {
+                        monitor.wait(sleepMinutes * Consts.MIN2MSEC);
+                    } catch (InterruptedException e) {
+                        log.info("MailQueue Interrupted");
+                        return;
+                    }
+                }
+                // Do try not to make delivery upon shutdown.  
+                if (shutdown) {
+                    break;
+                }
+
+                try {
+                    boolean continueDelivery = true;
+                    do {
+                        final AbstractOutgoingMailQueue persistable = peek();
+                        if (persistable == null) {
+                            continueDelivery = false;
+                            mailQueueEmptyCount++;
+                        } else {
+                            mailQueueEmptyCount = 0;
+                            final AbstractOutgoingMailQueue persistableUpdate = (AbstractOutgoingMailQueue) EntityFactory.create(persistable.getEntityMeta()
+                                    .getEntityClass());
+                            persistableUpdate.status().setValue(persistable.status().getValue());
+                            persistableUpdate.updated().setValue(SystemDateManager.getDate());
+
+                            IMailServiceConfigConfiguration mailConfig = configurations.get(persistable.configurationId().getValue());
+                            MailMessage mailMessage = (MailMessage) SerializationUtils.deserialize(persistable.data().getValue());
+                            MailDeliveryStatus status = Mail.send(mailMessage, mailConfig);
+
+                            switch (status) {
+                            case Success:
+                                persistableUpdate.status().setValue(MailQueueStatus.Success);
+                                persistableUpdate.messageId().setValue(mailMessage.getHeader("Message-ID"));
+                                persistableUpdate.sentDate().setValue(mailMessage.getHeader("Date"));
+                                deliveryErrorCount = 0;
+                                break;
+                            case ConfigurationError:
+                                continueDelivery = false;
+                                break;
+                            case ConnectionError:
+                                continueDelivery = false;
+                                deliveryErrorCount++;
+                                break;
+                            case MessageDataError:
+                                persistableUpdate.status().setValue(MailQueueStatus.Cancelled);
+                                break;
+                            }
+                            persistableUpdate.attempts().setValue(persistable.attempts().getValue(0) + 1);
+                            if (persistable.attempts().getValue() > 40) {
+                                persistableUpdate.status().setValue(MailQueueStatus.GiveUp);
+                            }
+                            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                                @Override
+                                public Void execute() {
+                                    runInEntityNamespace(persistable.getEntityMeta().getEntityClass(), new Executable<Void, RuntimeException>() {
+                                        @Override
+                                        public Void execute() {
+                                            Persistence.service().update(EntityCriteriaByPK.create(persistable), persistableUpdate);
+                                            return null;
+                                        }
+                                    });
+                                    return null;
+                                }
+                            });
+                            if (!persistable.statusCallbackClass().isNull()) {
+                                invokeCallback(persistable.statusCallbackClass().getValue(), persistable.namespace().getValue(), mailMessage, status);
+                            }
+                        }
+                    } while (continueDelivery && !shutdown);
+                } catch (Throwable t) {
+                    log.error("MailQueue delivery error", t);
+                }
+            } while (!shutdown);
+        } finally {
+            running = false;
+            synchronized (monitor) {
+                monitor.notifyAll();
             }
-        } while (!shutdown);
+        }
     }
 
     private void invokeCallback(String statusCallbackClass, String targetNamespace, final MailMessage mailMessage, final MailDeliveryStatus status) {
