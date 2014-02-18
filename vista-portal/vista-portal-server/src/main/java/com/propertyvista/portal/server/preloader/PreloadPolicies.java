@@ -35,6 +35,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.N4PolicyPr
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PreloadRestrictionsPolicies;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProspectPortalPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPoliciesPreloader;
@@ -67,6 +68,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new DepositPolicyPreloader());
             add(new LeaseAdjustmentPolicyPreloader());
             add(new LeaseBillingPolicyPreloader());
+            add(new ProspectPortalPolicyPreloader());
         } else {
             add(new LegalTermsPolicyPreloader());
             add(new MockupProductTaxPolicyPreloader());

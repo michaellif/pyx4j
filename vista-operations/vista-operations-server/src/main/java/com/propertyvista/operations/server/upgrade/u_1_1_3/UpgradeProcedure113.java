@@ -24,6 +24,7 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.operations.server.upgrade.u_1_0_5.UpgradeProcedure105;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProspectPortalPolicyPreloader;
 
 public class UpgradeProcedure113 implements UpgradeProcedure {
 
@@ -39,6 +40,7 @@ public class UpgradeProcedure113 implements UpgradeProcedure {
         switch (upgradeStep) {
         case 1:
             runLegalTermsPolicyPreloaderPolicyGeneration();
+            runProspectPortalPolicyPreloaderPolicyGeneration();
             break;
         default:
             throw new IllegalArgumentException();
@@ -48,6 +50,18 @@ public class UpgradeProcedure113 implements UpgradeProcedure {
     private void runLegalTermsPolicyPreloaderPolicyGeneration() {
         log.info("Creating LegalTermsPolicy and setting its scope to 'Organization'");
         LegalTermsPolicyPreloader policyPreloader = new LegalTermsPolicyPreloader();
+        OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        if (organizationNode == null) {
+            throw new UserRuntimeException("Organizational Policy Was not found");
+        }
+        policyPreloader.setTopNode(organizationNode);
+        String policyCreationLog = policyPreloader.create();
+        log.info("Finished policy creation: " + policyCreationLog);
+    }
+
+    private void runProspectPortalPolicyPreloaderPolicyGeneration() {
+        log.info("Creating ProspectPortalPolicy and setting its scope to 'Organization'");
+        ProspectPortalPolicyPreloader policyPreloader = new ProspectPortalPolicyPreloader();
         OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         if (organizationNode == null) {
             throw new UserRuntimeException("Organizational Policy Was not found");
