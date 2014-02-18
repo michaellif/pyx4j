@@ -269,16 +269,28 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         switch (bo.role().getValue()) {
         case Applicant:
         case CoApplicant:
-            saveLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermTenant());
+            Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
+            for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
+                if (tenant.leaseParticipant().customer().equals(ProspectPortalContext.getCustomer())) {
+                    saveLeaseTermParticipant(bo, to, tenant);
+                    break;
+                }
+            }
             break;
 
         case Guarantor:
-            saveLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermGuarantor());
+            Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
+            for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
+                if (guarantor.leaseParticipant().customer().equals(ProspectPortalContext.getCustomer())) {
+                    saveLeaseTermParticipant(bo, to, guarantor);
+                    break;
+                }
+            }
             break;
-
         case Dependent:
             throw new IllegalArgumentException();
         }
+
     }
 
     private void saveLeaseTermParticipant(OnlineApplication bo, OnlineApplicationDTO to, LeaseTermParticipant<?> participant) {
