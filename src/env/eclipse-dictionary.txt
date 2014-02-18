@@ -173,3 +173,4 @@ refactoring
 proprietorship
 payee
 stateful
+outage
