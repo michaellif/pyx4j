@@ -201,7 +201,7 @@ public class PeopleStep extends ApplicationWizardStep {
                             if (maturedOccupantsAreApplicants()) {
                                 if (TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
                                     return new FieldValidationError(getComponent(), i18n.tr(
-                                            "This person is matured and should be Co-Applicant!. According to regulations age of majority is {0}.",
+                                            "According to internal regulations and age this person cannot be a Dependent. Age of majority is {0}",
                                             ageOfMajority()));
                                 }
                             }
