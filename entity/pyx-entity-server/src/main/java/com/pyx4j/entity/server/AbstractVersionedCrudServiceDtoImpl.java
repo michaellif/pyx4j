@@ -58,12 +58,12 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
-    protected E retrieveForSave(TO dt) {
-        Validate.isTrue(dt.getPrimaryKey().getVersion() == Key.VERSION_DRAFT);
-        E entity = super.retrieveForSave(dt);
+    protected E retrieveForSave(TO to) {
+        Validate.isTrue(to.getPrimaryKey().getVersion() == Key.VERSION_DRAFT);
+        E entity = super.retrieveForSave(to);
         if (entity.version().isNull()) {
-            dt.setPrimaryKey(dt.getPrimaryKey().asCurrentKey());
-            entity = super.retrieveForSave(dt);
+            to.setPrimaryKey(to.getPrimaryKey().asCurrentKey());
+            entity = super.retrieveForSave(to);
             entity.version().set(EntityGraph.businessDuplicate(entity.version()));
             VersionedEntityUtils.setAsDraft(entity.version());
         }

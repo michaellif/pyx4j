@@ -107,15 +107,15 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, TO dto) {
-        BO entity = createBO(dto);
-        create(entity, dto);
+    public void create(AsyncCallback<Key> callback, TO to) {
+        BO entity = createBO(to);
+        create(entity, to);
         Persistence.service().commit();
         callback.onSuccess(entity.getPrimaryKey());
     }
 
-    protected BO retrieveForSave(TO dt) {
-        BO bo = Persistence.secureRetrieve(boClass, dt.getPrimaryKey());
+    protected BO retrieveForSave(TO to) {
+        BO bo = Persistence.secureRetrieve(boClass, to.getPrimaryKey());
         if (bo == null) {
             bo = EntityFactory.create(boClass);
         }
