@@ -17,10 +17,14 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
+import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
@@ -46,6 +50,8 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     private Label signDigitallyExplanation;
 
     private boolean canBeSignedDigitally;
+
+    private VerticalPanel sigingProgressPanelHolder;
 
     public LeaseAgreementDocumentSigningForm() {
         super(LeaseAgreementDocumentsDTO.class);
@@ -79,6 +85,10 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         panel.setWidget(++row, 0, 2,
                 signDigitallyExplanation = new Label(i18n.tr("Once every lease participant signs, the document will be ready for signing by Landlord")));
 
+        sigingProgressPanelHolder = new VerticalPanel();
+        sigingProgressPanelHolder.setWidth("100%");
+        panel.setWidget(++row, 0, 2, sigingProgressPanelHolder);
+
         panel.setH1(++row, 0, 2, i18n.tr("Ink Signed Agreement Documents"));
         panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder()));
 
@@ -101,18 +111,39 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
 
     }
 
+    public void monitorSigningProgress(String corellationId, DeferredProgressListener callback) {
+        sigingProgressPanelHolder.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        sigingProgressPanelHolder.clear();
+        sigingProgressPanelHolder.setVisible(true);
+
+        Label messageLabel = new Label(i18n.tr("Generating Signed Agreement, Please Wait..."));
+        messageLabel.setWidth("100%");
+        sigingProgressPanelHolder.add(messageLabel);
+        sigingProgressPanelHolder.setCellHorizontalAlignment(messageLabel, HasHorizontalAlignment.ALIGN_CENTER);
+
+        DeferredProgressPanel progressPanel = new DeferredProgressPanel("30em", "5em", false, callback);
+        progressPanel.startProgress(corellationId);
+        progressPanel.setWidth("100%");
+        sigingProgressPanelHolder.add(progressPanel);
+
+        signDigitallyButton.setVisible(false);
+        signDigitallyExplanation.setVisible(false);
+        notSignedDigitallyLabel.setVisible(false);
+    }
+
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().digitallySignedDocument()).setVisible(!getValue().digitallySignedDocument().isNull());
-        notSignedDigitallyLabel.setVisible(getValue().digitallySignedDocument().isNull());
+        sigingProgressPanelHolder.setVisible(false);
 
-        if (canBeSignedDigitally) {
-            signDigitallyButton.setEnabled(canBeSignedDigitally);
-            signDigitallyExplanation.setVisible(!canBeSignedDigitally);
-        } else if (!getValue().digitallySignedDocument().isNull()) {
-            signDigitallyButton.setVisible(false);
-            signDigitallyExplanation.setVisible(false);
-        }
+        boolean hasDigitallySignedDocument = !getValue().digitallySignedDocument().isNull();
+        digitallySignedDocumentForm.setVisible(hasDigitallySignedDocument);
+        notSignedDigitallyLabel.setVisible(!hasDigitallySignedDocument);
+        signDigitallyButton.setVisible(!hasDigitallySignedDocument);
+        signDigitallyExplanation.setVisible(!hasDigitallySignedDocument);
+
+        signDigitallyButton.setEnabled(canBeSignedDigitally);
+        signDigitallyExplanation.setVisible(!canBeSignedDigitally);
+
     }
 }

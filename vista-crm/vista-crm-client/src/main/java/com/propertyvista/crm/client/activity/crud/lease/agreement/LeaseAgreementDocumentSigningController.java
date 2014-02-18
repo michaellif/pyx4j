@@ -18,6 +18,9 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
@@ -133,10 +136,25 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
         GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class).signLease(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredProcessCorellationId) {
-                populate(new DefaultAsyncCallback<VoidSerializable>() {
+                LeaseAgreementDocumentSigningController.this.visor.monitorSigningProgress(deferredProcessCorellationId, new DeferredProgressListener() {
                     @Override
-                    public void onSuccess(VoidSerializable result) {
-                        // DO NOTHING
+                    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                        populate(new DefaultAsyncCallback<VoidSerializable>() {
+                            @Override
+                            public void onSuccess(VoidSerializable result) {
+                                // do nothing
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onDeferredProgress(DeferredProcessProgressResponse result) {
+
+                    }
+
+                    @Override
+                    public void onDeferredError(DeferredProcessProgressResponse result) {
+                        throw new UnrecoverableClientError(result.getMessage());
                     }
                 });
             }
