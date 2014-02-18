@@ -125,7 +125,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     public ValidationResults getValidationResults() {
         ValidationResults results = super.getValidationResults();
         if (parent != null) {
-            results.appendValidationErrors(parent.getValidationResults());
+            results.appendValidationResults(parent.getValidationResults());
         }
         return results;
     }

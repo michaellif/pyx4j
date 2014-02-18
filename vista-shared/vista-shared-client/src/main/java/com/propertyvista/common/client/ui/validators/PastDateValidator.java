@@ -17,7 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -49,7 +49,7 @@ public class PastDateValidator extends AbstractComponentValidator<LogicalDate> {
                 getComponent(), message);
     }
 
-    public ValidationError isValid(CComponent<LogicalDate> component) {
+    public AbstractValidationError isValid(CComponent<LogicalDate> component) {
         setComponent(component);
         return isValid();
     }

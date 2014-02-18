@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
-import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -396,7 +396,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         get(proto().termFrom()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid() {
+            public AbstractValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
                             .lease().creationDate().getValue();

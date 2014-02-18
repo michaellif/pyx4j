@@ -38,7 +38,10 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
     }
 
     public static boolean isSinValid(String value) {
-        return value.trim().matches("^\\d{3}[\\s]*\\d{3}[\\s]*\\d{3}$") && isLuhnValid(value.trim().replaceAll("\\s", ""));
+        if (value == null) {
+            return true;
+        }
+        return value.trim().replaceAll(" ", "").matches("^\\d{3}[\\s]*\\d{3}[\\s]*\\d{3}$") && isLuhnValid(value.trim().replaceAll("\\s", ""));
     }
 
     public static boolean isCreditCardNumberValid(String num) {
