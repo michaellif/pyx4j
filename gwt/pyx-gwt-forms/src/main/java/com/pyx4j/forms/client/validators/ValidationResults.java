@@ -50,21 +50,29 @@ public class ValidationResults {
     }
 
     public String getValidationMessage(boolean html) {
+        ArrayList<FieldValidationError> fieldValidationErrors = new ArrayList<>();
+
+        for (AbstractValidationError error : validationErrors) {
+            if (error instanceof FieldValidationError) {
+                fieldValidationErrors.add((FieldValidationError) error);
+            }
+        }
+
         StringBuilder messagesBuffer = new StringBuilder();
-        LoopCounter c = new LoopCounter(validationErrors);
         if (html) {
-            if (validationErrors.size() == 0) {
-            } else if (validationErrors.size() == 1) {
-                messagesBuffer.append(validationErrors.get(0).getMessage());
+            if (fieldValidationErrors.size() == 0) {
+            } else if (fieldValidationErrors.size() == 1) {
+                messagesBuffer.append(fieldValidationErrors.get(0).getMessage());
             } else {
                 messagesBuffer.append("<ul style='text-align:left'>");
-                for (AbstractValidationError ve : validationErrors) {
+                for (AbstractValidationError ve : fieldValidationErrors) {
                     messagesBuffer.append("<li>").append(ve.getMessage()).append("</li>");
                 }
                 messagesBuffer.append("</ul>");
             }
         } else {
-            for (AbstractValidationError ve : validationErrors) {
+            LoopCounter c = new LoopCounter(fieldValidationErrors);
+            for (AbstractValidationError ve : fieldValidationErrors) {
                 switch (c.next()) {
                 case SINGLE:
                     messagesBuffer.append(ve.getMessage());
