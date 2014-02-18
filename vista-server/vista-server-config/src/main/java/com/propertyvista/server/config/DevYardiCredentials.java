@@ -25,6 +25,15 @@ public class DevYardiCredentials {
     enum YardiCredential {
         localNew( //
                 "gran0002, aven2175", //
+                "http://yardi.birchwoodsoftwaregroup.com:8080/Voyager6008sp17", //
+                "vista_dev", //
+                "vista_dev", //
+                "WIN-CO5DPAKNUA4\\YARDI", //
+                "vista_dev" //
+        ),
+
+        localOld( //
+                "gran0002, aven2175", //
                 "http://yardi.birchwoodsoftwaregroup.com/Voyager60", //
                 "vista_dev", //
                 "vista_dev", //
