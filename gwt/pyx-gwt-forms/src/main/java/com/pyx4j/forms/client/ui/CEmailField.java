@@ -66,7 +66,7 @@ public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
                 return null; // empty value case
             }
             if (!ValidationUtils.isValidEmail(string)) {
-                throw new ParseException(i18n.tr("Not A Valid Email"), 0);
+                throw new ParseException(i18n.tr("Not a valid email"), 0);
             }
             return string;
         }
