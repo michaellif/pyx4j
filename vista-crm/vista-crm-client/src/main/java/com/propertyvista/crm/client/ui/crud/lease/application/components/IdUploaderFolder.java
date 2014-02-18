@@ -90,7 +90,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
                 if (getComponent().getValue() != null && documentationPolicy != null) {
                     int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                     if (numOfRemainingDocs > 0) {
-                        return new FieldValidationError(getComponent(), i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                        return new FieldValidationError(getComponent(), i18n.tr("{0} more document(s) is/are required", numOfRemainingDocs));
                     }
                 }
                 return null;

@@ -79,9 +79,12 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             @Override
             public FieldValidationError isValid() {
                 if (getComponent().getValue() != null && documentationPolicy != null) {
-                    int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
-                    if (numOfRemainingDocs > 0) {
-                        return new FieldValidationError(getComponent(), i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                    int requredDocsCount = documentationPolicy.numberOfRequiredIDs().getValue();
+                    int remainingDocsCount = requredDocsCount - getValue().size();
+                    if (remainingDocsCount > 0) {
+                        return new FieldValidationError(getComponent(), i18n.tr(
+                                "You have to provide {0} identification document(s), {1} more document(s) is/are required", requredDocsCount,
+                                remainingDocsCount));
                     }
                 }
                 return null;
