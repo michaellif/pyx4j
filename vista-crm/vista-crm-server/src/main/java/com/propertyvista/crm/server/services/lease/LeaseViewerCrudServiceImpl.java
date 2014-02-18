@@ -57,6 +57,7 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
+import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.AgreementInkSignatures;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -311,10 +312,22 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void signLease(AsyncCallback<String> callback, Lease leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
+        Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.Attached);
+
+        CrmUserSignature signature = EntityFactory.create(CrmUserSignature.class);
+        signature.signatureFormat().setValue(SignatureFormat.FullName);
+        signature.agree().setValue(true);
+        signature.fullName().setValue(CrmAppContext.getCurrentUserEmployee().name().getStringView());
+
+        lease.currentTerm().version().employeeSignature().set(signature);
+        Persistence.service().merge(lease.currentTerm().version());
+        Persistence.service().commit();
+
         String correlationId = DeferredProcessRegistry.fork(
-                new LeaseSignedTermAgreementPrinterDeferredProcess(lease.currentTerm(), CrmAppContext.getCurrentUser()),
+                new LeaseSignedTermAgreementCreatorDeferredProcess(lease.currentTerm(), CrmAppContext.getCurrentUser()),
                 DeferredProcessRegistry.THREAD_POOL_DOWNLOADS);
         callback.onSuccess(correlationId);
+
     }
 
     @Override
@@ -334,6 +347,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
                 i.remove();
                 break;
             }
+        }
+        if (leaseAgreementDocuments.digitallySignedDocument().isNull() && !lease.currentTerm().version().employeeSignature().isEmpty()) {
+            throw new UserRuntimeException(i18n.tr("Generation of signed agreement document is in progress. Please try again later!"));
         }
         callback.onSuccess(leaseAgreementDocuments);
     }

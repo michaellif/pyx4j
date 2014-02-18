@@ -17,13 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
@@ -32,17 +30,15 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade.LeaseTermAgreementSignaturesMode;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementPdfCreatorFacade;
-import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 
 @SuppressWarnings("serial")
-class LeaseSignedTermAgreementPrinterDeferredProcess extends AbstractDeferredProcess {
+class LeaseSignedTermAgreementCreatorDeferredProcess extends AbstractDeferredProcess {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaseSignedTermAgreementPrinterDeferredProcess.class);
+    private static final Logger log = LoggerFactory.getLogger(LeaseSignedTermAgreementCreatorDeferredProcess.class);
 
     private final LeaseTerm leaseTerm;
 
@@ -50,7 +46,7 @@ class LeaseSignedTermAgreementPrinterDeferredProcess extends AbstractDeferredPro
 
     private final CrmUser signingUser;
 
-    public LeaseSignedTermAgreementPrinterDeferredProcess(LeaseTerm leaseTerm, CrmUser signingUser) {
+    public LeaseSignedTermAgreementCreatorDeferredProcess(LeaseTerm leaseTerm, CrmUser signingUser) {
         super();
         this.leaseTerm = leaseTerm;
         this.agreementDocument = EntityFactory.create(LeaseTermAgreementDocument.class);
@@ -83,14 +79,6 @@ class LeaseSignedTermAgreementPrinterDeferredProcess extends AbstractDeferredPro
     }
 
     private void saveDocumentBlob(byte[] bytes) {
-        CrmUserSignature signature = EntityFactory.create(CrmUserSignature.class);
-        signature.signatureFormat().setValue(SignatureFormat.FullName);
-        signature.agree().setValue(true);
-        signature.fullName().setValue(CrmAppContext.getCurrentUserEmployee().name().getStringView());
-
-        Persistence.ensureRetrieve(leaseTerm, AttachLevel.Attached);
-        leaseTerm.version().employeeSignature().set(signature);
-        Persistence.service().merge(leaseTerm.version());
 
         // TODO Add lease agreement document generation logic that checks if all signatures present signed and creates a document
 
