@@ -41,8 +41,6 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         title,
 
-        locationHint,
-
         enabled,
 
         visible,

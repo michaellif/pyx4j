@@ -26,4 +26,6 @@ public interface ValidationError {
 
     CComponent<?> getOriginator();
 
+    String getMessage();
+
 }

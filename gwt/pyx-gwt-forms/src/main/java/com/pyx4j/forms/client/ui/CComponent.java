@@ -79,8 +79,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private String title;
 
-    private String locationHint;
-
     private String tooltip;
 
     private String note;
@@ -111,7 +109,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private MandatoryValidator<DATA_TYPE> mandatoryValidator;
 
-    // Have been changed after population
     private boolean visited = false;
 
     private boolean editingInProgress = false;
@@ -161,15 +158,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     public void setTitle(String title) {
         this.title = title;
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.title);
-    }
-
-    public String getLocationHint() {
-        return locationHint;
-    }
-
-    public void setLocationHint(String locationHint) {
-        this.locationHint = locationHint;
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.locationHint);
     }
 
     public CEntityContainer<?> getParent() {
@@ -686,6 +674,9 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         info.append("visible").append("=").append(isVisible()).append(";");
         info.append("visited").append("=").append(isVisited()).append(";");
         info.append("valid").append("=").append(isValid()).append(";");
+        if (!isValid()) {
+            info.append("validationError").append("=").append(validationError.getMessage()).append(";");
+        }
         return info.toString();
     }
 

@@ -22,9 +22,12 @@ package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.i18n.shared.I18n;
 
 @SuppressWarnings("rawtypes")
 public class EntityContainerValidator extends AbstractComponentValidator {
+
+    private static I18n i18n = I18n.get(EntityContainerValidationError.class);
 
     public EntityContainerValidator() {
 
@@ -39,7 +42,7 @@ public class EntityContainerValidator extends AbstractComponentValidator {
         if (container.getComponents() != null) {
             for (CComponent<?> ccomponent : container.getComponents()) {
                 if (!ccomponent.isValid()) {
-                    return new EntityContainerValidationError(container);
+                    return new EntityContainerValidationError(container, i18n.tr("Form is not valid."));
                 }
             }
         }
