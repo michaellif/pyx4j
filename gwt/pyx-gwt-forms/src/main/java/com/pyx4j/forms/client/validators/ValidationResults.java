@@ -96,8 +96,16 @@ public class ValidationResults {
         StringBuilder messagesBuffer = new StringBuilder();
         ArrayList<ValidationError> validationErrors = getValidationErrors();
 
+        int fieldValidationErrorsCounter = 0;
+
+        for (ValidationError validationError : validationErrors) {
+            if (validationError instanceof FieldValidationError) {
+                fieldValidationErrorsCounter++;
+            }
+        }
+
         if (validationErrors.size() > 0) {
-            messagesBuffer.append(i18n.tr("{0} error(s)", validationErrors.size()));
+            messagesBuffer.append(i18n.tr("{0} error(s)", fieldValidationErrorsCounter));
         }
 
         return messagesBuffer.toString();
