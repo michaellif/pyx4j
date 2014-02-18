@@ -7,19 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-02-11
- * @author ArtyomB
+ * Created on Feb 18, 2014
+ * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.biz.tenant.lease.print;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.LeaseAgreementSigningProgressDTO;
 
-@Transient
-public interface LeaseAgreementSigningProgressDTO extends IEntity {
+public interface LeaseTermAgreementSigningProgressFacade {
 
-    IList<LeaseAgreementStakeholderSigningProgressDTO> stackholdersProgressBreakdown();
+    boolean shouldSign(LeaseTermParticipant<?> participant);
+
+    LeaseAgreementSigningProgressDTO getSigningProgress(Lease leaseId);
 
 }

@@ -19,12 +19,12 @@ import java.util.List;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
+import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO;
 
-public class LeaseAgreementSigningProgressFolder extends VistaTableFolder<LeaseAgreementStackholderSigningProgressDTO> {
+public class LeaseAgreementSigningProgressFolder extends VistaTableFolder<LeaseAgreementStakeholderSigningProgressDTO> {
 
     public LeaseAgreementSigningProgressFolder() {
-        super(LeaseAgreementStackholderSigningProgressDTO.class);
+        super(LeaseAgreementStakeholderSigningProgressDTO.class);
     }
 
     @Override

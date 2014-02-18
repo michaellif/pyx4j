@@ -14,7 +14,6 @@
 package com.propertyvista.crm.server.services.lease;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +46,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementSigningProgressFacade;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
@@ -56,22 +56,15 @@ import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.security.CrmUserSignature;
-import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.AgreementInkSignatures;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
-import com.propertyvista.dto.LeaseAgreementSigningProgressDTO;
-import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
-import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO.SignatureType;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
@@ -323,8 +316,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Persistence.service().merge(lease.currentTerm().version());
         Persistence.service().commit();
 
-        String correlationId = DeferredProcessRegistry.fork(
-                new LeaseSignedTermAgreementCreatorDeferredProcess(lease.currentTerm(), CrmAppContext.getCurrentUser()),
+        String correlationId = DeferredProcessRegistry.fork(new LeaseSignedTermAgreementCreatorDeferredProcess(lease.currentTerm()),
                 DeferredProcessRegistry.THREAD_POOL_DOWNLOADS);
         callback.onSuccess(correlationId);
 
@@ -333,7 +325,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     @Override
     public void getLeaseAgreementDocuments(AsyncCallback<LeaseAgreementDocumentsDTO> callback, Lease leaseId) {
         LeaseAgreementDocumentsDTO leaseAgreementDocuments = EntityFactory.create(LeaseAgreementDocumentsDTO.class);
-        leaseAgreementDocuments.signingProgress().set(getLeaseAgreementSigningProgress(leaseId));
+        leaseAgreementDocuments.signingProgress().set(ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class).getSigningProgress(leaseId));
 
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         Persistence.ensureRetrieve(lease.currentTerm().version().agreementDocuments(), AttachLevel.Attached);
@@ -406,80 +398,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Persistence.service().commit();
 
         callback.onSuccess(null);
-    }
-
-    private LeaseAgreementSigningProgressDTO getLeaseAgreementSigningProgress(Lease leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
-
-        List<LeaseTermParticipant<?>> stakeholderParticipants = getStakeholderParticipants(lease.currentTerm());
-
-        LeaseAgreementSigningProgressDTO progress = EntityFactory.create(LeaseAgreementSigningProgressDTO.class);
-
-        for (LeaseTermParticipant<?> participant : stakeholderParticipants) {
-            Persistence.ensureRetrieve(participant.agreementSignatures(), AttachLevel.Attached);
-
-            LeaseAgreementStackholderSigningProgressDTO stakeholdersProgress = EntityFactory.create(LeaseAgreementStackholderSigningProgressDTO.class);
-            stakeholdersProgress.name().setValue(participant.leaseParticipant().customer().person().name().getStringView());
-            stakeholdersProgress.role().setValue(participant.role().getStringView());
-
-            boolean hasSigned = true;
-            Iterator<LeaseAgreementLegalTerm> legalTerms = lease.currentTerm().version().agreementLegalTerms().iterator();
-
-            while (hasSigned && legalTerms.hasNext()) {
-                LeaseAgreementLegalTerm legalTerm = legalTerms.next();
-                if (legalTerm.signatureFormat().getValue() != SignatureFormat.None) {
-                    if (!participant.agreementSignatures().isNull()
-                            && participant.agreementSignatures().getInstanceValueClass().equals(AgreementInkSignatures.class)) {
-                        stakeholdersProgress.singatureType().setValue(SignatureType.Ink);
-                    } else if (participant.agreementSignatures().getInstanceValueClass().equals(AgreementDigitalSignatures.class)) {
-                        stakeholdersProgress.singatureType().setValue(SignatureType.Digital);
-                        AgreementDigitalSignatures signatures = participant.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
-
-                        boolean foundSignedTerm = false;
-                        for (SignedAgreementLegalTerm signedTerm : signatures.legalTermsSignatures()) {
-                            if (signedTerm.term().getPrimaryKey().equals(legalTerm.getPrimaryKey())) {
-                                foundSignedTerm = true;
-                                break;
-                            }
-                        }
-                        if (!foundSignedTerm) {
-                            hasSigned = false;
-                            break;
-                        }
-                    } else {
-                        hasSigned = false;
-                        break;
-                    }
-                }
-            }
-            stakeholdersProgress.hasSigned().setValue(hasSigned);
-            progress.stackholdersProgressBreakdown().add(stakeholdersProgress);
-        }
-        return progress;
-    }
-
-    private List<LeaseTermParticipant<?>> getStakeholderParticipants(LeaseTerm leaseTerm) {
-        List<LeaseTermParticipant<?>> stakeholderParticipants = new ArrayList<>();
-        Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
-
-        stakeholderParticipants.addAll(leaseTerm.version().tenants());
-        stakeholderParticipants.addAll(leaseTerm.version().guarantors());
-        Iterator<LeaseTermParticipant<?>> i = stakeholderParticipants.iterator();
-        while (i.hasNext()) {
-            LeaseTermParticipant<?> participant = i.next();
-            Persistence.ensureRetrieve(participant.leaseParticipant(), AttachLevel.Attached);
-            if (!shouldSign(participant)) {
-                i.remove();
-            }
-        }
-        return stakeholderParticipants;
-    }
-
-    private boolean shouldSign(LeaseTermParticipant<?> participant) {
-        // TODO put this in a facade
-        return participant.role().getValue() == Role.Guarantor || participant.role().getValue() == Role.Applicant
-                || participant.role().getValue() == Role.CoApplicant;
     }
 
 }

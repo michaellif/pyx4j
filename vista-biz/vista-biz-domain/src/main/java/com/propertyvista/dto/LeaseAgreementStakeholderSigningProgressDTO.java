@@ -21,8 +21,11 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+
 @Transient
-public interface LeaseAgreementStackholderSigningProgressDTO extends IEntity {
+public interface LeaseAgreementStakeholderSigningProgressDTO extends IEntity {
 
     @I18n(context = "Signature Type")
     @XmlType(name = "SignatureType")
@@ -35,6 +38,10 @@ public interface LeaseAgreementStackholderSigningProgressDTO extends IEntity {
             return I18nEnum.toString(this);
         };
     }
+
+    CrmUser stakeholderUser();
+
+    LeaseTermParticipant<?> stakeholderLeaseParticipant();
 
     IPrimitive<String> name();
 

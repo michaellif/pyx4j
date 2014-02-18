@@ -34,8 +34,8 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
-import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO;
-import com.propertyvista.dto.LeaseAgreementStackholderSigningProgressDTO.SignatureType;
+import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO;
+import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO.SignatureType;
 
 public class LeaseAgreementDocumentSigningController implements IVisorEditor.Controller {
 
@@ -112,9 +112,8 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
                 LeaseAgreementDocumentSigningController.this.visor.setUploader(ClientContext.getUserVisit(CrmUserVisit.class).getCurrentUser()
                         .duplicate(CrmUser.class));
 
-                // TODO this should be part of Visor controller
                 boolean canBeSignedDigitally = true;
-                for (LeaseAgreementStackholderSigningProgressDTO siginingProgress : leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown()) {
+                for (LeaseAgreementStakeholderSigningProgressDTO siginingProgress : leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown()) {
                     canBeSignedDigitally &= siginingProgress.hasSigned().isBooleanTrue()
                             && siginingProgress.singatureType().getValue() == SignatureType.Digital;
                 }

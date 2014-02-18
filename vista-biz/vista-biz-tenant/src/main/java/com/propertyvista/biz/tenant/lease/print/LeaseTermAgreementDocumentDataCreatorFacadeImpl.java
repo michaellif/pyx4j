@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -260,7 +261,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         leaseTermParticipants.addAll(leaseTerm.version().guarantors());
 
         for (LeaseTermParticipant<?> participant : leaseTermParticipants) {
-            if (shouldSign(participant)) {
+            if (ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class).shouldSign(participant)) {
                 switch (signaturesMode) {
                 case SignaturesOnly: {
                     CustomerSignature tenantsSignature = getSignature(legalTerm, participant);
@@ -296,11 +297,6 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         }
 
         return legalTerm4Print;
-    }
-
-    private boolean shouldSign(LeaseTermParticipant<?> participant) {
-        return participant.role().getValue() == Role.Applicant || participant.role().getValue() == Role.CoApplicant
-                || participant.role().getValue() == Role.Guarantor;
     }
 
     private boolean needsPlaceholder(SignatureFormat signatureFormat) {

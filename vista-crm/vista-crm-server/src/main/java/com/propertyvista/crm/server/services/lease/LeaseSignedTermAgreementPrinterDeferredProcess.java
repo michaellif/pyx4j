@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -30,10 +31,14 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade.LeaseTermAgreementSignaturesMode;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementPdfCreatorFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementSigningProgressFacade;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
+import com.propertyvista.dto.LeaseAgreementSigningProgressDTO;
+import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO;
+import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO.SignatureType;
 
 @SuppressWarnings("serial")
 class LeaseSignedTermAgreementCreatorDeferredProcess extends AbstractDeferredProcess {
@@ -44,14 +49,11 @@ class LeaseSignedTermAgreementCreatorDeferredProcess extends AbstractDeferredPro
 
     private final LeaseTermAgreementDocument agreementDocument;
 
-    private final CrmUser signingUser;
-
-    public LeaseSignedTermAgreementCreatorDeferredProcess(LeaseTerm leaseTerm, CrmUser signingUser) {
+    public LeaseSignedTermAgreementCreatorDeferredProcess(LeaseTerm leaseTerm) {
         super();
         this.leaseTerm = leaseTerm;
         this.agreementDocument = EntityFactory.create(LeaseTermAgreementDocument.class);
         this.agreementDocument.leaseTermV().set(this.leaseTerm.version());
-        this.signingUser = signingUser;
     }
 
     @Override
@@ -72,15 +74,13 @@ class LeaseSignedTermAgreementCreatorDeferredProcess extends AbstractDeferredPro
             }
         });
 
-        log.info("Created and saved signed lease agreement document for lease term pk={}, by crm user pk={}", this.leaseTerm.getPrimaryKey(),
-                this.signingUser.getPrimaryKey());
+        log.info("Created and saved signed lease agreement document for lease term pk={}", this.leaseTerm.getPrimaryKey());
         completed = true;
 
     }
 
     private void saveDocumentBlob(byte[] bytes) {
-
-        // TODO Add lease agreement document generation logic that checks if all signatures present signed and creates a document
+        Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.IdOnly);
 
         LeaseTermAgreementDocumentBlob blob = EntityFactory.create(LeaseTermAgreementDocumentBlob.class);
         blob.data().setValue(bytes);
@@ -91,10 +91,23 @@ class LeaseSignedTermAgreementCreatorDeferredProcess extends AbstractDeferredPro
         agreementDocument.file().blobKey().set(blob.id());
 
         agreementDocument.leaseTermV().set(leaseTerm.version());
-        // TODO set rest of signed people here.
-        agreementDocument.isSignedByInk().setValue(false);
-        agreementDocument.signedEmployeeUploader().set(signingUser);
 
+        agreementDocument.isSignedByInk().setValue(false);
+
+        LeaseAgreementSigningProgressDTO signingProgress = ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class).getSigningProgress(
+                this.leaseTerm.lease().<Lease> createIdentityStub());
+        for (LeaseAgreementStakeholderSigningProgressDTO stackholderProgress : signingProgress.stackholdersProgressBreakdown()) {
+            if (stackholderProgress.singatureType().getValue() != SignatureType.Digital) {
+                throw new RuntimeException(
+                        "Aborting lease term agreement document creation: all lease participants required to sign digitally in order to create digitally signed document leaseId="
+                                + leaseTerm.lease().getPrimaryKey());
+            }
+            if (!stackholderProgress.stakeholderLeaseParticipant().isEmpty()) {
+                agreementDocument.signedParticipants().add(stackholderProgress.stakeholderLeaseParticipant());
+            } else if (!stackholderProgress.stakeholderUser().isEmpty()) {
+                agreementDocument.signedEmployeeUploader().set(stackholderProgress.stakeholderUser());
+            }
+        }
         FileUploadRegistry.register(agreementDocument.file());
         Persistence.service().persist(agreementDocument);
 

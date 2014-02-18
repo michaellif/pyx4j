@@ -155,6 +155,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
         ISet<LeaseTermAgreementDocument> agreementDocuments();
 
         @Owned
+        /** digital signature of employee */
         CrmUserSignature employeeSignature();
 
     }
