@@ -93,6 +93,8 @@ import com.propertyvista.portal.server.security.access.resident.CustomerPictureT
 import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.InsuranceCertificateScanDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.LeasePaymentMethodTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.MaintenanceRequestPictureTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.MaintenanceRequestTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.PaymentRecordTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
@@ -242,12 +244,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new EntityPermission(AutopayAgreement.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(AutopayAgreementCoveredItem.class, CRUD));
 
-        boolean VISTA_4157 = false; //  //TODO StanP Need DatasetAccessRule
-        if (VISTA_4157) {
-            grant(PortalResidentBehavior.Resident, new EntityPermission(YardiServiceRequest.class, CRUD));
-            grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
-            grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequest.class, CRUD));
-        }
+        grant(PortalResidentBehavior.Resident, new EntityPermission(YardiServiceRequest.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequest.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestCategory.class, EntityPermission.READ));
 
         grant(PortalResidentBehavior.ResidentPrimary, PortalResidentBehavior.Resident);
@@ -263,6 +262,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.ResidentInPortal, new BillTenantDatasetAccessRule(), Bill.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestTenantDatasetAccessRule(), MaintenanceRequest.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestPictureTenantDatasetAccessRule(), MaintenanceRequestPicture.class);
 
         grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);
         grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerPictureProspectDatasetAccessRule(), CustomerPicture.class);
