@@ -47,15 +47,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
     public TenantViewerViewImpl() {
         setForm(new TenantForm(this));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {
-            @Override
-            public void execute() {
-                if (!isVisorShown()) {
-                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
-                }
-            }
-        }));
-
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
@@ -64,6 +55,14 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
             }
         });
         addAction(passwordAction);
+
+        registrationAction = new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantViewerView.Presenter) getPresenter()).retrievePortalRegistrationInformation();
+            }
+        });
+        addAction(registrationAction);
 
         screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {
             @Override
@@ -81,22 +80,24 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         });
         addAction(maintenanceAction);
 
-        registrationAction = new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
-            @Override
-            public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).retrievePortalRegistrationInformation();
-            }
-        });
-        addAction(registrationAction);
-
         viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted AutoPayments"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).viewDeletedPaps();
             }
         });
-
         addAction(viewDeletedPapsAction);
+
+        // ------------------------------------------------------------------------------------------------------------
+
+        addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {
+            @Override
+            public void execute() {
+                if (!isVisorShown()) {
+                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
+                }
+            }
+        }));
     }
 
     @Override
@@ -105,6 +106,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         setActionVisible(screeningAction, false);
         setActionVisible(maintenanceAction, false);
         setActionVisible(registrationAction, false);
+        setActionVisible(viewDeletedPapsAction, false);
 
         super.reset();
     }
@@ -132,8 +134,10 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         boolean hasPortalAccess = LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue());
 
         // Disable password change button for tenants with no associated user principal (+ regular portal access rule):
-        setActionVisible(passwordAction, leaseIsActive && hasPortalAccess && !value.customer().user().isNull());
-        setActionVisible(registrationAction, leaseIsActive && hasPortalAccess && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
+        setActionVisible(passwordAction, hasPortalAccess && !value.customer().user().isNull());
+        setActionVisible(registrationAction, hasPortalAccess && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
+
+        setActionVisible(viewDeletedPapsAction, leaseIsActive);
     }
 
     @Override
