@@ -35,7 +35,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;

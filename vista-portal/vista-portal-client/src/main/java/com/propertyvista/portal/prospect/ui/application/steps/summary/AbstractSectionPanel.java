@@ -34,7 +34,6 @@ import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public abstract class AbstractSectionPanel extends CollapsablePanel {

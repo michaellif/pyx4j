@@ -27,18 +27,14 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.widgets.client.Anchor;
