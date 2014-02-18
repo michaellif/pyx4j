@@ -324,8 +324,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
         criteria.ne(criteria.proto().leaseParticipant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
+        List<LeaseTermTenant> tenants = Persistence.service().query(criteria);
 
-        for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
+//        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, bo.masterOnlineApplication().leaseApplication().lease().currentTerm()
+//                .getPrimaryKey());
+//        Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
+//        for (LeaseTermTenant ltt : leaseTerm.version().tenants()) {
+
+        for (LeaseTermTenant ltt : tenants) {
             if (ltt.role().getValue() == Role.CoApplicant) {
                 CoapplicantDTO cap = EntityFactory.create(CoapplicantDTO.class);
 
@@ -340,18 +346,18 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
                 to.coapplicants().add(cap);
             } else if (ltt.role().getValue() == Role.Dependent) {
-                DependentDTO cap = EntityFactory.create(DependentDTO.class);
+                DependentDTO dep = EntityFactory.create(DependentDTO.class);
 
-                cap.relationship().setValue(ltt.relationship().getValue());
+                dep.relationship().setValue(ltt.relationship().getValue());
 
-                cap.name().set(ltt.leaseParticipant().customer().person().name());
-                cap.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
+                dep.name().set(ltt.leaseParticipant().customer().person().name());
+                dep.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
 
                 // remember corresponding tenant: 
-                cap.set(cap.tenantId(), ltt);
-                cap.tenantId().setAttachLevel(AttachLevel.IdOnly);
+                dep.set(dep.tenantId(), ltt);
+                dep.tenantId().setAttachLevel(AttachLevel.IdOnly);
 
-                to.dependents().add(cap);
+                to.dependents().add(dep);
             }
         }
     }
@@ -443,7 +449,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void fillGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
         EntityQueryCriteria<LeaseTermGuarantor> criteria = new EntityQueryCriteria<LeaseTermGuarantor>(LeaseTermGuarantor.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
-        criteria.ne(criteria.proto().tenant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
+        criteria.eq(criteria.proto().tenant().customer().user(), ProspectPortalContext.getCustomerUserIdStub());
 
         for (LeaseTermGuarantor ltg : Persistence.service().query(criteria)) {
             GuarantorDTO grnt = EntityFactory.create(GuarantorDTO.class);
@@ -517,7 +523,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void updateGuarantor(LeaseTermGuarantor ltg, GuarantorDTO grt) {
-        ltg.leaseParticipant().customer().person().name().setValue(grt.getValue());
+        ltg.leaseParticipant().customer().person().name().set(grt.name());
         ltg.leaseParticipant().customer().person().email().setValue(grt.email().getValue());
 
         ltg.tenant().set(ProspectPortalContext.getTenant());
