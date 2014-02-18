@@ -282,7 +282,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                                 if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
                                     return new FieldValidationError(
                                             getComponent(),
-                                            i18n.tr("This person is too young to be an tenant or co-tenant: the minimum age required is {0}. Please mark the person as Dependent instead.",
+                                            i18n.tr("This person is too young to be a tenant or a co-tenant: the minimum age required is {0}. Please mark the person as a Dependent instead",
                                                     getAgeOfMajority()));
                                 }
                             }
@@ -291,7 +291,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                             if (Role.Dependent == getComponent().getValue()) {
                                 if (TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
                                     return new FieldValidationError(getComponent(), i18n
-                                            .tr("According to internal regulations and age this person cannot be a Dependent."));
+                                            .tr("According to internal regulations and age this person cannot be a Dependent"));
                                 }
                             }
                         }
