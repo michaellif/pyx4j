@@ -22,8 +22,6 @@ package com.pyx4j.forms.client.ui.folder;
 
 import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItem;
 
-import java.util.ArrayList;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -43,13 +41,9 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerDecoratorToolbar;
-import com.pyx4j.forms.client.validators.FieldValidationError;
-import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
