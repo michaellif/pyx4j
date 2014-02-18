@@ -145,7 +145,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
                 @Override
                 public FieldValidationError isValid() {
                     if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
-                        return new FieldValidationError(getComponent(), i18n.tr("at least one document file is required"));
+                        return new FieldValidationError(getComponent(), i18n.tr("At least one document file is required"));
                     } else {
                         return null;
                     }
