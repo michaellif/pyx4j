@@ -107,8 +107,6 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });
-
-        get(proto().customer().person().sex()).setMandatory(!VistaFeatures.instance().yardiIntegration());
     }
 
     private TwoColumnFlexFormPanel createContactsTab(String title) {

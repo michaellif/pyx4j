@@ -33,7 +33,7 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     static final I18n i18n = I18n.get(LeaseTermParticipantFolder.class);
 
-    private Integer ageOfMajority;
+    private Integer ageOfMajority = 18;
 
     private Boolean enforceAgeOfMajority = false;
 
@@ -43,7 +43,6 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
         super(clazz, parentForm.isEditable());
         this.parentForm = parentForm;
         setOrderable(false);
-        this.ageOfMajority = null;
     }
 
     @Override

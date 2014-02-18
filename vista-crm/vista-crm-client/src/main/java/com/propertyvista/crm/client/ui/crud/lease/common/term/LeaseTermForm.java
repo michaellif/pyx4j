@@ -42,8 +42,8 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -126,7 +126,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.pending, ClientContext.getServerDate()));
                             filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), Boolean.TRUE));
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
-
                             LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
                             if (!currentValue.termFrom().isNull()) {
                                 dateFrom = currentValue.termFrom().getValue();
@@ -143,7 +142,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), currentValue
                                         .unit().building().defaultProductCatalog().isBooleanTrue()));
                             }
-
                         } else {
                             assert false : "Weird! Value shouln'd be edited in this lease status!";
                         }
@@ -178,13 +176,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                         LeaseTermDTO currentValue = LeaseTermForm.this.getValue();
                         if (currentValue.lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
-
                             filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.pending, ClientContext.getServerDate()));
-
                             filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.TRUE));
-
                         } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
-
                             LogicalDate dateFrom = new LogicalDate(ClientContext.getServerDate());
                             if (!currentValue.termFrom().isNull()) {
                                 dateFrom = currentValue.termFrom().getValue();
@@ -201,7 +195,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), currentValue.unit()
                                         .building().defaultProductCatalog().isBooleanTrue()));
                             }
-
                         } else {
                             assert false : "Weird! Value shouln'd be edited in this lease status!";
                         }

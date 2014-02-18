@@ -35,6 +35,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -76,6 +77,15 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     public void setPadEditable(boolean isPadEditable) {
         this.isPadEditable = isPadEditable;
+    }
+
+    @Override
+    public void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+        super.setEnforceAgeOfMajority(enforceAgeOfMajority);
+
+        for (CComponent<?> comp : getComponents()) {
+            ((TenantInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
+        }
     }
 
     @Override
@@ -262,7 +272,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         public void addValidations() {
             super.addValidations();
 
-            get(proto().leaseParticipant().customer().person().sex()).setMandatory(!VistaFeatures.instance().yardiIntegration());
             get(proto().leaseParticipant().customer().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
             get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
 
@@ -311,6 +320,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     }
                 });
             }
+        }
+
+        void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+            get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(enforceAgeOfMajority);
         }
 
         private void devGenerateTenant() {

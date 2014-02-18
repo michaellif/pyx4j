@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
@@ -69,9 +70,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
         for (CComponent<?> comp : getComponents()) {
-            if (comp instanceof PortalImageSetEditor) {
-                ((PortalImageSetEditor) comp).setImageSize(width, height);
-            }
+            ((PortalImageSetEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
         }
     }
 

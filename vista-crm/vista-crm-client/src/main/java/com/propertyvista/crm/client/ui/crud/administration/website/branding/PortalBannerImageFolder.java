@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,9 +61,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
         for (CComponent<?> comp : getComponents()) {
-            if (comp instanceof PortalBannerImageEditor) {
-                ((PortalBannerImageEditor) comp).setImageSize(width, height);
-            }
+            ((PortalBannerImageEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
         }
     }
 

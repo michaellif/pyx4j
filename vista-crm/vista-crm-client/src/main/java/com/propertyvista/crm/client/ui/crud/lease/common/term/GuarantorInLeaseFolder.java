@@ -63,6 +63,15 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     @Override
+    public void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+        super.setEnforceAgeOfMajority(enforceAgeOfMajority);
+
+        for (CComponent<?> comp : getComponents()) {
+            ((GuarantorInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
+        }
+    }
+
+    @Override
     protected String getAddItemDialogCaption() {
         return i18n.tr("Add New Guarantor");
     }
@@ -105,10 +114,8 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     void updateTenantList() {
-        for (CComponent<?> c : getComponents()) {
-            @SuppressWarnings("rawtypes")
-            CEntityFolderItem i = (CEntityFolderItem) c;
-            ((GuarantorInLeaseEditor) i.getComponents().iterator().next()).updateTenantList();
+        for (CComponent<?> comp : getComponents()) {
+            ((GuarantorInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).updateTenantList();
         }
     }
 
@@ -181,21 +188,6 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             }
         }
 
-        void updateTenantList() {
-            if (get(proto().tenant()) instanceof CComboBox<?>) {
-                CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
-                combo.setOptions(getLeaseCustomerTenants());
-            }
-        }
-
-        private List<Tenant> getLeaseCustomerTenants() {
-            List<Tenant> l = new ArrayList<Tenant>();
-            for (LeaseTermTenant t : getLeaseTermTenants()) {
-                l.add(t.leaseParticipant());
-            }
-            return l;
-        }
-
         @Override
         public void addValidations() {
             super.addValidations();
@@ -227,6 +219,25 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
                     }
                 });
             }
+        }
+
+        void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+            get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(enforceAgeOfMajority);
+        }
+
+        void updateTenantList() {
+            if (get(proto().tenant()) instanceof CComboBox<?>) {
+                CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
+                combo.setOptions(getLeaseCustomerTenants());
+            }
+        }
+
+        private List<Tenant> getLeaseCustomerTenants() {
+            List<Tenant> l = new ArrayList<Tenant>();
+            for (LeaseTermTenant t : getLeaseTermTenants()) {
+                l.add(t.leaseParticipant());
+            }
+            return l;
         }
 
         private void devGenerateTenant() {

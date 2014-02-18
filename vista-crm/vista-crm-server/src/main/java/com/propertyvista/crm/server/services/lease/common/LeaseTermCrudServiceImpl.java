@@ -84,6 +84,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
                 setSelectedUnit(initData.unit(), term);
             }
 
+            setAgeRestrictions(term);
+
             switch (initData.leaseStatus().getValue()) {
             case ExistingLease:
                 term.carryforwardBalance().setValue(BigDecimal.ZERO);
@@ -387,11 +389,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     private void setAgeRestrictions(LeaseTermDTO dto) {
-        dto.ageOfMajority().setValue(null);
-
-        if (!dto.unit().isNull()) {
+        if (dto.unit().isNull()) {
+            dto.ageOfMajority().setValue(18);
+            dto.enforceAgeOfMajority().setValue(false);
+            dto.maturedOccupantsAreApplicants().setValue(false);
+        } else {
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit(), RestrictionsPolicy.class);
-
             dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
             dto.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
             dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
