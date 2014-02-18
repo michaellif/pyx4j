@@ -146,6 +146,7 @@ SET search_path = '_admin_';
         
         -- abstract_outgoing_mail_queue
         
+        /*
         CREATE TABLE abstract_outgoing_mail_queue
         (
             id                      BIGINT                  NOT NULL,
@@ -161,7 +162,7 @@ SET search_path = '_admin_';
         );
         
         ALTER TABLE abstract_outgoing_mail_queue OWNER TO vista;
-        
+        */
         -- admin_pmc_equifax_info
         
         ALTER TABLE admin_pmc_equifax_info RENAME COLUMN customer_number TO member_number_encrypted;
@@ -339,10 +340,12 @@ SET search_path = '_admin_';
 
 
         -- check constraints
+        /*
         ALTER TABLE abstract_outgoing_mail_queue ADD CONSTRAINT abstract_outgoing_mail_queue_id_discriminator_ck 
             CHECK ((id_discriminator) IN ('Default', 'TenantSure'));
         ALTER TABLE abstract_outgoing_mail_queue ADD CONSTRAINT abstract_outgoing_mail_queue_status_e_ck 
             CHECK ((status) IN ('Cancelled', 'GiveUp', 'Queued', 'Success'));
+        */
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck CHECK ((target) IN ('crm', 'portal', 'site'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
         ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_processing_status_e_ck CHECK ((processing_status) IN ('Invalid', 'Processed', 'Received', 'Refunded'));

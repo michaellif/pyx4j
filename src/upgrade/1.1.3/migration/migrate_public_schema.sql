@@ -61,7 +61,7 @@ BEGIN TRANSACTION;
 
         -- New sequences
         
-        CREATE SEQUENCE abstract_outgoing_mail_queue_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        -- CREATE SEQUENCE abstract_outgoing_mail_queue_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_signatures$legal_terms_signatures_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_signatures_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE apt_unit_effective_availability_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -108,6 +108,9 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE permission_to_enter_note_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE pmc_company_info_contact_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE pmc_company_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE proof_of_asset_document_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE proof_of_asset_document_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE proof_of_asset_document_folder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE proof_of_employment_document_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE proof_of_employment_document_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE proof_of_employment_document_folder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -119,7 +122,7 @@ BEGIN TRANSACTION;
 
         -- Change owner to vista
         
-        ALTER SEQUENCE abstract_outgoing_mail_queue_seq OWNER TO vista ;
+        -- ALTER SEQUENCE abstract_outgoing_mail_queue_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_signatures$legal_terms_signatures_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_signatures_seq OWNER TO vista ;
         ALTER SEQUENCE apt_unit_effective_availability_seq OWNER TO vista ;
@@ -175,6 +178,9 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE permission_to_enter_note_seq OWNER TO vista ;
         ALTER SEQUENCE pmc_company_info_contact_seq OWNER TO vista ;
         ALTER SEQUENCE pmc_company_info_seq OWNER TO vista ;
+        ALTER SEQUENCE proof_of_asset_document_blob_seq OWNER TO vista ;
+        ALTER SEQUENCE proof_of_asset_document_file_seq OWNER TO vista ;
+        ALTER SEQUENCE proof_of_asset_document_folder_seq OWNER TO vista ;
         ALTER SEQUENCE proof_of_employment_document_blob_seq OWNER TO vista ;
         ALTER SEQUENCE proof_of_employment_document_file_seq OWNER TO vista ;
         ALTER SEQUENCE proof_of_employment_document_folder_seq OWNER TO vista ;

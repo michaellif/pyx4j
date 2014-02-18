@@ -26,6 +26,7 @@ BEGIN
         -- foreign keys
         ALTER TABLE application_wizard_substep DROP CONSTRAINT application_wizard_substep_step_fk;
         ALTER TABLE apt_unit DROP CONSTRAINT apt_unit_marketing_fk;
+        ALTER TABLE billing_bill DROP CONSTRAINT billing_bill_lease_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_application_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_application_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_monthly_charges_fk;
@@ -217,6 +218,9 @@ BEGIN
         
         ALTER TABLE agreement_signatures$legal_terms_signatures OWNER TO vista;
         
+        -- application_documentation_policy
+        
+        ALTER TABLE application_documentation_policy ADD COLUMN mandatory_proof_of_income BOOLEAN;
         
         -- apt_unit_effective_availability
         
@@ -1118,6 +1122,54 @@ BEGIN
                                 ADD COLUMN price NUMERIC(18,2);
         
         
+        -- proof_of_asset_document_blob
+        
+        CREATE TABLE proof_of_asset_document_blob
+        (
+                id                      BIGINT                  NOT NULL,
+                name                    VARCHAR(500),
+                data                    BYTEA,
+                content_type            VARCHAR(500),
+                updated                 TIMESTAMP,
+                created                 TIMESTAMP,
+                        CONSTRAINT proof_of_asset_document_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE proof_of_asset_document_blob OWNER TO vista;
+        
+        
+        -- proof_of_asset_document_file
+        
+        CREATE TABLE proof_of_asset_document_file
+        (
+                id                      BIGINT                  NOT NULL,
+                file_file_name          VARCHAR(500),
+                file_updated_timestamp  BIGINT,
+                file_cache_version      INT,
+                file_file_size          INT,
+                file_content_mime_type  VARCHAR(500),
+                file_blob_key           BIGINT,
+                owner                   BIGINT,
+                order_in_owner          INT,
+                        CONSTRAINT proof_of_asset_document_file_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE proof_of_asset_document_file OWNER TO vista;
+        
+        
+        -- proof_of_asset_document_folder
+        
+        CREATE TABLE proof_of_asset_document_folder
+        (
+                id                      BIGINT                  NOT NULL,
+                owner                   BIGINT                  NOT NULL,
+                description             VARCHAR(500),
+                        CONSTRAINT proof_of_asset_document_folder_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE proof_of_asset_document_folder OWNER TO vista;
+        
+        
         -- proof_of_employment_document_blob
         
         CREATE TABLE proof_of_employment_document_blob
@@ -1501,7 +1553,11 @@ BEGIN
         
         -- billing_account
         
-        ALTER TABLE billing_account DROP COLUMN billing_cycle_start_day;
+        ALTER TABLE billing_account     DROP COLUMN billing_cycle_start_day;
+                                        
+        -- billing_bill
+        
+        ALTER TABLE billing_bill DROP COLUMN lease;
         
         -- charges
         
@@ -1800,6 +1856,10 @@ BEGIN
         ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_company_info_fk FOREIGN KEY(company_info) 
                 REFERENCES pmc_company_info(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE product ADD CONSTRAINT product_code_fk FOREIGN KEY(code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_asset_document_file ADD CONSTRAINT proof_of_asset_document_file_owner_fk FOREIGN KEY(owner) 
+                REFERENCES proof_of_asset_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_asset_document_folder ADD CONSTRAINT proof_of_asset_document_folder_owner_fk FOREIGN KEY(owner) 
+                REFERENCES customer_screening_personal_asset(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE proof_of_employment_document_file ADD CONSTRAINT proof_of_employment_document_file_owner_fk FOREIGN KEY(owner) 
                 REFERENCES proof_of_employment_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE proof_of_employment_document_folder ADD CONSTRAINT proof_of_employment_document_folder_owner_fk FOREIGN KEY(owner) 
@@ -1950,6 +2010,7 @@ BEGIN
         
         -- not null
         
+        ALTER TABLE crm_role ALTER COLUMN name SET NOT NULL;
         ALTER TABLE lease ALTER COLUMN integration_system_id DROP NOT NULL;
         ALTER TABLE lease ALTER COLUMN lease_id DROP NOT NULL;
         ALTER TABLE maintenance_request_status_record ALTER COLUMN request SET NOT NULL;
