@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.system.yardi;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.commons.Key;
@@ -33,6 +32,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.yardi.services.YardiGuestManagementService;
+import com.propertyvista.yardi.services.YardiGuestManagementService.SignLeaseResults;
 
 public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implements YardiApplicationFacade {
 
@@ -87,12 +87,12 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
 
             @Override
             public Void execute() throws YardiServiceException {
-                Map<String, String> participants = YardiGuestManagementService.getInstance().addLeaseParticipants(getPmcYardiCredential(lease), lease);
+                Map<Key, String> participants = YardiGuestManagementService.getInstance().addLeaseParticipants(getPmcYardiCredential(lease), lease);
 
                 // save lease participants ids
                 Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
                 for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-                    participant.yardiApplicantId().setValue(participants.get(participant.getPrimaryKey().toString()));
+                    participant.yardiApplicantId().setValue(participants.get(participant.getPrimaryKey()));
                     Persistence.service().persist(participant);
                 }
 
@@ -102,22 +102,15 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         });
     }
 
-    class SignLeaseResults {
-
-        String tID;
-
-        Map<Key, String> participants = new HashMap<>();
-    }
-
     private void saveLeaseId(final Lease leaseId, SignLeaseResults signLeaseResults) {
         final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-        lease.leaseId().setValue(signLeaseResults.tID);
+        lease.leaseId().setValue(signLeaseResults.getLeaseId());
         Persistence.service().persist(lease);
 
         Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
             // application must be updated (yardi sync) before approval
-            participant.participantId().setValue(signLeaseResults.participants.get(participant.getPrimaryKey()));
+            participant.participantId().setValue(signLeaseResults.getParticipants().get(participant.getPrimaryKey()));
             Persistence.service().persist(participant);
         }
     }
@@ -131,20 +124,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
-        //TODO VladsS change it later to use External Id
-        // External transaction will Lock lease. So Lease can't be update in RequiresNew
-//        new UnitOfWork(TransactionScopeOption.Mandatory).execute(new Executable<Void, YardiServiceException>() {
-//
-//            @Override
-//            public Void execute() throws YardiServiceException {
-        //TODO stas  change signLease  return value
-        final SignLeaseResults signLeaseResults = new SignLeaseResults();
-        signLeaseResults.tID = YardiGuestManagementService.getInstance().signLease(getPmcYardiCredential(lease), lease);
-        for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-            signLeaseResults.participants.put(participant.getPrimaryKey(), participant.yardiApplicantId().getValue());
-        }
-
-        saveLeaseId(lease, signLeaseResults);
+        final SignLeaseResults signLeaseResults = YardiGuestManagementService.getInstance().signLease(getPmcYardiCredential(lease), lease);
 
         // Save even if external transaction failed
         UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
@@ -155,9 +135,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                 return null;
             }
         });
-//                return null;
-//            }
-//        });
+
         return lease;
     }
 

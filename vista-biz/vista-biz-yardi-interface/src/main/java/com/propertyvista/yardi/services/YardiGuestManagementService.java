@@ -40,6 +40,7 @@ import com.yardi.entity.guestcard40.Prospects;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.mits.Information;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
@@ -67,6 +68,12 @@ public class YardiGuestManagementService extends YardiAbstractService {
         private IdentityType(String id) {
             this.ID = id;
         }
+    }
+
+    public interface SignLeaseResults {
+        String getLeaseId();
+
+        Map<Key, String> getParticipants();
     }
 
     private static class SingletonHolder {
@@ -151,7 +158,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return true;
     }
 
-    public Map<String, String> addLeaseParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public Map<Key, String> addLeaseParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
@@ -165,7 +172,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return getParticipants(yc, lease);
     }
 
-    public String signLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public SignLeaseResults signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException {
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getProspect(lease);
         // create lease
@@ -180,13 +187,28 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
         // do tenant search to retrieve lease id
         String guestId = lease.getPrimaryKey().toString();
-        String tenantId = getTenantId(yc, lease.unit().building(), guestId, IdentityType.Tenant);
+        final String tenantId = getTenantId(yc, lease.unit().building(), guestId, IdentityType.Tenant);
         if (tenantId == null) {
             throw new YardiServiceException("Tenant not found: " + guestId);
         }
         log.info("Created Lease: {}", tenantId);
 
-        return tenantId;
+        return new SignLeaseResults() {
+            final String leaseId = tenantId;
+
+            final Map<Key, String> participants = YardiGuestManagementService.this.getParticipants(yc, lease);
+
+            @Override
+            public String getLeaseId() {
+                return leaseId;
+            }
+
+            @Override
+            public Map<Key, String> getParticipants() {
+                return participants;
+            }
+
+        };
     }
 
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
@@ -277,14 +299,14 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return null;
     }
 
-    private Map<String, String> getParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
-        String tenantId = lease.getPrimaryKey().toString();
+    private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        Key tenantId = lease.getPrimaryKey();
         LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc,
-                lease.unit().building().propertyCode().getValue(), tenantId);
+                lease.unit().building().propertyCode().getValue(), tenantId.toString());
         if (guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", tenantId));
         }
-        Map<String, String> participants = new HashMap<String, String>();
+        Map<Key, String> participants = new HashMap<Key, String>();
         Prospect p = guestActivity.getProspects().getProspect().get(0);
         for (Customer c : p.getCustomers().getCustomer()) {
             String tpId = null, pId = null;
@@ -296,7 +318,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
                 }
             }
             if (tpId != null && pId != null) {
-                participants.put(tpId, pId);
+                participants.put(new Key(tpId), pId);
             }
         }
         String pId = participants.get(tenantId);
