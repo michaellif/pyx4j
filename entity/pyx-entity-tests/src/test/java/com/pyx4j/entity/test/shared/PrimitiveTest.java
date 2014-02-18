@@ -42,6 +42,21 @@ public class PrimitiveTest extends InitializerTestBase {
         assertEquals("Value", "Bob", emp.firstName().getValue());
     }
 
+    public void testEmptyString() {
+        Employee emp1 = EntityFactory.create(Employee.class);
+        // empty string is considered null
+        emp1.firstName().setValue("");
+        assertNull("empty string is null value", emp1.firstName().getValue());
+        assertTrue("isNull", emp1.firstName().isNull());
+
+        Employee emp2 = EntityFactory.create(Employee.class);
+        emp2.setMemberValue(emp2.firstName().getFieldName(), "");
+        assertNull("empty string is null value", emp2.firstName().getValue());
+        assertTrue("isNull", emp2.firstName().isNull());
+
+        assertTrue("equals", emp1.firstName().equals(emp2.firstName()));
+    }
+
     public void testDate() {
         Employee emp = EntityFactory.create(Employee.class);
         assertNull("Initial value", emp.from().getValue());

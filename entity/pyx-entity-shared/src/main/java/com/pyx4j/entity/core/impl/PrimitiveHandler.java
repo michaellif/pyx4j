@@ -80,12 +80,20 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
     @SuppressWarnings("unchecked")
     @Override
     public TYPE getValue() {
-        return (TYPE) getOwner().getMemberValue(getFieldName());
+        TYPE value = (TYPE) getOwner().getMemberValue(getFieldName());
+        if (valueClass.equals(String.class) && (value != null) && ((String) value).length() == 0) {
+            return null;
+        } else {
+            return value;
+        }
     }
 
     @Override
     public void setValue(TYPE value) {
         assert (value == null || isAssignableFrom(value)) : "IPrimitive of " + valueClass + " is not assignable from " + value.getClass();
+        if (valueClass.equals(String.class) && (value != null) && ((String) value).length() == 0) {
+            value = null;
+        }
         ((SharedEntityHandler) getOwner()).setMemberValue(getFieldName(), value);
     }
 
@@ -108,7 +116,7 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
         return parsString(valueClass, value);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
     public static <TYPE> TYPE parsString(Class<TYPE> valueClass, String value) {
         if (CommonsStringUtils.isEmpty(value)) {
             return null;
@@ -234,7 +242,7 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("unchecked")
     @Override
     public int compareTo(IPrimitive<TYPE> other) {
         if (other == this) {
@@ -244,7 +252,7 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
         if (thisValue == null) {
             return (other.getValue() == null) ? 0 : -1;
         } else if (thisValue instanceof Comparable) {
-            return CompareHelper.compareTo((Comparable) thisValue, other.getValue());
+            return CompareHelper.compareTo((Comparable<TYPE>) thisValue, other.getValue());
         } else {
             throw new ClassCastException("Unsupported type " + thisValue.getClass().getName());
         }
