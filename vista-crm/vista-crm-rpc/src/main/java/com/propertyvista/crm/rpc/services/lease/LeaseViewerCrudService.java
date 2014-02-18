@@ -69,7 +69,7 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     void setLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatus status);
 
-    void signLease(AsyncCallback<VoidSerializable> callback, Lease leaseId);
+    void signLease(AsyncCallback<String> callback, Lease leaseId);
 
     void getLeaseAgreementDocuments(AsyncCallback<LeaseAgreementDocumentsDTO> callback, Lease leaseId);
 

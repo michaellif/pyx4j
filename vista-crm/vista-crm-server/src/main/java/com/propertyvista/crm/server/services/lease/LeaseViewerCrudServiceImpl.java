@@ -36,6 +36,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -56,7 +57,6 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
-import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.AgreementInkSignatures;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -308,22 +308,13 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void signLease(AsyncCallback<VoidSerializable> callback, Lease leaseId) {
-        CrmUserSignature signature = EntityFactory.create(CrmUserSignature.class);
-
-        signature.signatureFormat().setValue(SignatureFormat.FullName);
-        signature.agree().setValue(true);
-        signature.fullName().setValue(CrmAppContext.getCurrentUserEmployee().name().getStringView());
-
+    public void signLease(AsyncCallback<String> callback, Lease leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
-        Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.Attached);
-        lease.currentTerm().version().employeeSignature().set(signature);
 
-        Persistence.service().merge(lease.currentTerm().version());
-
-        // TODO Add lease agreement document generation logic that checks if all signatures present signed and creates a document
-        Persistence.service().commit();
-        callback.onSuccess(null);
+        String correlationId = DeferredProcessRegistry.fork(
+                new LeaseSignedTermAgreementPrinterDeferredProcess(lease.currentTerm(), CrmAppContext.getCurrentUser()),
+                DeferredProcessRegistry.THREAD_POOL_DOWNLOADS);
+        callback.onSuccess(correlationId);
     }
 
     @Override

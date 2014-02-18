@@ -130,9 +130,9 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
     }
 
     private void signDigitally() {
-        GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class).signLease(new DefaultAsyncCallback<VoidSerializable>() {
+        GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class).signLease(new DefaultAsyncCallback<String>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
+            public void onSuccess(String deferredProcessCorellationId) {
                 populate(new DefaultAsyncCallback<VoidSerializable>() {
                     @Override
                     public void onSuccess(VoidSerializable result) {

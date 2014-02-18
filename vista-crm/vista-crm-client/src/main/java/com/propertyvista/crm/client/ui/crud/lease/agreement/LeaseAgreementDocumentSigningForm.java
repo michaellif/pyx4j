@@ -45,6 +45,8 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
 
     private Label signDigitallyExplanation;
 
+    private boolean canBeSignedDigitally;
+
     public LeaseAgreementDocumentSigningForm() {
         super(LeaseAgreementDocumentsDTO.class);
     }
@@ -92,8 +94,7 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     }
 
     public void setCanBeSignedDigitally(boolean canBeSignedDigitally) {
-        signDigitallyButton.setEnabled(canBeSignedDigitally);
-        signDigitallyExplanation.setVisible(!canBeSignedDigitally);
+        this.canBeSignedDigitally = canBeSignedDigitally;
     }
 
     public void onSignDigitally() {
@@ -105,5 +106,13 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         super.onValueSet(populate);
         get(proto().digitallySignedDocument()).setVisible(!getValue().digitallySignedDocument().isNull());
         notSignedDigitallyLabel.setVisible(getValue().digitallySignedDocument().isNull());
+
+        if (canBeSignedDigitally) {
+            signDigitallyButton.setEnabled(canBeSignedDigitally);
+            signDigitallyExplanation.setVisible(!canBeSignedDigitally);
+        } else if (!getValue().digitallySignedDocument().isNull()) {
+            signDigitallyButton.setVisible(false);
+            signDigitallyExplanation.setVisible(false);
+        }
     }
 }
