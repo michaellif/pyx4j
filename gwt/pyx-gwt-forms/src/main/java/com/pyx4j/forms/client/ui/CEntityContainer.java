@@ -50,7 +50,6 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EntityContainerValidator;
-import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.Button;
 
 public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<E> implements IEditableComponentFactory {
@@ -195,19 +194,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
             }
         }
         super.onReset();
-    }
-
-    @Override
-    public ValidationResults getValidationResults() {
-        ValidationResults validationResults = super.getValidationResults();
-        if (!isValid()) {
-            for (CComponent<?> component : this.getComponents()) {
-                if (!component.isValid()) {
-                    validationResults.appendValidationErrors(component.getValidationResults());
-                }
-            }
-        }
-        return validationResults;
     }
 
     @Override

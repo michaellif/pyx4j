@@ -59,14 +59,14 @@ public class ValidationResults {
         return results;
     }
 
-    public String getValidationMessage(boolean html, boolean showFieldName, boolean showLocation) {
+    public String getValidationMessage(boolean html) {
         StringBuilder messagesBuffer = new StringBuilder();
         LoopCounter c = new LoopCounter(validationErrors);
         if (html) {
             messagesBuffer.append("<ul style='text-align:left'>");
             for (ValidationError ve : validationErrors) {
                 if (ve instanceof FieldValidationError) {
-                    messagesBuffer.append("<li>").append(((FieldValidationError) ve).getMessageString(showFieldName, showLocation)).append("</li>");
+                    messagesBuffer.append("<li>").append(((FieldValidationError) ve).getMessage()).append("</li>");
                 }
             }
             messagesBuffer.append("</ul>");
@@ -76,14 +76,14 @@ public class ValidationResults {
                 if (ve instanceof FieldValidationError) {
                     switch (c.next()) {
                     case SINGLE:
-                        messagesBuffer.append(fve.getMessageString(showFieldName, showLocation));
+                        messagesBuffer.append(fve.getMessage());
                         break;
                     case FIRST:
                     case ITEM:
-                        messagesBuffer.append("- ").append(fve.getMessageString(showFieldName, showLocation)).append(";\n");
+                        messagesBuffer.append("- ").append(fve.getMessage()).append(";\n");
                         break;
                     case LAST:
-                        messagesBuffer.append("- ").append(fve.getMessageString(showFieldName, showLocation));
+                        messagesBuffer.append("- ").append(fve.getMessage());
                         break;
                     }
                 }

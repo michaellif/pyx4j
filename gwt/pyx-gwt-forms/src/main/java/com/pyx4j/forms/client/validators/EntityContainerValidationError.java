@@ -26,21 +26,14 @@ public class EntityContainerValidationError implements ValidationError {
 
     private final CComponent<?> originator;
 
-    private final String locationHint;
-
-    public EntityContainerValidationError(CComponent<?> originator, String locationHint) {
+    public EntityContainerValidationError(CComponent<?> originator) {
         this.originator = originator;
-        this.locationHint = locationHint;
+
     }
 
     @Override
     public CComponent<?> getOriginator() {
         return originator;
-    }
-
-    @Override
-    public String getLocationHint() {
-        return locationHint;
     }
 
 }

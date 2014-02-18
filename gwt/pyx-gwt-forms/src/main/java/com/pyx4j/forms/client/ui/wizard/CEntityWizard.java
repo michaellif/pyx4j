@@ -152,7 +152,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
             currentStep.showErrors(true);
             ValidationResults validationResults = currentStep.getValidationResults();
             if (!validationResults.isValid()) {
-                MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
+                MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
                 return false;
             }
         }
@@ -177,7 +177,8 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     protected final void finish() {
         setVisited(true);
         if (!isValid()) {
-            MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
+            MessageDialog.error(i18n.tr("Error"),
+                    i18n.tr("Application is not complete! Please correct all errors or omissions and try to submit application again."));
         } else {
             onFinish();
         }

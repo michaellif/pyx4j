@@ -39,7 +39,7 @@ public class EntityContainerValidator extends AbstractComponentValidator {
         if (container.getComponents() != null) {
             for (CComponent<?> ccomponent : container.getComponents()) {
                 if (!ccomponent.isValid()) {
-                    return new EntityContainerValidationError(container, "");
+                    return new EntityContainerValidationError(container);
                 }
             }
         }

@@ -26,6 +26,4 @@ public interface ValidationError {
 
     CComponent<?> getOriginator();
 
-    String getLocationHint();
-
 }

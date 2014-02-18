@@ -21,46 +21,15 @@
 package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.i18n.shared.I18n;
 
 public class FieldValidationError implements ValidationError {
 
-    private static final I18n i18n = I18n.get(FieldValidationError.class);
-
-    private final CComponent<?> originator;
+    private CComponent<?> originator;
 
     private String message;
 
     public FieldValidationError(CComponent<?> originator, String message) {
-        this.originator = originator;
         this.message = message;
-    }
-
-    public String getMessageString(boolean showFieldName, boolean showLocation) {
-        StringBuilder builder = new StringBuilder();
-        String title = originator.getTitle();
-        if (title != null && title.isEmpty()) {
-            title = null;
-        }
-        if (showFieldName) {
-            if (title != null) {
-                builder.append("'");
-                String locationHint = getLocationHint();
-                if (showLocation && locationHint != null && !locationHint.isEmpty()) {
-                    builder.append(locationHint).append("/");
-                }
-                builder.append(title).append("' ").append(i18n.tr("is not valid")).append(", ");
-            } else {
-                builder.append(i18n.tr("Field is not valid")).append(", ");
-            }
-            message = uncapitalize(message);
-        }
-        builder.append(message);
-        return builder.toString();
-    }
-
-    public String getTitle() {
-        return originator.getTitle();
     }
 
     public void setMessage(String message) {
@@ -69,11 +38,6 @@ public class FieldValidationError implements ValidationError {
 
     public String getMessage() {
         return message;
-    }
-
-    @Override
-    public String getLocationHint() {
-        return originator.getLocationHint();
     }
 
     @Override
