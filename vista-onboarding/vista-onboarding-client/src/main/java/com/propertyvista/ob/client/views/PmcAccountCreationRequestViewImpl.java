@@ -89,7 +89,6 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
     @Override
     public void setPresenter(PmcAccountCreationRequestView.Presenter presenter) {
         this.presenter = presenter;
-        this.form.setVisited(false);
     }
 
     @Override

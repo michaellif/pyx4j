@@ -165,9 +165,6 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     public void setPresenter(BulkOperationToolView.Presenter presenter) {
         this.presenter = presenter;
 
-        this.settingsForm.setVisited(false);
-
-        this.itemsHolderForm.setVisited(false);
         this.itemsHolderForm.populateNew();
         this.itemsHolderForm.toggleSelectAll(false);
     }
@@ -206,7 +203,6 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     @Override
     public void setSettings(Settings settings) {
         settingsForm.populate(settings);
-        settingsForm.setVisited(false);
     }
 
     protected CEntityForm<Settings> getSettingsForm() {
@@ -228,7 +224,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     private void acceptMarked() {
         visibleRange = new Range(0, pageIncrement);
 
-        itemsHolderForm.setVisited(true);
+        itemsHolderForm.setVisitedRecursive();
         boolean isEditable = itemsHolderForm.isEditable(); // validations can fail only when form is editable so we force it to be editable
         itemsHolderForm.setEditable(true);
         boolean isValid = itemsHolderForm.isValid();
@@ -243,7 +239,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     }
 
     private void search() {
-        settingsForm.setVisited(true);
+        settingsForm.setVisitedRecursive();
         if (settingsForm.isValid()) {
             presenter.search();
         }

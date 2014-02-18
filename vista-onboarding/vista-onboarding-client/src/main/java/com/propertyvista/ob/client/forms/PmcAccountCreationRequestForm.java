@@ -213,7 +213,7 @@ public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreatio
         submitButton = new Button(i18n.tr("Sign Up"), new Command() {
             @Override
             public void execute() {
-                setVisited(true);
+                setVisitedRecursive();
                 if (isValid()) {
                     onSubmit(getValue().duplicate(PmcAccountCreationRequest.class));
                 }

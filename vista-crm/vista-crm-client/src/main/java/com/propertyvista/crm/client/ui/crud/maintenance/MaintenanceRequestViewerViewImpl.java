@@ -189,7 +189,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         }
 
         public boolean validate() {
-            content.setVisited(true);
+            content.setVisitedRecursive();
             if (content.isValid()) {
                 return true;
             } else {
@@ -247,7 +247,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         }
 
         public boolean validate() {
-            content.setVisited(true);
+            content.setVisitedRecursive();
             if (content.isValid()) {
                 return true;
             } else {

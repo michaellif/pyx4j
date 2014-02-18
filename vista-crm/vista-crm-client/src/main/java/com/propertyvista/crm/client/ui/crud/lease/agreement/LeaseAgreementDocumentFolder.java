@@ -194,8 +194,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
 
         @Override
         public boolean onClickOk() {
-            form.setVisited(true);
-            form.revalidate();
+            form.setVisitedRecursive();
             if (form.isValid()) {
                 accept(form.getValue());
                 return true;

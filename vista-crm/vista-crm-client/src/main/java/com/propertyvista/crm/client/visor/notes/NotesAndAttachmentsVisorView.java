@@ -233,7 +233,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     btnSave = new Button(i18n.tr("Save"), new Command() {
                         @Override
                         public void execute() {
-                            setVisited(true);
+                            setVisitedRecursive();
                             if (!isValid()) {
                                 MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
                             } else {

@@ -75,7 +75,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
 
             @Override
             public void execute() {
-                form.setVisited(true);
+                form.setVisitedRecursive();
                 if (form.isValid()) {
                     presenter.changePassword(form.getValue());
                 } else {
@@ -111,7 +111,6 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-        form.setVisited(false);
         form.populateNew();
     }
 

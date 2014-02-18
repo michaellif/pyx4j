@@ -102,7 +102,7 @@ public class ScopeDialog extends OkCancelDialog {
 
     @Override
     public boolean onClickOk() {
-        form.setVisited(true);
+        form.setVisitedRecursive();
         if (!form.isValid()) {
             return false;
         } else {

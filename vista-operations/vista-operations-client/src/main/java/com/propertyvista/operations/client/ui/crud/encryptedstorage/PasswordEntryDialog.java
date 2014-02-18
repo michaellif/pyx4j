@@ -79,7 +79,7 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
     }
 
     public char[] getPassword() {
-        form.setVisited(true);
+        form.setVisitedRecursive();
         if (form.isValid()) {
             return form.getValue().password().getValue().toCharArray();
         } else {

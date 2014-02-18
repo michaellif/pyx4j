@@ -95,7 +95,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     }
 
     public void reset(String userId, boolean rememberUserId) {
-        loginForm.setVisited(false);
+        loginForm.reset();
         loginForm.populateNew();
         if (userId != null) {
             loginForm.get(loginForm.proto().email()).setValue(userId);
@@ -105,7 +105,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     }
 
     private void onLogin() {
-        loginForm.setVisited(true);
+        loginForm.setVisitedRecursive();
         if (loginForm.isValid()) {
             presenter.login(loginForm.getValue());
         }

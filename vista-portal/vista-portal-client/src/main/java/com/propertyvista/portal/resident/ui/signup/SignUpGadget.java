@@ -119,7 +119,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                 @Override
                 public void execute() {
                     signupForm.setEntityValidationError(null);
-                    signupForm.setVisited(true);
+                    signupForm.setVisitedRecursive();
                     if (signupForm.isValid()) {
                         presenter.register(signupForm.getValue());
                     }
@@ -261,13 +261,12 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         public void init(List<SelfRegistrationBuildingDTO> buildings) {
             buildingSelector.setOptions(buildings);
-            setVisited(false);
             populateNew();
         }
 
         public void setEntityValidationError(EntityValidationException caught) {
             this.entityValidationError = caught;
-            setVisited(true);
+            setVisitedRecursive();
         }
 
     }
