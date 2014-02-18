@@ -137,7 +137,7 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
 
     private void renderValidationMessage() {
         if (!component.isValid()) {
-            validationLabel.setText(component.getValidationResults().getValidationMessage(false, true, false));
+            validationLabel.setText(component.getValidationResults().getValidationMessage(false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
         } else {
             validationLabel.setText(null);

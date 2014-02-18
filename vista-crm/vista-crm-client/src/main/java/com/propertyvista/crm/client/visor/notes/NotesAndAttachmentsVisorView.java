@@ -235,7 +235,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                         public void execute() {
                             setVisited(true);
                             if (!isValid()) {
-                                MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
+                                MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
                             } else {
                                 if (getValue().created().getValue() == null) {
                                     CrmUser user = EntityFactory.create(CrmUser.class);

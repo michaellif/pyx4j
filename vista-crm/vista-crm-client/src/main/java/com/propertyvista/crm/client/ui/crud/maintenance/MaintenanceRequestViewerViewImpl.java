@@ -193,7 +193,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             if (content.isValid()) {
                 return true;
             } else {
-                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true, true));
+                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true));
                 return false;
             }
         }
@@ -251,7 +251,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             if (content.isValid()) {
                 return true;
             } else {
-                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true, true));
+                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true));
                 return false;
             }
         }

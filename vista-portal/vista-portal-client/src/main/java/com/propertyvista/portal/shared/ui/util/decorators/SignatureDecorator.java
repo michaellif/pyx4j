@@ -72,7 +72,7 @@ public class SignatureDecorator extends FlowPanel implements IDecorator<CSignatu
 
     protected void renderValidationMessage() {
         if (!component.isValid()) {
-            validationLabel.setText(component.getValidationResults().getValidationMessage(false, false, false));
+            validationLabel.setText(component.getValidationResults().getValidationMessage(false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);
         } else {

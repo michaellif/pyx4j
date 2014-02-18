@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
@@ -33,9 +34,12 @@ import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public abstract class AbstractSectionPanel extends CollapsablePanel {
+
+    private static final I18n i18n = I18n.get(AbstractSectionPanel.class);
 
     private final SectionCaptionBar captionBar;
 
@@ -69,7 +73,8 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         final FlowPanel expandedBoxPanel = new FlowPanel();
         mainPanel.add(expandedBoxPanel);
 
-        errorMessageBar = new HTML();
+        errorMessageBar = new HTML(
+                i18n.tr("The information provided under this section is not complete, please fill in all required fields to continue with the application."));
         errorMessageBar.setStyleName(VistaTheme.StyleName.ErrorMessage.name());
         expandedBoxPanel.add(errorMessageBar);
 
@@ -110,11 +115,13 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
     public void onValueSet() {
         captionBar.updateState();
         ValidationResults validationResults = step.getValidationResults();
-        errorMessageBar.setHTML(validationResults.getValidationMessage(true, true, false));
+
         if (validationResults.isValid()) {
             contentPanel.setVisible(true);
+            errorMessageBar.setVisible(false);
         } else {
             contentPanel.setVisible(false);
+            errorMessageBar.setVisible(true);
         }
     }
 

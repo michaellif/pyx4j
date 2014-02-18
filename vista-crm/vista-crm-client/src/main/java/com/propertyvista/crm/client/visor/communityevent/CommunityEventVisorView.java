@@ -212,7 +212,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                         public void execute() {
                             setVisited(true);
                             if (!isValid()) {
-                                MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
+                                MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                             } else {
 
                                 getController().save(getValue(), new DefaultAsyncCallback<Key>() {
