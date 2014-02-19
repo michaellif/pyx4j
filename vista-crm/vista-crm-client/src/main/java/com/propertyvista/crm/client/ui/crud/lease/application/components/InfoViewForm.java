@@ -206,7 +206,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         super.onValueSet(populate);
 
         if (isEditable()) {
-            fileUpload.setParentEntity(getValue());
+            fileUpload.setPolicyEntity(getValue());
         }
 
         enablePreviousAddress();

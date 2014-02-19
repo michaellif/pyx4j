@@ -62,9 +62,9 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerPicture;
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -102,7 +102,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
             get(proto().customer().person().birthDate()).setMandatory(!getValue().ageOfMajority().isNull());
         } else {
-            get(proto().customer().personScreening()).setVisible(getValue().customer().personScreening().getPrimaryKey() != null);
+            get(proto().screening()).setVisible(getValue().screening().getPrimaryKey() != null);
         }
 
         if (rootClass.equals(TenantDTO.class)) {
@@ -168,8 +168,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         main.setWidget(
                 row,
                 1,
-                new FormDecoratorBuilder(inject(proto().customer().personScreening(),
-                        new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 22).build());
+                new FormDecoratorBuilder(inject(proto().screening(),
+                        new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))), 22).build());
 
         if (rootClass.equals(TenantDTO.class)) {
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role(), new CEnumLabel()), 10).build());

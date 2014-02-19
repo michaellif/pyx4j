@@ -13,9 +13,21 @@
  */
 package com.propertyvista.crm.rpc.services.customer.screening;
 
-import com.pyx4j.entity.rpc.AbstractVersionDataListService;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
-import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public interface CustomerScreeningVersionService extends AbstractVersionDataListService<CustomerScreening.CustomerScreeningV> {
+/**
+ * Actual data is retried by LeaseParticipant id versioned part is CustomerScreening
+ */
+public interface LeaseParticipantScreeningCrudService extends AbstractVersionedCrudService<LeaseParticipantScreeningTO> {
+
+    @Transient
+    public interface CustomerScreeningInitializationData extends InitializationData {
+
+        LeaseParticipant<?> leaseParticipantId();
+
+    }
 }

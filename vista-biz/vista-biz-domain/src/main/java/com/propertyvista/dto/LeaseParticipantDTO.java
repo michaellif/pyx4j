@@ -53,4 +53,6 @@ public interface LeaseParticipantDTO<E extends LeaseTermParticipant<?>> extends 
 
     @Detached(level = AttachLevel.CollectionSizeOnly)
     IList<Lease> applicationsOfThisCustomer();
+
+    LeaseParticipantScreeningTO screening();
 }

@@ -23,8 +23,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
@@ -63,9 +63,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
     @Override
     protected void enhanceRetrieved(BO bo, TO to, RetrieveTarget retrieveTarget) {
         to.leaseTermV().set(retrieveLeaseTerm(bo));
-
-        LeaseParticipantUtils.retrieveCustomerScreeningPointer(to.customer());
-
+        to.screening().set(LeaseParticipantUtils.retrieveCustomerScreeningPointer(to));
         // fill/update payment methods: 
         to.paymentMethods().clear();
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo, PaymentMethodUsage.InProfile,

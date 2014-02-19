@@ -242,7 +242,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         Persistence.service().retrieve(lease.currentTerm());
         if (lease.currentTerm().version().isNull()) {
-            lease.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, lease.currentTerm().getPrimaryKey()));
+            lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
         }
 
         // add payable tenants:

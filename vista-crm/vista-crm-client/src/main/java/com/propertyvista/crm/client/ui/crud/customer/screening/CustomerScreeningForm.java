@@ -17,6 +17,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
@@ -38,34 +39,42 @@ import com.propertyvista.crm.client.ui.crud.lease.application.components.IdUploa
 import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalAssetFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalIncomeFolder;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.dto.CustomerScreeningDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.misc.BusinessRules;
 
-public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
+public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeningTO> {
 
     private static final I18n i18n = I18n.get(CustomerScreeningForm.class);
 
     private final TwoColumnFlexFormPanel previousAddress = new TwoColumnFlexFormPanel() {
         @Override
         public void setVisible(boolean visible) {
-            get(proto().version().previousAddress()).setVisible(visible);
+            get(proto().screening().version().previousAddress()).setVisible(visible);
             super.setVisible(visible);
         }
     };
 
     private final IdUploaderFolder fileUpload = new IdUploaderFolder();
 
-    public CustomerScreeningForm(IForm<CustomerScreeningDTO> view) {
-        super(CustomerScreeningDTO.class, view);
+    public CustomerScreeningForm(IForm<LeaseParticipantScreeningTO> view) {
+        super(LeaseParticipantScreeningTO.class, view);
 
         Tab tab = addTab(createIdentificationDocumentsTab(i18n.tr("Identification Documents")));
         selectTab(tab);
 
         addTab(createAddressesTab(i18n.tr("Addresses")));
-        addTab(createlegalQuestionsTab(proto().version().legalQuestions().getMeta().getCaption()));
+        addTab(createlegalQuestionsTab(proto().screening().version().legalQuestions().getMeta().getCaption()));
         addTab(createIncomesTab(i18n.tr("Incomes")));
         addTab(createAssetsTab(i18n.tr("Assets")));
 
+    }
+
+    private IEntity getPolicyEntity() {
+        if (getValue().getPrimaryKey() == null) {
+            return getValue().leaseParticipantId();
+        } else {
+            return getValue();
+        }
     }
 
     @Override
@@ -73,8 +82,8 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
         super.onValueSet(populate);
 
         if (isEditable()) {
-            fileUpload.setParentEntity(getValue());
-            ((PersonalIncomeFolder) (CComponent<?>) get(proto().version().incomes())).setParentEntity(getValue());
+            fileUpload.setPolicyEntity(getPolicyEntity());
+            ((PersonalIncomeFolder) (CComponent<?>) get(proto().screening().version().incomes())).setPolicyEntity(getPolicyEntity());
         }
 
         enablePreviousAddress();
@@ -85,7 +94,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
         super.addValidations();
 
         // ------------------------------------------------------------------------------------------------
-        CEntityForm<PriorAddress> currentAF = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
+        CEntityForm<PriorAddress> currentAF = ((CEntityForm<PriorAddress>) get(proto().screening().version().currentAddress()));
 
         currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
         currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
@@ -100,7 +109,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
         });
 
         // ------------------------------------------------------------------------------------------------
-        CEntityForm<PriorAddress> previousAF = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
+        CEntityForm<PriorAddress> previousAF = ((CEntityForm<PriorAddress>) get(proto().screening().version().previousAddress()));
 
         previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
         previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());
@@ -116,7 +125,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().version().documents(), fileUpload));
+        main.setWidget(++row, 0, 2, inject(proto().screening().version().documents(), fileUpload));
 
         return main;
     }
@@ -125,11 +134,11 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setH1(++row, 0, 2, proto().version().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().version().currentAddress(), new PriorAddressEditor()));
+        main.setH1(++row, 0, 2, proto().screening().version().currentAddress().getMeta().getCaption());
+        main.setWidget(++row, 0, 2, inject(proto().screening().version().currentAddress(), new PriorAddressEditor()));
 
-        previousAddress.setH1(0, 0, 2, proto().version().previousAddress().getMeta().getCaption());
-        previousAddress.setWidget(1, 0, 2, inject(proto().version().previousAddress(), new PriorAddressEditor()));
+        previousAddress.setH1(0, 0, 2, proto().screening().version().previousAddress().getMeta().getCaption());
+        previousAddress.setWidget(1, 0, 2, inject(proto().screening().version().previousAddress(), new PriorAddressEditor()));
         main.setWidget(++row, 0, 2, previousAddress);
 
         return main;
@@ -139,19 +148,19 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().suedForRent())));
+        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().suedForRent())));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().suedForDamages())));
+        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().suedForDamages())));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().everEvicted())));
+        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().everEvicted())));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().defaultedOnLease())));
+        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().defaultedOnLease())));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().convictedOfFelony())));
+        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().convictedOfFelony())));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().legalTroubles())));
+        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().legalTroubles())));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().filedBankruptcy())));
+        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().filedBankruptcy())));
 
         return main;
     }
@@ -161,7 +170,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
     }
 
     private void enablePreviousAddress() {
-        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().version().currentAddress().moveInDate().getValue()));
+        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().screening().version().currentAddress().moveInDate().getValue()));
     }
 
 // Financial: ------------------------------------------------------------------------------------------------
@@ -169,7 +178,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
     private TwoColumnFlexFormPanel createIncomesTab(String title) {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
-        main.setWidget(0, 0, 2, inject(proto().version().incomes(), new PersonalIncomeFolder(isEditable())));
+        main.setWidget(0, 0, 2, inject(proto().screening().version().incomes(), new PersonalIncomeFolder(isEditable())));
 
         return main;
     }
@@ -177,7 +186,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreeningDTO> {
     private TwoColumnFlexFormPanel createAssetsTab(String title) {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
-        main.setWidget(0, 0, 2, inject(proto().version().assets(), new PersonalAssetFolder(isEditable())));
+        main.setWidget(0, 0, 2, inject(proto().screening().version().assets(), new PersonalAssetFolder(isEditable())));
 
         return main;
     }

@@ -44,7 +44,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
         super(CustomerScreeningIncome.class, modifyable);
     }
 
-    public void setParentEntity(IEntity parentEntity) {
+    public void setPolicyEntity(IEntity parentEntity) {
         ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override

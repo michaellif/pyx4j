@@ -93,7 +93,7 @@ public interface Customer extends IEntity {
     @RpcTransient
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = LeaseParticipant.class)
-    ISet<LeaseParticipant> _tenantInLease();
+    ISet<LeaseParticipant<?>> _tenantInLease();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

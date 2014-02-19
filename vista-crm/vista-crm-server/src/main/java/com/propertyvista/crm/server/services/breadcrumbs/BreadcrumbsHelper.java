@@ -20,16 +20,14 @@ import java.util.List;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class BreadcrumbsHelper {
 
@@ -98,15 +96,8 @@ public class BreadcrumbsHelper {
         final List<IEntity> trail = new ArrayList<IEntity>();
 
         // Special case for no business owned
-        if (startFromTarget instanceof CustomerScreening) {
-            @SuppressWarnings("rawtypes")
-            EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant().customer().personScreening(), startFromTarget));
-            criteria.desc(criteria.proto().leaseParticipant().lease().updated());
-            LeaseTermParticipant<?> leaseParticipant = Persistence.service().retrieve(criteria);
-            trail.add(toStringDuplicate(leaseParticipant));
-            Persistence.ensureRetrieve(leaseParticipant.leaseTermV().holder(), AttachLevel.Attached);
-            startFromTarget = leaseParticipant.leaseTermV().holder();
+        if (startFromTarget instanceof LeaseParticipantScreeningTO) {
+            startFromTarget = Persistence.service().retrieve(LeaseParticipant.class, startFromTarget.getPrimaryKey());
         }
 
         if (startFromTarget instanceof Lease) {

@@ -15,17 +15,15 @@ package com.propertyvista.biz.policy;
 
 import java.util.List;
 
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class PolicyFacadeImpl implements PolicyFacade {
 
@@ -39,21 +37,11 @@ public class PolicyFacadeImpl implements PolicyFacade {
         // Find Object hierarchy, Like in BreadcrumbsHelper
         PolicyNode node = null;
         // Special case for not business owned
-        if (entity instanceof CustomerScreening) {
-            // TODO Find  LeaseTerm that have application
-            LeaseTermParticipant<?> leaseParticipant;
+        if ((entity instanceof LeaseParticipantScreeningTO) || (entity instanceof LeaseParticipant)) {
+            // Find building by Lease Participant
             {
-                @SuppressWarnings("rawtypes")
-                EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant().customer().personScreening(), entity));
-                criteria.desc(criteria.proto().leaseParticipant().lease().updated());
-                leaseParticipant = Persistence.service().retrieve(criteria);
-            }
-            // Find building by Lease
-            {
-                Persistence.ensureRetrieve(leaseParticipant.leaseTermV().holder(), AttachLevel.Attached);
                 EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-                criteria.eq(criteria.proto().units().$().leases(), leaseParticipant.leaseTermV().holder().lease());
+                criteria.eq(criteria.proto().units().$().leases().$().leaseParticipants(), entity.getPrimaryKey());
                 node = Persistence.service().retrieve(criteria);
             }
         } else {

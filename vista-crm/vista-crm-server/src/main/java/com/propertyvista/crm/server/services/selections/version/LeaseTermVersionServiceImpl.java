@@ -15,13 +15,13 @@ package com.propertyvista.crm.server.services.selections.version;
 
 import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionService;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceImpl;
 
-public class LeaseTermVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<LeaseTerm.LeaseTermV> implements LeaseTermVersionService {
+public class LeaseTermVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<LeaseTermV, LeaseTermV> implements LeaseTermVersionService {
 
     public LeaseTermVersionServiceImpl() {
-        super(LeaseTerm.LeaseTermV.class, CrmUser.class);
+        super(LeaseTermV.class, LeaseTermV.class, CrmUser.class);
     }
 
     @Override

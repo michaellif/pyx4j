@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
@@ -44,10 +45,7 @@ public class LeasesFromLeadListServiceImpl extends AbstractListServiceDtoImpl<Le
         Persistence.service().retrieve(dto.lease().unit().building());
 
         if (!dto.lease().currentTerm().isNull()) {
-            Persistence.service().retrieve(dto.lease().currentTerm());
-            if (dto.lease().currentTerm().version().isNull()) {
-                dto.lease().currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.lease().currentTerm().getPrimaryKey()));
-            }
+            dto.lease().currentTerm().set(Persistence.retriveFinalOrDraft(LeaseTerm.class, dto.lease().currentTerm().getPrimaryKey(), AttachLevel.Attached));
 
             Persistence.service().retrieve(dto.lease().currentTerm().version().tenants());
             Persistence.service().retrieve(dto.lease().currentTerm().version().guarantors());

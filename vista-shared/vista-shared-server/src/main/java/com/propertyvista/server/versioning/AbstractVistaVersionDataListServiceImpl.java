@@ -15,27 +15,27 @@ package com.propertyvista.server.versioning;
 
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
-import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.security.common.AbstractUser;
 
-public abstract class AbstractVistaVersionDataListServiceImpl<E extends IVersionData<?>> extends AbstractListServiceImpl<E> implements
-        AbstractVersionDataListService<E> {
+public abstract class AbstractVistaVersionDataListServiceImpl<BO extends IVersionData<?>, TO extends IVersionData<?>> extends
+        AbstractListServiceDtoImpl<BO, TO> implements AbstractVersionDataListService<TO> {
 
     protected Class<? extends AbstractUser> userClass;
 
-    public AbstractVistaVersionDataListServiceImpl(Class<E> entityClass, Class<? extends AbstractUser> userClass) {
-        super(entityClass);
+    public AbstractVistaVersionDataListServiceImpl(Class<BO> boClass, Class<TO> toClass, Class<? extends AbstractUser> userClass) {
+        super(boClass, toClass);
         this.userClass = userClass;
     }
 
     @Override
-    protected void enhanceListRetrieved(E entity, E dto) {
-        if (!entity.createdByUserKey().isNull()) {
-            AbstractUser user = Persistence.service().retrieve(userClass, entity.createdByUserKey().getValue());
+    protected void enhanceListRetrieved(BO bo, TO to) {
+        if (!bo.createdByUserKey().isNull()) {
+            AbstractUser user = Persistence.service().retrieve(userClass, bo.createdByUserKey().getValue());
             if (user != null) {
-                dto.createdByUser().setValue(user.getStringView());
+                to.createdByUser().setValue(user.getStringView());
             }
         }
     }

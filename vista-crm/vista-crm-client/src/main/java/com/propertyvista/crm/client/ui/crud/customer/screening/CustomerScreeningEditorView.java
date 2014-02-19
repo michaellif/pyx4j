@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.customer.screening;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.dto.CustomerScreeningDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public interface CustomerScreeningEditorView extends IEditor<CustomerScreeningDTO> {
+public interface CustomerScreeningEditorView extends IEditor<LeaseParticipantScreeningTO> {
 
 }

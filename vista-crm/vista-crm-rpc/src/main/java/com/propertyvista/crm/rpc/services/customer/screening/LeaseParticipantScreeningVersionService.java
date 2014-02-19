@@ -13,17 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.customer.screening;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 
-import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.dto.CustomerScreeningDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public interface CustomerScreeningCrudService extends AbstractVersionedCrudService<CustomerScreeningDTO> {
-
-    @Transient
-    public interface CustomerScreeningInitializationData extends InitializationData {
-
-        Customer screene();
-    }
+public interface LeaseParticipantScreeningVersionService extends AbstractVersionDataListService<LeaseParticipantScreeningTO.LeaseParticipantScreeningTOV> {
 }

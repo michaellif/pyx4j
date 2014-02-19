@@ -224,7 +224,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             main.setWidget(
                     ++leftRow,
                     0,
-                    new FormDecoratorBuilder(inject(proto().effectiveScreening(),
+                    new FormDecoratorBuilder(inject(proto().effectiveScreeningOld(),
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
             main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
 
@@ -246,7 +246,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
+            get(proto().effectiveScreeningOld()).setVisible(!getValue().effectiveScreeningOld().isNull());
             get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseTermParticipant.Role.Applicant);
             preauthorizedPaymentsPanel.setVisible(!isEditable() && !getValue().leaseParticipant().preauthorizedPayments().isEmpty());
 

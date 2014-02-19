@@ -46,6 +46,7 @@ import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
@@ -134,7 +135,11 @@ public interface LeaseTermParticipant<LP extends LeaseParticipant<?>> extends IE
     CustomerScreening screening();
 
     @Transient
-    CustomerScreening effectiveScreening();
+    @Deprecated
+    CustomerScreening effectiveScreeningOld();
+
+    @Transient
+    LeaseParticipantScreeningTO effectiveScreening();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)

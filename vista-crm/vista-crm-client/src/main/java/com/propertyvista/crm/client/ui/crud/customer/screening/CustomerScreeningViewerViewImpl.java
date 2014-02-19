@@ -16,20 +16,21 @@ package com.propertyvista.crm.client.ui.crud.customer.screening;
 import com.google.gwt.core.client.GWT;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningVersionService;
-import com.propertyvista.dto.CustomerScreeningDTO;
+import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningVersionService;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public class CustomerScreeningViewerViewImpl extends CrmViewerViewImplBase<CustomerScreeningDTO> implements CustomerScreeningViewerView {
+public class CustomerScreeningViewerViewImpl extends CrmViewerViewImplBase<LeaseParticipantScreeningTO> implements CustomerScreeningViewerView {
 
     public CustomerScreeningViewerViewImpl() {
         setForm(new CustomerScreeningForm(this));
-        enableVersioning(CustomerScreeningDTO.CustomerScreeningV.class, GWT.<CustomerScreeningVersionService> create(CustomerScreeningVersionService.class));
+        enableVersioning(LeaseParticipantScreeningTO.LeaseParticipantScreeningTOV.class,
+                GWT.<LeaseParticipantScreeningVersionService> create(LeaseParticipantScreeningVersionService.class));
     }
 
     @Override
-    public void populate(CustomerScreeningDTO value) {
+    public void populate(LeaseParticipantScreeningTO value) {
         super.populate(value);
 
-        setCaption(value.screene().getStringView() + " " + getCaption());
+        setCaption(value.screening().screene().getStringView() + " " + getCaption());
     }
 }

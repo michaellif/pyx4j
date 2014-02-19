@@ -30,14 +30,17 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
 
     static final I18n i18n = I18n.get(VersionSelectorDialog.class);
 
+    private final Key versionedEntityPk;
+
     public VersionSelectorDialog(IPane parentView, Class<V> entityVersionClass, Key entityId) {
         super(parentView, entityVersionClass, false, Collections.<V> emptyList(), i18n.tr("Select Version"));
         setParentFiltering(entityId);
+        this.versionedEntityPk = entityId;
     }
 
     public Key getSelectedVersionId() {
         for (V selected : getSelectedItems()) {
-            return new Key(selected.holder().getPrimaryKey().asLong(), (selected.fromDate().isNull() ? 0 : selected.fromDate().getValue().getTime()));
+            return new Key(versionedEntityPk.asLong(), (selected.fromDate().isNull() ? 0 : selected.fromDate().getValue().getTime()));
         }
         return null;
     }

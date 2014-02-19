@@ -14,14 +14,14 @@
 package com.propertyvista.crm.server.services.selections.version;
 
 import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
-import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Concession.ConcessionV;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceImpl;
 
-public class ConcessionVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<Concession.ConcessionV> implements ConcessionVersionService {
+public class ConcessionVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<ConcessionV, ConcessionV> implements ConcessionVersionService {
 
     public ConcessionVersionServiceImpl() {
-        super(Concession.ConcessionV.class, CrmUser.class);
+        super(ConcessionV.class, ConcessionV.class, CrmUser.class);
     }
 
     @Override

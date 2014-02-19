@@ -124,9 +124,9 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         boolean leaseIsActive = value.lease().status().getValue().isActive();
 
-        setActionVisible(screeningAction, value.customer().personScreening().getPrimaryKey() == null);
+        setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
         if (VistaFeatures.instance().yardiIntegration()) {
-            setActionVisible(maintenanceAction, leaseIsActive && !value.isPotentialTenant().isBooleanTrue());
+            setActionVisible(maintenanceAction, leaseIsActive && !value.isPotentialTenant().getValue(false));
         } else {
             setActionVisible(maintenanceAction, leaseIsActive);
         }

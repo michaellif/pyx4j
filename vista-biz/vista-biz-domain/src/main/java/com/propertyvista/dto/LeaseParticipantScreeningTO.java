@@ -14,12 +14,28 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IVersionData;
+import com.pyx4j.entity.core.IVersionedEntity;
 
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.dto.LeaseParticipantScreeningTO.LeaseParticipantScreeningTOV;
 
+/**
+ * This is the view on CustomerScreening by LeaseParticipant id
+ */
 @Transient
-@ExtendsBO
-public interface CustomerScreeningDTO extends CustomerScreening {
+@ExtendsBO(LeaseParticipant.class)
+public interface LeaseParticipantScreeningTO extends IVersionedEntity<LeaseParticipantScreeningTOV> {
+
+    @ToString
+    CustomerScreening screening();
+
+    LeaseParticipant<?> leaseParticipantId();
+
+    public interface LeaseParticipantScreeningTOV extends IVersionData<LeaseParticipantScreeningTO> {
+    }
 
 }

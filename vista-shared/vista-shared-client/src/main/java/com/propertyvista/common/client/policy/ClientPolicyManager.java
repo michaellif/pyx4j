@@ -115,9 +115,7 @@ public class ClientPolicyManager {
             public void onSuccess(Policy result) {
                 callback.onSuccess((POLICY) result);
             }
-            // Note: DO NOT create IdentityStub for supplied entity - newly created (not persisted) ones does not have it!
-            // more over in some cases some entity member data used to retrieve correct policy node (see PolicyFacadeImpl.obtainHierarchicalEffectivePolicy())
-        }, entity/* .createIdentityStub() */, EntityFactory.getEntityPrototype(policyClass));
+        }, entity.createIdentityStub(), EntityFactory.getEntityPrototype(policyClass));
     }
 
     public static void initialize(PolicyRetrieveService policyRetrieveService) {

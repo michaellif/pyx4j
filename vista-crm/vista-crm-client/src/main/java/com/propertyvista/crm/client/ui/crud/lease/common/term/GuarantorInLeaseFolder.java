@@ -159,7 +159,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             main.setWidget(
                     ++row,
                     0,
-                    new FormDecoratorBuilder(inject(proto().effectiveScreening(),
+                    new FormDecoratorBuilder(inject(proto().effectiveScreeningOld(),
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
 
@@ -175,7 +175,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
+            get(proto().effectiveScreeningOld()).setVisible(!getValue().effectiveScreeningOld().isNull());
 
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseParticipant().participantId()), getValue()

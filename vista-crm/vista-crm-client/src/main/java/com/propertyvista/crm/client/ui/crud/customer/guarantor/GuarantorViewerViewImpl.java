@@ -62,7 +62,7 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
     public void populate(GuarantorDTO value) {
         super.populate(value);
 
-        setActionVisible(screeningAction, value.customer().personScreening().getPrimaryKey() == null);
+        setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
 
         // Disable password change button for guarantors with no associated user principal
         if (value != null & !value.customer().user().isNull()) {

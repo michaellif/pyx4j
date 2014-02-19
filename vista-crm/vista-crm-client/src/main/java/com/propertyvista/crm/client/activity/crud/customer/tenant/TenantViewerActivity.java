@@ -32,10 +32,9 @@ import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorCon
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
+import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
@@ -47,8 +46,6 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     private Key currentTenantId;
 
     private Key currentBuildingId;
-
-    private Customer screeningCustomer;
 
     private TenantDTO currentValue;
 
@@ -66,9 +63,9 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     @Override
     public void createScreening() {
-        CustomerScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
-                .create(CustomerScreeningCrudService.CustomerScreeningInitializationData.class);
-        id.screene().set(screeningCustomer);
+        LeaseParticipantScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
+                .create(LeaseParticipantScreeningCrudService.CustomerScreeningInitializationData.class);
+        id.leaseParticipantId().set(EntityFactory.createIdentityStub(Tenant.class, currentTenantId));
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(id));
     }
 
@@ -95,9 +92,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
         super.onPopulateSuccess(result);
 
         currentValue = result;
-
         currentTenantId = result.getPrimaryKey();
-        screeningCustomer = result.customer();
         currentBuildingId = result.lease().unit().building().id().getValue();
     }
 

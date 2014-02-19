@@ -90,7 +90,6 @@ import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -102,6 +101,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class CrmEntityMapper {
 
@@ -136,7 +136,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Customer.class, Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(Tenant.class, Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(Guarantor.class, Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
-        AppPlaceEntityMapper.register(CustomerScreening.class, Tenants.Screening.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseParticipantScreeningTO.class, Tenants.Screening.class, defaultImage);
 
         AppPlaceEntityMapper.register(Lead.class, Marketing.Lead.class, defaultImage);
         AppPlaceEntityMapper.register(Appointment.class, Marketing.Appointment.class, defaultImage);

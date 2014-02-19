@@ -135,10 +135,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         if (dto.leaseApplication().status().getValue() == Status.Approved) {
             dto.currentTerm().set(Persistence.secureRetrieve(LeaseTerm.class, dto.currentTerm().getPrimaryKey().asVersionKey(dto.approvalDate().getValue())));
         } else {
-            Persistence.service().retrieve(dto.currentTerm());
-            if (dto.currentTerm().version().isNull()) {
-                dto.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey()));
-            }
+            dto.currentTerm().set(Persistence.retriveFinalOrDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey(), AttachLevel.Attached));
         }
 
         Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
@@ -154,12 +151,12 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         {
             Persistence.service().retrieve(leaseParticipant.leaseParticipant().customer().emergencyContacts());
             TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createTO(leaseParticipant);
-            new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(leaseParticipant.effectiveScreening(), tenantInfoDTO);
+            new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(leaseParticipant.effectiveScreeningOld(), tenantInfoDTO);
             dto.tenantInfo().add(fillQuickSummary(tenantInfoDTO));
         }
 
         {
-            TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createTO(leaseParticipant.effectiveScreening());
+            TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createTO(leaseParticipant.effectiveScreeningOld());
             tenantFinancialDTO.person().set(leaseParticipant.leaseParticipant().customer().person());
             dto.tenantFinancials().add(fillQuickSummary(tenantFinancialDTO));
         }
@@ -181,7 +178,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 approval.screening().set(approval.creditCheck().screening());
                 Persistence.service().retrieve(approval.screening(), AttachLevel.ToStringMembers, false);
             } else {
-                approval.screening().set(leaseParticipant.effectiveScreening());
+                approval.screening().set(leaseParticipant.effectiveScreeningOld());
             }
 
             dto.leaseApproval().participants().add(approval);

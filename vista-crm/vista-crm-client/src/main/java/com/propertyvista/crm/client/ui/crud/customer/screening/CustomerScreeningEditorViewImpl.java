@@ -14,17 +14,17 @@
 package com.propertyvista.crm.client.ui.crud.customer.screening;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.dto.CustomerScreeningDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public class CustomerScreeningEditorViewImpl extends CrmEditorViewImplBase<CustomerScreeningDTO> implements CustomerScreeningEditorView {
+public class CustomerScreeningEditorViewImpl extends CrmEditorViewImplBase<LeaseParticipantScreeningTO> implements CustomerScreeningEditorView {
     public CustomerScreeningEditorViewImpl() {
         setForm(new CustomerScreeningForm(this));
     }
 
     @Override
-    public void populate(CustomerScreeningDTO value) {
+    public void populate(LeaseParticipantScreeningTO value) {
         super.populate(value);
 
-        setCaption(value.screene().getStringView() + " " + getCaption());
+        setCaption(value.screening().screene().getStringView() + " " + getCaption());
     }
 }

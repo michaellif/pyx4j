@@ -21,14 +21,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorView;
-import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
-import com.propertyvista.dto.CustomerScreeningDTO;
+import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public class CustomerScreeningEditorActivity extends CrmEditorActivity<CustomerScreeningDTO> {
+public class CustomerScreeningEditorActivity extends CrmEditorActivity<LeaseParticipantScreeningTO> {
 
     @SuppressWarnings("unchecked")
     public CustomerScreeningEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(CustomerScreeningEditorView.class), (AbstractCrudService<CustomerScreeningDTO>) GWT
-                .create(CustomerScreeningCrudService.class), CustomerScreeningDTO.class);
+        super(place, CrmSite.getViewFactory().getView(CustomerScreeningEditorView.class), (AbstractCrudService<LeaseParticipantScreeningTO>) GWT
+                .create(LeaseParticipantScreeningCrudService.class), LeaseParticipantScreeningTO.class);
     }
 }

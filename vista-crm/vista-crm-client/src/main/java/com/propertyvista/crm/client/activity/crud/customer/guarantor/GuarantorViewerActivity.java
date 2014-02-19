@@ -28,14 +28,15 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
-import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
+import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> implements GuarantorViewerView.Presenter {
 
-    private Customer screeningCustomer;
+    private LeaseParticipant<?> leaseParticipantId;
 
     public GuarantorViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
@@ -43,9 +44,9 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
 
     @Override
     public void goToCreateScreening() {
-        CustomerScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
-                .create(CustomerScreeningCrudService.CustomerScreeningInitializationData.class);
-        id.screene().set(screeningCustomer);
+        LeaseParticipantScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
+                .create(LeaseParticipantScreeningCrudService.CustomerScreeningInitializationData.class);
+        id.leaseParticipantId().set(leaseParticipantId);
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(id));
     }
 
@@ -63,8 +64,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     @Override
     public void onPopulateSuccess(GuarantorDTO result) {
         super.onPopulateSuccess(result);
-
-        screeningCustomer = result.customer();
+        leaseParticipantId = EntityFactory.createIdentityStub(Guarantor.class, result.getPrimaryKey());
     }
 
     @Override

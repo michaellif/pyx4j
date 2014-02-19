@@ -55,7 +55,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
         super(IdentificationDocumentFolder.class, i18n.tr("Identification Document"));
     }
 
-    public void setParentEntity(IEntity parentEntity) {
+    public void setPolicyEntity(IEntity parentEntity) {
         ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override
