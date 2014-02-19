@@ -955,9 +955,14 @@ public abstract class LeaseAbstractManager {
         switch (lease.status().getValue()) {
         case NewLease:
         case Application:
-        case Approved:
             ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
             break;
+
+        case Approved:
+            ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
+            ServerSideFactory.create(OccupancyFacade.class).unoccupy(lease);
+            break;
+
         case ExistingLease:
             ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
             break;

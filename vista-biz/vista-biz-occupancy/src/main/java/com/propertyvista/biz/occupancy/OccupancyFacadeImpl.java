@@ -367,6 +367,18 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
         AptUnitOccupancySegment segment = Persistence.service().retrieve(criteria);
         if (segment != null) {
+
+            EntityQueryCriteria<AptUnitOccupancySegment> prevCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+            prevCriteria.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.available);
+            prevCriteria.eq(criteria.proto().lease(), leaseId);
+            prevCriteria.eq(criteria.proto().dateTo(), DateUtils.daysAdd(segment.dateFrom().getValue(), -1));
+            AptUnitOccupancySegment prevSegment = Persistence.service().retrieve(prevCriteria);
+
+            if (prevSegment != null) {
+                segment.dateFrom().setValue(prevSegment.dateFrom().getValue());
+                Persistence.service().delete(prevSegment);
+            }
+
             segment.status().setValue(Status.available);
             segment.lease().set(null);
             Persistence.service().persist(segment);
