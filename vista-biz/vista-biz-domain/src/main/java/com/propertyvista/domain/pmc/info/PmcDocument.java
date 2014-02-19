@@ -15,19 +15,12 @@ package com.propertyvista.domain.pmc.info;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.domain.VistaNamespace;
-
-@Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
-@Table(namespace = VistaNamespace.operationsNamespace)
 public interface PmcDocument extends IEntity {
 
     @Owned

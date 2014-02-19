@@ -36,7 +36,9 @@ public interface PmcBusinessInfoDocument extends PmcDocument {
     @XmlType(name = "BusinessInformationDocument")
     public enum Type {
 
-        BusinessLicense, ArticlesOfIncorporation;
+        BusinessLicense,
+
+        ArticlesOfIncorporation;
 
         // TODO get the rest of possible documents from Leonard
 

@@ -15,6 +15,7 @@ package com.propertyvista.domain.pmc.info;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -29,7 +30,9 @@ public interface PmcPersonalInformationDocument extends PmcDocument {
 
     public enum Type {
 
-        DriversLicense, Passport; // TODO get the rest from Leonard
+        DriversLicense,
+
+        Passport; // TODO get the rest from Leonard
 
         @Override
         public String toString() {
@@ -38,6 +41,7 @@ public interface PmcPersonalInformationDocument extends PmcDocument {
 
     }
 
+    @MemberColumn(name = "personal_info_doc_type")
     IPrimitive<Type> type();
 
     @Owner
