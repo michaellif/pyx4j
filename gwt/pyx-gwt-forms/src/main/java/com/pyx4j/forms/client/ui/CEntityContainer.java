@@ -190,10 +190,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     }
 
     @Override
-    public void revalidate() {
-        if (isVisible() && isEditable() && isEnabled() && !isViewable() && isVisited()) {
-            super.revalidate();
-        }
+    public boolean isValidatable() {
+        return isVisible() && isEditable() && isEnabled() && !isViewable() && isVisited();
     }
 
     @Override

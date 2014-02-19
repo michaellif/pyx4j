@@ -47,10 +47,15 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
 
     public void addStep(WizardStep step) {
         add(step);
+        step.setParent(this);
+        if (size() == 1) {
+            showWidget(0);
+        }
     }
 
     public void insertStep(WizardStep step, int beforeIndex) {
         insert(step, beforeIndex);
+        step.setParent(this);
     }
 
     public void showStep(WizardStep step) {
@@ -60,26 +65,26 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
             return;
         }
 
-        WizardStep previousSelection = getSelectedStep();
+        WizardStep previousSelection = getVisibleStep();
         if (previousSelection != null) {
-            previousSelection.setStepSelected(false);
+            previousSelection.onStepVizible(false);
         }
 
-        step.setStepSelected(true);
+        step.onStepVizible(true);
 
         showWidget(getWidgetIndex(step));
-        SelectionEvent.fire(this, getSelectedStep());
+        SelectionEvent.fire(this, getVisibleStep());
     }
 
     public void showStep(int index) {
         showStep((WizardStep) getWidget(index));
     }
 
-    public int getSelectedIndex() {
+    public int getVisibleIndex() {
         return getVisibleWidget();
     }
 
-    public WizardStep getSelectedStep() {
+    public WizardStep getVisibleStep() {
         int index = getVisibleWidget();
         if (index >= 0) {
             return (WizardStep) getWidget(getVisibleWidget());
@@ -113,5 +118,9 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
     @Override
     public HandlerRegistration addSelectionHandler(SelectionHandler<WizardStep> handler) {
         return addHandler(handler, SelectionEvent.getType());
+    }
+
+    public void reset() {
+        showWidget(0);
     }
 }

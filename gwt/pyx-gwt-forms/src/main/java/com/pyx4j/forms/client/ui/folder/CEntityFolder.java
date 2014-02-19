@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -96,10 +97,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyName.enabled || event.getPropertyName() == PropertyName.editable
-                        || event.getPropertyName() == PropertyName.repopulated) {
+                if (event.isEventOfType(PropertyName.enabled, PropertyName.editable, PropertyName.repopulated)) {
                     calculateActionsState();
                 }
+            }
+        });
+
+        addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<IList<E>> event) {
+                calculateActionsState();
             }
         });
     }
@@ -141,12 +149,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             item.setMovable(orderable);
             item.calculateActionsState();
         }
-    }
-
-    @Override
-    public void revalidate() {
-        super.revalidate();
-        calculateActionsState();
     }
 
     /**

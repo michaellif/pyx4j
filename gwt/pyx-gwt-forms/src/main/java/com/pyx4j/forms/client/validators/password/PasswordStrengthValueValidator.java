@@ -48,7 +48,7 @@ public class PasswordStrengthValueValidator extends AbstractComponentValidator<S
 
     @Override
     public FieldValidationError isValid() {
-        if (rule == null) {
+        if (rule == null || getComponent().getValue() == null || getComponent().getValue().isEmpty()) {
             return null;
         }
         PasswordStrengthVerdict verdict = rule.getPasswordVerdict(getComponent().getValue());

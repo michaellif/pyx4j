@@ -116,11 +116,11 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public WizardStep getSelectedStep() {
-        return wizardPanel.getSelectedStep();
+        return wizardPanel.getVisibleStep();
     }
 
     public int getSelectedIndex() {
-        return wizardPanel.getSelectedIndex();
+        return wizardPanel.getVisibleIndex();
     }
 
     public List<WizardStep> getAllSteps() {
@@ -130,7 +130,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     @Override
     public void onReset() {
         if (wizardPanel.size() > 0) {
-            showStep(0);
+            wizardPanel.reset();
         }
         super.onReset();
     }
@@ -161,7 +161,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public final void previousStep() {
-        int index = wizardPanel.getSelectedIndex() - 1;
+        int index = wizardPanel.getVisibleIndex() - 1;
         if (index >= 0) {
             showStep(index);
         }
@@ -177,8 +177,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     protected final void finish() {
         setVisitedRecursive();
         if (!isValid()) {
-            MessageDialog.error(i18n.tr("Error"),
-                    i18n.tr("Application is not complete! Please correct all errors or omissions and try to submit application again."));
+            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please correct errors or omissions and try to submit again."));
         } else {
             onFinish();
         }
@@ -196,11 +195,11 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public boolean isFirst() {
-        return wizardPanel.getSelectedIndex() == 0;
+        return wizardPanel.getVisibleIndex() == 0;
     }
 
     public boolean isLast() {
-        return wizardPanel.getSelectedIndex() == wizardPanel.size() - 1;
+        return wizardPanel.getVisibleIndex() == wizardPanel.size() - 1;
     }
 
     public void updateProgress(WizardStep currentStep, WizardStep previousStep) {

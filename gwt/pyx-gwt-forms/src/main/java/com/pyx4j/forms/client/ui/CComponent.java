@@ -442,23 +442,30 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return validationErrors.size() == 0;
     }
 
-    public void revalidate() {
+    public final void revalidate() {
+        Set<AbstractValidationError> origValidationErrors = new HashSet<>(validationErrors);
+        if (isValidatable()) {
+            validationErrors = new HashSet<>();
 
-        Set<AbstractValidationError> origValidationErrors = validationErrors;
-        validationErrors = new HashSet<>();
-
-        if (componentValidators != null) {
-            for (ComponentValidator<DATA_TYPE> validator : componentValidators) {
-                AbstractValidationError ve = validator.isValid();
-                if (ve != null) {
-                    validationErrors.add(ve);
+            if (componentValidators != null) {
+                for (ComponentValidator<DATA_TYPE> validator : componentValidators) {
+                    AbstractValidationError ve = validator.isValid();
+                    if (ve != null) {
+                        validationErrors.add(ve);
+                    }
                 }
             }
+        } else {
+            validationErrors.clear();
         }
         if (!origValidationErrors.equals(validationErrors)) {
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         }
 
+    }
+
+    protected boolean isValidatable() {
+        return true;
     }
 
     public final void reset() {
@@ -467,8 +474,8 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         if (getParent() != null) {
             getParent().updateContainer(this);
         }
-        onReset();
         setVisited(false);
+        onReset();
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.reset);
     }
 

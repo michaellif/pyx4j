@@ -28,11 +28,11 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 
 public class WizardStep extends SimplePanel implements IValidatable {
 
+    private WizardPanel parent;
+
     private Widget content;
 
     private String title;
-
-    private boolean selected = false;
 
     private boolean complete = false;
 
@@ -50,6 +50,10 @@ public class WizardStep extends SimplePanel implements IValidatable {
         addStyleName(WizardDecoratorTheme.StyleName.WizardStep.name());
     }
 
+    public void setParent(WizardPanel parent) {
+        this.parent = parent;
+    }
+
     protected void setStepContent(Widget content) {
         setWidget(this.content = content);
     }
@@ -62,12 +66,12 @@ public class WizardStep extends SimplePanel implements IValidatable {
         this.title = title;
     }
 
-    public void setStepSelected(boolean selected) {
-        this.selected = selected;
+    public boolean isStepVisible() {
+        return parent.getVisibleStep() == this;
     }
 
-    public boolean isStepSelected() {
-        return selected;
+    public void onStepVizible(boolean flag) {
+
     }
 
     public void setStepComplete(boolean complete) {
