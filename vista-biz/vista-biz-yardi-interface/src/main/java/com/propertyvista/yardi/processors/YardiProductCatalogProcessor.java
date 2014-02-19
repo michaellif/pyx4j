@@ -165,7 +165,7 @@ public class YardiProductCatalogProcessor {
             service.version().availableOnline().setValue(true);
         } else {
             if (isServiceChanged(service, typeData)) {
-                service = Persistence.secureRetrieveDraft(Service.class, service.getPrimaryKey());
+                service = Persistence.service().retrieve(Service.class, service.getPrimaryKey().asDraftKey());
             }
         }
 
@@ -232,7 +232,7 @@ public class YardiProductCatalogProcessor {
             feature.version().items().add(createFeatureItem(typeData.getArCode()));
         } else {
             if (isFeatureChanged(feature, typeData)) {
-                feature = Persistence.secureRetrieveDraft(Feature.class, feature.getPrimaryKey());
+                feature = Persistence.service().retrieve(Feature.class, feature.getPrimaryKey().asDraftKey());
             }
         }
 
