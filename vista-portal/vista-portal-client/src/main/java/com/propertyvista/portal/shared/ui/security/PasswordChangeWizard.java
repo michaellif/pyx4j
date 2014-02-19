@@ -69,7 +69,8 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
         get(proto().newPasswordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public FieldValidationError isValid() {
-                if (getComponent().getValue() == null || !getComponent().getValue().equals(get(proto().newPassword()).getValue())) {
+                if (getComponent().getValue() != null && !getComponent().getValue().isEmpty()
+                        && !getComponent().getValue().equals(get(proto().newPassword()).getValue())) {
                     return new FieldValidationError(getComponent(), i18n.tr("The passwords don't match."));
                 } else {
                     return null;

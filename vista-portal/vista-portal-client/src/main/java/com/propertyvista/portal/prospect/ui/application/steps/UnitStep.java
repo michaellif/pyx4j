@@ -128,9 +128,9 @@ public class UnitStep extends ApplicationWizardStep {
     }
 
     @Override
-    public void setStepSelected(boolean selected) {
-        super.setStepSelected(selected);
-        if (selected) {
+    public void onStepVizible(boolean visible) {
+        super.onStepVizible(visible);
+        if (visible) {
             setEditableState(selectedUnit.isValueEmpty());
         }
     }

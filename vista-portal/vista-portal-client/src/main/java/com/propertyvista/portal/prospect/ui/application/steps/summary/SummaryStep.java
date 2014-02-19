@@ -37,13 +37,13 @@ public class SummaryStep extends ApplicationWizardStep {
     }
 
     @Override
-    public void setStepSelected(final boolean selected) {
-        super.setStepSelected(selected);
+    public void onStepVizible(final boolean visible) {
+        super.onStepVizible(visible);
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
                 try {
-                    if (selected) {
+                    if (visible) {
                         form.setValue(getValue());
                     } else {
                         form.reset();

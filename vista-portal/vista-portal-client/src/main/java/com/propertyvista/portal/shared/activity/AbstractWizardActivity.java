@@ -48,7 +48,6 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-        view.reset();
         panel.setWidget(view);
     }
 
@@ -57,8 +56,8 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
     }
 
     protected void onDiscard() {
-        view.reset();
         view.setPresenter(null);
+        view.reset();
     }
 
     @Override
@@ -75,7 +74,6 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     @Override
     public void finish() {
-        view.reset();
         onFinish();
     }
 

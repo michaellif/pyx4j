@@ -107,12 +107,6 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         return getValue() == null || getValue().isEmpty();
     }
 
-    // TODO - here for testing; remove...
-    @Override
-    public void revalidate() {
-        super.revalidate();
-    }
-
     @Override
     public void setVisited(boolean flag) {
         super.setVisited(flag);
