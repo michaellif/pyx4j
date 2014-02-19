@@ -100,15 +100,22 @@ public class YardiGuestProcessor {
         Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         for (LeaseParticipant<?> lp : lease.leaseParticipants()) {
             Persistence.ensureRetrieve(lp.leaseTermParticipants(), AttachLevel.Attached);
-            if (Role.roommates().contains(lp.leaseTermParticipants().iterator().next().role().getValue())) {
-                result.add(getCustomer( //
+            Role role = lp.leaseTermParticipants().iterator().next().role().getValue();
+            if (Role.roommates().contains(role)) {
+                Customer roommate = getCustomer( //
                         CustomerInfo.ROOMMATE, //
                         lp.customer().person().name().firstName().getValue(), //
                         lp.customer().person().name().lastName().getValue(), //
                         getCurrentAddress(lp.customer()), //
                         lease.unit().building().propertyCode().getValue(), //
                         lp.getPrimaryKey().toString() // third-party room mate id
-                ));
+                );
+                if (Role.CoApplicant.equals(role)) {
+                    LeaseType leaseType = new LeaseType();
+                    leaseType.setResponsibleForLease(true);
+                    roommate.setLease(leaseType);
+                }
+                result.add(roommate);
             }
         }
         return result;

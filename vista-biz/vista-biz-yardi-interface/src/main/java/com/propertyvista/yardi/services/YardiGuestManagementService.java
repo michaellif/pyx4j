@@ -334,6 +334,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
         if (pId == null) {
             throw new YardiServiceException(SimpleMessageFormat.format("Main applicant is missing: {0}", tenantId));
         }
+
+        Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         if (lease.leaseParticipants().size() != participants.size()) {
             String msg = SimpleMessageFormat.format("Missing or invalid participants: found {0} instead of {1}", participants.size(), lease.leaseParticipants()
                     .size());
