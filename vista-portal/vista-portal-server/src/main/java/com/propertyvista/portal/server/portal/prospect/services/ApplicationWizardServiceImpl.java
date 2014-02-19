@@ -745,7 +745,20 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ServerSideFactory.create(PaymentFacade.class).validatePayment(pbo, VistaApplication.prospect);
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(pbo);
+    }
 
+    private void savePaymentMethod(OnlineApplication bo, OnlineApplicationDTO to) {
+        if (to.payment().storeInProfile().isBooleanTrue()) {
+            Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
+            Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
+
+            to.payment().paymentMethod().customer().set(ResidentPortalContext.getCustomer());
+            to.payment().paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+
+            ServerSideFactory.create(PaymentFacade.class)
+                    .validatePaymentMethod(lease.billingAccount(), to.payment().paymentMethod(), VistaApplication.prospect);
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(to.payment().paymentMethod(), lease.unit().building());
+        }
     }
 
     private void saveApplicationData(OnlineApplicationDTO to, boolean submit) {
@@ -791,11 +804,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease(), submit);
 
         if (submit) {
-            if (bo.role().getValue() == LeaseTermParticipant.Role.Applicant) {
-                savePaymentData(bo, to);
-            }
+            savePaymentData(bo, to);
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(bo);
         } else {
+            savePaymentMethod(bo, to);
+
             // update application status:
             bo.status().setValue(OnlineApplication.Status.Incomplete);
             Persistence.service().merge(bo);
