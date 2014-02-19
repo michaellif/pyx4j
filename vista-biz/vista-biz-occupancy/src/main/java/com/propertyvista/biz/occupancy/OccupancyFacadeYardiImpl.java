@@ -145,30 +145,17 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
     }
 
     @Override
-    public void reserve(Key unitId, Lease lease) {
-        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), null);
-    }
-
-    @Override
-    public LogicalDate isReserveAvailable(Key unitId) {
-        return OccupancyFacade.MIN_DATE;
-    }
-
-    @Override
-    public void unreserve(Key unitId) {
-        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, unitId), SystemDateManager.getLogicalDate());
-    }
-
-    @Override
-    public boolean isUnreserveAvailable(Key unitId) {
-        return true;
-    }
-
-    @Override
     public void occupy(Lease leaseId) {
         Lease lease = leaseId.createIdentityStub();
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.IdOnly);
         setAvailability(EntityFactory.createIdentityStub(AptUnit.class, lease.unit().getPrimaryKey()), null);
+    }
+
+    @Override
+    public void unoccupy(Lease leaseId) {
+        Lease lease = leaseId.createIdentityStub();
+        Persistence.ensureRetrieve(lease.unit(), AttachLevel.IdOnly);
+        setAvailability(EntityFactory.createIdentityStub(AptUnit.class, lease.unit().getPrimaryKey()), SystemDateManager.getLogicalDate());
     }
 
     @Override

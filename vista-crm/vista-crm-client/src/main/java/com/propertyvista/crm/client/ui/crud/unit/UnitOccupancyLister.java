@@ -18,7 +18,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -45,8 +44,6 @@ public class UnitOccupancyLister extends AbstractLister<AptUnitOccupancySegment>
     protected void onItemSelect(AptUnitOccupancySegment item) {
         if (item.status().getValue() == Status.occupied) {
             AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Lease.class).formViewerPlace(item.lease().getPrimaryKey()));
-        } else if (item.status().getValue() == Status.reserved) {
-            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(item.lease().getPrimaryKey()));
         }
     }
 }

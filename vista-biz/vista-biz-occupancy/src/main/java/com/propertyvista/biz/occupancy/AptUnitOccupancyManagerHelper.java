@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -34,8 +35,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
  * This class contains utility methods for unit occupancy manager.
  */
 public class AptUnitOccupancyManagerHelper {
-
-    private static final long MILLIS_IN_DAY = 1000l * 60l * 60l * 24l;
 
     public static void merge(AptUnit unit, LogicalDate startingAt, List<Status> relevantStatuses, MergeHandler handler) {
         merge(unit.getPrimaryKey(), startingAt, relevantStatuses, handler);
@@ -64,7 +63,7 @@ public class AptUnitOccupancyManagerHelper {
         if (i.hasNext()) {
             while (i.hasNext()) {
                 AptUnitOccupancySegment s2 = i.next();
-                if (s1.dateTo().getValue().equals(substractDay(s2.dateFrom().getValue())) & handler.isMergeable(s1, s2)) {
+                if (s1.dateTo().getValue().equals(DateUtils.daysAdd(s2.dateFrom().getValue(), -1)) & handler.isMergeable(s1, s2)) {
                     AptUnitOccupancySegment merged = EntityFactory.create(AptUnitOccupancySegment.class);
                     merged.unit().id().setValue(unitId);
                     merged.dateFrom().setValue(s1.dateFrom().getValue());
@@ -122,7 +121,7 @@ public class AptUnitOccupancyManagerHelper {
             newSegment.dateTo().setValue(segment.dateTo().getValue());
             handler.updateAfterSplitPointSegment(newSegment);
 
-            segment.dateTo().setValue(substractDay(splitDay));
+            segment.dateTo().setValue(DateUtils.daysAdd(splitDay, -1));
             handler.updateBeforeSplitPointSegment(segment);
 
             Persistence.service().merge(segment);
@@ -192,14 +191,6 @@ public class AptUnitOccupancyManagerHelper {
         } else if (segment.status().getValue() != status) {
             throw new IllegalStateException("expected segment with status that equals " + status + " but got " + segment.status().getValue());
         }
-    }
-
-    public static LogicalDate substractDay(LogicalDate date) {
-        return new LogicalDate(date.getTime() - MILLIS_IN_DAY);
-    }
-
-    public static LogicalDate addDay(LogicalDate date) {
-        return new LogicalDate(date.getTime() + MILLIS_IN_DAY);
     }
 
     public static LogicalDate minDate(LogicalDate d1, LogicalDate d2) {

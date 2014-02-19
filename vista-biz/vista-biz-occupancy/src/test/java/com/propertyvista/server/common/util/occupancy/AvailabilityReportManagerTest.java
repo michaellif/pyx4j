@@ -46,8 +46,7 @@ public class AvailabilityReportManagerTest extends AvailabilityReportManagerTest
     @Test
     public void testApproveLease() {
         Lease lease = createLease("2012-02-20", "2012-02-21", "2013-02-30");
-        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
-        setup().from("2012-02-18").to("2012-02-19").status(Status.reserved).withLease(lease).x();
+        setup().fromTheBeginning().to("2012-02-19").status(Status.available).x();
         setup().from("2012-02-20").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
 
         computeAvailabilityOn("2012-02-18");
@@ -66,17 +65,6 @@ public class AvailabilityReportManagerTest extends AvailabilityReportManagerTest
         computeAvailabilityOn("2012-02-20");
 
         expect().from("2012-02-20").toTheEndOfTime().occupied().x();
-    }
-
-    @Test
-    public void testReserve() {
-        Lease lease = createLease("2012-02-20", "2012-02-21", "2013-02-30");
-        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
-        setup().from("2012-02-18").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
-
-        computeAvailabilityOn("2012-02-18");
-
-        expect().from("2012-02-18").toTheEndOfTime().vacant("2012-02-18").scoped(RentReadiness.RentReady).rented("2012-02-20", "2012-02-21").x();
     }
 
     @Test
@@ -112,7 +100,7 @@ public class AvailabilityReportManagerTest extends AvailabilityReportManagerTest
         Lease lease2 = createLease("2013-04-01", "2013-04-02", "2014-04-01");
         setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
         setup().from("2012-02-20").to("2013-03-01").status(Status.occupied).withLease(lease).x();
-        setup().from("2013-03-02").to("2013-03-31").status(Status.reserved).withLease(lease2).x();
+        setup().from("2013-03-02").to("2013-03-31").status(Status.available).x();
         setup().from("2013-04-01").toTheEndOfTime().status(Status.occupied).withLease(lease2).x();
 
         computeAvailabilityOn("2013-02-01");
@@ -144,7 +132,7 @@ public class AvailabilityReportManagerTest extends AvailabilityReportManagerTest
         setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
         setup().from("2012-02-20").to("2013-03-01").status(Status.occupied).withLease(lease1).x();
         setup().from("2013-03-02").to("2013-03-14").status(Status.renovation).x();
-        setup().from("2013-03-15").to("2013-03-20").status(Status.reserved).withLease(lease2).x();
+        setup().from("2013-03-15").to("2013-03-20").status(Status.available).x();
         setup().from("2013-03-21").toTheEndOfTime().status(Status.occupied).withLease(lease2).x();
 
         computeAvailabilityOn("2013-02-01");

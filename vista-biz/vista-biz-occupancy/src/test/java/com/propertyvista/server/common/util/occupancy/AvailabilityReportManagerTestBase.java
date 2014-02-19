@@ -166,7 +166,7 @@ public class AvailabilityReportManagerTestBase {
         }
 
         public T withLease(Lease lease) {
-            if (segment.status().getValue().equals(Status.occupied) | segment.status().getValue().equals(Status.reserved)) {
+            if (segment.status().getValue().equals(Status.occupied)) {
                 segment.lease().set(lease);
                 return self();
             } else {
@@ -194,10 +194,6 @@ public class AvailabilityReportManagerTestBase {
                 throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set", segment.dateTo().getMeta().getCaption()));
             }
             if (segment.status().getValue().equals(Status.occupied) & segment.lease().isNull()) {
-                throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
-                        Status.occupied));
-            }
-            if (segment.status().getValue().equals(Status.reserved) & segment.lease().isNull()) {
                 throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
                         Status.occupied));
             }

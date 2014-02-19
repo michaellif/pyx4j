@@ -48,12 +48,6 @@ public interface AptUnitOccupancySegment extends IEntity {
         migrated,
 
         /**
-         * unit has lease that starts in the future and is not available for another lease
-         * (from the point of view of availability report it's leased, not in "net exposure")
-         */
-        reserved,
-
-        /**
          * Unit is vacant (i.e. no one lives there), but is not ready for marketing, needs some action in order to become available.
          * or example: unit is leased right now, and a person gave a notice, it becomes vacant in the future (i.e. not yet scoped).
          */

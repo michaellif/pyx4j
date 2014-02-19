@@ -942,13 +942,7 @@ public abstract class LeaseAbstractManager {
         switch (lease.status().getValue()) {
         case NewLease:
         case Application:
-// TODO: remove this :
-            if (ServerSideFactory.create(OccupancyFacade.class).isReserveAvailable(lease.unit().getPrimaryKey()) != null) {
-                ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
-            }
-            // END REMOVE             
             break;
-        // =================================
         case ExistingLease:
             ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
             break;

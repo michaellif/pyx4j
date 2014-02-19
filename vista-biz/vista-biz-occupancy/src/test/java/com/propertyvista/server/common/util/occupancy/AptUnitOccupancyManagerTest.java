@@ -35,139 +35,17 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    public void testReserveWhenAvailable() {
-        setup().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
-
-        now("2011-02-03");
-
-        Lease lease = createLease("2011-02-15", "2011-10-25");
-        getUOM().reserve(unitId, lease);
-
-        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
-        assertExpectedTimeline();
-        assertUnitIsNotAvailable();
-    }
-
-    @Test
-    public void testReserveWhenLeased() {
-        Lease lease1 = createLease("2011-02-02", "2011-10-01");
-        setup().fromTheBeginning().to("2011-02-01").status(Status.available).x();
-        setup().from("2011-02-02").to("2011-10-02").status(Status.occupied).withLease(lease1).x();
-        setup().from("2011-10-03").toTheEndOfTime().status(Status.available).x();
-
-        now("2011-09-03");
-
-        Lease lease2 = createLease("2011-10-05", "2012-12-31");
-        getUOM().reserve(unitId, lease2);
-
-        expect().fromTheBeginning().to("2011-02-01").status(Status.available).x();
-        expect().from("2011-02-02").to("2011-10-02").status(Status.occupied).withLease(lease1).x();
-        expect().from("2011-10-03").toTheEndOfTime().status(Status.reserved).withLease(lease2).x();
-        assertExpectedTimeline();
-        assertUnitIsNotAvailable();
-    }
-
-    @Test
-    public void testUnreserveFutureReserved() {
-        Lease lease = createLease("2011-02-15", "2011-10-25");
-        setup().fromTheBeginning().to("2011-02-01").status(Status.available).x();
-        setup().from("2011-02-02").to("2011-02-02").status(Status.renovation).x();
-        setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
-
-        now("2011-02-01");
-
-        getUOM().unreserve(unitId);
-
-        expect().fromTheBeginning().to("2011-02-01").status(Status.available).x();
-        expect().from("2011-02-02").to("2011-02-02").status(Status.renovation).x();
-        expect().from("2011-02-03").toTheEndOfTime().status(Status.available).x();
-        assertExpectedTimeline();
-        assertUnitIsAvailableFrom("2011-02-03");
-    }
-
-    @Test
-    public void testUnreservePresentReserved() {
-        Lease lease = createLease("2011-02-15", "2011-10-25");
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
-
-        now("2011-02-05");
-
-        getUOM().unreserve(unitId);
-
-        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-02-03").to("2011-02-04").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-05").toTheEndOfTime().status(Status.available).x();
-        assertExpectedTimeline();
-        assertUnitIsAvailableFrom("2011-02-05");
-    }
-
-    @Test
-    public void testUnreservePresentReservedAndApprovedV1() {
-        Lease lease = createLease("2011-02-15", "2011-10-25");
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
-
-        now("2011-02-05");
-
-        getUOM().unreserve(unitId);
-
-        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-02-03").to("2011-02-04").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-05").toTheEndOfTime().status(Status.available).x();
-        assertExpectedTimeline();
-        assertUnitIsAvailableFrom("2011-02-05");
-    }
-
-    @Test
-    public void testUnreservePresentReservedAndApprovedV2() {
-        Lease lease = createLease("2011-02-15", "2011-10-25");
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
-
-        now("2011-02-03");
-
-        getUOM().unreserve(unitId);
-
-        expect().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
-        assertExpectedTimeline();
-        assertUnitIsAvailableFrom("2011-02-03");
-    }
-
-    @Test
-    public void testApproveLeaseWhenReservedInFuture() {
-        Lease lease = createLease("2011-02-15", "2011-10-25");
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
-
-        now("2011-02-10");
-
-        getUOM().occupy(lease.<Lease> createIdentityStub());
-
-        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
-        assertExpectedTimeline();
-        assertUnitIsNotAvailable();
-    }
-
-    @Test
     public void testScopeAvailable() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().fromTheBeginning().to("2011-02-14").status(Status.available).x();
         setup().from("2011-01-15").to("2011-10-25").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.pending).x();
 
         now("2011-09-25");
         getUOM().scopeAvailable(unitId);
 
-        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().fromTheBeginning().to("2011-02-14").status(Status.available).x();
         expect().from("2011-01-15").to("2011-10-25").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
@@ -192,16 +70,14 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     public void testScopeRenovationWhenLeased() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().fromTheBeginning().to("2011-02-14").status(Status.available).x();
         setup().from("2011-02-15").to("2011-10-25").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.pending).x();
 
         now("2011-09-25");
         getUOM().scopeRenovation(unitId, asDate("2011-11-10"));
 
-        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().fromTheBeginning().to("2011-02-14").status(Status.available).x();
         expect().from("2011-02-15").to("2011-10-25").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-26").to("2011-11-10").status(Status.renovation).x();
         expect().from("2011-11-11").toTheEndOfTime().status(Status.available).x();
@@ -213,16 +89,14 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     public void testScopeRenovationWhenVacant() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().fromTheBeginning().to("2011-02-14").status(Status.available).x();
         setup().from("2011-02-15").to("2011-10-25").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.pending).x();
 
         now("2011-11-05");
         getUOM().scopeRenovation(unitId, asDate("2011-11-10"));
 
-        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().fromTheBeginning().to("2011-02-14").status(Status.available).x();
         expect().from("2011-02-15").to("2011-10-25").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-26").to("2011-11-04").status(Status.pending).x();
         expect().from("2011-11-05").to("2011-11-10").status(Status.renovation).x();

@@ -39,6 +39,7 @@ public interface OccupancyFacade {
      * @return an occupancy segment of the unit that contains the provided date.
      */
     // TODO refactor this function it's not good: should return only minimal information: i.e sometimes occupancy model is not available
+    // TODO i'm not sure this function shouild exist
     AptUnitOccupancySegment getOccupancySegment(AptUnit unit, LogicalDate date);
 
     void setupNewUnit(AptUnit unit);
@@ -100,18 +101,11 @@ public interface OccupancyFacade {
     MakeVacantConstraintsDTO getMakeVacantConstraints(Key unitId);
 
     /**
-     * Create lease in draft mode. To create lease it first must be created in draft mode via {@link #reserve()} and then {@link #approveLease()}.
-     */
-    @Deprecated
-    void reserve(Key unitId, Lease lease);
-
-    /**
-     * Has UofW
+     * (Has Unit of Work)
      */
     void reserve(Lease lease, int durationHours);
 
     /**
-     * 
      * @param unitId
      * @return empty pair in case of no reservation exist; Date - reservation to (until);
      */
@@ -130,21 +124,9 @@ public interface OccupancyFacade {
 
     Criterion buildAvalableCriteria(AptUnit unitProto, AptUnitOccupancySegment.Status status, Date from, Date fromDeadline);
 
-    /**
-     * @return the starting day of the 'available' segment, i.e. the minimum day that can be given to lease.leasFrom; or null, if it can't be done
-     */
-    LogicalDate isReserveAvailable(Key unitId);
-
-    /**
-     * Cancel lease draft.
-     */
-    @Deprecated
-    void unreserve(Key unitId);
-
-    @Deprecated
-    boolean isUnreserveAvailable(Key unitId);
-
     void occupy(Lease leaseId);
+
+    void unoccupy(Lease leaseId);
 
     boolean isOccupyAvaialble(Key unitId);
 
@@ -165,4 +147,5 @@ public interface OccupancyFacade {
      * Lease availability.
      */
     boolean isAvailableForExistingLease(Key unitId);
+
 }

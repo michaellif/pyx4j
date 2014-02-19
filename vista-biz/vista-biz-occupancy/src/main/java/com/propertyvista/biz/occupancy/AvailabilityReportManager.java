@@ -103,9 +103,6 @@ public class AvailabilityReportManager {
             case available:
                 available(status, future, current.dateFrom().getValue());
                 break;
-            case reserved:
-                reserved(status, current, current.dateFrom().getValue());
-                break;
             case occupied:
                 leased(status, current, future);
                 break;
@@ -152,7 +149,7 @@ public class AvailabilityReportManager {
         status.rentedFromDay().setValue(null);
 
         for (AptUnitOccupancySegment segment : future) {
-            if (segment.status().getValue() == Status.occupied | segment.status().getValue() == Status.reserved) {
+            if (segment.status().getValue() == Status.occupied) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                 status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
@@ -160,20 +157,6 @@ public class AvailabilityReportManager {
                 break;
             }
         }
-    }
-
-    private void reserved(UnitAvailabilityStatus status, AptUnitOccupancySegment current, LogicalDate vacantSince) {
-        status.vacancyStatus().setValue(Vacancy.Vacant);
-        status.vacantSince().setValue(vacantSince);
-        // implicit: status.moveOutDay().setValue(null)
-
-        status.scoping().setValue(Scoping.Scoped);
-        status.rentReadinessStatus().setValue(RentReadiness.RentReady);
-
-        status.rentedStatus().setValue(RentedStatus.Rented);
-        status.rentedFromDay().setValue(current.lease().currentTerm().termFrom().getValue());
-        status.moveInDay().setValue(current.lease().expectedMoveIn().getValue());
-        status.unitRent().setValue(current.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
     }
 
     private void leased(UnitAvailabilityStatus status, AptUnitOccupancySegment current, List<AptUnitOccupancySegment> future) {
@@ -215,7 +198,6 @@ public class AvailabilityReportManager {
                     status.rentedStatus().setValue(RentedStatus.OffMarket);
                 }
                 break;
-            case reserved:
             case occupied:
                 if (status.rentedStatus() != null) {
                     if (status.scoping().getValue() == null) {
@@ -247,7 +229,7 @@ public class AvailabilityReportManager {
         // implicit: status.rentedFromDate().setValue(null);
 
         for (AptUnitOccupancySegment segment : future) {
-            if (segment.status().getValue() == Status.occupied | segment.status().getValue() == Status.reserved) {
+            if (segment.status().getValue() == Status.occupied) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                 status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());

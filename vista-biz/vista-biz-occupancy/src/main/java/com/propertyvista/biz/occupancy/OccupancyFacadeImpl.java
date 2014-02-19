@@ -13,14 +13,11 @@
  */
 package com.propertyvista.biz.occupancy;
 
-import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.addDay;
-import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.assertStatus;
 import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.merge;
 import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancySegment;
 import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.split;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -41,6 +38,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
@@ -55,7 +53,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.misc.VistaTODO;
 
 public class OccupancyFacadeImpl implements OccupancyFacade {
 
@@ -222,7 +219,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                         segment.status().setValue(Status.renovation);
                     }
                 });
-                split(renoSeg, addDay(renovationEndDate), new SplittingHandler() {
+                split(renoSeg, DateUtils.daysAdd(renovationEndDate, 1), new SplittingHandler() {
 
                     @Override
                     public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
@@ -250,7 +247,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                     prevSegment.dateTo().setValue(renovationEndDate);
                     Persistence.service().persist(prevSegment);
                 }
-                setUnitAvailableFrom(unitPk, addDay(renovationEndDate));
+                setUnitAvailableFrom(unitPk, DateUtils.daysAdd(renovationEndDate, 1));
                 new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
                 return;
             }
@@ -318,103 +315,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void reserve(Key unitPk, final Lease lease) {
-        LogicalDate leaseFrom = lease.currentTerm().termFrom().getValue();
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-
-        // FIXME
-        if (VistaTODO.checkLeaseDatesOnUnitReservation & leaseFrom.before(now)) {
-            throw new IllegalStateException(i18n.tr("Operation 'reserve unit' is not permitted, the lease from date ({0}) is before the present date ({1})",
-                    leaseFrom, now));
-        }
-
-        if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            createAvailableSegment(unitPk, leaseFrom);
-        }
-
-        List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, leaseFrom);
-        if (occupancy.size() != 1) {
-            throw new UserRuntimeException(i18n.tr("Operation 'reserve unit' is not permitted, the unit is not available after {0}", leaseFrom));
-        }
-        AptUnitOccupancySegment segment = occupancy.get(0);
-        assertStatus(segment, Status.available);
-
-        LogicalDate reservedFrom = now.before(segment.dateFrom().getValue()) ? segment.dateFrom().getValue() : now;
-
-        split(segment, reservedFrom, new SplittingHandler() {
-            @Override
-            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-                assertStatus(segment, Status.available);
-            }
-
-            @Override
-            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                segment.status().setValue(Status.reserved);
-                segment.lease().set(lease);
-            }
-        });
-        setUnitAvailableFrom(unitPk, null);
-        new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
-    }
-
-    @Override
-    public void unreserve(Key unitPk) {
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        List<AptUnitOccupancySegment> futureOccupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, now);
-        AptUnitOccupancySegment reservedSegment = null;
-        for (AptUnitOccupancySegment futureSegment : futureOccupancy) {
-            if (futureSegment.status().getValue() == Status.reserved) {
-                reservedSegment = futureSegment;
-                break;
-            }
-        }
-        if (reservedSegment == null) {
-            throw new UserRuntimeException(i18n.tr("This unit is not reserved!"));
-        }
-
-        LogicalDate unreserveFrom = reservedSegment.dateFrom().getValue().after(now) ? reservedSegment.dateFrom().getValue() : now;
-
-        split(reservedSegment, unreserveFrom, new SplittingHandler() {
-            @Override
-            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-            }
-
-            @Override
-            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-            }
-        });
-        EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        criteria.add(PropertyCriterion.ge(criteria.proto().dateFrom(), unreserveFrom));
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unitPk));
-        Persistence.service().delete(criteria);
-
-        AptUnitOccupancySegment availableSegment = EntityFactory.create(AptUnitOccupancySegment.class);
-        availableSegment.unit().setPrimaryKey(unitPk);
-        availableSegment.status().setValue(Status.available);
-        availableSegment.dateFrom().setValue(unreserveFrom);
-        availableSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-        Persistence.service().persist(availableSegment);
-
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.setTime(unreserveFrom);
-        calendar.add(Calendar.DAY_OF_YEAR, -1);
-        merge(unitPk, new LogicalDate(calendar.getTime()), Arrays.asList(Status.available), new MergeHandler() {
-            @Override
-            public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
-                merged.status().setValue(Status.available);
-            }
-
-            @Override
-            public boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
-                return true;
-            }
-        });
-        new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
-        setUnitAvailableFrom(unitPk, unreserveFrom);
-    }
-
-    @Override
-    public void occupy(Lease leaseId) {
+    public void occupy(final Lease leaseId) {
         Lease lease = leaseId.duplicate();
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
@@ -428,7 +329,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         }
 
         for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.available || segment.status().getValue() == Status.reserved) {
+            if (segment.status().getValue() == Status.available) {
                 segmentToOccupy = segment;
                 break;
             }
@@ -444,6 +345,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 @Override
                 public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
                     segment.status().setValue(Status.occupied);
+                    segment.lease().set(leaseId);
                 }
             });
 
@@ -451,6 +353,27 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             return;
         } else {
             throw new IllegalStateException("'approveLease' operation failed: a 'reserved' or 'available' segment was not found");
+        }
+    }
+
+    @Override
+    public void unoccupy(Lease leaseId) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+        criteria.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.occupied);
+        criteria.eq(criteria.proto().lease(), leaseId);
+        criteria.eq(criteria.proto().dateTo(), OccupancyFacade.MAX_DATE);
+
+        AptUnitOccupancySegment segment = Persistence.service().retrieve(criteria);
+        if (segment != null) {
+            segment.status().setValue(Status.available);
+            segment.lease().set(null);
+            Persistence.service().persist(segment);
+
+            new AvailabilityReportManager(lease.unit().getPrimaryKey()).generateUnitAvailablity(SystemDateManager.getLogicalDate());
+        } else {
+            throw new IllegalStateException("An 'occupied' segment for this lease was not found");
         }
     }
 
@@ -471,9 +394,25 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             throw new OccupancyOperationException(
                     i18n.tr("Occupied segment was not found. Please ensure that the unit is not leased, reserved or scheduled for renovation"));
         }
-        if (moveOutDate.getTime() < occupiedSegment.lease().leaseFrom().getValue().getTime()) {
+        if (moveOutDate.compareTo(occupiedSegment.lease().leaseFrom().getValue()) < 0) {
             throw new OccupancyOperationException(i18n.tr("Impossible to move out: move out date is before lease start date"));
         }
+
+        if (moveOutDate.compareTo(occupiedSegment.dateTo().getValue()) > 0) {
+            // if we reschedule forward, we check that move out date is not set on forbidden segments,
+            // that might have appeared after current move out date
+            EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+            criteria.eq(criteria.proto().unit(), unitPk);
+            criteria.le(criteria.proto().dateFrom(), moveOutDate);
+            criteria.ge(criteria.proto().dateTo(), moveOutDate);
+            AptUnitOccupancySegment segment = Persistence.service().retrieve(criteria);
+            if (segment != null && (segment.status().getValue() == Status.occupied || segment.status().getValue() == Status.renovation)) {
+                throw new OccupancyOperationException("cannot reschedule moveout because the unit=" + unitPk + " is scheduled for "
+                        + segment.status().getValue().name());
+            }
+
+        }
+
         // get the next segment or create a new next segment if a next segment doesn't exist
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(occupiedSegment.dateTo().getValue());
@@ -497,15 +436,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         case migrated:
             throw new OccupancyOperationException(i18n.tr("It's impossible to move out, since this unit is leased in the future"));
         case available:
-            unitAvailableFrom = dayAfterMoveOutDate;
-        case pending:
-            nextSegment.dateFrom().setValue(dayAfterMoveOutDate);
-            Persistence.service().merge(nextSegment);
-            break;
-        case reserved:
-            if (nextSegment.lease().leaseFrom().getValue().getTime() < dayAfterMoveOutDate.getTime()) {
-                throw new OccupancyOperationException(i18n.tr("It's imposible to move out, since the unit is reserved on move out date"));
+            if (nextSegment.dateTo().getValue().compareTo(OccupancyFacade.MAX_DATE) == 0) {
+                unitAvailableFrom = dayAfterMoveOutDate;
             }
+        case pending:
             nextSegment.dateFrom().setValue(dayAfterMoveOutDate);
             Persistence.service().merge(nextSegment);
             break;
@@ -514,14 +448,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 throw new OccupancyOperationException(i18n.tr("It's imposible to move out, since the unit is leased on move out date"));
             } else {
                 AptUnitOccupancySegment reservedSegment = EntityFactory.create(AptUnitOccupancySegment.class);
-                reservedSegment.status().setValue(Status.reserved);
+                reservedSegment.status().setValue(Status.available);
                 reservedSegment.dateFrom().setValue(dayAfterMoveOutDate);
-
-                cal.setTime(nextSegment.dateFrom().getValue());
-                cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
-                reservedSegment.dateTo().setValue(new LogicalDate(cal.getTime()));
+                reservedSegment.dateTo().setValue(DateUtils.daysAdd(nextSegment.dateFrom().getValue(), -1));
                 reservedSegment.unit().setPrimaryKey(unitPk);
-                reservedSegment.lease().setPrimaryKey(nextSegment.lease().getPrimaryKey());
 
                 Persistence.service().merge(reservedSegment);
             }
@@ -555,6 +485,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         }
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
         setUnitAvailableFrom(unitPk, unitAvailableFrom);
+
     }
 
     @Override
@@ -562,14 +493,14 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         assert unitPk != null;
 
         CancelMoveOutConstraintsDTO constraints = getCancelMoveOutConstraints(unitPk);
-        if (!constraints.canCancelMoveOut().isBooleanTrue()) {
+        if (!constraints.canCancelMoveOut().getValue(true)) {
             throw new OccupancyOperationException("cancelMoveOut cannot be performed due to: " + constraints.reason().getValue());
         }
 
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
         AptUnitOccupancySegment leasedSegment = retrieveOccupancySegment(unitPk, now);
         EntityQueryCriteria<AptUnitOccupancySegment> delete = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        delete.add(PropertyCriterion.ge(delete.proto().dateFrom(), addDay(leasedSegment.dateTo().getValue())));
+        delete.add(PropertyCriterion.ge(delete.proto().dateFrom(), DateUtils.daysAdd(leasedSegment.dateTo().getValue(), 1)));
         Persistence.service().delete(delete);
         leasedSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
         Persistence.service().merge(leasedSegment);
@@ -651,7 +582,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate maxVacantFromCandidate = null;
         for (AptUnitOccupancySegment segment : occupancy) {
             Status segStatus = segment.status().getValue();
-            if ((segStatus == Status.reserved | segStatus == Status.occupied) & minVacantFromCandidate != null) {
+            if (segStatus == Status.occupied && minVacantFromCandidate != null) {
                 return null;
             }
             if (minVacantFromCandidate == null) {
@@ -689,41 +620,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public LogicalDate isReserveAvailable(Key unitPk) {
-        LogicalDate start = new LogicalDate(SystemDateManager.getDate());
-        if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            return start; // newly created unit - can be scoped to any state!..
-        }
-
-        List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, start);
-        for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.available) {
-                LogicalDate segmentStart = segment.dateFrom().getValue();
-                return segmentStart.before(start) ? start : segmentStart;
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public boolean isUnreserveAvailable(Key unitPk) {
-        LogicalDate start = new LogicalDate(SystemDateManager.getDate());
-        if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            return true; // newly created unit - can be scoped to any state!..
-        }
-
-        List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, start);
-        for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.reserved) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
     public boolean isOccupyAvaialble(Key unitPk) {
         LogicalDate start = new LogicalDate(SystemDateManager.getDate());
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
@@ -732,11 +628,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
         List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, start);
         for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.reserved) {
+            if (segment.status().getValue() == Status.available & segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -752,7 +647,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             constraints.reason().setValue(ConstraintsReason.MoveOutNotExpected);
             return constraints;
         } else {
-            List<AptUnitOccupancySegment> futureOccupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, addDay(segment.dateTo().getValue()));
+            List<AptUnitOccupancySegment> futureOccupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk,
+                    DateUtils.daysAdd(segment.dateTo().getValue(), 1));
             CancelMoveOutConstraintsDTO constraints = EntityFactory.create(CancelMoveOutConstraintsDTO.class);
             constraints.canCancelMoveOut().setValue(true);
             for (AptUnitOccupancySegment seg : futureOccupancy) {
@@ -763,7 +659,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
                 case migrated:
                 case occupied:
-                case reserved:
                     constraints.canCancelMoveOut().setValue(false);
                     constraints.reason().setValue(ConstraintsReason.LeasedOrReserved);
                     constraints.leaseStub().set(seg.lease().createIdentityStub());
@@ -897,38 +792,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         return segment != null && segment.status().getValue() == Status.pending && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
     }
 
-    private void setUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
-        EntityQueryCriteria<AptUnitEffectiveAvailability> criteria = EntityQueryCriteria.create(AptUnitEffectiveAvailability.class);
-        criteria.eq(criteria.proto().unit(), unitPk);
-        AptUnitEffectiveAvailability availability = Persistence.service().retrieve(criteria);
-        availability.availableForRent().setValue(newAvaialbleFrom);
-        Persistence.service().merge(availability);
-    }
-
-    private boolean isInProductCatalog(Key unitPk) {
-        AptUnit unit = EntityFactory.createIdentityStub(AptUnit.class, unitPk);
-        EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
-        criteria.eq(criteria.proto().product().holder().catalog().building().units(), unit);
-        criteria.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices());
-        criteria.eq(criteria.proto().element(), unit);
-        return Persistence.service().exists(criteria);
-    }
-
-    /*
-     * Used in work-flow logic for newly created units in case of assigning them
-     * to the existing (pre-dated) lease!
-     */
-    private void createAvailableSegment(Key unitPk, LogicalDate from) {
-        AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
-        segment.status().setValue(Status.available);
-        segment.dateFrom().setValue(from);
-        segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-        segment.lease().setValue(null);
-        segment.unit().setPrimaryKey(unitPk);
-        setUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
-        Persistence.service().merge(segment);
-    }
-
     @Override
     public void reserve(final Lease lease, final int durationHours) {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
@@ -974,4 +837,37 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public void setAvailability(AptUnit unit, LogicalDate availableForRent) {
         throw new Error("unsupported");
     }
+
+    private void setUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
+        EntityQueryCriteria<AptUnitEffectiveAvailability> criteria = EntityQueryCriteria.create(AptUnitEffectiveAvailability.class);
+        criteria.eq(criteria.proto().unit(), unitPk);
+        AptUnitEffectiveAvailability availability = Persistence.service().retrieve(criteria);
+        availability.availableForRent().setValue(newAvaialbleFrom);
+        Persistence.service().merge(availability);
+    }
+
+    private boolean isInProductCatalog(Key unitPk) {
+        AptUnit unit = EntityFactory.createIdentityStub(AptUnit.class, unitPk);
+        EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
+        criteria.eq(criteria.proto().product().holder().catalog().building().units(), unit);
+        criteria.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices());
+        criteria.eq(criteria.proto().element(), unit);
+        return Persistence.service().exists(criteria);
+    }
+
+    /*
+     * Used in work-flow logic for newly created units in case of assigning them
+     * to the existing (pre-dated) lease!
+     */
+    private void createAvailableSegment(Key unitPk, LogicalDate from) {
+        AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
+        segment.status().setValue(Status.available);
+        segment.dateFrom().setValue(from);
+        segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+        segment.lease().setValue(null);
+        segment.unit().setPrimaryKey(unitPk);
+        setUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
+        Persistence.service().merge(segment);
+    }
+
 }
