@@ -91,6 +91,11 @@ public class PreauthorizedPaymentsVisorController extends AbstractVisorControlle
         save(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
+                visor.populate(new Command() {
+                    @Override
+                    public void execute() {
+                    }
+                });
             }
         }, visor.getValue());
     }
