@@ -115,12 +115,19 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
     }
 
     public void testCase() {
-        createLease("01-Dec-2013", "30-Nov-2014");
+        createLease("01-Dec-2013", "30-Nov-2014", new BigDecimal("789.99"), null);
+        setUnitNo("0001");
+
+        if (false) {
+            // create second lease for another test
+            createLease("01-Dec-2013", "30-Nov-2014", new BigDecimal("789.99"), null);
+            setUnitNo("AV008");
+        }
+
         fixTenantName(null);
         setMoveIn(new LogicalDate());
         setPropertyCode("gran0002");
         setFloorplan("2bdrm", 2);
-        setUnitNo("0001");
         setCurrentAddress(getAddress());
 
         addOutdoorParking();
@@ -128,29 +135,40 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
         Lease lease = retrieveLease();
 
+        log.info("Created Lease: {}", lease.getPrimaryKey().toString());
+
         try {
             ServerSideFactory.create(YardiApplicationFacade.class).validateApplicationAcceptance(lease.unit().building());
-            // clear guests if added earlier
-            ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
-            log.info("Created Guest: {}", retrieveLease().leaseApplication().yardiApplicationId().getValue());
 
+            ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
+            lease = retrieveLease();
+            log.info("Created Guest: {}", lease.leaseApplication().yardiApplicationId().getValue());
+
+            // NOTE: if added before, the room mates must be removed manually
             addCoTenant();
             addGuarantor();
 
             ServerSideFactory.create(YardiApplicationFacade.class).addLeaseParticipants(lease);
+            lease = retrieveLease();
             Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
             for (LeaseParticipant<?> p : lease.leaseParticipants()) {
                 Persistence.ensureRetrieve(p.leaseTermParticipants(), AttachLevel.Attached);
                 log.info("  Participant {} = {}", p.leaseTermParticipants().iterator().next().role().getValue().name(), p.yardiApplicantId().getValue());
             }
 
-            if (false) {
-                ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(lease);
-                log.info("Unit held for: {}", lease.leaseApplication().yardiApplicationId().getValue());
+            ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(retrieveLease());
+            lease = retrieveLease();
+            log.info("Unit held for: {}", lease.leaseApplication().yardiApplicationId().getValue());
 
-                ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
-                log.info("Signed lease: {}", lease.leaseId().getValue());
+            if (false) {
+                ServerSideFactory.create(YardiApplicationFacade.class).unreserveUnit(retrieveLease());
+                lease = retrieveLease();
+                log.info("Unit released for: {}", lease.leaseApplication().yardiApplicationId().getValue());
             }
+
+            ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
+            lease = retrieveLease();
+            log.info("Signed lease: {}", lease.leaseId().getValue());
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(e.getMessage(), e);
         } catch (UserRuntimeException e) {
@@ -310,7 +328,6 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
     }
 
     void setPropertyCode(String code) {
-        Building building = lease.unit().building();
         building.propertyCode().setValue(code);
         Persistence.service().persist(building);
     }
@@ -320,8 +337,11 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         Floorplan fp = lease.unit().floorplan();
         fp.code().setValue(code);
         fp.bedrooms().setValue(beds);
-        fp.building().set(building);
+        Persistence.ensureRetrieve(building.floorplans(), AttachLevel.Attached);
+        building.floorplans().add(fp);
         Persistence.service().persist(fp);
+        Persistence.service().persist(building);
+        Persistence.service().persist(lease.unit());
     }
 
     void setUnitNo(String unitNo) {
@@ -372,7 +392,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
                 yc.propertyListCodes().setValue("gran0002");
                 yc.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
                 yc.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com:8080/voyager6008sp17");
-                yc.serviceURLBase().setValue("http://192.168.50.100/voyager6008sp17");
+//                yc.serviceURLBase().setValue("http://192.168.50.100/voyager6008sp17");
                 yc.username().setValue("vista_dev");
                 yc.password().number().setValue("vista_dev");
                 yc.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
