@@ -120,6 +120,9 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return prospectId;
     }
 
+    /**
+     * Try to hold unit for the given lease. In case of failure will throw exception.
+     */
     public boolean holdUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
@@ -136,11 +139,16 @@ public class YardiGuestManagementService extends YardiAbstractService {
         event.setEventDate(new Timestamp(new Date().getTime() + 2 * 24 * 3600 * 1000));
         guestProcessor.setEvent(guest, event);
         submitGuest(yc, guest);
+
         log.info("Reserved unit: {}", lease.unit().info().number().getValue());
-        // TODO - handle negative case
+
         return true;
     }
 
+    /**
+     * Try to release unit for the given lease. In case of failure will throw exception.
+     * Will fail if attempted to release unit that has no hold by this lease.
+     */
     public boolean releaseUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getProspect(lease);
@@ -153,8 +161,9 @@ public class YardiGuestManagementService extends YardiAbstractService {
         event.setEventID(holdId);
         guestProcessor.setEvent(guest, event);
         submitGuest(yc, guest);
-        log.info("Reserved unit: {}", lease.unit().info().number().getValue());
-        // TODO - handle negative case
+
+        log.info("Released unit: {}", lease.unit().info().number().getValue());
+
         return true;
     }
 

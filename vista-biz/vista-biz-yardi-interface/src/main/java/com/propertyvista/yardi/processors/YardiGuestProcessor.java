@@ -65,6 +65,8 @@ public class YardiGuestProcessor {
     }
 
     public Prospect getProspect(Lease lease) {
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Prospect prospect = getProspect( //
                 lease._applicant().customer().person().name().firstName().getValue(), //
                 lease._applicant().customer().person().name().lastName().getValue(), //
