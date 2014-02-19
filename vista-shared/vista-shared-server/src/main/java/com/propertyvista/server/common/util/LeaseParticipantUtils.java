@@ -74,7 +74,7 @@ public class LeaseParticipantUtils {
             }
 
         }
-        if (!screening.isNull()) {
+        if ((screening != null) && !screening.isNull()) {
             Persistence.service().retrieve(screening.version().incomes());
             Persistence.service().retrieve(screening.version().assets());
             Persistence.service().retrieve(screening.version().documents());

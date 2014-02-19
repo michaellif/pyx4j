@@ -149,17 +149,19 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         CustomerScreening screening = LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(lease, termParticipant);
 
-        {
-            Persistence.service().retrieve(termParticipant.leaseParticipant().customer().emergencyContacts());
-            TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createTO(termParticipant);
-            new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(screening, tenantInfoDTO);
-            dto.tenantInfo().add(fillQuickSummary(tenantInfoDTO));
-        }
+        if (screening != null) {
+            {
+                Persistence.service().retrieve(termParticipant.leaseParticipant().customer().emergencyContacts());
+                TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createTO(termParticipant);
+                new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(screening, tenantInfoDTO);
+                dto.tenantInfo().add(fillQuickSummary(tenantInfoDTO));
+            }
 
-        {
-            TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createTO(screening);
-            tenantFinancialDTO.person().set(termParticipant.leaseParticipant().customer().person());
-            dto.tenantFinancials().add(fillQuickSummary(tenantFinancialDTO));
+            {
+                TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createTO(screening);
+                tenantFinancialDTO.person().set(termParticipant.leaseParticipant().customer().person());
+                dto.tenantFinancials().add(fillQuickSummary(tenantFinancialDTO));
+            }
         }
 
         // approval data
