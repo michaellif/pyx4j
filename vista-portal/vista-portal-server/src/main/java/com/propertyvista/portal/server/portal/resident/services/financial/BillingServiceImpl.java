@@ -35,6 +35,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -146,8 +147,8 @@ public class BillingServiceImpl implements BillingService {
     private static List<BillDataDTO> retrieveBillHistory(Lease lease) {
         List<BillDataDTO> bills = new ArrayList<BillDataDTO>();
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), BillStatus.Confirmed));
         for (Bill bill : Persistence.service().query(criteria)) {
             BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
 
