@@ -1328,7 +1328,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel, boolean forUpdate) {
         if (entity.getPrimaryKey() == null) {
-            Mappings.assertPersistableEntity(entity.getEntityMeta());
+            Mappings.assertQueryableEntity(entity.getEntityMeta());
             return false;
         }
         startCallContext(ConnectionReason.forRead);
@@ -1435,7 +1435,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @SuppressWarnings("unchecked")
     private <T extends IEntity> T cascadeRetrieve(T entity, AttachLevel attachLevel, boolean forUpdate) {
         if (entity.getPrimaryKey() == null) {
-            Mappings.assertPersistableEntity(entity.getEntityMeta());
+            Mappings.assertQueryableEntity(entity.getEntityMeta());
             return null;
         }
 

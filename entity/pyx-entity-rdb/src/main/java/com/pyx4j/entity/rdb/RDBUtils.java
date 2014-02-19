@@ -35,14 +35,13 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -222,7 +221,7 @@ public class RDBUtils implements Closeable {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
+            if (!Mappings.isPersistableTableEntity(meta)) {
                 continue;
             }
             if (srv.isTableExists(meta.getEntityClass())) {
@@ -242,7 +241,7 @@ public class RDBUtils implements Closeable {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
+            if (!Mappings.isPersistableTableEntity(meta)) {
                 continue;
             }
             if (srv.isTableExists(meta.getEntityClass())) {
@@ -262,7 +261,7 @@ public class RDBUtils implements Closeable {
             }
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
+            if (!Mappings.isPersistableTableEntity(meta)) {
                 continue;
             }
             if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
@@ -283,7 +282,7 @@ public class RDBUtils implements Closeable {
             }
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
+            if (!Mappings.isPersistableTableEntity(meta)) {
                 continue;
             }
             Table table = entityClass.getAnnotation(Table.class);
@@ -302,7 +301,7 @@ public class RDBUtils implements Closeable {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
+            if (!Mappings.isPersistableTableEntity(meta)) {
                 continue;
             }
             if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {

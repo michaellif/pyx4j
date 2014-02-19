@@ -118,13 +118,58 @@ public class Mappings {
         return getTableModel(persistenceContext, entityClass).operationsMeta();
     }
 
-    public static void assertPersistableEntity(EntityMeta entityMeta) {
+    public static void assertQueryableEntity(EntityMeta entityMeta) {
         if (entityMeta.isTransient()) {
             throw new Error("Can't operate on Transient Entity " + entityMeta.getEntityClass().getName());
         }
         if (entityMeta.getAnnotation(EmbeddedEntity.class) != null) {
             throw new Error("Can't operate on Embedded Entity " + entityMeta.getEntityClass().getName());
         }
+        if ((entityMeta.getAnnotation(AbstractEntity.class) != null) && (entityMeta.getPersistableSuperClass() == null)) {
+            Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
+            if ((inheritance == null) || (inheritance.strategy() == Inheritance.InheritanceStrategy.TABLE_PER_CLASS)) {
+                throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
+            }
+        }
+    }
+
+    public static boolean isQueryableEntity(EntityMeta entityMeta) {
+        if (entityMeta.isTransient()) {
+            return false;
+        }
+        if (entityMeta.getAnnotation(EmbeddedEntity.class) != null) {
+            return false;
+        }
+        if ((entityMeta.getAnnotation(AbstractEntity.class) != null) && (entityMeta.getPersistableSuperClass() == null)) {
+            Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
+            if ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isPersistableTableEntity(EntityMeta entityMeta) {
+        if (entityMeta.isTransient()) {
+            return false;
+        }
+        if (entityMeta.getAnnotation(EmbeddedEntity.class) != null) {
+            return false;
+        }
+        if (entityMeta.getPersistableSuperClass() != null) {
+            return false;
+        }
+        if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
+            Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
+            if ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static Collection<Class<? extends IEntity>> getPersistableAssignableFrom(Class<? extends IEntity> entityClass) {
@@ -152,13 +197,7 @@ public class Mappings {
         if ((model != null) && (!schemaInitialization)) {
             return model;
         }
-        assertPersistableEntity(entityMeta);
-        Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
-        if ((entityMeta.getAnnotation(AbstractEntity.class) != null) && (entityMeta.getPersistableSuperClass() == null)) {
-            if ((inheritance == null) || (inheritance.strategy() == Inheritance.InheritanceStrategy.TABLE_PER_CLASS)) {
-                throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
-            }
-        }
+        assertQueryableEntity(entityMeta);
 
         // Avoid lock on EntityClass
         Object entityTypeLock;
