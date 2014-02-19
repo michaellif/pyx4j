@@ -75,6 +75,7 @@ BEGIN
         ALTER TABLE application_documentation_policy DROP CONSTRAINT application_documentation_policy_node_discriminator_d_ck;
         ALTER TABLE application_wizard_step DROP CONSTRAINT application_wizard_step_status_e_ck;
         ALTER TABLE application_wizard_substep DROP CONSTRAINT application_wizard_substep_status_e_ck;
+        ALTER TABLE apt_unit_occupancy_segment DROP CONSTRAINT apt_unit_occupancy_segment_status_e_ck;
         ALTER TABLE arpolicy DROP CONSTRAINT arpolicy_node_discriminator_d_ck;
         ALTER TABLE auto_pay_policy DROP CONSTRAINT auto_pay_policy_node_discriminator_d_ck;
         ALTER TABLE background_check_policy DROP CONSTRAINT background_check_policy_node_discriminator_d_ck;
@@ -1333,6 +1334,14 @@ BEGIN
                 ||'             DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated '
                 ||'FROM         '||v_schema_name||'.apt_unit AS a '
                 ||'ORDER BY     a.id )';
+                
+
+        -- apt_unit_occupancy_segment
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit_occupancy_segment '
+                ||'SET  status = ''available'','
+                ||'     lease = NULL '
+                ||'WHERE    status = ''reserved'' ';
         
         -- insurance_certificate_scan
         
@@ -1893,6 +1902,8 @@ BEGIN
                 CHECK ((lease_term_participant_discriminator) IN ('Guarantor', 'Tenant'));
         ALTER TABLE application_documentation_policy ADD CONSTRAINT application_documentation_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE apt_unit_occupancy_segment ADD CONSTRAINT apt_unit_occupancy_segment_status_e_ck 
+            CHECK ((status) IN ('available', 'migrated', 'occupied', 'offMarket', 'pending', 'renovation'));
         ALTER TABLE arpolicy ADD CONSTRAINT arpolicy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE auto_pay_policy ADD CONSTRAINT auto_pay_policy_node_discriminator_d_ck 

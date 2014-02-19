@@ -67,6 +67,7 @@ SET search_path = '_admin_';
         ALTER TABLE pad_reconciliation_debit_record DROP CONSTRAINT pad_reconciliation_debit_record_reconciliation_status_e_ck;
         ALTER TABLE pad_reconciliation_file DROP CONSTRAINT pad_reconciliation_file_funds_transfer_type_e_ck;
         ALTER TABLE pad_reconciliation_summary DROP CONSTRAINT pad_reconciliation_summary_reconciliation_status_e_ck;
+        ALTER TABLE pmc_personal_information_document DROP CONSTRAINT pmc_personal_information_document_type_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
         ALTER TABLE vista_terms DROP CONSTRAINT vista_terms_target_e_ck;
 
@@ -234,6 +235,10 @@ SET search_path = '_admin_';
         ALTER TABLE pmc_document_file   DROP COLUMN caption,
                                         DROP COLUMN description;
                                         
+        
+        -- pmc_personal_information_document
+        
+        ALTER TABLE pmc_personal_information_document RENAME COLUMN type TO personal_info_doc_type;
                                         
         -- vista_terms_v
         
@@ -368,6 +373,8 @@ SET search_path = '_admin_';
         ALTER TABLE funds_transfer_record ADD CONSTRAINT funds_transfer_record_processing_status_e_ck 
                 CHECK ((processing_status) IN ('AcknowledgeProcessed', 'AcknowledgeReject', 'AcknowledgedReceived', 'ReconciliationProcessed', 'ReconciliationReceived'));
         ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
+        ALTER TABLE pmc_personal_information_document ADD CONSTRAINT pmc_personal_information_document_personal_info_doc_type_e_ck 
+            CHECK ((personal_info_doc_type) IN ('DriversLicense', 'Passport'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'ilsEmailFeed', 'ilsUpdate', 
                 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcess', 'paymentsDbpProcessAcknowledgment', 
