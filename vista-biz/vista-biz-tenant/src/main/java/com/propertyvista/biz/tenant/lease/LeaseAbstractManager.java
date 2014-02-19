@@ -333,7 +333,7 @@ public abstract class LeaseAbstractManager {
 
         Persistence.service().merge(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
+        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
             Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
@@ -356,7 +356,7 @@ public abstract class LeaseAbstractManager {
 
         Persistence.service().merge(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
+        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
     }
 
     public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -946,6 +946,7 @@ public abstract class LeaseAbstractManager {
             if (ServerSideFactory.create(OccupancyFacade.class).isReserveAvailable(lease.unit().getPrimaryKey()) != null) {
                 ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
             }
+            // END REMOVE             
             break;
         // =================================
         case ExistingLease:
@@ -961,9 +962,7 @@ public abstract class LeaseAbstractManager {
         case NewLease:
         case Application:
         case Approved:
-            if (ServerSideFactory.create(OccupancyFacade.class).isUnreserveAvailable(lease.unit().getPrimaryKey())) {
-                ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
-            }
+            ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
             break;
         case ExistingLease:
             ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
