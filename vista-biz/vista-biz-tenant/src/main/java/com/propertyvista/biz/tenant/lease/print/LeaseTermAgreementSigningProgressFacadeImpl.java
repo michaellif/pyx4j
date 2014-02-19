@@ -93,7 +93,9 @@ public class LeaseTermAgreementSigningProgressFacadeImpl implements LeaseTermAgr
                     }
                 }
             }
-            stakeholdersProgress.hasSigned().setValue(hasSigned);
+            if (!lease.currentTerm().version().agreementLegalTerms().isEmpty()) {
+                stakeholdersProgress.hasSigned().setValue(hasSigned);
+            }
             progress.stackholdersProgressBreakdown().add(stakeholdersProgress);
         }
 
