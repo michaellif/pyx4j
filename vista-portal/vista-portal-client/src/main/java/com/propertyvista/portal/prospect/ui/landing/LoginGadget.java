@@ -87,7 +87,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     }
 
     public void enableHumanVerification() {
-        loginForm.setEnableCaptcha(true);
+        loginForm.setCaptchaEnabled(true);
     }
 
     public void reset(String userId, boolean rememberUserId) {
@@ -97,7 +97,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             loginForm.get(loginForm.proto().email()).setValue(userId);
         }
         loginForm.get(loginForm.proto().rememberID()).setValue(rememberUserId);
-        loginForm.setEnableCaptcha(false);
+        loginForm.setCaptchaEnabled(false);
     }
 
     private void onLogin() {
@@ -162,16 +162,15 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
             captchaField = (CCaptcha) inject(proto().captcha());
             captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0,
-                    (new LoginWidgetDecoratorBuilder(captchaField).watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build()));
-            setEnableCaptcha(false);
+            contentPanel.setWidget(++row, 0, (new LoginWidgetDecoratorBuilder(captchaField).watermark(i18n.tr("Enter both security words above")).build()));
+            setCaptchaEnabled(false);
 
             contentPanel.setBR(++row, 0, 2);
 
             return contentPanel;
         }
 
-        public final void setEnableCaptcha(boolean isEnabled) {
+        public final void setCaptchaEnabled(boolean isEnabled) {
             captchaField.setVisible(isEnabled);
             if (isEnabled) {
                 captchaField.createNewChallenge();

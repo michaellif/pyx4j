@@ -23,4 +23,5 @@ public interface PasswordChangeWizardView extends IWizardView<PasswordChangeRequ
 
     }
 
+    void enableHumanVerification();
 }

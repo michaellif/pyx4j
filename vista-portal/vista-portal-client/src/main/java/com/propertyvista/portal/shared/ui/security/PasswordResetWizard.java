@@ -31,7 +31,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeRequest> {
 
@@ -62,8 +62,8 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
         int row = -1;
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().newPassword())).assistantWidget(passwordStrengthWidget).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).build());
+        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPassword())).assistantWidget(passwordStrengthWidget).build());
+        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).build());
 
         return mainPanel;
     }

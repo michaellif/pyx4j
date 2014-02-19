@@ -23,4 +23,7 @@ public class PasswordChangeWizardViewImpl extends AbstractWizardFormView<Passwor
         setWizard(new PasswordChangeWizard(this));
     }
 
+    public void enableHumanVerification() {
+        ((PasswordChangeWizard) getWizard()).setCaptchaEnabled(true);
+    }
 }

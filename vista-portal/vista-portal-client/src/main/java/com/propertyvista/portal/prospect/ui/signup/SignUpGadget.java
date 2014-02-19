@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.events.NValueChangeEvent;
+import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
@@ -33,10 +35,14 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
@@ -128,8 +134,13 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         private Image signUpPersonalImage;
 
+        private PasswordStrengthWidget passwordStrengthWidget;
+
+        private final TenantPasswordStrengthRule passwordStrengthRule;
+
         public SignUpForm() {
             super(ProspectSignUpDTO.class);
+            this.passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
         }
 
         @SuppressWarnings("unchecked")
@@ -176,10 +187,13 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             flexPanel.setWidget(++row, 0, widget);
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).build());
+            passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
+            flexPanel.setWidget(++row, 0,
+                    new LoginWidgetDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).componentWidth("180px")
+                            .assistantWidget(passwordStrengthWidget).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().passwordConfirm())).build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().passwordConfirm())).componentWidth("180px").build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
@@ -245,6 +259,18 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             setVisitedRecursive();
         }
 
+        @Override
+        public void addValidations() {
+            ((CTextFieldBase<?, ?>) get(proto().password())).addNValueChangeHandler(new NValueChangeHandler<String>() {
+
+                @Override
+                public void onNValueChange(NValueChangeEvent<String> event) {
+                    passwordStrengthWidget.ratePassword(event.getValue());
+                }
+            });
+
+            get(proto().password()).addComponentValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+        }
     }
 
 }

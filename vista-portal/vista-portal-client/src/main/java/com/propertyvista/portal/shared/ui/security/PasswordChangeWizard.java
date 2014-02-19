@@ -16,6 +16,7 @@ package com.propertyvista.portal.shared.ui.security;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
+import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -30,6 +31,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequest> {
 
@@ -38,6 +40,8 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
     private PasswordStrengthWidget passwordStrengthWidget;
 
     private final TenantPasswordStrengthRule passwordStrengthRule;
+
+    private CCaptcha captchaField;
 
     public PasswordChangeWizard(PasswordChangeWizardViewImpl view) {
         super(PasswordChangeRequest.class, view, i18n.tr("Change Password"), i18n.tr("Submit"), ThemeColor.contrast3);
@@ -53,15 +57,32 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
 
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentPassword())).componentWidth("180px").build());
+        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().currentPassword())).build());
+        captchaField = (CCaptcha) inject(proto().captcha());
+        mainPanel.setWidget(++row, 0, (new LoginWidgetDecoratorBuilder(captchaField).watermark(i18n.tr("Enter both security words above")).build()));
+        setCaptchaEnabled(false);
+
         mainPanel.setBR(++row, 0, 1);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().newPassword())).componentWidth("180px").assistantWidget(passwordStrengthWidget).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth("180px").build());
+        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPassword())).assistantWidget(passwordStrengthWidget).build());
+        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).build());
 
         return mainPanel;
+    }
+
+    public final void setCaptchaEnabled(boolean isEnabled) {
+        captchaField.setVisible(isEnabled);
+        if (isEnabled) {
+            captchaField.createNewChallenge();
+        }
+
+    }
+
+    @Override
+    public void onReset() {
+        setCaptchaEnabled(false);
+        super.onReset();
     }
 
     @Override
