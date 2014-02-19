@@ -76,9 +76,14 @@ public final class AppPlaceContorller {
     }
 
     public void showNotification(Notification notification, AppPlace continuePlace) {
+        AppPlace currentPlace = getWhere();
         NotificationAppPlace notificationPlace = dispatcher.getNotificationPlace(notification);
-        notificationPlace.setContinuePlace(continuePlace);
-        sureGoTo(notificationPlace);
+        if (notificationPlace.equals(currentPlace)) {
+            log.warn("Can't navigate to Notification Place while beeng on Notification Place");
+        } else {
+            notificationPlace.setContinuePlace(continuePlace);
+            sureGoTo(notificationPlace);
+        }
     }
 
     public void showNotification(Notification notification) {
