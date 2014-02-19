@@ -135,10 +135,6 @@ public interface LeaseTermParticipant<LP extends LeaseParticipant<?>> extends IE
     CustomerScreening screening();
 
     @Transient
-    @Deprecated
-    CustomerScreening effectiveScreeningOld();
-
-    @Transient
     LeaseParticipantScreeningTO effectiveScreening();
 
     @Owned(cascade = {})

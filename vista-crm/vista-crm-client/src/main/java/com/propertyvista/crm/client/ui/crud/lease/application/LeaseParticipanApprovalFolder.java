@@ -44,12 +44,12 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipanApprovalDTO> {
@@ -127,7 +127,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                     ++row,
                     0,
                     new FormDecoratorBuilder(inject(proto().screening(),
-                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 15, 15, 20).build());
+                            new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))), 15,
+                            15, 20).build());
             return panel;
         }
 

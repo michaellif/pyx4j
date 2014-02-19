@@ -46,13 +46,13 @@ import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermGuarantor> {
 
@@ -159,8 +159,9 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             main.setWidget(
                     ++row,
                     0,
-                    new FormDecoratorBuilder(inject(proto().effectiveScreeningOld(),
-                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
+                    new FormDecoratorBuilder(inject(proto().effectiveScreening(),
+                            new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))), 9)
+                            .build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
 
             row = 1;
@@ -175,7 +176,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            get(proto().effectiveScreeningOld()).setVisible(!getValue().effectiveScreeningOld().isNull());
+            get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
 
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseParticipant().participantId()), getValue()

@@ -63,7 +63,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
     @Override
     protected void enhanceRetrieved(BO bo, TO to, RetrieveTarget retrieveTarget) {
         to.leaseTermV().set(retrieveLeaseTerm(bo));
-        to.screening().set(LeaseParticipantUtils.retrieveCustomerScreeningPointer(to));
+        to.screening().set(LeaseParticipantUtils.getCustomerScreeningPointer(to));
         // fill/update payment methods: 
         to.paymentMethods().clear();
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo, PaymentMethodUsage.InProfile,

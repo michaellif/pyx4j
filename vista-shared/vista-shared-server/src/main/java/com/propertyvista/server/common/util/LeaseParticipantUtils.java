@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.util;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -20,6 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
@@ -28,34 +30,56 @@ import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class LeaseParticipantUtils {
 
-    public static LeaseParticipantScreeningTO retrieveCustomerScreeningPointer(LeaseParticipant<?> participant) {
-        // Retrieve draft if there are no final version
+    public static LeaseParticipantScreeningTO createScreeningPointer(LeaseParticipant<?> participant, CustomerScreening screening) {
         LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
-        to.screening().set(
-                ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(participant.customer(), AttachLevel.ToStringMembers));
+        to.screening().set(screening);
         if (to.screening().getPrimaryKey() != null) {
-            to.setPrimaryKey(participant.getPrimaryKey());
+            to.setPrimaryKey(new Key(participant.getPrimaryKey().asLong(), screening.getPrimaryKey().getVersion()));
+            to.screening().setAttachLevel(AttachLevel.ToStringMembers);
         }
         return to;
     }
 
-    public static void retrieveLeaseTermEffectiveScreening(Lease lease, LeaseTermParticipant<?> leaseParticipant, AttachLevel attachLevel) {
-        if (isApplicationInPogress(lease, leaseParticipant.leaseTermV())) {
+    public static LeaseParticipantScreeningTO getCustomerScreeningPointer(LeaseParticipant<?> participant) {
+        // Retrieve draft if there are no final version
+        return createScreeningPointer(participant,
+                ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(participant.customer(), AttachLevel.ToStringMembers));
+    }
+
+    public static LeaseParticipantScreeningTO getLeaseTermEffectiveScreeningPointer(Lease lease, LeaseTermParticipant<?> termParticipant) {
+        if (isApplicationInPogress(lease, termParticipant.leaseTermV())) {
             // Take customer's Screening, Prefers draft version.
-            leaseParticipant.effectiveScreeningOld().set(
-                    ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(leaseParticipant.leaseParticipant().customer(),
-                            attachLevel));
+            return getCustomerScreeningPointer(termParticipant.leaseParticipant());
         } else {
-            leaseParticipant.effectiveScreeningOld().set(leaseParticipant.screening());
-            if (!leaseParticipant.effectiveScreeningOld().isNull()) {
-                Persistence.service().retrieve(leaseParticipant.effectiveScreeningOld(), attachLevel, false);
+            if (!termParticipant.screening().isNull()) {
+                CustomerScreening screening = termParticipant.screening().duplicate();
+                Persistence.service().retrieve(screening, AttachLevel.ToStringMembers, false);
+                return createScreeningPointer(termParticipant.leaseParticipant(), screening);
+            } else {
+                return null;
             }
         }
-        if ((!leaseParticipant.effectiveScreeningOld().isNull()) && (attachLevel == AttachLevel.Attached)) {
-            Persistence.service().retrieve(leaseParticipant.effectiveScreeningOld().version().incomes());
-            Persistence.service().retrieve(leaseParticipant.effectiveScreeningOld().version().assets());
-            Persistence.service().retrieve(leaseParticipant.effectiveScreeningOld().version().documents());
+    }
+
+    public static CustomerScreening retrieveLeaseTermEffectiveScreening(Lease lease, LeaseTermParticipant<?> termParticipant) {
+        CustomerScreening screening;
+        if (isApplicationInPogress(lease, termParticipant.leaseTermV())) {
+            // Take customer's Screening, Prefers draft version.
+            screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(termParticipant.leaseParticipant().customer(),
+                    AttachLevel.Attached);
+        } else {
+            screening = termParticipant.screening();
+            if (!screening.isNull()) {
+                Persistence.service().retrieve(screening, AttachLevel.Attached, false);
+            }
+
         }
+        if (!screening.isNull()) {
+            Persistence.service().retrieve(screening.version().incomes());
+            Persistence.service().retrieve(screening.version().assets());
+            Persistence.service().retrieve(screening.version().documents());
+        }
+        return screening;
     }
 
     public static boolean isApplicationInPogress(Lease lease, LeaseTermV leaseTermV) {

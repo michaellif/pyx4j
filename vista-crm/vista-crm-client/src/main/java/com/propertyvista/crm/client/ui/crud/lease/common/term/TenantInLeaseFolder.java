@@ -55,12 +55,12 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTenant> {
@@ -224,8 +224,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             main.setWidget(
                     ++leftRow,
                     0,
-                    new FormDecoratorBuilder(inject(proto().effectiveScreeningOld(),
-                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
+                    new FormDecoratorBuilder(inject(proto().effectiveScreening(),
+                            new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))), 9)
+                            .build());
             main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
 
             int rightRow = 1;
@@ -246,7 +247,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            get(proto().effectiveScreeningOld()).setVisible(!getValue().effectiveScreeningOld().isNull());
+            get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
             get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseTermParticipant.Role.Applicant);
             preauthorizedPaymentsPanel.setVisible(!isEditable() && !getValue().leaseParticipant().preauthorizedPayments().isEmpty());
 

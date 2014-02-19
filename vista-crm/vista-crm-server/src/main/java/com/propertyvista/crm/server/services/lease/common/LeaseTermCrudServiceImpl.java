@@ -154,16 +154,16 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieveMember(to.version().tenants());
         }
-        for (LeaseTermTenant item : to.version().tenants()) {
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(to.lease(), item, AttachLevel.ToStringMembers);
-            fillPreauthorizedPayments(item);
+        for (LeaseTermTenant participant : to.version().tenants()) {
+            participant.effectiveScreening().set(LeaseParticipantUtils.getLeaseTermEffectiveScreeningPointer(to.lease(), participant));
+            fillPreauthorizedPayments(participant);
         }
 
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieveMember(to.version().guarantors());
         }
-        for (LeaseTermGuarantor item : to.version().guarantors()) {
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(to.lease(), item, AttachLevel.ToStringMembers);
+        for (LeaseTermGuarantor participant : to.version().guarantors()) {
+            participant.effectiveScreening().set(LeaseParticipantUtils.getLeaseTermEffectiveScreeningPointer(to.lease(), participant));
         }
 
         loadDetachedProducts(to);

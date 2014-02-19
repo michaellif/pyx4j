@@ -40,6 +40,7 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -142,44 +143,38 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
     }
 
-    private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<? extends LeaseParticipant<?>> leaseParticipantId) {
-        LeaseTermParticipant<? extends LeaseParticipant<?>> leaseParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(
-                leaseParticipantId.getValueClass(), leaseParticipantId.getPrimaryKey());
+    private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<? extends LeaseParticipant<?>> participantId) {
+        LeaseTermParticipant<? extends LeaseParticipant<?>> termParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(
+                participantId.getValueClass(), participantId.getPrimaryKey());
 
-        LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(lease, leaseParticipant, AttachLevel.Attached);
+        CustomerScreening screening = LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(lease, termParticipant);
 
         {
-            Persistence.service().retrieve(leaseParticipant.leaseParticipant().customer().emergencyContacts());
-            TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createTO(leaseParticipant);
-            new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(leaseParticipant.effectiveScreeningOld(), tenantInfoDTO);
+            Persistence.service().retrieve(termParticipant.leaseParticipant().customer().emergencyContacts());
+            TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createTO(termParticipant);
+            new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(screening, tenantInfoDTO);
             dto.tenantInfo().add(fillQuickSummary(tenantInfoDTO));
         }
 
         {
-            TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createTO(leaseParticipant.effectiveScreeningOld());
-            tenantFinancialDTO.person().set(leaseParticipant.leaseParticipant().customer().person());
+            TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createTO(screening);
+            tenantFinancialDTO.person().set(termParticipant.leaseParticipant().customer().person());
             dto.tenantFinancials().add(fillQuickSummary(tenantFinancialDTO));
         }
 
         // approval data
         {
             LeaseParticipanApprovalDTO approval = EntityFactory.create(LeaseParticipanApprovalDTO.class);
-            approval.leaseParticipant().set(leaseParticipant.duplicate());
+            approval.leaseParticipant().set(termParticipant.duplicate());
 
-            if (LeaseParticipantUtils.isApplicationInPogress(lease, leaseParticipant.leaseTermV())) {
+            if (LeaseParticipantUtils.isApplicationInPogress(lease, termParticipant.leaseTermV())) {
                 approval.creditCheck().set(
-                        ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseParticipant().customer()));
+                        ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(termParticipant.leaseParticipant().customer()));
             } else {
-                approval.creditCheck().set(leaseParticipant.creditCheck());
+                approval.creditCheck().set(termParticipant.creditCheck());
             }
 
-            if (!approval.creditCheck().isNull()) {
-                Persistence.ensureRetrieve(approval.creditCheck(), AttachLevel.Attached);
-                approval.screening().set(approval.creditCheck().screening());
-                Persistence.service().retrieve(approval.screening(), AttachLevel.ToStringMembers, false);
-            } else {
-                approval.screening().set(leaseParticipant.effectiveScreeningOld());
-            }
+            approval.screening().set(LeaseParticipantUtils.createScreeningPointer(termParticipant.leaseParticipant(), screening));
 
             dto.leaseApproval().participants().add(approval);
         }
