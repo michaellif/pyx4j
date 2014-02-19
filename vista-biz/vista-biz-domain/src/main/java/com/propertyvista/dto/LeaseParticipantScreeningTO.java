@@ -35,6 +35,7 @@ public interface LeaseParticipantScreeningTO extends IVersionedEntity<LeaseParti
 
     LeaseParticipant<?> leaseParticipantId();
 
+    @Transient
     public interface LeaseParticipantScreeningTOV extends IVersionData<LeaseParticipantScreeningTO> {
     }
 
