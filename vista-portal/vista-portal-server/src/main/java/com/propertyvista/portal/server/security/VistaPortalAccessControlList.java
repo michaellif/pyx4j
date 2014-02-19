@@ -42,7 +42,6 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
@@ -70,8 +69,6 @@ import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentPro
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalContentService;
@@ -221,20 +218,10 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         //=======================================
 
-        // Tenant Insurance and TenantSure
-        boolean VISTA_4158 = false; //  //TODO ArtyomB Need DatasetAccessRule
-
-        grant(PortalResidentBehavior.Resident, new EntityPermission(GeneralInsurancePolicy.class, CRUD));
+        // Tenant Insurance and TenantSure        
         grant(PortalResidentBehavior.Resident, new EntityPermission(InsuranceCertificateScan.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(GeneralInsurancePolicy.class, CRUD));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
-
-        if (VISTA_4158) {
-            //TODO ArtyomB
-            grant(PortalResidentBehavior.Resident, new EntityPermission(TenantSureInsurancePolicy.class, CRUD));
-        }
-
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSureInsurancePolicyCrudService.class));
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSurePaymentMethodCrudService.class));
 
         // Billing and Payments
         grant(PortalResidentBehavior.Resident, new EntityPermission(Bill.class, EntityPermission.READ));
