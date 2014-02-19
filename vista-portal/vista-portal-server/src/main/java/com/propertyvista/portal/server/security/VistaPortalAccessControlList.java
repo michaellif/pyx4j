@@ -69,6 +69,7 @@ import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentPro
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
+import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalContentService;
@@ -222,6 +223,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new EntityPermission(InsuranceCertificateScan.class, EntityPermission.READ));
         grant(PortalResidentBehavior.Resident, new EntityPermission(GeneralInsurancePolicy.class, CRUD));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSureInsurancePolicyCrudService.class));
 
         // Billing and Payments
         grant(PortalResidentBehavior.Resident, new EntityPermission(Bill.class, EntityPermission.READ));
