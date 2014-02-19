@@ -22,8 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Filter;
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -32,6 +30,7 @@ import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -171,8 +170,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
                     }
                     Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
                     EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-                    if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null
-                            || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
+                    if (!Mappings.isPersistableTableEntity(meta)) {
                         continue;
                     }
                     if (filter.accept(entityClass)) {
