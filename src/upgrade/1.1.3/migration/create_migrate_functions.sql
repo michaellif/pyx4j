@@ -689,6 +689,7 @@ BEGIN
                 file_blob_key                   BIGINT,
                 lease_term_v                    BIGINT                  NOT NULL,
                 is_signed_by_ink                BOOLEAN,
+                signed_employee_uploader        BIGINT,
                         CONSTRAINT lease_term_agreement_document_pk PRIMARY KEY(id)
         );
         
@@ -1800,6 +1801,8 @@ BEGIN
                 REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_lease_term_v_fk FOREIGN KEY(lease_term_v) 
                 REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_signed_employee_uploader_fk FOREIGN KEY(signed_employee_uploader) 
+            REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_agreement_document$signed_participants ADD CONSTRAINT lease_term_agreement_document$signed_participants_owner_fk FOREIGN KEY(owner) 
                 REFERENCES lease_term_agreement_document(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v ADD CONSTRAINT lease_term_v_employee_signature_fk FOREIGN KEY(employee_signature) REFERENCES crm_user_signature(id)  DEFERRABLE INITIALLY DEFERRED;
