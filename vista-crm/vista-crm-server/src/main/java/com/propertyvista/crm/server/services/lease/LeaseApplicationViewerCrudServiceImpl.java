@@ -25,7 +25,10 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -278,25 +281,31 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    public void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO) {
-        switch (actionDTO.action().getValue()) {
-        case Approve:
-            ServerSideFactory.create(LeaseFacade.class).approve(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                    actionDTO.decisionReason().getValue());
-            break;
-        case Decline:
-            ServerSideFactory.create(LeaseFacade.class).declineApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                    actionDTO.decisionReason().getValue());
-            break;
-        case Cancel:
-            ServerSideFactory.create(LeaseFacade.class).cancelApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                    actionDTO.decisionReason().getValue());
-            break;
-        default:
-            throw new IllegalArgumentException();
-        }
+    public void applicationAction(AsyncCallback<VoidSerializable> callback, final LeaseApplicationActionDTO actionDTO) {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
-        Persistence.service().commit();
+            @Override
+            public Void execute() throws RuntimeException {
+                switch (actionDTO.action().getValue()) {
+                case Approve:
+                    ServerSideFactory.create(LeaseFacade.class).approve(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
+                            actionDTO.decisionReason().getValue());
+                    break;
+                case Decline:
+                    ServerSideFactory.create(LeaseFacade.class).declineApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
+                            actionDTO.decisionReason().getValue());
+                    break;
+                case Cancel:
+                    ServerSideFactory.create(LeaseFacade.class).cancelApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
+                            actionDTO.decisionReason().getValue());
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+                }
+                return null;
+            }
+
+        });
         callback.onSuccess(null);
     }
 

@@ -15,6 +15,9 @@ package com.propertyvista.biz.system.yardi;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.AttachLevel;
@@ -35,6 +38,8 @@ import com.propertyvista.yardi.services.YardiGuestManagementService;
 import com.propertyvista.yardi.services.YardiGuestManagementService.SignLeaseResults;
 
 public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implements YardiApplicationFacade {
+
+    private final static Logger log = LoggerFactory.getLogger(YardiApplicationFacadeImpl.class);
 
     @Override
     public void createApplication(final Lease leaseId) throws YardiServiceException {
@@ -114,17 +119,21 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         });
     }
 
-    private void saveLeaseId(final Lease leaseId, SignLeaseResults signLeaseResults) {
+    private Lease saveLeaseId(final Lease leaseId, SignLeaseResults signLeaseResults) {
         final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         lease.leaseId().setValue(signLeaseResults.getLeaseId());
         Persistence.service().persist(lease);
+
+        log.info("leaseId assigned {} for {}", lease.leaseId(), lease.leaseApplication().yardiApplicationId());
 
         Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
             // application must be updated (yardi sync) before approval
             participant.participantId().setValue(signLeaseResults.getParticipants().get(participant.getPrimaryKey()));
             Persistence.service().persist(participant);
+            log.info("participantId assigned {} for {} in leaseId", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
         }
+        return lease;
     }
 
     @Override
@@ -148,7 +157,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
             }
         });
 
-        return lease;
+        return saveLeaseId(lease, signLeaseResults);
     }
 
     @Override

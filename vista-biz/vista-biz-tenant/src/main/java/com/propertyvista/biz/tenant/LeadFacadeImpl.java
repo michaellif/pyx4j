@@ -138,10 +138,10 @@ public class LeadFacadeImpl implements LeadFacade {
     public void setLeadRentedState(Lease leaseId) {
         EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseId));
-        Lead lead = Persistence.secureRetrieve(criteria);
+        Lead lead = Persistence.service().retrieve(criteria);
         if (lead != null) {
             lead.status().setValue(Lead.Status.rented);
-            Persistence.secureSave(lead);
+            Persistence.service().persist(lead);
         }
     }
 }
