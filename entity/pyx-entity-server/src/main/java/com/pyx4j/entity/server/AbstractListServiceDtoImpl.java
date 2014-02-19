@@ -43,15 +43,15 @@ import com.pyx4j.security.shared.SecurityController;
 
 public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends EntityBinder<BO, TO> implements AbstractListService<TO> {
 
-    protected AbstractListServiceDtoImpl(Class<BO> boClass, Class<TO> dtoClass) {
-        super(boClass, dtoClass);
+    protected AbstractListServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
+        super(boClass, toClass);
     }
 
     /**
      * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
      * This function is empty no need to call when you override this method
      */
-    protected void enhanceListRetrieved(BO bo, TO dto) {
+    protected void enhanceListRetrieved(BO bo, TO to) {
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         return boFilters;
     }
 
-    public Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
+    protected Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
         if (cr instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
             Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
@@ -103,7 +103,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         }
     }
 
-    public Serializable convertValue(EntityListCriteria<BO> criteria, PropertyCriterion propertyCriterion) {
+    protected Serializable convertValue(EntityListCriteria<BO> criteria, PropertyCriterion propertyCriterion) {
         Serializable value = propertyCriterion.getValue();
         if (value instanceof Path) {
             Path path = getBoundDboMemberPath((Path) value);

@@ -47,9 +47,8 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     /**
      * Used to retrieve bound detached members before they are copied to DTO
-     * TODO To make it work magically we have implemented retriveDetachedMember
      * 
-     * retrieveTarget when called for save operations
+     * retrieveTarget is null when called for save operations
      */
     protected void retrievedSingle(BO bo, RetrieveTarget retrieveTarget) {
     }
@@ -59,7 +58,6 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
      * This is empty callback function that don't need to be called from implementation.
      * 
      * @param retrieveTarget
-     *            TODO
      */
     protected void enhanceRetrieved(BO bo, TO to, RetrieveTarget retrieveTarget) {
     }
@@ -89,15 +87,42 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         Persistence.secureSave(bo);
     }
 
+    /**
+     * Allows to map BO to id of different TO entity.
+     * if changed, need to change getTOKey
+     * 
+     * @experimental
+     * 
+     * @param toId
+     * @return primary key of BO entity
+     */
+    protected Key getBOKey(TO to) {
+        return to.getPrimaryKey();
+    }
+
+    /**
+     * Default implementation does noting since the keys mapped one to one.
+     * 
+     * @experimental
+     * 
+     * @param bo
+     * @param to
+     */
+    protected Key getTOKey(BO bo, TO to) {
+        return bo.getPrimaryKey();
+    }
+
     @Override
-    public void retrieve(AsyncCallback<TO> callback, Key entityId, RetrieveTarget retrieveTarget) {
-        BO entity = retrieve(entityId, retrieveTarget);
-        if (entity != null) {
-            retrievedSingle(entity, retrieveTarget);
+    public void retrieve(AsyncCallback<TO> callback, Key toId, RetrieveTarget retrieveTarget) {
+        TO to = EntityFactory.createIdentityStub(toClass, toId);
+        BO bo = retrieve(getBOKey(to), retrieveTarget);
+        if (bo != null) {
+            retrievedSingle(bo, retrieveTarget);
         }
-        TO dto = createTO(entity);
-        enhanceRetrieved(entity, dto, retrieveTarget);
-        callback.onSuccess(dto);
+        copyBOtoTO(bo, to);
+        enhanceRetrieved(bo, to, retrieveTarget);
+        to.setPrimaryKey(getTOKey(bo, to));
+        callback.onSuccess(to);
     }
 
     @Override
@@ -108,14 +133,14 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     @Override
     public void create(AsyncCallback<Key> callback, TO to) {
-        BO entity = createBO(to);
-        create(entity, to);
+        BO bo = createBO(to);
+        create(bo, to);
         Persistence.service().commit();
-        callback.onSuccess(entity.getPrimaryKey());
+        callback.onSuccess(getTOKey(bo, to));
     }
 
     protected BO retrieveForSave(TO to) {
-        BO bo = Persistence.secureRetrieve(boClass, to.getPrimaryKey());
+        BO bo = Persistence.secureRetrieve(boClass, getBOKey(to));
         if (bo == null) {
             bo = EntityFactory.create(boClass);
         }
@@ -124,12 +149,12 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     @Override
     public void save(AsyncCallback<Key> callback, TO to) {
-        BO entity = retrieveForSave(to);
-        retrievedSingle(entity, null);
-        copyTOtoBO(to, entity);
-        save(entity, to);
+        BO bo = retrieveForSave(to);
+        retrievedSingle(bo, null);
+        copyTOtoBO(to, bo);
+        save(bo, to);
         Persistence.service().commit();
-        callback.onSuccess(entity.getPrimaryKey());
+        callback.onSuccess(getTOKey(bo, to));
     }
 
 }

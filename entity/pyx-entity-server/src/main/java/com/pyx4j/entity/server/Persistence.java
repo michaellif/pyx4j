@@ -162,6 +162,16 @@ public class Persistence {
         Persistence.service().merge(entity);
     }
 
+    public static <T extends IVersionedEntity<?>> T retriveFinalOrDraft(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel) {
+        T entity = service().retrieve(entityClass, primaryKey.asCurrentKey());
+        if ((entity != null) && !entity.version().isNull()) {
+            return entity;
+        } else {
+            return service().retrieve(entityClass, primaryKey.asDraftKey());
+        }
+    }
+
+    @Deprecated
     public static <T extends IVersionedEntity<?>> T secureRetrieveDraft(Class<T> entityClass, Key primaryKey) {
         // TODO  vlads
         return retrieveDraftForEdit(entityClass, primaryKey);
@@ -184,9 +194,21 @@ public class Persistence {
         }
     }
 
+    public static <T extends IVersionedEntity<?>> T secureRetrieveDraftForEdit(Class<T> entityClass, Key primaryKey) {
+        T entity = secureRetrieve(entityClass, primaryKey.asDraftKey());
+        if ((entity == null) || entity.version().isNull()) {
+            entity = secureRetrieve(entityClass, primaryKey.asCurrentKey());
+            retrieveOwned(entity.version());
+            entity.version().set(EntityGraph.businessDuplicate(entity.version()));
+            VersionedEntityUtils.setAsDraft(entity.version());
+            entity.setPrimaryKey(primaryKey.asDraftKey());
+        }
+        return entity;
+    }
+
     public static <T extends IVersionedEntity<?>> T retrieveDraftForEdit(Class<T> entityClass, Key primaryKey) {
         T entity = service().retrieve(entityClass, primaryKey.asDraftKey());
-        if (entity.version().isNull()) {
+        if ((entity == null) || entity.version().isNull()) {
             entity = service().retrieve(entityClass, primaryKey.asCurrentKey());
             retrieveOwned(entity.version());
             entity.version().set(EntityGraph.businessDuplicate(entity.version()));

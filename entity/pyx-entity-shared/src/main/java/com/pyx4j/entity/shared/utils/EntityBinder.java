@@ -186,6 +186,7 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void copyBOtoTO(BO bo, TO to) {
         init();
+        to.setAttachLevel(AttachLevel.Attached);
         for (Binding b : binding) {
             IObject dtoM = to.getMember(b.toMemberPath);
             IObject dboM = bo.getMember(b.boMemberPath);
