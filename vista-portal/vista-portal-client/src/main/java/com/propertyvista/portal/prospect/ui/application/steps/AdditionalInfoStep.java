@@ -69,22 +69,16 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         panel.setH3(++row, 0, 1, i18n.tr("General Questions"));
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForRent())).build());
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForDamages())).build());
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().everEvicted())).build());
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().defaultedOnLease())).build());
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().convictedOfFelony())).build());
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().legalTroubles())).build());
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().filedBankruptcy())).build());
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
