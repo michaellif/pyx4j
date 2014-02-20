@@ -34,7 +34,7 @@ public interface IPrimitive<TYPE extends Serializable> extends IObject<TYPE>, Co
     /**
      * Here until Elvis operator in java 7
      * 
-     * @deprecated use getValue(true)
+     * @deprecated use getValue(false)
      */
     @Deprecated
     public boolean isBooleanTrue();
