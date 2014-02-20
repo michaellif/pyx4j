@@ -325,7 +325,7 @@ public abstract class LeaseAbstractManager {
 
         Persistence.service().merge(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
+        releaseUnit(lease);
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
             Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
@@ -348,7 +348,7 @@ public abstract class LeaseAbstractManager {
 
         Persistence.service().merge(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
+        releaseUnit(lease);
     }
 
     public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -386,6 +386,8 @@ public abstract class LeaseAbstractManager {
         // Billing-related stuff:
         onLeaseApprovalSuccess(lease, leaseStatus);
 
+        markUnitOccupied(lease);
+
         switch (leaseStatus) {
         case Application:
             if (!lease.leaseApplication().onlineApplication().isNull()) {
@@ -397,18 +399,6 @@ public abstract class LeaseAbstractManager {
                     }
                 }
             }
-
-            ServerSideFactory.create(OccupancyFacade.class).occupy(lease.<Lease> createIdentityStub());
-            break;
-
-        case NewLease:
-            ServerSideFactory.create(OccupancyFacade.class).occupy(lease.<Lease> createIdentityStub());
-            break;
-
-        case ExistingLease:
-            ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
-            break;
-
         }
 
         // create historical billing cycles for imported leases
@@ -583,11 +573,7 @@ public abstract class LeaseAbstractManager {
 
         Persistence.service().merge(lease);
 
-        try {
-            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.expectedMoveOut().getValue(), lease);
-        } catch (OccupancyOperationException e) {
-            throw new IllegalStateException(e.getMessage());
-        }
+        moveOutUnit(lease);
     }
 
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -623,11 +609,7 @@ public abstract class LeaseAbstractManager {
         Persistence.service().merge(
                 creteLeaseNote(leaseId, "Cancel " + completionType.toString(), decisionReason, (decidedBy != null ? decidedBy.user() : null)));
 
-        try {
-            ServerSideFactory.create(OccupancyFacade.class).cancelMoveOut(lease.unit().getPrimaryKey());
-        } catch (OccupancyOperationException e) {
-            throw new IllegalStateException(e.getMessage());
-        }
+        cancelMoveOutUnit(lease);
     }
 
     public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
@@ -646,15 +628,7 @@ public abstract class LeaseAbstractManager {
 
         persist(lease);
 
-        // if unit is not reserved/leased for new application/lease yet - correct the move out date:
-        AptUnitOccupancySegment segment = ServerSideFactory.create(OccupancyFacade.class).getOccupancySegment(lease.unit(), lease.actualMoveOut().getValue());
-        if (segment.lease().equals(lease)) {
-            try {
-                ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.actualMoveOut().getValue(), lease);
-            } catch (OccupancyOperationException e) {
-                throw new IllegalStateException(e.getMessage());
-            }
-        }
+        approveMoveOutUnit(lease);
     }
 
     public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -874,13 +848,8 @@ public abstract class LeaseAbstractManager {
             if (lease.getPrimaryKey() != null) {
                 Lease previousLeaseEdition = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
                 if (!EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
-                    boolean doRelease = !previousLeaseEdition.unit().isNull();
-                    if (doRelease) {
-                        releaseUnit(previousLeaseEdition);
-                    }
-
                     if (!previousLeaseEdition.unit().isNull()) {
-                        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(previousLeaseEdition);
+                        releaseUnit(previousLeaseEdition);
                     }
                 }
             }
@@ -930,22 +899,26 @@ public abstract class LeaseAbstractManager {
         return lease;
     }
 
-    private void reserveUnit(Lease lease) {
+    // Unit occupancy management:
+
+    protected void reserveUnit(Lease lease) {
         switch (lease.status().getValue()) {
         case NewLease:
         case Application:
             break;
+
         case ExistingLease:
             if (ServerSideFactory.create(OccupancyFacade.class).isMigrateStartAvailable(lease.unit().<AptUnit> createIdentityStub())) {
                 ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
             }
             break;
+
         default:
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
     }
 
-    private void releaseUnit(Lease lease) {
+    protected void releaseUnit(Lease lease) {
         switch (lease.status().getValue()) {
         case NewLease:
         case Application:
@@ -958,10 +931,55 @@ public abstract class LeaseAbstractManager {
             break;
 
         case ExistingLease:
-            ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
+            if (ServerSideFactory.create(OccupancyFacade.class).isMigratedCancelAvailable(lease.unit().<AptUnit> createIdentityStub())) {
+                ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
+            }
             break;
+
         default:
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+    }
+
+    protected void markUnitOccupied(Lease lease) {
+        switch (lease.status().getValue()) {
+        case Approved:
+            ServerSideFactory.create(OccupancyFacade.class).occupy(lease.<Lease> createIdentityStub());
+            break;
+
+        case ExistingLease:
+            ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
+            break;
+
+        default:
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+    }
+
+    protected void moveOutUnit(Lease lease) {
+        try {
+            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.expectedMoveOut().getValue(), lease);
+        } catch (OccupancyOperationException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
+    }
+
+    protected void cancelMoveOutUnit(Lease lease) {
+        try {
+            ServerSideFactory.create(OccupancyFacade.class).cancelMoveOut(lease.unit().getPrimaryKey());
+        } catch (OccupancyOperationException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
+    }
+
+    protected void approveMoveOutUnit(Lease lease) {
+        AptUnitOccupancySegment segment = ServerSideFactory.create(OccupancyFacade.class).getOccupancySegment(lease.unit(), lease.actualMoveOut().getValue());
+        if (segment.lease().equals(lease)) {
+            try {
+                ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.actualMoveOut().getValue(), lease);
+            } catch (OccupancyOperationException e) {
+                throw new IllegalStateException(e.getMessage());
+            }
         }
     }
 
