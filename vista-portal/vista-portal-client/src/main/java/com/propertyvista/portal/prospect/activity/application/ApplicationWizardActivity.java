@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
@@ -54,6 +57,8 @@ import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBla
 import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
 public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineApplicationDTO> implements ApplicationWizardPresenter {
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationWizardActivity.class);
 
     private static final I18n i18n = I18n.get(ApplicationWizardActivity.class);
 
@@ -107,8 +112,15 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
             service.save(new DefaultAsyncCallback<Key>() {
                 @Override
                 public void onSuccess(Key result) {
-                    // TODO Auto-generated method stub
+                    log.info("application was saved on server");
                 }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    log.error("failed to save application on server");
+                    super.onFailure(caught);
+                }
+
             }, currentValue);
         }
 

@@ -51,4 +51,9 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
         }
     }
 
+    @Override
+    public String mayStop() {
+        return null;
+    }
+
 }
