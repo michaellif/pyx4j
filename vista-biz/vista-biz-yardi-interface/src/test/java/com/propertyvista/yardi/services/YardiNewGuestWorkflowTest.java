@@ -300,7 +300,7 @@ public class YardiNewGuestWorkflowTest {
             if (false) {
                 // deposit
                 charge.setChargeType(ChargeType.SECURITY_DEPOSIT);
-                charge.setLabel("deposit");
+                charge.setLabel("deposit"); // charge code
                 chargeId.setIDValue("0");
                 chargeId.setOrganizationName("Move-In Security Deposit");
             } else {

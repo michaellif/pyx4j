@@ -102,13 +102,13 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
-                CEntityComboBox<ARCode> depositTypeSelector;
+                CEntityComboBox<ARCode> chargeCodeSelector;
 
                 int row = -1;
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode(), new CEntityLabel<ARCode>())).build());
                 content.setWidget(++row, 0,
-                        new FormDecoratorBuilder(inject(proto().depositCode(), depositTypeSelector = new CEntityComboBox<ARCode>(ARCode.class))).build());
+                        new FormDecoratorBuilder(inject(proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class))).build());
                 content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
                 row = -1;
@@ -116,7 +116,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 content.setWidget(++row, 1, valueHolder);
 
                 // tweaks:
-                depositTypeSelector.addCriterion(PropertyCriterion.in(depositTypeSelector.proto().type(), ARCode.Type.deposits()));
+                chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));
 
                 get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
                     @Override

@@ -55,7 +55,7 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
             item.value().setValue(new BigDecimal(RandomUtil.randomDouble(500.0)));
             item.valueType().setValue(ValueType.Monetary);
             item.productCode().set(arCode);
-            item.depositCode().set(RandomUtil.random(depositCodes));
+            item.chargeCode().set(RandomUtil.random(depositCodes));
             item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
             policy.policyItems().add(item);
@@ -73,7 +73,7 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
                     item.valueType().setValue(ValueType.Percentage);
                     item.productCode().set(arCode);
-                    item.depositCode().set(RandomUtil.random(depositCodes));
+                    item.chargeCode().set(RandomUtil.random(depositCodes));
                     item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
                     policy.policyItems().add(item);
@@ -86,7 +86,7 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
                     item.valueType().setValue(ValueType.Percentage);
                     item.productCode().set(arCode);
-                    item.depositCode().set(RandomUtil.random(depositCodes));
+                    item.chargeCode().set(RandomUtil.random(depositCodes));
                     item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
                     policy.policyItems().add(item);

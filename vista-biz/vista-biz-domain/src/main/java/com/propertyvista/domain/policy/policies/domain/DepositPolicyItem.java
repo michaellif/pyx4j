@@ -64,11 +64,13 @@ public interface DepositPolicyItem extends IEntity {
     @OrderColumn
     IPrimitive<Integer> orderInPolicy();
 
+    /** used to match against arCode of the product this policy item will be applied to */
     @NotNull
     ARCode productCode();
 
+    /** passed to Deposit to use for corresponding invoice line items */
     @NotNull
-    ARCode depositCode();
+    ARCode chargeCode();
 
     @NotNull
     @ToString(index = 0)

@@ -88,8 +88,9 @@ public interface Deposit extends IEntity {
 
     // -----------------------------------------------------------------
 
+    /** used for corresponding invoice line item */
     @NotNull
-    ARCode depostCode();
+    ARCode chargeCode();
 
     @NotNull
     @ToString(index = 0)

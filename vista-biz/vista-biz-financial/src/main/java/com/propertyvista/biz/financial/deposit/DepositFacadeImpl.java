@@ -313,7 +313,7 @@ public class DepositFacadeImpl implements DepositFacade {
     private Deposit makeDeposit(DepositPolicyItem policyItem, BillableItem billableItem) {
         Deposit deposit = EntityFactory.create(Deposit.class);
 
-        deposit.depostCode().set(policyItem.depositCode());
+        deposit.chargeCode().set(policyItem.chargeCode());
         deposit.type().set(policyItem.depositType());
         switch (policyItem.valueType().getValue()) {
         case Monetary:
