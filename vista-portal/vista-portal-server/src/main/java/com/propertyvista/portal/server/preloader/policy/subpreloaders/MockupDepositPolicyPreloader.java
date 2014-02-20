@@ -42,45 +42,51 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
     protected DepositPolicy createPolicy(StringBuilder log) {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
-        EntityQueryCriteria<ARCode> srvType = EntityQueryCriteria.create(ARCode.class);
-        srvType.add(PropertyCriterion.in(srvType.proto().type(), ARCode.Type.unitRelatedServices()));
-        List<ARCode> services = Persistence.service().query(srvType);
-        for (ARCode pit : services) {
+        EntityQueryCriteria<ARCode> depositsCrt = EntityQueryCriteria.create(ARCode.class);
+        depositsCrt.add(PropertyCriterion.in(depositsCrt.proto().type(), ARCode.Type.deposits()));
+        List<ARCode> depositCodes = Persistence.service().query(depositsCrt);
 
+        EntityQueryCriteria<ARCode> servicesCrt = EntityQueryCriteria.create(ARCode.class);
+        servicesCrt.add(PropertyCriterion.in(servicesCrt.proto().type(), ARCode.Type.unitRelatedServices()));
+        for (ARCode arCode : Persistence.service().query(servicesCrt)) {
             DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
             item.depositType().setValue(DepositType.SecurityDeposit);
             item.description().setValue(i18n.tr("Security Deposit"));
             item.value().setValue(new BigDecimal(RandomUtil.randomDouble(500.0)));
             item.valueType().setValue(ValueType.Monetary);
-            item.productCode().set(pit);
+            item.productCode().set(arCode);
+            item.depositCode().set(RandomUtil.random(depositCodes));
             item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
             policy.policyItems().add(item);
         }
 
-        EntityQueryCriteria<ARCode> pitc = EntityQueryCriteria.create(ARCode.class);
-        List<ARCode> features = Persistence.service().query(pitc);
-        for (ARCode pit : features) {
+        EntityQueryCriteria<ARCode> featuresCrt = EntityQueryCriteria.create(ARCode.class);
+        featuresCrt.add(PropertyCriterion.in(servicesCrt.proto().type(), ARCode.Type.features()));
+        for (ARCode arCode : Persistence.service().query(featuresCrt)) {
             if (RandomUtil.randomBoolean()) {
-                switch (pit.type().getValue()) {
+                switch (arCode.type().getValue()) {
                 case Parking:
                     DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.SecurityDeposit);
                     item.description().setValue(i18n.tr("First Month Parking"));
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
                     item.valueType().setValue(ValueType.Percentage);
-                    item.productCode().set(pit);
+                    item.productCode().set(arCode);
+                    item.depositCode().set(RandomUtil.random(depositCodes));
                     item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
                     policy.policyItems().add(item);
                     break;
+
                 case Locker:
                     item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.SecurityDeposit);
                     item.description().setValue(i18n.tr("Last Month Locker"));
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
                     item.valueType().setValue(ValueType.Percentage);
-                    item.productCode().set(pit);
+                    item.productCode().set(arCode);
+                    item.depositCode().set(RandomUtil.random(depositCodes));
                     item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
                     policy.policyItems().add(item);

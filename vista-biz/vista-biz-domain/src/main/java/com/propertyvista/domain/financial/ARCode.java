@@ -131,6 +131,10 @@ public interface ARCode extends IEntity {
             return EnumSet.of(Parking, Locker, Pet, Utility, AddOn, OneTime);
         }
 
+        public static EnumSet<Type> deposits() {
+            return EnumSet.of(Deposit);
+        }
+
         public static EnumSet<Type> leaseAjustments() {
             return EnumSet.of(AccountCredit, AccountCharge);
         }

@@ -64,10 +64,11 @@ public interface DepositPolicyItem extends IEntity {
     @OrderColumn
     IPrimitive<Integer> orderInPolicy();
 
-    /**
-     * Could be null for security deposits
-     */
+    @NotNull
     ARCode productCode();
+
+    @NotNull
+    ARCode depositCode();
 
     @NotNull
     @ToString(index = 0)

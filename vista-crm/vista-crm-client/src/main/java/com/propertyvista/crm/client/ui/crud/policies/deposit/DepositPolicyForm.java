@@ -27,9 +27,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -99,15 +102,21 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
+                CEntityComboBox<ARCode> depositTypeSelector;
+
                 int row = -1;
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode())).build());
-                get(proto().productCode()).setEditable(false);
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode(), new CEntityLabel<ARCode>())).build());
+                content.setWidget(++row, 0,
+                        new FormDecoratorBuilder(inject(proto().depositCode(), depositTypeSelector = new CEntityComboBox<ARCode>(ARCode.class))).build());
                 content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
                 row = -1;
                 content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().valueType())).build());
                 content.setWidget(++row, 1, valueHolder);
+
+                // tweaks:
+                depositTypeSelector.addCriterion(PropertyCriterion.in(depositTypeSelector.proto().type(), ARCode.Type.deposits()));
 
                 get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
                     @Override
