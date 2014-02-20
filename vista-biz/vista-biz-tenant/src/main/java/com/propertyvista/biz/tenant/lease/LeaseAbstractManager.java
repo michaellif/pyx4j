@@ -944,7 +944,9 @@ public abstract class LeaseAbstractManager {
         case Application:
             break;
         case ExistingLease:
-            ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
+            if (ServerSideFactory.create(OccupancyFacade.class).isMigrateStartAvailable(lease.unit().<AptUnit> createIdentityStub())) {
+                ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
+            }
             break;
         default:
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
