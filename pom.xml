@@ -55,7 +55,7 @@
         <site>
             <id>test-pyx4j-site</id>
             <!--url>${scp-apache-site-snapshot-base}/pyx</url-->
-            <url>file:///data/apache/pyx/pyx</url>
+            <url>file:///data/apache/pyx</url>
         </site>
         <repository>
             <id>pyx4j.com-file-release</id>
@@ -300,7 +300,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>2.1.1</version>
+                <version>3.3</version>
             </plugin>
 
             <plugin>
@@ -391,7 +391,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.7</version>
                 <reportSets>
                    <reportSet>
                       <reports>
