@@ -171,12 +171,6 @@ public class Persistence {
         }
     }
 
-    @Deprecated
-    public static <T extends IVersionedEntity<?>> T secureRetrieveDraft(Class<T> entityClass, Key primaryKey) {
-        // TODO  vlads
-        return retrieveDraftForEdit(entityClass, primaryKey);
-    }
-
     public static <T extends IEntity> T retrieveUnique(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) throws UniqueConstraintUserRuntimeException {
         ICursorIterator<T> cursor = service().query(null, criteria, attachLevel);
         T enttity = null;
