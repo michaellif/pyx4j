@@ -167,19 +167,11 @@ public abstract class LeaseAbstractManager {
     }
 
     public Lease persist(Lease lease) {
-        return persist(lease, false, true);
+        return persist(lease, false);
     }
 
     public Lease finalize(Lease lease) {
-        return persist(lease, true, true);
-    }
-
-    public Lease persist(Lease lease, boolean reserve) {
-        return persist(lease, false, reserve);
-    }
-
-    public Lease finalize(Lease lease, boolean reserve) {
-        return persist(lease, true, reserve);
+        return persist(lease, true);
     }
 
     public Lease load(Lease leaseId, boolean editingTerm) {
@@ -874,7 +866,7 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    private Lease persist(Lease lease, boolean finalize, boolean reserve) {
+    private Lease persist(Lease lease, boolean finalize) {
         boolean doReserve = false;
 
         if (lease.status().getValue().isDraft()) {
@@ -931,7 +923,7 @@ public abstract class LeaseAbstractManager {
         ServerSideFactory.create(PaymentMethodFacade.class).terminateAutopayAgreements(lease);
 
         // update reservation if necessary:
-        if (reserve && doReserve) {
+        if (doReserve) {
             reserveUnit(lease);
         }
 

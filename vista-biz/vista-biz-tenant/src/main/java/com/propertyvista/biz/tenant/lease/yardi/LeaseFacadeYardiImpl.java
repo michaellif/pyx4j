@@ -77,16 +77,6 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     }
 
     @Override
-    public Lease persist(Lease lease, boolean reserve) {
-        return getLeaseYardiManager(lease).persist(lease, reserve);
-    }
-
-    @Override
-    public Lease finalize(Lease lease, boolean reserve) {
-        return getLeaseYardiManager(lease).finalize(lease, reserve);
-    }
-
-    @Override
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
         return getLeaseYardiManager(retrieve(leaseTerm)).setUnit(leaseTerm, unitId);
     }

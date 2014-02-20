@@ -816,7 +816,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         saveStepsStatuses(bo, to);
 
         // do not forget to save LEASE:
-        ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease(), submit);
+        ServerSideFactory.create(LeaseFacade.class).persist(bo.masterOnlineApplication().leaseApplication().lease());
 
         if (submit) {
             savePaymentData(bo, to);

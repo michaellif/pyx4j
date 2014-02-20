@@ -55,11 +55,6 @@ public interface LeaseFacade {
 
     Lease load(Lease leaseId, boolean forEdit);
 
-    // the same persistence with manageable unit reserve:
-    Lease persist(Lease lease, boolean reserve);
-
-    Lease finalize(Lease lease, boolean reserve);
-
     // in-memory Lease Term interface:
 
     LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId);
