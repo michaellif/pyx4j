@@ -17,6 +17,9 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
@@ -25,6 +28,8 @@ import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.NotificationPageView;
 
 public class NotificationPageActivity extends AbstractActivity implements NotificationPageView.NotificationPagePresenter {
+
+    private long started = System.currentTimeMillis();
 
     private final NotificationPageView view;
 
@@ -37,6 +42,7 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        started = System.currentTimeMillis();
         view.setPresenter(this);
         view.populate(place.getNotification());
         panel.setWidget(view);
@@ -53,6 +59,11 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
 
     @Override
     public String mayStop() {
+        if (ApplicationMode.isDevelopment()) {
+            if (TimeUtils.since(started) < 10 * Consts.SEC2MILLISECONDS) {
+                return ApplicationMode.DEV + "Following message will not be shown in application production mode\n\n" + place.getNotification().getMessage();
+            }
+        }
         return null;
     }
 
