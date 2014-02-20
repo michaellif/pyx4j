@@ -46,8 +46,9 @@ public class PaymentAcceptanceUtils {
 
         abstract boolean accept(IEntity selection);
 
+        @SuppressWarnings("unchecked")
         protected boolean isTrue(IEntity selection, IPrimitive<Boolean> member) {
-            return (selection.getMember(member.getPath()).getValue() == Boolean.TRUE);
+            return (((IPrimitive<Boolean>) selection.getMember(member.getPath())).getValue(Boolean.FALSE));
         }
     }
 

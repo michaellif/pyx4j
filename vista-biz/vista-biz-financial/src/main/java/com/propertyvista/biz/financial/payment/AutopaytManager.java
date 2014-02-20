@@ -91,7 +91,7 @@ class AutopaytManager {
             ICursorIterator<BillingCycle> billingCycleIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             try {
                 long expectedTotal = 0L;
-                while (billingCycleIterator.hasNext() & !executionMonitor.isTerminationRequested()) {
+                while (billingCycleIterator.hasNext() && !executionMonitor.isTerminationRequested()) {
                     expectedTotal += Persistence.service().count(createBillingCyclePreauthorisedQueryCriteria(billingCycleIterator.next(), reportCriteria));
                 }
                 executionMonitor.setExpectedTotal(expectedTotal);
@@ -104,7 +104,7 @@ class AutopaytManager {
         {
             ICursorIterator<BillingCycle> billingCycleIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             try {
-                while (billingCycleIterator.hasNext() & !executionMonitor.isTerminationRequested()) {
+                while (billingCycleIterator.hasNext() && !executionMonitor.isTerminationRequested()) {
                     createBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor, reportOny, resultingPaymentRecords, reportCriteria);
                 }
             } finally {

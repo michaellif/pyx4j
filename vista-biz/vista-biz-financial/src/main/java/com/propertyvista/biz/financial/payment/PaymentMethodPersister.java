@@ -95,6 +95,7 @@ class PaymentMethodPersister {
                             EcheckInfo origeci = origPaymentMethod.details().cast();
                             eci.accountNo().newNumber().setValue(origeci.accountNo().number().getValue());
                         }
+                        break;
                     default:
                         break;
                     }
@@ -134,6 +135,7 @@ class PaymentMethodPersister {
                             EcheckInfo origeci = origPaymentMethod.details().cast();
                             eci.accountNo().newNumber().setValue(origeci.accountNo().number().getValue());
                         }
+                        break;
                     default:
                         break;
                     }
@@ -170,6 +172,7 @@ class PaymentMethodPersister {
                             EcheckInfo origeci = origPaymentMethod.details().cast();
                             eci.accountNo().newNumber().setValue(origeci.accountNo().number().getValue());
                         }
+                        break;
                     default:
                         break;
                     }
