@@ -54,13 +54,17 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
 
     @Override
     public void getNewQuote() {
-        ((TenantSureOrderWizardView) getView()).waitForQuote();
-        ((TenantSureInsurancePolicyCrudService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
-            @Override
-            public void onSuccess(TenantSureQuoteDTO quote) {
-                ((TenantSureOrderWizardView) getView()).setQuote(quote);
-            }
-        }, getView().getValue().tenantSureCoverageRequest().<TenantSureCoverageDTO> duplicate());
+        TenantSureCoverageDTO coverageRequest = getView().getValue().tenantSureCoverageRequest().<TenantSureCoverageDTO> duplicate();
+        if (isValid(coverageRequest)) {
+            ((TenantSureOrderWizardView) getView()).waitForQuote();
+
+            ((TenantSureInsurancePolicyCrudService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
+                @Override
+                public void onSuccess(TenantSureQuoteDTO quote) {
+                    ((TenantSureOrderWizardView) getView()).setQuote(quote);
+                }
+            }, coverageRequest);
+        }
     }
 
     @Override
@@ -72,5 +76,17 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
             }
         });
     }
+
+    private boolean isValid(TenantSureCoverageDTO coverageRequest) {//@formatter:off
+        return !(coverageRequest.tenantName().isNull() 
+                || coverageRequest.tenantPhone().isNull()
+                || coverageRequest.personalLiabilityCoverage().isNull()
+                || coverageRequest.contentsCoverage().isNull()
+                || coverageRequest.deductible().isNull()
+//                || coverageRequest.inceptionDate().isNull()
+                || coverageRequest.numberOfPreviousClaims().isNull()
+                || coverageRequest.smoker().isNull()
+                || coverageRequest.paymentSchedule().isNull());
+    }//@formatter:on
 
 }

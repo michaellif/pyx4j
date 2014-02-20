@@ -34,7 +34,7 @@ public interface TenantSureInsurancePolicyDTO extends TenantSureInsurancePolicy 
     /** used during purchase process */
     TenantSureQuoteDTO quote();
 
-    /** used during purchase process */
+    /** used during purchase process: these are selected coverage request that are displayed during payment step */
     TenantSureCoverageDTO tenantSureCoverageRequestConfirmation();
 
     /** used during purchase process */

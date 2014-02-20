@@ -137,11 +137,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         get(proto().tenantSureCoverageRequest()).addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
             @Override
             public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
-                coverageRequestForm.revalidate();
-                if (coverageRequestForm.isValid()) {
-                    presenter.getNewQuote();
-                    get(proto().tenantSureCoverageRequestConfirmation()).setValue(event.getValue(), false);
-                }
+                get(proto().tenantSureCoverageRequestConfirmation()).setValue(event.getValue(), false);
+                presenter.getNewQuote();
             }
         });
 
