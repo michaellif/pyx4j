@@ -193,7 +193,7 @@ public class DevDumpProxyServlet extends HttpServlet {
                 deferredExecute.copyResponce(response);
             } else {
                 //response.sendRedirect(DeferredProxyServlet.createRedirect(request, deferredExecute));
-                log.equals("redirect not supported");
+                log.warn("redirect not supported");
             }
             sucsess = true;
         } finally {
