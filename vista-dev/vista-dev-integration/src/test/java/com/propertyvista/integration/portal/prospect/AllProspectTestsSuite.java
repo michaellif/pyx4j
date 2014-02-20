@@ -18,7 +18,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ //
-ProspectSelfRegistrationFlowInternalTest.class,//
+//
+        ProspectSelfRegistrationFlowInternalTest.class,//
+        ProspectCoTenantEditInternalTest.class, //
 })
 public class AllProspectTestsSuite {
 
