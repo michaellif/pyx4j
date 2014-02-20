@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.note;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -31,25 +30,15 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.CrmUser;
 
 @ToStringFormat("\"{0}\", by {1}; last modified {2}")
 public interface NotesAndAttachments extends IEntity {
 
-    @Indexed(group = { "o,1" })
-    @I18n(strategy = I18n.I18nStrategy.IgnoreMember)
-    IPrimitive<Key> ownerId();
-
-    @Indexed(group = { "o,2" })
-    @I18n(strategy = I18n.I18nStrategy.IgnoreMember)
-    @Length(80)
-    IPrimitive<String> ownerClass();
-
     @Detached
     @ReadOnly
-    //@MemberColumn(name = "owner2")
+    @Indexed
     HasNotesAndAttachments owner();
 
     @NotNull
