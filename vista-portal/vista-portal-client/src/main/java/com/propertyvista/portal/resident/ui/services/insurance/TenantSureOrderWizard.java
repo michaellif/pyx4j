@@ -116,15 +116,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
                 0,
                 new FormWidgetDecoratorBuilder(inject(proto().personalDisclaimerSignature())).customLabel("").labelPosition(LabelPosition.hidden)
                         .contentWidth("250px").componentWidth("250px").build());
-        get(proto().personalDisclaimerSignature()).addComponentValidator(new AbstractComponentValidator<CustomerSignature>() {
-            @Override
-            public FieldValidationError isValid() {
-                if (!getComponent().getValue().agree().isBooleanTrue()) {
-                    return new FieldValidationError(getComponent(), i18n.tr("You must agree to the personal disclaimer terms to continue"));
-                }
-                return null;
-            }
-        });
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
 
