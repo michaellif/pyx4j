@@ -980,8 +980,9 @@ BEGIN
                                                 
         -- notes_and_attachments
         
-        ALTER TABLE notes_and_attachments       ADD COLUMN owner BIGINT,
-                                                ADD COLUMN owner_discriminator VARCHAR(50);
+        ALTER TABLE notes_and_attachments       ADD COLUMN owner BIGINT;
+		ALTER TABLE notes_and_attachments RENAME COLUMN owner_class TO owner_discriminator;
+		ALTER TABLE notes_and_attachments ALTER COLUMN owner_discriminator TYPE VARCHAR(50);
                                                 
        
         -- online_application$confirmation_terms
@@ -1418,6 +1419,12 @@ BEGIN
                 ||'     termination_date_advance_days_short_rent_period = 7 ';
         
         
+        -- notes_and_attachments
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.notes_and_attachments '
+				||'SET		owner_discriminator = ''service'' '
+				||'WHERE 	owner_discriminator = ''Service'' ';
+         
         -- policy tables
         
         PERFORM * FROM _dba_.update_policy_tables(v_schema_name);
@@ -1700,6 +1707,10 @@ BEGIN
         
         ALTER TABLE n4_policy   DROP COLUMN mailing_address_street1,
                                 DROP COLUMN mailing_address_street2;
+                                
+		-- notes_and_attachments
+		
+		ALTER TABLE notes_and_attachments DROP COLUMN owner_id;
         
         -- online_application$signatures
         
@@ -2055,6 +2066,8 @@ BEGIN
         CREATE INDEX lease_term_agreement_document_lease_term_v_idx ON lease_term_agreement_document USING btree (lease_term_v);
         CREATE INDEX lease_term_agreement_document$signed_participants_owner_idx ON lease_term_agreement_document$signed_participants USING btree (owner);
         CREATE INDEX maintenance_request_status_record_request_idx ON maintenance_request_status_record USING btree (request);
+        CREATE INDEX notes_and_attachments_owner_discriminator_idx ON notes_and_attachments USING btree (owner_discriminator);
+        CREATE INDEX notes_and_attachments_owner_idx ON notes_and_attachments USING btree (owner);
         CREATE INDEX payment_posting_batch_building_idx ON payment_posting_batch USING btree (building);
         CREATE INDEX permission_to_enter_note_policy_idx ON permission_to_enter_note USING btree (policy);
 

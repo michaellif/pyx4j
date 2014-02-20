@@ -61,7 +61,6 @@ BEGIN TRANSACTION;
 
         -- New sequences
         
-        -- CREATE SEQUENCE abstract_outgoing_mail_queue_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_signatures$legal_terms_signatures_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE agreement_signatures_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE apt_unit_effective_availability_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -102,8 +101,8 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE note_attachment_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application$legal_terms_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application$confirmation_terms_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        -- CREATE SEQUENCE online_application$steps_statuses_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE online_application_wizard_step_status_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE outgoing_mail_queue_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE payment_posting_batch_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE permission_to_enter_note_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE pmc_company_info_contact_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -122,7 +121,6 @@ BEGIN TRANSACTION;
 
         -- Change owner to vista
         
-        -- ALTER SEQUENCE abstract_outgoing_mail_queue_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_signatures$legal_terms_signatures_seq OWNER TO vista ;
         ALTER SEQUENCE agreement_signatures_seq OWNER TO vista ;
         ALTER SEQUENCE apt_unit_effective_availability_seq OWNER TO vista ;
@@ -172,8 +170,8 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE note_attachment_seq OWNER TO vista ;
         ALTER SEQUENCE online_application$confirmation_terms_seq OWNER TO vista ;
         ALTER SEQUENCE online_application$legal_terms_seq OWNER TO vista ;
-        -- ALTER SEQUENCE online_application$steps_statuses_seq OWNER TO vista ;
         ALTER SEQUENCE online_application_wizard_step_status_seq OWNER TO vista ;
+        ALTER SEQUENCE outgoing_mail_queue_seq OWNER TO vista ;
         ALTER SEQUENCE payment_posting_batch_seq OWNER TO vista ;
         ALTER SEQUENCE permission_to_enter_note_seq OWNER TO vista ;
         ALTER SEQUENCE pmc_company_info_contact_seq OWNER TO vista ;

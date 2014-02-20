@@ -145,25 +145,8 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
-        -- abstract_outgoing_mail_queue
         
-        /*
-        CREATE TABLE abstract_outgoing_mail_queue
-        (
-            id                      BIGINT                  NOT NULL,
-            id_discriminator        VARCHAR(64)             NOT NULL,
-            status                  VARCHAR(50),
-            configuration_id        VARCHAR(500),
-            status_callback_class   VARCHAR(500),
-            created                 TIMESTAMP,
-            updated                 TIMESTAMP,
-            attempts                INT,
-            data                    BYTEA,
-                CONSTRAINT abstract_outgoing_mail_queue_pk PRIMARY KEY(id)
-        );
         
-        ALTER TABLE abstract_outgoing_mail_queue OWNER TO vista;
-        */
         -- admin_pmc_equifax_info
         
         ALTER TABLE admin_pmc_equifax_info RENAME COLUMN customer_number TO member_number_encrypted;
@@ -215,6 +198,30 @@ SET search_path = '_admin_';
         ALTER TABLE funds_transfer_file ADD COLUMN acknowledgment_file_name VARCHAR(500),
                                         ADD COLUMN acknowledgment_file_name_date TIMESTAMP,
                                         ADD COLUMN acknowledgment_remote_file_date TIMESTAMP;
+                                        
+        -- outgoing_mail_queue
+        
+        CREATE TABLE outgoing_mail_queue
+        (
+            id                          BIGINT                  NOT NULL,
+            id_discriminator            VARCHAR(64)             NOT NULL,
+            status                      VARCHAR(50),
+            namespace                   VARCHAR(500),
+            configuration_id            VARCHAR(500),
+            status_callback_class       VARCHAR(500),
+            created                     TIMESTAMP,
+            updated                     TIMESTAMP,
+            attempts                    INT,
+            last_attempt_error_message  VARCHAR(4000),
+            send_to                     VARCHAR(500),
+            keywords                    VARCHAR(500),
+            sent_date                   VARCHAR(500),
+            message_id                  VARCHAR(500),
+            data                        BYTEA,
+                CONSTRAINT outgoing_mail_queue_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE outgoing_mail_queue OWNER TO vista;
                                         
         
         -- pmc_document_blob
@@ -345,12 +352,7 @@ SET search_path = '_admin_';
 
 
         -- check constraints
-        /*
-        ALTER TABLE abstract_outgoing_mail_queue ADD CONSTRAINT abstract_outgoing_mail_queue_id_discriminator_ck 
-            CHECK ((id_discriminator) IN ('Default', 'TenantSure'));
-        ALTER TABLE abstract_outgoing_mail_queue ADD CONSTRAINT abstract_outgoing_mail_queue_status_e_ck 
-            CHECK ((status) IN ('Cancelled', 'GiveUp', 'Queued', 'Success'));
-        */
+        
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck CHECK ((target) IN ('crm', 'portal', 'site'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
         ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_processing_status_e_ck CHECK ((processing_status) IN ('Invalid', 'Processed', 'Received', 'Refunded'));
@@ -373,6 +375,10 @@ SET search_path = '_admin_';
         ALTER TABLE funds_transfer_record ADD CONSTRAINT funds_transfer_record_processing_status_e_ck 
                 CHECK ((processing_status) IN ('AcknowledgeProcessed', 'AcknowledgeReject', 'AcknowledgedReceived', 'ReconciliationProcessed', 'ReconciliationReceived'));
         ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
+        ALTER TABLE outgoing_mail_queue ADD CONSTRAINT outgoing_mail_queue_id_discriminator_ck 
+            CHECK ((id_discriminator) IN ('Default', 'TenantSure'));
+        ALTER TABLE outgoing_mail_queue ADD CONSTRAINT outgoing_mail_queue_status_e_ck 
+            CHECK ((status) IN ('Cancelled', 'GiveUp', 'Queued', 'Success'));
         ALTER TABLE pmc_personal_information_document ADD CONSTRAINT pmc_personal_information_document_personal_info_doc_type_e_ck 
             CHECK ((personal_info_doc_type) IN ('DriversLicense', 'Passport'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
