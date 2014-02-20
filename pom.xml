@@ -481,6 +481,17 @@
 
             </plugins>
         </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
+            </plugin>
+
+        </plugins>
+
     </build>
 
     <profiles>
@@ -613,124 +624,6 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>todo-try-with-maven3.1</id>
-            <activation>
-                <file>
-                    <!-- This employs that the basedir expression is only recognized by Maven 3.x (see MNG-2363) -->
-                    <exists>off-${basedir}</exists>
-                </file>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-site-plugin</artifactId>
-                        <version>3.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-descriptor</id>
-                                <goals>
-                                    <goal>attach-descriptor</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <reportPlugins>
-                                <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                                    <version>2.4</version>
-                                    <configuration>
-                                        <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                                        <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                                    </configuration>
-                                    <reports>
-                                        <report>index</report>
-                                        <report>dependencies</report>
-                                        <report>modules</report>
-                                        <report>license</report>
-                                    </reports>
-                                </plugin>
-                                <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-javadoc-plugin</artifactId>
-                                    <version>2.8.1</version>
-                                    <configuration>
-                                        <quiet>true</quiet>
-                                        <nohelp>true</nohelp>
-                                    </configuration>
-                                </plugin>
-                                <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-changelog-plugin</artifactId>
-                                    <version>2.2</version>
-                                    <configuration>
-                                        <basedir>${basedir}</basedir>
-                                    </configuration>
-                                    <reportSets>
-                                        <reportSet>
-                                            <id>dual-report</id>
-                                            <configuration>
-                                                <type>range</type>
-                                                <range>30</range>
-                                            </configuration>
-                                            <reports>
-                                                <report>changelog</report>
-                                                <report>file-activity</report>
-                                                <report>dev-activity</report>
-                                            </reports>
-                                        </reportSet>
-                                    </reportSets>
-                                </plugin>
-                                <plugin>
-                                    <groupId>org.codehaus.mojo</groupId>
-                                    <artifactId>findbugs-maven-plugin</artifactId>
-                                    <version>2.4.0</version>
-                                </plugin>
-                                <!-- TODO list -->
-                                <plugin>
-                                    <groupId>org.codehaus.mojo</groupId>
-                                    <artifactId>taglist-maven-plugin</artifactId>
-                                    <version>2.4</version>
-                                </plugin>
-                                <plugin>
-                                    <groupId>net.sf</groupId>
-                                    <artifactId>stat-scm</artifactId>
-                                    <version>1.2.0</version>
-                                    <configuration>
-                                        <excludes>
-                                            <exclude>**/*.cvs</exclude>
-                                            <exclude>**/*.po</exclude>
-                                        </excludes>
-                                        <nonDeveloperLogins>
-                                            <nonDeveloperLogin>cruisecontrol</nonDeveloperLogin>
-                                        </nonDeveloperLogins>
-                                        <systemProperties>
-                                            <property>
-                                                <name>java.util.logging.config.file</name>
-                                                <value>src/site/stat-scm-logging-error.properties</value>
-                                            </property>
-                                        </systemProperties>
-                                    </configuration>
-                                </plugin>
-                                <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-pmd-plugin</artifactId>
-                                    <version>2.7.1</version>
-                                    <configuration>
-                                        <linkXref>true</linkXref>
-                                        <minimumTokens>100</minimumTokens>
-                                        <targetJdk>1.5</targetJdk>
-                                    </configuration>
-                                </plugin>
-                            </reportPlugins>
                         </configuration>
                     </plugin>
                 </plugins>
