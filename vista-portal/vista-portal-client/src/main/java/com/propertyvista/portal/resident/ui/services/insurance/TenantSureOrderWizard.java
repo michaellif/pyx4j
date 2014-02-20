@@ -27,15 +27,12 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
@@ -73,6 +70,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         }
     });
 
+    private TenantSureCoverageRequestForm coverageRequestForm;
+
     public TenantSureOrderWizard(TenantSureOrderWizardView view, String endButtonCaption) {
         super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
 
@@ -85,7 +84,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        ((TenantSureCoverageRequestForm) get(proto().tenantSureCoverageRequest())).setCoverageParams(getValue().agreementParams());
+        coverageRequestForm.setCoverageParams(getValue().agreementParams());
 
         get(proto().tenantSureCoverageRequest().tenantName()).setViewable(getValue().agreementParams().isTenantInitializedInCfc().isBooleanTrue());
         get(proto().tenantSureCoverageRequest().tenantPhone()).setViewable(getValue().agreementParams().isTenantInitializedInCfc().isBooleanTrue());
@@ -133,11 +132,13 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         BasicFlexFormPanel quotationRequestStepPanel = new BasicFlexFormPanel();
         quotationRequestStepPanel.getElement().getStyle().setMarginBottom(2, Unit.EM);
         int row = -1;
-        quotationRequestStepPanel.setWidget(++row, 0, 1, inject(proto().tenantSureCoverageRequest(), new TenantSureCoverageRequestForm()));
+        quotationRequestStepPanel
+                .setWidget(++row, 0, 1, inject(proto().tenantSureCoverageRequest(), coverageRequestForm = new TenantSureCoverageRequestForm()));
         get(proto().tenantSureCoverageRequest()).addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
             @Override
             public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
-                if (get(proto().tenantSureCoverageRequest()).isValid()) {
+                coverageRequestForm.revalidate();
+                if (coverageRequestForm.isValid()) {
                     presenter.getNewQuote();
                     get(proto().tenantSureCoverageRequestConfirmation()).setValue(event.getValue(), false);
                 }
