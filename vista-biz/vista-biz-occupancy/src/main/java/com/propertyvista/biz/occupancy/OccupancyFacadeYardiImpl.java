@@ -78,7 +78,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
 
     @Override
     public boolean isMigrateStartAvailable(AptUnit unitStub) {
-        throw new Error("unsupported");
+        return true;
     }
 
     @Override
