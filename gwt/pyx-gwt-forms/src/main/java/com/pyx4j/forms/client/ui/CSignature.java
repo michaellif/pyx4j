@@ -84,6 +84,11 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
 
     }
 
+    @Override
+    public boolean isValidatable() {
+        return isVisible() && isEditable() && isEnabled() && !isViewable() && (isVisited() || isEditingInProgress());
+    }
+
     public void setSignatureCompletionValidator(AbstractComponentValidator<ISignature> validator) {
         removeComponentValidator(signatureComplitionsValidator);
         signatureComplitionsValidator = validator;
