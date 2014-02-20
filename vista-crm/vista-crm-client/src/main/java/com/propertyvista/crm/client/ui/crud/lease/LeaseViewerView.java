@@ -26,7 +26,6 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -34,6 +33,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LegalStatusDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -103,5 +103,5 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
     void reportCancelNoticeFailed(UserRuntimeException caught);
 
-    void requestNewLegalStatus(AsyncCallback<LegalStatus> legalStatusUpadate);
+    void requestNewLegalStatus(AsyncCallback<LegalStatusDTO> legalStatusUpadate);
 }

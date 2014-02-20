@@ -60,7 +60,6 @@ import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudServi
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -72,6 +71,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LegalStatusDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -351,9 +351,9 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void setLegalStatus() {
-        ((LeaseViewerView) getView()).requestNewLegalStatus(new DefaultAsyncCallback<LegalStatus>() {
+        ((LeaseViewerView) getView()).requestNewLegalStatus(new DefaultAsyncCallback<LegalStatusDTO>() {
             @Override
-            public void onSuccess(LegalStatus result) {
+            public void onSuccess(LegalStatusDTO result) {
                 ((LeaseViewerCrudService) getService()).setLegalStatus(new DefaultAsyncCallback<VoidSerializable>() {
                     @Override
                     public void onSuccess(VoidSerializable result) {
@@ -366,7 +366,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void clearLegalStatus() {
-        final LegalStatus status = EntityFactory.create(LegalStatus.class);
+        final LegalStatusDTO status = EntityFactory.create(LegalStatusDTO.class);
         status.status().setValue(Status.None);
         ((LeaseViewerCrudService) getService()).setLegalStatus(new DefaultAsyncCallback<VoidSerializable>() {
             @Override

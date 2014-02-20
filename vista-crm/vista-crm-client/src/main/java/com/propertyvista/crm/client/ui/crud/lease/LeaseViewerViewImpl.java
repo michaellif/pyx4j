@@ -70,7 +70,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -82,6 +81,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LegalStatusDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -827,10 +827,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     @Override
-    public void requestNewLegalStatus(final AsyncCallback<LegalStatus> legalStatusUpadate) {
+    public void requestNewLegalStatus(final AsyncCallback<LegalStatusDTO> legalStatusUpadate) {
         new LegalStatusDialog() {
             @Override
-            public void onSetLegalStatus(LegalStatus legalStatus) {
+            public void onSetLegalStatus(LegalStatusDTO legalStatus) {
                 legalStatusUpadate.onSuccess(legalStatus);
             }
         }.show();

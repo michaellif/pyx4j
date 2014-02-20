@@ -7,25 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-01-22
+ * Created on 2014-02-20
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.dto;
 
-import java.util.List;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface LeaseLegalFacade {
+@Transient
+public interface LegalStatusDTO extends LegalStatus {
 
-    LegalStatus getCurrentLegalStatus(Lease leaseId);
-
-    List<LegalStatus> getLegalStatusHistory(Lease leaseId);
-
-    void setLegalStatus(Lease leaseId, LegalStatus.Status status, String details, String notes, CrmUser setBy, List<LegalLetter> attachedLetters);
-
+    IList<LegalLetter> letters();
 }

@@ -13,30 +13,29 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.legal.LeaseLegalFacade;
-import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
+import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
-import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LegalStatusDTO;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrudServiceDtoImpl<Lease, DTO> {
 
@@ -107,14 +106,26 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     private void loadCommunicationLetters(LeaseDTO lease) {
-        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey());
-        Map<Lease, List<N4LegalLetter>> n4s = ServerSideFactory.create(N4ManagementFacade.class).getN4(Arrays.asList(leaseId), null);
-        lease.letters().addAll(n4s.get(leaseId));
+        EntityQueryCriteria<LegalLetter> criteria = EntityQueryCriteria.create(LegalLetter.class);
+        criteria.eq(criteria.proto().lease(), lease.getPrimaryKey());
+        criteria.asc(criteria.proto().generatedOn());
+        lease.letters().addAll(Persistence.service().query(criteria));
     }
 
     private void loadLegalStatus(LeaseDTO lease) {
-        lease.legalStatusHistory().addAll(
-                ServerSideFactory.create(LeaseLegalFacade.class).getLegalStatusHistory(EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey())));
+        List<LegalStatus> legalStatuses = ServerSideFactory.create(LeaseLegalFacade.class).getLegalStatusHistory(
+                EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey()));
+        for (LegalStatus status : legalStatuses) {
+            LegalStatusDTO dto = status.duplicate(LegalStatusDTO.class);
+
+            EntityQueryCriteria<LegalLetter> criteria = EntityQueryCriteria.create(LegalLetter.class);
+            criteria.eq(criteria.proto().lease(), lease.getPrimaryKey());
+            criteria.eq(criteria.proto().status(), status);
+            dto.letters().addAll(Persistence.service().query(criteria));
+
+            lease.legalStatusHistory().add(dto);
+        }
+
         if (!lease.legalStatusHistory().isEmpty()) {
             LegalStatus current = lease.legalStatusHistory().get(0);
             if (current.status().getValue() != LegalStatus.Status.None) {

@@ -28,6 +28,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.security.CrmUser;
@@ -51,7 +52,7 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
     }
 
     @Override
-    public void setLegalStatus(Lease leaseId, Status status, String details, String notes, CrmUser setBy) {
+    public void setLegalStatus(Lease leaseId, Status status, String details, String notes, CrmUser setBy, List<LegalLetter> letters) {
         LegalStatus legalStatus = EntityFactory.create(LegalStatus.class);
         legalStatus.lease().set(leaseId);
         legalStatus.status().setValue(status);
@@ -60,6 +61,15 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
         legalStatus.setBy().set(setBy);
         legalStatus.setOn().setValue(SystemDateManager.getDate());
         Persistence.service().persist(legalStatus);
+
+        if (letters != null) {
+            for (LegalLetter letter : letters) {
+                letter.lease().set(leaseId);
+                letter.status().set(legalStatus);
+                letter.generatedOn().setValue(legalStatus.setOn().getValue());
+                Persistence.service().persist(letter);
+            }
+        }
     }
 
     @Override

@@ -17,7 +17,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LegalStatusForm;
-import com.propertyvista.domain.legal.LegalStatus;
+import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.dto.LegalStatusDTO;
 
 public class LegalStatusDialog extends OkCancelDialog {
 
@@ -27,7 +28,7 @@ public class LegalStatusDialog extends OkCancelDialog {
 
     public LegalStatusDialog() {
         super(i18n.tr("Set Legal Status"));
-        form = new LegalStatusForm();
+        form = new LegalStatusForm(true);
         form.initContent();
         form.populateNew();
         setBody(form);
@@ -37,6 +38,12 @@ public class LegalStatusDialog extends OkCancelDialog {
     @Override
     public boolean onClickOk() {
         form.setVisitedRecursive();
+        form.revalidate();
+        for (LegalLetter letter : form.getValue().letters()) {
+            if (letter.file().isEmpty()) {
+                return false;
+            }
+        }
         if (form.isValid()) {
             onSetLegalStatus(form.getValue());
             return true;
@@ -46,7 +53,7 @@ public class LegalStatusDialog extends OkCancelDialog {
     }
 
     /** override to do something useful */
-    public void onSetLegalStatus(LegalStatus legalStatus) {
+    public void onSetLegalStatus(LegalStatusDTO legalStatus) {
 
     }
 

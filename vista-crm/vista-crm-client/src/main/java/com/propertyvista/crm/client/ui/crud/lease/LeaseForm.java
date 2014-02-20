@@ -25,7 +25,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LegalStatusHistoryFolder;
-import com.propertyvista.crm.client.ui.crud.lease.common.N4LegalLetterFolder;
+import com.propertyvista.crm.client.ui.crud.lease.common.LegalLetterFolder;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.LeaseDTO;
@@ -94,7 +94,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     private Widget createCommunicationsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().letters(), new N4LegalLetterFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().letters(), new LegalLetterFolder()));
         return panel;
     }
 }

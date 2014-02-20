@@ -25,8 +25,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.legal.LegalStatus;
-import com.propertyvista.domain.legal.n4.N4LegalLetter;
+import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -57,11 +56,11 @@ public interface LeaseDTO extends Lease {
     @Caption(name = "Initial Balance")
     IPrimitive<BigDecimal> carryforwardBalance();
 
-    IList<N4LegalLetter> letters();
+    IList<LegalLetter> letters();
 
     IPrimitive<String> currentLegalStatus();
 
-    IList<LegalStatus> legalStatusHistory();
+    IList<LegalStatusDTO> legalStatusHistory();
 
     @Editor(type = EditorType.label)
     IPrimitive<Boolean> isUnitReserved();

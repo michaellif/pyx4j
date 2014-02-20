@@ -22,6 +22,7 @@ package com.propertyvista.biz.legal;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,6 +59,7 @@ import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
@@ -175,14 +177,21 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             n4Letter.cancellationThreshold().setValue(new BigDecimal("0.00")); // TODO should be defined by user input
             n4Letter.isActive().setValue(true);
             n4Letter.generatedOn().setValue(generationTime);
+
             n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
             n4Letter.file().fileSize().setValue(n4LetterBinary.length);
             n4Letter.file().fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
+
             Persistence.service().persist(n4Letter);
 
-            ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(leaseId, Status.N4,
-                    SimpleMessageFormat.format("termination date: {0,date,short}", n4LeaseData.terminationDate().getValue()), "created via issue of N4 notice",
-                    EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
+            ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
+                    leaseId,
+                    Status.N4,
+                    SimpleMessageFormat.format("termination date: {0,date,short}", n4LeaseData.terminationDate().getValue()),
+                    "created via issue of N4 notice",
+                    EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()),
+                    Arrays.<LegalLetter>asList(n4Letter)
+            );//@formatter:on
 
         } catch (Throwable error) {
             log.error("Failed to generate n4 for lease pk='" + leaseId.getPrimaryKey() + "'", error);

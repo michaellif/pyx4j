@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-02-06
+ * Created on 2014-02-20
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease;
+package com.propertyvista.crm.server.services.legal;
 
 import java.util.Collection;
 import java.util.EnumSet;
@@ -25,29 +25,24 @@ import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentUploadService;
-import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
+import com.propertyvista.crm.rpc.services.legal.LegalLetterUploadService;
+import com.propertyvista.domain.blob.LegalLetterBlob;
 
-public class LeaseTermAgreementDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, LeaseTermAgreementDocumentBlob> implements
-        LeaseTermAgreementDocumentUploadService {
+public class LegalLetterUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, LegalLetterBlob> implements LegalLetterUploadService {
 
-    private static final I18n i18n = I18n.get(LeaseTermAgreementDocumentUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(LegalLetterUploadServiceImpl.class);
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.BMP, DownloadFormat.PDF);
 
-    public LeaseTermAgreementDocumentUploadServiceImpl() {
-
-    }
-
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(LeaseTermAgreementDocumentBlob.class).data().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(LegalLetterBlob.class).data().getMeta().getLength();
     }
 
     @Override
     public String getUploadFileTypeName() {
-        return i18n.tr("Signed Lease Agreement Document");
+        return i18n.tr("Legal Letter");
     }
 
     @Override
@@ -56,12 +51,13 @@ public class LeaseTermAgreementDocumentUploadServiceImpl extends AbstractUploadS
     }
 
     @Override
-    protected void processUploadedData(IEntity entity, UploadedData uploadedData, IFile<LeaseTermAgreementDocumentBlob> response) {
-        LeaseTermAgreementDocumentBlob blob = EntityFactory.create(LeaseTermAgreementDocumentBlob.class);
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<LegalLetterBlob> response) {
+        LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
         blob.contentType().setValue(uploadedData.contentMimeType);
         blob.data().setValue(uploadedData.binaryContent);
         Persistence.service().persist(blob);
         Persistence.service().commit();
         response.blobKey().setValue(blob.getPrimaryKey());
     }
+
 }

@@ -28,7 +28,7 @@ public class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatus> {
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof LegalStatus) {
-            return new LegalStatusForm();
+            return new LegalStatusForm(false);
         }
         return super.create(member);
     }

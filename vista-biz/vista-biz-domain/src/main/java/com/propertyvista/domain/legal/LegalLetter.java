@@ -17,6 +17,8 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -35,6 +37,10 @@ public interface LegalLetter extends IHasFile<LegalLetterBlob> {
     @MemberColumn(notNull = true)
     Lease lease();
 
+    @Detached
+    LegalStatus status();
+
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();
 
     @MemberColumn(notNull = true)
