@@ -17,7 +17,13 @@
     <name>vista-shared-rpc</name>
 
     <dependencies>
-
+        
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-domain</artifactId>

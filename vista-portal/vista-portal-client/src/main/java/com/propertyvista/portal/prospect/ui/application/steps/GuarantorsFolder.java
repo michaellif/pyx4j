@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -20,11 +21,14 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.shared.services.dev.MockDataGenerator;
 
 public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
 
@@ -62,6 +66,19 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
 
             return mainPanel;
+        }
+
+        @Override
+        public void generateMockData() {
+            GWT.<MockDataGenerator> create(MockDataGenerator.class).getPerson(new DefaultAsyncCallback<Person>() {
+                @Override
+                public void onSuccess(Person person) {
+                    get(proto().name().firstName()).setMockValue(person.name().firstName().getValue());
+                    get(proto().name().lastName()).setMockValue(person.name().lastName().getValue());
+                    get(proto().email()).setMockValue(person.email().getValue());
+
+                }
+            });
         }
     }
 }

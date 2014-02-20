@@ -47,13 +47,13 @@ public class ProspectCoTenantEditInternalTest extends ProspectInternalTestBase {
         final OnlineApplicationDTO applicationDTO = createApplication();
 
         // Add Co-Tenant
-        CoapplicantDTO coapplicant = applicationDTO.coapplicants().$();
-        coapplicant.name().firstName().setValue("CoopF " + DataGenerator.randomFirstName());
-        coapplicant.name().lastName().setValue("CoopL " + DataGenerator.randomLastName());
-        coapplicant.relationship().setValue(PersonRelationship.Aunt);
-        coapplicant.email().setValue("cotenant009@aa.com");
+        CoapplicantDTO coapplicant1 = applicationDTO.coapplicants().$();
+        coapplicant1.name().firstName().setValue("Coop1F " + DataGenerator.randomFirstName());
+        coapplicant1.name().lastName().setValue("Coop1L " + DataGenerator.randomLastName());
+        coapplicant1.relationship().setValue(PersonRelationship.Aunt);
+        coapplicant1.email().setValue("cotenant009@aa.com");
 
-        applicationDTO.coapplicants().add(coapplicant);
+        applicationDTO.coapplicants().add(coapplicant1);
 
         TestServiceFactory.create(ApplicationWizardService.class).save(new EmptyAsyncCallbackAssertion<Key>(), applicationDTO);
 
@@ -70,7 +70,7 @@ public class ProspectCoTenantEditInternalTest extends ProspectInternalTestBase {
 
         assertEquals("saved CoApplicant", 1, applicationDTO.coapplicants().size());
 
-        assertEquals("email saved", coapplicant.email(), applicationDTOupdated1.coapplicants().get(0).email());
+        assertEquals("email saved", coapplicant1.email(), applicationDTOupdated1.coapplicants().get(0).email());
 
         TestServiceFactory.create(ApplicationWizardService.class).save(new EmptyAsyncCallbackAssertion<Key>(), applicationDTOupdated1);
 
@@ -85,6 +85,33 @@ public class ProspectCoTenantEditInternalTest extends ProspectInternalTestBase {
             }
         });
 
-        assertEquals("email saved again", coapplicant.email(), applicationDTOupdated2.coapplicants().get(0).email());
+        assertEquals("email saved again", coapplicant1.email(), applicationDTOupdated2.coapplicants().get(0).email());
+
+        // Test Duplicate email CoAppliant
+        if (false) {
+
+            CoapplicantDTO coapplicant2 = applicationDTO.coapplicants().$();
+            coapplicant2.name().firstName().setValue("Coop2F " + DataGenerator.randomFirstName());
+            coapplicant2.name().lastName().setValue("Coop2L " + DataGenerator.randomLastName());
+            coapplicant2.relationship().setValue(PersonRelationship.Friend);
+            coapplicant2.email().setValue("cotenant009@aa.com");
+
+            applicationDTOupdated2.coapplicants().add(coapplicant1);
+
+            TestServiceFactory.create(ApplicationWizardService.class).save(new EmptyAsyncCallbackAssertion<Key>(), applicationDTOupdated2);
+
+            final OnlineApplicationDTO applicationDTOupdated3 = EntityFactory.create(OnlineApplicationDTO.class);
+
+            TestServiceFactory.create(ApplicationWizardService.class).init(new AsyncCallbackAssertion<OnlineApplicationDTO>() {
+
+                @Override
+                public void onSuccess(OnlineApplicationDTO result) {
+                    applicationDTOupdated3.set(result);
+
+                }
+            });
+
+            assertEquals("duplicate email saved", coapplicant2.email(), applicationDTOupdated3.coapplicants().get(1).email());
+        }
     }
 }

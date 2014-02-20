@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.security;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.ReferenceDataService;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.security.InstanceAccess;
@@ -95,6 +96,7 @@ import com.propertyvista.portal.server.security.access.resident.MaintenanceReque
 import com.propertyvista.portal.server.security.access.resident.MaintenanceRequestTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.PaymentRecordTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
+import com.propertyvista.shared.services.dev.MockDataGenerator;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
@@ -240,6 +242,12 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.ResidentPrimary, PortalResidentBehavior.Resident);
         grant(PortalResidentBehavior.ResidentSecondary, PortalResidentBehavior.Resident);
+
+        // Dev
+        if (ApplicationMode.isDevelopment()) {
+            grant(new IServiceExecutePermission(MockDataGenerator.class));
+            grant(new IServiceExecutePermission(MockDataGenerator.class));
+        }
 
         // Data Access
         grant(PortalResidentBehavior.Resident, VistaDataAccessBehavior.ResidentInPortal);

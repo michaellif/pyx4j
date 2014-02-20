@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -27,8 +28,10 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
@@ -37,6 +40,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.shared.services.dev.MockDataGenerator;
 
 public class PeopleStep extends ApplicationWizardStep {
 
@@ -109,10 +113,17 @@ public class PeopleStep extends ApplicationWizardStep {
 
             @Override
             public void generateMockData() {
-                get(proto().name().firstName()).setMockValue("Jane");
-                get(proto().name().lastName()).setMockValue("Stiles");
-                get(proto().relationship()).setMockValue(PersonRelationship.Spouse);
-                get(proto().email()).setMockValue("JaneStiles" + (int) System.currentTimeMillis() + "@pyx4j.com");
+                GWT.<MockDataGenerator> create(MockDataGenerator.class).getPerson(new DefaultAsyncCallback<Person>() {
+
+                    @Override
+                    public void onSuccess(Person person) {
+                        get(proto().name().firstName()).setMockValue(person.name().firstName().getValue());
+                        get(proto().name().lastName()).setMockValue(person.name().lastName().getValue());
+                        get(proto().relationship()).setMockValue(PersonRelationship.Spouse);
+                        get(proto().email()).setMockValue(person.email().getValue());
+
+                    }
+                });
             }
         }
     }
@@ -184,10 +195,17 @@ public class PeopleStep extends ApplicationWizardStep {
 
             @Override
             public void generateMockData() {
-                get(proto().name().firstName()).setMockValue("Bob");
-                get(proto().name().lastName()).setMockValue("Stiles");
                 get(proto().relationship()).setMockValue(PersonRelationship.Son);
                 get(proto().birthDate()).setMockValue(new LogicalDate(102, 3, 5));
+
+                GWT.<MockDataGenerator> create(MockDataGenerator.class).getPerson(new DefaultAsyncCallback<Person>() {
+
+                    @Override
+                    public void onSuccess(Person person) {
+                        get(proto().name().firstName()).setMockValue(person.name().firstName().getValue());
+                        get(proto().name().lastName()).setMockValue(person.name().lastName().getValue());
+                    }
+                });
             }
 
             @Override
