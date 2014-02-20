@@ -85,9 +85,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
             leaseAgreementData.landlordLogo().setValue((blob.data().getValue()));
         }
 
-        if (!makeDraft) {
-            leaseAgreementData.applicants().addAll(makeApplicants(leaseTerm));
-        }
+        leaseAgreementData.applicants().addAll(makeApplicants(leaseTerm));
         leaseAgreementData.terms().add(makeOccupantsTerm(leaseTerm));
         leaseAgreementData.terms().add(makePremisesTerm(AddressRetriever.getUnitLegalAddress(leaseTerm.lease().unit())));
         leaseAgreementData.terms().add(makeTermTerm(leaseTerm));
