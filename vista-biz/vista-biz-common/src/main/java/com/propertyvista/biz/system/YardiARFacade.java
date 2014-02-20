@@ -22,6 +22,7 @@ import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -41,4 +42,6 @@ public interface YardiARFacade {
             YardiServiceException, RemoteException;
 
     List<YardiPropertyConfiguration> getPropertyConfigurations() throws YardiServiceException, RemoteException;
+
+    void updateUnitAvailability(AptUnit aptUnit) throws YardiServiceException, RemoteException;
 }
