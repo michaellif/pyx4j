@@ -105,6 +105,14 @@ public class DataGenerator {
         generatorLocal.remove();
     }
 
+    public static Object getGeneratorContext() {
+        return generatorLocal.get();
+    }
+
+    public static void setGeneratorContext(Object generatorContext) {
+        generatorLocal.set((GeneratorContext) generatorContext);
+    }
+
     public static void cleanRandomDuplicates(String duplicatesId) {
         generatorLocal.get().cleanUpDuplicates(duplicatesId);
     }
