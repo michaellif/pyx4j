@@ -54,15 +54,22 @@ public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<
 
         @Override
         public IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
+            BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     IdentificationDocumentFile.class));
 
-            main.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().file(), cfile)).customLabel("").labelWidth("0px").build());
+            content.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().file(), cfile)).customLabel("").labelWidth("0px").build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description())).build());
 
-            return main;
+            return content;
         }
+
+        @Override
+        public void generateMockData() {
+            get(proto().description()).setMockValue("Description");
+        }
+
     }
 }
