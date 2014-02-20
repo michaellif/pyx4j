@@ -218,7 +218,8 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
                     updateNote();
                 } else if (event.isEventOfType(PropertyName.valid)) {
                     renderValidationMessage();
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable,
+                        PropertyName.mandatory)) {
                     renderMandatoryStar();
                 }
             }
