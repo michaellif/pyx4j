@@ -44,6 +44,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 public class MockHttpServletRequest implements HttpServletRequest {
 
     protected Hashtable<String, String> headers = new Hashtable<String, String>();
@@ -291,7 +293,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public StringBuffer getRequestURL() {
-        throw new UnsupportedOperationException();
+        return new StringBuffer(ServerSideConfiguration.instance().getMainApplicationURL());
     }
 
     @Override
