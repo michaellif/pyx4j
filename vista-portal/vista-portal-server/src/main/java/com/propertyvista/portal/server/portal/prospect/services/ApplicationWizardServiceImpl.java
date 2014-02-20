@@ -69,6 +69,7 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -171,6 +172,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         options.unit().set(filterUnitData(Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey())));
 
         callback.onSuccess(fillAvailableUnitOptions(options));
+    }
+
+    @Override
+    public void getCurrentDeposits(AsyncCallback<Vector<Deposit>> callback, OnlineApplicationDTO currentValue) {
+        // TODO: implement it:
+        callback.onSuccess(new Vector<Deposit>(/* calculateDeposits(lease) */));
     }
 
     @Override
@@ -691,16 +698,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // current balance: -------------------------------------------------------------------------------------------------------
 
-        // calculate deposits fee:
-        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
-        dto.deposits().addAll(leaseTerm.version().leaseProducts().serviceItem().deposits());
-        for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
-            dto.deposits().addAll(feature.deposits());
-        }
+        // calculate deposits/fee:
+        dto.deposits().addAll(calculateDeposits(lease));
 
-        // calculate application fee:
         ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, ProspectPortalPolicy.class);
-
         if (policy.feePayment().getValue() == FeePayment.perApplicant) {
             if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
                 dto.applicationFee().setValue(policy.feeAmount().getValue());
@@ -714,6 +715,18 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.payment().set(dto);
     }
 
+    private List<Deposit> calculateDeposits(Lease lease) {
+        List<Deposit> deposits = new ArrayList<>();
+
+        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
+        deposits.addAll(leaseTerm.version().leaseProducts().serviceItem().deposits());
+        for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
+            deposits.addAll(feature.deposits());
+        }
+
+        return deposits;
+    }
+
     private void savePaymentData(OnlineApplication bo, OnlineApplicationDTO to) {
         Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
         PaymentDTO pto = to.payment();
@@ -724,31 +737,33 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             }
         }.createBO(pto);
 
-        pbo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
-        pbo.billingAccount().set(lease.billingAccount());
+        if (!pto.paymentMethod().isNull()) {
+            pbo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
+            pbo.billingAccount().set(lease.billingAccount());
 
-        // Do not change profile methods
-        if (pbo.paymentMethod().id().isNull()) {
-            if (pto.storeInProfile().isBooleanTrue() && PaymentType.availableInProfile().contains(pto.paymentMethod().type().getValue())) {
-                pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
-            } else {
-                pbo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
+            // Do not change profile methods
+            if (pbo.paymentMethod().id().isNull()) {
+                if (pto.storeInProfile().isBooleanTrue() && PaymentType.availableInProfile().contains(pto.paymentMethod().type().getValue())) {
+                    pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+                } else {
+                    pbo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
+                }
+
+                // some corrections for particular method types:
+                if (pto.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                    pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+                }
             }
 
-            // some corrections for particular method types:
-            if (pto.paymentMethod().type().getValue() == PaymentType.Echeck) {
-                pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
-            }
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), pbo.paymentMethod(), VistaApplication.prospect);
+            ServerSideFactory.create(PaymentFacade.class).validatePayment(pbo, VistaApplication.prospect);
+
+            ServerSideFactory.create(PaymentFacade.class).persistPayment(pbo);
         }
-
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), pbo.paymentMethod(), VistaApplication.prospect);
-        ServerSideFactory.create(PaymentFacade.class).validatePayment(pbo, VistaApplication.prospect);
-
-        ServerSideFactory.create(PaymentFacade.class).persistPayment(pbo);
     }
 
     private void savePaymentMethod(OnlineApplication bo, OnlineApplicationDTO to) {
-        if (to.payment().storeInProfile().isBooleanTrue()) {
+        if (to.payment().storeInProfile().isBooleanTrue() && !to.payment().paymentMethod().isNull()) {
             Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
             Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
 

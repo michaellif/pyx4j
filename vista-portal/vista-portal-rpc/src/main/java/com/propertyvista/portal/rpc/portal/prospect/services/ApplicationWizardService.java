@@ -22,6 +22,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
@@ -39,6 +40,8 @@ public interface ApplicationWizardService extends IService {
     void getAvailableUnits(AsyncCallback<UnitSelectionDTO> callback, UnitSelectionDTO unitSelection);
 
     void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId);
+
+    void getCurrentDeposits(AsyncCallback<Vector<Deposit>> callback, OnlineApplicationDTO currentValue);
 
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 }

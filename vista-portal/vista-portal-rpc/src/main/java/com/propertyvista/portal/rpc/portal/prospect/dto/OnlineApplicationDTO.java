@@ -74,5 +74,4 @@ public interface OnlineApplicationDTO extends IEntity {
     IList<OnlineApplicationWizardStepStatus> stepsStatuses();
 
     PaymentDTO payment();
-
 }
