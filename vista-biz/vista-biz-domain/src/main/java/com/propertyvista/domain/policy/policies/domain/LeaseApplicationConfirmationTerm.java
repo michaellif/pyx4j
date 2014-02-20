@@ -28,6 +28,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
 
 public interface LeaseApplicationConfirmationTerm extends IEntity {
 
@@ -48,6 +49,9 @@ public interface LeaseApplicationConfirmationTerm extends IEntity {
 
     @NotNull
     IPrimitive<SignatureFormat> signatureFormat();
+
+    @NotNull
+    IPrimitive<TargetRole> applyToRole();
 
     @OrderColumn
     IPrimitive<Integer> orderId();

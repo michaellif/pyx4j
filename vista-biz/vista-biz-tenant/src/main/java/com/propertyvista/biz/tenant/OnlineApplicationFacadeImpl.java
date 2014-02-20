@@ -435,10 +435,13 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
                 LeaseApplicationLegalPolicy.class);
         for (LeaseApplicationConfirmationTerm term : leaseApplicationPolicy.confirmationTerms()) {
-            SignedOnlineApplicationConfirmationTerm signedTerm = EntityFactory.create(SignedOnlineApplicationConfirmationTerm.class);
-            signedTerm.term().set(term);
-            signedTerm.signature().signatureFormat().set(term.signatureFormat());
-            terms.add(signedTerm);
+            TargetRole termRole = term.applyToRole().getValue();
+            if (termRole.matchesApplicationRole(app.role().getValue())) {
+                SignedOnlineApplicationConfirmationTerm signedTerm = EntityFactory.create(SignedOnlineApplicationConfirmationTerm.class);
+                signedTerm.term().set(term);
+                signedTerm.signature().signatureFormat().set(term.signatureFormat());
+                terms.add(signedTerm);
+            }
         }
         return terms;
     }

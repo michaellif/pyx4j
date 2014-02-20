@@ -86,6 +86,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = -1;
 
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().applyToRole()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().body()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureFormat()), 35).build());
@@ -119,6 +120,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = -1;
 
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().applyToRole()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().body()), 35).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureFormat()), 35).build());

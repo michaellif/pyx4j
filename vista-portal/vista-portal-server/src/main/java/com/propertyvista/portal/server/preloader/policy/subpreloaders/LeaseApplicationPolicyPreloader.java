@@ -36,33 +36,34 @@ public class LeaseApplicationPolicyPreloader extends AbstractPolicyPreloader<Lea
         LeaseApplicationLegalPolicy policy = EntityFactory.create(LeaseApplicationLegalPolicy.class);
 
         // add legal terms
-        policy.legalTerms()
-                .add(createTerm("Conditions of Acceptance of a Lease", "leaseApplicationTerm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
-        policy.legalTerms().add(createTerm("Consent to Lease", "leaseApplicationTerm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.legalTerms().add(
+                createLegalTerm("Conditions of Acceptance of a Lease", "leaseApplicationTerm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.legalTerms().add(createLegalTerm("Consent to Lease", "leaseApplicationTerm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
 
         // add confirmation terms
-        policy.confirmationTerms().add(createTerm("Privacy Policy", "leaseApplicationConfirm1.html", SignatureFormat.AgreeBox));
-        policy.confirmationTerms().add(createTerm("Digital Signature", "leaseApplicationConfirm2.html", SignatureFormat.AgreeBox));
+        policy.confirmationTerms().add(createConfTerm("Privacy Policy", "leaseApplicationConfirm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.confirmationTerms().add(createConfTerm("Digital Signature", "leaseApplicationConfirm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
 
         return policy;
     }
 
-    public LeaseApplicationLegalTerm createTerm(String caption, String termsSourceFile, TargetRole role, SignatureFormat format) {
+    public LeaseApplicationLegalTerm createLegalTerm(String caption, String termsSourceFile, TargetRole role, SignatureFormat format) {
 
         String termsContent = getTermsContent(termsSourceFile);
 
         LeaseApplicationLegalTerm term = EntityFactory.create(LeaseApplicationLegalTerm.class);
+        term.applyToRole().setValue(role);
         term.title().setValue(caption);
         term.body().setValue(termsContent);
-        term.applyToRole().setValue(role);
         term.signatureFormat().setValue(format);
         return term;
     }
 
-    private LeaseApplicationConfirmationTerm createTerm(String caption, String termsSourceFile, SignatureFormat format) {
+    private LeaseApplicationConfirmationTerm createConfTerm(String caption, String termsSourceFile, TargetRole role, SignatureFormat format) {
         String termsContent = getTermsContent(termsSourceFile);
 
         LeaseApplicationConfirmationTerm term = EntityFactory.create(LeaseApplicationConfirmationTerm.class);
+        term.applyToRole().setValue(role);
         term.title().setValue(caption);
         term.body().setValue(termsContent);
         term.signatureFormat().setValue(format);

@@ -48,8 +48,9 @@ public interface LeaseApplicationLegalTerm extends IEntity {
                 return this == TargetRole.Applicant;
             case Guarantor:
                 return this == TargetRole.Guarantor;
+            default:
+                return false;
             }
-            return false;
         }
     }
 
