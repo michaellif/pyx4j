@@ -57,7 +57,7 @@ public class YardiILSGuestCardService extends YardiAbstractService {
 
         // process new availability data
         for (ILSUnit ilsUnit : marketingInfo.getProperty().get(0).getILSUnit()) {
-            if (aptUnit.info().number().equals(ilsUnit.getUnit().getInformation().get(0).getUnitID())) {
+            if (aptUnit.info().number().getValue("").equals(ilsUnit.getUnit().getInformation().get(0).getUnitID())) {
                 final Availability avail = ilsUnit.getAvailability();
                 log.info("New Unit Availability: {}: {}", aptUnit.getStringView(), (avail == null || avail.getVacateDate() == null ? "Not " : "") + "Available");
 
