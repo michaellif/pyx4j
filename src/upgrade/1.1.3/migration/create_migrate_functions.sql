@@ -383,7 +383,7 @@ BEGIN
         (
                 id                              BIGINT                  NOT NULL,
                 name                            VARCHAR(500),
-                data                            bytea,
+                data                            BYTEA,
                 content_type                    VARCHAR(500),
                 updated                         TIMESTAMP,
                 created                         TIMESTAMP,
@@ -980,7 +980,7 @@ BEGIN
                                                 
         -- notes_and_attachments
         
-        ALTER TABLE notes_and_attachments       ADD COLUMN owner BIGINT;
+        ALTER TABLE notes_and_attachments RENAME COLUMN owner_id TO owner;
 		ALTER TABLE notes_and_attachments RENAME COLUMN owner_class TO owner_discriminator;
 		ALTER TABLE notes_and_attachments ALTER COLUMN owner_discriminator TYPE VARCHAR(50);
                                                 
@@ -1708,9 +1708,7 @@ BEGIN
         ALTER TABLE n4_policy   DROP COLUMN mailing_address_street1,
                                 DROP COLUMN mailing_address_street2;
                                 
-		-- notes_and_attachments
-		
-		ALTER TABLE notes_and_attachments DROP COLUMN owner_id;
+				
         
         -- online_application$signatures
         
