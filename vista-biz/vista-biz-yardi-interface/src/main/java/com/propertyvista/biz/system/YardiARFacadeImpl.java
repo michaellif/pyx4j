@@ -29,11 +29,13 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.yardi.services.YardiILSGuestCardService;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
@@ -114,4 +116,9 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
 
         return propertyConfigurations;
     }
+
+    public void updateUnitAvailability(AptUnit aptUnit) throws YardiServiceException, RemoteException {
+        YardiILSGuestCardService.getInstance().updateUnitAvailability(VistaDeployment.getPmcYardiCredential(aptUnit.building()), aptUnit);
+    }
+
 }

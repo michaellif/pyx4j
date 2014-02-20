@@ -18,13 +18,19 @@ import java.rmi.RemoteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.ils.Availability;
+import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.PhysicalProperty;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 
 public class YardiILSGuestCardService extends YardiAbstractService {
@@ -42,14 +48,28 @@ public class YardiILSGuestCardService extends YardiAbstractService {
         return SingletonHolder.INSTANCE;
     }
 
-    public void getUnitAvailability(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
-        if (VistaDeployment.getPmcYardiBuildings(yc).size() == 0) {
-            return;
-        }
-
+    /** Update availability for specific unit */
+    // TODO - move to ILS/GuestCard v4 - UnitAvailability_LoginByUnit
+    public void updateUnitAvailability(PmcYardiCredential yc, final AptUnit aptUnit) throws YardiServiceException, RemoteException {
         YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-
-        log.info("Getting marketing info for property {}", propertyId);
+        String propertyId = aptUnit.building().propertyCode().getValue();
         PhysicalProperty marketingInfo = stub.getPropertyMarketingInfo(yc, propertyId);
+
+        // process new availability data
+        for (ILSUnit ilsUnit : marketingInfo.getProperty().get(0).getILSUnit()) {
+            if (aptUnit.info().number().equals(ilsUnit.getUnit().getInformation().get(0).getUnitID())) {
+                final Availability avail = ilsUnit.getAvailability();
+                log.info("New Unit Availability: {}: {}", aptUnit.getStringView(), (avail == null || avail.getVacateDate() == null ? "Not " : "") + "Available");
+
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+                    @Override
+                    public Void execute() throws YardiServiceException {
+                        new YardiILSMarketingProcessor().updateAvailability(aptUnit, avail);
+                        return null;
+                    }
+                });
+                break;
+            }
+        }
     }
 }
