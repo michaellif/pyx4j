@@ -52,7 +52,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.ci.bugs.MemoryLeakJAXBContextLifecycleListener;
 import com.propertyvista.server.common.security.VistaAntiBot;

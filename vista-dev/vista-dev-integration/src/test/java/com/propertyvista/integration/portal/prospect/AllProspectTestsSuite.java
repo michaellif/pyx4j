@@ -11,20 +11,15 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.integration;
+package com.propertyvista.integration.portal.prospect;
 
-import org.junit.experimental.categories.Categories;
-import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.propertyvista.integration.portal.prospect.AllProspectTestsSuite;
-import com.propertyvista.integration.yardi.AllYardiTestsSuite;
-import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
-
-@RunWith(Categories.class)
-@IncludeCategory(FunctionalTests.class)
-@Suite.SuiteClasses({ AllYardiTestsSuite.class, AllProspectTestsSuite.class })
-public class FunctionalSuite {
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ //
+ProspectSelfRegistrationFlowInternalTest.class,//
+})
+public class AllProspectTestsSuite {
 
 }

@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.maintenance.MaintenanceViewerView;
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 
 public class MaintenanceViewerActivity extends AdminViewerActivity<VistaSystemMaintenanceState> implements MaintenanceViewerView.Presenter {

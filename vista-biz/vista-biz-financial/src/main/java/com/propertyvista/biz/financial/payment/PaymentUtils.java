@@ -42,7 +42,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
 class PaymentUtils {
 

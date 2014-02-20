@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.maintenance;
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
 public interface MaintenanceViewerView extends IViewer<VistaSystemMaintenanceState> {
 

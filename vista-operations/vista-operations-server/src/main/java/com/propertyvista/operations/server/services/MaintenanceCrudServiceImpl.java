@@ -34,7 +34,7 @@ import com.propertyvista.biz.system.YardiOperationsFacade;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AuditRecordEventType;
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 
 public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements MaintenanceCrudService {

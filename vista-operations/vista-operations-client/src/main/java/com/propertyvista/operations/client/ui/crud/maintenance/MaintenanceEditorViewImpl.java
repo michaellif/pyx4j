@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.maintenance;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
 public class MaintenanceEditorViewImpl extends OperationsEditorViewImplBase<VistaSystemMaintenanceState> implements MaintenanceEditorView {
 

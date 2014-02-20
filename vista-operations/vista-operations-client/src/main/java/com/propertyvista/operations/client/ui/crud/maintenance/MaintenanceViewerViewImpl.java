@@ -20,7 +20,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceViewerActivity;
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
 public class MaintenanceViewerViewImpl extends OperationsViewerViewImplBase<VistaSystemMaintenanceState> implements MaintenanceViewerView {
 

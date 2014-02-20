@@ -100,7 +100,10 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
         // Clear memory
         CacheService.reset();
         try {
-            Persistence.service().commit();
+            // If there are open transaction
+            if (Persistence.service().getTransactionScopeOption() != null) {
+                Persistence.service().commit();
+            }
         } finally {
             TestLifecycle.tearDown();
             SystemDateManager.resetDate();

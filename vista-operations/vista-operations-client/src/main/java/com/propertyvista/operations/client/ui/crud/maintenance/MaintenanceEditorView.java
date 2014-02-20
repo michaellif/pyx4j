@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.maintenance;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
 public interface MaintenanceEditorView extends IEditor<VistaSystemMaintenanceState> {
 

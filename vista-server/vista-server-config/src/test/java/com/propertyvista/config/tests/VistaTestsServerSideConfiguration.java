@@ -26,6 +26,7 @@ import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.ReCaptchaAntiBot;
 import com.pyx4j.log4j.LoggerConfig;
@@ -39,6 +40,7 @@ import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
 public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideConfiguration {
 
@@ -115,6 +117,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
         } catch (Throwable e) {
             throw new RuntimeException("Can't create " + SERVER_SIDE_TESTS_ACL_CREATOR, e);
         }
+    }
+
+    @Override
+    public Class<? extends SystemMaintenanceState> getSystemMaintenanceStateClass() {
+        return VistaSystemMaintenanceState.class;
     }
 
     @Override
