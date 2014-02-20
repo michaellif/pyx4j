@@ -180,4 +180,36 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
     //
     // Functionality, removed in Yardi mode:
     //
+
+    // Unit occupancy management:
+
+    @Override
+    protected void reserveUnit(Lease lease) {
+        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+    }
+
+    @Override
+    protected void releaseUnit(Lease lease) {
+        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+    }
+
+    @Override
+    protected void markUnitOccupied(Lease lease) {
+        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+    }
+
+    @Override
+    protected void moveOutUnit(Lease lease) {
+        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+    }
+
+    @Override
+    protected void cancelMoveOutUnit(Lease lease) {
+        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+    }
+
+    @Override
+    protected void approveMoveOutUnit(Lease lease) {
+        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+    }
 }
