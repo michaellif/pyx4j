@@ -4,11 +4,27 @@
 	<!-- xs:include schemaLocation="http://www.nmhc.info/MITS/MITSCustomExtension.xsd"/ -->
 	<xs:include schemaLocation="MITSCoreData30.xsd"/>
 	<xs:include schemaLocation="MITSCustomExtension.xsd"/>
-	<xs:element name="LeaseApplication" type="LeaseApplication">
+	<!-- ##### 1.START ##### forcing @XmlRootElement for LeaseApplication -->
+	<!-- xs:element name="LeaseApplication" type="LeaseApplication">
 		<xs:annotation>
 			<xs:documentation>MITS Lease/Application 3.0m Draft 10/29/2008</xs:documentation>
 		</xs:annotation>
+	</xs:element -->
+	<xs:element name="LeaseApplication">
+		<xs:annotation>
+			<xs:documentation>MITS Lease/Application 3.0m Draft 10/29/2008</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Tenant" type="Tenant" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="CorporateTenant" type="CorporateTenant" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="LA_Lease" type="LA_Lease" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Error" type="Error" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
 	</xs:element>
+	<!-- ##### 1.END ##### forcing @XmlRootElement for LeaseApplication -->
 	<xs:complexType name="AccountingData">
 		<xs:annotation>
 			<xs:documentation>
@@ -719,7 +735,8 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="LeaseApplication">
+	<!-- ##### 2.START ##### forcing @XmlRootElement for LeaseApplication -->
+	<!-- xs:complexType name="LeaseApplication">
 		<xs:annotation>
 			<xs:documentation>
 				<p>This type defines the root node of every Leasing/Application
@@ -737,7 +754,8 @@
 			<xs:element name="Error" type="Error" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-	</xs:complexType>
+	</xs:complexType -->
+	<!-- ##### 2.END ##### forcing @XmlRootElement for LeaseApplication -->
 	<xs:complexType name="LeaseEvent">
 		<xs:annotation>
 			<xs:documentation>
