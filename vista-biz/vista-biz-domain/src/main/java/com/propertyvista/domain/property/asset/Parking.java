@@ -33,8 +33,10 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.note.HasNotesAndAttachments;
+
 @DiscriminatorValue("Parking")
-public interface Parking extends BuildingElement {
+public interface Parking extends BuildingElement, HasNotesAndAttachments {
 
     @I18n(context = "Parking Type")
     @XmlType(name = "ParkingType")
