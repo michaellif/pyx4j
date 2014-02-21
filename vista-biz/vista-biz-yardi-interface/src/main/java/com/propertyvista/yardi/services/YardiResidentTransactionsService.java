@@ -230,7 +230,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
         } catch (YardiResidentNoTenantsExistException e) {
             log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
-            terminateLeaseCharges(lease, null);
+            // Do not remove lease charges from submitted lease applications
+            if (lease.status().getValue() != Lease.Status.Approved) {
+                terminateLeaseCharges(lease, null);
+            }
         }
         if (leaseCharges != null) {
             boolean processed = false;
@@ -241,7 +244,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
             // handle non-processed lease
-            if (!processed) {
+            if ((!processed) && (lease.status().getValue() != Lease.Status.Approved)) {
                 terminateLeaseCharges(lease, null);
             }
         }
@@ -640,6 +643,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             // handle all non-processed leases
             for (String propertyCode : notProcessedLeases.keySet()) {
                 for (Lease leaseId : notProcessedLeases.get(propertyCode)) {
+                    // Do not remove lease charges from submitted lease applications
+                    if (leaseId.status().getValue() == Lease.Status.Approved) {
+                        continue;
+                    }
                     try {
                         terminateLeaseCharges(leaseId, executionMonitor);
                     } catch (Throwable t) {
