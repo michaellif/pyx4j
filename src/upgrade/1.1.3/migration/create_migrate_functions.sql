@@ -92,6 +92,7 @@ BEGIN
         ALTER TABLE lease_adjustment_policy DROP CONSTRAINT lease_adjustment_policy_node_discriminator_d_ck;
         ALTER TABLE lease_billing_policy DROP CONSTRAINT lease_billing_policy_node_discriminator_d_ck;
         ALTER TABLE legal_documentation DROP CONSTRAINT legal_documentation_node_discriminator_d_ck;
+        ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_id_discriminator_ck;
         ALTER TABLE master_online_application DROP CONSTRAINT master_online_application_status_e_ck;
         ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_node_discriminator_d_ck;
         ALTER TABLE online_application DROP CONSTRAINT online_application_role_e_ck;
@@ -157,6 +158,7 @@ BEGIN
         **/
         
         DROP INDEX apt_unit__available_for_rent_idx;
+        DROP INDEX notes_and_attachments_owner_id_owner_class_idx;
         
         /**
         ***    ======================================================================================================
@@ -336,7 +338,16 @@ BEGIN
         );
         
         ALTER TABLE customer_signature OWNER TO vista;
-      
+		
+		-- deposit
+		
+		ALTER TABLE deposit ADD COLUMN deposit_code BIGINT;
+		
+		
+		-- deposit_policy_item
+		
+		ALTER TABLE deposit_policy_item ADD COLUMN deposit_code BIGINT;
+		
         -- emergency_contact
         
         ALTER TABLE emergency_contact ADD COLUMN relationship VARCHAR(50);
@@ -405,6 +416,7 @@ BEGIN
                 file_blob_key                   BIGINT,
                 owner                           BIGINT,
                 order_in_owner                  INT,
+                description 					VARCHAR(500),
                         CONSTRAINT identification_document_file_pk PRIMARY KEY(id)
         );
         
@@ -568,6 +580,7 @@ BEGIN
         );
         
         ALTER TABLE landlord_media_blob OWNER TO vista;
+        
         
         -- lease
         
@@ -784,7 +797,9 @@ BEGIN
         
         ALTER TABLE legal_letter        ADD COLUMN cancellation_threshold NUMERIC(18,2),
                                         ADD COLUMN is_active BOOLEAN,
-                                        ADD COLUMN termination_date DATE;
+                                        ADD COLUMN termination_date DATE,
+                                        ADD COLUMN status BIGINT,
+										ADD COLUMN status_discriminator VARCHAR(50);
         
         -- legal_letter_blob
         
@@ -1790,6 +1805,9 @@ BEGIN
         ALTER TABLE community_event ADD CONSTRAINT community_event_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE customer_signature ADD CONSTRAINT customer_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE deposit ADD CONSTRAINT deposit_deposit_code_fk FOREIGN KEY(deposit_code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+		ALTER TABLE deposit_policy_item ADD CONSTRAINT deposit_policy_item_deposit_code_fk FOREIGN KEY(deposit_code) 
+			REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_owner_fk FOREIGN KEY(owner) 
                 REFERENCES identification_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_folder ADD CONSTRAINT identification_document_folder_id_type_fk FOREIGN KEY(id_type) 
@@ -1834,6 +1852,7 @@ BEGIN
                 REFERENCES lease_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_owner_fk FOREIGN KEY(owner) REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_value_fk FOREIGN KEY(value) REFERENCES building_utility(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_status_fk FOREIGN KEY(status) REFERENCES legal_status(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_set_by_fk FOREIGN KEY(set_by) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request_picture ADD CONSTRAINT maintenance_request_picture_maintenance_request_fk FOREIGN KEY(maintenance_request) 
@@ -1972,6 +1991,9 @@ BEGIN
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE legal_terms_policy ADD CONSTRAINT legal_terms_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_id_discriminator_ck 
+			CHECK ((id_discriminator) IN ('GenericLegalLetter', 'N4LegalLetter'));
+		ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_status_discriminator_d_ck CHECK (status_discriminator = 'LegalStatus');
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_id_discriminator_ck CHECK (id_discriminator= 'LegalStatus');
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_status_e_ck 
                 CHECK ((status) IN ('HearingDate', 'L1', 'N4', 'None', 'Order', 'RequestToReviewOrder', 'SetAside', 'Sheriff', 'StayOrder'));
@@ -1993,6 +2015,7 @@ BEGIN
                 'gardens', 'glade', 'glen', 'green', 'grove', 'heights', 'highway', 'lane', 'line', 'link', 'loop', 'mall', 'mews', 'other', 'packet', 
                 'parade', 'park', 'parkway', 'place', 'promenade', 'reserve', 'ridge', 'rise', 'road', 'row', 'square', 'street', 'strip', 'tarn', 'terrace', 
                 'thoroughfaree', 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
+		/*
         ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('ARPolicy', 'AggregatedTransfer', 'AgreementLegalPolicy', 'ApplicationDocumentationPolicy', 
                 'AptUnit', 'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'Complex', 'DatesPolicy', 'DepositPolicy', 
@@ -2001,6 +2024,7 @@ BEGIN
                 'N4Policy', 'OnlineAppPolicy', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 'PaymentTypeSelectionPolicy', 
                 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 
                 'YardiInterfacePolicy', 'feature', 'service'));
+        */
         ALTER TABLE online_application ADD CONSTRAINT online_application_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
         ALTER TABLE online_application_wizard_step_status ADD CONSTRAINT online_application_wizard_step_status_step_e_ck 
                 CHECK ((step) IN ('AboutYou', 'AdditionalInfo', 'Confirmation', 'Contacts', 'Financial', 'Lease', 'Legal', 'Options', 
