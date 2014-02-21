@@ -13,8 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import org.apache.commons.lang.Validate;
-
+import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -210,7 +209,7 @@ class PaymentMethodPersister {
                 Validate.isTrue(!paymentMethod.details().id().isNull(), "Account number is required when creating Echeck");
                 EcheckInfo origeci = origPaymentMethod.details().cast();
                 eci.accountNo().number().setValue(origeci.accountNo().number().getValue());
-                Validate.isTrue(eci.accountNo().obfuscatedNumber().equals(origeci.accountNo().obfuscatedNumber()), "obfuscatedNumber changed");
+                Validate.isEquals(origeci.accountNo().obfuscatedNumber(), eci.accountNo().obfuscatedNumber(), "obfuscatedNumber changed");
             }
             break;
         case CreditCard:
@@ -219,20 +218,20 @@ class PaymentMethodPersister {
             if (!paymentMethod.details().id().isNull()) {
                 CreditCardInfo origcc = origPaymentMethod.details().cast();
                 if (cc.card().newNumber().isNull()) {
-                    Validate.isTrue(cc.card().obfuscatedNumber().equals(origcc.card().obfuscatedNumber()), "obfuscatedNumber changed");
+                    Validate.isEquals(origcc.card().obfuscatedNumber(), cc.card().obfuscatedNumber(), "obfuscatedNumber changed");
                 }
             }
             break;
         case Cash:
             // Assert value type
-            Validate.isTrue(paymentMethod.details().isInstanceOf(CashInfo.class));
+            Validate.isTrue(paymentMethod.details().isInstanceOf(CashInfo.class), "type integrity");
             break;
         case Check:
             // Assert value type
-            Validate.isTrue(paymentMethod.details().isInstanceOf(CheckInfo.class));
+            Validate.isTrue(paymentMethod.details().isInstanceOf(CheckInfo.class), "type integrity");
             break;
         case DirectBanking:
-            Validate.isTrue(paymentMethod.details().isInstanceOf(DirectDebitInfo.class));
+            Validate.isTrue(paymentMethod.details().isInstanceOf(DirectDebitInfo.class), "type integrity");
             break;
         default:
             throw new IllegalArgumentException("Unsupported PaymentMethod type " + paymentMethod.type().getValue());
@@ -272,5 +271,4 @@ class PaymentMethodPersister {
 
         return paymentMethod;
     }
-
 }

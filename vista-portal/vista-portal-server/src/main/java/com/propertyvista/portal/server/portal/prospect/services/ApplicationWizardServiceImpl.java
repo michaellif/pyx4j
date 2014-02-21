@@ -747,7 +747,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             // Do not change profile methods
             if (pbo.paymentMethod().id().isNull()) {
-                if (pto.storeInProfile().isBooleanTrue() && PaymentType.availableInProfile().contains(pto.paymentMethod().type().getValue())) {
+                if (pto.storeInProfile().getValue(false) && PaymentType.availableInProfile().contains(pto.paymentMethod().type().getValue())) {
                     pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
                 } else {
                     pbo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
@@ -767,7 +767,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void savePaymentMethod(OnlineApplication bo, OnlineApplicationDTO to) {
-        if (to.payment().storeInProfile().isBooleanTrue() && !to.payment().paymentMethod().isNull()) {
+        if (to.payment().storeInProfile().getValue(false) && !to.payment().paymentMethod().isNull()) {
             Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
             Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
 
