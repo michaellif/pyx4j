@@ -92,7 +92,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 }
             });
             addStep(new SummaryStep());
-            if (feePaymentPolicy == FeePayment.perApplicant) {
+            if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor) && feePaymentPolicy == FeePayment.perApplicant) {
                 addStep(new PaymentStep());
             }
             addStep(new ConfirmationStep());
