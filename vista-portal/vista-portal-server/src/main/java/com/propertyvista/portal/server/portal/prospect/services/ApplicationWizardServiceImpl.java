@@ -32,7 +32,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -97,8 +96,6 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
-    private static final I18n i18n = I18n.get(ApplicationWizardServiceImpl.class);
-
     public ApplicationWizardServiceImpl() {
     }
 
@@ -110,6 +107,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(bo.masterOnlineApplication().leaseApplication().lease().unit().floorplan(), AttachLevel.Attached);
 
         OnlineApplicationDTO to = EntityFactory.create(OnlineApplicationDTO.class);
+        to.policyNode().set(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationPolicyNode(bo));
 
         loadRestrictions(bo, to);
 
@@ -129,8 +127,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillPaymentData(bo, to);
 
-        ProspectPortalPolicy prospectPortalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                bo.masterOnlineApplication().leaseApplication().lease().unit().building(), ProspectPortalPolicy.class);
+        ProspectPortalPolicy prospectPortalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(),
+                ProspectPortalPolicy.class);
         to.feePaymentPolicy().set(prospectPortalPolicy.feePayment());
 
         callback.onSuccess(to);
@@ -261,11 +259,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.applicant().set(to.applicant().currentAddress(), screening.version().currentAddress());
         to.applicant().set(to.applicant().previousAddress(), screening.version().previousAddress());
 
-        Building policyNode = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationPolicyNode(bo);
-
         to.applicant().set(to.applicant().documents(), screening.version().documents());
         to.applicant().set(to.applicant().documentsPolicy(),
-                ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, ApplicationDocumentationPolicy.class));
+                ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ApplicationDocumentationPolicy.class));
         initializeRequiredDocuments(to.applicant());
 
         to.applicant().set(to.applicant().legalQuestions(), screening.version().legalQuestions());
@@ -679,12 +675,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void fillPaymentData(OnlineApplication bo, OnlineApplicationDTO to) {
         Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
 
-        Building policyNode = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationPolicyNode(bo);
-
         PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
 
         dto.billingAccount().set(lease.billingAccount());
-        dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(policyNode, VistaApplication.prospect));
+        dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.policyNode(), VistaApplication.prospect));
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
@@ -705,7 +699,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         // calculate deposits/fee:
         dto.deposits().addAll(calculateDeposits(lease));
 
-        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, ProspectPortalPolicy.class);
+        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ProspectPortalPolicy.class);
         if (policy.feePayment().getValue() == FeePayment.perApplicant) {
             if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
                 dto.applicationFee().setValue(policy.feeAmount().getValue());
@@ -835,8 +829,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void loadRestrictions(OnlineApplication bo, OnlineApplicationDTO to) {
-        Building policyNode = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationPolicyNode(bo);
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), RestrictionsPolicy.class);
 
         to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
         to.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());

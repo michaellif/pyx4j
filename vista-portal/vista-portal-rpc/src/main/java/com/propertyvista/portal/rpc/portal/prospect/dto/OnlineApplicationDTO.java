@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
@@ -34,6 +35,8 @@ public interface OnlineApplicationDTO extends IEntity {
     // read-only data:
 
     AptUnit unit();
+
+    Building policyNode();
 
     @Caption(name = "Included Utilities")
     IPrimitive<String> utilities();
