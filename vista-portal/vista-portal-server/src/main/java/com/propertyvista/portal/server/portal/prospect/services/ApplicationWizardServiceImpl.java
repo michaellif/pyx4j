@@ -803,9 +803,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         case Guarantor:
             break;
+
         default:
             throw new IllegalArgumentException();
-
         }
 
         saveApplicantData(bo, to);

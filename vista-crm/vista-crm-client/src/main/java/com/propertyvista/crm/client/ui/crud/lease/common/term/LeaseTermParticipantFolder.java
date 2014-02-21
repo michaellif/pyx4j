@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -100,10 +101,21 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
     protected abstract void addParticipant();
 
     private List<Customer> retrieveExistingCustomers() {
+        List<Customer> customers = new ArrayList<Customer>();
+        customers.addAll(retrieveCurrentCustomers());
+        customers.addAll(retrieveConcurrentCustomers());
+        return customers;
+    }
+
+    public List<Customer> retrieveCurrentCustomers() {
         List<Customer> customers = new ArrayList<Customer>(getValue().size());
         for (LeaseTermParticipant<?> wrapper : getValue()) {
             customers.add(wrapper.leaseParticipant().customer());
         }
         return customers;
+    }
+
+    protected List<Customer> retrieveConcurrentCustomers() {
+        return Collections.emptyList();
     }
 }

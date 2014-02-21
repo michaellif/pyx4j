@@ -77,6 +77,7 @@ import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.UnitAvailabilityCriteria;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -90,6 +91,25 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     protected static final I18n i18n = I18n.get(LeaseTermForm.class);
+
+    private final TenantInLeaseFolder tenantsFolder = new TenantInLeaseFolder(this) {
+        @Override
+        protected List<Customer> retrieveConcurrentCustomers() {
+            return guarantorsFolder.retrieveCurrentCustomers();
+        }
+    };
+
+    private final GuarantorInLeaseFolder guarantorsFolder = new GuarantorInLeaseFolder(this) {
+        @Override
+        protected List<Customer> retrieveConcurrentCustomers() {
+            return tenantsFolder.retrieveCurrentCustomers();
+        }
+
+        @Override
+        protected IList<LeaseTermTenant> getLeaseTermTenants() {
+            return tenantsFolder.getValue();
+        }
+    };
 
     protected LeaseTermForm(IForm<LeaseTermDTO> view) {
         super(LeaseTermDTO.class, view);
@@ -313,26 +333,18 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         // Tenants/Guarantors: --------------------------------------------------------------------------------------------------
         flexPanel.setH1(++leftRow, 0, 2, proto().version().tenants().getMeta().getCaption());
-
-        TenantInLeaseFolder tf;
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(this)));
-        tf.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<IList<LeaseTermTenant>> event) {
-                @SuppressWarnings("rawtypes")
-                CComponent gf = get(proto().version().guarantors());
-                ((GuarantorInLeaseFolder) gf).updateTenantList();
-            }
-        });
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tenantsFolder));
 
         flexPanel.setH1(++leftRow, 0, 2, proto().version().guarantors().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(this) {
-            @Override
-            protected IList<LeaseTermTenant> getLeaseTermTenants() {
-                return LeaseTermForm.this.getValue().version().tenants();
-            }
-        }));
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().guarantors(), guarantorsFolder));
 
+        // tweaks:
+        tenantsFolder.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<IList<LeaseTermTenant>> event) {
+                guarantorsFolder.updateTenantList();
+            }
+        });
         return flexPanel;
     }
 

@@ -234,11 +234,11 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         }
 
         private List<Tenant> getLeaseCustomerTenants() {
-            List<Tenant> l = new ArrayList<Tenant>();
+            List<Tenant> tenants = new ArrayList<Tenant>();
             for (LeaseTermTenant t : getLeaseTermTenants()) {
-                l.add(t.leaseParticipant());
+                tenants.add(t.leaseParticipant());
             }
-            return l;
+            return tenants;
         }
 
         private void devGenerateTenant() {
