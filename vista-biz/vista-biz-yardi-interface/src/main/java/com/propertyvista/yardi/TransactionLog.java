@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.InputSource;
 
@@ -68,14 +70,17 @@ public class TransactionLog {
             Node document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src).getDocumentElement();
             DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
             DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
-            LSSerializer writer = impl.createLSSerializer();
+            LSSerializer serializer = impl.createLSSerializer();
+            serializer.getDomConfig().setParameter("format-pretty-print", Boolean.TRUE);
+            serializer.getDomConfig().setParameter("xml-declaration", true);
 
-            writer.getDomConfig().setParameter("format-pretty-print", Boolean.TRUE);
-            writer.getDomConfig().setParameter("xml-declaration", true);
+            LSOutput lso = impl.createLSOutput();
+            lso.setEncoding(StandardCharsets.UTF_8.name());
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            lso.setByteStream(bos);
 
-            // this by default uses UTF-16 to convert document to String with corresponding encoding in the xml declaration
-            // <?xml version="1.0" encoding="UTF-16"?>
-            return writer.writeToString(document);
+            serializer.write(document, lso);
+            return bos.toString(StandardCharsets.UTF_8.name());
         } catch (Throwable e) {
             log.warn("unable to format xml", e);
             return input;
@@ -102,7 +107,7 @@ public class TransactionLog {
             while (out.exists()) {
                 out = new File(dir, fname.toString() + "-" + (++repeat) + "." + fileExt);
             }
-            FileIOUtils.writeToFile(out, prettyXmlFormat(context), StandardCharsets.UTF_16);
+            FileIOUtils.writeToFile(out, prettyXmlFormat(context), StandardCharsets.UTF_8);
             return out.getAbsolutePath();
         } catch (Throwable t) {
             log.error("failed to create transaction log", t);
