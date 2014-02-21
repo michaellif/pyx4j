@@ -129,6 +129,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         fillPaymentData(bo, to);
 
+        ProspectPortalPolicy prospectPortalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                bo.masterOnlineApplication().leaseApplication().lease().unit().building(), ProspectPortalPolicy.class);
+        to.feePaymentPolicy().set(prospectPortalPolicy.feePayment());
+
         callback.onSuccess(to);
     }
 

@@ -81,12 +81,12 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         super.start(panel, eventBus);
+
         service.init(new DefaultAsyncCallback<OnlineApplicationDTO>() {
             @Override
             public void onSuccess(OnlineApplicationDTO result) {
                 getView().populate(result);
-                eventBus.fireEvent(new ApplicationWizardStateChangeEvent(getView().getApplicationWizard(),
-                        ApplicationWizardStateChangeEvent.ChangeType.init));
+                eventBus.fireEvent(new ApplicationWizardStateChangeEvent(getView().getApplicationWizard(), ApplicationWizardStateChangeEvent.ChangeType.init));
             }
         });
     }

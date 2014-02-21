@@ -24,6 +24,7 @@ import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
@@ -50,7 +51,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     private ApplicationWizardPresenter presenter;
 
-    public ApplicationWizard(ApplicationWizardViewImpl view) {
+    public ApplicationWizard(ApplicationWizardViewImpl view, FeePayment feePaymentPolicy) {
         super(OnlineApplicationDTO.class, view, null, i18n.tr("Submit"), ThemeColor.contrast2);
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
@@ -72,7 +73,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 }
             });
             addStep(new SummaryStep());
-            addStep(new PaymentStep());
+            if (feePaymentPolicy == FeePayment.perLease || feePaymentPolicy == FeePayment.perApplicant) {
+                addStep(new PaymentStep());
+            }
             addStep(new ConfirmationStep());
         } else {
             addStep(new LeaseStep());
@@ -89,6 +92,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 }
             });
             addStep(new SummaryStep());
+            if (feePaymentPolicy == FeePayment.perApplicant) {
+                addStep(new PaymentStep());
+            }
             addStep(new ConfirmationStep());
         }
     }

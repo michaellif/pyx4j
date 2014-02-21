@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
@@ -72,6 +73,8 @@ public interface OnlineApplicationDTO extends IEntity {
     IList<SignedOnlineApplicationConfirmationTerm> confirmationTerms();
 
     IList<OnlineApplicationWizardStepStatus> stepsStatuses();
+
+    IPrimitive<FeePayment> feePaymentPolicy();
 
     PaymentDTO payment();
 }

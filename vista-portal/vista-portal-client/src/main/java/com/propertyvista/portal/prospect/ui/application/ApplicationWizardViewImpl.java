@@ -26,7 +26,7 @@ public class ApplicationWizardViewImpl extends AbstractWizardFormView<OnlineAppl
 
     @Override
     public void populate(OnlineApplicationDTO value) {
-        applicationWizard = new ApplicationWizard(this);
+        applicationWizard = new ApplicationWizard(this, value.feePaymentPolicy().getValue());
         applicationWizard.setPresenter((ApplicationWizardPresenter) getPresenter());
         setWizard(applicationWizard);
         super.populate(value);
