@@ -38,7 +38,6 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -212,7 +211,6 @@ public class Button extends FocusPanel implements IFocusWidget {
             imageHolder.getElement().getStyle().setProperty("paddingLeft", singleImage.getWidth() + "px");
             imageHolder.getElement().getStyle().setProperty("background", "url('" + singleImage.getSafeUri().asString() + "') no-repeat scroll left center");
         } else if (imageBundle != null) {
-            imageHolder.getElement().getStyle().setProperty("paddingLeft", singleImage.getWidth() + "px");
             imageHolder.getElement().getStyle()
                     .setProperty("background", "url('" + imageBundle.regular().getSafeUri().asString() + "') no-repeat scroll left center");
         } else {
@@ -236,12 +234,12 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     @Override
     public boolean isEnabled() {
-        return !DOM.getElementPropertyBoolean(getElement(), "disabled");
+        return !getElement().getPropertyBoolean("disabled");
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        DOM.setElementPropertyBoolean(getElement(), "disabled", !enabled);
+        getElement().setPropertyBoolean("disabled", !enabled);
         buttonFacesHandler.setEnabled(enabled);
     }
 
