@@ -102,7 +102,6 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
         get(proto().branchTransitNumber()).setMockValue("12345");
 
         CTextFieldBase<?, ?> id = (CTextFieldBase<?, ?>) get(proto().accountNo());
-        id.onEditingStop(); // assume new user input; will obfuscate the value if focused
         id.setMockValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
     }
 }
