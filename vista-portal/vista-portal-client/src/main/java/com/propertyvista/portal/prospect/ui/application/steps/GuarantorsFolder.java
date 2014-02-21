@@ -15,6 +15,7 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -39,15 +40,17 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
     public GuarantorsFolder(ApplicationWizardViewImpl view) {
         super(GuarantorDTO.class, i18n.tr("Guarantor"));
         this.view = view;
+
+        setNoDataNotificationWidget(new Label(
+                i18n.tr("Guarantors are individuals who are financially responsible for your lease commitment but will not be leaving in your apartment")));
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof GuarantorDTO) {
             return new GuarantorForm();
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 
     class GuarantorForm extends CEntityForm<GuarantorDTO> {
