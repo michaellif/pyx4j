@@ -79,7 +79,6 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
                     get(proto().name().firstName()).setMockValue(person.name().firstName().getValue());
                     get(proto().name().lastName()).setMockValue(person.name().lastName().getValue());
                     get(proto().email()).setMockValue(person.email().getValue());
-
                 }
             });
         }
