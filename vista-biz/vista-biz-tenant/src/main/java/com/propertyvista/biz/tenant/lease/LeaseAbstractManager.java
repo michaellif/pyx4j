@@ -941,7 +941,7 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    protected void markUnitOccupied(Lease lease, Lease.Status previousStatus) {
+    protected void markUnitOccupied(Lease lease, Status previousStatus) {
         switch (previousStatus) {
         case Application:
             ServerSideFactory.create(OccupancyFacade.class).occupy(lease.<Lease> createIdentityStub());
