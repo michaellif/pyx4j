@@ -36,6 +36,8 @@ public interface UnitViewerView extends IViewer<AptUnitDTO> {
         void makeVacant(LogicalDate vacantFrom);
 
         void createMaintenanceRequest();
+
+        void updateAvailabilityFromYardi();
     }
 
     ILister<AptUnitItem> getUnitItemsListerView();

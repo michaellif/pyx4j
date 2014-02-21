@@ -134,6 +134,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
                 new FormDecoratorBuilder(inject(proto().lease(), isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(
                         AppPlaceEntityMapper.resolvePlace(Lease.class))), 20).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().availability().availableForRent()), 9).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().isUnitReserved()), 9).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
 

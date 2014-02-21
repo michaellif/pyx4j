@@ -44,4 +44,6 @@ public interface UnitOccupancyManagerService extends IService {
 
     void getMakeVacantConstraints(AsyncCallback<MakeVacantConstraintsDTO> callback, Key unitPk);
 
+    void updateAvailabilityFromYardi(AsyncCallback<VoidSerializable> callback, Key unitPk);
+
 }

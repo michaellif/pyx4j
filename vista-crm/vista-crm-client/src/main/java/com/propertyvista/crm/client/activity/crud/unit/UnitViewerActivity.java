@@ -172,4 +172,16 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(id));
     }
 
+    @Override
+    public void updateAvailabilityFromYardi() {
+        occupancyManagerService.updateAvailabilityFromYardi(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+
+        }, getEntityId());
+    }
+
 }

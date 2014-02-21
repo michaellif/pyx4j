@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services.unit;
 
+import java.util.Date;
+
+import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -83,6 +86,9 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
             to.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
             to.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(in.getPrimaryKey()));
+
+            Pair<Date, Lease> result = ServerSideFactory.create(OccupancyFacade.class).isReserved(in.getPrimaryKey());
+            to.isUnitReserved().setValue(in.equals(result.getB()));
         }
     }
 

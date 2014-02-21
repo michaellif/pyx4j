@@ -23,7 +23,9 @@ import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.PhysicalProperty;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
@@ -52,6 +54,7 @@ public class YardiILSGuestCardService extends YardiAbstractService {
     // TODO - move to ILS/GuestCard v4 - UnitAvailability_LoginByUnit
     public void updateUnitAvailability(PmcYardiCredential yc, final AptUnit aptUnit) throws YardiServiceException, RemoteException {
         YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
+        Persistence.ensureRetrieve(aptUnit.building(), AttachLevel.Attached);
         String propertyId = aptUnit.building().propertyCode().getValue();
         PhysicalProperty marketingInfo = stub.getPropertyMarketingInfo(yc, propertyId);
 

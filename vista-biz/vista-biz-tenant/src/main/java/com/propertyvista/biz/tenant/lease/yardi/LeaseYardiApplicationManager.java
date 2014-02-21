@@ -80,9 +80,7 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
             throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
         }
 
-        super.approve(leaseId, decidedBy, decisionReason);
-        // activate, newly created leases:
-        Lease lease = super.activate(leaseId);
+        Lease lease = super.approve(leaseId, decidedBy, decisionReason);
 
         // Send Participants to yardi after activation validation if we have not done so in previous attempt
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);

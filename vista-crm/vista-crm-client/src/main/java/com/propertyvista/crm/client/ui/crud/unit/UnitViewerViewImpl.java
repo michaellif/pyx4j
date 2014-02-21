@@ -52,6 +52,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private final MenuItem maintenanceAction;
 
+    private final MenuItem yardiImporttAvailability;
+
     private boolean canScopeOffMarket;
 
     private boolean canScopeAvailable;
@@ -120,10 +122,20 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             addAction(makePendingAction);
         }
 
+        yardiImporttAvailability = new MenuItem(i18n.tr("Update Availability From Yardi"), new Command() {
+            @Override
+            public void execute() {
+                ((UnitViewerView.Presenter) getPresenter()).updateAvailabilityFromYardi();
+            }
+        });
+        if (VistaFeatures.instance().yardiIntegration()) {
+            addAction(yardiImporttAvailability);
+        }
+
         existingLeaseAction = new MenuItem(i18n.tr("Create Current Lease..."), new Command() {
             @Override
             public void execute() {
-                if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {
+                if (getForm().getValue().isPresentInCatalog().getValue(false)) {
                     new LeaseDataDialog(LeaseDataDialog.Type.Current, getForm().getValue()).show();
                 } else {
                     MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog first!"));

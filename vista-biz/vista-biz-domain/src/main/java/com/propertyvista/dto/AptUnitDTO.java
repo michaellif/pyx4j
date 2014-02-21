@@ -13,6 +13,8 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
@@ -33,6 +35,9 @@ public interface AptUnitDTO extends AptUnit {
     IList<AptUnitServicePriceDTO> marketPrices();
 
     Lease lease();
+
+    @Editor(type = EditorType.label)
+    IPrimitive<Boolean> isUnitReserved();
 
     IPrimitive<Boolean> isPresentInCatalog();
 

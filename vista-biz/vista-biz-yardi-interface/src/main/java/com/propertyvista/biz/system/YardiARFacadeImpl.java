@@ -117,6 +117,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
         return propertyConfigurations;
     }
 
+    @Override
     public void updateUnitAvailability(AptUnit aptUnit) throws YardiServiceException, RemoteException {
         YardiILSGuestCardService.getInstance().updateUnitAvailability(VistaDeployment.getPmcYardiCredential(aptUnit.building()), aptUnit);
     }
