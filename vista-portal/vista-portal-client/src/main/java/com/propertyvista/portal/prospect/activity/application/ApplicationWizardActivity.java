@@ -56,7 +56,7 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardSe
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
-public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineApplicationDTO> implements ApplicationWizardPresenter {
+public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineApplicationDTO, ApplicationWizardView> implements ApplicationWizardPresenter {
 
     private static final Logger log = LoggerFactory.getLogger(ApplicationWizardActivity.class);
 
@@ -85,7 +85,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
             @Override
             public void onSuccess(OnlineApplicationDTO result) {
                 getView().populate(result);
-                eventBus.fireEvent(new ApplicationWizardStateChangeEvent(((ApplicationWizardView) getView()).getApplicationWizard(),
+                eventBus.fireEvent(new ApplicationWizardStateChangeEvent(getView().getApplicationWizard(),
                         ApplicationWizardStateChangeEvent.ChangeType.init));
             }
         });
@@ -131,7 +131,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
 
     private void updateStepProgressInfo() {
         getView().getValue().stepsStatuses().clear();
-        for (WizardStep step : ((ApplicationWizardView) getView()).getApplicationWizard().getAllSteps()) {
+        for (WizardStep step : getView().getApplicationWizard().getAllSteps()) {
             ApplicationWizardStep appStep = (ApplicationWizardStep) step;
             OnlineApplicationWizardStepStatus status = EntityFactory.create(OnlineApplicationWizardStepStatus.class);
             status.step().setValue(appStep.getOnlineApplicationWizardStepMeta());

@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class LeaseSigningWizardActivity extends AbstractWizardCrudActivity<LeaseAgreementDTO> implements LeaseSigningWizardPresenter {
+public class LeaseSigningWizardActivity extends AbstractWizardCrudActivity<LeaseAgreementDTO, LeaseSigningWizardView> implements LeaseSigningWizardPresenter {
 
     public LeaseSigningWizardActivity(AppPlace place) {
         super(LeaseSigningWizardView.class, GWT.<LeaseSigningCrudService> create(LeaseSigningCrudService.class), LeaseAgreementDTO.class);

@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuot
 import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<TenantSureInsurancePolicyDTO> implements
+public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<TenantSureInsurancePolicyDTO, TenantSureOrderWizardView> implements
         TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
 
     public TenantSureOrderWizardActivity(AppPlace place) {
@@ -47,24 +47,26 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
         ((TenantSureInsurancePolicyCrudService) getService()).sendQuoteDetails(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String email) {
-                ((TenantSureOrderWizardView) getView()).acknowledgeSendQuoteDetailsSucess(email);
+                getView().acknowledgeSendQuoteDetailsSucess(email);
             }
         }, getView().getValue().quote().quoteId().getValue());
     }
 
     @Override
     public void getNewQuote() {
+
         TenantSureCoverageDTO coverageRequest = getView().getValue().tenantSureCoverageRequest().<TenantSureCoverageDTO> duplicate();
         if (isValid(coverageRequest)) {
-            ((TenantSureOrderWizardView) getView()).waitForQuote();
+            getView().waitForQuote();
 
             ((TenantSureInsurancePolicyCrudService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
                 @Override
                 public void onSuccess(TenantSureQuoteDTO quote) {
-                    ((TenantSureOrderWizardView) getView()).setQuote(quote);
+                    getView().setQuote(quote);
                 }
             }, coverageRequest);
         }
+
     }
 
     @Override
@@ -72,7 +74,7 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
         ((TenantSureInsurancePolicyCrudService) getService()).getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
             public void onSuccess(AddressSimple billingAddress) {
-                ((TenantSureOrderWizardView) getView()).setBillingAddress(billingAddress);
+                getView().setBillingAddress(billingAddress);
             }
         });
     }

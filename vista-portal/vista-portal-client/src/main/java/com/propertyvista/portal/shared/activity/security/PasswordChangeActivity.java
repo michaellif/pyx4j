@@ -37,7 +37,7 @@ import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 import com.propertyvista.portal.shared.ui.security.PasswordChangeWizardView;
 import com.propertyvista.portal.shared.ui.security.PasswordChangeWizardView.PasswordChangePresenter;
 
-public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChangeRequest> implements PasswordChangePresenter {
+public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChangeRequest, PasswordChangeWizardView> implements PasswordChangePresenter {
 
     private static final I18n i18n = I18n.get(PasswordChangeActivity.class);
 
@@ -55,11 +55,6 @@ public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChang
     protected void onFinish() {
         Notification notification = new Notification(null, i18n.tr("Your password was changed successfully!"), NotificationType.INFO);
         PortalSite.getPlaceController().showNotification(notification);
-    }
-
-    @Override
-    public PasswordChangeWizardView getView() {
-        return (PasswordChangeWizardView) super.getView();
     }
 
     @Override

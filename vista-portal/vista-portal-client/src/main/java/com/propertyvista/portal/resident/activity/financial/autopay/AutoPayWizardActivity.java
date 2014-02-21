@@ -33,7 +33,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO> implements AutoPayWizardView.Presenter {
+public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO, AutoPayWizardView> implements AutoPayWizardView.Presenter {
 
     public AutoPayWizardActivity(AppPlace place) {
         super(AutoPayWizardView.class, GWT.<AutoPayWizardService> create(AutoPayWizardService.class), AutoPayDTO.class);

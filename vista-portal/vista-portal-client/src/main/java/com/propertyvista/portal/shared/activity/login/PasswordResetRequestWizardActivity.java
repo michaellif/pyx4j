@@ -36,7 +36,8 @@ import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 import com.propertyvista.portal.shared.ui.landing.PasswordResetRequestWizardView;
 import com.propertyvista.portal.shared.ui.landing.PasswordResetRequestWizardView.PasswordResetRequestWizardPresenter;
 
-public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<PasswordRetrievalRequest> implements PasswordResetRequestWizardPresenter {
+public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<PasswordRetrievalRequest, PasswordResetRequestWizardView> implements
+        PasswordResetRequestWizardPresenter {
 
     private static final I18n i18n = I18n.get(PasswordResetRequestWizardActivity.class);
 
@@ -72,7 +73,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
 
     public void createNewCaptchaChallenge() {
 
-        final PasswordResetRequestWizardView view = ((PasswordResetRequestWizardView) getView());
+        final PasswordResetRequestWizardView view = (getView());
 
         if (CaptchaComposite.isPublicKeySet()) {
             view.createNewCaptchaChallenge();

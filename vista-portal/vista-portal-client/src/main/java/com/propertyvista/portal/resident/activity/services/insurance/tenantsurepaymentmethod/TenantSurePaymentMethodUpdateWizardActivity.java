@@ -27,8 +27,8 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePayme
 import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardCrudActivity<InsurancePaymentMethodDTO> implements
-        TenantSurePaymentMethodWizardView.Persenter {
+public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardCrudActivity<InsurancePaymentMethodDTO, TenantSurePaymentMethodWizardView>
+        implements TenantSurePaymentMethodWizardView.Persenter {
 
     public TenantSurePaymentMethodUpdateWizardActivity(AppPlace place) {
         super(TenantSurePaymentMethodWizardView.class, GWT.<TenantSurePaymentMethodCrudService> create(TenantSurePaymentMethodCrudService.class),
@@ -40,7 +40,7 @@ public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardC
         ((TenantSurePaymentMethodCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
             public void onSuccess(AddressSimple result) {
-                ((TenantSurePaymentMethodWizardView) getView()).setBillingAddress(result);
+                getView().setBillingAddress(result);
             }
         });
     }
@@ -48,7 +48,6 @@ public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardC
     @Override
     protected void onFinish(Key result) {
         getView().reset();
-        AppSite.getPlaceController().goTo(
-                new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCardConfirmation());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCardConfirmation());
     }
 }

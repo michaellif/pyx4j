@@ -37,7 +37,7 @@ import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 import com.propertyvista.portal.shared.ui.security.PasswordResetWizardView;
 import com.propertyvista.portal.shared.ui.security.PasswordResetWizardView.PasswordResetWizardPresenter;
 
-public class PasswordResetActivity extends AbstractWizardActivity<PasswordChangeRequest> implements PasswordResetWizardPresenter {
+public class PasswordResetActivity extends AbstractWizardActivity<PasswordChangeRequest, PasswordResetWizardView> implements PasswordResetWizardPresenter {
 
     private static final I18n i18n = I18n.get(AbstractPasswordResetActivity.class);
 

@@ -35,13 +35,13 @@ import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.IWizardView;
 import com.propertyvista.portal.shared.ui.IWizardView.IWizardFormPresenter;
 
-public abstract class AbstractWizardActivity<E extends IEntity> extends SecurityAwareActivity implements IWizardFormPresenter<E> {
+public abstract class AbstractWizardActivity<E extends IEntity, T extends IWizardView<E>> extends SecurityAwareActivity implements IWizardFormPresenter<E> {
 
     private static final I18n i18n = I18n.get(AbstractWizardActivity.class);
 
-    private final IWizardView<E> view;
+    private final T view;
 
-    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType) {
+    public AbstractWizardActivity(Class<T> viewType) {
         view = PortalSite.getViewFactory().getView(viewType);
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
         panel.setWidget(view);
     }
 
-    public IWizardView<E> getView() {
+    public T getView() {
         return view;
     }
 

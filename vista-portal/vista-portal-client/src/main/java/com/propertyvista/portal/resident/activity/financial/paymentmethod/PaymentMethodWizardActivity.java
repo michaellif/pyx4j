@@ -33,7 +33,8 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodD
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentMethodWizardService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Presenter {
+public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<PaymentMethodDTO, PaymentMethodWizardView> implements
+        PaymentMethodWizardView.Presenter {
 
     public PaymentMethodWizardActivity(AppPlace place) {
         super(PaymentMethodWizardView.class, GWT.<PaymentMethodWizardService> create(PaymentMethodWizardService.class), PaymentMethodDTO.class);

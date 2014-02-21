@@ -34,13 +34,13 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.shared.ui.IWizardView;
 
-public abstract class AbstractWizardCrudActivity<E extends IEntity> extends AbstractWizardActivity<E> {
+public abstract class AbstractWizardCrudActivity<E extends IEntity, T extends IWizardView<E>> extends AbstractWizardActivity<E, T> {
 
     private final AbstractCrudService<E> service;
 
     private final Class<E> entityClass;
 
-    public AbstractWizardCrudActivity(Class<? extends IWizardView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
+    public AbstractWizardCrudActivity(Class<T> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
         super(viewType);
 
         this.service = service;

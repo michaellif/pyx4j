@@ -32,7 +32,8 @@ import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceR
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class MaintenanceRequestWizardActivity extends AbstractWizardCrudActivity<MaintenanceRequestDTO> implements MaintenanceRequestWizardPresenter {
+public class MaintenanceRequestWizardActivity extends AbstractWizardCrudActivity<MaintenanceRequestDTO, MaintenanceRequestWizardView> implements
+        MaintenanceRequestWizardPresenter {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestWizardActivity.class);
 
