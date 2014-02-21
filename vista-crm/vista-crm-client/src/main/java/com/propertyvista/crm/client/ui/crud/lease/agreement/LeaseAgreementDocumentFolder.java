@@ -103,6 +103,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
             panel.setWidget(
                     ++row,
                     0,
+                    2,
                     new FormDecoratorBuilder(inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseTermAgreementDocumentUploadService.class),
                             new VistaFileURLBuilder(LeaseTermAgreementDocument.class)))).labelPosition(LabelPosition.top)
                             .customLabel(i18n.tr("Agreement Document File")).componentWidth("350px").build());

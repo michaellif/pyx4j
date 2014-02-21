@@ -27,7 +27,12 @@ public class BuildingSelector extends SuperSuggestiveSelector<BuildingForSelecti
 
             @Override
             public String format(BuildingForSelectionDTO value) {
-                return value.propertyCode().getValue() + " (" + value.name().getValue() + ")";
+                if (!value.name().isNull()) {
+                    return value.propertyCode().getValue() + " (" + value.name().getValue() + ")";
+                } else {
+                    return value.propertyCode().getValue();
+                }
+
             }
 
             @Override

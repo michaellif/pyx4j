@@ -42,7 +42,7 @@ class BuildingForSelectionCell extends AbstractCell<BuildingForSelectionDTO> {
     @Override
     public void render(Context context, BuildingForSelectionDTO value, SafeHtmlBuilder sb) {
         if (value != null) {
-            sb.append(template.buildingTemplate(value.propertyCode().getValue(), value.name().getValue(), value.address().getValue()));
+            sb.append(template.buildingTemplate(value.propertyCode().getValue(""), value.name().getValue(""), value.address().getValue("")));
         }
     }
 
