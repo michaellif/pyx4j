@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.tenant.lease.yardi;
 
+import java.rmi.RemoteException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
@@ -193,7 +196,12 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     @Override
     protected void markUnitOccupied(Lease lease, Status previousStatus) {
-        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+        // Unit occupancy state managed by purely by Import procedure.
+        try {
+            ServerSideFactory.create(YardiARFacade.class).updateUnitAvailability(lease.unit());
+        } catch (RemoteException | YardiServiceException e) {
+            log.error("unable to update unit alabiltity", e);
+        }
     }
 
     @Override

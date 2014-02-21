@@ -548,7 +548,7 @@ public abstract class LeaseAbstractManager {
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate expectedMoveOut, LogicalDate leaseEndDate) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
-            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease {0} Status (\"{1}\")", lease.id(), lease.status()));
         }
 
         lease.completion().setValue(completionType);

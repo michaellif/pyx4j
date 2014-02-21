@@ -52,11 +52,14 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
 
             @Override
             public Void execute() throws YardiServiceException {
-                String pID = YardiGuestManagementService.getInstance().createNewProspect(getPmcYardiCredential(lease), lease);
+                PmcYardiCredential yc = getPmcYardiCredential(lease);
+                final Key yardiInterfaceId = yc.getPrimaryKey();
+                String pID = YardiGuestManagementService.getInstance().createNewProspect(yc, lease);
 
                 // save primary tenant pID as yardiApplicationId
                 // We should not copy pID to tenant.yardiApplicantId() since this is indicator if we sent applicants to yardi or not
                 lease.leaseApplication().yardiApplicationId().setValue(pID);
+                lease.integrationSystemId().setValue(yardiInterfaceId);
                 Persistence.service().persist(lease.leaseApplication());
 
                 return null;
