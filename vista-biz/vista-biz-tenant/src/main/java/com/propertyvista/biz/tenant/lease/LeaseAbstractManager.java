@@ -386,7 +386,7 @@ public abstract class LeaseAbstractManager {
         // Billing-related stuff:
         onLeaseApprovalSuccess(lease, leaseStatus);
 
-        markUnitOccupied(lease);
+        markUnitOccupied(lease, leaseStatus);
 
         switch (leaseStatus) {
         case Application:
@@ -941,9 +941,13 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    protected void markUnitOccupied(Lease lease) {
-        switch (lease.status().getValue()) {
-        case Approved:
+    protected void markUnitOccupied(Lease lease, Lease.Status previousStatus) {
+        switch (previousStatus) {
+        case Application:
+            ServerSideFactory.create(OccupancyFacade.class).occupy(lease.<Lease> createIdentityStub());
+            break;
+
+        case NewLease:
             ServerSideFactory.create(OccupancyFacade.class).occupy(lease.<Lease> createIdentityStub());
             break;
 
@@ -952,7 +956,7 @@ public abstract class LeaseAbstractManager {
             break;
 
         default:
-            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", previousStatus));
         }
     }
 
