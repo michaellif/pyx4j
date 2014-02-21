@@ -26,7 +26,7 @@ import com.propertyvista.test.mock.MockDataModel;
 public class ARCodeDataModel extends MockDataModel<ARCode> {
 
     public static enum Code {
-        rent, outdoorParking, indoorParking, smallLocker, largeLocker, catRent, dogRent, booking, legalFee, superintendentDiscount, nsf;
+        rent, outdoorParking, indoorParking, smallLocker, largeLocker, catRent, dogRent, booking, legalFee, superintendentDiscount, nsf, deposit;
     }
 
     private final Map<Code, ARCode> codeMap;
@@ -86,7 +86,9 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
         generateARCode("Unknown External Credit", ARCode.Type.ExternalCredit, 0, 1, true);
         generateARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, 1, true);
 
-        generateARCode("Deposit", ARCode.Type.Deposit, 0, 1, true);
+        code = generateARCode("Deposit", ARCode.Type.Deposit, 0, 1, true);
+        codeMap.put(Code.deposit, code);
+
         generateARCode("LatePayment", ARCode.Type.LatePayment, 0, 1, true);
 
         code = generateARCode("NSF", ARCode.Type.NSF, 0, 1, true, new String[] { "rnsffee" });

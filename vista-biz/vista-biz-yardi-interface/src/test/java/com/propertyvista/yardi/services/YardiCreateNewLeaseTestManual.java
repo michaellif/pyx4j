@@ -23,6 +23,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.leaseapp30.LeaseApplication;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -42,12 +44,14 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -69,6 +73,8 @@ import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
+import com.propertyvista.yardi.processors.YardiApplicationProcessor;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 
 /**
  * Create new lease in Yardi using PV lease application
@@ -114,7 +120,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
     }
 
-    public void testCase() {
+    public void testCreateFutureLease() {
         createLease("01-Dec-2013", "30-Nov-2014", new BigDecimal("789.99"), null);
         setUnitNo("0001");
 
@@ -124,11 +130,11 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
             setUnitNo("AV008");
         }
 
-        fixTenantName(null);
-        setMoveIn(new LogicalDate());
         setPropertyCode("gran0002");
         setFloorplan("2bdrm", 2);
         setCurrentAddress(getAddress());
+        fixTenantName(null);
+        setMoveIn(new LogicalDate());
 
         addOutdoorParking();
         addLargeLocker();
@@ -167,8 +173,67 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
             }
 
             ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
+
             lease = retrieveLease();
             log.info("Signed lease: {}", lease.leaseId().getValue());
+        } catch (YardiServiceException e) {
+            throw new UserRuntimeException(e.getMessage(), e);
+        } catch (UserRuntimeException e) {
+            log.info("ERROR: {}", e.getMessage());
+        }
+    }
+
+//    @Ignore
+    public void testImportApplication() {
+        createLease("01-Dec-2013", "30-Nov-2014", new BigDecimal("789.99"), null);
+        setUnitNo("0001");
+
+        if (false) {
+            // create second lease for another test
+            createLease("01-Dec-2013", "30-Nov-2014", new BigDecimal("789.99"), null);
+            setUnitNo("AV008");
+        }
+
+        setPropertyCode("gran0002");
+        setFloorplan("2bdrm", 2);
+        setCurrentAddress(getAddress());
+        fixTenantName("211536");
+        setMoveIn(new LogicalDate());
+
+        BillableItem park = addOutdoorParking();
+        BillableItem lock = addLargeLocker();
+
+        // add yardi deposit charge codes
+        Lease lease = retrieveLeaseDraft();
+        for (Deposit deposit : lease.currentTerm().version().leaseProducts().serviceItem().deposits()) {
+            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+            code.yardiChargeCode().setValue("rsecdep");
+            deposit.chargeCode().yardiChargeCodes().add(code);
+            Persistence.service().persist(deposit.chargeCode());
+        }
+        for (Deposit deposit : park.deposits()) {
+            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+            code.yardiChargeCode().setValue("rgarage");
+            deposit.chargeCode().yardiChargeCodes().add(code);
+            Persistence.service().persist(deposit.chargeCode());
+        }
+        for (Deposit deposit : lock.deposits()) {
+            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+            code.yardiChargeCode().setValue("rpet");
+            deposit.chargeCode().yardiChargeCodes().add(code);
+            Persistence.service().persist(deposit.chargeCode());
+        }
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+        Persistence.service().commit();
+
+        lease = retrieveLease();
+
+        log.info("Created Lease: {}", lease.getPrimaryKey().toString());
+
+        try {
+            LeaseApplication leaseApp = new YardiApplicationProcessor().createApplication(lease);
+            ServerSideFactory.create(YardiGuestManagementStub.class).importApplication(getTestPmcYardiCredential(), leaseApp);
+            log.info("Imported lease application: {}", lease.leaseId().getValue());
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(e.getMessage(), e);
         } catch (UserRuntimeException e) {
@@ -392,7 +457,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
                 yc.propertyListCodes().setValue("gran0002");
                 yc.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
                 yc.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com:8080/voyager6008sp17");
-//                yc.serviceURLBase().setValue("http://192.168.50.100/voyager6008sp17");
+                yc.serviceURLBase().setValue("http://192.168.50.100/voyager6008sp17");
                 yc.username().setValue("vista_dev");
                 yc.password().number().setValue("vista_dev");
                 yc.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");

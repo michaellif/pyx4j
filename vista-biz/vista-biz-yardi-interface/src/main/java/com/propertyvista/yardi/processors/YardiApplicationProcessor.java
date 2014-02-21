@@ -14,12 +14,14 @@
 package com.propertyvista.yardi.processors;
 
 import java.util.Date;
+import java.util.List;
 
 import com.yardi.entity.leaseapp30.AccountingData;
 import com.yardi.entity.leaseapp30.Charge;
 import com.yardi.entity.leaseapp30.ChargeSet;
 import com.yardi.entity.leaseapp30.ChargeType;
 import com.yardi.entity.leaseapp30.Frequency;
+import com.yardi.entity.leaseapp30.Identification;
 import com.yardi.entity.leaseapp30.LALease;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.entity.leaseapp30.Name;
@@ -27,6 +29,7 @@ import com.yardi.entity.leaseapp30.PropertyType;
 import com.yardi.entity.leaseapp30.ResidentType;
 import com.yardi.entity.leaseapp30.Tenant;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
@@ -37,40 +40,38 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class YardiApplicationProcessor {
 
     public LeaseApplication createApplication(Lease lease) {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+
         LeaseApplication leaseApp = new LeaseApplication();
         // create main applicant
         Tenant tenant = getMainApplicant(lease);
+        leaseApp.getTenant().add(tenant);
 
         // add deposit charges
-        AccountingData charges = new AccountingData();
-        tenant.setAccountingData(charges);
         ChargeSet chargeSet = new ChargeSet();
-        chargeSet.setFrequency(Frequency.ONE_TIME);
-        chargeSet.setStart(new Date(0));
-        chargeSet.setEnd(new Date(0));
-        charges.getChargeSet().add(chargeSet);
-        // add service deposits
-        for (Deposit deposit : lease.currentTerm().version().leaseProducts().serviceItem().deposits()) {
-            chargeSet.getCharge().add(getDepositCharge(deposit));
-        }
-        // add feature deposits
+        addDepositCharges(lease.currentTerm().version().leaseProducts().serviceItem().deposits(), chargeSet);
         for (BillableItem feature : lease.currentTerm().version().leaseProducts().featureItems()) {
-            for (Deposit deposit : feature.deposits()) {
-                chargeSet.getCharge().add(getDepositCharge(deposit));
-            }
+            addDepositCharges(feature.deposits(), chargeSet);
+        }
+        if (chargeSet.getCharge().size() > 0) {
+            chargeSet.setFrequency(Frequency.ONE_TIME);
+            chargeSet.setStart(new Date(0));
+            chargeSet.setEnd(new Date(0));
+            AccountingData charges = new AccountingData();
+            charges.getChargeSet().add(chargeSet);
+            tenant.setAccountingData(charges);
         }
 
         // add lease info
         LALease laLease = new LALease();
         PropertyType property = new PropertyType();
-        com.yardi.entity.leaseapp30.Identification propId = new com.yardi.entity.leaseapp30.Identification();
+        Identification propId = new Identification();
         propId.setIDValue(lease.unit().building().propertyCode().getValue());
         property.getIdentification().add(propId);
         property.setMarketingName(lease.unit().building().marketing().name().getValue(""));
         laLease.setProperty(property);
         laLease.getIdentification().add(tenant.getIdentification().get(0));
 
-        leaseApp.getTenant().add(tenant);
         leaseApp.getLALease().add(laLease);
 
         return leaseApp;
@@ -86,7 +87,7 @@ public class YardiApplicationProcessor {
         name.setLastName(lease._applicant().customer().person().name().lastName().getValue());
         tenant.setName(name);
 
-        com.yardi.entity.leaseapp30.Identification tId = new com.yardi.entity.leaseapp30.Identification();
+        Identification tId = new Identification();
 //        tId.setIDType("prospect");
         tId.setIDType("thirdparty");
         tId.setIDValue(lease.getPrimaryKey().toString());
@@ -95,9 +96,23 @@ public class YardiApplicationProcessor {
         return tenant;
     }
 
-    public Charge getDepositCharge(Deposit deposit) {
+    public void addDepositCharges(List<Deposit> deposits, ChargeSet chargeSet) {
+        for (Deposit deposit : deposits) {
+            Charge charge = getDepositCharge(deposit);
+            if (charge != null) {
+                chargeSet.getCharge().add(charge);
+            }
+        }
+
+    }
+
+    private Charge getDepositCharge(Deposit deposit) {
+        if (deposit.chargeCode().yardiChargeCodes().size() == 0 || deposit.chargeCode().yardiChargeCodes().get(0).yardiChargeCode().isNull()) {
+            throw new UserRuntimeException("Missing Yardi charge code for ARCode: " + deposit.chargeCode().getStringView());
+        }
+
         Charge charge = new Charge();
-        com.yardi.entity.leaseapp30.Identification chargeId = new com.yardi.entity.leaseapp30.Identification();
+        Identification chargeId = new Identification();
         charge.setChargeType(ChargeType.APPLICATION_FEE);
         charge.setLabel(deposit.chargeCode().yardiChargeCodes().get(0).yardiChargeCode().getValue());
         chargeId.setIDValue("");

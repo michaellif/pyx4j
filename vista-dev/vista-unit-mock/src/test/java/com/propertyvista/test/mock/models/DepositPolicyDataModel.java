@@ -24,6 +24,7 @@ import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.test.mock.MockDataModel;
+import com.propertyvista.test.mock.models.ARCodeDataModel.Code;
 
 public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
 
@@ -34,6 +35,7 @@ public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
     protected void generate() {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
+        ARCode chargeCode = getDataModel(ARCodeDataModel.class).getARCode(Code.deposit);
         for (ARCode type : getDataModel(ARCodeDataModel.class).getAllItems()) {
             DepositPolicyItem item = null;
             String product = null;
@@ -72,6 +74,7 @@ public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
 
             if (item != null) {
                 item.productCode().set(type);
+                item.chargeCode().set(chargeCode);
                 item.annualInterestRate().setValue(new BigDecimal("0.12"));
                 item.description().setValue(item.depositType().getStringView() + ", " + product);
                 policy.policyItems().add(item);

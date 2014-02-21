@@ -312,7 +312,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
     public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException {
         try {
             init(Action.ImportGuestInfo);
-//            validateWriteAccess(yc);
+            validateWriteAccess(yc);
 
             ImportYardiGuest_Login request = new ImportYardiGuest_Login();
 
