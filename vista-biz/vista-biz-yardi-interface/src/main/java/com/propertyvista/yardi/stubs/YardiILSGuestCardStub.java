@@ -22,6 +22,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Properties;
 
 public interface YardiILSGuestCardStub extends ExternalInterfaceLoggingStub {
+
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 
     PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException;

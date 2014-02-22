@@ -13,9 +13,12 @@
  */
 package com.propertyvista.dto;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -37,7 +40,8 @@ public interface AptUnitDTO extends AptUnit {
     Lease lease();
 
     @Editor(type = EditorType.label)
-    IPrimitive<Boolean> isUnitReserved();
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> reservedUntil();
 
     IPrimitive<Boolean> isPresentInCatalog();
 

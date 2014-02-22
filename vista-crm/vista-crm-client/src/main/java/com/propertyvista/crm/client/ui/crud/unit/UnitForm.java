@@ -91,6 +91,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         get(proto().lease()).setVisible(!getValue().lease().isNull());
         get(proto().availability().availableForRent()).setVisible(!getValue().availability().availableForRent().isNull());
         get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
+        get(proto().reservedUntil()).setVisible(!getValue().reservedUntil().isNull());
 
         if (VistaFeatures.instance().yardiIntegration()) {
             catalogMarketPricesPanel.setVisible(false);
@@ -134,7 +135,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
                 new FormDecoratorBuilder(inject(proto().lease(), isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(
                         AppPlaceEntityMapper.resolvePlace(Lease.class))), 20).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().availability().availableForRent()), 9).build());
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().isUnitReserved()), 9).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().reservedUntil()), 9).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
 

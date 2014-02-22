@@ -88,7 +88,9 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
             to.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(in.getPrimaryKey()));
 
             Pair<Date, Lease> result = ServerSideFactory.create(OccupancyFacade.class).isReserved(in.getPrimaryKey());
-            to.isUnitReserved().setValue(result.getB() != null);
+            if (result.getB() != null) {
+                to.reservedUntil().setValue(result.getA());
+            }
         }
     }
 

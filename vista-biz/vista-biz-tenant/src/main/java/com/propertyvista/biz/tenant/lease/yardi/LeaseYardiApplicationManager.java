@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.tenant.lease.yardi;
 
-import java.rmi.RemoteException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +26,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
@@ -100,6 +99,14 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
         }
+
+        // Unit occupancy state managed by purely by Import procedure.
+        try {
+            ServerSideFactory.create(YardiARFacade.class).updateUnitAvailability(lease.unit());
+        } catch (Throwable e) {
+            log.error("unable to update unit availability", e);
+        }
+
         return lease;
     }
 
@@ -191,17 +198,12 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     @Override
     protected void releaseUnit(Lease lease) {
-        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
     }
 
     @Override
     protected void markUnitOccupied(Lease lease, Status previousStatus) {
-        // Unit occupancy state managed by purely by Import procedure.
-        try {
-            ServerSideFactory.create(YardiARFacade.class).updateUnitAvailability(lease.unit());
-        } catch (RemoteException | YardiServiceException e) {
-            log.error("unable to update unit alabiltity", e);
-        }
+        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
     }
 
     @Override

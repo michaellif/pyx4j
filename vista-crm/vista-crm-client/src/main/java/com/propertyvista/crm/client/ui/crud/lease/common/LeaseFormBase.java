@@ -83,6 +83,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         get(proto().isUnitReserved()).setVisible(
                 !getValue().unit().isNull() && getValue().status().getValue().isDraft() && getValue().status().getValue() != Lease.Status.ExistingLease);
+        get(proto().reservedUntil()).setVisible(!getValue().reservedUntil().isNull());
+
         get(proto().carryforwardBalance()).setVisible(!getValue().carryforwardBalance().isNull());
 
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
@@ -143,6 +145,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
                         inject(proto().currentTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 25).build());
 
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().isUnitReserved())).build());
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().reservedUntil())).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().currentLegalStatus())).build());
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
 

@@ -14,6 +14,7 @@
 package com.propertyvista.dto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -64,4 +65,8 @@ public interface LeaseDTO extends Lease {
 
     @Editor(type = EditorType.label)
     IPrimitive<Boolean> isUnitReserved();
+
+    @Editor(type = EditorType.label)
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> reservedUntil();
 }

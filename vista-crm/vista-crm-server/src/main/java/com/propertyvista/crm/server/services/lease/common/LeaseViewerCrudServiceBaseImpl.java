@@ -64,6 +64,9 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
             Pair<Date, Lease> result = ServerSideFactory.create(OccupancyFacade.class).isReserved(to.unit().getPrimaryKey());
             to.isUnitReserved().setValue(in.equals(result.getB()));
+            if (to.isUnitReserved().getValue()) {
+                to.reservedUntil().setValue(result.getA());
+            }
 
             checkUnitMoveOut(to);
         }

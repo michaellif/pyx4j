@@ -173,7 +173,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
         Lease.Status status = value.status().getValue();
         boolean reservationPreconditions = (!value.unit().isNull() && status.isDraft() && status != Lease.Status.ExistingLease);
-        setActionVisible(reserveUnit, reservationPreconditions && !value.isUnitReserved().isBooleanTrue());
+        setActionVisible(reserveUnit, reservationPreconditions && !value.isUnitReserved().getValue(false));
         setActionVisible(unreserveUnit, reservationPreconditions && value.isUnitReserved().isBooleanTrue());
 
         setupPapsMenu(value);

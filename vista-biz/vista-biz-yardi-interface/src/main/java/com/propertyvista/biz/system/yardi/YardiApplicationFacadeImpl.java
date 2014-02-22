@@ -60,7 +60,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                 // We should not copy pID to tenant.yardiApplicantId() since this is indicator if we sent applicants to yardi or not
                 lease.leaseApplication().yardiApplicationId().setValue(pID);
                 lease.integrationSystemId().setValue(yardiInterfaceId);
-                Persistence.service().persist(lease.leaseApplication());
+                Persistence.service().persist(lease);
 
                 return null;
             }
@@ -134,7 +134,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
             // application must be updated (yardi sync) before approval
             participant.participantId().setValue(signLeaseResults.getParticipants().get(participant.getPrimaryKey()));
             Persistence.service().persist(participant);
-            log.info("participantId assigned {} for {} in leaseId", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
+            log.info("participantId assigned {} for {} in leaseId {}", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
         }
         return lease;
     }
