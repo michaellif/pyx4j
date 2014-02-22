@@ -197,7 +197,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         setPropertyCode("gran0002");
         setFloorplan("2bdrm", 2);
         setCurrentAddress(getAddress());
-        fixTenantName("211536");
+        fixTenantName("211536"); // TODO - use exact guest name
         setMoveIn(new LogicalDate());
 
         BillableItem park = addOutdoorParking();

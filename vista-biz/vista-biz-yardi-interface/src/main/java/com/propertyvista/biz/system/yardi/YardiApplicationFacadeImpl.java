@@ -34,6 +34,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.yardi.services.YardiGuestManagementService;
 import com.propertyvista.yardi.services.YardiGuestManagementService.SignLeaseResults;
 
@@ -132,7 +133,11 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
             // application must be updated (yardi sync) before approval
-            participant.participantId().setValue(signLeaseResults.getParticipants().get(participant.getPrimaryKey()));
+            Persistence.ensureRetrieve(participant.leaseTermParticipants(), AttachLevel.Attached);
+            Role role = participant.leaseTermParticipants().iterator().next().role().getValue();
+            // For main Applicant the lookup key is lease PK, for others - participant's PK
+            Key key = Role.Applicant.equals(role) ? lease.getPrimaryKey() : participant.getPrimaryKey();
+            participant.participantId().setValue(signLeaseResults.getParticipants().get(key));
             Persistence.service().persist(participant);
             log.info("participantId assigned {} for {} in leaseId {}", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
         }
