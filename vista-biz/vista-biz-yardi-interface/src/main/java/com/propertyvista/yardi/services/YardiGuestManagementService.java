@@ -203,6 +203,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         log.info("Created Lease: {}", tenantId);
 
         return new SignLeaseResults() {
+
             final String leaseId = tenantId;
 
             final Map<Key, String> participants = YardiGuestManagementService.this.getParticipants(yc, lease);
@@ -336,6 +337,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
         String pId = participants.get(tenantId);
         if (pId == null) {
             throw new YardiServiceException(SimpleMessageFormat.format("Main applicant is missing: {0}", tenantId));
+        } else {
+            participants.remove(tenantId);
+            participants.put(lease._applicant().getPrimaryKey(), pId);
+
         }
 
         Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);

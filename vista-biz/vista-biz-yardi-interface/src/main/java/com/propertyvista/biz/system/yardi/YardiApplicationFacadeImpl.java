@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Executable;
@@ -34,7 +35,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.yardi.services.YardiGuestManagementService;
 import com.propertyvista.yardi.services.YardiGuestManagementService.SignLeaseResults;
 
@@ -56,7 +56,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                 PmcYardiCredential yc = getPmcYardiCredential(lease);
                 final Key yardiInterfaceId = yc.getPrimaryKey();
                 String pID = YardiGuestManagementService.getInstance().createNewProspect(yc, lease);
-
+                Validate.notNull(pID, "ApplicationId is null");
                 // save primary tenant pID as yardiApplicationId
                 // We should not copy pID to tenant.yardiApplicantId() since this is indicator if we sent applicants to yardi or not
                 lease.leaseApplication().yardiApplicationId().setValue(pID);
@@ -113,7 +113,9 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
                 // save lease participants ids
                 Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
                 for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-                    participant.yardiApplicantId().setValue(participants.get(participant.getPrimaryKey()));
+                    String yardiApplicantId = participants.get(participant.getPrimaryKey());
+                    Validate.notNull(yardiApplicantId, "yardiApplicantId is null");
+                    participant.yardiApplicantId().setValue(yardiApplicantId);
                     Persistence.service().persist(participant);
                 }
 
@@ -133,11 +135,9 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
         Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
             // application must be updated (yardi sync) before approval
-            Persistence.ensureRetrieve(participant.leaseTermParticipants(), AttachLevel.Attached);
-            Role role = participant.leaseTermParticipants().iterator().next().role().getValue();
-            // For main Applicant the lookup key is lease PK, for others - participant's PK
-            Key key = Role.Applicant.equals(role) ? lease.getPrimaryKey() : participant.getPrimaryKey();
-            participant.participantId().setValue(signLeaseResults.getParticipants().get(key));
+            String participantId = signLeaseResults.getParticipants().get(participant.getPrimaryKey());
+            Validate.notNull(participantId, "ParticipantId  is null");
+            participant.participantId().setValue(participantId);
             Persistence.service().persist(participant);
             log.info("participantId assigned {} for {} in leaseId {}", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
         }
