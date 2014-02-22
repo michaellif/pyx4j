@@ -341,12 +341,12 @@ BEGIN
 		
 		-- deposit
 		
-		ALTER TABLE deposit ADD COLUMN deposit_code BIGINT;
+		ALTER TABLE deposit ADD COLUMN charge_code BIGINT;
 		
 		
 		-- deposit_policy_item
 		
-		ALTER TABLE deposit_policy_item ADD COLUMN deposit_code BIGINT;
+		ALTER TABLE deposit_policy_item ADD COLUMN charge_code BIGINT;
 		
         -- emergency_contact
         
@@ -648,6 +648,7 @@ BEGIN
                 title                           VARCHAR(500),
                 body                            VARCHAR(48000),
                 signature_format                VARCHAR(50),
+                apply_to_role					VARCHAR(50),
                 order_id                        INT,
                         CONSTRAINT lease_application_confirmation_term_pk PRIMARY KEY(id)
         );
@@ -1805,8 +1806,8 @@ BEGIN
         ALTER TABLE community_event ADD CONSTRAINT community_event_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE customer_signature ADD CONSTRAINT customer_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE deposit ADD CONSTRAINT deposit_deposit_code_fk FOREIGN KEY(deposit_code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
-		ALTER TABLE deposit_policy_item ADD CONSTRAINT deposit_policy_item_deposit_code_fk FOREIGN KEY(deposit_code) 
+        ALTER TABLE deposit ADD CONSTRAINT deposit_charge_code_fk FOREIGN KEY(charge_code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+		ALTER TABLE deposit_policy_item ADD CONSTRAINT deposit_policy_item_charge_code_fk FOREIGN KEY(charge_code) 
 			REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_owner_fk FOREIGN KEY(owner) 
                 REFERENCES identification_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1985,6 +1986,8 @@ BEGIN
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE lease_application_confirmation_term ADD CONSTRAINT lease_application_confirmation_term_signature_format_e_ck 
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
+		ALTER TABLE lease_application_confirmation_term ADD CONSTRAINT lease_application_confirmation_term_apply_to_role_e_ck 
+			CHECK ((apply_to_role) IN ('All', 'Applicant', 'Guarantor'));
         ALTER TABLE lease_application_legal_policy ADD CONSTRAINT lease_application_legal_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE lease_billing_policy ADD CONSTRAINT lease_billing_policy_node_discriminator_d_ck 
@@ -2015,16 +2018,14 @@ BEGIN
                 'gardens', 'glade', 'glen', 'green', 'grove', 'heights', 'highway', 'lane', 'line', 'link', 'loop', 'mall', 'mews', 'other', 'packet', 
                 'parade', 'park', 'parkway', 'place', 'promenade', 'reserve', 'ridge', 'rise', 'road', 'row', 'square', 'street', 'strip', 'tarn', 'terrace', 
                 'thoroughfaree', 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
-		/*
-        ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
-                CHECK ((owner_discriminator) IN ('ARPolicy', 'AggregatedTransfer', 'AgreementLegalPolicy', 'ApplicationDocumentationPolicy', 
-                'AptUnit', 'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'Complex', 'DatesPolicy', 'DepositPolicy', 
-                'EmailTemplatesPolicy', 'Employee', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 'LeaseAdjustmentPolicy', 
-                'LeaseBillingPolicy', 'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 'MaintenanceRequestPolicy', 'MerchantAccount', 
-                'N4Policy', 'OnlineAppPolicy', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 'PaymentTypeSelectionPolicy', 
-                'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 'TenantInsurancePolicy', 
-                'YardiInterfacePolicy', 'feature', 'service'));
-        */
+		ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
+			CHECK ((owner_discriminator) IN ('ARPolicy', 'AggregatedTransfer', 'AgreementLegalPolicy', 'ApplicationDocumentationPolicy', 
+			'AptUnit', 'AutoPayPolicy', 'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'Complex', 'DatesPolicy', 'DepositPolicy', 
+			'EmailTemplatesPolicy', 'Employee', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 'LeaseAdjustmentPolicy',
+			'LeaseBillingPolicy', 'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 'MaintenanceRequestPolicy', 'MerchantAccount', 
+			'N4Policy', 'OnlineAppPolicy', 'Parking', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 
+			'PaymentTypeSelectionPolicy', 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 
+			'TenantInsurancePolicy', 'Vendor', 'YardiInterfacePolicy', 'feature', 'service'));
         ALTER TABLE online_application ADD CONSTRAINT online_application_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
         ALTER TABLE online_application_wizard_step_status ADD CONSTRAINT online_application_wizard_step_status_step_e_ck 
                 CHECK ((step) IN ('AboutYou', 'AdditionalInfo', 'Confirmation', 'Contacts', 'Financial', 'Lease', 'Legal', 'Options', 
