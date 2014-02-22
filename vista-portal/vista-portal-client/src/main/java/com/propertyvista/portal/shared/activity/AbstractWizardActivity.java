@@ -74,10 +74,6 @@ public abstract class AbstractWizardActivity<E extends IEntity, T extends IWizar
 
     @Override
     public void finish() {
-        onFinish();
-    }
-
-    protected void onFinish() {
         AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
     }
 

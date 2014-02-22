@@ -37,5 +37,5 @@ public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO>
         void downloadLeaseAgreementDraft();
     }
 
-    ApplicationWizard getApplicationWizard();
+    ApplicationWizard getWizard();
 }

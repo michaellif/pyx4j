@@ -76,7 +76,7 @@ public abstract class AbstractWizardCrudActivity<E extends IEntity, T extends IW
             @Override
             public void onSuccess(Key result) {
                 ReferenceDataManager.invalidate(entityClass);
-                AbstractWizardCrudActivity.super.finish();
+                getView().reset();
                 onFinish(result);
             }
 
@@ -88,10 +88,6 @@ public abstract class AbstractWizardCrudActivity<E extends IEntity, T extends IW
             }
         }, getView().getValue());
 
-    }
-
-    @Override
-    protected final void onFinish() {
     }
 
     protected void onFinish(Key result) {

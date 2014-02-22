@@ -52,7 +52,6 @@ public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<Paym
 
     @Override
     protected void onFinish(Key result) {
-        getView().reset();
         AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PaymentMethods.PaymentMethodSubmitted(result));
     }
 

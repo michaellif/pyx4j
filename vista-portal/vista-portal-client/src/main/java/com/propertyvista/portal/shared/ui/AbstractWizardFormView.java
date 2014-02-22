@@ -39,15 +39,24 @@ public abstract class AbstractWizardFormView<E extends IEntity> extends Abstract
     }
 
     @Override
+    public CPortalEntityWizard<E> getWizard() {
+        return wizardForm;
+    }
+
+    @Override
     public void populate(E value) {
-        wizardForm.populate(value);
-        wizardForm.calculateButtonsState();
+        if (wizardForm != null) {
+            wizardForm.populate(value);
+            wizardForm.calculateButtonsState();
+        }
     }
 
     @Override
     public void reset() {
-        wizardForm.reset();
-        wizardForm.calculateButtonsState();
+        if (wizardForm != null) {
+            wizardForm.reset();
+            wizardForm.calculateButtonsState();
+        }
     }
 
     @Override
@@ -62,11 +71,7 @@ public abstract class AbstractWizardFormView<E extends IEntity> extends Abstract
 
     @Override
     public E getValue() {
-        return wizardForm.getValue();
-    }
-
-    public CPortalEntityWizard<E> getWizard() {
-        return wizardForm;
+        return wizardForm == null ? null : wizardForm.getValue();
     }
 
     @Override
@@ -81,6 +86,6 @@ public abstract class AbstractWizardFormView<E extends IEntity> extends Abstract
 
     @Override
     public boolean isDirty() {
-        return wizardForm.isDirty();
+        return wizardForm != null && wizardForm.isDirty();
     }
 }

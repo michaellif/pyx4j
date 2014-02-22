@@ -52,19 +52,14 @@ public class PasswordResetActivity extends AbstractWizardActivity<PasswordChange
     }
 
     @Override
-    protected void onFinish() {
-        Notification message = new Notification(null, i18n.tr("Your password has been reset successfully!"), NotificationType.INFO);
-        PortalSite.getPlaceController().showNotification(message);
-    }
-
-    @Override
     public void finish() {
         GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class).resetPassword(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 getView().reset();
                 ClientContext.authenticated(result);
-                PasswordResetActivity.super.finish();
+                Notification message = new Notification(null, i18n.tr("Your password has been reset successfully!"), NotificationType.INFO);
+                PortalSite.getPlaceController().showNotification(message);
             }
 
             @Override

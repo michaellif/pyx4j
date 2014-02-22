@@ -18,15 +18,13 @@ import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
 
 public class ApplicationWizardViewImpl extends AbstractWizardFormView<OnlineApplicationDTO> implements ApplicationWizardView {
 
-    private ApplicationWizard applicationWizard;
-
     public ApplicationWizardViewImpl() {
         super();
     }
 
     @Override
     public void populate(OnlineApplicationDTO value) {
-        applicationWizard = new ApplicationWizard(this, value.feePaymentPolicy().getValue());
+        ApplicationWizard applicationWizard = new ApplicationWizard(this, value.feePaymentPolicy().getValue());
         applicationWizard.setPresenter((ApplicationWizardPresenter) getPresenter());
         setWizard(applicationWizard);
         super.populate(value);
@@ -34,13 +32,11 @@ public class ApplicationWizardViewImpl extends AbstractWizardFormView<OnlineAppl
 
     @Override
     public void reset() {
-        applicationWizard = null;
         setWizard(null);
     }
 
     @Override
-    public ApplicationWizard getApplicationWizard() {
-        return applicationWizard;
+    public ApplicationWizard getWizard() {
+        return (ApplicationWizard) super.getWizard();
     }
-
 }

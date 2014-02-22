@@ -47,7 +47,6 @@ public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardC
 
     @Override
     protected void onFinish(Key result) {
-        getView().reset();
         AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCardConfirmation());
     }
 }

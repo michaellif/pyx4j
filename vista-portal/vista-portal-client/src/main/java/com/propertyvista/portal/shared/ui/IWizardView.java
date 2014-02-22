@@ -46,4 +46,6 @@ public interface IWizardView<E extends IEntity> extends IsView {
      */
     boolean manageSubmissionFailure(Throwable caught);
 
+    CPortalEntityWizard<E> getWizard();
+
 }

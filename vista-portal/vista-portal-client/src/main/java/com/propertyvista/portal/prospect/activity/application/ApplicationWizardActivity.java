@@ -86,7 +86,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
             @Override
             public void onSuccess(OnlineApplicationDTO result) {
                 getView().populate(result);
-                eventBus.fireEvent(new ApplicationWizardStateChangeEvent(getView().getApplicationWizard(), ApplicationWizardStateChangeEvent.ChangeType.init));
+                eventBus.fireEvent(new ApplicationWizardStateChangeEvent(getView().getWizard(), ApplicationWizardStateChangeEvent.ChangeType.init));
             }
         });
     }
@@ -97,7 +97,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
         service.submit(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                ApplicationWizardActivity.super.finish();
+                getView().reset();
                 AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.ApplicationConfirmation());
             }
         }, getView().getValue());
@@ -124,14 +124,13 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
             }, currentValue);
         }
 
-        // call super AFTER! 
         super.onDiscard();
         ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(null, ApplicationWizardStateChangeEvent.ChangeType.discard));
     }
 
     private void updateStepProgressInfo() {
         getView().getValue().stepsStatuses().clear();
-        for (WizardStep step : getView().getApplicationWizard().getAllSteps()) {
+        for (WizardStep step : getView().getWizard().getAllSteps()) {
             ApplicationWizardStep appStep = (ApplicationWizardStep) step;
             OnlineApplicationWizardStepStatus status = EntityFactory.create(OnlineApplicationWizardStepStatus.class);
             status.step().setValue(appStep.getOnlineApplicationWizardStepMeta());
