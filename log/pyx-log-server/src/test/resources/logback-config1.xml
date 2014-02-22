@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE configuration>
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<configuration debug="false">
+
+    <property name="logs-name" value="try-logs" />
+    <property name="logs-dir" value="./target" />
+
+    <conversionRule conversionWord="message" converterClass="com.pyx4j.logback.IStringViewMessageConverter" />
+
+    <appender name="ConsoleAppender1" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- The caller line# should clickable in eclipse console.-->
+            <pattern>[1]%-5level %-70message\t{ %class.%method\(%file:%line\)}%n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ConsoleAppender2" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- The caller line# should clickable in eclipse console.-->
+            <pattern>[2]%-5level %-70message\t{ %class.%method\(%file:%line\)}%n%throwable</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="FileAppender1" class="ch.qos.logback.core.FileAppender">
+	    <file>${logs-dir}/${logs-name}-1.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+             <pattern>%-5level %date %6relative\t {%class.%method\(%file:%line\)}\t [%thread]\n\t%message\n%throwable</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="FileAppender2" class="ch.qos.logback.core.FileAppender">
+        <file>${logs-dir}/${logs-name}-2.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+             <pattern>%-5level %date %6relative\t {%class.%method\(%file:%line\)}\t [%thread]\n\t%message\n%throwable</pattern>
+        </encoder>
+    </appender>
+    
+    <logger name="com.pyx4j" level="DEBUG" />
+
+	<root level="INFO">
+        <appender-ref ref="ConsoleAppender1" />
+        <appender-ref ref="ConsoleAppender2" />
+        <appender-ref ref="FileAppender1" />
+        <appender-ref ref="FileAppender2" />
+	</root>
+
+</configuration>

@@ -24,6 +24,8 @@ import org.slf4j.helpers.MessageFormatter;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEventAccess;
 
 import com.pyx4j.commons.IStringView;
 
@@ -41,7 +43,7 @@ public class IStringViewMessageConverter extends ClassicConverter {
                 }
             }
             if (hasIStringView) {
-                return MessageFormatter.arrayFormat(event.getMessage(), argumentArray).getMessage();
+                LoggingEventAccess.setFormattedMessage((LoggingEvent) event, MessageFormatter.arrayFormat(event.getMessage(), argumentArray).getMessage());
             }
         }
         return event.getFormattedMessage();
