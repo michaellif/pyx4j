@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.core.IObject;
@@ -31,20 +30,15 @@ public class EntityViewerDialog extends OkDialog {
 
     public EntityViewerDialog(IObject<?> entity) {
         super("Entity Viewer");
+        setDialogPixelWidth(400);
 
         FlowPanel panel = new FlowPanel();
-
-        EntityViewerCellTree tree = new EntityViewerCellTree(entity);
-        tree.setSize("100%", "100%");
-        panel.add(tree);
+        panel.add(new EntityViewerCellTree(entity));
 
         ScrollPanel scroll = new ScrollPanel(panel);
-        LayoutPanel content = new LayoutPanel();
-        content.setHeight("100%");
-        content.add(scroll);
-        setBody(content);
+        scroll.setHeight("500px");
 
-        setDialogPixelWidth(400);
+        setBody(scroll);
 
     }
 
