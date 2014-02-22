@@ -42,7 +42,7 @@ public class LeaseApplicationPolicyPreloader extends AbstractPolicyPreloader<Lea
 
         // add confirmation terms
         policy.confirmationTerms().add(createConfTerm("Privacy Policy", "leaseApplicationConfirm1.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
-        policy.confirmationTerms().add(createConfTerm("Digital Signature", "leaseApplicationConfirm2.html", TargetRole.Applicant, SignatureFormat.AgreeBox));
+        policy.confirmationTerms().add(createConfTerm("Digital Signature", "leaseApplicationConfirm2.html", TargetRole.Applicant, SignatureFormat.FullName));
 
         return policy;
     }
