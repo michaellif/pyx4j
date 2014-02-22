@@ -112,12 +112,12 @@ public interface OccupancyFacade {
     Pair<Date, Lease> isReserved(Key unitId);
 
     /**
-     * @param lease
+     * @param leaseId
      *            with unit Id
      * @return true if unit was unreserved
      *         do not have UofW
      */
-    boolean unreserveIfReservered(Lease lease);
+    boolean unreserveIfReservered(Lease leaseId);
 
     // Used only in Yardi for now
     void setAvailability(AptUnit unit, LogicalDate availableForRent);

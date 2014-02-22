@@ -805,12 +805,12 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void reserve(final Lease lease, final int durationHours) {
+    public void reserve(final Lease leaseId, final int durationHours) {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
             @Override
             public Void execute() throws RuntimeException {
-                new ReservationManager().reserve(lease, durationHours);
+                new ReservationManager().reserve(leaseId, durationHours);
                 return null;
             }
 
@@ -818,8 +818,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public boolean unreserveIfReservered(Lease lease) {
-        return new ReservationManager().unreserveIfReservered(lease);
+    public boolean unreserveIfReservered(Lease leaseId) {
+        return new ReservationManager().unreserveIfReservered(leaseId);
     }
 
     @Override

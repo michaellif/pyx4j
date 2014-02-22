@@ -21,11 +21,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitReservation;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -33,10 +35,11 @@ public class ReservationManager {
 
     private final static I18n i18n = I18n.get(ReservationManager.class);
 
-    public void reserve(Lease lease, int durationHours) {
-        AptUnitReservation currentReservation = getCurrentReserved(lease.unit().getPrimaryKey());
+    public void reserve(Lease leaseId, int durationHours) {
+        Key unitId = getUnitId(leaseId);
+        AptUnitReservation currentReservation = getCurrentReserved(unitId);
         if (currentReservation != null) {
-            if (currentReservation.lease().equals(lease)) {
+            if (currentReservation.lease().equals(leaseId)) {
                 currentReservation.dateTo().setValue(DateUtils.addSeconds(SystemDateManager.getDate(), -1));
                 Persistence.service().persist(currentReservation);
             } else {
@@ -45,18 +48,18 @@ public class ReservationManager {
         }
 
         AptUnitReservation reservation = EntityFactory.create(AptUnitReservation.class);
-        reservation.lease().set(lease);
-        reservation.unit().set(lease.unit());
+        reservation.lease().set(leaseId);
+        reservation.unit().setPrimaryKey(unitId);
         reservation.dateFrom().setValue(SystemDateManager.getDate());
         reservation.dateTo().setValue(DateUtils.addHours(SystemDateManager.getDate(), durationHours));
         Persistence.service().persist(reservation);
     }
 
-    public boolean unreserveIfReservered(Lease lease) {
-        AptUnitReservation reservation = getCurrentReserved(lease.unit().getPrimaryKey());
+    public boolean unreserveIfReservered(Lease leaseId) {
+        AptUnitReservation reservation = getCurrentReserved(getUnitId(leaseId));
         if (reservation == null) {
             return false;
-        } else if (reservation.lease().equals(lease)) {
+        } else if (reservation.lease().equals(leaseId)) {
             reservation.dateTo().setValue(DateUtils.addSeconds(SystemDateManager.getDate(), -1));
             Persistence.service().persist(reservation);
             return true;
@@ -72,6 +75,16 @@ public class ReservationManager {
             return new Pair<>();
         } else {
             return new Pair<>(reservation.dateTo().getValue(), reservation.lease());
+        }
+    }
+
+    private Key getUnitId(Lease leaseId) {
+        if (leaseId.getAttachLevel() == AttachLevel.Attached) {
+            return leaseId.unit().getPrimaryKey();
+        } else {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().leases(), leaseId);
+            return Persistence.service().retrieve(criteria).getPrimaryKey();
         }
     }
 

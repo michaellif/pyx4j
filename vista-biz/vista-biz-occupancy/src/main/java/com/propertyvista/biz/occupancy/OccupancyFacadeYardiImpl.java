@@ -226,14 +226,14 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
     }
 
     @Override
-    public boolean unreserveIfReservered(final Lease lease) {
+    public boolean unreserveIfReservered(final Lease leaseId) {
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Boolean, RuntimeException>() {
 
             @Override
             public Boolean execute() throws RuntimeException {
-                if (new ReservationManager().unreserveIfReservered(lease)) {
+                if (new ReservationManager().unreserveIfReservered(leaseId)) {
                     try {
-                        ServerSideFactory.create(YardiApplicationFacade.class).unreserveUnit(lease);
+                        ServerSideFactory.create(YardiApplicationFacade.class).unreserveUnit(leaseId);
                     } catch (YardiServiceException e) {
                         throw new UserRuntimeException(i18n.tr("Unreserve Unit failed") + "\n" + e.getMessage(), e);
                     }
