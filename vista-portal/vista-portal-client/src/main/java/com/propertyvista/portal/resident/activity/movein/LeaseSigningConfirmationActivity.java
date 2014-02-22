@@ -53,16 +53,12 @@ public class LeaseSigningConfirmationActivity extends SecurityAwareActivity impl
         GWT.<LeaseAgreementService> create(LeaseAgreementService.class).retrieveLeaseAgreementDocument(new DefaultAsyncCallback<LeaseTermAgreementDocument>() {
             @Override
             public void onSuccess(LeaseTermAgreementDocument result) {
+                //TODO retrieve real status of LeaseAgreement submission
                 LeaseAgreementConfirmationDTO confirmatioin = EntityFactory.create(LeaseAgreementConfirmationDTO.class);
                 confirmatioin.agreementDocument().set(result);
                 view.populate(confirmatioin);
             }
         });
-    }
-
-    @Override
-    public void back() {
-        // TODO Auto-generated method stub
     }
 
     @Override

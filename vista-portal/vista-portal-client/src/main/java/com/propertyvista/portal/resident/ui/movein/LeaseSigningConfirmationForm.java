@@ -39,38 +39,38 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
 
     @Override
     public IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
+        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setH4(
+        contentPanel.setH4(
                 ++row,
                 0,
                 1,
                 i18n.tr("Thank you. We have received your signed Lease Agreement. You can obtain a draft copy of the agreement by clicking 'Download Agreement' button here."));
 
-        content.setWidget(++row, 0, new Button(i18n.tr("Download Agreement"), new Command() {
+        contentPanel.setWidget(++row, 0, new Button(i18n.tr("Download Agreement"), new Command() {
             @Override
             public void execute() {
                 onDownloadAgreement();
             }
         }));
 
-        content.setBR(++row, 0, 1);
+        contentPanel.setBR(++row, 0, 1);
 
         if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
             HTML helpText = new HTML(
                     i18n.tr("You now have access to the mycommunity portal. From the dashboard you can manage your payments, submit maintenance requests, view special offers and more."));
             //" Please use the links below to continue with the setup of your tenant services, then continue on to the mycommunity dashboard."
             helpText.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            content.setWidget(++row, 0, helpText);
+            contentPanel.setWidget(++row, 0, helpText);
         } else if (SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
             HTML helpText = new HTML(
                     i18n.tr("You now have access to the mycommunity portal. From the dashboard you can manage your payments, view special offers and more."));
             helpText.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            content.setWidget(++row, 0, helpText);
+            contentPanel.setWidget(++row, 0, helpText);
         }
 
-        return content;
+        return contentPanel;
     }
 
     public void onDownloadAgreement() {

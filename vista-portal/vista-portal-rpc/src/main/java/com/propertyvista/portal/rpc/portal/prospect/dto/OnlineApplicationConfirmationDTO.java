@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
- * @author VladL
+ * Created on Dec 20, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application;
+package com.propertyvista.portal.rpc.portal.prospect.dto;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationConfirmationDTO;
-import com.propertyvista.portal.shared.ui.IViewerView;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IEntity;
 
-public interface ApplicationConfirmationView extends IViewerView<OnlineApplicationConfirmationDTO> {
-
-    public interface ApplicationConfirmationPresenter extends IViewerView.IViewerPresenter<OnlineApplicationConfirmationDTO> {
-
-    }
+@Transient
+public interface OnlineApplicationConfirmationDTO extends IEntity {
 
 }

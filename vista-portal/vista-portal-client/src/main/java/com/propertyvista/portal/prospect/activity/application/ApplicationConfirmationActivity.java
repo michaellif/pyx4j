@@ -36,11 +36,8 @@ public class ApplicationConfirmationActivity extends SecurityAwareActivity imple
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
-    }
 
-    @Override
-    public void back() {
-        // TODO Auto-generated method stub
+        //TODO retrieve real status of Online Application submission
 
     }
 
