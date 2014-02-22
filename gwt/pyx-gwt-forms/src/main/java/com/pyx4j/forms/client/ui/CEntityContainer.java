@@ -77,7 +77,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
                 @Override
                 public void execute() {
-                    log.info(CEntityContainer.this.getValue().toString());
                     new EntityViewerDialog(CEntityContainer.this.getValue()).show();
                 }
             });

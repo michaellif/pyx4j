@@ -61,20 +61,19 @@ public class EntityViewerCellTree extends CellTree {
             if (value == null) {
                 sb.appendEscaped("NULL");
             } else {
-                IObject<?> obj = value;
                 sb.appendHtmlConstant("<div style=\"border-width: 1px; border-style: solid; margin-bottom: 0.3em; padding-left: 1em;\">");
 
                 sb.appendHtmlConstant("<div style=\"font-weight: bold;\">");
-                if (obj.getFieldName() == null) {
-                    sb.appendEscaped(((IEntity) obj).getEntityMeta().getCaption());
-                } else {
-                    sb.appendEscaped("" + obj.getFieldName());
+                String fieldName = value.getFieldName();
+                if (fieldName == null) {
+                    fieldName = ((IEntity) value).getEntityMeta().getCaption();
                 }
+                sb.appendEscaped(fieldName + " (" + System.identityHashCode(value) + ")");
                 sb.appendHtmlConstant("</div>");
 
-                if (obj.getFieldName() != null) {
+                if (value.getFieldName() != null) {
                     sb.appendHtmlConstant("<div>");
-                    sb.appendEscaped("Title: " + obj.getMeta().getCaption());
+                    sb.appendEscaped("Title: " + value.getMeta().getCaption());
                     sb.appendHtmlConstant("</div>");
                 }
 
