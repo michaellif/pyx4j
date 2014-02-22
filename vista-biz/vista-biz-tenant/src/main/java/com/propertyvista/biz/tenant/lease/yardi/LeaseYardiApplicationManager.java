@@ -203,7 +203,7 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     @Override
     protected void markUnitOccupied(Lease lease, Status previousStatus) {
-        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
+        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
     }
 
     @Override
