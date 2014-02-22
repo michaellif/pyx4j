@@ -40,7 +40,11 @@ public class ApplicationConfirmationForm extends CPortalEntityForm<OnlineApplica
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        contentPanel.setH4(++row, 0, 1, i18n.tr("Thank you. We have received your Lease Application."));
+        contentPanel
+                .setH4(++row,
+                        0,
+                        1,
+                        i18n.tr("Your application has been successfully submitted. An email has been sent to you as well with all pertinent information. Once all applicants/guarantors (if applicable) have successfully submitted the application we will process your application and will advise you of our decision. The process can take between 1-3 business days. If you have any questions about the status of your application, please do not hesitate to contact us directly or check back here to see the latest status of your application."));
 
         contentPanel.setBR(++row, 0, 1);
 
