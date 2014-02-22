@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,7 +24,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
@@ -124,8 +124,8 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
      * 
      * @return - current Tenants list
      */
-    protected IList<LeaseTermTenant> getLeaseTermTenants() {
-        return null;
+    protected List<LeaseTermTenant> getLeaseTermTenants() {
+        return Collections.emptyList();
     }
 
     private class GuarantorInLeaseEditor extends CEntityForm<LeaseTermGuarantor> {

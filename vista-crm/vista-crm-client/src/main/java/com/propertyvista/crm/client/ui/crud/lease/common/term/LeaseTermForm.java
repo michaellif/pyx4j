@@ -106,7 +106,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         @Override
-        protected IList<LeaseTermTenant> getLeaseTermTenants() {
+        protected List<LeaseTermTenant> getLeaseTermTenants() {
             return tenantsFolder.getValue();
         }
     };
