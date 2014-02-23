@@ -17,15 +17,19 @@ import java.util.HashMap;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
@@ -135,10 +139,27 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        //TODO Set WizardStep visited flag
+        IList<OnlineApplicationWizardStepStatus> statuses = getValue().stepsStatuses();
+        HashMap<OnlineApplicationWizardStepMeta, Boolean> visitedStatusMap = new HashMap<>();
+
+        for (OnlineApplicationWizardStepStatus status : statuses) {
+            visitedStatusMap.put(status.step().getValue(), status.visited().getValue());
+        }
 
         for (ApplicationWizardStep step : steps.values()) {
             step.onValueSet(populate);
+
+            boolean visited = visitedStatusMap.get(step.getOnlineApplicationWizardStepMeta());
+            step.setStepVisited(visited);
+            if (visited) {
+                step.showErrors(true);
+                ValidationResults validationResults = step.getValidationResults();
+                if (validationResults.isValid()) {
+                    step.setStepComplete(true);
+                } else {
+                    step.setStepWarning(validationResults.getValidationShortMessage());
+                }
+            }
         }
 
     }

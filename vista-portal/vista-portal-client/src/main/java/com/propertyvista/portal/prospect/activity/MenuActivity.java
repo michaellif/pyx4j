@@ -45,7 +45,6 @@ public class MenuActivity extends AbstractActivity implements MenuPresenter {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
-        view.updateStepButtons(applicationWizard);
 
         eventBus.addHandler(ApplicationWizardStateChangeEvent.getType(), new ApplicationWizardStateChangeHandler() {
             @Override
