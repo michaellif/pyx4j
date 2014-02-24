@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui.folder;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -363,7 +362,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public Collection<? extends CComponent<?>> getComponents() {
+    public List<CEntityFolderItem<E>> getComponents() {
         return itemsList;
     }
 
