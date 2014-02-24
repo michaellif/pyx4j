@@ -79,6 +79,8 @@ public class AboutYouStep extends ApplicationWizardStep {
         if (getWizard().isEditable()) {
             fileUpload.setDocumentsPolicy(getValue().applicant().documentsPolicy());
         }
+
+        get(proto().applicant().person().birthDate()).setMandatory(getWizard().getValue().enforceAgeOfMajority().isBooleanTrue());
     }
 
     @Override

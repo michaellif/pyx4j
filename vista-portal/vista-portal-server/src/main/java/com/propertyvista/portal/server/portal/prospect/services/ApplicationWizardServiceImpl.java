@@ -456,6 +456,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         for (LeaseTermGuarantor ltg : Persistence.service().query(criteria)) {
             GuarantorDTO grnt = EntityFactory.create(GuarantorDTO.class);
 
+            grnt.relationship().setValue(ltg.relationship().getValue());
+
             grnt.name().setValue(ltg.leaseParticipant().customer().person().name().getValue());
             grnt.email().setValue(ltg.leaseParticipant().customer().person().email().getValue());
 
@@ -511,6 +513,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void updateGuarantor(LeaseTermGuarantor ltg, GuarantorDTO grt) {
         ltg.role().setValue(LeaseTermParticipant.Role.Guarantor);
+        ltg.relationship().setValue(grt.relationship().getValue());
         ltg.leaseParticipant().customer().person().name().set(grt.name());
         ltg.leaseParticipant().customer().person().email().setValue(grt.email().getValue());
 
