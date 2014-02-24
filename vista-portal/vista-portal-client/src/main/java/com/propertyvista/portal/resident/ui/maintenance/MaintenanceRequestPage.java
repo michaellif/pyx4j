@@ -14,10 +14,12 @@
 package com.propertyvista.portal.resident.ui.maintenance;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -151,11 +153,9 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
         mainPanel.setWidget(++row, 0, scheduledPanel);
 
-        rateIt = new RateIt(5);
-        mainPanel.setWidget(++row, 0, rateIt);
-
         mainPanel.setBR(++row, 0, 1);
 
+        rateIt = new RateIt(5);
         rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
             @Override
             public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -165,6 +165,12 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
             }
         });
+
+        SimplePanel rateItHolder = new SimplePanel(rateIt);
+        rateItHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        mainPanel.setWidget(++row, 0, rateItHolder);
+
+        mainPanel.setBR(++row, 0, 1);
 
         return mainPanel;
     }

@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -63,7 +65,9 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority().level(), new CLabel<PriorityLevel>()), 180).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastUpdated(), new CLabel<String>()), 180).build());
 
-        content.setWidget(++row, 0, rateIt = new RateIt(5));
+        content.setBR(++row, 0, 1);
+
+        rateIt = new RateIt(5);
         rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
             @Override
             public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -72,6 +76,10 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
                 }
             }
         });
+
+        SimplePanel rateItHolder = new SimplePanel(rateIt);
+        rateItHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        content.setWidget(++row, 0, rateItHolder);
 
         detailsLink = new Anchor(i18n.tr("View Details"), new Command() {
 

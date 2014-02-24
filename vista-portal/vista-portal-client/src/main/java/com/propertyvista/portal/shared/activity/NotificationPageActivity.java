@@ -57,14 +57,4 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
         }
     }
 
-    @Override
-    public String mayStop() {
-        if (ApplicationMode.isDevelopment()) {
-            if (TimeUtils.since(started) < 10 * Consts.SEC2MILLISECONDS) {
-                return ApplicationMode.DEV + "Following message will not be shown in application production mode\n\n" + place.getNotification().getMessage();
-            }
-        }
-        return null;
-    }
-
 }

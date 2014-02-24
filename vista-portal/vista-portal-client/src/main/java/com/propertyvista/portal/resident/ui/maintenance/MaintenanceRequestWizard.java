@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
+import java.util.Random;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -42,6 +44,8 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.domain.maintenance.IssueElementType;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
@@ -218,8 +222,24 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     @Override
     public void generateMockData() {
         get(proto().reportedForOwnUnit()).setMockValue(true);
+        get(proto().category()).setMockValue(getMockCategory());
         get(proto().summary()).setMockValue("Maintenance Request Summary");
+        get(proto().description()).setMockValue("Maintenance Request Description");
+        get(proto().priority()).setMockValue(meta.priorities().get(0));
         get(proto().permissionToEnter()).setMockValue(true);
+    }
+
+    private MaintenanceRequestCategory getMockCategory() {
+        MaintenanceRequestCategory category = meta.rootCategory();
+        while (category.subCategories().size() > 0) {
+            MaintenanceRequestCategory tmp;
+            do {
+                // get unit-related category 
+                tmp = category.subCategories().get(new Random().nextInt(category.subCategories().size()));
+            } while (!tmp.type().isNull() && tmp.type().getValue() != IssueElementType.ApartmentUnit);
+            category = tmp;
+        }
+        return category;
     }
 
     @Override
