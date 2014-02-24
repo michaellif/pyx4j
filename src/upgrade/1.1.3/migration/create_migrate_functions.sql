@@ -1536,10 +1536,10 @@ BEGIN
         ALTER TABLE product ALTER COLUMN code_type DROP NOT NULL;
         
         
-        EXECUTE 'INSERT INTO '||v_schema_name||'.product (id,id_discriminator,catalog,updated,code) '
+        EXECUTE 'INSERT INTO '||v_schema_name||'.product (id,id_discriminator,catalog,updated,default_catalog_item,code) '
                 ||'(SELECT      nextval(''public.product_seq'') AS id, pi.product_discriminator AS id_discriminator,'
                 ||'             p.catalog,DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated,'
-                ||'             pi.code '
+                ||'             TRUE, pi.code '
                 ||'FROM '||v_schema_name||'.product p '
                 ||'JOIN '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
                 ||'JOIN '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
@@ -1547,6 +1547,17 @@ BEGIN
                 ||'AND          pv.to_date IS NULL '
                 ||'AND          pv.from_date IS NOT NULL '
                 ||'AND          pi.code != p.code ) ';             
+        
+        -- new records for product_v table
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.product_v (id,id_discriminator,version_number,'
+                ||'from_date,holder_discriminator,holder,name,mandatory) '
+                ||'(SELECT  nextval(''public.product_v_seq'') AS id,p.id_discriminator AS id_discriminator, '
+                ||'1,DATE_TRUNC(''second'',current_timestamp)::timestamp AS from_date, '
+                ||'p.id_discriminator AS holder_discriminator,p.id AS holder,a.code_type AS name, FALSE '
+                ||'FROM '||v_schema_name||'.product p '
+                ||'JOIN '||v_schema_name||'.arcode a ON (p.code = a.id) '
+                ||'WHERE    p.id NOT IN (SELECT DISTINCT holder FROM '||v_schema_name||'.product_v ) )';
         
                         
         SET CONSTRAINTS ALL IMMEDIATE;
