@@ -241,6 +241,13 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         get(proto().description()).setVisible(VistaFeatures.instance().yardiIntegration() && (isEditable() || !getValue().description().isNull()));
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().agreedPrice()).setEditable(false);
+
+            get(proto().effectiveDate()).setVisible(false);
+            get(proto().expirationDate()).setVisible(false);
+        }
     }
 
     @Override
