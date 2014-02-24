@@ -149,7 +149,10 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         for (ApplicationWizardStep step : steps.values()) {
             step.onValueSet(populate);
 
-            boolean visited = visitedStatusMap.get(step.getOnlineApplicationWizardStepMeta());
+            Boolean visited = visitedStatusMap.get(step.getOnlineApplicationWizardStepMeta());
+            if (visited == null) {
+                visited = false;
+            }
             step.setStepVisited(visited);
             if (visited) {
                 step.showErrors(true);
