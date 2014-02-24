@@ -40,6 +40,7 @@ import com.yardi.entity.guestcard40.PropertyMarketingSources;
 import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Prospects;
 import com.yardi.entity.guestcard40.RentableItems;
+import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Name;
 import com.yardi.entity.mits.YardiCustomer;
@@ -58,6 +59,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
+import com.propertyvista.yardi.processors.YardiApplicationProcessor;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
@@ -193,7 +195,12 @@ public class YardiGuestManagementService extends YardiAbstractService {
         // create lease
         for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
             EventType event = guestProcessor.getNewEvent(type, false);
-            if (type == EventTypes.LEASE_SIGN) {
+            if (type == EventTypes.APPROVE) {
+                // this will submit deposit charges under Application Fees
+                LeaseApplication leaseApp = new YardiApplicationProcessor().createApplication(lease);
+                ServerSideFactory.create(YardiGuestManagementStub.class).importApplication(yc, leaseApp);
+                log.info("Imported lease application: {}", lease.leaseId().getValue());
+            } else if (type == EventTypes.LEASE_SIGN) {
                 event.setQuotes(guestProcessor.getRentQuote(getRentPrice(lease)));
             }
             guestProcessor.setEvent(guest, event);
@@ -257,6 +264,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
 
         // TODO - check for Deposit charge code mapping
+        // - get list of configured charge codes for GuestCard service (use GetAttachmentTypesAndChargeCodes)
+        // - check Deposit policy to ensure that charge code for each item belongs to the list above
 
         StringBuilder msg = new StringBuilder();
         if (agentName == null) {
