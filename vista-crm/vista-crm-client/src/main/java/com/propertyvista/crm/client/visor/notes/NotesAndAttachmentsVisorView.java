@@ -329,15 +329,13 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                 public AttachmentsEditorFolder() {
                     super(NoteAttachment.class);
-                    setOrderable(false);
-                    setAddable(false);
-                    setViewable(true);
+                    setViewableMode(true);
                 }
 
                 public void setViewableMode(boolean isViewable) {
+                    setViewable(isViewable);
                     setOrderable(!isViewable);
                     setAddable(!isViewable);
-                    setViewable(isViewable);
                 }
 
                 @Override
