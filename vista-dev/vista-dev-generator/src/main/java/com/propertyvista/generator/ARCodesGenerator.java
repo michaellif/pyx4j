@@ -29,7 +29,11 @@ public class ARCodesGenerator {
 
     public ARCodesGenerator() {
         for (ARCode.Type type : ARCode.Type.services()) {
-            createARCode(type.toString(), type, 5110, false);
+            if (type.equals(ARCode.Type.Residential)) {
+                createARCode("Residential Rent", type, 5110, false, "rrent");
+            } else {
+                createARCode(type.toString(), type, 5110, false);
+            }
         }
 
         if (VistaFeatures.instance().yardiIntegration()) {
@@ -77,11 +81,6 @@ public class ARCodesGenerator {
 
         createARCode("Carry Forward Credit", ARCode.Type.CarryForwardCredit, 0, true);
         createARCode("Carry Forward Charge", ARCode.Type.CarryForwardCharge, 0, true);
-
-        // create Yardi rrent code if necessary:
-        if (VistaFeatures.instance().yardiIntegration()) {
-            createARCode("Yardi Residential Rent", ARCode.Type.Residential, 0, false, "rrent");
-        }
     }
 
     public List<ARCode> getARCodes() {
@@ -101,7 +100,7 @@ public class ARCodesGenerator {
         code.reserved().setValue(reserved);
 
         // map Yardi charge code:
-        if (VistaFeatures.instance().yardiIntegration()) {
+        if (yardiChargeCodeName != null) {
             YardiChargeCode yardiChargeCode = EntityFactory.create(YardiChargeCode.class);
             yardiChargeCode.yardiChargeCode().setValue(yardiChargeCodeName);
             code.yardiChargeCodes().add(yardiChargeCode);
