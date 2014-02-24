@@ -181,7 +181,7 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
     }
 
     @Override
-    protected void releaseUnit(Lease lease) {
+    protected void releaseUnit(Lease lease, Status previousStatus) {
         // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
     }
 

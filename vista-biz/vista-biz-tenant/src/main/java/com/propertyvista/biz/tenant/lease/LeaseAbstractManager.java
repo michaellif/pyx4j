@@ -315,6 +315,7 @@ public abstract class LeaseAbstractManager {
 
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
+        Status status = lease.status().getValue();
 
         // TODO Review the status
         lease.status().setValue(Lease.Status.Cancelled);
@@ -327,7 +328,7 @@ public abstract class LeaseAbstractManager {
 
         Persistence.service().merge(lease);
 
-        releaseUnit(lease);
+        releaseUnit(lease, status);
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
             Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
@@ -341,6 +342,7 @@ public abstract class LeaseAbstractManager {
 
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
+        Status status = lease.status().getValue();
 
         lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
@@ -350,7 +352,7 @@ public abstract class LeaseAbstractManager {
 
         Persistence.service().merge(lease);
 
-        releaseUnit(lease);
+        releaseUnit(lease, status);
     }
 
     public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -644,13 +646,14 @@ public abstract class LeaseAbstractManager {
 
     public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        Status status = lease.status().getValue();
 
         // Verify the status
-        if (!lease.status().getValue().isDraft() && lease.status().getValue() != Status.Approved) {
+        if (!status.isDraft() && status != Status.Approved) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
-        releaseUnit(lease);
+        releaseUnit(lease, status);
 
         lease.status().setValue(Status.Cancelled);
         Persistence.service().merge(lease);
@@ -860,7 +863,7 @@ public abstract class LeaseAbstractManager {
                 Lease previousLeaseEdition = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
                 if (!EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
                     if (!previousLeaseEdition.unit().isNull()) {
-                        releaseUnit(previousLeaseEdition);
+                        releaseUnit(previousLeaseEdition, previousLeaseEdition.status().getValue());
                     }
                 }
             }
@@ -929,8 +932,8 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    protected void releaseUnit(Lease lease) {
-        switch (lease.status().getValue()) {
+    protected void releaseUnit(Lease lease, Status previousStatus) {
+        switch (previousStatus) {
         case NewLease:
         case Application:
             ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);

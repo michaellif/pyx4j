@@ -197,7 +197,7 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
     }
 
     @Override
-    protected void releaseUnit(Lease lease) {
+    protected void releaseUnit(Lease lease, Status previousStatus) {
         ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
     }
 
