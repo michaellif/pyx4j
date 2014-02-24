@@ -287,7 +287,7 @@ public class YardiGuestProcessor {
         nameType.setLastName(name.lastName().getValue());
         nameType.setMiddleName(name.middleName().getValue());
         nameType.setMaidenName(name.maidenName().getValue());
-        nameType.setNamePrefix(name.namePrefix().getValue().toString());
+        nameType.setNamePrefix(name.namePrefix().isNull() ? null : name.namePrefix().getValue().toString());
         nameType.setNameSuffix(name.nameSuffix().getValue());
         return nameType;
     }
