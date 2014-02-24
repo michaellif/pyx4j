@@ -807,7 +807,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
             if (forMessageFormatFormat && (mm.isNumberValueClass())) {
                 return member.getValue();
             } else if (forMessageFormatFormat && mm.getValueClass().equals(Boolean.class)) {
-                if (member.isBooleanTrue()) {
+                @SuppressWarnings("unchecked")
+                IPrimitive<Boolean> booleanMember = (IPrimitive<Boolean>) member;
+                if (booleanMember.getValue(false)) {
                     return Integer.valueOf(1);
                 } else {
                     return Integer.valueOf(0);
@@ -832,6 +834,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         Map<String, Serializable> thisValue = getValue(false);
         if ((thisValue != null) && thisValue.containsKey(TO_STRING_ATTR)) {
             return (String) thisValue.get(TO_STRING_ATTR);
+        }
+        if ((thisValue != null) && thisValue.containsKey(DETACHED_ATTR)) {
+            throw new RuntimeException("Access to detached " + data.get(DETACHED_ATTR) + " entity " + exceptionInfo(data));
         }
         List<String> sm = getEntityMeta().getToStringMemberNames();
         String format = getEntityMeta().getToStringFormat();
