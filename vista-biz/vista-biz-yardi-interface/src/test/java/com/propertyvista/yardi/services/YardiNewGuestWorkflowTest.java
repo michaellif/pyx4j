@@ -237,7 +237,10 @@ public class YardiNewGuestWorkflowTest {
                 }
             }
             String[] names = guestName.split(" ", 2);
-            Prospect guest = guestProcessor.getProspect(names[0], names[1], getAddress(), null, yc.propertyListCodes().getValue());
+            com.propertyvista.domain.person.Name name = EntityFactory.create(com.propertyvista.domain.person.Name.class);
+            name.firstName().setValue(names[0]);
+            name.lastName().setValue(names[1]);
+            Prospect guest = guestProcessor.getProspect(name, getAddress(), null, yc.propertyListCodes().getValue());
             guestProcessor //
                     .addUnit(guest, ilsUnit.getUnit().getInformation().get(0)) //
                     .addMoveInDate(guest, moveIn) //

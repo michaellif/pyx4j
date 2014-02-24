@@ -49,6 +49,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -68,8 +69,7 @@ public class YardiGuestProcessor {
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Prospect prospect = getProspect( //
-                lease._applicant().customer().person().name().firstName().getValue(), //
-                lease._applicant().customer().person().name().lastName().getValue(), //
+                lease._applicant().customer().person().name(), //
                 getCurrentAddress(lease._applicant().customer()), //
                 lease.getPrimaryKey().toString(), // use primary key as third-party guest id
                 lease.unit().building().propertyCode().getValue() //
@@ -84,12 +84,12 @@ public class YardiGuestProcessor {
         return prospect;
     }
 
-    public Prospect getProspect(String firstName, String lastName, AddressStructured addr, String prospectId, String propertyId) {
+    public Prospect getProspect(Name name, AddressStructured addr, String prospectId, String propertyId) {
         Prospect guest = new Prospect();
         guest.setLastUpdateDate(new Timestamp(new Date().getTime()));
         // add prospect
         Customers customers = new Customers();
-        customers.getCustomer().add(getCustomer(CustomerInfo.PROSPECT, firstName, lastName, addr, propertyId, prospectId));
+        customers.getCustomer().add(getCustomer(CustomerInfo.PROSPECT, name, addr, propertyId, prospectId));
         guest.setCustomers(customers);
 
         return guest;
@@ -104,8 +104,7 @@ public class YardiGuestProcessor {
             if (Role.roommates().contains(role)) {
                 Customer roommate = getCustomer( //
                         CustomerInfo.ROOMMATE, //
-                        lp.customer().person().name().firstName().getValue(), //
-                        lp.customer().person().name().lastName().getValue(), //
+                        lp.customer().person().name(), //
                         getCurrentAddress(lp.customer()), //
                         lease.unit().building().propertyCode().getValue(), //
                         lp.getPrimaryKey().toString() // third-party room mate id
@@ -129,8 +128,7 @@ public class YardiGuestProcessor {
             if (Role.Guarantor.equals(lp.leaseTermParticipants().iterator().next().role().getValue())) {
                 result.add(getCustomer( //
                         CustomerInfo.GUARANTOR, //
-                        lp.customer().person().name().firstName().getValue(), //
-                        lp.customer().person().name().lastName().getValue(), //
+                        lp.customer().person().name(), //
                         getCurrentAddress(lp.customer()), //
                         lease.unit().building().propertyCode().getValue(), //
                         lp.getPrimaryKey().toString() //
@@ -212,12 +210,12 @@ public class YardiGuestProcessor {
         return appEvent;
     }
 
-    private Customer getCustomer(CustomerInfo type, String firstName, String lastName, AddressStructured addr, String propertyId, String thirdPartyId) {
+    private Customer getCustomer(CustomerInfo type, Name name, AddressStructured addr, String propertyId, String thirdPartyId) {
         Customer customer = new Customer();
         customer.setType(type);
         customer.getIdentification().add(getThirdPartyId(thirdPartyId));
         customer.getIdentification().add(getPropertyId(propertyId));
-        customer.setName(getName(firstName, lastName));
+        customer.setName(toNameType(name));
         customer.getAddress().add(getAddress(addr));
         return customer;
     }
@@ -283,11 +281,15 @@ public class YardiGuestProcessor {
         return id;
     }
 
-    private NameType getName(String first, String last) {
-        NameType name = new NameType();
-        name.setFirstName(first);
-        name.setLastName(last);
-        return name;
+    private NameType toNameType(Name name) {
+        NameType nameType = new NameType();
+        nameType.setFirstName(name.firstName().getValue());
+        nameType.setLastName(name.lastName().getValue());
+        nameType.setMiddleName(name.middleName().getValue());
+        nameType.setMaidenName(name.maidenName().getValue());
+        nameType.setNamePrefix(name.namePrefix().getValue().toString());
+        nameType.setNameSuffix(name.nameSuffix().getValue());
+        return nameType;
     }
 
     private Agent getAgent(String name) {
