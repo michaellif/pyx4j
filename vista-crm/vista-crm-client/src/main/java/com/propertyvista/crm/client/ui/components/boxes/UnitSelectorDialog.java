@@ -66,6 +66,7 @@ public abstract class UnitSelectorDialog extends EntitySelectorTableVisorControl
                 new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan")).build(),
                 new MemberColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build(),
+                new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
 
                 // building data                
                 new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
