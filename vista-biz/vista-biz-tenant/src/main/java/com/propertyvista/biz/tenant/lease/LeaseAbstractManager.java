@@ -182,13 +182,15 @@ public abstract class LeaseAbstractManager {
 
         // load current Term
         assert !lease.currentTerm().isNull();
-        if (editingTerm || lease.currentTerm().version().isNull()) {
+        if (editingTerm) {
             lease.currentTerm().set(Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey()));
+        } else {
+            lease.currentTerm().set(Persistence.retriveFinalOrDraft(LeaseTerm.class, lease.currentTerm().getPrimaryKey(), AttachLevel.Attached));
         }
 
-//        // Load participants:
-//        Persistence.service().retrieveMember(lease.currentTerm().version().tenants());
-//        Persistence.service().retrieveMember(lease.currentTerm().version().guarantors());
+        // Load participants:
+        Persistence.service().retrieveMember(lease.currentTerm().version().tenants());
+        Persistence.service().retrieveMember(lease.currentTerm().version().guarantors());
 
         return lease;
     }
