@@ -27,6 +27,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -174,16 +175,6 @@ public class YardiImportTest extends YardiTestBase {
     }
 
     protected void setupRentableItem() {
-        {
-            // @formatter:off
-            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "UnitRent").
-            set(RentableItemTypeUpdater.Name.Description, "Unit rent").
-            set(RentableItemTypeUpdater.Name.ChargeCode, "rrent").
-            set(RentableItemTypeUpdater.Name.Rent, "1000.00");
-            // @formatter:on
-            MockEventBus.fireEvent(new RentableItemTypeUpdateEvent(updater));
-        }
-
         {
             // @formatter:off
             RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "OutdoorParking").
@@ -426,7 +417,8 @@ public class YardiImportTest extends YardiTestBase {
         {
             EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
             criteria.eq(criteria.proto().catalog(), building.productCatalog());
-            criteria.eq(criteria.proto().version().name(), "UnitRent");
+            criteria.eq(criteria.proto().code().type(), ARCode.Type.Residential);
+            criteria.eq(criteria.proto().code().yardiChargeCodes().$().yardiChargeCode(), "rrent");
             Service service = Persistence.service().retrieve(criteria);
 
             assertNotNull("Unit Rent Service", service);

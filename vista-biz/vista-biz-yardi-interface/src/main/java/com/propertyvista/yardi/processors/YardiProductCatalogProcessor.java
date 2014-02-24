@@ -171,6 +171,7 @@ public class YardiProductCatalogProcessor {
     private ARCode getServiceArCode() {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
         criteria.eq(criteria.proto().type(), ARCode.Type.Residential);
+        criteria.isNotNull(criteria.proto().yardiChargeCodes());
 
         return Persistence.service().retrieve(criteria);
     }
