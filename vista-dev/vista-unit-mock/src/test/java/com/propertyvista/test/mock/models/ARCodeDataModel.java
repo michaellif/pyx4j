@@ -38,7 +38,7 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
     @Override
     protected void generate() {
 
-        ARCode code = generateARCode("Regular Residential Unit", ARCode.Type.Residential, 5110, 1, true, new String[] { "rrent" });
+        ARCode code = generateARCode("Regular Residential Unit", ARCode.Type.Residential, 5110, 1, true);
         codeMap.put(Code.rent, code);
 
         generateARCode("Ocean View Residential Unit", ARCode.Type.Residential, 5110, 1, false);

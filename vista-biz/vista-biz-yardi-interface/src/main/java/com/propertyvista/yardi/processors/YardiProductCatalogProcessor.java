@@ -48,7 +48,7 @@ public class YardiProductCatalogProcessor {
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
 
-        updateServices(building.productCatalog(), rentableItems);
+        updateServices(building.productCatalog());
         updateFeatures(building.productCatalog(), rentableItems);
 
         updateEligibilityMatrixes(building.productCatalog());
@@ -62,11 +62,10 @@ public class YardiProductCatalogProcessor {
 
         List<AptUnit> units = Persistence.service().query(criteria);
 
+        ARCode arCode = getServiceArCode();
         for (Service service : building.productCatalog().services()) {
-            if (!service.defaultCatalogItem().isBooleanTrue()) {
-                if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
-                    updateUnitItems(service, units);
-                }
+            if (!service.defaultCatalogItem().isBooleanTrue() && service.code().equals(arCode)) {
+                updateUnitItems(service, units);
             }
         }
     }
@@ -129,13 +128,10 @@ public class YardiProductCatalogProcessor {
     }
 
     // ----------------------------------------------------------------------------------
-
-    private void updateServices(ProductCatalog catalog, RentableItems rentableItems) {
+    private void updateServices(ProductCatalog catalog) {
         deleteServices(catalog);
         catalog.services().clear();
-        for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.services())) {
-            catalog.services().add(ensureService(catalog, typeData));
-        }
+        catalog.services().add(ensureService(catalog));
     }
 
     private void deleteServices(ProductCatalog catalog) {
@@ -147,49 +143,36 @@ public class YardiProductCatalogProcessor {
         }
     }
 
-    private Service ensureService(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
+    private Service ensureService(ProductCatalog catalog) {
+        ARCode arCode = getServiceArCode();
+
+        assert (arCode != null);
+
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.eq(criteria.proto().catalog(), catalog);
         criteria.eq(criteria.proto().defaultCatalogItem(), false);
-        criteria.eq(criteria.proto().code(), typeData.getArCode());
-        criteria.eq(criteria.proto().yardiCode(), typeData.getItemType().getCode());
+        criteria.eq(criteria.proto().code(), arCode);
 
         Service service = Persistence.service().retrieve(criteria);
         if (service == null) {
             service = EntityFactory.create(Service.class);
             service.defaultCatalogItem().setValue(false);
             service.catalog().set(catalog);
-            service.code().set(typeData.getArCode());
-            service.yardiCode().setValue(typeData.getItemType().getCode());
-            service.version().name().setValue(typeData.getItemType().getCode());
+            service.code().set(arCode);
+            service.version().name().setValue(arCode.name().getValue());
             service.version().availableOnline().setValue(true);
-        } else {
-            if (isServiceChanged(service, typeData)) {
-                service = Persistence.service().retrieve(Service.class, service.getPrimaryKey().asDraftKey());
-            }
         }
-
-        service.version().description().setValue(typeData.getItemType().getDescription());
-        service.version().price().setValue(new BigDecimal(typeData.getItemType().getRent()));
 
         service.expiredFrom().setValue(null);
 
         return service;
     }
 
-    private boolean isServiceChanged(Service service, YardiRentableItemTypeData itemTypeData) {
+    private ARCode getServiceArCode() {
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.eq(criteria.proto().type(), ARCode.Type.Residential);
 
-        boolean isChanged = false;
-
-        if (!isChanged) {
-            isChanged = (service.version().price().isNull() || service.version().price().getValue()
-                    .compareTo(new BigDecimal(itemTypeData.getItemType().getRent())) != 0);
-        }
-        if (!isChanged) {
-            isChanged = !CommonsStringUtils.equals(service.version().description().getValue(), itemTypeData.getItemType().getDescription());
-        }
-
-        return isChanged;
+        return Persistence.service().retrieve(criteria);
     }
 
     // ----------------------------------------------------------------------------------
@@ -314,15 +297,14 @@ public class YardiProductCatalogProcessor {
             ProductItem item = EntityFactory.create(ProductItem.class);
             item.element().set(unit);
 
-            if (Collections.binarySearch(serviceItems, item, new ProductItemByElementComparator()) < 0) {
+            int found = Collections.binarySearch(serviceItems, item, new ProductItemByElementComparator());
+            if (found >= 0) {
+                serviceItems.get(found).price().setValue(unit.financial()._marketRent().getValue());
+            } else {
                 item.name().setValue(service.code().name().getStringView());
+                item.price().setValue(unit.financial()._marketRent().getValue());
                 service.version().items().add(item);
             }
-        }
-
-        // update items price:
-        for (ProductItem item : service.version().items()) {
-            item.price().setValue(service.version().price().getValue());
         }
     }
 }

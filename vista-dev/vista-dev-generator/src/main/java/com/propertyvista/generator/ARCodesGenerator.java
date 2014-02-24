@@ -77,11 +77,6 @@ public class ARCodesGenerator {
 
         createARCode("Carry Forward Credit", ARCode.Type.CarryForwardCredit, 0, true);
         createARCode("Carry Forward Charge", ARCode.Type.CarryForwardCharge, 0, true);
-
-        // create Yardi rrent code if necessary:
-        if (VistaFeatures.instance().yardiIntegration()) {
-            createARCode("Yardi Residential Rent", ARCode.Type.Residential, 0, false, "rrent");
-        }
     }
 
     public List<ARCode> getARCodes() {
