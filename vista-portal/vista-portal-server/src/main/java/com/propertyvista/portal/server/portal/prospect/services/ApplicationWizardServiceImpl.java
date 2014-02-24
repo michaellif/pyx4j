@@ -510,6 +510,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void updateGuarantor(LeaseTermGuarantor ltg, GuarantorDTO grt) {
+        ltg.role().setValue(LeaseTermParticipant.Role.Guarantor);
         ltg.leaseParticipant().customer().person().name().set(grt.name());
         ltg.leaseParticipant().customer().person().email().setValue(grt.email().getValue());
 
