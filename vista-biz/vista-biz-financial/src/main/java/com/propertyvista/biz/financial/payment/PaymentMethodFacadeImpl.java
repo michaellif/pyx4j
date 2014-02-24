@@ -54,6 +54,11 @@ import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
+    public boolean isCompleatePaymentMethod(LeasePaymentMethod paymentMethod) {
+        return PaymentMethodPersister.isCompleatePaymentMethod(paymentMethod);
+    }
+
+    @Override
     public LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building building) {
         return PaymentMethodPersister.persistLeasePaymentMethod(building, paymentMethod);
     }
@@ -231,4 +236,5 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     public List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId) {
         return new AutopaytManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
     }
+
 }

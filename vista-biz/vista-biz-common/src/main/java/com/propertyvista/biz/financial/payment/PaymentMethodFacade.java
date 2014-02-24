@@ -39,6 +39,13 @@ import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 public interface PaymentMethodFacade {
 
     // Lease:
+    /**
+     * Used when form allow to enter incomplete data
+     * 
+     * @param paymentMethod
+     * @return is payment method can be saved
+     */
+    boolean isCompleatePaymentMethod(LeasePaymentMethod paymentMethod);
 
     LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building building);
 

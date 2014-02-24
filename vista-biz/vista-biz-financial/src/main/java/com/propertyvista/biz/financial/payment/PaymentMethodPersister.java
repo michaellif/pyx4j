@@ -70,6 +70,36 @@ class PaymentMethodPersister {
         return false;
     }
 
+    static boolean isCompleatePaymentMethod(LeasePaymentMethod paymentMethod) {
+        if (!paymentMethod.isNull()) {
+            return false;
+        }
+        switch (paymentMethod.type().getValue()) {
+        case Echeck:
+            EcheckInfo eci = paymentMethod.details().cast();
+            if (paymentMethod.details().id().isNull()) {
+                if (eci.accountNo().newNumber().isNull() || eci.bankId().isNull() || eci.branchTransitNumber().isNull()) {
+                    return false;
+                }
+            } else if (eci.bankId().isNull() || eci.branchTransitNumber().isNull()) {
+                return false;
+            }
+            break;
+        case CreditCard:
+            CreditCardInfo cc = paymentMethod.details().cast();
+            if (paymentMethod.details().id().isNull()) {
+                if (cc.card().newNumber().isNull() || cc.cardType().isNull() || cc.expiryDate().isNull()) {
+                    return false;
+                }
+            }
+            break;
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
     static LeasePaymentMethod persistLeasePaymentMethod(Building building, LeasePaymentMethod paymentMethod) {
         LeasePaymentMethod origPaymentMethod = null;
         if (!paymentMethod.id().isNull()) {

@@ -762,7 +762,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void savePaymentMethod(OnlineApplication bo, OnlineApplicationDTO to) {
-        if (to.payment().storeInProfile().getValue(false) && !to.payment().paymentMethod().isNull()) {
+        if (to.payment().storeInProfile().getValue(false)
+                && ServerSideFactory.create(PaymentMethodFacade.class).isCompleatePaymentMethod(to.payment().paymentMethod())) {
             Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
             Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
 
