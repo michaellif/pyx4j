@@ -87,13 +87,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendApplicationStatus(LeaseTermTenant tenantId) {
-        LeaseTermTenant tenant = Persistence.service().retrieve(LeaseTermTenant.class, tenantId.getPrimaryKey());
-        Persistence.service().retrieve(tenant.leaseTermV());
-        Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
+    public void sendApplicationStatus(LeaseTermParticipant<?> participantId) {
+        LeaseTermParticipant<?> participant = Persistence.service().retrieve(LeaseTermParticipant.class, participantId.getPrimaryKey());
+        Persistence.service().retrieve(participant.leaseTermV());
+        Persistence.service().retrieve(participant.leaseTermV().holder().lease());
 
         EmailTemplateType emailType;
-        switch (tenant.leaseTermV().holder().lease().leaseApplication().status().getValue()) {
+        switch (participant.leaseTermV().holder().lease().leaseApplication().status().getValue()) {
         case Approved:
             emailType = EmailTemplateType.ApplicationApproved;
             break;
@@ -103,7 +103,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         default:
             throw new IllegalArgumentException();
         }
-        MailMessage m = MessageTemplatesCustomizable.createApplicationStatusEmail(tenant, emailType);
+        MailMessage m = MessageTemplatesCustomizable.createApplicationStatusEmail(participant, emailType);
         Mail.queue(m, null, null);
     }
 

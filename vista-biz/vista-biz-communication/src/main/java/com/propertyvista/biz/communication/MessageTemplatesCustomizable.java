@@ -132,18 +132,15 @@ class MessageTemplatesCustomizable {
         return email;
     }
 
-    public static MailMessage createApplicationStatusEmail(LeaseTermTenant tenantInLease, EmailTemplateType type) {
+    public static MailMessage createApplicationStatusEmail(LeaseTermParticipant<?> participant, EmailTemplateType type) {
         // get building policy node
-        Persistence.service().retrieve(tenantInLease.leaseTermV());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
-        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.leaseTermV().holder().lease().unit().building());
+        Persistence.ensureRetrieve(participant.leaseTermV().holder().lease().unit().building(), AttachLevel.Attached);
+        EmailTemplate emailTemplate = getEmailTemplate(type, participant.leaseTermV().holder().lease().unit().building());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type
-        context.leaseTermParticipant().set(tenantInLease);
-        context.lease().set(tenantInLease.leaseTermV().holder().lease());
+        context.leaseTermParticipant().set(participant);
+        context.lease().set(participant.leaseTermV().holder().lease());
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
@@ -151,9 +148,9 @@ class MessageTemplatesCustomizable {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        CustomerUser user = tenantInLease.leaseParticipant().customer().user();
+        CustomerUser user = participant.leaseParticipant().customer().user();
         if (user.isValueDetached()) {
-            Persistence.service().retrieve(tenantInLease.leaseParticipant().customer().user());
+            Persistence.service().retrieve(participant.leaseParticipant().customer().user());
         }
         email.setTo(user.email().getValue());
         email.setSender(getSender());

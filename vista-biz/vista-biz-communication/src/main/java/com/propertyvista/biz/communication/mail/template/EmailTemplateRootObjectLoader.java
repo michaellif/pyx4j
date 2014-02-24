@@ -60,7 +60,6 @@ import com.propertyvista.domain.settings.PmcCompanyInfoContact.CompanyInfoContac
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -171,22 +170,16 @@ public class EmailTemplateRootObjectLoader {
             }
         } else if (tObj instanceof ApplicationT) {
             ApplicationT t = (ApplicationT) tObj;
-            OnlineApplication app = null;
             Customer customer;
             if (!context.leaseTermParticipant().isNull()) {
-                app = getApplication(context.leaseTermParticipant());
                 Persistence.ensureRetrieve(context.leaseTermParticipant(), AttachLevel.Attached);
                 customer = context.leaseTermParticipant().leaseParticipant().customer();
             } else {
                 throw new Error("LeaseTermParticipant should be provided in context");
             }
             if (context.lease().isNull()) {
-                Persistence.ensureRetrieve(app.masterOnlineApplication(), AttachLevel.Attached);
-                context.lease().set(app.masterOnlineApplication().leaseApplication().lease());
-                // TODO Fix unit tests
-                if (!context.lease().currentTerm().isNull()) {
-                    context.lease().currentTerm().set(Persistence.retrieveDraftForEdit(LeaseTerm.class, context.lease().currentTerm().getPrimaryKey()));
-                }
+                Persistence.ensureRetrieve(context.leaseTermParticipant().leaseTermV(), AttachLevel.Attached);
+                context.lease().set(context.leaseTermParticipant().leaseTermV().holder().lease());
             }
             if (context.leaseTermParticipant().role().getValue() == Role.Applicant) {
                 t.Applicant().Name().setValue(customer.person().name().getStringView());
@@ -216,14 +209,18 @@ public class EmailTemplateRootObjectLoader {
             Collection<String> applicantsAndGuarantorsNames = new ArrayList<String>();
 
             for (LeaseTermTenant tenant : context.lease().currentTerm().version().tenants()) {
-                applicantsNames.add(tenant.leaseParticipant().customer().person().name().getStringView());
-                applicantsAndGuarantorsNames.add(tenant.leaseParticipant().customer().person().name().getStringView());
+                Persistence.ensureRetrieve(tenant, AttachLevel.Attached);
+                if (tenant.role().getValue() != LeaseTermParticipant.Role.Dependent) {
+                    applicantsNames.add(tenant.leaseParticipant().customer().person().name().getStringView());
+                    applicantsAndGuarantorsNames.add(tenant.leaseParticipant().customer().person().name().getStringView());
+                }
             }
             for (LeaseTermGuarantor guarantor : context.lease().currentTerm().version().guarantors()) {
+                Persistence.ensureRetrieve(guarantor, AttachLevel.Attached);
                 applicantsAndGuarantorsNames.add(guarantor.leaseParticipant().customer().person().name().getStringView());
             }
 
-            t.ApplicantsAndGuarantorsNames().setValue(ConverterUtils.convertStringCollection(applicantsNames, ", "));
+            t.ApplicantsNames().setValue(ConverterUtils.convertStringCollection(applicantsNames, ", "));
             t.ApplicantsAndGuarantorsNames().setValue(ConverterUtils.convertStringCollection(applicantsAndGuarantorsNames, ", "));
 
             t.ReferenceNumber().setValue(context.lease().leaseApplication().applicationId().getStringView());

@@ -394,13 +394,22 @@ public abstract class LeaseAbstractManager {
         case Application:
             if (!lease.leaseApplication().onlineApplication().isNull()) {
                 Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-                for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                    if (!tenant.application().isNull()) { // co-applicants have no
-                                                          // dedicated application
-                        ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
+                for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+                    // co-applicants have no dedicated application
+                    if (participant.role().getValue() != LeaseTermParticipant.Role.Dependent
+                            && !participant.leaseParticipant().customer().person().email().isNull()) {
+                        ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(participant);
+                    }
+                }
+                Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
+                for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
+                    if (!participant.leaseParticipant().customer().person().email().isNull()) {
+                        ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(participant);
                     }
                 }
             }
+        default:
+            break;
         }
 
         // create historical billing cycles for imported leases

@@ -29,6 +29,7 @@ import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 /**
@@ -55,7 +56,7 @@ public interface CommunicationFacade {
 
     void sendGuarantorApplicationInvitation(LeaseTermGuarantor guarantor);
 
-    void sendApplicationStatus(LeaseTermTenant tenant);
+    void sendApplicationStatus(LeaseTermParticipant<?> participant);
 
     void sendTenantInvitation(LeaseTermTenant tenant);
 

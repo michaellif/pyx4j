@@ -424,7 +424,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "In order to move to the next steps, click <b>[[{2}|here]]</b>.<br/>"+
                 "<br/>" +
                 "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
-                "{2} )</small></i><br/>"+
+                "{2} )</small></i><br/><br/>"+
                 "If at anytime during the process you have any concerns or questions, please call us directly at {3} and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
                 "Your Application Reference Number is: <b>{4}</b><br/>"+
