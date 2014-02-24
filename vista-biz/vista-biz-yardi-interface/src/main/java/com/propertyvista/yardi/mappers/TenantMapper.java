@@ -33,6 +33,7 @@ import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
@@ -88,25 +89,23 @@ public class TenantMapper {
         return tenant;
     }
 
-    public boolean updateTenant(YardiCustomer yardiCustomer, LeaseTermTenant tenant) {
-        tenant.leaseParticipant().customer().set(mapCustomer(yardiCustomer, tenant.leaseParticipant().customer()));
+    public boolean updateCustomerData(YardiCustomer yardiCustomer, Customer customer) {
+        //TODO detect changes.
+        customer.set(mapCustomer(yardiCustomer, customer));
+        return true;
+    }
 
-        boolean updated = false;
-
-        Role current = tenant.role().getValue();
-
+    public static LeaseTermParticipant.Role getRole(YardiCustomer yardiCustomer, LeaseTermParticipant<?> participant) {
         // update CoApplicant <-> Dependent transition:
         if (yardiCustomer.getLease().isResponsibleForLease()) {
-            if (tenant.role().getValue() != Role.Applicant) {
-                tenant.role().setValue(Role.CoApplicant);
+            if (participant.role().getValue() == Role.Applicant) {
+                return Role.Applicant;
+            } else {
+                return Role.CoApplicant;
             }
         } else {
-            tenant.role().setValue(Role.Dependent);
+            return Role.Dependent;
         }
-
-        updated |= current != tenant.role().getValue();
-
-        return updated;
     }
 
     public Customer mapCustomer(YardiCustomer yardiCustomer, Customer customer) {

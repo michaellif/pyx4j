@@ -13,21 +13,24 @@
  */
 package com.propertyvista.yardi.mergers;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.mits.YardiCustomer;
-import com.yardi.entity.resident.RTCustomer;
 
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.yardi.mappers.TenantMapper;
 
@@ -45,22 +48,13 @@ public class TenantMerger {
         this.executionMonitor = executionMonitor;
     }
 
-    public boolean isChanged(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
-        if (yardiCustomers.size() != tenants.size()) {
+    public boolean isChanged(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants, List<LeaseTermGuarantor> guarantors) {
+        if (yardiCustomers.size() != (tenants.size() + guarantors.size())) {
             return true;
         }
 
         for (YardiCustomer customer : yardiCustomers) {
-            boolean isNew = true;
-
-            for (LeaseTermTenant tenant : tenants) {
-                if (customer.getCustomerID().equals(tenant.leaseParticipant().participantId().getValue())) {
-                    isNew = false;
-                    break;
-                }
-            }
-
-            if (isNew) {
+            if (findParticipant(tenants, guarantors, customer.getCustomerID()) == null) {
                 return true;
             }
         }
@@ -76,74 +70,63 @@ public class TenantMerger {
     }
 
     public LeaseTerm updateTenants(List<YardiCustomer> yardiCustomers, LeaseTerm term) {
-        IList<LeaseTermTenant> tenants = term.version().tenants();
+        Set<String> currentCustomerIDs = new HashSet<String>();
 
-        // calculate:
-        List<String> existing = fromT(tenants);
-        List<String> imported = fromC(yardiCustomers);
+        for (YardiCustomer customer : yardiCustomers) {
+            currentCustomerIDs.add(customer.getCustomerID());
 
-        List<String> removed = new ArrayList<String>(existing);
-        removed.removeAll(imported);
-
-        List<String> added = new ArrayList<String>(imported);
-        added.removeAll(existing);
-
-        // process:
-        for (String id : removed) {
-            term.version().tenants().remove(toT(tenants, id));
+            if (findParticipant(term.version().tenants(), term.version().guarantors(), customer.getCustomerID()) == null) {
+                // New tenant,  TODO implement new guarantor
+                term.version().tenants().add(new TenantMapper(executionMonitor).createTenant(customer, term.version().tenants()));
+            }
         }
 
-        for (String id : added) {
-            term.version().tenants().add(new TenantMapper(executionMonitor).createTenant(toC(yardiCustomers, id), term.version().tenants()));
+        // Find removed tenants and guarantors
+        Iterator<LeaseTermTenant> ti = term.version().tenants().iterator();
+        while (ti.hasNext()) {
+            LeaseTermTenant participant = ti.next();
+            if (!currentCustomerIDs.contains(participant.leaseParticipant().participantId().getValue())) {
+                ti.remove();
+            }
+        }
+
+        Iterator<LeaseTermGuarantor> ig = term.version().guarantors().iterator();
+        while (ig.hasNext()) {
+            LeaseTermGuarantor participant = ig.next();
+            if (!currentCustomerIDs.contains(participant.leaseParticipant().participantId().getValue())) {
+                ti.remove();
+            }
         }
 
         return term;
     }
 
-    public boolean updateTenantsData(RTCustomer rtCustomer, Lease lease) {
+    public boolean updateTenantsData(List<YardiCustomer> yardiCustomers, LeaseTerm term) {
         boolean updated = false;
 
-        for (YardiCustomer customer : rtCustomer.getCustomers().getCustomer()) {
-            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                if (tenant.leaseParticipant().participantId().getValue().equals(customer.getCustomerID())) {
-                    updated |= new TenantMapper(executionMonitor).updateTenant(customer, tenant);
-                    Persistence.service().merge(tenant.leaseParticipant().customer());
-                }
+        for (YardiCustomer customer : yardiCustomers) {
+            LeaseTermParticipant<?> participant = findParticipant(term.version().tenants(), term.version().guarantors(), customer.getCustomerID());
+
+            if (new TenantMapper(executionMonitor).updateCustomerData(customer, participant.leaseParticipant().customer())) {
+                Persistence.service().merge(participant.leaseParticipant().customer());
+            }
+
+            LeaseTermParticipant.Role newRole = TenantMapper.getRole(customer, participant);
+
+            if (participant.role().getValue() == LeaseTermParticipant.Role.Guarantor) {
+                // Guarantors change not supported ...  it is not available in API
+            } else {
+                updated |= EntityGraph.updateMember(participant.role(), newRole);
             }
         }
 
         return updated;
     }
 
-    private List<String> fromT(List<LeaseTermTenant> tenants) {
-        List<String> ids = new ArrayList<String>();
-        for (LeaseTermTenant tenant : tenants) {
-            ids.add(tenant.leaseParticipant().participantId().getValue());
-        }
-        return ids;
-    }
-
-    private List<String> fromC(List<YardiCustomer> customers) {
-        List<String> ids = new ArrayList<String>();
-        for (YardiCustomer customer : customers) {
-            ids.add(customer.getCustomerID());
-        }
-        return ids;
-    }
-
-    private YardiCustomer toC(List<YardiCustomer> customers, String id) {
-        for (YardiCustomer customer : customers) {
-            if (customer.getCustomerID().equals(id)) {
-                return customer;
-            }
-        }
-        return null;
-    }
-
-    private LeaseTermTenant toT(List<LeaseTermTenant> tenants, String id) {
-        for (LeaseTermTenant tenant : tenants) {
-            if (tenant.leaseParticipant().participantId().getValue().equals(id)) {
-                return tenant;
+    private LeaseTermParticipant<?> findParticipant(List<LeaseTermTenant> tenants, List<LeaseTermGuarantor> guarantors, String id) {
+        for (LeaseTermParticipant<?> participant : CollectionUtils.union(tenants, guarantors)) {
+            if (!participant.leaseParticipant().participantId().isNull() && participant.leaseParticipant().participantId().getValue().equals(id)) {
+                return participant;
             }
         }
         return null;
