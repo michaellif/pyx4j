@@ -56,6 +56,7 @@ public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChang
         GWT.<PasswordChangeUserService> create(PasswordChangeUserService.class).changePassword(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
+                getView().reset();
                 Notification notification = new Notification(null, i18n.tr("Your password was changed successfully!"), NotificationType.INFO);
                 PortalSite.getPlaceController().showNotification(notification);
             }
@@ -88,4 +89,9 @@ public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChang
             ClientContext.getAuthenticationService().obtainRecaptchaPublicKey(callback);
         }
     }
+
+    @Override
+    public String mayStop() {
+        return null;
+    };
 }

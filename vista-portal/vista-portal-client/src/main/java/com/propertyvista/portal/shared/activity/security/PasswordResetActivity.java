@@ -73,4 +73,8 @@ public class PasswordResetActivity extends AbstractWizardActivity<PasswordChange
         }, getView().getValue());
     }
 
+    @Override
+    public String mayStop() {
+        return null;
+    };
 }

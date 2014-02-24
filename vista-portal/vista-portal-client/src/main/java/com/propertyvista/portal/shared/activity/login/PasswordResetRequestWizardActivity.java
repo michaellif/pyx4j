@@ -57,7 +57,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
         ClientContext.getAuthenticationService().requestPasswordReset(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                PasswordResetRequestWizardActivity.super.finish();
+                getView().reset();
                 Notification message = new Notification(i18n.tr("A link to the password reset page was sent to your email."),
                         i18n.tr("Password reset request has been submitted"), NotificationType.INFO);
                 PortalSite.getPlaceController().showNotification(message);
@@ -89,4 +89,8 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
         }
     }
 
+    @Override
+    public String mayStop() {
+        return null;
+    };
 }
