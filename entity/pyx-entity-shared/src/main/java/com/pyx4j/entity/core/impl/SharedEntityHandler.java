@@ -826,7 +826,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     @Override
     public String getStringView() {
-        if (isNull()) {
+        if (isNull() && !isValueDetached()) {
             return getEntityMeta().getNullString();
         } else if (!isObjectClassSameAsDef()) {
             return this.cast().getStringView();
@@ -835,9 +835,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         if ((thisValue != null) && thisValue.containsKey(TO_STRING_ATTR)) {
             return (String) thisValue.get(TO_STRING_ATTR);
         }
-        if ((thisValue != null) && thisValue.containsKey(DETACHED_ATTR)) {
-            throw new RuntimeException("Access to detached " + data.get(DETACHED_ATTR) + " entity " + exceptionInfo(data));
-        }
+        // Access to detached entity
+        getValue(true);
+
         List<String> sm = getEntityMeta().getToStringMemberNames();
         String format = getEntityMeta().getToStringFormat();
         if (format != null) {

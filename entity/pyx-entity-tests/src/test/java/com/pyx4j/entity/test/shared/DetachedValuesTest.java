@@ -169,6 +169,19 @@ public class DetachedValuesTest extends InitializerTestBase {
 
     }
 
+    public void testDetachedStringView() {
+        final Employee emp = EntityFactory.create(Employee.class);
+        emp.setValueDetached();
+
+        assertException("Embedded.getStringView()", new Runnable() {
+            @Override
+            public void run() {
+                emp.workAddress().getStringView();
+            }
+        });
+
+    }
+
     public void testAssigments() {
         final Employee emp = EntityFactory.create(Employee.class);
         emp.setValueDetached();
