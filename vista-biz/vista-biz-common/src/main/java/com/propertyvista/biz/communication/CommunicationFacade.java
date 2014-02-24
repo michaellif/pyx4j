@@ -56,7 +56,9 @@ public interface CommunicationFacade {
 
     void sendGuarantorApplicationInvitation(LeaseTermGuarantor guarantor);
 
-    void sendApplicationStatus(LeaseTermParticipant<?> participant);
+    void sendApplicationApproved(LeaseTermParticipant<?> participantId);
+
+    void sendApplicationDeclined(LeaseTermParticipant<?> participantId);
 
     void sendTenantInvitation(LeaseTermTenant tenant);
 

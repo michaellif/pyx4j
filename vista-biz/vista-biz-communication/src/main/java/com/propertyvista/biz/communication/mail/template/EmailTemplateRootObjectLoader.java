@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.pyx4j.commons.ConverterUtils;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
@@ -60,6 +61,7 @@ import com.propertyvista.domain.settings.PmcCompanyInfoContact.CompanyInfoContac
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -181,6 +183,13 @@ public class EmailTemplateRootObjectLoader {
                 Persistence.ensureRetrieve(context.leaseTermParticipant().leaseTermV(), AttachLevel.Attached);
                 context.lease().set(context.leaseTermParticipant().leaseTermV().holder().lease());
             }
+
+            // Declined do not have final version, get draft
+            if (context.lease().currentTerm().version().isNull()) {
+                context.lease().currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, context.lease().currentTerm().getPrimaryKey().asDraftKey()));
+            }
+            Validate.isTrue(!context.lease().currentTerm().version().isEmpty(), "Lease Term is empty");
+
             if (context.leaseTermParticipant().role().getValue() == Role.Applicant) {
                 t.Applicant().Name().setValue(customer.person().name().getStringView());
                 t.Applicant().FirstName().setValue(customer.person().name().firstName().getStringView());

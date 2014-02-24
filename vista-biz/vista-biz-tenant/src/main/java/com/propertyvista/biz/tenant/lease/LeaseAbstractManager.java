@@ -330,14 +330,20 @@ public abstract class LeaseAbstractManager {
 
         releaseUnit(lease, status);
 
-        if (!lease.leaseApplication().onlineApplication().isNull()) {
-            Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                if (!tenant.application().isNull()) { // co-applicants have no dedicated application
-                    ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
-                }
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+            // co-applicants have no dedicated application
+            if (participant.role().getValue() != LeaseTermParticipant.Role.Dependent && !participant.leaseParticipant().customer().person().email().isNull()) {
+                ServerSideFactory.create(CommunicationFacade.class).sendApplicationDeclined(participant);
             }
         }
+        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
+        for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
+            if (!participant.leaseParticipant().customer().person().email().isNull()) {
+                ServerSideFactory.create(CommunicationFacade.class).sendApplicationDeclined(participant);
+            }
+        }
+
     }
 
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -400,13 +406,13 @@ public abstract class LeaseAbstractManager {
                     // co-applicants have no dedicated application
                     if (participant.role().getValue() != LeaseTermParticipant.Role.Dependent
                             && !participant.leaseParticipant().customer().person().email().isNull()) {
-                        ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(participant);
+                        ServerSideFactory.create(CommunicationFacade.class).sendApplicationApproved(participant);
                     }
                 }
                 Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
                 for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
                     if (!participant.leaseParticipant().customer().person().email().isNull()) {
-                        ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(participant);
+                        ServerSideFactory.create(CommunicationFacade.class).sendApplicationApproved(participant);
                     }
                 }
             }

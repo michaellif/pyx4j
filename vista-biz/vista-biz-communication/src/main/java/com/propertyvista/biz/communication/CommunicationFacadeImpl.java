@@ -87,23 +87,16 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendApplicationStatus(LeaseTermParticipant<?> participantId) {
+    public void sendApplicationApproved(LeaseTermParticipant<?> participantId) {
         LeaseTermParticipant<?> participant = Persistence.service().retrieve(LeaseTermParticipant.class, participantId.getPrimaryKey());
-        Persistence.service().retrieve(participant.leaseTermV());
-        Persistence.service().retrieve(participant.leaseTermV().holder().lease());
+        MailMessage m = MessageTemplatesCustomizable.createApplicationStatusEmail(participant, EmailTemplateType.ApplicationApproved);
+        Mail.queue(m, null, null);
+    }
 
-        EmailTemplateType emailType;
-        switch (participant.leaseTermV().holder().lease().leaseApplication().status().getValue()) {
-        case Approved:
-            emailType = EmailTemplateType.ApplicationApproved;
-            break;
-        case Declined:
-            emailType = EmailTemplateType.ApplicationDeclined;
-            break;
-        default:
-            throw new IllegalArgumentException();
-        }
-        MailMessage m = MessageTemplatesCustomizable.createApplicationStatusEmail(participant, emailType);
+    @Override
+    public void sendApplicationDeclined(LeaseTermParticipant<?> participantId) {
+        LeaseTermParticipant<?> participant = Persistence.service().retrieve(LeaseTermParticipant.class, participantId.getPrimaryKey());
+        MailMessage m = MessageTemplatesCustomizable.createApplicationStatusEmail(participant, EmailTemplateType.ApplicationDeclined);
         Mail.queue(m, null, null);
     }
 
