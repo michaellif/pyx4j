@@ -53,8 +53,12 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
 
     @Override
     public LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, LeaseTermAgreementSignaturesMode signaturesMode, boolean makeDraft) {
-        Persistence.service().retrieve(leaseTerm.lease());
-        Persistence.service().retrieve(leaseTerm.version().tenants());
+        Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.version().agreementLegalTerms(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.version().agreementConfirmationTerm(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.version().utilities(), AttachLevel.Attached);
+
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
             Persistence.service().retrieveMember(tenant.agreementSignatures(), AttachLevel.Attached);
             if (tenant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
@@ -65,10 +69,6 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
                 tenant.agreementSignatures().set(agreementSignatures);
             }
         }
-        Persistence.service().retrieve(leaseTerm.version().guarantors());
-        Persistence.service().retrieve(leaseTerm.version().agreementLegalTerms());
-        Persistence.service().retrieve(leaseTerm.version().agreementConfirmationTerm());
-        Persistence.service().retrieve(leaseTerm.version().utilities());
 
         LeaseAgreementDocumentDataDTO leaseAgreementData = EntityFactory.create(LeaseAgreementDocumentDataDTO.class);
 

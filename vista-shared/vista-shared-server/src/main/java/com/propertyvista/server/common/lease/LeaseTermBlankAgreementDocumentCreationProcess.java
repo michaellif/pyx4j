@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -27,6 +26,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementDocumentDataCreatorFacade.LeaseTermAgreementSignaturesMode;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementPdfCreatorFacade;
@@ -62,12 +62,13 @@ public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDefe
     @Override
     public void execute() {
         try {
-            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-
-            LeaseAgreementDocumentDataDTO documentData = ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(
-                    lease.currentTerm(), LeaseTermAgreementSignaturesMode.PlaceholdersAndAvailableSignatures, createDraft);
-            byte[] pdfBytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(documentData);
-
+            Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
+            LeaseAgreementDocumentDataDTO data = ServerSideFactory.create(LeaseTermAgreementDocumentDataCreatorFacade.class).createAgreementData(//@formatter:off
+                    lease.currentTerm(),
+                    LeaseTermAgreementSignaturesMode.PlaceholdersAndAvailableSignatures,
+                    createDraft
+            );//@formatter:on
+            byte[] pdfBytes = ServerSideFactory.create(LeaseTermAgreementPdfCreatorFacade.class).createPdf(data);
             Downloadable d = new Downloadable(pdfBytes, MimeMap.getContentType(DownloadFormat.PDF));
 
             fileName = "blank-lease-agreement.pdf";
