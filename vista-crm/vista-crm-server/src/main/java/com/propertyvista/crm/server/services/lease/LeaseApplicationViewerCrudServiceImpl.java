@@ -14,7 +14,6 @@
 package com.propertyvista.crm.server.services.lease;
 
 import java.math.BigDecimal;
-import java.util.EnumSet;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -72,7 +71,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     protected void enhanceListCriteria(EntityListCriteria<Lease> boCriteria, EntityListCriteria<LeaseApplicationDTO> toCriteria) {
         super.enhanceListCriteria(boCriteria, toCriteria);
 
-        boCriteria.in(boCriteria.proto().status(), EnumSet.of(Lease.Status.Application, Lease.Status.Approved));
         boCriteria.isNotNull(boCriteria.proto().leaseApplication().status());
     }
 
