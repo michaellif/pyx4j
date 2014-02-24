@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +35,16 @@ import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingAgent;
 import com.yardi.entity.guestcard40.MarketingSource;
 import com.yardi.entity.guestcard40.MarketingSources;
+import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.PropertyMarketingSources;
 import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Prospects;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.mits.Information;
+import com.yardi.entity.mits.Name;
+import com.yardi.entity.mits.YardiCustomer;
+import com.yardi.entity.resident.Property;
+import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -47,7 +53,6 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -55,6 +60,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 public class YardiGuestManagementService extends YardiAbstractService {
 
@@ -111,7 +117,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         // do guest search to retrieve lease id
         // do tenant search to retrieve lease id
         String guestId = lease.getPrimaryKey().toString();
-        String prospectId = getTenantId(yc, lease.unit().building(), guestId, IdentityType.Prospect);
+        String prospectId = getTenantId(yc, lease.unit().building().propertyCode().getValue(), guestId, IdentityType.Prospect);
         if (prospectId == null) {
             throw new YardiServiceException("Prospect not found: " + guestId);
         }
@@ -178,7 +184,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         log.info("Added Lease Participants");
 
         // do guest search to retrieve lease id
-        return getParticipants(yc, lease);
+        return getParticipants(yc, lease, null);
     }
 
     public SignLeaseResults signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException {
@@ -196,17 +202,21 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
         // do tenant search to retrieve lease id
         String guestId = lease.getPrimaryKey().toString();
-        final String tenantId = getTenantId(yc, lease.unit().building(), guestId, IdentityType.Tenant);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        final String tenantId = getTenantId(yc, lease.unit().building().propertyCode().getValue(), guestId, IdentityType.Tenant);
         if (tenantId == null) {
             throw new YardiServiceException("Tenant not found: " + guestId);
         }
         log.info("Created Lease: {}", tenantId);
 
+        // call resident transactions to retrieve name-to-residentId mapping
+        final Map<String, String> residentIds = getLeaseResidentIds(yc, lease.unit().building().propertyCode().getValue(), tenantId);
+
         return new SignLeaseResults() {
 
             final String leaseId = tenantId;
 
-            final Map<Key, String> participants = YardiGuestManagementService.this.getParticipants(yc, lease);
+            final Map<Key, String> participants = YardiGuestManagementService.this.getParticipants(yc, lease, residentIds);
 
             @Override
             public String getLeaseId() {
@@ -245,6 +255,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
                 }
             }
         }
+
+        // TODO - check for Deposit charge code mapping
 
         StringBuilder msg = new StringBuilder();
         if (agentName == null) {
@@ -290,8 +302,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
         ServerSideFactory.create(YardiGuestManagementStub.class).importGuestInfo(yc, lead);
     }
 
-    private String getTenantId(PmcYardiCredential yc, Building building, String guestId, IdentityType type) throws YardiServiceException {
-        LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc, building.propertyCode().getValue(), guestId);
+    private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId, IdentityType type) throws YardiServiceException {
+        LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
         if (guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException("Prospect not found: " + guestId);
         }
@@ -312,7 +324,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return null;
     }
 
-    private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease, Map<String, String> residentIds) throws YardiServiceException {
         Key tenantId = lease.getPrimaryKey();
         LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc,
                 lease.unit().building().propertyCode().getValue(), tenantId.toString());
@@ -321,34 +333,82 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
         Map<Key, String> participants = new HashMap<Key, String>();
         Prospect p = guestActivity.getProspects().getProspect().get(0);
+        boolean tenantFound = false;
         for (Customer c : p.getCustomers().getCustomer()) {
-            String tpId = null, pId = null;
+            String tpId = null, pId = null, tId = null;
             for (Identification id : c.getIdentification()) {
                 if (IdentityType.ThirdParty.ID.equals(id.getIDType())) {
                     tpId = id.getIDValue();
                 } else if (IdentityType.Prospect.ID.equals(id.getIDType())) {
                     pId = id.getIDValue();
+                } else if (IdentityType.Tenant.ID.equals(id.getIDType())) {
+                    tId = id.getIDValue();
                 }
             }
             if (tpId != null && pId != null) {
-                participants.put(new Key(tpId), pId);
+                Key tpKey = new Key(tpId);
+                if (tpKey.equals(tenantId)) {
+                    participants.put(lease._applicant().getPrimaryKey(), StringUtils.isEmpty(tId) ? pId : tId);
+                    tenantFound = true;
+                } else {
+                    if (residentIds != null) {
+                        String nameKey = getNameKey(c.getName());
+                        pId = residentIds.get(nameKey);
+                        if (pId == null) {
+                            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", nameKey));
+                        }
+                    }
+                    participants.put(tpKey, pId);
+                }
             }
         }
-        String pId = participants.get(tenantId);
-        if (pId == null) {
-            throw new YardiServiceException(SimpleMessageFormat.format("Main applicant is missing: {0}", tenantId));
-        } else {
-            participants.remove(tenantId);
-            participants.put(lease._applicant().getPrimaryKey(), pId);
 
+        // sanity checks
+        if (!tenantFound) {
+            throw new YardiServiceException(SimpleMessageFormat.format("Main applicant is missing: {0}", tenantId));
         }
 
         Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         if (lease.leaseParticipants().size() != participants.size()) {
-            String msg = SimpleMessageFormat.format("Missing or invalid participants: found {0} instead of {1}", participants.size(), lease.leaseParticipants()
+            String msg = SimpleMessageFormat.format("Missing or invalid participants: found {0} expecting {1}", participants.size(), lease.leaseParticipants()
                     .size());
             throw new YardiServiceException(msg);
         }
         return participants;
+    }
+
+    private Map<String, String> getLeaseResidentIds(PmcYardiCredential yc, String propertyCode, String tenantId) throws YardiServiceException {
+        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+        try {
+            Map<String, String> result = null;
+            ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, tenantId);
+            if (transaction != null && !transaction.getProperty().isEmpty()) {
+                Property property = transaction.getProperty().iterator().next();
+                if (!property.getRTCustomer().isEmpty()) {
+                    result = new HashMap<String, String>();
+                    for (YardiCustomer customer : property.getRTCustomer().iterator().next().getCustomers().getCustomer()) {
+                        result.put(getNameKey(customer.getName()), customer.getCustomerID());
+                    }
+                }
+            }
+            return result;
+        } catch (RemoteException e) {
+            throw new YardiServiceException(e);
+        }
+    }
+
+    private String getNameKey(Name name) {
+        StringBuilder key = new StringBuilder() //
+                .append(name.getFirstName() + ".") //
+                .append(name.getLastName() + ".");
+        return key.toString();
+    }
+
+    // TODO - com.yardi.entity.guestcard40.NameType is identical to com.yardi.entity.mits.Name - consider xsd or reflection mapping
+    private String getNameKey(NameType name) {
+        StringBuilder key = new StringBuilder() //
+                .append(name.getFirstName() + ".") //
+                .append(name.getLastName() + ".");
+        return key.toString();
     }
 }
