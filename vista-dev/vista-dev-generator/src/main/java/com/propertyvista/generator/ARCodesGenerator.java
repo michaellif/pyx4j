@@ -45,17 +45,14 @@ public class ARCodesGenerator {
             createARCode("Narrow Parking", ARCode.Type.Parking, 5110, false);
             createARCode("Disabled Parking", ARCode.Type.Parking, 5110, false);
         }
+
         createARCode("Cat", ARCode.Type.Pet, 5930, false, "petf");
         createARCode("Dog", ARCode.Type.Pet, 5930, false, "rpet");
 
-        if (VistaFeatures.instance().yardiIntegration()) {
-            createARCode("Large Locker", ARCode.Type.Locker, 5110, false, "storoth");
-            createARCode("Small Locker", ARCode.Type.Locker, 5110, false, "rstorage");
-        } else {
-            createARCode("Small Locker", ARCode.Type.Locker, 5110, false);
-            createARCode("Medium Locker", ARCode.Type.Locker, 5110, false);
-            createARCode("Large Locker", ARCode.Type.Locker, 5110, false);
-        }
+        createARCode("Large Locker", ARCode.Type.Locker, 5110, false, "storoth");
+        createARCode("Small Locker", ARCode.Type.Locker, 5110, false, "rstorage");
+        createARCode("Large Locker", ARCode.Type.Locker, 5110, false);
+
         createARCode("Fitness", ARCode.Type.AddOn, 5110, false);
         createARCode("Pool", ARCode.Type.AddOn, 5110, false);
         createARCode("Furnished", ARCode.Type.AddOn, 5110, false);
