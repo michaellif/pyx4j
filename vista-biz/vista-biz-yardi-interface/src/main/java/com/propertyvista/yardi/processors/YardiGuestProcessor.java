@@ -108,7 +108,7 @@ public class YardiGuestProcessor {
             if (Role.roommates().contains(role)) {
                 PersonRelationship relation = ((LeaseTermTenant) ltp).relationship().getValue();
                 Customer roommate = getCustomer( //
-                        relation == PersonRelationship.Spouse ? CustomerInfo.SPOUSE : CustomerInfo.ROOMMATE, //
+                        PersonRelationship.Spouse.equals(relation) ? CustomerInfo.SPOUSE : CustomerInfo.ROOMMATE, //
                         lp.customer().person().name(), //
                         getCurrentAddress(lp.customer()), //
                         lease.unit().building().propertyCode().getValue(), //
