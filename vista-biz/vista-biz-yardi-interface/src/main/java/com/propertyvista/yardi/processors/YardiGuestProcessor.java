@@ -50,9 +50,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class YardiGuestProcessor {
 
@@ -100,10 +103,12 @@ public class YardiGuestProcessor {
         Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
         for (LeaseParticipant<?> lp : lease.leaseParticipants()) {
             Persistence.ensureRetrieve(lp.leaseTermParticipants(), AttachLevel.Attached);
-            Role role = lp.leaseTermParticipants().iterator().next().role().getValue();
+            LeaseTermParticipant<?> ltp = lp.leaseTermParticipants().iterator().next();
+            Role role = ltp.role().getValue();
             if (Role.roommates().contains(role)) {
+                PersonRelationship relation = ((LeaseTermTenant) ltp).relationship().getValue();
                 Customer roommate = getCustomer( //
-                        CustomerInfo.ROOMMATE, //
+                        relation == PersonRelationship.Spouse ? CustomerInfo.SPOUSE : CustomerInfo.ROOMMATE, //
                         lp.customer().person().name(), //
                         getCurrentAddress(lp.customer()), //
                         lease.unit().building().propertyCode().getValue(), //
