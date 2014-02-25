@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,7 +104,8 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 switch (userAppStatus.status().getValue()) {
                 case Incomplete:
                 case Invited:
-                    messageLabel.setText(i18n.tr("Your application progress is " + masterAppStatus.progress().getValue()
+                    messageLabel.setText(i18n.tr("Your application progress is "
+                            + masterAppStatus.progress().getValue().multiply(new BigDecimal(100)).setScale(0)
                             + "%. Click 'Continue Application' button below to complete your application."));
                     continueApplicationButton.setVisible(true);
                     break;
@@ -258,10 +260,8 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 @Override
                 public List<EntityFolderColumnDescriptor> columns() {
                     ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<>();
-                    columns.add(new EntityFolderColumnDescriptor(proto().customer(), "20em"));
-                    columns.add(new EntityFolderColumnDescriptor(proto().role(), "10em"));
-                    columns.add(new EntityFolderColumnDescriptor(proto().status(), "10em"));
-                    columns.add(new EntityFolderColumnDescriptor(proto().progress(), "7em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto().customer(), "200px"));
+                    columns.add(new EntityFolderColumnDescriptor(proto().progress(), "80px"));
                     return columns;
                 }
             }

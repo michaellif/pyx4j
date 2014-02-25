@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -255,7 +256,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
 
         if (!moa.applications().isEmpty()) {
-            moaStatus.progress().setValue(progressSum.divide(new BigDecimal(moa.applications().size())));
+            moaStatus.progress().setValue(progressSum.divide(new BigDecimal(moa.applications().size()), 2, RoundingMode.HALF_UP));
         }
 
         return moaStatus;
@@ -270,9 +271,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         BigDecimal sum = BigDecimal.ZERO;
         for (OnlineApplicationWizardStepStatus stepStatus : app.stepsStatuses()) {
             if (stepStatus.complete().isBooleanTrue()) {
-                sum.add(new BigDecimal(1));
+                sum = sum.add(new BigDecimal(1));
             } else if (stepStatus.visited().isBooleanTrue()) {
-                sum.add(new BigDecimal(0.5));
+                sum = sum.add(new BigDecimal(0.5));
             }
         }
 

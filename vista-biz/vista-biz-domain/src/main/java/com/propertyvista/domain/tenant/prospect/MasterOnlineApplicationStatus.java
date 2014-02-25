@@ -16,6 +16,8 @@ package com.propertyvista.domain.tenant.prospect;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -32,8 +34,9 @@ public interface MasterOnlineApplicationStatus extends IEntity {
     /**
      * Completed steps/total steps in %
      */
-    @Format("#0.00")
-    @Caption(name = "Overall Application Progress (%)")
+    @Format("#0")
+    @Caption(name = "Overall Application Progress")
+    @Editor(type = EditorType.percentagelabel)
     IPrimitive<BigDecimal> progress();
 
     IPrimitive<Status> status();
