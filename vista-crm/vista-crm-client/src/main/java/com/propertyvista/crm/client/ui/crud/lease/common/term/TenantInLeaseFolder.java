@@ -69,7 +69,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private boolean isPadEditable = false;
 
-    private Boolean maturedOccupantsAreApplicant = false;
+    private boolean maturedOccupantsAreApplicant = false;
 
     public TenantInLeaseFolder(CrmEntityForm<?> parentForm) {
         super(LeaseTermTenant.class, parentForm);
@@ -80,7 +80,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     }
 
     @Override
-    public void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+    public void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
         super.setEnforceAgeOfMajority(enforceAgeOfMajority);
 
         for (CComponent<?> comp : getComponents()) {
@@ -98,11 +98,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         return i18n.tr("Do you want to select existing Tenant?");
     }
 
-    public Boolean getMaturedOccupantsAreApplicants() {
+    public boolean getMaturedOccupantsAreApplicants() {
         return maturedOccupantsAreApplicant;
     }
 
-    public void setMaturedOccupantsAreApplicants(Boolean maturedOccupantsAreApplicants) {
+    public void setMaturedOccupantsAreApplicants(boolean maturedOccupantsAreApplicants) {
         this.maturedOccupantsAreApplicant = maturedOccupantsAreApplicants;
     }
 
@@ -323,7 +323,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             }
         }
 
-        void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+        void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
             get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(enforceAgeOfMajority);
         }
 

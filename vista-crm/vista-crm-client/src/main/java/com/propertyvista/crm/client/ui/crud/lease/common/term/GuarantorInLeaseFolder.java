@@ -63,7 +63,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     @Override
-    public void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
+    public void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
         super.setEnforceAgeOfMajority(enforceAgeOfMajority);
 
         for (CComponent<?> comp : getComponents()) {
