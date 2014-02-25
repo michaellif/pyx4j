@@ -43,7 +43,6 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -426,17 +425,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
-
-        get(proto().version().tenants()).addComponentValidator(new AbstractComponentValidator<List<LeaseTermTenant>>() {
-            @Override
-            public FieldValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    return (getComponent().getValue().isEmpty() ? new FieldValidationError(getComponent(), i18n.tr("At least one tenant should be selected!"))
-                            : null);
-                }
-                return null;
-            }
-        });
     }
 
     private void crossValidate(CComponent<LogicalDate> date1, CComponent<LogicalDate> date2, String message) {
