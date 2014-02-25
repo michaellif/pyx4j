@@ -68,6 +68,12 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
     }
 
     @Override
+    public Lease persist(Lease lease) {
+        ServerSideFactory.create(YardiARFacade.class).setLeaseChargesComaptibleIds(lease);
+        return super.persist(lease);
+    }
+
+    @Override
     public Lease activate(Lease leaseId) {
         // approve, newly created leases:
         super.approve(leaseId, null, null);

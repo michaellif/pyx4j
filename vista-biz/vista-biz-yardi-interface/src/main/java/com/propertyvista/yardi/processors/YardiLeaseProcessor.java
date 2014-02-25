@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +40,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -287,6 +287,36 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
+    public void setLeaseChargesComaptibleIds(Lease lease) {
+
+        List<BillableItem> allBillableItems = new ArrayList<>();
+        allBillableItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
+        for (BillableItem bi : lease.currentTerm().version().leaseProducts().featureItems()) {
+            allBillableItems.add(bi);
+        }
+
+        Map<String, Integer> chargeCodeItemsCount = new HashMap<>();
+
+        for (BillableItem bi : allBillableItems) {
+            String chargeCode;
+
+            Validate.isTrue(bi.item().product().holder().code().yardiChargeCodes().size() > 0, "yardiChargeCodes are not mapped to product {0}", bi.item()
+                    .product().holder());
+
+            chargeCode = bi.item().product().holder().code().yardiChargeCodes().get(0).yardiChargeCode().getValue();
+
+            Integer chargeCodeItemNo = chargeCodeItemsCount.get(chargeCode);
+            if (chargeCodeItemNo == null) {
+                chargeCodeItemNo = 1;
+            } else {
+                chargeCodeItemNo = chargeCodeItemNo + 1;
+            }
+            chargeCodeItemsCount.put(chargeCode, chargeCodeItemNo);
+
+            bi.uid().setValue(billableItemUid(chargeCode, chargeCodeItemNo));
+        }
+    }
+
     public Lease updateLeaseProducts(List<Transactions> transactions, Lease leaseId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         log.info("        = Updating billable items for lease: {} ", lease.leaseId().getStringView());
@@ -455,11 +485,15 @@ public class YardiLeaseProcessor {
         return rtCustomers;
     }
 
+    // @see function in migration PadProcessorInformation.billableItemId  that use the same value
+    public String billableItemUid(String chargeCode, int chargeCodeItemNo) {
+        return chargeCode + ":" + chargeCodeItemNo;
+    }
+
     private BillableItem createBillableItem(ChargeDetail detail, int chargeCodeItemNo) {
         BillableItem billableItem = EntityFactory.create(BillableItem.class);
 
-        // @see function in migration PadProcessorInformation.billableItemId  that use the same value
-        billableItem.uid().setValue(detail.getChargeCode() + ":" + chargeCodeItemNo);
+        billableItem.uid().setValue(billableItemUid(detail.getChargeCode(), chargeCodeItemNo));
         billableItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
         billableItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));
         billableItem.effectiveDate().setValue(getLogicalDate(detail.getServiceFromDate()));

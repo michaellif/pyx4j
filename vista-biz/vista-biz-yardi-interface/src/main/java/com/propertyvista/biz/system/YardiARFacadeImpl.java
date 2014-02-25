@@ -35,6 +35,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.services.YardiILSGuestCardService;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
@@ -47,6 +48,11 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
         for (PmcYardiCredential yc : VistaDeployment.getPmcYardiCredentials()) {
             YardiResidentTransactionsService.getInstance().updateAll(yc, executionMonitor);
         }
+    }
+
+    @Override
+    public void setLeaseChargesComaptibleIds(Lease lease) {
+        new YardiLeaseProcessor().setLeaseChargesComaptibleIds(lease);
     }
 
     @Override

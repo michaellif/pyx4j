@@ -30,6 +30,11 @@ public interface YardiARFacade {
 
     void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 
+    /**
+     * set the same uid as during import so the pap will not be suspended.
+     */
+    void setLeaseChargesComaptibleIds(Lease lease);
+
     void updateLease(Lease lease) throws YardiServiceException, RemoteException;
 
     void updateProductCatalog(Building building) throws YardiServiceException, RemoteException;

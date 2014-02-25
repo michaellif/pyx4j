@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
@@ -65,7 +66,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 class AutopayAgreementMananger {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AutopayAgreementMananger.class);
+    private static final Logger log = LoggerFactory.getLogger(AutopayAgreementMananger.class);
 
     private static final I18n i18n = I18n.get(AutopayAgreementMananger.class);
 
@@ -247,6 +248,8 @@ class AutopayAgreementMananger {
                 if ((billableItemCurrent == null) || (!PaymentBillableUtils.isBillableItemPapable(billableItemCurrent, nextCycle))) {
                     // Not found, item removed
                     reviewRequired = true;
+                    log.debug("removed BillableItem {} {}, paid {}", coveredItemOriginal.billableItem().uid(), coveredItemOriginal.billableItem(),
+                            coveredItemOriginal.amount());
                 } else {
                     papBillableItemsCurrent.remove(coveredItemOriginal.billableItem().uid().getValue());
 
@@ -267,6 +270,8 @@ class AutopayAgreementMananger {
                             newCoveredItem.amount().setValue(originalPaymentAmount);
                         } else {
                             newCoveredItem.amount().setValue(calulateNewPaymentValue(originalPaymentAmount, priceOriginal, priceCurrent, changeRule));
+                            log.debug("update BillableItem {} {}, pay {}, paid {}", billableItemCurrent.uid(), billableItemCurrent, newCoveredItem.amount(),
+                                    coveredItemOriginal.amount());
                         }
                     } else {
                         // Price not changed
@@ -285,6 +290,7 @@ class AutopayAgreementMananger {
                 newCoveredItem.amount().setValue(BigDecimal.ZERO);
                 newCoveredItem.billableItem().set(billableItemCurrent);
                 newCoveredItems.add(newCoveredItem);
+                log.debug("new BillableItem {} {}, pay {}", billableItemCurrent.uid(), billableItemCurrent, newCoveredItem.amount());
             }
 
             pap.coveredItems().clear();
