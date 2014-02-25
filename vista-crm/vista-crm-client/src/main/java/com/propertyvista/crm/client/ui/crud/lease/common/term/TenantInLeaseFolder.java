@@ -186,7 +186,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             public FieldValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     if (getComponent().getValue().isEmpty()) {
-                        return new FieldValidationError(getComponent(), i18n.tr("At least one Tenant should be present!"));
+                        return new FieldValidationError(getComponent(), i18n.tr("At least one Person should be present!"));
                     }
                 }
                 return null;
