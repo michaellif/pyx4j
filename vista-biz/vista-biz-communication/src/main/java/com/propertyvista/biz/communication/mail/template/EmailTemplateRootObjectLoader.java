@@ -180,7 +180,7 @@ public class EmailTemplateRootObjectLoader {
                 throw new Error("LeaseTermParticipant should be provided in context");
             }
             if (context.lease().isNull()) {
-                Persistence.ensureRetrieve(context.leaseTermParticipant().leaseTermV(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(context.leaseTermParticipant().leaseTermV().holder().lease(), AttachLevel.Attached);
                 context.lease().set(context.leaseTermParticipant().leaseTermV().holder().lease());
             }
 

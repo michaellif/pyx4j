@@ -93,7 +93,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             loadLeaseParticipant(lease, to, guarantorId);
         }
 
-        if (!Lease.Status.isApplicationWithoutUnit(to)) {
+        if (Lease.Status.isApplicationUnitSelected(to)) {
             BigDecimal total = ServerSideFactory.create(BillingFacade.class).getMaxLeaseTermMonthlyTotal(to.currentTerm());
             ServerSideFactory.create(ScreeningFacade.class).calculateSuggestedDecision(total, to.leaseApproval());
         }
