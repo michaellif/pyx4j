@@ -71,7 +71,7 @@ class PaymentMethodPersister {
     }
 
     static boolean isCompleatePaymentMethod(LeasePaymentMethod paymentMethod) {
-        if (!paymentMethod.isNull()) {
+        if (paymentMethod.isNull()) {
             return false;
         }
         switch (paymentMethod.type().getValue()) {
