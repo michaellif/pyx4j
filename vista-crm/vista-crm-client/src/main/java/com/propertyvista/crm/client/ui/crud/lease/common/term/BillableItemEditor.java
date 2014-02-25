@@ -157,16 +157,6 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         return flexPanel;
     }
 
-    void updateServiceItemEditability() {
-        if (isEditable()) {
-            boolean isLeaseApproved = !leaseTerm.getValue().lease().approvalDate().isNull();
-
-            // set editable for non-approved leases (and multiple service items):
-            get(proto().agreedPrice()).setEditable(!isLeaseApproved);
-            get(proto().item()).setEditable(!isLeaseApproved && leaseTerm.getValue().selectedServiceItems().size() > 1);
-        }
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     protected void onValueSet(boolean populate) {
@@ -177,13 +167,10 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
             get(proto().item()).setVisible(isEditable() || !getValue().item().isNull());
 
-            get(proto().effectiveDate()).setVisible(true);
-            get(proto().effectiveDate()).setTooltip(null);
+            get(proto().agreedPrice()).setEditable(false);
 
-            get(proto().expirationDate()).setVisible(true);
-            get(proto().expirationDate()).setTooltip(null);
-
-            get(proto().agreedPrice()).setEditable(true);
+            get(proto().effectiveDate()).setVisible(false);
+            get(proto().expirationDate()).setVisible(false);
 
             adjustmentPanel.setVisible((isEditable() || !getValue().adjustments().isEmpty()));
             depositPanel.setVisible((isEditable() || !getValue().deposits().isEmpty()));
@@ -194,7 +181,13 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                 get(proto().effectiveDate()).setVisible(false);
                 get(proto().expirationDate()).setVisible(false);
 
-                updateServiceItemEditability();
+                if (isEditable()) {
+                    boolean isLeaseApproved = !leaseTerm.getValue().lease().approvalDate().isNull();
+                    // set editable for non-approved leases (and multiple service items):
+                    get(proto().item()).setEditable(!isLeaseApproved && leaseTerm.getValue().selectedServiceItems().size() > 1);
+                    get(proto().agreedPrice()).setEditable(!isLeaseApproved);
+                    get(proto().agreedPrice()).setMandatory(!leaseTerm.getValue().unit().isNull());
+                }
             } else if (ARCode.Type.features().contains(getValue().item().product().holder().code().type().getValue())) {
                 // show/hide effective dates (hide expiration for non-recurring; show in editor, hide in viewer if empty):
                 boolean recurring = isRecurringFeature(getValue().item().product());
@@ -202,8 +195,8 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                 get(proto().expirationDate()).setVisible(recurring && (isEditable() || !getValue().expirationDate().isNull()));
 
                 if (isEditable()) {
-                    get(proto().agreedPrice()).setEditable(!getValue().finalized().isBooleanTrue());
                     get(proto().item()).setEditable(false);
+                    get(proto().agreedPrice()).setEditable(!getValue().finalized().isBooleanTrue());
                 }
 
                 // correct folder item:
@@ -241,13 +234,6 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         get(proto().description()).setVisible(VistaFeatures.instance().yardiIntegration() && (isEditable() || !getValue().description().isNull()));
-
-        if (VistaFeatures.instance().yardiIntegration()) {
-            get(proto().agreedPrice()).setEditable(false);
-
-            get(proto().effectiveDate()).setVisible(false);
-            get(proto().expirationDate()).setVisible(false);
-        }
     }
 
     @Override
