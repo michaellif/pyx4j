@@ -233,7 +233,12 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
-            get(proto().agreedPrice()).setMandatory(false);
+
+            if (isEditable()) {
+                get(proto().item()).setEditable(false);
+                get(proto().agreedPrice()).setEditable(false);
+                get(proto().agreedPrice()).setMandatory(false);
+            }
         }
 
         get(proto().description()).setVisible(VistaFeatures.instance().yardiIntegration() && (isEditable() || !getValue().description().isNull()));
