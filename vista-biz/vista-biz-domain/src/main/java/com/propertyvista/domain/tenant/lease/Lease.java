@@ -156,17 +156,10 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
 
         /**
          * Unit was not selected yet.
-         * 
-         * this does not work for Cancelled Applications
          */
-        public static boolean isApplicationWithoutUnit(Lease lease) {
-            return (lease.status().getValue() == Application) && lease.unit().isNull();
-        }
-
         public static boolean isApplicationUnitSelected(Lease lease) {
             return !lease.unit().isNull();
         }
-
     }
 
     @I18n(context = "Lease Completion Type")

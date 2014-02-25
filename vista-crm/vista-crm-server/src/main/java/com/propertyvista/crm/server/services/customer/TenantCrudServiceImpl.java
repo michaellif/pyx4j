@@ -135,7 +135,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     private void fillPreauthorizedPayments(TenantDTO dto, RetrieveTarget retrieveTarget) {
         dto.preauthorizedPayments().addAll(
                 PreauthorizedPaymentsCommons.createPreauthorizedPayments(EntityFactory.createIdentityStub(Tenant.class, dto.id().getValue()), retrieveTarget));
-        if (!Lease.Status.isApplicationWithoutUnit(dto.lease())) {
+        if (Lease.Status.isApplicationUnitSelected(dto.lease())) {
             dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(dto.lease()));
         }
     }
