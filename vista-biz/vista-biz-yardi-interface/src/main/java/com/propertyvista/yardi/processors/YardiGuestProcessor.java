@@ -184,9 +184,10 @@ public class YardiGuestProcessor {
         return this;
     }
 
-    public YardiGuestProcessor addRentableItem(Prospect guest, String type) {
+    public YardiGuestProcessor addRentableItem(Prospect guest, String type, String itemCode) {
         AdditionalPreference item = new AdditionalPreference();
         item.setAdditionalPreferenceType(type);
+        item.setValue(itemCode);
         CustomerPreferences pref = guest.getCustomerPreferences();
         if (pref == null) {
             guest.setCustomerPreferences(pref = new CustomerPreferences());

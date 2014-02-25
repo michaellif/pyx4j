@@ -39,6 +39,8 @@ import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.PropertyMarketingSources;
 import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Prospects;
+import com.yardi.entity.guestcard40.RentableItem;
+import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.entity.mits.Information;
@@ -104,11 +106,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
-        // create guest, add rentable items, preferred unit, and moveIn date
+        // create guest, preferred unit, and moveIn date
         Prospect guest = guestProcessor.getProspect(lease);
-        for (String type : getLeaseProducts(lease)) {
-            guestProcessor.addRentableItem(guest, type);
-        }
         guestProcessor //
                 .addUnit(guest, getUnitInfo(lease.unit())) //
                 .addLeaseTerm(guest, lease.leaseFrom().getValue(), lease.leaseTo().getValue()) //
@@ -192,6 +191,16 @@ public class YardiGuestManagementService extends YardiAbstractService {
     public SignLeaseResults signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException {
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getProspect(lease);
+        // get available rentable item ids per type
+        Map<String, String> availableCodes = getAvailableRentableItems(yc, lease);
+        // add selected rentable items
+        for (String type : getLeaseProducts(lease)) {
+            String itemCode = availableCodes.get(type);
+            if (itemCode == null) {
+                throw new YardiServiceException(SimpleMessageFormat.format("No available Rentable Items found for type: {0}", type));
+            }
+            guestProcessor.addRentableItem(guest, type, itemCode);
+        }
         // create lease
         for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
             EventType event = guestProcessor.getNewEvent(type, false);
@@ -238,7 +247,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         };
     }
 
-    public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+    public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         log.info("Getting RentableItems for property {}", propertyId);
         return ServerSideFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, propertyId);
     }
@@ -302,6 +311,23 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
 
         return productCodes;
+    }
+
+    /** get available rentable item codes */
+    private Map<String, String> getAvailableRentableItems(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        Map<String, String> availableCodes = new HashMap<String, String>();
+        RentableItems rentableItems = getRentableItems(yc, lease.unit().building().propertyCode().getValue());
+        for (RentableItemType type : rentableItems.getItemType()) {
+            if (!availableCodes.containsKey(type.getCode())) {
+                for (RentableItem item : type.getItem()) {
+                    if (item.isAvailable()) {
+                        availableCodes.put(type.getCode(), item.getCode());
+                        break;
+                    }
+                }
+            }
+        }
+        return availableCodes;
     }
 
     private void submitGuest(PmcYardiCredential yc, Prospect guest) throws YardiServiceException {

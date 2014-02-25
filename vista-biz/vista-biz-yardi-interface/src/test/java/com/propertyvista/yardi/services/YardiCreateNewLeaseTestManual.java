@@ -23,8 +23,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yardi.entity.leaseapp30.LeaseApplication;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -73,8 +71,6 @@ import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
-import com.propertyvista.yardi.processors.YardiApplicationProcessor;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 
 /**
  * Create new lease in Yardi using PV lease application
@@ -136,10 +132,33 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         fixTenantName(null);
         setMoveIn(new LogicalDate());
 
-        addOutdoorParking();
-        addLargeLocker();
+        BillableItem park = addOutdoorParking();
+        BillableItem lock = addLargeLocker();
 
-        Lease lease = retrieveLease();
+        // add yardi deposit charge codes
+        Lease lease = retrieveLeaseDraft();
+        for (Deposit deposit : lease.currentTerm().version().leaseProducts().serviceItem().deposits()) {
+            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+            code.yardiChargeCode().setValue("rsecdep");
+            deposit.chargeCode().yardiChargeCodes().add(code);
+            Persistence.service().persist(deposit.chargeCode());
+        }
+        for (Deposit deposit : park.deposits()) {
+            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+            code.yardiChargeCode().setValue("secdepot");
+            deposit.chargeCode().yardiChargeCodes().add(code);
+            Persistence.service().persist(deposit.chargeCode());
+        }
+        for (Deposit deposit : lock.deposits()) {
+            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+            code.yardiChargeCode().setValue("rpet");
+            deposit.chargeCode().yardiChargeCodes().add(code);
+            Persistence.service().persist(deposit.chargeCode());
+        }
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+        Persistence.service().commit();
+
+        lease = retrieveLease();
 
         log.info("Created Lease: {}", lease.getPrimaryKey().toString());
 
@@ -176,64 +195,6 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
             lease = retrieveLease();
             log.info("Signed lease: {}", lease.leaseId().getValue());
-        } catch (YardiServiceException e) {
-            throw new UserRuntimeException(e.getMessage(), e);
-        } catch (UserRuntimeException e) {
-            log.info("ERROR: {}", e.getMessage());
-        }
-    }
-
-//    @Ignore
-    public void testImportApplication() {
-        createLease("01-Dec-2013", "30-Nov-2014", new BigDecimal("789.99"), null);
-        setUnitNo("0001");
-
-        if (false) {
-            // create second lease for another test
-            createLease("01-Dec-2013", "30-Nov-2014", new BigDecimal("789.99"), null);
-            setUnitNo("AV008");
-        }
-
-        setPropertyCode("gran0002");
-        setFloorplan("2bdrm", 2);
-        setCurrentAddress(getAddress());
-        fixTenantName("211536"); // TODO - use exact guest name
-        setMoveIn(new LogicalDate());
-
-        BillableItem park = addOutdoorParking();
-        BillableItem lock = addLargeLocker();
-
-        // add yardi deposit charge codes
-        Lease lease = retrieveLeaseDraft();
-        for (Deposit deposit : lease.currentTerm().version().leaseProducts().serviceItem().deposits()) {
-            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
-            code.yardiChargeCode().setValue("rsecdep");
-            deposit.chargeCode().yardiChargeCodes().add(code);
-            Persistence.service().persist(deposit.chargeCode());
-        }
-        for (Deposit deposit : park.deposits()) {
-            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
-            code.yardiChargeCode().setValue("rgarage");
-            deposit.chargeCode().yardiChargeCodes().add(code);
-            Persistence.service().persist(deposit.chargeCode());
-        }
-        for (Deposit deposit : lock.deposits()) {
-            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
-            code.yardiChargeCode().setValue("rpet");
-            deposit.chargeCode().yardiChargeCodes().add(code);
-            Persistence.service().persist(deposit.chargeCode());
-        }
-        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
-        Persistence.service().commit();
-
-        lease = retrieveLease();
-
-        log.info("Created Lease: {}", lease.getPrimaryKey().toString());
-
-        try {
-            LeaseApplication leaseApp = new YardiApplicationProcessor().createApplication(lease);
-            ServerSideFactory.create(YardiGuestManagementStub.class).importApplication(getTestPmcYardiCredential(), leaseApp);
-            log.info("Imported lease application: {}", lease.leaseId().getValue());
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(e.getMessage(), e);
         } catch (UserRuntimeException e) {
@@ -351,28 +312,34 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
                     // correct agreed price for existing leases:
                     BigDecimal agreedPrice = null;
-                    if (lease.status().getValue() == Lease.Status.ExistingLease) {
-                        switch (code) {
-                        case outdoorParking:
-                            agreedPrice = new BigDecimal("80.00");
-                            break;
-                        case largeLocker:
-                            agreedPrice = new BigDecimal("60.00");
-                            break;
-                        case catRent:
-                            agreedPrice = new BigDecimal("20.00");
-                            break;
-                        case booking:
-                            agreedPrice = new BigDecimal("30.00");
-                            break;
-                        default:
-                            break;
-                        }
+                    String rentableItemCode = null;
+                    switch (code) {
+                    case outdoorParking:
+                        agreedPrice = new BigDecimal("80.00");
+                        rentableItemCode = "parkingoutdoor";
+                        break;
+                    case largeLocker:
+                        agreedPrice = new BigDecimal("60.00");
+                        rentableItemCode = "lockersmall";
+                        break;
+                    case catRent:
+                        agreedPrice = new BigDecimal("20.00");
+                        break;
+                    case booking:
+                        agreedPrice = new BigDecimal("30.00");
+                        break;
+                    default:
+                        break;
                     }
                     if (agreedPrice != null) {
                         billableItem.agreedPrice().setValue(agreedPrice);
                     } else {
                         billableItem.agreedPrice().setValue(item.price().getValue());
+                    }
+                    if (rentableItemCode != null) {
+                        Persistence.ensureRetrieve(item.product().holder(), AttachLevel.Attached);
+                        item.product().holder().yardiCode().setValue(rentableItemCode);
+                        Persistence.service().persist(item.product().holder());
                     }
 
                     leaseFacade.persist(lease.currentTerm());
@@ -457,7 +424,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
                 yc.propertyListCodes().setValue("gran0002");
                 yc.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
                 yc.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com:8080/voyager6008sp17");
-                yc.serviceURLBase().setValue("http://192.168.50.100/voyager6008sp17");
+//                yc.serviceURLBase().setValue("http://192.168.50.100/voyager6008sp17");
                 yc.username().setValue("vista_dev");
                 yc.password().number().setValue("vista_dev");
                 yc.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
