@@ -191,6 +191,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         }
     }
 
+    protected abstract VALUE_TYPE ensureValue();
+
     @Override
     public void set(ICollection<TYPE, VALUE_TYPE> typedCollection) {
         switch (typedCollection.getAttachLevel()) {
@@ -201,7 +203,10 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
             setAttachLevel(AttachLevel.Detached);
             break;
         case Attached:
-            setValue(typedCollection.getValue());
+            for (TYPE entity : typedCollection) {
+                ensureTypedValue(entity);
+            }
+            setValue(((AbstractCollectionHandler<TYPE, VALUE_TYPE>) typedCollection).ensureValue());
             break;
         default:
             throw new IllegalArgumentException();

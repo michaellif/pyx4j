@@ -26,6 +26,4 @@ import java.util.Set;
 
 public interface ISet<TYPE extends IEntity> extends ICollection<TYPE, Set<Map<String, Serializable>>>, Set<TYPE> {
 
-    public void set(ISet<TYPE> typedSet);
-
 }

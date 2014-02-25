@@ -26,8 +26,6 @@ import java.util.Map;
 
 public interface IList<TYPE extends IEntity> extends ICollection<TYPE, List<Map<String, Serializable>>>, List<TYPE> {
 
-    public void set(IList<TYPE> typedList);
-
     /**
      * Move element to new position in list
      */

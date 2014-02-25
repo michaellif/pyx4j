@@ -46,14 +46,6 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
         return (getValue() == null);
     }
 
-    @Override
-    public void set(IList<TYPE> typedList) {
-        for (TYPE entity : typedList) {
-            ensureTypedValue(entity);
-        }
-        setValue(typedList.getValue());
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public List<Map<String, Serializable>> getValue() {
@@ -75,7 +67,8 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     /**
      * Guarantee that data holder is created before setting the value of element
      */
-    private List<Map<String, Serializable>> ensureValue() {
+    @Override
+    protected List<Map<String, Serializable>> ensureValue() {
         List<Map<String, Serializable>> value = getValue();
         if (value == null) {
             // TODO test  modifiable Objects Properties 

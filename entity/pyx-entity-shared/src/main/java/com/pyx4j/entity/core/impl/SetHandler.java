@@ -71,14 +71,6 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
         return (getValue() == null);
     }
 
-    @Override
-    public void set(ISet<TYPE> typedSet) {
-        for (TYPE entity : typedSet) {
-            ensureTypedValue(entity);
-        }
-        setValue(typedSet.getValue());
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public Set<Map<String, Serializable>> getValue() {
@@ -101,7 +93,8 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
     /**
      * Guarantee that data holder is created before setting the value of element
      */
-    private Set<Map<String, Serializable>> ensureValue() {
+    @Override
+    protected Set<Map<String, Serializable>> ensureValue() {
         Set<Map<String, Serializable>> value = getValue();
         if (value == null) {
             // Use TreeSet for implementation to allow for modifiable Objects Properties (hashCode) after they are added to Set
