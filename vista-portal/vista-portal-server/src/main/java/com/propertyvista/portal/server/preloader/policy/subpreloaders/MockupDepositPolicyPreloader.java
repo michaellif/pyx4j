@@ -43,11 +43,12 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
         EntityQueryCriteria<ARCode> depositsCrt = EntityQueryCriteria.create(ARCode.class);
-        depositsCrt.add(PropertyCriterion.in(depositsCrt.proto().type(), ARCode.Type.deposits()));
+        depositsCrt.in(depositsCrt.proto().type(), ARCode.Type.deposits());
         List<ARCode> depositCodes = Persistence.service().query(depositsCrt);
 
         EntityQueryCriteria<ARCode> servicesCrt = EntityQueryCriteria.create(ARCode.class);
         servicesCrt.add(PropertyCriterion.in(servicesCrt.proto().type(), ARCode.Type.unitRelatedServices()));
+
         for (ARCode arCode : Persistence.service().query(servicesCrt)) {
             DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
             item.depositType().setValue(DepositType.SecurityDeposit);
@@ -55,7 +56,7 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
             item.value().setValue(new BigDecimal(RandomUtil.randomDouble(500.0)));
             item.valueType().setValue(ValueType.Monetary);
             item.productCode().set(arCode);
-            item.chargeCode().set(RandomUtil.random(depositCodes));
+            item.chargeCode().set(findAvalable(depositCodes, null));
             item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
             policy.policyItems().add(item);
@@ -64,39 +65,63 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
         EntityQueryCriteria<ARCode> featuresCrt = EntityQueryCriteria.create(ARCode.class);
         featuresCrt.add(PropertyCriterion.in(servicesCrt.proto().type(), ARCode.Type.features()));
         for (ARCode arCode : Persistence.service().query(featuresCrt)) {
-            if (RandomUtil.randomBoolean()) {
-                switch (arCode.type().getValue()) {
-                case Parking:
-                    DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
-                    item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.description().setValue(i18n.tr("First Month Parking"));
-                    item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
-                    item.valueType().setValue(ValueType.Percentage);
-                    item.productCode().set(arCode);
-                    item.chargeCode().set(RandomUtil.random(depositCodes));
-                    item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
+            switch (arCode.type().getValue()) {
+            case Parking:
+                DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
+                item.depositType().setValue(DepositType.SecurityDeposit);
+                item.description().setValue(i18n.tr("Deposit Parking"));
+                item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
+                item.valueType().setValue(ValueType.Percentage);
+                item.productCode().set(arCode);
+                item.chargeCode().set(findAvalable(depositCodes, "Parking"));
+                item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
-                    policy.policyItems().add(item);
-                    break;
+                policy.policyItems().add(item);
+                break;
 
-                case Locker:
-                    item = EntityFactory.create(DepositPolicyItem.class);
-                    item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.description().setValue(i18n.tr("Last Month Locker"));
-                    item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
-                    item.valueType().setValue(ValueType.Percentage);
-                    item.productCode().set(arCode);
-                    item.chargeCode().set(RandomUtil.random(depositCodes));
-                    item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
+            case Locker:
+                item = EntityFactory.create(DepositPolicyItem.class);
+                item.depositType().setValue(DepositType.SecurityDeposit);
+                item.description().setValue(i18n.tr("Deposit Locker"));
+                item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
+                item.valueType().setValue(ValueType.Percentage);
+                item.productCode().set(arCode);
+                item.chargeCode().set(findAvalable(depositCodes, "Locker"));
+                item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
-                    policy.policyItems().add(item);
-                    break;
-                }
+                policy.policyItems().add(item);
+                break;
+
+            case Pet:
+                item = EntityFactory.create(DepositPolicyItem.class);
+                item.depositType().setValue(DepositType.SecurityDeposit);
+                item.description().setValue(i18n.tr("Security Deposit Pet"));
+                item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
+                item.valueType().setValue(ValueType.Percentage);
+                item.productCode().set(arCode);
+                item.chargeCode().set(findAvalable(depositCodes, "Pet"));
+                item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
+
+                policy.policyItems().add(item);
+                break;
+
+            default:
             }
         }
 
         log.append(policy.getStringView());
 
         return policy;
+    }
+
+    private ARCode findAvalable(List<ARCode> depositCodes, String nameFragment) {
+        if (nameFragment != null) {
+            for (ARCode ar : depositCodes) {
+                if (ar.name().getValue().contains(nameFragment)) {
+                    return ar;
+                }
+            }
+        }
+        return depositCodes.get(0);
     }
 }

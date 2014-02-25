@@ -16,6 +16,7 @@ package com.propertyvista.generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.financial.ARCode;
@@ -69,7 +70,13 @@ public class ARCodesGenerator {
         createARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, true);
 
         // reserved codes:
-        createARCode("Deposit", ARCode.Type.Deposit, 0, true);
+        createARCode("Deposit", ARCode.Type.Deposit, 0, true, "rsecdep");
+        if (VistaFeatures.instance().yardiIntegration() && ApplicationMode.isDevelopment()) {
+            createARCode("Deposit Key", ARCode.Type.Deposit, 0, true, "rkeydep");
+            createARCode("Deposit Parking", ARCode.Type.Deposit, 0, true, "secdepot");
+            createARCode("Deposit Locker", ARCode.Type.Deposit, 0, true, "csecont");
+            createARCode("Deposit Pet", ARCode.Type.Deposit, 0, true, "rpet");
+        }
         createARCode("DepositRefund", ARCode.Type.DepositRefund, 0, true);
         createARCode("LatePayment", ARCode.Type.LatePayment, 0, true);
         createARCode("NSF", ARCode.Type.NSF, 0, true);
