@@ -110,7 +110,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     protected void enhanceRetrieved(Lease in, LeaseDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(in, to, retrieveTarget);
 
-        if (!to.billingAccount().isNull()) {
+        if (Lease.Status.isApplicationUnitSelected(to)) {
             to.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(to.billingAccount()));
             to.carryforwardBalance().setValue(to.billingAccount().carryforwardBalance().getValue());
         }

@@ -179,9 +179,9 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             }
 
             checkUnitMoveOut(to);
-
-            setAgeRestrictions(to);
         }
+
+        setAgeRestrictions(to);
     }
 
     @Override
@@ -376,15 +376,17 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     private void checkUnitMoveOut(LeaseTermDTO dto) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.unit()));
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-        criteria.add(PropertyCriterion.ne(criteria.proto().id(), dto.lease().getPrimaryKey()));
-        criteria.isNotNull(criteria.proto().completion());
-        criteria.isNull(criteria.proto().actualMoveOut());
+        if (!dto.unit().isNull()) {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.unit()));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
+            criteria.add(PropertyCriterion.ne(criteria.proto().id(), dto.lease().getPrimaryKey()));
+            criteria.isNotNull(criteria.proto().completion());
+            criteria.isNull(criteria.proto().actualMoveOut());
 
-        if (Persistence.service().exists(criteria)) {
-            dto.unitMoveOutNote().setValue("Warning: This unit is not freed completely by previous tenant!");
+            if (Persistence.service().exists(criteria)) {
+                dto.unitMoveOutNote().setValue("Warning: This unit is not freed completely by previous tenant!");
+            }
         }
     }
 
