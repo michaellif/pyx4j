@@ -175,6 +175,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                         ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(termParticipant.leaseParticipant().customer()));
             } else {
                 approval.creditCheck().set(termParticipant.creditCheck());
+                Persistence.ensureRetrieve(approval.creditCheck(), AttachLevel.Attached);
             }
 
             approval.screening().set(LeaseParticipantUtils.createScreeningPointer(termParticipant.leaseParticipant(), screening));
