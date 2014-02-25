@@ -49,7 +49,6 @@ public class GeoCache {
     public void loadResource() {
         try {
             String xml = IOUtils.getTextResource(FILENAME, getClass());
-            log.debug("Loading {}", xml);
             GeoPairs pairs = MarshallUtil.unmarshal(GeoPairs.class, xml);
             for (GeoPair pair : pairs.getPairs()) {
                 GeoPoint gp = GeoPoint.valueOf(pair.getGeoPoint());
