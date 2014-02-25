@@ -85,7 +85,6 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         form.getValue().selectedConcessions().clear();
 
         form.get(form.proto().version().leaseProducts().serviceItem()).reset();
-//        ((BillableItemEditor) form.get(form.proto().version().leaseProducts().serviceItem())).updateServiceItemEditability();
         form.get(form.proto().version().leaseProducts().featureItems()).reset();
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             form.get(form.proto().version().leaseProducts().concessions()).reset();

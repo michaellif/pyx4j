@@ -168,6 +168,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
             get(proto().item()).setVisible(isEditable() || !getValue().item().isNull());
 
             get(proto().agreedPrice()).setEditable(false);
+            get(proto().agreedPrice()).setMandatory(false);
 
             get(proto().effectiveDate()).setVisible(false);
             get(proto().expirationDate()).setVisible(false);
@@ -197,6 +198,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                 if (isEditable()) {
                     get(proto().item()).setEditable(false);
                     get(proto().agreedPrice()).setEditable(!getValue().finalized().isBooleanTrue());
+                    get(proto().agreedPrice()).setMandatory(true);
                 }
 
                 // correct folder item:
@@ -231,6 +233,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
+            get(proto().agreedPrice()).setMandatory(false);
         }
 
         get(proto().description()).setVisible(VistaFeatures.instance().yardiIntegration() && (isEditable() || !getValue().description().isNull()));
