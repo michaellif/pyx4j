@@ -83,7 +83,6 @@ public class LeaseParticipantUtils {
     }
 
     public static boolean isApplicationInPogress(Lease lease, LeaseTermV leaseTermV) {
-        return (lease.status().getValue() == Lease.Status.Application) && VersionedEntityUtils.isDraft(leaseTermV) && lease.status().getValue().isDraft();
+        return (lease.status().getValue() != Lease.Status.Cancelled) && VersionedEntityUtils.isDraft(leaseTermV) && lease.status().getValue().isDraft();
     }
-
 }
