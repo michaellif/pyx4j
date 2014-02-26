@@ -13,15 +13,44 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
 
 public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO> implements LeaseTermEditorView {
 
+    private static final I18n i18n = I18n.get(LeaseTermEditorViewImpl.class);
+
     public LeaseTermEditorViewImpl() {
         setForm(new LeaseTermForm(this));
+    }
+
+    @Override
+    public void populate(LeaseTermDTO value) {
+        super.populate(value);
+
+        if (EditMode.newItem.equals(mode)) {
+            if (value.lease().status().getValue() == Lease.Status.NewLease) {
+                setCaption(i18n.tr("New Lease..."));
+            } else if (value.lease().status().getValue() == Lease.Status.ExistingLease) {
+                setCaption(i18n.tr("New Current Lease..."));
+            } else if (value.lease().status().getValue() == Lease.Status.Application) {
+                setCaption(i18n.tr("New Lease Application..."));
+            }
+        } else if (EditMode.existingItem.equals(mode)) {
+//            if (value.lease().status().getValue() == Lease.Status.NewLease) {
+//                setCaption(i18n.tr("Lease"));
+//            } else if (value.lease().status().getValue() == Lease.Status.ExistingLease) {
+//                setCaption(i18n.tr("Current Lease"));
+//            } else 
+            if (value.lease().status().getValue() == Lease.Status.Application) {
+                setCaption(i18n.tr("Lease Application"));
+            }
+        }
     }
 
     @Override
