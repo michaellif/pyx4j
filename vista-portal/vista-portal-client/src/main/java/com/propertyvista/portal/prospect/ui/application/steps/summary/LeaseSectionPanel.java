@@ -18,9 +18,8 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.portal.prospect.ui.application.steps.CoapplicantsReadonlyFolder;
-import com.propertyvista.portal.prospect.ui.application.steps.DependentsReadonlyFolder;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
+import com.propertyvista.portal.prospect.ui.application.steps.TenantsReadonlyFolder;
 
 public class LeaseSectionPanel extends AbstractSectionPanel {
 
@@ -41,9 +40,8 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
         addField(proto().selectedService().agreedPrice());
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
-            addCaption(i18n.tr("People Living with You"));
-            addField(proto().coapplicants(), new CoapplicantsReadonlyFolder(), false);
-            addField(proto().dependents(), new DependentsReadonlyFolder(), false);
+            addCaption(i18n.tr("Peoples"));
+            addField(proto().tenants(), new TenantsReadonlyFolder(), false);
         }
     }
 

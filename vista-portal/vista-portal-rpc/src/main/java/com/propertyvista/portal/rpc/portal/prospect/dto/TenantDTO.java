@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -24,12 +25,14 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 @Transient
+@ToStringFormat("{0} - {1}")
 public interface TenantDTO extends IEntity {
 
-    @ToString()
+    @ToString(index = 0)
     @EmbeddedEntity
     Name name();
 
+    @ToString(index = 1)
     IPrimitive<LeaseTermParticipant.Role> role();
 
     LeaseTermTenant tenantId();
