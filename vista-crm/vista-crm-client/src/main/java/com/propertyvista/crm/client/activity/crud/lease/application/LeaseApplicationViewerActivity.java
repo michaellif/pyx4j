@@ -115,6 +115,15 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                 populate();
                 ((LeaseApplicationViewerView) getView()).reportInviteUsersActionResult(message);
             }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    ((LeaseApplicationViewerView) getView()).reportInviteUsersActionFailure(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
         }, getEntityId(), new Vector<LeaseTermParticipant<?>>(users));
     }
 

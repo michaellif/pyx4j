@@ -57,6 +57,8 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
     void reportInviteUsersActionResult(String message);
 
+    void reportInviteUsersActionFailure(String message);
+
     void reportCreditCheckActionResult(String message);
 
     void reportApplicationApprovalSuccess();

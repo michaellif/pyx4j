@@ -326,6 +326,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     @Override
+    public void reportInviteUsersActionFailure(String message) {
+        MessageDialog.error(i18n.tr("Invitation Failed"), message);
+    }
+
+    @Override
     public void reportCreditCheckActionResult(String message) {
         MessageDialog.info(message);
     }
