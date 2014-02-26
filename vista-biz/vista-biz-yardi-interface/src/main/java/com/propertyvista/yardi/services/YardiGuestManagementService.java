@@ -16,7 +16,6 @@ package com.propertyvista.yardi.services;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,6 +50,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
@@ -192,14 +192,18 @@ public class YardiGuestManagementService extends YardiAbstractService {
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getProspect(lease);
         // get available rentable item ids per type
-        Map<String, String> availableCodes = getAvailableRentableItems(yc, lease);
+        Map<RentableItemKey, RentableItem> availableItems = getAvailableRentableItems(yc, lease);
         // add selected rentable items
-        for (String type : getLeaseProducts(lease)) {
-            String itemCode = availableCodes.get(type);
-            if (itemCode == null) {
-                throw new YardiServiceException(SimpleMessageFormat.format("No available Rentable Items found for type: {0}", type));
+        for (BillableItem product : getLeaseProducts(lease)) {
+            String type = product.item().product().holder().yardiCode().getValue();
+            RentableItemKey lookupKey = new RentableItemKey(type, product.agreedPrice().getValue());
+            RentableItem item = availableItems.get(lookupKey);
+            if (item == null) {
+                throw new UserRuntimeException(SimpleMessageFormat.format("No available ''{0}'' found for the price of ''{1}''", lookupKey.code,
+                        lookupKey.price));
             }
-            guestProcessor.addRentableItem(guest, type, itemCode);
+
+            guestProcessor.addRentableItem(guest, type, item.getCode());
         }
         // create lease
         for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
@@ -284,7 +288,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
             msg.append(SimpleMessageFormat.format("Yardi Marketing Source ''{0}'' is not configured for property ''{1}''.\n", ILS_SOURCE, propertyCode));
         }
         if (msg.length() > 0) {
-            throw new YardiServiceException(msg.toString());
+            throw new UserRuntimeException(msg.toString());
         }
     }
 
@@ -303,25 +307,20 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue();
     }
 
-    private List<String> getLeaseProducts(Lease lease) {
-        List<String> productCodes = new ArrayList<>();
-
-        for (BillableItem feature : lease.currentTerm().version().leaseProducts().featureItems()) {
-            productCodes.add(feature.item().product().holder().yardiCode().getValue());
-        }
-
-        return productCodes;
+    private List<BillableItem> getLeaseProducts(Lease lease) {
+        return lease.currentTerm().version().leaseProducts().featureItems();
     }
 
     /** get available rentable item codes */
-    private Map<String, String> getAvailableRentableItems(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
-        Map<String, String> availableCodes = new HashMap<String, String>();
+    private Map<RentableItemKey, RentableItem> getAvailableRentableItems(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        Map<RentableItemKey, RentableItem> availableCodes = new HashMap<RentableItemKey, RentableItem>();
         RentableItems rentableItems = getRentableItems(yc, lease.unit().building().propertyCode().getValue());
         for (RentableItemType type : rentableItems.getItemType()) {
-            if (!availableCodes.containsKey(type.getCode())) {
-                for (RentableItem item : type.getItem()) {
-                    if (item.isAvailable()) {
-                        availableCodes.put(type.getCode(), item.getCode());
+            for (RentableItem item : type.getItem()) {
+                if (item.isAvailable()) {
+                    RentableItemKey key = new RentableItemKey(type.getCode(), new BigDecimal(item.getRent()));
+                    if (!availableCodes.containsKey(key)) {
+                        availableCodes.put(key, item);
                         break;
                     }
                 }
@@ -340,7 +339,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
     private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId, IdentityType type) throws YardiServiceException {
         LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
         if (guestActivity.getProspects().getProspect().size() != 1) {
-            throw new YardiServiceException("Prospect not found: " + guestId);
+            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
         }
         Prospect p = guestActivity.getProspects().getProspect().get(0);
         for (Customer c : p.getCustomers().getCustomer()) {
@@ -445,5 +444,33 @@ public class YardiGuestManagementService extends YardiAbstractService {
                 .append(name.getFirstName() + ".") //
                 .append(name.getLastName() + ".");
         return key.toString();
+    }
+
+    private static class RentableItemKey {
+        public final String code;
+
+        public final BigDecimal price;
+
+        public RentableItemKey(String code, BigDecimal price) {
+            assert code != null && price != null : "Arguments cannot be null";
+            this.code = code;
+            this.price = price;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) {
+                return true;
+            } else if (other instanceof RentableItemKey) {
+                RentableItemKey otherKey = (RentableItemKey) other;
+                return code.equals(otherKey.code) && price.compareTo(otherKey.price) == 0;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return 17 * code.hashCode() ^ price.hashCode();
+        }
     }
 }
