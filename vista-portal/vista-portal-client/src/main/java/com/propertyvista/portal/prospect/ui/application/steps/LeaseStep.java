@@ -89,8 +89,7 @@ public class LeaseStep extends ApplicationWizardStep {
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             panel.setH3(++row, 0, 1, i18n.tr("People"));
-            panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsReadonlyFolder()));
-            panel.setWidget(++row, 0, inject(proto().dependents(), new DependentsReadonlyFolder()));
+            panel.setWidget(++row, 0, inject(proto().tenants(), new TenantsReadonlyFolder()));
         }
 
         return panel;
@@ -104,5 +103,4 @@ public class LeaseStep extends ApplicationWizardStep {
         depositPanel.setVisible(!getValue().selectedService().deposits().isEmpty());
         featurePanel.setVisible(!getValue().selectedFeatures().isEmpty());
     }
-
 }

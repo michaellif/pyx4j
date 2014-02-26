@@ -49,6 +49,8 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IList<BillableItem> selectedFeatures();
 
+    IList<TenantDTO> tenants();
+
     /** Sets the age of majority for validation, null if no validation is required */
     IPrimitive<Integer> ageOfMajority();
 
