@@ -205,6 +205,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
             guestProcessor.addRentableItem(guest, type, item.getCode());
         }
+        // ensure unit
+        guestProcessor.addUnit(guest, getUnitInfo(lease.unit()));
         // create lease
         for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
             EventType event = guestProcessor.getNewEvent(type, false);
