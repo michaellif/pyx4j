@@ -37,7 +37,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Assigned Buildings"));
-        content.setWidget(++row, 0, 2, inject(proto().buildings(), new BuildingFolder(isEditable())));
+        content.setWidget(++row, 0, 2, inject(proto().buildings(), new BuildingFolder(getParentView(), isEditable())));
 
         setTabBarVisible(false);
         selectTab(addTab(content));

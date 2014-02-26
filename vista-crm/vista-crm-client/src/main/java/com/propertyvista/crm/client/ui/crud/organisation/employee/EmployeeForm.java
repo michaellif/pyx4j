@@ -192,7 +192,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         int baRow = -1;
         buildingsAccessPanel.setH3(++baRow, 0, 2, i18n.tr("Buildings"));
-        buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().buildingAccess(), new BuildingFolder(isEditable())));
+        buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().buildingAccess(), new BuildingFolder(this)));
 
         buildingsAccessPanel.setH3(++baRow, 0, 2, i18n.tr("Portfolios"));
         buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().portfolios(), new PortfolioFolder(getParentView(), isEditable())));

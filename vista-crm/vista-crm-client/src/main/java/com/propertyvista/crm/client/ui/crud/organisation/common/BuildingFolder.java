@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -43,13 +44,17 @@ public class BuildingFolder extends VistaTableFolder<Building> {
 
     private EmployeeForm employeeForm;
 
-    public BuildingFolder(boolean modifiable) {
+    private final IPane parentView;
+
+    public BuildingFolder(IPane parentView, boolean modifiable) {
         super(Building.class, modifiable);
+        this.parentView = parentView;
     }
 
     public BuildingFolder(EmployeeForm employeeForm) {
-        this(employeeForm.isEditable());
+        super(Building.class, employeeForm.isEditable());
         this.employeeForm = employeeForm;
+        parentView = employeeForm.getParentView();
     }
 
     @Override
@@ -93,7 +98,7 @@ public class BuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(employeeForm.getParentView(), getValue()) {
+        new BuildingSelectorDialog(parentView, getValue()) {
             @Override
             public void onClickOk() {
                 for (Building selected : getSelectedItems()) {

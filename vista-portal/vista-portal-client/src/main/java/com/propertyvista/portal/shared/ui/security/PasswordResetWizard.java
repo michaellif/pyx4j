@@ -42,7 +42,7 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
     private final TenantPasswordStrengthRule passwordStrengthRule;
 
     public PasswordResetWizard(PasswordResetWizardViewImpl view) {
-        super(PasswordChangeRequest.class, view, i18n.tr("Change Password"), i18n.tr("Submit"), ThemeColor.contrast3);
+        super(PasswordChangeRequest.class, view, i18n.tr("Create New Password"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.passwordStrengthRule = new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getName());
 
         addStep(createStep());
