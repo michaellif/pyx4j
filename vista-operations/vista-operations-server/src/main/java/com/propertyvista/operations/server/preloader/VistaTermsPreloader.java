@@ -38,14 +38,14 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
          * The change in policy text is not covered by DBA migration script.
          ****************/
 
-        createTerms(Target.PmcPropertyVistaService, "PmcVistaTerms.html", "TODO name it PMC terms");
+        createTerms(Target.PmcPropertyVistaService, "PmcVistaTerms.html", "Terms of Service and Subscription Agreement");
         createTerms(Target.PmcCaledonTemplate, "PmcCaledonTemplateVistaTerms.html", "TODO name it CaledonTemplate");
         createTerms(Target.PmcCaledonSoleProprietorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html", "TODO name it SoleProprietorship");
         createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html", "TODO name it PaymentPad");
 
-        createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html", "TODO name it billing");
-        createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "TenantPreAuthorizedPaymentECheckTerms.html", "TODO name it, ECheck");
-        createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html", "TODO name it, Cards");
+        createTerms(Target.TenantBillingTerms, "TenantBillingAndRefundPolicy.html", "Billing and Refund Policy");
+        createTerms(Target.TenantPreAuthorizedPaymentECheckTerms, "TenantPreAuthorizedPaymentECheckTerms.html", "Pre-Authorization Payment Agreement");
+        createTerms(Target.TenantPreAuthorizedPaymentCardTerms, "TenantPreAuthorizedPaymentCardTerms.html", "Pre-Authorization Payment Agreement");
         createTerms(Target.TenantPaymentWebPaymentFeeTerms, "TenantPaymentWebPaymentFeeTerms.html", "Web Payment Fee - Terms and Conditions");
 
         createTerms(Target.ProspectPortalTermsAndConditions, "ProspectPortalTermsAndConditionsOperations.html", "TERMS OF USE POLICY");
@@ -53,7 +53,7 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         createTerms(Target.ResidentPortalTermsAndConditions, "ResidentPortalTermsAndConditionsOperations.html", "TERMS OF USE POLICY");
         createTerms(Target.ResidentPortalPrivacyPolicy, "ResidentPortalPrivacyPolicyOperations.html", "LANDLORD'S PRIVACY POLICY");
 
-        createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html", "TODO TenantSure");
+        createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html", "Pre-Authorization Payment Agreement");
 
         return null;
     }
