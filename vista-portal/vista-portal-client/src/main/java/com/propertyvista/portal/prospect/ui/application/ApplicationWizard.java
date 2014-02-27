@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import com.pyx4j.commons.css.StyleManager;
@@ -21,6 +23,8 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,6 +48,8 @@ import com.propertyvista.portal.prospect.ui.application.steps.PaymentStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
 import com.propertyvista.portal.prospect.ui.application.steps.UnitStep;
 import com.propertyvista.portal.prospect.ui.application.steps.summary.SummaryStep;
+import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 
@@ -133,6 +139,37 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         for (ApplicationWizardStep step : steps.values()) {
             step.addValidations();
         }
+
+        // some inter-step validation:
+
+        this.addComponentValidator(new AbstractComponentValidator<OnlineApplicationDTO>() {
+            @Override
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    boolean duplicate = false;
+
+                    Collection<String> emails = new ArrayList<>();
+                    emails.add(getComponent().getValue().applicant().person().email().getValue());
+
+                    for (CoapplicantDTO coap : getComponent().getValue().coapplicants()) {
+                        emails.add(coap.email().getValue());
+                    }
+
+                    for (GuarantorDTO grnt : getComponent().getValue().guarantors()) {
+                        if (emails.contains(grnt.email().getValue())) {
+                            duplicate = true;
+                            break;
+                        }
+                    }
+
+                    if (duplicate) {
+                        new FieldValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)!?"));
+                    }
+                }
+
+                return null;
+            }
+        });
     }
 
     @Override
