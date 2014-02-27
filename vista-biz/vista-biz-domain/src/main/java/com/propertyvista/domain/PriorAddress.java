@@ -62,6 +62,7 @@ public interface PriorAddress extends AddressStructured {
     IPrimitive<OwnedRented> rented();
 
     @NotNull
+    @Caption(name = "Management Company")
     IPrimitive<String> propertyCompany();
 
     @NotNull
