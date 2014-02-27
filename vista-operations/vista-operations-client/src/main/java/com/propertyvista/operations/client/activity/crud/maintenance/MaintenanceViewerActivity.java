@@ -32,8 +32,7 @@ public class MaintenanceViewerActivity extends AdminViewerActivity<VistaSystemMa
     private final static I18n i18n = I18n.get(MaintenanceViewerActivity.class);
 
     public MaintenanceViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(MaintenanceViewerView.class), GWT
-                .<MaintenanceCrudService> create(MaintenanceCrudService.class));
+        super(place, OperationsSite.getViewFactory().getView(MaintenanceViewerView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class));
     }
 
     @Override

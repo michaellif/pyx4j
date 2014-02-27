@@ -19,4 +19,8 @@ import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public interface DirectDebitRecordViewerView extends IViewer<DirectDebitRecord> {
 
+    interface Presenter extends IViewer.Presenter {
+
+        void markRefunded(String operationNotes);
+    }
 }

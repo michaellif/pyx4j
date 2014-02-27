@@ -13,8 +13,11 @@
  */
 package com.propertyvista.operations.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
@@ -41,4 +44,8 @@ public class PmcDirectDebitRecordCrudServiceImpl extends AbstractCrudServiceImpl
         Persistence.service().retrieve(to.pmc());
     }
 
+    @Override
+    public void markRefunded(AsyncCallback<VoidSerializable> defaultAsyncCallback, String operationNotes, DirectDebitRecord entityId) {
+        // TODO Auto-generated method stub
+    }
 }

@@ -15,7 +15,10 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.directde
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -36,4 +39,13 @@ public class DirectDebitRecordViewerActivity extends AbstractViewerActivity<Dire
         return false;
     }
 
+    @Override
+    public void markRefunded(String operationNotes) {
+        ((PmcDirectDebitRecordCrudService) getService()).markRefunded(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, operationNotes, EntityFactory.createIdentityStub(DirectDebitRecord.class, getEntityId()));
+    }
 }
