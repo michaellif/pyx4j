@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
 

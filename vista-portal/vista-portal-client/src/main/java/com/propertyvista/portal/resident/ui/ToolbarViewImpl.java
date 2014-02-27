@@ -36,8 +36,8 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.portal.shared.resources.PortalImages;

@@ -32,8 +32,8 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;

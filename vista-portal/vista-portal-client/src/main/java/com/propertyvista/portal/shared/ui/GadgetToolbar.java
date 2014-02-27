@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.shared.ui;
 
-import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
