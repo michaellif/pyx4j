@@ -61,7 +61,7 @@ BEGIN
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_address_province_fk;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_customer_fk;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_details_fk;
-        -- ALTER TABLE product_item DROP CONSTRAINT product_item_code_fk;
+        ALTER TABLE product_item DROP CONSTRAINT product_item_code_fk;
         ALTER TABLE property_phone DROP CONSTRAINT property_phone_provider_fk;
         ALTER TABLE summary DROP CONSTRAINT summary_application_fk;
         ALTER TABLE tenant_charge_list$charges DROP CONSTRAINT tenant_charge_list$charges_owner_fk;
@@ -1516,7 +1516,17 @@ BEGIN
                 ||'                     WHERE   id_discriminator  = ''service'' )';   
                 
                 
-      
+		-- update of old product_v records 
+		
+		EXECUTE	'UPDATE '||v_schema_name||'.product_v AS pv '
+				||'SET	from_date = DATE_TRUNC(''second'',current_timestamp)::timestamp, '
+				||'		version_number = t.version '
+				||'FROM 	(SELECT id, '
+				||'					row_number() OVER (PARTITION BY holder ORDER BY id) AS version '
+				||'			FROM    '||v_schema_name||'.product_v '
+				||'			WHERE   from_date IS NULL ) AS t '
+				||'WHERE	pv.id = t.id ';
+		
         -- Update existing features in product table 
         
         EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
@@ -1597,8 +1607,19 @@ BEGIN
                 ||'         WHERE       code IS NOT NULL '
                 ||'         AND         id_discriminator = ''feature'' '
                 ||'         AND         id NOT IN (SELECT DISTINCT value FROM '||v_schema_name||'.product_v$features)) AS f )';
+                
+		
+		-- delete those rare rows that do not have a code still
+		
+		EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
+				||'WHERE 	holder IN 	(SELECT 	id '
+				||'						FROM 	'||v_schema_name||'.product '
+				||'						WHERE	code IS NULL) ';
+		
+		EXECUTE 'DELETE FROM '||v_schema_name||'.product '
+				||'WHERE	code IS NULL';
         
-                        
+                      
         SET CONSTRAINTS ALL IMMEDIATE;
         
         /**
@@ -1797,16 +1818,15 @@ BEGIN
                                                         DROP COLUMN prospect_interac;
         
         -- product
-        /*
+        
         ALTER TABLE product     DROP COLUMN code_type;
-                                
-        */                       
+                                                       
         -- product_item
-        /*
+        
         ALTER TABLE product_item        DROP COLUMN code,
                                         DROP COLUMN is_default;
         
-        */
+        
         -- proof_of_employment_document
         
         DROP TABLE proof_of_employment_document;
@@ -2078,8 +2098,8 @@ BEGIN
 			'TenantInsurancePolicy', 'Vendor', 'YardiInterfacePolicy', 'feature', 'service'));
         ALTER TABLE online_application ADD CONSTRAINT online_application_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
         ALTER TABLE online_application_wizard_step_status ADD CONSTRAINT online_application_wizard_step_status_step_e_ck 
-                CHECK ((step) IN ('AboutYou', 'AdditionalInfo', 'Confirmation', 'Contacts', 'Financial', 'Lease', 'Legal', 'Options', 
-                'Payment', 'People', 'Summary', 'Unit'));
+			CHECK ((step) IN ('AboutYou', 'AdditionalInfo', 'Confirmation', 'EmergencyContacts', 'Financial', 'Lease', 
+			'Legal', 'Options', 'Payment', 'People', 'Summary', 'Unit'));
         ALTER TABLE payment_posting_batch ADD CONSTRAINT payment_posting_batch_created_by_discriminator_d_ck CHECK ((created_by_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE payment_posting_batch ADD CONSTRAINT payment_posting_batch_status_e_ck CHECK ((status) IN ('Canceled', 'Created', 'Posted'));
         ALTER TABLE payment_transactions_policy ADD CONSTRAINT payment_transactions_policy_node_discriminator_d_ck 
@@ -2112,7 +2132,7 @@ BEGIN
         ALTER TABLE lease ALTER COLUMN integration_system_id DROP NOT NULL;
         ALTER TABLE lease ALTER COLUMN lease_id DROP NOT NULL;
         ALTER TABLE maintenance_request_status_record ALTER COLUMN request SET NOT NULL;
-        --ALTER TABLE product ALTER COLUMN code SET NOT NULL;
+		ALTER TABLE product ALTER COLUMN code SET NOT NULL;
         
        
         /**
