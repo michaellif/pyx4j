@@ -41,7 +41,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.services.ARCodeAdapter;
 
@@ -121,20 +120,17 @@ public class LeaseMerger {
             BillableItem leaseItem = null;
             LeaseChargesMergeStatus lookupStatus = compareBillableItems(item, lease.currentTerm().version().leaseProducts().serviceItem());
             if (LeaseChargesMergeStatus.NoChange.equals(lookupStatus)) {
-                log.debug("      existing service: {} - {}", item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue(), item.agreedPrice()
-                        .getValue());
+                log.debug("      existing service: {} - {}", item.yardiChargeCode().getValue(), item.agreedPrice().getValue());
                 continue;
             } else if (lookupStatus == null) {
                 leaseItem = findBillableItem(item, lookupList);
                 lookupStatus = (leaseItem == null ? null : compareBillableItems(item, leaseItem));
                 if (LeaseChargesMergeStatus.NoChange.equals(lookupStatus)) {
-                    log.debug("      existing feature: {} - {}", item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue(), item.agreedPrice()
-                            .getValue());
+                    log.debug("      existing feature: {} - {}", item.yardiChargeCode().getValue(), item.agreedPrice().getValue());
                     continue;
                 }
             }
-            log.debug("      new or modified item: {} - {}", item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue(), item.agreedPrice()
-                    .getValue());
+            log.debug("      new or modified item: {} - {}", item.yardiChargeCode().getValue(), item.agreedPrice().getValue());
             // update mergeStatus to the highest lookupStatus
             if (lookupStatus == null) {
                 // new product added
@@ -213,7 +209,7 @@ public class LeaseMerger {
 
     // internals
     private boolean isServiceItem(BillableItem item) {
-        ARCode arCode = new ARCodeAdapter().retrieveARCode(ActionType.Debit, item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue());
+        ARCode arCode = new ARCodeAdapter().retrieveARCode(ActionType.Debit, item.yardiChargeCode().getValue());
         return arCode != null && ARCode.Type.Residential.equals(arCode.type().getValue());
     }
 

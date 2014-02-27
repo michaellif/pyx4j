@@ -47,6 +47,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
@@ -62,7 +63,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.yardi.mergers.LeaseMerger;
 import com.propertyvista.yardi.mergers.LeaseMerger.LeaseChargesMergeStatus;
@@ -344,6 +344,9 @@ public class YardiLeaseProcessor {
             // ignore
         }
 
+        List<BillableItem> uidLookupList = new ArrayList<BillableItem>(lease.currentTerm().version().leaseProducts().featureItems());
+        uidLookupList.add(lease.currentTerm().version().leaseProducts().serviceItem());
+
         for (Transactions tr : transactions) {
             if (tr == null || tr.getCharge() == null) {
                 continue;
@@ -357,15 +360,25 @@ public class YardiLeaseProcessor {
                 continue;
             }
 
+            // update charge code item counter
             Integer chargeCodeItemNo = chargeCodeItemsCount.get(chargeCode);
-            if (chargeCodeItemNo == null) {
-                chargeCodeItemNo = 1;
-            } else {
-                chargeCodeItemNo = chargeCodeItemNo + 1;
-            }
+            chargeCodeItemNo = chargeCodeItemNo == null ? 1 : chargeCodeItemNo + 1;
             chargeCodeItemsCount.put(chargeCode, chargeCodeItemNo);
 
-            newItems.add(createBillableItem(tr.getCharge().getDetail(), chargeCodeItemNo));
+            // create new item from an empty stub or from a copy if we find item with the same uid
+            String uid = billableItemUid(tr.getCharge().getDetail().getChargeCode(), chargeCodeItemNo);
+            BillableItem newItem = null;
+            for (BillableItem leaseItem : uidLookupList) {
+                if (uid.compareTo(leaseItem.uid().getValue()) == 0) {
+                    newItem = EntityGraph.businessDuplicate(leaseItem);
+                }
+            }
+            if (newItem == null) {
+                newItem = EntityFactory.create(BillableItem.class);
+                newItem.uid().setValue(uid);
+            }
+
+            newItems.add(createBillableItem(tr.getCharge().getDetail(), newItem));
         }
 
         LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease, executionMonitor);
@@ -490,21 +503,16 @@ public class YardiLeaseProcessor {
         return chargeCode + ":" + chargeCodeItemNo;
     }
 
-    private BillableItem createBillableItem(ChargeDetail detail, int chargeCodeItemNo) {
-        BillableItem billableItem = EntityFactory.create(BillableItem.class);
+    private BillableItem createBillableItem(ChargeDetail detail, BillableItem newItem) {
 
-        billableItem.uid().setValue(billableItemUid(detail.getChargeCode(), chargeCodeItemNo));
-        billableItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
-        billableItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));
-        billableItem.effectiveDate().setValue(getLogicalDate(detail.getServiceFromDate()));
-        billableItem.expirationDate().setValue(getLogicalDate(detail.getServiceToDate()));
-        billableItem.description().setValue(getLeaseChargeDescription(detail));
+        newItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
+        newItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));
+        newItem.effectiveDate().setValue(getLogicalDate(detail.getServiceFromDate()));
+        newItem.expirationDate().setValue(getLogicalDate(detail.getServiceToDate()));
+        newItem.description().setValue(getLeaseChargeDescription(detail));
+        newItem.yardiChargeCode().setValue(detail.getChargeCode());
 
-        YardiLeaseChargeData extraData = EntityFactory.create(YardiLeaseChargeData.class);
-        extraData.chargeCode().setValue(detail.getChargeCode());
-        billableItem.extraData().set(extraData);
-
-        return billableItem;
+        return newItem;
     }
 
     private static LogicalDate getLogicalDate(Date date) {

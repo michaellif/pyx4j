@@ -27,11 +27,10 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.payment.EcheckInfo;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
-import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
+import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.interfaces.importer.pad.PadFileExportModel;
 
 @SuppressWarnings("serial")
@@ -126,10 +125,7 @@ public class ExportTenantsPreauthorizedPaymentDeferredProcess extends AbstractDe
 
             model.estimatedCharge().setValue(item.billableItem().agreedPrice().getStringView());
             model.chargeId().setValue(item.billableItem().id().getStringView());
-
-            if (item.billableItem().extraData().isInstanceOf(YardiLeaseChargeData.class)) {
-                model.chargeCode().setValue(item.billableItem().extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue());
-            }
+            model.chargeCode().setValue(item.billableItem().yardiChargeCode().getValue());
 
             entityFormatter.reportEntity(formatter, model);
         }

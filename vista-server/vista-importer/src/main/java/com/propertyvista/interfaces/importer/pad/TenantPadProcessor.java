@@ -55,7 +55,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.interfaces.importer.model.PadFileModel;
@@ -938,7 +937,7 @@ public class TenantPadProcessor {
         for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
             boolean found = false;
             for (AutopayAgreementCoveredItem padItem : pap.coveredItems()) {
-                if (!charge.chargeCode().getValue().equals(padItem.billableItem().extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue())) {
+                if (!charge.chargeCode().getValue().equals(padItem.billableItem().yardiChargeCode().getValue())) {
                     continue;
                 } else if (charge._processorInformation().chargeEftAmount().getValue().compareTo(padItem.amount().getValue()) != 0) {
                     continue;
@@ -998,7 +997,7 @@ public class TenantPadProcessor {
                 matchingBillableItem = sameIdBillableItem;
             } else {
                 for (BillableItem billableItem : billableItemsUnprocessed) {
-                    if (!charge.chargeCode().getValue().equals(billableItem.extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue())) {
+                    if (!charge.chargeCode().getValue().equals(billableItem.yardiChargeCode().getValue())) {
                         continue;
                     } else if (charge._processorInformation().chargeAmount().getValue().compareTo(billableItem.agreedPrice().getValue()) != 0) {
                         continue;
@@ -1053,7 +1052,7 @@ public class TenantPadProcessor {
             if (b.length() > 0) {
                 b.append(", ");
             }
-            b.append("'").append(billableItem.extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue()).append("' ");
+            b.append("'").append(billableItem.yardiChargeCode().getValue()).append("' ");
             b.append(billableItem.agreedPrice().getValue()).append("$ ");
         }
         return b.toString();

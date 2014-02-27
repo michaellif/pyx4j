@@ -69,5 +69,7 @@ public interface BillableItem extends IEntity {
     @ToString(index = 2)
     IPrimitive<String> description();
 
+    IPrimitive<String> yardiChargeCode();
+
     IPrimitive<Boolean> finalized();
 }

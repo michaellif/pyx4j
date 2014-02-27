@@ -40,6 +40,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.test.integration.BillableItemTester;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentAgreementTester;
@@ -166,11 +167,23 @@ public class YardiLeaseChargesTest extends YardiTestBase {
                 .activeCount(1)//
                 .lastRecordAmount(eval("1234.56 + 50"));
 
+        BillableItem parking = getLease().currentTerm().version().leaseProducts().featureItems().get(0);
+
+        // add BillableItemExtraData - ensure it stays intact after price change
+        Vehicle vehicleData = EntityFactory.create(Vehicle.class);
+        vehicleData.plateNumber().setValue("12345");
+        vehicleData.make().setValue("honda");
+        vehicleData.model().setValue("accord");
+        vehicleData.color().setValue("black");
+        parking.extraData().set(vehicleData);
+        Persistence.service().persist(parking);
+        Persistence.service().commit();
+
         // @formatter:off
-        new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
+        new BillableItemTester(parking).
         uid("rpark:1").
         description("Parking A").
-        agreedPrice("50.00");  
+        agreedPrice("50.00");
         // @formatter:on
 
         // modify amount
@@ -181,11 +194,19 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         yardiImportAll(getYardiCredential(PROPERTY_CODE));
 
         // @formatter:off
-        new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
+        parking = getLease().currentTerm().version().leaseProducts().featureItems().get(0);
+        new BillableItemTester(parking).
         uid("rpark:1").
         description("Parking A").
         agreedPrice("55.00");  
         // @formatter:on
+
+        // ensure BillableItemExtraData is intact
+        vehicleData = parking.extraData().cast();
+        assertEquals("Invalid PlateNo", "12345", vehicleData.plateNumber().getValue());
+        assertEquals("Invalid Make", "honda", vehicleData.make().getValue());
+        assertEquals("Invalid Model", "accord", vehicleData.model().getValue());
+        assertEquals("Invalid Color", "black", vehicleData.color().getValue());
 
         // Ensure PAP NOT suspended
         new PaymentAgreementTester(getLease().billingAccount())//

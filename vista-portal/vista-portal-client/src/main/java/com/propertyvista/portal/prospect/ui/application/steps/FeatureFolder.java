@@ -31,7 +31,6 @@ import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.editors.YardiDataEditor;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
@@ -39,7 +38,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
-import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PetDataEditor;
@@ -146,26 +144,22 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
                 CEntityForm editor = null;
                 BillableItemExtraData extraData = value.extraData();
 
-                if (extraData.getInstanceValueClass() == YardiLeaseChargeData.class) {
-                    editor = new YardiDataEditor();
-                } else {
-                    if (ARCode.Type.features().contains(value.item().product().holder().code().type().getValue())) {
-                        switch (value.item().product().holder().code().type().getValue()) {
-                        case Parking:
-                            editor = new VehicleDataEditor();
-                            if (extraData.getInstanceValueClass() != Vehicle.class) {
-                                extraData.set(EntityFactory.create(Vehicle.class));
-                            }
-                            break;
-                        case Pet:
-                            editor = new PetDataEditor();
-                            if (extraData.getInstanceValueClass() != Pet.class) {
-                                extraData.set(EntityFactory.create(Pet.class));
-                            }
-                            break;
-                        default:
-                            // ok - there is no extra-data for other types!.. 
+                if (ARCode.Type.features().contains(value.item().product().holder().code().type().getValue())) {
+                    switch (value.item().product().holder().code().type().getValue()) {
+                    case Parking:
+                        editor = new VehicleDataEditor();
+                        if (extraData.getInstanceValueClass() != Vehicle.class) {
+                            extraData.set(EntityFactory.create(Vehicle.class));
                         }
+                        break;
+                    case Pet:
+                        editor = new PetDataEditor();
+                        if (extraData.getInstanceValueClass() != Pet.class) {
+                            extraData.set(EntityFactory.create(Pet.class));
+                        }
+                        break;
+                    default:
+                        // ok - there is no extra-data for other types!.. 
                     }
                 }
 
