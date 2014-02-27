@@ -31,6 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -212,6 +213,7 @@ public class PeopleStep extends ApplicationWizardStep {
             public void addValidations() {
                 super.addValidations();
 
+                get(proto().birthDate()).addComponentValidator(new BirthdayDateValidator());
                 get(proto().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
                     public FieldValidationError isValid() {

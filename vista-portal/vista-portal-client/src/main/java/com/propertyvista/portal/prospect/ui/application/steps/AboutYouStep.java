@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
@@ -87,6 +88,7 @@ public class AboutYouStep extends ApplicationWizardStep {
     public void addValidations() {
         super.addValidations();
 
+        get(proto().applicant().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
         get(proto().applicant().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public FieldValidationError isValid() {
