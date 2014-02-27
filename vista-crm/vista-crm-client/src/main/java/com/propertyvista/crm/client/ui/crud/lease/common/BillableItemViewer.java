@@ -100,6 +100,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         flowPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
         flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().effectiveDate()), 9).build());
         flowPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().expirationDate()), 9).build());
+        flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiChargeCode()), 10).build());
 
         flowPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
@@ -115,6 +116,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         depositPanel.setH3(0, 0, 2, proto().deposits().getMeta().getCaption());
         depositPanel.setWidget(1, 0, 2, inject(proto().deposits(), new DepositFolder()));
 
+        get(proto().yardiChargeCode()).setVisible(false);
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
 
@@ -129,6 +131,8 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         if (VistaFeatures.instance().yardiIntegration()) {
 
             get(proto().item()).setVisible(false);
+
+            get(proto().yardiChargeCode()).setVisible(true);
 
             get(proto().effectiveDate()).setVisible(true);
             get(proto().effectiveDate()).setTooltip(null);
