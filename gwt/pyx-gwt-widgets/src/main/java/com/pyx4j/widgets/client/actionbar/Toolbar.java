@@ -57,12 +57,6 @@ public class Toolbar implements IsWidget {
         panel.clear();
     }
 
-    public BarSeparator insertSeparator(int beforeIndex) {
-        BarSeparator separator = new BarSeparator();
-        insertItem(separator, beforeIndex);
-        return separator;
-    }
-
     @Override
     public Widget asWidget() {
         return panel;
