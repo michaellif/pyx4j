@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.portal.prospect.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -530,6 +531,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 }
             }
         }
+
+        validateGuarantors(bo, to);
     }
 
     private void updateGuarantor(LeaseTermGuarantor ltg, GuarantorDTO grt) {
@@ -539,6 +542,24 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ltg.leaseParticipant().customer().person().email().setValue(grt.email().getValue());
 
         ltg.tenant().set(ProspectPortalContext.getTenant());
+    }
+
+    // Removes duplicate emails in guarantors: 
+    private void validateGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
+        LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
+
+        Collection<String> emails = new ArrayList<>();
+        for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
+            if (!tenant.leaseParticipant().customer().person().email().isNull()) {
+                emails.add(tenant.leaseParticipant().customer().person().email().getValue());
+            }
+        }
+
+        for (LeaseTermGuarantor grnt : leaseTerm.version().guarantors()) {
+            if (emails.contains(grnt.leaseParticipant().customer().person().email().getValue())) {
+                grnt.leaseParticipant().customer().person().email().setValue(null);
+            }
+        }
     }
 
     private void fillUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
