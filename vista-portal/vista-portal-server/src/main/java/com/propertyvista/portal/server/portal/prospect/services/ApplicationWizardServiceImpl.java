@@ -557,6 +557,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         for (LeaseTermGuarantor grnt : leaseTerm.version().guarantors()) {
             if (emails.contains(grnt.leaseParticipant().customer().person().email().getValue())) {
+                System.out.println("Guarantor " + grnt.leaseParticipant().customer().person().getStringView() + " has duplicate email!");
                 grnt.leaseParticipant().customer().person().email().setValue(null);
             }
         }
