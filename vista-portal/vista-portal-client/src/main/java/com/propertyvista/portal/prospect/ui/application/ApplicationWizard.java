@@ -35,7 +35,7 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.Ap
 import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
 import com.propertyvista.portal.prospect.ui.application.steps.AdditionalInfoStep;
 import com.propertyvista.portal.prospect.ui.application.steps.ConfirmationStep;
-import com.propertyvista.portal.prospect.ui.application.steps.ContactsStep;
+import com.propertyvista.portal.prospect.ui.application.steps.EmergencyContactsStep;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
@@ -69,7 +69,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new AboutYouStep());
             addStep(new AdditionalInfoStep());
             addStep(new FinancialStep());
-            addStep(new ContactsStep());
+            addStep(new EmergencyContactsStep());
             addStep(new LegalStep() {
                 @Override
                 public void onDownloadLeaseAgreementDraft() {
@@ -87,7 +87,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new AdditionalInfoStep());
             addStep(new FinancialStep());
             if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
-                addStep(new ContactsStep());
+                addStep(new EmergencyContactsStep());
             }
             addStep(new LegalStep() {
                 @Override

@@ -26,7 +26,7 @@ import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 import com.propertyvista.portal.prospect.ui.application.steps.AboutYouStep;
 import com.propertyvista.portal.prospect.ui.application.steps.AdditionalInfoStep;
-import com.propertyvista.portal.prospect.ui.application.steps.ContactsStep;
+import com.propertyvista.portal.prospect.ui.application.steps.EmergencyContactsStep;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
 import com.propertyvista.portal.prospect.ui.application.steps.LegalStep;
@@ -74,8 +74,8 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
                 panel = new AdditionalInfoSectionPanel(index, this, (AdditionalInfoStep) step);
             } else if (step instanceof FinancialStep) {
                 panel = new FinancialSectionPanel(index, this, (FinancialStep) step);
-            } else if (step instanceof ContactsStep) {
-                panel = new ContactsSectionPanel(index, this, (ContactsStep) step);
+            } else if (step instanceof EmergencyContactsStep) {
+                panel = new ContactsSectionPanel(index, this, (EmergencyContactsStep) step);
             } else if (step instanceof LegalStep) {
                 panel = new LegalSectionPanel(index, this, (LegalStep) step);
             }

@@ -14,13 +14,13 @@
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.portal.prospect.ui.application.steps.ContactsStep;
+import com.propertyvista.portal.prospect.ui.application.steps.EmergencyContactsStep;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
 
 public class ContactsSectionPanel extends AbstractSectionPanel {
 
-    public ContactsSectionPanel(int index, SummaryForm form, ContactsStep step) {
-        super(index, OnlineApplicationWizardStepMeta.Contacts.toString(), form, step);
+    public ContactsSectionPanel(int index, SummaryForm form, EmergencyContactsStep step) {
+        super(index, OnlineApplicationWizardStepMeta.EmergencyContacts.toString(), form, step);
 
         EmergencyContactFolder emergencyContactFolder = new EmergencyContactFolder();
         emergencyContactFolder.setViewable(true);

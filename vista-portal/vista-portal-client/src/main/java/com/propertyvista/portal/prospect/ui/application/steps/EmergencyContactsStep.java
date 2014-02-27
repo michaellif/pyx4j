@@ -19,10 +19,10 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
 
-public class ContactsStep extends ApplicationWizardStep {
+public class EmergencyContactsStep extends ApplicationWizardStep {
 
-    public ContactsStep() {
-        super(OnlineApplicationWizardStepMeta.Contacts);
+    public EmergencyContactsStep() {
+        super(OnlineApplicationWizardStepMeta.EmergencyContacts);
     }
 
     @Override
