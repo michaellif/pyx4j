@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.client.ui.visor.VisorHolder;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.Toolbar;
 
 public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 

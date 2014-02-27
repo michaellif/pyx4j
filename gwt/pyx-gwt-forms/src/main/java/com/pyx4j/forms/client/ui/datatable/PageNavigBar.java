@@ -39,7 +39,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TargetLabel;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.Toolbar;
 
 public class PageNavigBar extends Toolbar {
 

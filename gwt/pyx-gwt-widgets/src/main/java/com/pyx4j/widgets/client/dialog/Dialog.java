@@ -67,7 +67,7 @@ import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.Toolbar;
 
 /**
  * Shared implementation for Modal Dialogs

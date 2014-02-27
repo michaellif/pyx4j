@@ -23,7 +23,7 @@ package com.pyx4j.forms.client.ui.datatable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.Toolbar;
 
 public class DataTableActionsBar extends SimplePanel implements DataTableModelListener {
 

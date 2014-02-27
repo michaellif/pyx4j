@@ -18,15 +18,13 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.widgets.client.actionbar;
+package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 /**
  * @author michaellif
