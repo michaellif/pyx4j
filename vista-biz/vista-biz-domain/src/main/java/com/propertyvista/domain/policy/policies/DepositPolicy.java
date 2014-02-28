@@ -16,6 +16,8 @@ package com.propertyvista.domain.policy.policies;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
@@ -35,6 +37,7 @@ public interface DepositPolicy extends Policy {
     IList<DepositPolicyItem> policyItems();
 
     @NotNull
+    @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> annualInterestRate();
 
     @NotNull

@@ -21,6 +21,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ProductDepositEditor;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
@@ -32,12 +33,13 @@ public class ServiceForm extends CrmEntityForm<Service> {
     public ServiceForm(IForm<Service> view) {
         super(Service.class, view);
 
-        selectTab(addTab(createGeneralTab(i18n.tr("General"))));
-        addTab(createEligibilityTab(i18n.tr("Eligibility")));
+        selectTab(addTab(createGeneralTab()));
+        addTab(createItemsTab());
+        addTab(createEligibilityTab());
     }
 
-    public TwoColumnFlexFormPanel createGeneralTab(String title) {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
+    public TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -52,14 +54,41 @@ public class ServiceForm extends CrmEntityForm<Service> {
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().availableOnline()), 4).build());
 
-        content.setH1(++row, 0, 2, i18n.tr("Items"));
-        content.setWidget(++row, 0, 2, inject(proto().version().items(), new ServiceItemFolder(this)));
+        content.setH1(++row, 0, 2, i18n.tr("Deposits"));
+        content.setH3(++row, 0, 2, proto().version().depositLMR().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().version().depositLMR(), new ProductDepositEditor()));
+
+        content.setH3(++row, 0, 2, proto().version().depositMoveIn().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
+
+        content.setH3(++row, 0, 2, proto().version().depositSecurity().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
+
+        // tweaks:
+        ProductDepositEditor dpe;
+
+        dpe = (ProductDepositEditor) get(proto().version().depositLMR());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
+
+        dpe = (ProductDepositEditor) get(proto().version().depositMoveIn());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
+
+        dpe = (ProductDepositEditor) get(proto().version().depositSecurity());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
 
         return content;
     }
 
-    public TwoColumnFlexFormPanel createEligibilityTab(String title) {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
+    public TwoColumnFlexFormPanel createItemsTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Items"));
+
+        content.setWidget(0, 0, 2, inject(proto().version().items(), new ServiceItemFolder(this)));
+
+        return content;
+    }
+
+    public TwoColumnFlexFormPanel createEligibilityTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Eligibility"));
 
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("Features"));

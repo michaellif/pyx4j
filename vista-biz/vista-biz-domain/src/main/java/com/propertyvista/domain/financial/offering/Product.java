@@ -106,10 +106,10 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
         ProductDeposit depositLMR();
 
         @EmbeddedEntity
-        ProductDeposit depositSecurity();
+        ProductDeposit depositMoveIn();
 
         @EmbeddedEntity
-        ProductDeposit depositMoveIn();
+        ProductDeposit depositSecurity();
 
         @NotNull
         IPrimitive<Boolean> availableOnline();

@@ -71,12 +71,12 @@ public interface ProductItem extends IEntity {
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> depositSecurity();
+    IPrimitive<BigDecimal> depositMoveIn();
 
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> depositMoveIn();
+    IPrimitive<BigDecimal> depositSecurity();
 
     @Length(250)
     IPrimitive<String> description();

@@ -22,6 +22,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ProductDepositEditor;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 
@@ -32,7 +33,12 @@ public class FeatureForm extends CrmEntityForm<Feature> {
     public FeatureForm(IForm<Feature> view) {
         super(Feature.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        selectTab(addTab(createGeneralTab()));
+        addTab(createItemsTab());
+    }
+
+    public TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -49,11 +55,37 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
-        content.setH1(++row, 0, 2, i18n.tr("Items"));
-        content.setWidget(++row, 0, 2, inject(proto().version().items(), new FeatureItemFolder(this)));
+        content.setH1(++row, 0, 2, i18n.tr("Deposits"));
+        content.setH3(++row, 0, 2, proto().version().depositLMR().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().version().depositLMR(), new ProductDepositEditor()));
 
-        selectTab(addTab(content));
-        setTabBarVisible(false);
+        content.setH3(++row, 0, 2, proto().version().depositMoveIn().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
+
+        content.setH3(++row, 0, 2, proto().version().depositSecurity().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
+
+        // tweaks:
+        ProductDepositEditor dpe;
+
+        dpe = (ProductDepositEditor) get(proto().version().depositLMR());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
+
+        dpe = (ProductDepositEditor) get(proto().version().depositMoveIn());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
+
+        dpe = (ProductDepositEditor) get(proto().version().depositSecurity());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
+
+        return content;
+    }
+
+    public TwoColumnFlexFormPanel createItemsTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Items"));
+
+        content.setWidget(0, 0, 2, inject(proto().version().items(), new FeatureItemFolder(this)));
+
+        return content;
     }
 
     @Override

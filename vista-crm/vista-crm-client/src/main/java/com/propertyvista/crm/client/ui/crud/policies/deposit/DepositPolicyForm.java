@@ -13,45 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
-
-import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
-import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyDTO> {
 
@@ -67,144 +38,12 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
     }
 
     private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, inject(proto().policyItems(), new DepositPolicyItemEditorFolder()));
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().annualInterestRate())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityDepositRefundWindow())).build());
 
         return panel;
-    }
-
-    class DepositPolicyItemEditorFolder extends VistaBoxFolder<DepositPolicyItem> {
-
-        public DepositPolicyItemEditorFolder() {
-            super(DepositPolicyItem.class);
-        }
-
-        @Override
-        public CComponent<?> create(IObject<?> member) {
-            if (member instanceof DepositPolicyItem) {
-                return new DepositPolicyItemEditor();
-            } else {
-                return super.create(member);
-            }
-        }
-
-        class DepositPolicyItemEditor extends CEntityForm<DepositPolicyItem> {
-
-            private final SimplePanel valueHolder = new SimplePanel();
-
-            public DepositPolicyItemEditor() {
-                super(DepositPolicyItem.class);
-            }
-
-            @Override
-            public IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-
-                CEntityComboBox<ARCode> chargeCodeSelector;
-
-                int row = -1;
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode(), new CEntityLabel<ARCode>())).build());
-                content.setWidget(++row, 0,
-                        new FormDecoratorBuilder(inject(proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class))).build());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
-
-                row = -1;
-                content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().valueType())).build());
-                content.setWidget(++row, 1, valueHolder);
-
-                // tweaks:
-                chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));
-
-                get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<ValueType> event) {
-                        bindValueEditor(event.getValue(), false);
-                    }
-                });
-
-                return content;
-            }
-
-            @Override
-            protected void onValueSet(boolean populate) {
-                super.onValueSet(populate);
-
-                bindValueEditor(getValue().valueType().getValue(), true);
-            }
-
-            private void bindValueEditor(ValueType valueType, boolean repopulatevalue) {
-                if (valueType == null)
-                    return; // New item
-
-                CComponent<?> comp = null;
-                switch (valueType) {
-                case Monetary:
-                    comp = new CMoneyField();
-                    break;
-                case Percentage:
-                    comp = new CPercentageField();
-                    break;
-                }
-
-                unbind(proto().value());
-
-                if (comp != null) {
-                    valueHolder.setWidget(new FormDecoratorBuilder(inject(proto().value(), comp), 6).build());
-
-                    if (repopulatevalue) {
-                        get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
-                    }
-                }
-            }
-        }
-
-        @Override
-        protected void addItem() {
-            final List<ARCode> alreadySelectedProducts = new ArrayList<ARCode>();
-            for (DepositPolicyItem di : getValue()) {
-                if (!di.productCode().isNull()) {
-                    alreadySelectedProducts.add(di.productCode());
-                }
-            }
-
-            new ProductSelectorDialog(DepositPolicyForm.this.getParentView(), alreadySelectedProducts).show();
-        }
-
-        private class ProductSelectorDialog extends EntitySelectorTableVisorController<ARCode> {
-
-            public ProductSelectorDialog(IPane parentView, List<ARCode> alreadySelectedProducts) {
-                super(parentView, ARCode.class, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
-            }
-
-            @Override
-            public void onClickOk() {
-                for (ARCode code : getSelectedItems()) {
-                    DepositPolicyItem newItem = EntityFactory.create(DepositPolicyItem.class);
-                    newItem.depositType().setValue(DepositType.SecurityDeposit);
-                    newItem.productCode().set(code);
-                    DepositPolicyItemEditorFolder.this.addItem(newItem);
-                }
-            }
-
-            @Override
-            protected List<ColumnDescriptor> defineColumnDescriptors() {
-                return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().name()).build()
-                );//@formatter:on
-            }
-
-            @Override
-            public List<Sort> getDefaultSorting() {
-                return Arrays.asList(new Sort(proto().name(), false));
-            }
-
-            @Override
-            protected AbstractListService<ARCode> getSelectService() {
-                return GWT.<AbstractListService<ARCode>> create(SelectProductCodeListService.class);
-            }
-        }
     }
 }

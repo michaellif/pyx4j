@@ -50,10 +50,15 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().depositLMR(), "5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().depositMoveIn(), "5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().depositSecurity(), "5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+
         return columns;
     }
 
