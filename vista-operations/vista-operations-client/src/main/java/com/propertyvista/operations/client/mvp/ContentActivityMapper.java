@@ -34,16 +34,16 @@ import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecor
 import com.propertyvista.operations.client.activity.crud.encryptedstorage.EncryptedStorageActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordViewerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileListerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileViewerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordListerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordViewerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.PadBatchListerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.PadBatchViewerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileListerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileViewerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordListerActivity;
-import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.FundsReconciliationFileListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.FundsReconciliationFileViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.FundsReconciliationDebitRecordListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.FundsReconciliationDebitRecordViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.FundsTransferBatchListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.FundsTransferBatchViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.FundsTransferFileListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.FundsTransferFileViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.FundsTransferDebitRecordListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.FundsTransferDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsDefaultActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
@@ -213,10 +213,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsTransferFile) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PadFileListerActivity(crudPlace);
+                            activity = new FundsTransferFileListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new PadFileViewerActivity(crudPlace);
+                            activity = new FundsTransferFileViewerActivity(crudPlace);
                             break;
                         default:
                             break;
@@ -225,10 +225,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsTransferRecord) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PadDebitRecordListerActivity(crudPlace);
+                            activity = new FundsTransferDebitRecordListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new PadDebitRecordViewerActivity(crudPlace);
+                            activity = new FundsTransferDebitRecordViewerActivity(crudPlace);
                             break;
                         default:
                             break;
@@ -237,10 +237,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsTransferBatch) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PadBatchListerActivity(crudPlace);
+                            activity = new FundsTransferBatchListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new PadBatchViewerActivity(crudPlace);
+                            activity = new FundsTransferBatchViewerActivity(crudPlace);
                             break;
                         default:
                             break;
@@ -249,10 +249,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsReconciliationFile) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PadReconciliationFileListerActivity(crudPlace);
+                            activity = new FundsReconciliationFileListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new PadReconciliationFileViewerActivity(crudPlace);
+                            activity = new FundsReconciliationFileViewerActivity(crudPlace);
                             break;
                         default:
                             break;
@@ -261,10 +261,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsReconciliationRecord) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PadReconciliationDebitRecordListerActivity(crudPlace);
+                            activity = new FundsReconciliationDebitRecordListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new PadReconciliationDebitRecordViewerActivity(crudPlace);
+                            activity = new FundsReconciliationDebitRecordViewerActivity(crudPlace);
                             break;
                         default:
                             break;
