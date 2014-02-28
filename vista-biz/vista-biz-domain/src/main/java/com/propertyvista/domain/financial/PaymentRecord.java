@@ -186,6 +186,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     IPrimitive<String> yardiDocumentNumber();
 
     @Editor(type = EditorType.label)
+    @Format("MM/dd/yyyy HH:mm:ss")
     IPrimitive<Date> createdDate();
 
     IPrimitive<LogicalDate> receivedDate();
@@ -273,6 +274,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     @Timestamp(Timestamp.Update.Updated)
     @Editor(type = EditorType.label)
+    @Format("MM/dd/yyyy HH:mm:ss")
     IPrimitive<Date> updated();
 
     @ReadOnly
