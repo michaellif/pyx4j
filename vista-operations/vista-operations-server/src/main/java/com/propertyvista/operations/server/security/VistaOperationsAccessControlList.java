@@ -66,7 +66,7 @@ import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
 import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
-import com.propertyvista.operations.rpc.services.PadReconciliationSummaryListService;
+import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryListService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.operations.rpc.services.PmcDataReportService;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
@@ -159,7 +159,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationDebitRecordCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsReconciliationRecordRecord.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationSummaryListService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(FundsReconciliationSummaryListService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsReconciliationSummary.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadFileCrudService.class));

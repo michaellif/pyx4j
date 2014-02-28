@@ -106,6 +106,10 @@ public class OperationsSiteMap implements SiteMap {
         public static class FundsReconciliationFile extends CrudAppPlace {
         }
 
+        @PlaceProperties(navigLabel = "Funds Reconciliation Summaries")
+        public static class FundsReconciliationSummary extends CrudAppPlace {
+        }
+
         @PlaceProperties(navigLabel = "Funds Reconciliation Records")
         public static class FundsReconciliationRecord extends CrudAppPlace {
         }

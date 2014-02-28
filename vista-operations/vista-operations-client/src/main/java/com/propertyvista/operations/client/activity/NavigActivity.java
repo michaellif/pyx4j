@@ -78,9 +78,10 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder("Funds Transfer");
         folder.addNavigItem(new OperationsSiteMap.FundsTransfer.DirectDebitRecord());
         folder.addNavigItem(new OperationsSiteMap.FundsTransfer.FundsTransferFile());
-        folder.addNavigItem(new OperationsSiteMap.FundsTransfer.FundsTransferRecord());
         folder.addNavigItem(new OperationsSiteMap.FundsTransfer.FundsTransferBatch());
+        folder.addNavigItem(new OperationsSiteMap.FundsTransfer.FundsTransferRecord());
         folder.addNavigItem(new OperationsSiteMap.FundsTransfer.FundsReconciliationFile());
+        folder.addNavigItem(new OperationsSiteMap.FundsTransfer.FundsReconciliationSummary());
         folder.addNavigItem(new OperationsSiteMap.FundsTransfer.FundsReconciliationRecord());
         list.add(folder);
 

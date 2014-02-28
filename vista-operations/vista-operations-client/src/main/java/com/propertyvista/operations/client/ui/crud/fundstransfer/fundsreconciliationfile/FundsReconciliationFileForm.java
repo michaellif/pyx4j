@@ -18,7 +18,6 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -26,8 +25,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
-import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 
 public class FundsReconciliationFileForm extends OperationsEntityForm<FundsReconciliationFileDTO> {
 
@@ -55,9 +54,7 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
             }
         };
 
-        CEntityCollectionCrudHyperlink<IList<FundsReconciliationRecordRecord>> link = new CEntityCollectionCrudHyperlink<IList<FundsReconciliationRecordRecord>>(
-                appPlaceBuilder);
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecords(), link)).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordsCount())).build());
 
         panel.setBR(++row, 0, 1);
 

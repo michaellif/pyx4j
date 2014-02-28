@@ -13,7 +13,6 @@
  */
 package com.propertyvista.operations.server.services;
 
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -37,10 +36,10 @@ public class PadReconciliationFileCrudServiceImpl extends AbstractCrudServiceDto
 
     @Override
     protected void enhanceRetrieved(FundsReconciliationFile bo, FundsReconciliationFileDTO to, RetrieveTarget retrieveTarget) {
-        { //TODO count only,
+        {
             EntityQueryCriteria<FundsReconciliationRecordRecord> criteria = EntityQueryCriteria.create(FundsReconciliationRecordRecord.class);
             criteria.eq(criteria.proto().reconciliationSummary().reconciliationFile(), bo);
-            to.reconciliationRecords().addAll(Persistence.service().query(criteria, AttachLevel.IdOnly));
+            to.reconciliationRecordsCount().setValue(Persistence.service().count(criteria));
         }
     }
 }

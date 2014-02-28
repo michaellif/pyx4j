@@ -11,15 +11,12 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.operations.rpc.dto;
+package com.propertyvista.operations.rpc.services;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
-@Transient
-public interface FundsReconciliationFileDTO extends FundsReconciliationFile {
+public interface FundsReconciliationSummaryListService extends AbstractListService<FundsReconciliationSummaryDTO> {
 
-    IPrimitive<Integer> reconciliationRecordsCount();
 }

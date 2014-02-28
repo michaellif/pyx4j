@@ -17,12 +17,12 @@ import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
-import com.propertyvista.operations.rpc.services.PadReconciliationSummaryListService;
+import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryListService;
 
-public class PadReconciliationSummaryListServiceImpl extends AbstractListServiceDtoImpl<FundsReconciliationSummary, FundsReconciliationSummaryDTO> implements
-        PadReconciliationSummaryListService {
+public class FundsReconciliationSummaryListServiceImpl extends AbstractListServiceDtoImpl<FundsReconciliationSummary, FundsReconciliationSummaryDTO> implements
+        FundsReconciliationSummaryListService {
 
-    public PadReconciliationSummaryListServiceImpl() {
+    public FundsReconciliationSummaryListServiceImpl() {
         super(FundsReconciliationSummary.class, FundsReconciliationSummaryDTO.class);
     }
 

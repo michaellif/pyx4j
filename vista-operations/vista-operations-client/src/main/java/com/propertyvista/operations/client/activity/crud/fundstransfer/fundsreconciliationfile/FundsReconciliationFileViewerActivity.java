@@ -26,7 +26,7 @@ import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcilia
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
-import com.propertyvista.operations.rpc.services.PadReconciliationSummaryListService;
+import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryListService;
 
 public class FundsReconciliationFileViewerActivity extends AbstractViewerActivity<FundsReconciliationFileDTO> implements
         FundsReconciliationFileViewerView.Presenter {
@@ -38,7 +38,7 @@ public class FundsReconciliationFileViewerActivity extends AbstractViewerActivit
                 .<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
 
         summaryLister = new ListerController<FundsReconciliationSummaryDTO>(((FundsReconciliationFileViewerView) getView()).getSummaryListerView(),
-                GWT.<PadReconciliationSummaryListService> create(PadReconciliationSummaryListService.class), FundsReconciliationSummaryDTO.class);
+                GWT.<FundsReconciliationSummaryListService> create(FundsReconciliationSummaryListService.class), FundsReconciliationSummaryDTO.class);
 
     }
 

@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 19, 2013
- * @author VladL
+ * Created on 2014-02-28
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.rpc.services;
+package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationsummary;
 
-import com.pyx4j.entity.rpc.AbstractListService;
-
+import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
-public interface PadReconciliationSummaryListService extends AbstractListService<FundsReconciliationSummaryDTO> {
+public class FundsReconciliationSummaryListerViewImpl extends OperationsListerViewImplBase<FundsReconciliationSummaryDTO> implements
+        FundsReconciliationSummaryListerView {
 
+    public FundsReconciliationSummaryListerViewImpl() {
+        setLister(new FundsReconciliationSummaryLister());
+    }
 }
