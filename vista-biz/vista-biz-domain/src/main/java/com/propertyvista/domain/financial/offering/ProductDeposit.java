@@ -47,6 +47,8 @@ public interface ProductDeposit extends IEntity {
         }
     }
 
+    IPrimitive<Boolean> enabled();
+
     /** passed to Deposit to use for corresponding invoice line items */
     @NotNull
     ARCode chargeCode();
