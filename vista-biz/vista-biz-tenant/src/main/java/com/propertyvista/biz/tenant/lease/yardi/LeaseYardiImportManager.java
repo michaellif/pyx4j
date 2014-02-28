@@ -27,7 +27,6 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -162,7 +161,7 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
     }
 
     @Override
-    public BillableItem createBillableItem(Lease lease, ProductItem productItemId, PolicyNode node) {
+    public BillableItem createBillableItem(Lease lease, ProductItem productItemId) {
         // Do nothing in Yardi mode!
         return null;
     }

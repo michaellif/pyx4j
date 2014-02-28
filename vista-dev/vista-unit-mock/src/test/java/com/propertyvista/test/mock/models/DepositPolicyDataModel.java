@@ -18,13 +18,8 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.test.mock.MockDataModel;
-import com.propertyvista.test.mock.models.ARCodeDataModel.Code;
 
 public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
 
@@ -35,51 +30,7 @@ public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
     protected void generate() {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
-        ARCode chargeCode = getDataModel(ARCodeDataModel.class).getARCode(Code.deposit);
-        for (ARCode type : getDataModel(ARCodeDataModel.class).getAllItems()) {
-            DepositPolicyItem item = null;
-            String product = null;
-            ARCode serviceItemType = type;
-            product = serviceItemType.type().getStringView();
-
-            switch (serviceItemType.type().getValue()) {
-            case Residential:
-                item = EntityFactory.create(DepositPolicyItem.class);
-                item.depositType().setValue(DepositType.LastMonthDeposit);
-                item.valueType().setValue(ValueType.Percentage);
-                item.value().setValue(new BigDecimal("1.0"));
-                break;
-            case Parking:
-                item = EntityFactory.create(DepositPolicyItem.class);
-                item.depositType().setValue(DepositType.SecurityDeposit);
-                item.valueType().setValue(ValueType.Percentage);
-                item.value().setValue(new BigDecimal("1.0"));
-                break;
-            case Locker:
-                item = EntityFactory.create(DepositPolicyItem.class);
-                item.depositType().setValue(DepositType.SecurityDeposit);
-                item.valueType().setValue(ValueType.Percentage);
-                item.value().setValue(new BigDecimal("1.0"));
-                break;
-            case Pet:
-                item = EntityFactory.create(DepositPolicyItem.class);
-                item.depositType().setValue(DepositType.SecurityDeposit);
-                item.valueType().setValue(ValueType.Monetary);
-                item.value().setValue(new BigDecimal("200.00"));
-                break;
-
-            default:
-                break;
-            }
-
-            if (item != null) {
-                item.productCode().set(type);
-                item.chargeCode().set(chargeCode);
-                item.annualInterestRate().setValue(new BigDecimal("0.12"));
-                item.description().setValue(item.depositType().getStringView() + ", " + product);
-                policy.policyItems().add(item);
-            }
-        }
+        policy.annualInterestRate().setValue(new BigDecimal("0.12"));
 
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 

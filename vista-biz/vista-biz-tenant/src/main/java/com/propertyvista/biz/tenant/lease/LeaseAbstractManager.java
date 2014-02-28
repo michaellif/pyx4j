@@ -65,7 +65,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.note.NotesAndAttachments;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -668,7 +667,7 @@ public abstract class LeaseAbstractManager {
 
     // Utils : --------------------------------------------------------------------------------------------------------
 
-    public BillableItem createBillableItem(Lease lease, ProductItem productItemId, PolicyNode node) {
+    public BillableItem createBillableItem(Lease lease, ProductItem productItemId) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
         ProductItem productItem = Persistence.service().retrieve(ProductItem.class, productItemId.getPrimaryKey());
@@ -682,7 +681,7 @@ public abstract class LeaseAbstractManager {
         // avoid policed deposits for existing Leases:
         if (lease.status().getValue() != Lease.Status.ExistingLease) {
             // set policed deposits:
-            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem, node);
+            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem);
             if (deposits != null) {
                 newItem.deposits().addAll(deposits);
             }
@@ -790,10 +789,8 @@ public abstract class LeaseAbstractManager {
             throw new IllegalArgumentException(i18n.tr("Invalid Unit/Service combination"));
         }
 
-        PolicyNode node = lease.unit().building();
-
         // set selected service:
-        BillableItem billableItem = createBillableItem(lease, serviceItem, node);
+        BillableItem billableItem = createBillableItem(lease, serviceItem);
         leaseTerm.version().leaseProducts().serviceItem().set(billableItem);
 
         if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
@@ -830,7 +827,7 @@ public abstract class LeaseAbstractManager {
                     if (feature.version().mandatory().isBooleanTrue()) {
                         Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                         if (!feature.version().items().isEmpty()) {
-                            leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, feature.version().items().get(0), node));
+                            leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, feature.version().items().get(0)));
                         }
                     }
                 }

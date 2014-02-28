@@ -303,7 +303,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
                 for (ProductItem item : feature.version().items()) {
 
                     LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                    BillableItem billableItem = leaseFacade.createBillableItem(lease, item, lease.unit().building());
+                    BillableItem billableItem = leaseFacade.createBillableItem(lease, item);
 
                     billableItem.effectiveDate().setValue(effectiveDate);
                     billableItem.expirationDate().setValue(expirationDate);

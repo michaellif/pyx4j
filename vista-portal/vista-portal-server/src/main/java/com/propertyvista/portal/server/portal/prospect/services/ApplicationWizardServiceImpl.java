@@ -1211,7 +1211,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         ProductItem productItem = Persistence.service().retrieve(criteria);
         if (productItem != null) {
-            options.selectedService().set(createBillableItem(productItem, options.unit()));
+            options.selectedService().set(createBillableItem(productItem));
             fillCatalogFeatures(options, productItem.product().<Service.ServiceV> cast(), true);
         }
     }
@@ -1230,31 +1230,31 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                     case Utility:
                         options.availableUtilities().add(item);
                         if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedUtilities().add(createBillableItem(item, options.unit()));
+                            options.selectedUtilities().add(createBillableItem(item));
                         }
                         break;
                     case Pet:
                         options.availablePets().add(item);
                         if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedPets().add(createBillableItem(item, options.unit()));
+                            options.selectedPets().add(createBillableItem(item));
                         }
                         break;
                     case Parking:
                         options.availableParking().add(item);
                         if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedParking().add(createBillableItem(item, options.unit()));
+                            options.selectedParking().add(createBillableItem(item));
                         }
                         break;
                     case Locker:
                         options.availableStorage().add(item);
                         if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedStorage().add(createBillableItem(item, options.unit()));
+                            options.selectedStorage().add(createBillableItem(item));
                         }
                         break;
                     default:
                         options.availableOther().add(item);
                         if (fillMandatory && feature.version().mandatory().isBooleanTrue()) {
-                            options.selectedOther().add(createBillableItem(item, options.unit()));
+                            options.selectedOther().add(createBillableItem(item));
                         }
                     }
                 }
@@ -1278,8 +1278,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
     }
 
-    private BillableItem createBillableItem(ProductItem productItem, AptUnit unit) {
-        return ServerSideFactory.create(LeaseFacade.class).createBillableItem(ProspectPortalContext.getLease(), productItem, unit);
+    private BillableItem createBillableItem(ProductItem productItem) {
+        return ServerSideFactory.create(LeaseFacade.class).createBillableItem(ProspectPortalContext.getLease(), productItem);
     }
 
 }

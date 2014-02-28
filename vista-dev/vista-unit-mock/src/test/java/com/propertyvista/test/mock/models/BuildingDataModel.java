@@ -28,6 +28,8 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ProductDeposit;
+import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.pmc.IntegrationSystem;
@@ -36,6 +38,7 @@ import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class BuildingDataModel extends MockDataModel<Building> {
@@ -146,6 +149,13 @@ public class BuildingDataModel extends MockDataModel<Building> {
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
 
+        // add deposits
+        standardResidentialService
+                .version()
+                .depositLMR()
+                .set(createDeposit(DepositType.LastMonthDeposit, ValueType.Percentage, new BigDecimal("1.0"), standardResidentialService.version().name()
+                        .getValue()));
+
         Persistence.service().persist(standardResidentialService);
         return standardResidentialService;
     }
@@ -172,18 +182,24 @@ public class BuildingDataModel extends MockDataModel<Building> {
         switch (arCode.type().getValue()) {
         case Parking:
             feature.version().recurring().setValue(true);
+            feature.version().depositSecurity()
+                    .set(createDeposit(DepositType.SecurityDeposit, ValueType.Percentage, new BigDecimal("1.00"), feature.version().name().getValue()));
             for (Parking parking : building.parkings()) {
                 generateFeatureItem(feature, parking, arCode, "80.00");
             }
             break;
         case Locker:
             feature.version().recurring().setValue(true);
+            feature.version().depositSecurity()
+                    .set(createDeposit(DepositType.SecurityDeposit, ValueType.Percentage, new BigDecimal("1.00"), feature.version().name().getValue()));
             for (LockerArea lockerArea : building.lockerAreas()) {
                 generateFeatureItem(feature, lockerArea, arCode, "60.00");
             }
             break;
         case Pet:
             feature.version().recurring().setValue(true);
+            feature.version().depositSecurity()
+                    .set(createDeposit(DepositType.SecurityDeposit, ValueType.Monetary, new BigDecimal("200.00"), feature.version().name().getValue()));
             generateFeatureItem(feature, arCode, "20");
             break;
         case AddOn:
@@ -208,7 +224,18 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
     }
 
-    private void generateFeatureItem(Feature feature, BuildingElement element, ARCode code, String price) {
+    private ProductDeposit createDeposit(DepositType depositType, ValueType valueType, BigDecimal value, String desc) {
+        ProductDeposit deposit = EntityFactory.create(ProductDeposit.class);
+        deposit.enabled().setValue(true);
+        deposit.depositType().setValue(depositType);
+        deposit.valueType().setValue(valueType);
+        deposit.value().setValue(value);
+        String description = deposit.depositType().getStringView() + ", " + desc;
+        deposit.description().setValue(description.length() > 40 ? description.substring(0, 40) : description);
+        return deposit;
+    }
+
+    private ProductItem generateFeatureItem(Feature feature, BuildingElement element, ARCode code, String price) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.name().setValue(code.name().getValue());
         productItem.price().setValue(new BigDecimal(price));
@@ -217,10 +244,11 @@ public class BuildingDataModel extends MockDataModel<Building> {
             productItem.element().set(element);
         }
         feature.version().items().add(productItem);
+        return productItem;
     }
 
-    private void generateFeatureItem(Feature feature, ARCode code, String price) {
-        generateFeatureItem(feature, null, code, price);
+    private ProductItem generateFeatureItem(Feature feature, ARCode code, String price) {
+        return generateFeatureItem(feature, null, code, price);
     }
 
     private void generateConcessions(Building building) {

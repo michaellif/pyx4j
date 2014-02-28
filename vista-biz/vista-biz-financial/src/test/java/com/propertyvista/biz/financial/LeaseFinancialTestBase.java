@@ -363,7 +363,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
                 for (ProductItem item : feature.version().items()) {
 
                     LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                    BillableItem billableItem = leaseFacade.createBillableItem(lease, item, lease.unit().building());
+                    BillableItem billableItem = leaseFacade.createBillableItem(lease, item);
 
                     billableItem.effectiveDate().setValue(effectiveDate);
                     billableItem.expirationDate().setValue(expirationDate);
@@ -419,7 +419,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         BillableItem billableItem = findBillableItem(billableItemId, lease);
         assert (billableItem != null);
 
-        Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem, lease.unit().building());
+        Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem);
         DepositLifecycle depositLifecycle = ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount());
 
         billableItem.deposits().add(deposit);

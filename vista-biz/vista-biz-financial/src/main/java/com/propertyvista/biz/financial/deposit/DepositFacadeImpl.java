@@ -38,13 +38,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
-import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.financial.offering.ProductDeposit;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
@@ -58,59 +57,20 @@ import com.propertyvista.domain.util.DomainUtil;
 public class DepositFacadeImpl implements DepositFacade {
     private static final I18n i18n = I18n.get(DepositFacadeImpl.class);
 
-    class DepositPolicyKey {
-        private final DepositType depositType;
-
-        private final String productType;
-
-        public DepositPolicyKey(DepositType depositType, ARCode productType) {
-            this.depositType = depositType;
-            this.productType = productType.name().getValue();
-        }
-
-        @Override
-        public boolean equals(Object other) {
-            if (other instanceof DepositPolicyKey) {
-                DepositPolicyKey otherKey = (DepositPolicyKey) other;
-                if (depositType != null && productType != null) {
-                    return depositType.equals(otherKey.depositType) && productType.equals(otherKey.productType);
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 1;
-            if (depositType != null && productType != null) {
-                hash = depositType.hashCode() ^ productType.hashCode();
-            }
-            return hash;
-        }
+    @Override
+    public Deposit createDeposit(DepositType depositType, BillableItem billableItem) {
+        ProductDeposit productDeposit = getProductDepositByType(depositType, billableItem.item());
+        return (productDeposit == null ? null : makeDeposit(productDeposit, billableItem));
     }
 
     @Override
-    public Deposit createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node) {
-        DepositPolicyItem policyItem = null;
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
-        for (DepositPolicyItem pi : depositPolicy.policyItems()) {
-            if (pi.depositType().getValue().equals(depositType) && pi.productCode().equals(billableItem.item().product().holder().code())) {
-                policyItem = pi;
-                break;
-            }
-        }
-        return (policyItem == null ? null : makeDeposit(policyItem, billableItem));
-    }
-
-    @Override
-    public List<Deposit> createRequiredDeposits(BillableItem billableItem, PolicyNode node) {
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
+    public List<Deposit> createRequiredDeposits(BillableItem billableItem) {
         List<Deposit> deposits = new ArrayList<Deposit>();
-        for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
-            if (!policyItem.productCode().equals(billableItem.item().product().holder().code())) {
-                continue;
+        for (DepositType type : DepositType.values()) {
+            ProductDeposit productDeposit = getProductDepositByType(type, billableItem.item());
+            if (productDeposit.enabled().isBooleanTrue()) {
+                deposits.add(makeDeposit(productDeposit, billableItem));
             }
-            deposits.add(makeDeposit(policyItem, billableItem));
         }
         return deposits;
     }
@@ -185,26 +145,24 @@ public class DepositFacadeImpl implements DepositFacade {
 
     @Override
     public void collectInterest(Lease lease) {
-        Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(lease.unit().building());
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), DepositPolicy.class);
 
         // TODO - do we want to check for last adjustment date?
         Map<Deposit, ProductTerm> deposits = getCurrentDeposits(lease);
         for (Deposit deposit : deposits.keySet()) {
-
             if (!DepositStatus.Paid.equals(deposit.lifecycle().status().getValue())) {
                 continue;
             }
-            ProductTerm term = deposits.get(deposit);
-            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), term.productType));
-            if (policyItem == null) {
+
+            if (depositPolicy == null) {
                 throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
             } else {
                 DepositInterestAdjustment adjustment = EntityFactory.create(DepositInterestAdjustment.class);
                 adjustment.date().setValue(new LogicalDate(SystemDateManager.getDate()));
-                adjustment.interestRate().set(policyItem.annualInterestRate());
+                adjustment.interestRate().set(depositPolicy.annualInterestRate());
                 adjustment.amount().setValue(
                         DomainUtil.roundMoney(deposit.lifecycle().currentAmount().getValue()
-                                .multiply(policyItem.annualInterestRate().getValue().divide(new BigDecimal(12)))));
+                                .multiply(depositPolicy.annualInterestRate().getValue().divide(new BigDecimal(12)))));
 
                 deposit.lifecycle().interestAdjustments().add(adjustment);
                 deposit.lifecycle().currentAmount().setValue(deposit.lifecycle().currentAmount().getValue().add(adjustment.amount().getValue()));
@@ -233,7 +191,7 @@ public class DepositFacadeImpl implements DepositFacade {
 
     @Override
     public void issueDepositRefunds(Lease lease) {
-        Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(lease.unit().building());
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), DepositPolicy.class);
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
 
@@ -264,15 +222,14 @@ public class DepositFacadeImpl implements DepositFacade {
                 if (term.to == null) {
                     break;
                 }
-                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), term.productType));
-                if (policyItem == null) {
+                if (depositPolicy == null) {
                     throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
                 } else {
                     Calendar calendar = new GregorianCalendar();
                     // see if we are past the refund window
                     calendar.setTime(SystemDateManager.getDate());
-                    if (!policyItem.securityDepositRefundWindow().isNull()) {
-                        calendar.add(Calendar.DAY_OF_MONTH, -policyItem.securityDepositRefundWindow().getValue());
+                    if (!depositPolicy.securityDepositRefundWindow().isNull()) {
+                        calendar.add(Calendar.DAY_OF_MONTH, -depositPolicy.securityDepositRefundWindow().getValue());
                     }
                     Date dueDate = calendar.getTime();
                     if (!term.to.after(dueDate) || !lease.leaseTo().getValue().after(dueDate)) {
@@ -301,34 +258,62 @@ public class DepositFacadeImpl implements DepositFacade {
         }
     }
 
-    private Map<DepositPolicyKey, DepositPolicyItem> getDepositPolicyMatrix(PolicyNode node) {
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
-        Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = new HashMap<DepositPolicyKey, DepositPolicyItem>();
-        for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
-            policyMatrix.put(new DepositPolicyKey(policyItem.depositType().getValue(), policyItem.productCode()), policyItem);
+    private Deposit makeDeposit(ProductDeposit productDeposit, BillableItem billableItem) {
+        if (!productDeposit.enabled().isBooleanTrue()) {
+            return null;
         }
-        return policyMatrix;
-    }
 
-    private Deposit makeDeposit(DepositPolicyItem policyItem, BillableItem billableItem) {
         Deposit deposit = EntityFactory.create(Deposit.class);
 
-        deposit.chargeCode().set(policyItem.chargeCode());
-        deposit.type().set(policyItem.depositType());
-        switch (policyItem.valueType().getValue()) {
+        deposit.chargeCode().set(productDeposit.chargeCode());
+        deposit.type().set(productDeposit.depositType());
+        BigDecimal depositValue = getDepositValue(productDeposit, billableItem.item());
+        switch (productDeposit.valueType().getValue()) {
         case Monetary:
-            deposit.amount().setValue(policyItem.value().getValue());
+            deposit.amount().setValue(depositValue);
             break;
         case Percentage:
-            deposit.amount().setValue(DomainUtil.roundMoney(policyItem.value().getValue().multiply(billableItem.agreedPrice().getValue())));
+            deposit.amount().setValue(DomainUtil.roundMoney(depositValue.multiply(billableItem.agreedPrice().getValue())));
             break;
         default:
             throw new Error("Unsupported ValueType");
         }
         deposit.isProcessed().setValue(false);
-        deposit.description().set(policyItem.description());
+        deposit.description().set(productDeposit.description());
         deposit.billableItem().set(billableItem);
 
         return deposit;
+    }
+
+    private ProductDeposit getProductDepositByType(DepositType depositType, ProductItem productItem) {
+        ProductDeposit productDeposit = null;
+        switch (depositType) {
+        case LastMonthDeposit:
+            productDeposit = productItem.product().depositLMR();
+            break;
+        case MoveInDeposit:
+            productDeposit = productItem.product().depositMoveIn();
+            break;
+        case SecurityDeposit:
+            productDeposit = productItem.product().depositSecurity();
+            break;
+        }
+        return productDeposit;
+    }
+
+    private BigDecimal getDepositValue(ProductDeposit productDeposit, ProductItem productItem) {
+        BigDecimal value = null;
+        switch (productDeposit.depositType().getValue()) {
+        case MoveInDeposit:
+            value = productItem.depositMoveIn().getValue();
+            break;
+        case LastMonthDeposit:
+            value = productItem.depositLMR().getValue();
+            break;
+        case SecurityDeposit:
+            value = productItem.depositSecurity().getValue();
+            break;
+        }
+        return value == null ? productDeposit.value().getValue() : value;
     }
 }

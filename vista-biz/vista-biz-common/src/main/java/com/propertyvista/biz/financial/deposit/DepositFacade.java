@@ -18,10 +18,9 @@ import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
@@ -36,12 +35,12 @@ public interface DepositFacade {
 
         public final LogicalDate to;
 
-        public final ARCode productType;
+        public final ProductItem productItem;
 
         public ProductTerm(BillableItem product, Lease lease) {
             from = product.effectiveDate().isNull() ? lease.currentTerm().termFrom().getValue() : product.effectiveDate().getValue();
             to = product.expirationDate().isNull() ? lease.currentTerm().termTo().getValue() : product.expirationDate().getValue();
-            productType = product.item().product().holder().code();
+            productItem = product.item();
         }
     }
 
@@ -49,12 +48,12 @@ public interface DepositFacade {
      * Creates deposit instance based on the corresponding policy. DepositType may limit acceptable target
      * products, for example, LastMonthDeposit may only accept ServiceType products.
      */
-    public Deposit createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node);
+    public Deposit createDeposit(DepositType depositType, BillableItem billableItem);
 
     /*
      * Create all deposits required by the policy
      */
-    public List<Deposit> createRequiredDeposits(BillableItem billableItem, PolicyNode node);
+    public List<Deposit> createRequiredDeposits(BillableItem billableItem);
 
     /*
      * Create DepositLifecycle wrapper on supplied Deposit
