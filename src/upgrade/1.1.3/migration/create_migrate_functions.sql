@@ -254,6 +254,10 @@ BEGIN
         
         ALTER TABLE apt_unit_reservation OWNER TO vista;
         
+		-- billable_item
+		
+		ALTER TABLE billable_item ADD COLUMN yardi_charge_code VARCHAR(500);
+       
         
         -- building
         
@@ -1352,7 +1356,14 @@ BEGIN
                 ||'FROM         '||v_schema_name||'.apt_unit AS a '
                 ||'ORDER BY     a.id )';
                 
-
+		-- billable_item
+		
+		EXECUTE 'UPDATE '||v_schema_name||'.billable_item b '
+				||'SET	yardi_charge_code = y.charge_code '
+				||'FROM '||v_schema_name||'.yardi_lease_charge_data y '
+				||'WHERE	extra_data_discriminator = ''YardiLeaseCharge'' '
+				||'AND	b.extra_data = y.id ';
+		
         -- apt_unit_occupancy_segment
         
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit_occupancy_segment '
@@ -1850,6 +1861,10 @@ BEGIN
         -- tenant_charge_list
         
         DROP TABLE tenant_charge_list;
+        
+        -- yardi_lease_charge_data
+        
+        DROP TABLE yardi_lease_charge_data;
                  
         /**
         ***     ======================================================================================================

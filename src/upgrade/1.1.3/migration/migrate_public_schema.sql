@@ -58,6 +58,7 @@ BEGIN TRANSACTION;
         DROP SEQUENCE tenant_charge_list$charges_seq;
         DROP SEQUENCE tenant_charge_list_seq;
         DROP SEQUENCE tenant_charge_seq;
+        DROP SEQUENCE yardi_lease_charge_data_seq;
 
         -- New sequences
         
