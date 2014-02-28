@@ -79,6 +79,7 @@ BEGIN
         ALTER TABLE arpolicy DROP CONSTRAINT arpolicy_node_discriminator_d_ck;
         ALTER TABLE auto_pay_policy DROP CONSTRAINT auto_pay_policy_node_discriminator_d_ck;
         ALTER TABLE background_check_policy DROP CONSTRAINT background_check_policy_node_discriminator_d_ck;
+        ALTER TABLE billable_item DROP CONSTRAINT billable_item_extra_data_discriminator_d_ck;
         ALTER TABLE building_utility DROP CONSTRAINT building_utility_building_utility_type_e_ck;
         ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_street_direction_e_ck;
         ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_street_type_e_ck;
@@ -2024,6 +2025,8 @@ BEGIN
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE background_check_policy ADD CONSTRAINT background_check_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE billable_item ADD CONSTRAINT billable_item_extra_data_discriminator_d_ck 
+            CHECK ((extra_data_discriminator) IN ('Pet_ChargeItemExtraData', 'Vehicle_ChargeItemExtraData'));
         ALTER TABLE building_utility ADD CONSTRAINT building_utility_building_utility_type_e_ck 
                 CHECK ((building_utility_type) IN ('airConditioning', 'cable', 'electricity', 'garbage', 'gas', 'heating', 'hydro', 'internet', 
                 'other', 'sewage', 'telephone', 'television', 'water'));
