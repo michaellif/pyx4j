@@ -13,9 +13,13 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -27,5 +31,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface DepositPolicy extends Policy {
 
     @Owned
+    @Deprecated
     IList<DepositPolicyItem> policyItems();
+
+    @NotNull
+    IPrimitive<BigDecimal> annualInterestRate();
+
+    @NotNull
+    IPrimitive<Integer> securityDepositRefundWindow();
 }

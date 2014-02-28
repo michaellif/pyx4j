@@ -11,22 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies.domain;
+package com.propertyvista.domain.financial.offering;
 
 import java.math.BigDecimal;
 
 import javax.xml.bind.annotation.XmlType;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -36,12 +31,10 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.tenant.lease.Deposit;
 
-@Deprecated
 @ToStringFormat("{2}, {1,choice,Percentage#{0,number,percent}|Monetary#${0,number,#.##}}, {3}")
-public interface DepositPolicyItem extends IEntity {
+public interface ProductDeposit extends IEntity {
 
     @I18n
     @XmlType(name = "ValueType")
@@ -53,21 +46,6 @@ public interface DepositPolicyItem extends IEntity {
             return I18nEnum.toString(this);
         }
     }
-
-    @Owner
-    @NotNull
-    @MemberColumn(notNull = true)
-    @ReadOnly
-    @Detached
-    @JoinColumn
-    DepositPolicy policy();
-
-    @OrderColumn
-    IPrimitive<Integer> orderInPolicy();
-
-    /** used to match against arCode of the product this policy item will be applied to */
-    @NotNull
-    ARCode productCode();
 
     /** passed to Deposit to use for corresponding invoice line items */
     @NotNull
@@ -92,9 +70,4 @@ public interface DepositPolicyItem extends IEntity {
     @NotNull
     @ToString(index = 3)
     IPrimitive<Deposit.DepositType> depositType();
-
-    @NotNull
-    IPrimitive<BigDecimal> annualInterestRate();
-
-    IPrimitive<Integer> securityDepositRefundWindow();
 }

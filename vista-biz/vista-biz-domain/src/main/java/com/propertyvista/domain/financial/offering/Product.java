@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -100,6 +101,15 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
         @Caption(name = "Market Price")
         @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> price();
+
+        @EmbeddedEntity
+        ProductDeposit depositLMR();
+
+        @EmbeddedEntity
+        ProductDeposit depositSecurity();
+
+        @EmbeddedEntity
+        ProductDeposit depositMoveIn();
 
         @NotNull
         IPrimitive<Boolean> availableOnline();

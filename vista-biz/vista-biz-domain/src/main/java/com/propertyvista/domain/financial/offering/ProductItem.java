@@ -62,6 +62,22 @@ public interface ProductItem extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> price();
 
+    @NotNull
+    @Format("#,##0.00")
+    @Caption(name = "Deposit LMR")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> depositLMR();
+
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> depositSecurity();
+
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> depositMoveIn();
+
     @Length(250)
     IPrimitive<String> description();
 
