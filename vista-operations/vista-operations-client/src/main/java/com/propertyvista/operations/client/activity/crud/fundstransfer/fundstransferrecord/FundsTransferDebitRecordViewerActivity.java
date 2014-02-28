@@ -24,7 +24,8 @@ import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferre
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 
-public class FundsTransferDebitRecordViewerActivity extends AbstractViewerActivity<FundsTransferRecordDTO> implements PadDebitRecordViewerView.Presenter {
+public class FundsTransferDebitRecordViewerActivity extends AbstractViewerActivity<FundsTransferRecordDTO> implements
+        FundsTransferDebitRecordViewerView.Presenter {
 
     public FundsTransferDebitRecordViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().getView(FundsTransferDebitRecordViewerView.class), GWT

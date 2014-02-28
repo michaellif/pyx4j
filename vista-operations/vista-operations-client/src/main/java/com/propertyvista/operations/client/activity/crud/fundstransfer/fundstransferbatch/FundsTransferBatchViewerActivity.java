@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferba
 import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 
-public class FundsTransferBatchViewerActivity extends AbstractViewerActivity<FundsTransferBatchDTO> implements PadBatchViewerView.Presenter {
+public class FundsTransferBatchViewerActivity extends AbstractViewerActivity<FundsTransferBatchDTO> implements FundsTransferBatchViewerView.Presenter {
 
     public FundsTransferBatchViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().getView(FundsTransferBatchViewerView.class), GWT
