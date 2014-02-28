@@ -92,6 +92,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract BmoInterfaceConfiguration getBmoInterfaceConfiguration();
 
+    public abstract EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration();
+
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;
     }

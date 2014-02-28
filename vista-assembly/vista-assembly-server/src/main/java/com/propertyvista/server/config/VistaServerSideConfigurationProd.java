@@ -21,6 +21,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
+import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.shared.config.VistaSettings;
@@ -159,6 +160,15 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
             return new BmoInterfaceConfigurationProd(this);
         } else {
             throw new UserRuntimeException("FundsTransfer is disabled");
+        }
+    }
+
+    @Override
+    public EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration() {
+        if (VistaDeployment.isVistaProduction()) {
+            return new EquifaxInterfaceConfigurationProd(this);
+        } else {
+            throw new UserRuntimeException("EquifaxInterface is disabled");
         }
     }
 }

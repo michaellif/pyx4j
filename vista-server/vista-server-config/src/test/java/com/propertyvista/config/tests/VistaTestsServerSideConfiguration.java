@@ -37,6 +37,7 @@ import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
+import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -262,6 +263,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public BankingSimulatorConfiguration getBankingSimulatorConfiguration() {
+        throw new Error("not supported in tests");
+    }
+
+    @Override
+    public EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration() {
         throw new Error("not supported in tests");
     }
 

@@ -46,6 +46,7 @@ import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
+import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaCookieLocaleResolver;
 import com.propertyvista.config.VistaDeployment;
@@ -441,4 +442,8 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         return new BmoInterfaceConfigurationSimulator(this);
     }
 
+    @Override
+    public EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration() {
+        return new EquifaxInterfaceConfigurationUatCustom(this);
+    }
 }

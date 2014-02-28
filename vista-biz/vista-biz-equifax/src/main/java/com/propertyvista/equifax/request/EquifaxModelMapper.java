@@ -90,9 +90,6 @@ public class EquifaxModelMapper {
             cnCustomerInfo.setCustomerId(equifaxInfo.customerReferenceNumber().getValue());
         }
 
-        cnCustomerInfo.setCustomerCode("P028");
-        cnCustomerInfo.setCustomerId("vista");
-
         CustomerInfoType customerInfo = factory.createCustomerInfoType();
         cnCustomerInfo.setCustomerInfo(customerInfo);
 

@@ -42,18 +42,22 @@ import org.slf4j.LoggerFactory;
 import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.to.CNConsAndCommRequestType;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.EquifaxInterfaceConfiguration;
 import com.propertyvista.config.SystemConfig;
 
 public class EquifaxHttpClient {
 
     private final static Logger log = LoggerFactory.getLogger(EquifaxHttpClient.class);
 
-    public static String serverUrl = "https://uat.equifax.ca/sts/processinquiry.asp";
-
     public static EfxTransmit execute(CNConsAndCommRequestType requestMessage) throws Exception {
+        EquifaxInterfaceConfiguration config = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getEquifaxInterfaceConfiguration();
+        String serverUrl = config.getInquiryUrl();
+
         DefaultHttpClient httpclient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(serverUrl);
 
