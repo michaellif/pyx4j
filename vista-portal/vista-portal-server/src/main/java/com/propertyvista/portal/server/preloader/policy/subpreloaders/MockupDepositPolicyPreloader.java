@@ -42,6 +42,9 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
     protected DepositPolicy createPolicy(StringBuilder log) {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
+        policy.annualInterestRate().setValue(new BigDecimal("0.11"));
+        policy.securityDepositRefundWindow().setValue(11);
+
         EntityQueryCriteria<ARCode> depositsCrt = EntityQueryCriteria.create(ARCode.class);
         depositsCrt.in(depositsCrt.proto().type(), ARCode.Type.deposits());
         List<ARCode> depositCodes = Persistence.service().query(depositsCrt);

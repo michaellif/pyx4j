@@ -38,7 +38,7 @@ public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         // TODO these values were copied from ARSunnyDayScenarioTest: I have no idea how they were calculated (part the lease month?), need to ask Michael  
         assertArrearsCategory(ARCode.Type.Residential, "302.50", "0.00", "0.00", "0.00", "0.00");
         assertArrearsCategory(ARCode.Type.Parking, "26.02", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsCategory(ARCode.Type.Deposit, "1010.30", "0.00", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
+        assertArrearsCategory(ARCode.Type.DepositSecurity, "1010.30", "0.00", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
         assertArrearsTotal("1338.82", "0.00", "0.00", "0.00", "0.00");
 
         // arrears are not supposed to change until the due date
@@ -63,7 +63,7 @@ public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         assertArrearsSnapshotStart("23-Mar-2011");
         assertArrearsCategory(ARCode.Type.Residential, "302.50", "0.00", "0.00", "0.00", "0.00");
         assertArrearsCategory(ARCode.Type.Parking, "26.02", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsCategory(ARCode.Type.Deposit, "1010.30", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.DepositSecurity, "1010.30", "0.00", "0.00", "0.00", "0.00");
         assertArrearsTotal("1338.82", "0.00", "0.00", "0.00", "0.00");
 
         // here also nothing is supposed to change
@@ -81,7 +81,7 @@ public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         assertArrearsSnapshotStart("28-Apr-2011");
         assertArrearsCategory(ARCode.Type.Residential, "1041.94", "302.50", "0.00", "0.00", "0.00");
         assertArrearsCategory(ARCode.Type.Parking, "89.60", "26.02", "0.00", "0.00", "0.00");
-        assertArrearsCategory(ARCode.Type.Deposit, "0.00", "1010.30", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.DepositSecurity, "0.00", "1010.30", "0.00", "0.00", "0.00");
         assertArrearsCategory(ARCode.Type.LatePayment, "50.00", "0.00", "0.00", "0.00", "0.00");
         assertArrearsTotal("1181.54", "1338.82", "0.00", "0.00", "0.00");
 

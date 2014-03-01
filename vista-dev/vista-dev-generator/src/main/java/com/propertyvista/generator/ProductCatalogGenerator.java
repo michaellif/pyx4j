@@ -29,10 +29,12 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.generator.util.RandomUtil;
 
 public class ProductCatalogGenerator {
@@ -109,7 +111,20 @@ public class ProductCatalogGenerator {
         }
     }
 
+    public void fillUnitServices(ProductCatalog catalog, AptUnit unit) {
+        for (ARCode.Type type : ARCode.Type.unitRelatedServices()) {
+            fillBuildingElementServices(catalog, unit, RandomUtil.random(getARCodes(type)), createUnitMarketRent(unit));
+        }
+    }
+
 // internals:
+
+    private ARCode getARCode(ARCode.Type type) {
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.eq(criteria.proto().type(), type);
+        return Persistence.service().retrieve(criteria);
+    }
+
     private List<ARCode> getARCodes(ARCode.Type type) {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
         criteria.eq(criteria.proto().type(), type);
@@ -126,6 +141,24 @@ public class ProductCatalogGenerator {
         service.version().description().setValue("Service description");
         service.version().price().setValue(new BigDecimal(1000.10));
         service.version().availableOnline().setValue(onlineUse);
+
+        service.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
+        service.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.DepositLMR));
+        service.version().depositLMR().valueType().setValue(ValueType.Percentage);
+        service.version().depositLMR().value().setValue(BigDecimal.ONE);
+        service.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
+
+        service.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
+        service.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.DepositMoveIn));
+        service.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
+        service.version().depositMoveIn().value().setValue(new BigDecimal(0.66));
+        service.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
+
+        service.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
+        service.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.DepositSecurity));
+        service.version().depositSecurity().valueType().setValue(ValueType.Monetary);
+        service.version().depositSecurity().value().setValue(new BigDecimal(333.3));
+        service.version().depositSecurity().description().setValue(DepositType.SecurityDeposit.toString());
 
         return service;
 
@@ -145,18 +178,36 @@ public class ProductCatalogGenerator {
         feature.version().availableOnline().setValue(RandomUtil.randomBoolean());
         feature.version().price().setValue(new BigDecimal(100.10));
 
-        feature.version().items().add(createFeatureItem(arCode));
+        feature.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
+        feature.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.DepositLMR));
+        feature.version().depositLMR().valueType().setValue(ValueType.Percentage);
+        feature.version().depositLMR().value().setValue(BigDecimal.ONE);
+        feature.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
+
+        feature.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
+        feature.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.DepositMoveIn));
+        feature.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
+        feature.version().depositMoveIn().value().setValue(new BigDecimal(0.33));
+        feature.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
+
+        feature.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
+        feature.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.DepositSecurity));
+        feature.version().depositSecurity().valueType().setValue(ValueType.Monetary);
+        feature.version().depositSecurity().value().setValue(new BigDecimal(33.3));
+        feature.version().depositSecurity().description().setValue(DepositType.SecurityDeposit.toString());
+
+        feature.version().items().add(createFeatureItem(feature));
 
         return feature;
     }
 
-    private ProductItem createFeatureItem(ARCode arCode) {
+    private ProductItem createFeatureItem(Feature feature) {
         ProductItem item = EntityFactory.create(ProductItem.class);
 
-        item.name().setValue(arCode.name().getValue());
-        item.description().setValue(arCode.type().getStringView() + " description");
+        item.name().setValue(feature.code().name().getValue());
+        item.description().setValue(feature.code().type().getStringView() + " description");
 
-        switch (arCode.type().getValue()) {
+        switch (feature.code().type().getValue()) {
         case Parking:
             item.price().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
             break;
@@ -177,9 +228,13 @@ public class ProductCatalogGenerator {
             break;
         default:
             // all other types are not feature-relevant!
-            assert (!ARCode.Type.features().contains(arCode.type().getValue()));
+            assert (!ARCode.Type.features().contains(feature.code().type().getValue()));
             break;
         }
+
+        item.depositLMR().setValue(feature.version().depositLMR().value().getValue());
+        item.depositMoveIn().setValue(feature.version().depositMoveIn().value().getValue());
+        item.depositSecurity().setValue(feature.version().depositSecurity().value().getValue());
 
         return item;
     }
@@ -218,12 +273,6 @@ public class ProductCatalogGenerator {
         return item;
     }
 
-    public void fillUnitServices(ProductCatalog catalog, AptUnit unit) {
-        for (ARCode.Type type : ARCode.Type.unitRelatedServices()) {
-            fillBuildingElementServices(catalog, unit, RandomUtil.random(getARCodes(type)), createUnitMarketRent(unit));
-        }
-    }
-
     private void fillBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, ARCode arCode, BigDecimal price) {
         for (Service service : getServices(catalog, arCode)) {
             ProductItem item = EntityFactory.create(ProductItem.class);
@@ -232,6 +281,10 @@ public class ProductCatalogGenerator {
             item.name().setValue(arCode.name().getValue());
             item.description().setValue(arCode.type().getStringView() + " description");
             item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
+
+            item.depositLMR().setValue(service.version().depositLMR().value().getValue());
+            item.depositMoveIn().setValue(service.version().depositMoveIn().value().getValue());
+            item.depositSecurity().setValue(service.version().depositSecurity().value().getValue());
 
             Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
             service.version().items().add(item);

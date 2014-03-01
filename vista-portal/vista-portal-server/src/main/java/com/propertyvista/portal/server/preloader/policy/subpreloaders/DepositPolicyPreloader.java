@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.policy.policies.DepositPolicy;
@@ -27,8 +29,11 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
     @Override
     protected DepositPolicy createPolicy(StringBuilder log) {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
-        log.append(policy.getStringView());
 
+        policy.annualInterestRate().setValue(BigDecimal.ZERO);
+        policy.securityDepositRefundWindow().setValue(0);
+
+        log.append(policy.getStringView());
         return policy;
     }
 
