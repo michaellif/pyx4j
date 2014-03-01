@@ -21,7 +21,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -113,7 +112,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
 
         // some default values:
-        dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        dto.createdDate().setValue(SystemDateManager.getDate());
 
         // calculate current balance:
         dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));

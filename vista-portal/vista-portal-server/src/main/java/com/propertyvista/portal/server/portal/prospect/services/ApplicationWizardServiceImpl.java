@@ -738,7 +738,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         dto.leaseTermParticipant().set(ProspectPortalContext.getLeaseTermTenant());
 
         // some default values:
-        dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        dto.createdDate().setValue(SystemDateManager.getDate());
         dto.convenienceFeeSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
 
         // current balance: -------------------------------------------------------------------------------------------------------
