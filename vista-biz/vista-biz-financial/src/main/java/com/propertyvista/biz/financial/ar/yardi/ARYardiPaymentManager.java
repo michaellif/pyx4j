@@ -114,7 +114,8 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         reversal.amount().setValue(paymentRecord.amount().getValue());
         reversal.billingAccount().set(paymentRecord.billingAccount());
         reversal.description().setValue(
-                i18n.tr("{1} Payment from ''{0,date,MM/dd/yyyy}'' was rejected", paymentRecord.createdDate(), paymentRecord.transactionErrorMessage()));
+                i18n.tr("{1} Payment from ''{0,date,MM/dd/yyyy}'' was rejected", paymentRecord.createdDate().getValue(),
+                        paymentRecord.transactionErrorMessage()));
         reversal.taxTotal().setValue(BigDecimal.ZERO);
         reversal.applyNSF().setValue(applyNSF);
 
