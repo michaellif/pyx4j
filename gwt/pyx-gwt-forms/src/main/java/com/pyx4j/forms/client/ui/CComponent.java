@@ -89,8 +89,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private CEntityContainer<?> parent;
 
-    private CLayoutConstraints constraints;
-
     private final Collection<IAccessAdapter> accessAdapters = new ArrayList<IAccessAdapter>();
 
     private ComponentAccessAdapter componentAccessAdapter;
@@ -428,14 +426,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         applyEnablingRules();
         applyViewabilityRules();
         applyEditabilityRules();
-    }
-
-    public CLayoutConstraints getConstraints() {
-        return constraints;
-    }
-
-    public void setConstraints(CLayoutConstraints constraints) {
-        this.constraints = constraints;
     }
 
     public boolean isValid() {
