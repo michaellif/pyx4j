@@ -584,7 +584,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
                 unitSelection.building().set(moa.building());
                 unitSelection.floorplan().set(moa.floorplan());
-                unitSelection.moveIn().setValue(new LogicalDate(SystemDateManager.getDate()));
+                unitSelection.moveIn().setValue(SystemDateManager.getLogicalDate());
             }
 
             if (!unitSelection.floorplan().isNull()) {
@@ -977,7 +977,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private List<UnitTO> retriveAvailableUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
         if (moveIn == null) {
-            moveIn = new LogicalDate(SystemDateManager.getDate());
+            moveIn = SystemDateManager.getLogicalDate();
         }
         if (baths == null) {
             baths = BathroomNumber.Any;
@@ -1097,7 +1097,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private List<UnitTO> retrivePotentialUnits(Building building, BedroomNumber beds, BathroomNumber baths, LogicalDate moveIn) {
         if (moveIn == null) {
-            moveIn = new LogicalDate(SystemDateManager.getDate());
+            moveIn = SystemDateManager.getLogicalDate();
         }
 
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);

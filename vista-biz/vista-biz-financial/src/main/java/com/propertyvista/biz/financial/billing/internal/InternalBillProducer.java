@@ -128,7 +128,7 @@ class InternalBillProducer implements BillProducer {
 
             }
 
-            bill.executionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            bill.executionDate().setValue(SystemDateManager.getLogicalDate());
 
             Bill.BillType billType = findBillType();
             bill.billType().setValue(billType);

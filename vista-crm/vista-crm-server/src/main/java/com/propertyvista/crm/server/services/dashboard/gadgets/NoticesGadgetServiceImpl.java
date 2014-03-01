@@ -77,7 +77,7 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
 
         LogicalDate lowerLeavingBound = null;
         LogicalDate upperLeavingBound = null;
-        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate today = SystemDateManager.getLogicalDate();
 
         NoticesGadgetDataDTO proto = EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class);
         IObject<?> noticesFilter = proto.getMember(noticesFilterPreset.getPath());
@@ -116,7 +116,7 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
         }
-        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate today = SystemDateManager.getLogicalDate();
         criteria.add(PropertyCriterion.le(criteria.proto().availability().availableForRent(), today));
         return criteria;
     }

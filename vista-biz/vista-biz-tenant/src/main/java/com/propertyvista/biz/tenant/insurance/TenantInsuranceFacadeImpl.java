@@ -44,7 +44,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
     @Override
     public List<InsuranceCertificate<?>> getInsuranceCertificates(Tenant tenantId, boolean ownedOnly) {
-        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate today = SystemDateManager.getLogicalDate();
 
         // try to get current insurance certificate either tenant's own or the insurance certificate of the room mate
         @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -73,7 +73,7 @@ class EFTBankMockReconciliation {
         FundsReconciliationRecordRecord record = EntityFactory.create(FundsReconciliationRecordRecord.class);
         record.processingStatus().setValue(Boolean.FALSE);
 
-        record.paymentDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        record.paymentDate().setValue(SystemDateManager.getLogicalDate());
         record.merchantTerminalId().setValue(summary.merchantTerminalId().getValue());
         record.clientId().setValue(padRecord.clientId().getValue());
         record.transactionId().setValue(padRecord.transactionId().getValue());

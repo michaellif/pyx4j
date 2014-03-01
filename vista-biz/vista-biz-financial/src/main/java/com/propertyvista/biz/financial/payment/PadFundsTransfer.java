@@ -88,7 +88,7 @@ class PadFundsTransfer {
         }
         paymentRecord.merchantAccount().set(merchantAccount);
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
 
         Persistence.service().retrieve(paymentRecord.billingAccount());

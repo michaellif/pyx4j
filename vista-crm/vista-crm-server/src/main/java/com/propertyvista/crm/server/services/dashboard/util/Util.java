@@ -21,7 +21,7 @@ import com.pyx4j.config.server.SystemDateManager;
 public class Util {
 
     public static LogicalDate dayOfCurrentTransaction() {
-        return new LogicalDate(SystemDateManager.getDate());
+        return SystemDateManager.getLogicalDate();
     }
 
     public static LogicalDate beginningOfMonth(LogicalDate dayOfMonth) {

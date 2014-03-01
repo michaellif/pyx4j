@@ -119,13 +119,13 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
     @Override
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate expectedMoveOut, LogicalDate leaseEndDate) {
         if (eventDate == null) {
-            eventDate = new LogicalDate(SystemDateManager.getDate());
+            eventDate = SystemDateManager.getLogicalDate();
         }
         if (expectedMoveOut == null) {
-            expectedMoveOut = new LogicalDate(SystemDateManager.getDate());
+            expectedMoveOut = SystemDateManager.getLogicalDate();
         }
         if (leaseEndDate == null) {
-            leaseEndDate = new LogicalDate(SystemDateManager.getDate());
+            leaseEndDate = SystemDateManager.getLogicalDate();
         }
 
         super.createCompletionEvent(leaseId, completionType, eventDate, expectedMoveOut, leaseEndDate);
@@ -156,7 +156,7 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
     @Override
     public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
         if (actualMoveOut == null) {
-            actualMoveOut = new LogicalDate(SystemDateManager.getDate());
+            actualMoveOut = SystemDateManager.getLogicalDate();
         }
 
         super.moveOut(leaseId, actualMoveOut);

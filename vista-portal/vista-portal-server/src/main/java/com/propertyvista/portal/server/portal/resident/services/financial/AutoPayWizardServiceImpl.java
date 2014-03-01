@@ -179,7 +179,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
             //@formatter:off
             if (billableItem.agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0                                                                            // non-free
                 && !ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().code().type().getValue())                                       // recursive
-                && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
+                && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(SystemDateManager.getLogicalDate()))     // non-expired 
                 && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
             //@formatter:on
                 itemDto = createCoveredItemDTO(billableItem, lease);

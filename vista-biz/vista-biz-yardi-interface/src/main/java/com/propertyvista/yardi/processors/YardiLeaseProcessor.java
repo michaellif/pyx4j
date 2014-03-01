@@ -468,7 +468,7 @@ public class YardiLeaseProcessor {
         } else if (yardiLease.getLeaseSignDate() != null) {
             date = getLogicalDate(yardiLease.getLeaseSignDate());
         } else {
-            date = new LogicalDate(SystemDateManager.getDate());
+            date = SystemDateManager.getLogicalDate();
             log.warn("Empty Yardi 'Lease From' date - substitute with current date!");
         }
 
@@ -527,7 +527,7 @@ public class YardiLeaseProcessor {
     // Lease state management: 
 
     private static Lease markLeaseOnNotice(Lease lease, YardiLease yardiLease) {
-        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, new LogicalDate(SystemDateManager.getDate()),
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, SystemDateManager.getLogicalDate(),
                 getLogicalDate(yardiLease.getExpectedMoveOutDate()), null);
 
         Persistence.service().retrieve(lease);
@@ -553,7 +553,7 @@ public class YardiLeaseProcessor {
 
     private static Lease completeLease(Lease lease, YardiLease yardiLease) {
         if (lease.completion().isNull()) {
-            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Termination, new LogicalDate(SystemDateManager.getDate()),
+            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Termination, SystemDateManager.getLogicalDate(),
                     getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
         }
 

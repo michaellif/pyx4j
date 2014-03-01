@@ -94,14 +94,14 @@ class PaymentCreditCard {
         if (saleResponse.success().getValue()) {
             log.debug("ccTransaction accepted {}", saleResponse.authorizationNumber());
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
             paymentRecord.transactionAuthorizationNumber().setValue(saleResponse.authorizationNumber().getValue());
             paymentRecord.convenienceFeeTransactionAuthorizationNumber().setValue(saleResponse.convenienceFeeAuthorizationNumber().getValue());
             ServerSideFactory.create(NotificationFacade.class).paymentCleared(paymentRecord);
         } else {
             log.debug("ccTransaction rejected {}", saleResponse.code(), saleResponse.message());
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
             paymentRecord.transactionAuthorizationNumber().setValue(saleResponse.code().getValue());
             paymentRecord.transactionErrorMessage().setValue(saleResponse.message().getValue());
         }
@@ -121,7 +121,7 @@ class PaymentCreditCard {
                             PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
                             record.transactionAuthorizationNumber().setValue(saleResponse.authorizationNumber().getValue());
                             record.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
-                            LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+                            LogicalDate now = SystemDateManager.getLogicalDate();
                             record.lastStatusChangeDate().setValue(now);
                             record.receivedDate().setValue(now);
                             record.finalizeDate().setValue(now);

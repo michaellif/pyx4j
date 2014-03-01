@@ -150,7 +150,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
 
         BigDecimal currentBallanceAmount = bill.totalDueAmount().getValue();
 
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         BillingCycle prevCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(billingAccount.lease(), now);
         if (prevCycle != null) {
             BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(prevCycle);

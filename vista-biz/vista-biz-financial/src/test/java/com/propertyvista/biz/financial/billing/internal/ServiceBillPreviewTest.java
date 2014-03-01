@@ -85,7 +85,7 @@ public class ServiceBillPreviewTest extends LeaseFinancialTestBase {
 
         advanceSysDate("05-May-2011");
         Lease lease = retrieveLease();
-        LogicalDate date = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate date = SystemDateManager.getLogicalDate();
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, date);
         // @formatter:off
         new BillTester(InternalBillProducer.produceProductBillPreview(cycle, lease)).

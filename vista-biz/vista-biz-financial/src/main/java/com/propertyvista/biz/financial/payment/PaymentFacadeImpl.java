@@ -174,7 +174,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         if (paymentRecord.paymentStatus().isNull()) {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
         }
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
                 paymentRecord.paymentStatus().getValue())) {
@@ -196,7 +196,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         //  receivedDate should be editable by CRM user for Cash and Check.
         if (EnumSet.of(PaymentType.Cash, PaymentType.Check).contains((paymentRecord.paymentMethod().type().getValue()))) {
             if (paymentRecord.receivedDate().isNull()) {
-                paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+                paymentRecord.receivedDate().setValue(SystemDateManager.getLogicalDate());
             }
         } else {
             paymentRecord.receivedDate().setValue(null);
@@ -271,13 +271,13 @@ public class PaymentFacadeImpl implements PaymentFacade {
         //  receivedDate should be editable by CRM user for Cash and Check.
         if (EnumSet.of(PaymentType.Cash, PaymentType.Check).contains((paymentRecord.paymentMethod().type().getValue()))) {
             if (paymentRecord.receivedDate().isNull()) {
-                paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+                paymentRecord.receivedDate().setValue(SystemDateManager.getLogicalDate());
             }
         } else {
-            paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            paymentRecord.receivedDate().setValue(SystemDateManager.getLogicalDate());
         }
 
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
         paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
         if (paymentRecord.merchantAccount().isNull()
                 && (PaymentRecord.merchantAccountIsRequedForPayments || PaymentType.electronicPayments().contains(
@@ -288,7 +288,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-            paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
             break;
         case Check:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
@@ -296,7 +296,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case CreditCard:
             // The credit card processing is done in new transaction and committed regardless of results
             PaymentCreditCard.processPayment(paymentRecord);
-            paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
             break;
         case Echeck:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
@@ -361,8 +361,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         PaymentStatus incommingStatus = paymentRecord.paymentStatus().getValue();
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
 
         if (incommingStatus == PaymentRecord.PaymentStatus.Queued) {
@@ -396,8 +396,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
 
         ServerSideFactory.create(AuditFacade.class).updated(paymentRecord, "Cleared");
@@ -425,8 +425,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
 
         try {

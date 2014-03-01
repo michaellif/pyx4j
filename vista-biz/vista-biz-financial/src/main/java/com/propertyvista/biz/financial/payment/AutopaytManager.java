@@ -140,7 +140,7 @@ class AutopaytManager {
                 }
 
                 if (!reportOny) {
-                    billingCycle.actualAutopayExecutionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+                    billingCycle.actualAutopayExecutionDate().setValue(SystemDateManager.getLogicalDate());
                     Persistence.service().persist(billingCycle);
                 }
 

@@ -78,7 +78,7 @@ public class LeaseInternalManager extends LeaseAbstractManager {
         }
 
         if (Lease.Status.ExistingLease.equals(leaseStatus)) {
-            LogicalDate curDate = new LogicalDate(SystemDateManager.getDate());
+            LogicalDate curDate = SystemDateManager.getLogicalDate();
             LogicalDate nextExecDate = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
             if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
                 ServerSideFactory.create(BillingFacade.class).runBilling(lease);

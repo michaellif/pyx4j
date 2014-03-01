@@ -71,14 +71,14 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
         vacant.unit().set(unit);
         vacant.status().setValue(Status.pending);
-        vacant.dateFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+        vacant.dateFrom().setValue(SystemDateManager.getLogicalDate());
         vacant.dateTo().setValue(OccupancyFacade.MAX_DATE);
         Persistence.service().persist(vacant);
     }
 
     @Override
     public void scopeAvailable(Key unitPk) {
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
 
         if (!isInProductCatalog(unitPk)) {
             throw new UserRuntimeException(i18n.tr("Unable to make this unit available because the unit is not present in product catalog"));
@@ -149,7 +149,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public void scopeOffMarket(Key unitPk, final OffMarketType type) {
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
             segment.status().setValue(Status.offMarket);
@@ -190,7 +190,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public void scopeRenovation(Key unitPk, LogicalDate renovationEndDate) {
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
             segment.status().setValue(Status.pending);
@@ -260,7 +260,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         if (vacantFrom == null) {
             throw new IllegalArgumentException("vacantFrom must not be null");
         }
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         MakeVacantConstraintsDTO constraints = getMakeVacantConstraints(unitPk);
         LogicalDate min = constraints.minVacantFrom().getValue();
         LogicalDate max = constraints.maxVacantFrom().getValue();
@@ -317,7 +317,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public void occupy(final Lease leaseId) {
         Lease lease = leaseId.duplicate();
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
         List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(lease.unit().getPrimaryKey(), now);
         AptUnitOccupancySegment segmentToOccupy = null;
@@ -395,7 +395,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         assert moveOutDate != null;
 
         LogicalDate unitAvailableFrom = null;
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
 
         EntityQueryCriteria<AptUnitOccupancySegment> occupiedSegmentCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
         occupiedSegmentCriteria.add(PropertyCriterion.eq(occupiedSegmentCriteria.proto().unit(), unitPk));
@@ -509,7 +509,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             throw new OccupancyOperationException("cancelMoveOut cannot be performed due to: " + constraints.reason().getValue());
         }
 
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         AptUnitOccupancySegment leasedSegment = retrieveOccupancySegment(unitPk, now);
         EntityQueryCriteria<AptUnitOccupancySegment> delete = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
         delete.add(PropertyCriterion.ge(delete.proto().dateFrom(), DateUtils.daysAdd(leasedSegment.dateTo().getValue(), 1)));
@@ -523,7 +523,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public boolean isScopeOffMarketAvailable(Key unitPk) {
-        LogicalDate start = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate start = SystemDateManager.getLogicalDate();
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             return true; // newly created unit - can be scoped to any state!..
         }
@@ -540,7 +540,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public LogicalDate isRenovationAvailable(Key unitPk) {
-        LogicalDate start = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate start = SystemDateManager.getLogicalDate();
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             return start; // newly created unit - can be scoped to any state!..
         }
@@ -558,7 +558,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public boolean isScopeAvailableAvailable(Key unitPk) {
-        LogicalDate start = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate start = SystemDateManager.getLogicalDate();
 
         // Check if the unit has entry in the Product Catalog:
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
@@ -587,7 +587,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public MakeVacantConstraintsDTO getMakeVacantConstraints(Key unitPk) {
-        LogicalDate start = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate start = SystemDateManager.getLogicalDate();
         List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, start);
 
         LogicalDate minVacantFromCandidate = null;
@@ -633,7 +633,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public boolean isOccupyAvaialble(Key unitPk) {
-        LogicalDate start = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate start = SystemDateManager.getLogicalDate();
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             return true; // newly created unit - can be scoped to any state!..
         }
@@ -649,7 +649,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public CancelMoveOutConstraintsDTO getCancelMoveOutConstraints(Key unitPk) {
-        LogicalDate start = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate start = SystemDateManager.getLogicalDate();
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, start);
         if (segment == null) {
             throw new IllegalStateException("current occupancy segment was not found");
@@ -696,7 +696,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public void migrateStart(AptUnit unitStub, final Lease leaseStub) {
 
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
 
         if (!isMigrateStartAvailable(unitStub)) {
             throw new IllegalStateException(i18n.tr("Operation 'migrate start' is not permitted"));
@@ -722,7 +722,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             throw new IllegalStateException(i18n.tr("Operation 'migrate approve' is not permitted"));
         }
 
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         split(unitStub, now, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
@@ -742,7 +742,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             throw new IllegalStateException(i18n.tr("Operation 'migrate cancel' is not permitted"));
         }
 
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         split(unitStub, now, new SplittingHandler() {
 
             @Override
@@ -774,7 +774,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public boolean isMigrateStartAvailable(AptUnit unitStub) {
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         AptUnitOccupancySegment unitOccupancySegment = retrieveOccupancySegment(unitStub, now);
         return unitOccupancySegment != null
                 && (((unitOccupancySegment.status().getValue() == Status.pending) | (unitOccupancySegment.status().getValue() == Status.available)) & unitOccupancySegment
@@ -783,7 +783,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public boolean isMigratedApproveAvailable(AptUnit unitStub) {
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         AptUnitOccupancySegment unitOccupancySegment = retrieveOccupancySegment(unitStub, now);
         return unitOccupancySegment != null
                 && ((unitOccupancySegment.status().getValue() == Status.migrated) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE));
@@ -791,7 +791,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public boolean isMigratedCancelAvailable(AptUnit unitStub) {
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         AptUnitOccupancySegment unitOccupancySegment = retrieveOccupancySegment(unitStub, now);
         return unitOccupancySegment != null
                 && ((unitOccupancySegment.status().getValue() == Status.migrated) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE));
@@ -799,7 +799,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public boolean isAvailableForExistingLease(Key unitId) {
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate now = SystemDateManager.getLogicalDate();
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitId, now);
         return segment != null && segment.status().getValue() == Status.pending && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
     }

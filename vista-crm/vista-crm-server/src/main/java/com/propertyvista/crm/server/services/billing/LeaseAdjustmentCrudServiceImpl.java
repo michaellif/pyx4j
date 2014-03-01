@@ -48,8 +48,8 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     protected LeaseAdjustment init(InitializationData initializationData) {
         LeaseAdjustment entity = EntityFactory.create(LeaseAdjustment.class);
 
-        entity.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        entity.targetDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        entity.receivedDate().setValue(SystemDateManager.getLogicalDate());
+        entity.targetDate().setValue(SystemDateManager.getLogicalDate());
         entity.status().setValue(Status.draft);
 
         return entity;

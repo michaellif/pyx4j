@@ -77,7 +77,7 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
     @Override
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate expectedMoveOut, LogicalDate leaseEndDate) {
         if (eventDate == null) {
-            eventDate = new LogicalDate(SystemDateManager.getDate());
+            eventDate = SystemDateManager.getLogicalDate();
         }
 
         super.createCompletionEvent(leaseId, completionType, eventDate, expectedMoveOut, leaseEndDate);
@@ -108,7 +108,7 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
     @Override
     public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
         if (actualMoveOut == null) {
-            actualMoveOut = new LogicalDate(SystemDateManager.getDate());
+            actualMoveOut = SystemDateManager.getLogicalDate();
         }
 
         super.moveOut(leaseId, actualMoveOut);

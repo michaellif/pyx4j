@@ -79,7 +79,7 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
     }
 
     public static int compareBucketAge(InvoiceDebit debit1, InvoiceDebit debit2) {
-        LogicalDate currentDate = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate currentDate = SystemDateManager.getLogicalDate();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(currentDate);
         calendar.add(Calendar.DATE, -90);

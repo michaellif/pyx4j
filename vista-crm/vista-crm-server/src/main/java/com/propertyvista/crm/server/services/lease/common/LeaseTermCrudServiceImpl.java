@@ -92,11 +92,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
                 break;
 
             case NewLease:
-                term.termFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+                term.termFrom().setValue(SystemDateManager.getLogicalDate());
                 break;
 
             case Application:
-                term.termFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+                term.termFrom().setValue(SystemDateManager.getLogicalDate());
                 break;
             }
 
@@ -279,7 +279,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // fill related:
         if (selectedService != null) {
-            LogicalDate termFrom = (currentValue.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : currentValue.termFrom().getValue());
+            LogicalDate termFrom = (currentValue.termFrom().isNull() ? SystemDateManager.getLogicalDate() : currentValue.termFrom().getValue());
 
             // features:
             Persistence.ensureRetrieve(selectedService.features(), AttachLevel.Attached);
@@ -311,7 +311,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // use default product catalog items for specific cases:
         boolean useDefaultCatalog = (currentValue.unit().building().defaultProductCatalog().isBooleanTrue() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
-        LogicalDate termFrom = (currentValue.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : currentValue.termFrom().getValue());
+        LogicalDate termFrom = (currentValue.termFrom().isNull() ? SystemDateManager.getLogicalDate() : currentValue.termFrom().getValue());
 
         if (VistaFeatures.instance().yardiIntegration()) {
             useDefaultCatalog = false;

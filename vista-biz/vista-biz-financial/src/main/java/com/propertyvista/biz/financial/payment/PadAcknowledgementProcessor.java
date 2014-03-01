@@ -89,8 +89,8 @@ class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
             throw new IllegalArgumentException("Invalid PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         }
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
 
         paymentRecord.transactionErrorMessage().setValue(getAcknowledgmentErrorMessage(debitRecord));
 

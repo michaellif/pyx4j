@@ -840,7 +840,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Throwable>() {
                 @Override
                 public Void execute() throws YardiServiceException {
-                    LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+                    LogicalDate today = SystemDateManager.getLogicalDate();
 
                     UnitAvailabilityStatus currentAvailabilityStatus = retrieveCurrentAvailabilityStatus(unit);
                     if (currentAvailabilityStatus != null) {

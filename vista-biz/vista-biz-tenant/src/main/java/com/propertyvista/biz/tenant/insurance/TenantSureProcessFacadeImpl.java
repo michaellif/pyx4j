@@ -127,7 +127,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
             ICursorIterator<TenantSureInsurancePolicy> skippedIterator = Persistence.service().query(null, skippedPaymentCancellationsCriteria,
                     AttachLevel.Attached);
             try {
-                LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+                LogicalDate today = SystemDateManager.getLogicalDate();
                 while (skippedIterator.hasNext()) {
                     TenantSureInsurancePolicy ts = skippedIterator.next();
                     if (gracePeriodEnd(ts).compareTo(today) < 0) {

@@ -553,7 +553,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            ServerSideFactory.create(LeaseFacade.class).moveOut(lease, new LogicalDate(SystemDateManager.getDate()));
+            ServerSideFactory.create(LeaseFacade.class).moveOut(lease, SystemDateManager.getLogicalDate());
         }
     }
 
@@ -600,7 +600,7 @@ public class LeaseLifecycleSimulator {
     }
 
     private static LogicalDate now() {
-        return new LogicalDate(SystemDateManager.getDate());
+        return SystemDateManager.getLogicalDate();
     }
 
     private static LogicalDate toDate(String date) {

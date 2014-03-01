@@ -161,11 +161,11 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void moveOut(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
 
-        ServerSideFactory.create(LeaseFacade.class).moveOut(leaseId, new LogicalDate(SystemDateManager.getDate()));
+        ServerSideFactory.create(LeaseFacade.class).moveOut(leaseId, SystemDateManager.getLogicalDate());
 
         // complete actually, if it already finished:
         Lease lease = Persistence.secureRetrieve(Lease.class, entityId);
-        if (!lease.leaseTo().isNull() && lease.leaseTo().getValue().before(new LogicalDate(SystemDateManager.getDate()))) {
+        if (!lease.leaseTo().isNull() && lease.leaseTo().getValue().before(SystemDateManager.getLogicalDate())) {
             ServerSideFactory.create(LeaseFacade.class).complete(leaseId);
         }
 
@@ -228,7 +228,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         ServerSideFactory.create(LeaseFacade.class).approve(leaseId, null, null);
 
         // activate actually, if it already runs:
-        if (!Persistence.secureRetrieve(Lease.class, entityId).leaseFrom().getValue().after(new LogicalDate(SystemDateManager.getDate()))) {
+        if (!Persistence.secureRetrieve(Lease.class, entityId).leaseFrom().getValue().after(SystemDateManager.getLogicalDate())) {
             ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
         }
 

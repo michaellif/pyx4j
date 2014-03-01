@@ -127,7 +127,7 @@ public class ARArrearsManager {
         LeaseArrearsSnapshot currentSnapshot = takeArrearsSnapshot(billingAccount);
 
         // 2. retrieve previous ArrearsSnapshot
-        LogicalDate asOfNow = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate asOfNow = SystemDateManager.getLogicalDate();
         LeaseArrearsSnapshot previousSnapshot = retrieveArrearsSnapshot(billingAccount, asOfNow);
 
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
@@ -140,7 +140,7 @@ public class ARArrearsManager {
         BuildingArrearsSnapshot currentSnapshot = takeArrearsSnapshot(building);
 
         // 2. retrieve previous ArrearsSnapshot
-        LogicalDate asOf = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate asOf = SystemDateManager.getLogicalDate();
         BuildingArrearsSnapshot previousSnapshot = retrieveArrearsSnapshot(building, asOf, false);
 
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
@@ -157,7 +157,7 @@ public class ARArrearsManager {
     protected Collection<LeaseAgingBuckets> calculateAgingBuckets(List<InvoiceDebit> debits) {
         Map<ARCode.Type, LeaseAgingBuckets> agingBucketsMap = new EnumMap<ARCode.Type, LeaseAgingBuckets>(ARCode.Type.class);
 
-        LogicalDate currentDate = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate currentDate = SystemDateManager.getLogicalDate();
 
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(currentDate);
@@ -228,7 +228,7 @@ public class ARArrearsManager {
         );//@formatter:on        
 
         // FIXME what the hell is going on with the following two lines???
-        arrearsSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        arrearsSnapshot.fromDate().setValue(SystemDateManager.getLogicalDate());
         arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
         arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
 
@@ -303,7 +303,7 @@ public class ARArrearsManager {
                 Persistence.service().delete(previousSnapshot);
             }
 
-            currentSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            currentSnapshot.fromDate().setValue(SystemDateManager.getLogicalDate());
             currentSnapshot.toDate().setValue(OccupancyFacade.MAX_DATE);
             Persistence.service().persist(currentSnapshot);
         }

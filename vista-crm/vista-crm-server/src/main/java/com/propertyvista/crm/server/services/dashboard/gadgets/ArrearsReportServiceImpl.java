@@ -127,7 +127,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         }
         Vector<Building> buildings = Persistence.secureQuery(criteria);
 
-        final LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        final LogicalDate now = SystemDateManager.getLogicalDate();
 
         final GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(now);
@@ -178,7 +178,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
         BigDecimal totalArrears = new BigDecimal("0.00");
 
-        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate today = SystemDateManager.getLogicalDate();
 
         if (!asOf.after(today)) { // if we asked for the future value of total arrears return 0            
 

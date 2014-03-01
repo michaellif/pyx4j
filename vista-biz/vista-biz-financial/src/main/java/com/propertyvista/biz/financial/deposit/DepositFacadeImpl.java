@@ -158,7 +158,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
             } else {
                 DepositInterestAdjustment adjustment = EntityFactory.create(DepositInterestAdjustment.class);
-                adjustment.date().setValue(new LogicalDate(SystemDateManager.getDate()));
+                adjustment.date().setValue(SystemDateManager.getLogicalDate());
                 adjustment.interestRate().set(depositPolicy.annualInterestRate());
                 adjustment.amount().setValue(
                         DomainUtil.roundMoney(deposit.lifecycle().currentAmount().getValue()

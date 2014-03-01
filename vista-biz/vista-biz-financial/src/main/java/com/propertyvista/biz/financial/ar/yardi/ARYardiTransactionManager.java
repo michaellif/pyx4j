@@ -103,7 +103,7 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
         th.lineItems().addAll(credits);
         th.lineItems().addAll(payments);
         th.currentBalanceAmount().setValue(calculateTotal(charges, credits, payments));
-        th.issueDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        th.issueDate().setValue(SystemDateManager.getLogicalDate());
 
         Collection<LeaseAgingBuckets> agingBucketsCollection = ServerSideFactory.create(ARFacade.class).getAgingBuckets(billingAccount);
         th.agingBuckets().addAll(agingBucketsCollection);

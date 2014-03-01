@@ -46,7 +46,7 @@ class ARInternalLeaseAdjustmentManager {
                 InvoiceAccountCharge charge = InvoiceLineItemFactory.createInvoiceAccountCharge(adjustment);
                 charge.dueDate().setValue(
                         ARInternalTransactionManager.instance()
-                                .getTransactionDueDate(adjustment.billingAccount(), new LogicalDate(SystemDateManager.getDate())));
+                                .getTransactionDueDate(adjustment.billingAccount(), SystemDateManager.getLogicalDate()));
                 lineItem = charge;
             } else if (ARCode.Type.AccountCredit.equals(adjustment.code().type().getValue())) {
                 lineItem = InvoiceLineItemFactory.createInvoiceAccountCredit(adjustment);

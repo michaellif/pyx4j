@@ -1270,10 +1270,10 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         }
         mr.summary().setValue("Store closed");
         mr.description().setValue("Please open a 24-hour liquor store!");
-        mr.submitted().setValue(new LogicalDate(SystemDateManager.getDate()));
+        mr.submitted().setValue(SystemDateManager.getLogicalDate());
         mr.permissionToEnter().setValue(true);
         mr.petInstructions().setValue("just a friendly crocodile");
-        mr.preferredDate1().setValue(new LogicalDate(SystemDateManager.getDate()));
+        mr.preferredDate1().setValue(SystemDateManager.getLogicalDate());
         mr.preferredTime1().setValue(DayTime.Afternoon);
         // -- mr priority
         MaintenanceRequestPriority priority = EntityFactory.create(MaintenanceRequestPriority.class);
@@ -1287,13 +1287,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         mr.status().set(status);
         // -- mr schedule
         MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
-        schedule.scheduledDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        schedule.scheduledDate().setValue(SystemDateManager.getLogicalDate());
         schedule.scheduledTimeFrom().setValue(Time.valueOf("11:00:00"));
         schedule.scheduledTimeTo().setValue(Time.valueOf("13:00:00"));
         schedule.workDescription().setValue("planting trees");
         mr.workHistory().add(schedule);
         // mr resolution info
-        mr.resolvedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        mr.resolvedDate().setValue(SystemDateManager.getLogicalDate());
         mr.resolution().setValue("all good");
         generateEmailPolicy();
     }

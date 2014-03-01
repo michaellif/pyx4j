@@ -298,8 +298,8 @@ abstract class AbstractReconciliationProcessor {
         paymentRecord.padReconciliationDebitRecordKey().setValue(debitRecord.getPrimaryKey());
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
         log.info("Payment {} {} {} Cleared", fundsTransferType, paymentRecord.id().getValue(), paymentRecord.amount().getValue());
         ServerSideFactory.create(NotificationFacade.class).paymentCleared(paymentRecord);

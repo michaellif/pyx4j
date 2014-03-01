@@ -49,7 +49,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
         {
             setSysDate("2011-01-01");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
-                    new LogicalDate(SystemDateManager.getDate()));
+                    SystemDateManager.getLogicalDate());
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
 
@@ -59,7 +59,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
         {
             setSysDate("2011-01-31");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
-                    new LogicalDate(SystemDateManager.getDate()));
+                    SystemDateManager.getLogicalDate());
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
 
@@ -69,7 +69,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
         {
             setSysDate("2011-02-01");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
-                    new LogicalDate(SystemDateManager.getDate()));
+                    SystemDateManager.getLogicalDate());
 
             assertEquals("billingCycleStartDate", "2011-02-01", curentCycle.billingCycleStartDate().getValue());
 
@@ -99,7 +99,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
         {
             setSysDate("2011-01-10");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
-                    new LogicalDate(SystemDateManager.getDate()));
+                    SystemDateManager.getLogicalDate());
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
 
@@ -109,7 +109,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
         {
             setSysDate("2011-02-01");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
-                    new LogicalDate(SystemDateManager.getDate()));
+                    SystemDateManager.getLogicalDate());
 
             assertEquals("billingCycleStartDate", "2011-02-01", curentCycle.billingCycleStartDate().getValue());
 
@@ -119,7 +119,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
         {
             setSysDate("2011-02-05");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
-                    new LogicalDate(SystemDateManager.getDate()));
+                    SystemDateManager.getLogicalDate());
 
             assertEquals("billingCycleStartDate", "2011-02-01", curentCycle.billingCycleStartDate().getValue());
 

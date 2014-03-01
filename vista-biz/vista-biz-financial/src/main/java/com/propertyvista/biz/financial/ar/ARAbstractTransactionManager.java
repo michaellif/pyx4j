@@ -69,7 +69,7 @@ public abstract class ARAbstractTransactionManager {
             return;
         }
 
-        LogicalDate postDate = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate postDate = SystemDateManager.getLogicalDate();
         if (billingCycle == null) {
             Persistence.ensureRetrieve(invoiceLineItem.billingAccount(), AttachLevel.Attached);
             Persistence.ensureRetrieve(invoiceLineItem.billingAccount().lease(), AttachLevel.Attached);
@@ -96,7 +96,7 @@ public abstract class ARAbstractTransactionManager {
 
         List<InvoiceLineItem> lineItems = Persistence.service().query(criteria);
         th.lineItems().addAll(lineItems);
-        th.issueDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        th.issueDate().setValue(SystemDateManager.getLogicalDate());
         th.currentBalanceAmount().setValue(getCurrentBallance(billingAccount));
 
         Collection<LeaseAgingBuckets> agingBucketsCollection = ServerSideFactory.create(ARFacade.class).getAgingBuckets(billingAccount);

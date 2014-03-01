@@ -112,7 +112,7 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
     }
 
     private <Criteria extends EntityQueryCriteria<? extends AptUnit>> Criteria fillOccupiedUnitsCriteria(Criteria criteria, Vector<Building> buildings) {
-        LogicalDate when = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate when = SystemDateManager.getLogicalDate();
 
         if (buildings != null && !buildings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));

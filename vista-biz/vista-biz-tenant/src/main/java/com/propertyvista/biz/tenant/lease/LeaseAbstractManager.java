@@ -321,7 +321,7 @@ public abstract class LeaseAbstractManager {
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
 
         recordApplicationData(lease.currentTerm());
 
@@ -353,7 +353,7 @@ public abstract class LeaseAbstractManager {
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
 
         Persistence.service().merge(lease);
 
@@ -383,7 +383,7 @@ public abstract class LeaseAbstractManager {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
             lease.leaseApplication().decidedBy().set(decidedBy);
             lease.leaseApplication().decisionReason().setValue(decisionReason);
-            lease.leaseApplication().decisionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
 
             ServerSideFactory.create(OnlineApplicationFacade.class).approveMasterOnlineApplication(lease.leaseApplication().onlineApplication());
 
@@ -444,7 +444,7 @@ public abstract class LeaseAbstractManager {
 //        }
 
         lease.status().setValue(Status.Active);
-        lease.activationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        lease.activationDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(lease);
 
         ensureLeaseUniqness(lease);
@@ -495,7 +495,7 @@ public abstract class LeaseAbstractManager {
             throw new IllegalStateException("Lease has next term ready");
         }
         // if still has time to go:
-        if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().before(new LogicalDate(SystemDateManager.getDate()))) {
+        if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().before(SystemDateManager.getLogicalDate())) {
             throw new IllegalStateException("Lease is not ended yet");
         }
 
@@ -525,7 +525,7 @@ public abstract class LeaseAbstractManager {
 
         // set from date to next day after current term (or today if termTo is not set):
         if (lease.currentTerm().termTo().isNull()) {
-            term.termFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+            term.termFrom().setValue(SystemDateManager.getLogicalDate());
         } else {
             term.termFrom().setValue(DateUtils.daysAdd(lease.currentTerm().termTo().getValue(), 1));
         }
@@ -816,7 +816,7 @@ public abstract class LeaseAbstractManager {
         leaseTerm.version().leaseProducts().featureItems().clear();
         leaseTerm.version().leaseProducts().concessions().clear();
 
-        LogicalDate termFrom = (leaseTerm.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : leaseTerm.termFrom().getValue());
+        LogicalDate termFrom = (leaseTerm.termFrom().isNull() ? SystemDateManager.getLogicalDate() : leaseTerm.termFrom().getValue());
 
         // pre-populate mandatory features for the new service:
         Persistence.ensureRetrieve(service.features(), AttachLevel.Attached);
@@ -1180,7 +1180,7 @@ public abstract class LeaseAbstractManager {
 
         boolean succeeded = false;
 
-        LogicalDate termFrom = (leaseTerm.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : leaseTerm.termFrom().getValue());
+        LogicalDate termFrom = (leaseTerm.termFrom().isNull() ? SystemDateManager.getLogicalDate() : leaseTerm.termFrom().getValue());
 
         // use default product catalog items for specific cases:
         boolean useDefaultCatalog = (leaseTerm.unit().building().defaultProductCatalog().isBooleanTrue() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);

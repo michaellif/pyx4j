@@ -242,7 +242,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         batchData.companyEmailAddress().setValue(batchRequest.emailAddress().getValue());
 
         batchData.isLandlord().setValue(false); // TODO right now we always assume it's agent
-        batchData.signatureDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        batchData.signatureDate().setValue(SystemDateManager.getLogicalDate());
         batchData.signature().setValue(retrieveSignature(batchData.signingEmployee()));
         return batchData;
     }

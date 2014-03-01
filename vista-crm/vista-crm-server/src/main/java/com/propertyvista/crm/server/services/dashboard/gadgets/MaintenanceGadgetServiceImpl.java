@@ -71,7 +71,7 @@ public class MaintenanceGadgetServiceImpl implements MaintenanceGadgetService {
             IObject<?> member) {
         MaintenanceGadgetDataDTO proto = EntityFactory.getEntityPrototype(MaintenanceGadgetDataDTO.class);
 
-        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+        LogicalDate today = SystemDateManager.getLogicalDate();
         LogicalDate lowerBound = null;
         LogicalDate upperBound = null;
         GregorianCalendar cal = new GregorianCalendar();

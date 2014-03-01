@@ -110,7 +110,7 @@ class DirectDebitFundsTransfer {
         }
         paymentRecord.merchantAccount().set(merchantAccount);
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
 
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {

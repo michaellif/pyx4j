@@ -95,7 +95,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
 
     @Override
     public void runImmediately(AsyncCallback<Run> callback, TriggerDTO triggerStub) {
-        runForDate(callback, triggerStub, new LogicalDate(SystemDateManager.getDate()));
+        runForDate(callback, triggerStub, SystemDateManager.getLogicalDate());
     }
 
     @Override
