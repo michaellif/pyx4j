@@ -51,7 +51,7 @@ public class Visit implements Serializable {
 
     private final Hashtable<String, Serializable> attributes;
 
-    private transient final Hashtable<String, Object> transientAttributes;
+    private transient Hashtable<String, Object> transientAttributes;
 
     private long requestIDCount = 0;
 
@@ -59,13 +59,21 @@ public class Visit implements Serializable {
 
     private final String sessionToken;
 
-    private transient final ReadWriteLock sessionGuardLock = new ReentrantReadWriteLock();
+    private transient ReadWriteLock sessionGuardLock;
 
     public Visit(String sessionToken) {
         this.userVisit = null;
         this.sessionToken = sessionToken;
         this.attributes = new Hashtable<String, Serializable>();
         this.transientAttributes = new Hashtable<String, Object>();
+        this.sessionGuardLock = new ReentrantReadWriteLock();
+    }
+
+    private Object readResolve() {
+        this.changed = false;
+        this.transientAttributes = new Hashtable<String, Object>();
+        this.sessionGuardLock = new ReentrantReadWriteLock();
+        return this;
     }
 
     /**
