@@ -31,7 +31,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -47,24 +50,45 @@ public class CacheService {
 
     private static boolean disabled = false;
 
+    private static boolean namespaceAware = readMultitenancyConfig();
+
     private static Cache getCache() {
         if (shutdown) {
             throw new Error("Cache already shutdown");
         }
         CacheManager mgr = CacheManager.create(configuration);
-        Cache cache = mgr.getCache(NamespaceManager.getNamespace());
+
+        String cacheName;
+        if (namespaceAware) {
+            cacheName = NamespaceManager.getNamespace();
+        } else {
+            cacheName = "pyx";
+        }
+        Cache cache = mgr.getCache(cacheName);
         if (cache == null) {
             synchronized (CacheService.class) {
-                cache = mgr.getCache(NamespaceManager.getNamespace());
+                cache = mgr.getCache(cacheName);
                 if (cache == null) {
                     int maxElementsInMemory = 10 * 1024;
                     int timeToLiveSeconds = 2 * Consts.HOURS2SEC;
-                    cache = new Cache(NamespaceManager.getNamespace(), maxElementsInMemory, false, false, timeToLiveSeconds, timeToLiveSeconds);
+                    cache = new Cache(cacheName, maxElementsInMemory, false, false, timeToLiveSeconds, timeToLiveSeconds);
                     mgr.addCache(cache);
                 }
             }
         }
         return cache;
+    }
+
+    private static boolean readMultitenancyConfig() {
+        IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
+        if (cfg == null) {
+            throw new RuntimeException("Persistence Configuration is not defined (is null) in class " + ServerSideConfiguration.instance().getClass().getName());
+        }
+        if (cfg instanceof com.pyx4j.entity.rdb.cfg.Configuration) {
+            return ((com.pyx4j.entity.rdb.cfg.Configuration) cfg).getMultitenancyType() != MultitenancyType.SingleTenant;
+        } else {
+            return false;
+        }
     }
 
     private static Configuration createCacheConfiguration() {
