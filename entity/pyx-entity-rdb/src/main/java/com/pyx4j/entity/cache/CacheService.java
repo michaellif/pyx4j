@@ -50,7 +50,7 @@ public class CacheService {
 
     private static boolean disabled = false;
 
-    private static boolean namespaceAware = readMultitenancyConfig();
+    private static Boolean namespaceAware;
 
     private static Cache getCache() {
         if (shutdown) {
@@ -59,6 +59,9 @@ public class CacheService {
         CacheManager mgr = CacheManager.create(configuration);
 
         String cacheName;
+        if (namespaceAware == null) {
+            namespaceAware = readMultitenancyConfig();
+        }
         if (namespaceAware) {
             cacheName = NamespaceManager.getNamespace();
         } else {
