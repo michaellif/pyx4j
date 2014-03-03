@@ -13,9 +13,6 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulation;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -23,8 +20,6 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
-import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig.SimpulationType;
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
 
 public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
@@ -42,7 +37,13 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
     @Override
     protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
         updatecardServiceVisibility();
+    }
+
+    private void updatecardServiceVisibility() {
+        get(proto().systems().useFundsTransferSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
+        get(proto().systems().useDirectBankingSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
     }
 
     private TwoColumnFlexFormPanel createGeneralTab() {
@@ -76,26 +77,6 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
         content.setH2(++row, 0, 2, i18n.tr("Credit Cards"));
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().useCardServiceSimulator()), 5, true).build());
-        // TODO This should be in separate server/separate forms
-
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseDelay()), 5, true).build());
-
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseType()), 15, true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseCode()), 15, true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseHttpCode()), 15, true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseText()), 15, true).build());
-
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().acceptCardExpiryFrom()), 15, true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().acceptCardExpiryTo()), 15, true).build());
-
-        get(proto().cardService().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<SimpulationType> event) {
-                updatecardServiceVisibility();
-            }
-
-        });
 
         return content;
     }
@@ -110,36 +91,6 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().yardiInterfaceNetworkSimulation().delay()), 10, true).build());
 
         return content;
-    }
-
-    private void updatecardServiceVisibility() {
-
-        get(proto().systems().useFundsTransferSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
-        get(proto().systems().useDirectBankingSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
-
-        get(proto().cardService().responseCode()).setVisible(false);
-        get(proto().cardService().responseText()).setVisible(false);
-        get(proto().cardService().responseHttpCode()).setVisible(false);
-        get(proto().cardService().acceptCardExpiryFrom()).setVisible(false);
-        get(proto().cardService().acceptCardExpiryTo()).setVisible(false);
-
-        switch (getValue().cardService().responseType().getValue()) {
-        case RespondWithCode:
-            get(proto().cardService().responseCode()).setVisible(true);
-            break;
-        case RespondWithText:
-            get(proto().cardService().responseText()).setVisible(true);
-            break;
-        case RespondWithHttpCode:
-            get(proto().cardService().responseHttpCode()).setVisible(true);
-            break;
-        case SimulateTransations:
-            get(proto().cardService().acceptCardExpiryFrom()).setVisible(true);
-            get(proto().cardService().acceptCardExpiryTo()).setVisible(true);
-            break;
-        default:
-            break;
-        }
     }
 
     private TwoColumnFlexFormPanel createEquifaxTab() {

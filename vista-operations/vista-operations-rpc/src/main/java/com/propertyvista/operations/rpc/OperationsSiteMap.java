@@ -260,6 +260,11 @@ public class OperationsSiteMap implements SiteMap {
 
         public static class CardServiceSimulation extends CrudAppPlace implements DevelopmentOnlyPlace {
 
+            @PlaceProperties(caption = "Simulated Card Service Configuration", navigLabel = "Cards Service Config")
+            public static class CardServiceSimulatorConfiguration extends CrudAppPlace implements DevelopmentOnlyPlace {
+
+            }
+
             @PlaceProperties(caption = "Simulated Card", navigLabel = "Cards")
             public static class CardServiceSimulationCard extends CrudAppPlace implements DevelopmentOnlyPlace {
 

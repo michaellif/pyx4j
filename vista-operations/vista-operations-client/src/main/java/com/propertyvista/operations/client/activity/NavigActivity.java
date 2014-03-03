@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -129,6 +130,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
             folder.addNavigItem(new OperationsSiteMap.Simulator.PadSimulation.PadSimFile());
 
+            folder.addNavigItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulatorConfiguration().formViewerPlace(new Key(1)));
             folder.addNavigItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationMerchantAccount());
             folder.addNavigItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationCard());
             folder.addNavigItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction());

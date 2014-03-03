@@ -37,7 +37,6 @@ import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
 import com.propertyvista.operations.rpc.services.SimulationService;
-import com.propertyvista.operations.server.services.simulator.CardServiceSimulationUtils;
 
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {
 
@@ -56,8 +55,6 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         result.systems().set(VistaSystemsSimulationConfig.getConfiguration());
 
         result.equifax().set(Persistence.service().retrieve(EntityQueryCriteria.create(EquifaxSimulatorConfig.class)));
-
-        result.cardService().set(CardServiceSimulationUtils.getCardServiceSimulatorConfig());
 
         result.fundsTransferSimulationConfigurable().setValue(
                 ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBankingSimulatorConfiguration()
@@ -100,7 +97,6 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         VistaSystemsSimulationConfig.setConfiguration(entity.systems());
 
         Persistence.service().persist(entity.equifax());
-        Persistence.service().persist(entity.cardService());
         Persistence.service().commit();
 
         callback.onSuccess(entity.getPrimaryKey());

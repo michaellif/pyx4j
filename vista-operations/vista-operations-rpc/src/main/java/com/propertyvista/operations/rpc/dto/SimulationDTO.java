@@ -20,7 +20,6 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
-import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 import com.propertyvista.operations.dto.VistaSystemsSimulationConfigDTO;
 
 @Transient
@@ -48,7 +47,4 @@ public interface SimulationDTO extends IEntity {
 
     EquifaxSimulatorConfig equifax();
 
-    // TODO This should be in separate server/separate forms
-    @Deprecated
-    CardServiceSimulatorConfig cardService();
 }

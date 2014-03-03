@@ -70,6 +70,8 @@ import com.propertyvista.operations.client.activity.crud.simulation.SimulationEd
 import com.propertyvista.operations.client.activity.crud.simulation.SimulationViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationCardEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationCardListerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationConfigEditorActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationConfigViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationMerchantAccountEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationMerchantAccountListerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationTransactionEditorActivity;
@@ -460,6 +462,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                     break;
                 case lister:
                     activity = new CardServiceSimulationMerchantAccountListerActivity(place);
+                    break;
+                }
+
+            } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulatorConfiguration) {
+                switch (crudPlace.getType()) {
+                case viewer:
+                    activity = new CardServiceSimulationConfigViewerActivity((CrudAppPlace) place);
+                    break;
+                case editor:
+                    activity = new CardServiceSimulationConfigEditorActivity((CrudAppPlace) place);
+                    break;
+                case lister:
+                default:
                     break;
                 }
 
