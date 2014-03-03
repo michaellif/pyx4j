@@ -256,7 +256,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         updateProductCatalog(yc, building, getBuildingDepositInfo(building, Arrays.asList(propertyMarketing)));
     }
 
-    // TODO - ValdL: process depositInfo
     public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, BigDecimal> depositInfo) throws YardiServiceException {
         YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
         RentableItems rentableItems = stub.getRentableItems(yc, building.propertyCode().getValue());
@@ -293,7 +292,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
         }
-        return null;
+        return java.util.Collections.emptyMap();
     }
 
     private List<YardiPropertyConfiguration> getPropertyConfigurations(Properties properties) {
