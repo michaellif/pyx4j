@@ -275,7 +275,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             if ((lease.currentTerm().version().guarantors().size() > 0) && (pGuarantorCount < DemoData.UserType.PGUARANTOR.getDefaultMax())) {
                 pGuarantorCount++;
                 LeaseTermGuarantor participant = lease.currentTerm().version().guarantors().get(0);
-                String email = DemoData.UserType.PGUARANTOR.getEmail(pCoApplicantCount);
+                String email = DemoData.UserType.PGUARANTOR.getEmail(pGuarantorCount);
                 participant.leaseParticipant().customer().person().email().setValue(email);
             }
 
