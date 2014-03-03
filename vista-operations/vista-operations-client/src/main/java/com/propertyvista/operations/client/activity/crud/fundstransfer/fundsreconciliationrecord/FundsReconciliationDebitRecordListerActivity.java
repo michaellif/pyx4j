@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord.FundsReconciliationDebitRecordListerView;
@@ -38,12 +39,16 @@ public class FundsReconciliationDebitRecordListerActivity extends AbstractLister
     @Override
     protected void parseExternalFilters(AppPlace place, Class<FundsReconciliationRecordRecordDTO> entityClass,
             EntityFiltersBuilder<FundsReconciliationRecordRecordDTO> filters) {
-        super.parseExternalFilters(place, entityClass, filters);
-
         String val;
         if ((val = place.getFirstArg(filters.proto().reconciliationSummary().reconciliationFile().id().getPath().toString())) != null) {
             filters.eq(filters.proto().reconciliationSummary().reconciliationFile().id(), new Key(val));
+
         }
+        // Actually super() of this method should do this, but it's bugged
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
+            filters.eq(filters.proto().reconciliationSummary().id(), new Key(val));
+        }
+
     }
 
 }

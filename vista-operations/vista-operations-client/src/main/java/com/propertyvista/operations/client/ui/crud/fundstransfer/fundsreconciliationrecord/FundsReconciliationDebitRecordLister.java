@@ -25,6 +25,7 @@ public class FundsReconciliationDebitRecordLister extends AbstractLister<FundsRe
         setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off       
+                    new MemberColumnDescriptor.Builder(proto().reconciliationSummary().id()).columnTitle("Summary Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().id()).columnTitle("File Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().fileName()).build(),
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().merchantAccount().pmc()).build(),

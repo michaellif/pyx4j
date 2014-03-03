@@ -31,11 +31,12 @@ import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
-import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
-import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
-import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
-import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
@@ -61,6 +62,7 @@ public class OperationsEntityMapper {
         register(FundsTransferBatchDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferBatch.class, DEFAULT_IMAGE);
 
         register(FundsReconciliationFileDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationFile.class, DEFAULT_IMAGE);
+        register(FundsReconciliationSummaryDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationSummary.class, DEFAULT_IMAGE);
         register(FundsReconciliationRecordRecordDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationRecord.class, DEFAULT_IMAGE);
 
         register(PadSimFile.class, OperationsSiteMap.Simulator.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);

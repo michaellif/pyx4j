@@ -13,15 +13,16 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationsummary;
 
-import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
-
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
+
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
 public class FundsReconciliationSummaryLister extends AbstractLister<FundsReconciliationSummaryDTO> {
 
     public FundsReconciliationSummaryLister() {
-        super(FundsReconciliationSummaryDTO.class);
+        super(FundsReconciliationSummaryDTO.class, false, false);
+        setAllowZoomIn(true);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().paymentDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),

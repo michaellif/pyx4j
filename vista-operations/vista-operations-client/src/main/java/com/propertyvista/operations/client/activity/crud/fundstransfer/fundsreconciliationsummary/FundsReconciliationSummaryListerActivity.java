@@ -25,13 +25,13 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationsummary.FundsReconciliationSummaryListerView;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
-import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryListService;
+import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudService;
 
 public class FundsReconciliationSummaryListerActivity extends AbstractListerActivity<FundsReconciliationSummaryDTO> {
 
     public FundsReconciliationSummaryListerActivity(Place place) {
         super(place, OperationsSite.getViewFactory().getView(FundsReconciliationSummaryListerView.class), GWT
-                .<AbstractCrudService<FundsReconciliationSummaryDTO>> create(FundsReconciliationSummaryListService.class), FundsReconciliationSummaryDTO.class);
+                .<AbstractCrudService<FundsReconciliationSummaryDTO>> create(FundsReconciliationSummaryCrudService.class), FundsReconciliationSummaryDTO.class);
     }
 
     @Override

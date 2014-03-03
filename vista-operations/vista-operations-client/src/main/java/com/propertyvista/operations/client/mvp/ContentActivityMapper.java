@@ -39,6 +39,7 @@ import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreco
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.FundsReconciliationDebitRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.FundsReconciliationDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationsummary.FundsReconciliationSummaryListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationsummary.FundsReconciliationSummaryViewerActivty;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.FundsTransferBatchListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.FundsTransferBatchViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.FundsTransferFileListerActivity;
@@ -264,7 +265,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         case lister:
                             activity = new FundsReconciliationSummaryListerActivity(crudPlace);
                             break;
-
+                        case viewer:
+                            activity = new FundsReconciliationSummaryViewerActivty(crudPlace);
                         default:
                             break;
                         }
