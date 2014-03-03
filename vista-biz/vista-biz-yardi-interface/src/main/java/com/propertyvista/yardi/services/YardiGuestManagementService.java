@@ -243,6 +243,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
     }
 
     public SignLeaseResults signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException {
+        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
+            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
+        }
+
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getProspect(lease);
         // get available rentable item ids per type

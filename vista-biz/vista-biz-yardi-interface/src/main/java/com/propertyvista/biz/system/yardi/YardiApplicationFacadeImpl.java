@@ -158,10 +158,6 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
 
     @Override
     public Lease approveApplication(final Lease lease) throws YardiServiceException {
-        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
-            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
-        }
-
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
