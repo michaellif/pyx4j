@@ -219,8 +219,16 @@ public class YardiGuestManagementService extends YardiAbstractService {
                 event.setQuotes(guestProcessor.getRentQuote(getRentPrice(lease)));
             }
             guestProcessor.setEvent(guest, event);
-            submitGuest(yc, guest);
-            log.info("Triggered event: {}", type.name());
+            // intermediate events may fail if have been submitted before, so we only care about the LEASE_SIGN event
+            try {
+                submitGuest(yc, guest);
+                log.info("Event Submitted: {}", type.name());
+            } catch (YardiServiceException e) {
+                log.info("Event Failed: {}", type.name());
+                if (type == EventTypes.LEASE_SIGN) {
+                    throw e;
+                }
+            }
         }
         // do tenant search to retrieve lease id
         String guestId = lease.getPrimaryKey().toString();
