@@ -37,7 +37,7 @@ public class XYChartConfigurator extends GridBasedChartConfigurator {
     private int barWidth = 10;
 
     public enum ChartType {
-        Line, Bar
+        Line, Bar, BarDistribution
     }
 
     public enum PointsType {

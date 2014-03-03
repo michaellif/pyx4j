@@ -261,7 +261,12 @@ public class XYChart extends GridBase implements IsSvgElement {
         List<Rect> bars = new ArrayList<>();
 
         Iterator<String> colors = configurator.getColorIterator();
+
+        int seriesNumber = 0;
+        double xBarDistributionShift = Utils.round((configurator.getSeries().size()) / 2d, 2);
+
         for (XYSeries serie : configurator.getSeries()) {
+            seriesNumber++;
             String path = "";
             String color = colors.next();
             for (XYData value : serie.dataset) {
@@ -278,7 +283,7 @@ public class XYChart extends GridBase implements IsSvgElement {
                     }
                     path += x + "," + y;
                     break;
-                case Bar:
+                case Bar: {
                     int bx = (int) x - configurator.getBarWidth() / 2;
                     int by = (int) y;
                     int height = ystart - (int) y;
@@ -293,6 +298,26 @@ public class XYChart extends GridBase implements IsSvgElement {
                     bar.setFill(color);
                     bar.setStroke(color);
                     bars.add(bar);
+                }
+                    break;
+                case BarDistribution: {
+                    int bx = (int) x - configurator.getBarWidth() / 2;
+                    bx += 3 * (seriesNumber - xBarDistributionShift);
+
+                    int by = (int) y;
+                    int height = ystart - (int) y;
+                    if (Math.abs(height) < 3) {
+                        height = 3;
+                        // Place small bar on the X axis
+                        if (by == ystart) {
+                            by--;
+                        }
+                    }
+                    Rect bar = factory.createRect(bx, by, configurator.getBarWidth(), height, 0, 0);
+                    bar.setFill(color);
+                    bar.setStroke(color);
+                    container.add(bar);
+                }
                     break;
                 }
 
