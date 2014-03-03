@@ -64,11 +64,11 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -109,6 +109,9 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             get(((TenantDTO) proto()).customer().registeredInPortal()).setVisible(
                     LeaseTermParticipant.Role.portalAccess().contains(((TenantDTO) getValue()).role().getValue()));
         }
+
+        get(proto().leasesOfThisCustomer()).setEnabled(getValue().leasesOfThisCustomer().size() != 0);
+        get(proto().applicationsOfThisCustomer()).setEnabled(getValue().applicationsOfThisCustomer().size() != 0);
     }
 
     @Override
@@ -169,7 +172,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 row,
                 1,
                 new FormDecoratorBuilder(inject(proto().screening(),
-                        new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))), 22).build());
+                        new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))), 22)
+                        .build());
 
         if (rootClass.equals(TenantDTO.class)) {
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role(), new CEnumLabel()), 10).build());

@@ -91,7 +91,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.eq(criteria.proto().leaseParticipants().$().customer(), bo.customer());
-            criteria.in(criteria.proto().status(), EnumSet.of(Lease.Status.Application, Lease.Status.Approved));
+            criteria.in(criteria.proto().status(), EnumSet.of(Lease.Status.Application));
             criteria.isNotNull(criteria.proto().leaseApplication().status());
             to.applicationsOfThisCustomer().setCollectionSizeOnly(Persistence.service().count(criteria));
         }
