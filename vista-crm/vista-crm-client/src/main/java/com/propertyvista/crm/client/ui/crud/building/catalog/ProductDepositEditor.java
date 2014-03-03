@@ -48,12 +48,14 @@ public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
         CEntityComboBox<ARCode> chargeCodeSelector;
 
         int row = -1;
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enabled()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType())).build());
         content.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class))).build());
+
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
-        row = -1;
+        row = 0;
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().valueType()), 10).build());
         content.setWidget(++row, 1, valueHolder);
 
@@ -67,7 +69,21 @@ public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
             }
         });
 
+        get(proto().enabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                setStateEnabled(event.getValue());
+            }
+        });
+
         return content;
+    }
+
+    private void setStateEnabled(boolean enabled) {
+        ProductDepositEditor.this.setEnabled(enabled);
+
+        get(proto().enabled()).inheritEnabled(false);
+        get(proto().enabled()).setEnabled(true);
     }
 
     @Override
@@ -75,6 +91,8 @@ public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
         super.onValueSet(populate);
 
         bindValueEditor(getValue().valueType().getValue(), true);
+
+        setStateEnabled(getValue().enabled().isBooleanTrue());
     }
 
     private void bindValueEditor(ValueType valueType, boolean repopulatevalue) {

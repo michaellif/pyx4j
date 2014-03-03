@@ -142,18 +142,21 @@ public class ProductCatalogGenerator {
         service.version().price().setValue(new BigDecimal(1000.10));
         service.version().availableOnline().setValue(onlineUse);
 
+        service.version().depositLMR().enabled().setValue(RandomUtil.randomBoolean());
         service.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
         service.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.DepositLMR));
         service.version().depositLMR().valueType().setValue(ValueType.Percentage);
         service.version().depositLMR().value().setValue(BigDecimal.ONE);
         service.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
 
+        service.version().depositMoveIn().enabled().setValue(RandomUtil.randomBoolean());
         service.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
         service.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.DepositMoveIn));
         service.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
         service.version().depositMoveIn().value().setValue(new BigDecimal(0.66));
         service.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
 
+        service.version().depositSecurity().enabled().setValue(RandomUtil.randomBoolean());
         service.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
         service.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.DepositSecurity));
         service.version().depositSecurity().valueType().setValue(ValueType.Monetary);
@@ -178,18 +181,21 @@ public class ProductCatalogGenerator {
         feature.version().availableOnline().setValue(RandomUtil.randomBoolean());
         feature.version().price().setValue(new BigDecimal(100.10));
 
+        feature.version().depositLMR().enabled().setValue(RandomUtil.randomBoolean());
         feature.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
         feature.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.DepositLMR));
         feature.version().depositLMR().valueType().setValue(ValueType.Percentage);
         feature.version().depositLMR().value().setValue(BigDecimal.ONE);
         feature.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
 
+        feature.version().depositMoveIn().enabled().setValue(RandomUtil.randomBoolean());
         feature.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
         feature.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.DepositMoveIn));
         feature.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
         feature.version().depositMoveIn().value().setValue(new BigDecimal(0.33));
         feature.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
 
+        feature.version().depositSecurity().enabled().setValue(RandomUtil.randomBoolean());
         feature.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
         feature.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.DepositSecurity));
         feature.version().depositSecurity().valueType().setValue(ValueType.Monetary);

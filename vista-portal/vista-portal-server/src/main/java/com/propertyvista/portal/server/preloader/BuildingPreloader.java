@@ -144,7 +144,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
             productCatalogGenerator.generateProductCatalog(building.productCatalog());
-            building.defaultProductCatalog().setValue(true);
+            building.defaultProductCatalog().setValue(RandomUtil.randomBoolean());
 
             if (merchantAccount != null) {
                 BuildingMerchantAccount bma = building.merchantAccounts().$();

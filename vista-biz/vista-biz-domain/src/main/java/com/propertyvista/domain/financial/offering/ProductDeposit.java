@@ -47,6 +47,8 @@ public interface ProductDeposit extends IEntity {
         }
     }
 
+    @NotNull
+    @Editor(type = EditorType.radiogroup)
     IPrimitive<Boolean> enabled();
 
     /** passed to Deposit to use for corresponding invoice line items */

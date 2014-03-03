@@ -55,18 +55,21 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
         entity.catalog().setPrimaryKey(initData.parent().getPrimaryKey());
         entity.catalog().setValueDetached();
 
+        entity.version().depositLMR().enabled().setValue(false);
         entity.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
         entity.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.DepositLMR));
         entity.version().depositLMR().valueType().setValue(ValueType.Percentage);
         entity.version().depositLMR().value().setValue(BigDecimal.ONE);
         entity.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
 
+        entity.version().depositMoveIn().enabled().setValue(false);
         entity.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
         entity.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.DepositMoveIn));
         entity.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
         entity.version().depositMoveIn().value().setValue(BigDecimal.ONE);
         entity.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
 
+        entity.version().depositSecurity().enabled().setValue(false);
         entity.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
         entity.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.DepositSecurity));
         entity.version().depositSecurity().valueType().setValue(ValueType.Percentage);

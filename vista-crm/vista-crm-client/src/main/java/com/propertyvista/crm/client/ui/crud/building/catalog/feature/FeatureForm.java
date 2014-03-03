@@ -56,13 +56,14 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Deposits"));
-        content.setH3(++row, 0, 2, proto().version().depositLMR().getMeta().getCaption());
+
+        content.setH3(++row, 0, 2, i18n.tr("Last Month Rent"));
         content.setWidget(++row, 0, 2, inject(proto().version().depositLMR(), new ProductDepositEditor()));
 
-        content.setH3(++row, 0, 2, proto().version().depositMoveIn().getMeta().getCaption());
+        content.setH3(++row, 0, 2, i18n.tr("Move In"));
         content.setWidget(++row, 0, 2, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
 
-        content.setH3(++row, 0, 2, proto().version().depositSecurity().getMeta().getCaption());
+        content.setH3(++row, 0, 2, i18n.tr("Security"));
         content.setWidget(++row, 0, 2, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
 
         // tweaks:
