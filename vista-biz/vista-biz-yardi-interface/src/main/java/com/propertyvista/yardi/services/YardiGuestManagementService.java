@@ -129,6 +129,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
      * Try to hold unit for the given lease. In case of failure will throw exception.
      */
     public boolean holdUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
+            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
+        }
+
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
@@ -155,6 +159,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
      * Will fail if attempted to release unit that has no hold by this lease.
      */
     public boolean releaseUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
+            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
+        }
+
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         Prospect guest = guestProcessor.getProspect(lease);
         // add unit hold event
@@ -168,6 +176,54 @@ public class YardiGuestManagementService extends YardiAbstractService {
         submitGuest(yc, guest);
 
         log.info("Released unit: {}", lease.unit().info().number().getValue());
+
+        return true;
+    }
+
+    public boolean cancelApplication(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        EventType event = null;
+        YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
+        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("t")) {
+            // tenant - use cancel application event
+            event = guestProcessor.getNewEvent(EventTypes.CANCEL_APPLICATION, false);
+        } else if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
+            // prospect - use cancel guest event
+            event = guestProcessor.getNewEvent(EventTypes.CANCEL, false);
+        } else {
+            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
+        }
+
+        Prospect guest = guestProcessor.getProspect(lease);
+        // add cancel application event
+        guestProcessor.clearPreferences(guest);
+        Identification eventId = new Identification();
+        eventId.setIDValue("0");
+        event.setEventID(eventId);
+        guestProcessor.setEvent(guest, event);
+        submitGuest(yc, guest);
+
+        log.info("Application canceled: {}", lease.leaseId().getValue());
+
+        return true;
+    }
+
+    public boolean declineApplication(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("t")) {
+            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
+        }
+
+        YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
+        Prospect guest = guestProcessor.getProspect(lease);
+        // add cancel application event
+        guestProcessor.clearPreferences(guest);
+        EventType event = guestProcessor.getNewEvent(EventTypes.APPLICATION_DENIED, false);
+        Identification eventId = new Identification();
+        eventId.setIDValue("0");
+        event.setEventID(eventId);
+        guestProcessor.setEvent(guest, event);
+        submitGuest(yc, guest);
+
+        log.info("Application declined: {}", lease.leaseId().getValue());
 
         return true;
     }

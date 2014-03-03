@@ -45,6 +45,10 @@ public interface YardiApplicationFacade {
      */
     Lease approveApplication(Lease leaseId) throws YardiServiceException;
 
+    void cancelApplication(Lease leaseId) throws YardiServiceException;
+
+    void declineApplication(Lease leaseId) throws YardiServiceException;
+
     /**
      * @param buildingId
      *            for which Online Applications will be enabled

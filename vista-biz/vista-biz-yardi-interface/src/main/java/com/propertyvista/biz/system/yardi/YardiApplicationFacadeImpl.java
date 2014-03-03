@@ -73,10 +73,6 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
     public void holdUnit(Lease leaseId) throws YardiServiceException {
         final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
-        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
-            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
-        }
-
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
@@ -87,14 +83,30 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
     public void unreserveUnit(Lease leaseId) throws YardiServiceException {
         final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
-        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
-            throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
-        }
-
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 
         YardiGuestManagementService.getInstance().releaseUnit(getPmcYardiCredential(lease), lease);
+    }
+
+    @Override
+    public void cancelApplication(Lease leaseId) throws YardiServiceException {
+        final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
+        validateApplicationAcceptance(lease.unit().building());
+
+        YardiGuestManagementService.getInstance().cancelApplication(getPmcYardiCredential(lease), lease);
+    }
+
+    @Override
+    public void declineApplication(Lease leaseId) throws YardiServiceException {
+        final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
+        validateApplicationAcceptance(lease.unit().building());
+
+        YardiGuestManagementService.getInstance().declineApplication(getPmcYardiCredential(lease), lease);
     }
 
     @Override
