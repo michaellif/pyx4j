@@ -71,7 +71,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.offering.ProductDeposit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -258,7 +257,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     // TODO - ValdL: process depositInfo
-    public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, ProductDeposit> depositInfo) throws YardiServiceException {
+    public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, BigDecimal> depositInfo) throws YardiServiceException {
         YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
         RentableItems rentableItems = stub.getRentableItems(yc, building.propertyCode().getValue());
         if (rentableItems != null && !rentableItems.getItemType().isEmpty()) {
@@ -285,7 +284,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return getPropertyConfigurations(stub.getPropertyConfigurations(yc));
     }
 
-    private Map<String, ProductDeposit> getBuildingDepositInfo(Building building, List<PhysicalProperty> marketingInfo) {
+    private Map<String, BigDecimal> getBuildingDepositInfo(Building building, List<PhysicalProperty> marketingInfo) {
         for (PhysicalProperty propertyInfo : marketingInfo) {
             for (com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
                 String propertyCode = property.getPropertyID().getIdentification().getPrimaryID();

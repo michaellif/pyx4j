@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.processors;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,14 +29,11 @@ import com.yardi.entity.ils.VacateDate;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.domain.financial.offering.ProductDeposit;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.yardi.mappers.MappingUtils;
 
 public class YardiILSMarketingProcessor {
@@ -65,19 +63,13 @@ public class YardiILSMarketingProcessor {
         ServerSideFactory.create(OccupancyFacade.class).setAvailability(unit, dateAvail);
     }
 
-    public Map<String, ProductDeposit> getDepositInfo(Property property) {
-        Map<String, ProductDeposit> depositInfo = new HashMap<String, ProductDeposit>();
+    public Map<String, BigDecimal> getDepositInfo(Property property) {
+        Map<String, BigDecimal> depositInfo = new HashMap<String, BigDecimal>();
         for (ILSUnit ilsUnit : property.getILSUnit()) {
             // process deposit data
             DepositType depositType = ilsUnit.getDeposit();
             if (ilsUnit.getUnit().getInformation().size() == 1 && depositType != null && depositType.getAmount().getValue() != null) {
-                ProductDeposit deposit = EntityFactory.create(ProductDeposit.class);
-                deposit.enabled().setValue(true);
-                deposit.depositType().setValue(Deposit.DepositType.SecurityDeposit);
-                deposit.valueType().setValue(ProductDeposit.ValueType.Monetary);
-                deposit.value().setValue(depositType.getAmount().getValue());
-                deposit.description().setValue(depositType.getDescription());
-                depositInfo.put(ilsUnit.getUnit().getInformation().get(0).getUnitID(), deposit);
+                depositInfo.put(ilsUnit.getUnit().getInformation().get(0).getUnitID(), depositType.getAmount().getValue());
             }
         }
         return depositInfo;
