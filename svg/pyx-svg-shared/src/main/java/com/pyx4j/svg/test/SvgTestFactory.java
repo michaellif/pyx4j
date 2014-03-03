@@ -53,6 +53,11 @@ import com.pyx4j.svg.chart.PieChart;
 import com.pyx4j.svg.chart.PieChart2D;
 import com.pyx4j.svg.chart.PieChartModel;
 import com.pyx4j.svg.chart.PieChartModel.PieChartSegment;
+import com.pyx4j.svg.chart.XYChart;
+import com.pyx4j.svg.chart.XYChartConfigurator;
+import com.pyx4j.svg.chart.XYChartConfigurator.ChartType;
+import com.pyx4j.svg.chart.XYChartConfigurator.PointsType;
+import com.pyx4j.svg.chart.XYSeries;
 
 public class SvgTestFactory {
 
@@ -110,6 +115,43 @@ public class SvgTestFactory {
 
     }
 
+    private static List<XYSeries> xySeries = new ArrayList<>();
+
+    static {
+        XYSeries a = new XYSeries("Series A");
+        xySeries.add(a);
+        a.add(1, 23);
+        a.add(2, 14);
+        a.add(3, 15);
+        a.add(4, 24);
+        a.add(5, 34);
+        a.add(6, 36);
+        a.add(7, 22);
+        a.add(8, 45);
+        a.add(9, 43);
+        a.add(10, 17);
+        a.add(11, 29);
+        a.add(12, 25);
+
+        XYSeries b = new XYSeries("Series B");
+        xySeries.add(b);
+        b.add(1.5, 10.1);
+        b.add(2.4, 14);
+        b.add(4.1, 30);
+        b.add(5, 21);
+        b.add(8.3, 34);
+
+        XYSeries c = new XYSeries("Series C");
+        xySeries.add(c);
+        c.add(1.5, 15.1); // This is over B should see B in Bar
+        c.add(3.5, 0);
+        c.add(4.5, 15);
+        c.add(5.4, 40);
+        c.add(7.2, 30);
+        c.add(8.6, 21);
+        c.add(9.3, 39);
+    }
+
     public static SvgRoot createPieChart2DTest(SvgFactory factory, int x, int y) {
         SvgRoot svgroot = factory.getSvgRoot();
         Group g = factory.createGroup();
@@ -159,6 +201,45 @@ public class SvgTestFactory {
         config.setChartColors(ChartTheme.bright);
 
         GridBasedChart lchart = new LineChart(config);
+        g.add(lchart);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
+        return svgroot;
+    }
+
+    public static SvgRoot createXYChart2DTest(SvgFactory factory, int x, int y, boolean zeroBased) {
+        SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
+
+        XYChartConfigurator config = new XYChartConfigurator(factory, ChartType.Line, xySeries, 600, 400);
+        config.setLegend(true);
+        config.setTitle("XYChart");
+        config.setGridType(GridType.Both);
+        config.setZeroBased(zeroBased);
+        config.setZeroBasedY(zeroBased);
+        config.setChartColors(ChartTheme.bright);
+        config.setPointsType(PointsType.Circle);
+
+        XYChart lchart = new XYChart(config);
+        g.add(lchart);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
+        return svgroot;
+    }
+
+    public static SvgRoot createXYBarChart2DTest(SvgFactory factory, int x, int y, boolean zeroBased) {
+        SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
+
+        XYChartConfigurator config = new XYChartConfigurator(factory, ChartType.Bar, xySeries, 600, 400);
+        config.setLegend(true);
+        config.setTitle("XYBarChart");
+        config.setGridType(GridType.Both);
+        config.setZeroBased(zeroBased);
+        config.setZeroBasedY(zeroBased);
+        config.setChartColors(ChartTheme.bright);
+
+        XYChart lchart = new XYChart(config);
         g.add(lchart);
         g.setTransform("translate(" + x + "," + y + ")");
         svgroot.add(g);

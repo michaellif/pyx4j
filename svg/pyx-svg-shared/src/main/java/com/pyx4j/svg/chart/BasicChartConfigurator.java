@@ -46,7 +46,6 @@ public abstract class BasicChartConfigurator {
 
     public BasicChartConfigurator(SvgFactory factory, DataSource datasource) {
         assert factory != null;
-        assert datasource != null;
         this.factory = factory;
         this.datasourse = datasource;
         chartColors = ChartTheme.monochrome;

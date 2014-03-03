@@ -39,36 +39,14 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.common.Tick;
 import com.pyx4j.svg.common.Tick.Rank;
 
-public abstract class GridBasedChart extends ChartBase implements IsSvgElement {
+public abstract class GridBasedChart extends GridBase implements IsSvgElement {
     /**
      * Default max value of the graph, for the cases when actual max value that is present in the data set is 0.
      * It's used to avoid the bug that causes the points that represent zero to be drawn not on the X-axis.
      */
     private static final double DEFAULT_MAX_VALUE = 100d;
 
-    protected final static int PADDING = 15;
-
-    protected static final String AXIS_COLOR = "gray";
-
-    protected static int CHART_LABEL_PADDING = 4;
-
-    protected static final String GRID_COLOR = "lightgray";
-
-    private static final int MAJOR_TICK_LENGTH = 5;
-
-    private static final int MINOR_TICK_LENGTH = 3;
-
-    private static final int MICRO_TICK_LENGTH = 1;
-
     private static int NUM_OF_VALUE_TICKS = 10;
-
-    private static int DEFAULT_FONT_SIZE = 11;
-
-    private final static int LEGEND_FRAME_PADDING = 5;
-
-    private static int VALUE_LABEL_PADDING = 7;
-
-    private static int LEGEND_SPACING = 7;
 
     private final DataSource datasource;
 
@@ -97,76 +75,6 @@ public abstract class GridBasedChart extends ChartBase implements IsSvgElement {
     private int numOfMetrics;
 
     private double maxValue;
-
-    public enum MetricPrefix {
-        T() {
-
-            @Override
-            public long getFactor() {
-                return 1000000000000l;
-            }
-
-            @Override
-            public String getName() {
-                return "T";
-            }
-
-        },
-        G() {
-            @Override
-            public long getFactor() {
-                return 1000000000;
-            }
-
-            @Override
-            public String getName() {
-                return "G";
-            }
-
-        },
-        M() {
-
-            @Override
-            public long getFactor() {
-                return 1000000;
-            }
-
-            @Override
-            public String getName() {
-                return "M";
-            }
-
-        },
-        K() {
-
-            @Override
-            public long getFactor() {
-                return 1000;
-            }
-
-            @Override
-            public String getName() {
-                return "K";
-            }
-
-        },
-        NONE() {
-
-            @Override
-            public long getFactor() {
-                return 1;
-            }
-
-            @Override
-            public String getName() {
-                return "";
-            }
-
-        };
-        public abstract long getFactor();
-
-        public abstract String getName();
-    }
 
     public GridBasedChart(GridBasedChartConfigurator configurator) {
         //TODO validation
@@ -236,17 +144,7 @@ public abstract class GridBasedChart extends ChartBase implements IsSvgElement {
         maxValue = calculateMaxValue();
 
         //adjust width for value labels
-        if (maxValue % MetricPrefix.T.getFactor() != maxValue) {
-            valuePostfix = MetricPrefix.T;
-        } else if (maxValue % MetricPrefix.G.getFactor() != maxValue) {
-            valuePostfix = MetricPrefix.G;
-        } else if (maxValue % MetricPrefix.M.getFactor() != maxValue) {
-            valuePostfix = MetricPrefix.M;
-        } else if (maxValue % MetricPrefix.K.getFactor() != maxValue) {
-            valuePostfix = MetricPrefix.K;
-        } else {
-            valuePostfix = MetricPrefix.NONE;
-        }
+        valuePostfix = MetricPrefix.getMetricPrefix(maxValue);
         //round up the maximum value to avoid lots of decimal places
         // And allow to see all the value, use ceil
         maxValue = Math.ceil(10.0 * maxValue / valuePostfix.getFactor()) * valuePostfix.getFactor() / 10.0;

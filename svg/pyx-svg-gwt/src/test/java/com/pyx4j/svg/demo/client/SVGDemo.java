@@ -49,6 +49,28 @@ public class SVGDemo implements EntryPoint {
         content.add(new HTML("<h5>SVG Demo</h5>"));
 
         //=========================================//
+        boolean testSingel = false;
+
+        if (testSingel) {
+            svgPanel = SvgTestFactory.createXYBarChart2DTest(svgFactory, 0, 0, true);
+            ((Widget) svgPanel).setSize("600px", "400px");
+            content.add((Widget) svgPanel);
+
+            svgPanel = SvgTestFactory.createXYChart2DTest(svgFactory, 0, 0, true);
+            ((Widget) svgPanel).setSize("600px", "400px");
+            content.add((Widget) svgPanel);
+
+            svgPanel = SvgTestFactory.createBarChart2DTest(svgFactory, 0, 0);
+            ((Widget) svgPanel).setSize("600px", "400px");
+            content.add((Widget) svgPanel);
+
+        }
+
+        if (testSingel) {
+            return;
+        }
+
+        //=========================================//
 
         content.add(new HTML("Rect"));
         svgPanel = SvgTestFactory.createTestRect(svgFactory, 0, 0);
@@ -119,7 +141,19 @@ public class SVGDemo implements EntryPoint {
 
         //=========================================//
 
+        svgPanel = SvgTestFactory.createXYChart2DTest(svgFactory, 0, 0, false);
+        ((Widget) svgPanel).setSize("600px", "400px");
+        content.add((Widget) svgPanel);
+
+        //=========================================//
+
         svgPanel = SvgTestFactory.createBarChart2DTest(svgFactory, 0, 0);
+        ((Widget) svgPanel).setSize("600px", "400px");
+        content.add((Widget) svgPanel);
+
+        //=========================================//
+
+        svgPanel = SvgTestFactory.createXYBarChart2DTest(svgFactory, 0, 0, true);
         ((Widget) svgPanel).setSize("600px", "400px");
         content.add((Widget) svgPanel);
 
@@ -146,7 +180,7 @@ public class SVGDemo implements EntryPoint {
         ColorPicker colorPicker = new ColorPicker(svgFactory, (Widget) svgroot, ColorPicker.PickerType.Hue, 90, 120);
         g.add(colorPicker);
         svgroot.add(g);
-        content.add((Widget) svgroot);      
+        content.add((Widget) svgroot);
 
     }
 }

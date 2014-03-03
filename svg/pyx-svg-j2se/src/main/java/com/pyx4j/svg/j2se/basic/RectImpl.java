@@ -27,16 +27,23 @@ import com.pyx4j.svg.common.Animator;
 
 public class RectImpl extends ShapeImpl implements Rect {
 
+    private final int height;
+
     public RectImpl(Document document, int x, int y, int width, int height, int rx, int ry) {
         super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "rect"));
         initRect(x, y, width, height, rx, ry);
-
+        this.height = height;
     }
 
     public RectImpl(Document document, int x, int y, int width, int height, int rx, int ry, Animator animator) {
         super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "rect"), animator);
         initRect(x, y, width, height, rx, ry);
+        this.height = height;
+    }
 
+    @Override
+    public int getHeight() {
+        return height;
     }
 
     private void initRect(int x, int y, int width, int height, int rx, int ry) {
