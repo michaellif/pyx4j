@@ -18,23 +18,16 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("DepositPolicy")
 @LowestApplicableNode(value = Building.class)
 public interface DepositPolicy extends Policy {
-
-    @Owned
-    @Deprecated
-    IList<DepositPolicyItem> policyItems();
 
     @NotNull
     @Editor(type = EditorType.percentage)
