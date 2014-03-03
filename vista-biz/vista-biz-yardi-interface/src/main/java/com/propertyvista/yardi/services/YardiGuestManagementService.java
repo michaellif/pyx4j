@@ -41,7 +41,6 @@ import com.yardi.entity.guestcard40.Prospects;
 import com.yardi.entity.guestcard40.RentableItem;
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
-import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Name;
 import com.yardi.entity.mits.YardiCustomer;
@@ -61,7 +60,6 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
-import com.propertyvista.yardi.processors.YardiApplicationProcessor;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
@@ -210,16 +208,13 @@ public class YardiGuestManagementService extends YardiAbstractService {
         // create lease
         for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
             EventType event = guestProcessor.getNewEvent(type, false);
-            if (type == EventTypes.APPROVE) {
-                // this will submit deposit charges under Application Fees
-                LeaseApplication leaseApp = new YardiApplicationProcessor().createApplication(lease);
-                ServerSideFactory.create(YardiGuestManagementStub.class).importApplication(yc, leaseApp);
-                log.info("Imported lease application: {}", lease.leaseId().getValue());
-            } else if (type == EventTypes.LEASE_SIGN) {
+            if (type == EventTypes.LEASE_SIGN) {
                 event.setQuotes(guestProcessor.getRentQuote(getRentPrice(lease)));
             }
             guestProcessor.setEvent(guest, event);
-            // intermediate events may fail if have been submitted before, so we only care about the LEASE_SIGN event
+
+            // Allow intermediate events to fail as they could have been triggered
+            // by previous attempts - so, we only care about LEASE_SIGN event
             try {
                 submitGuest(yc, guest);
                 log.info("Event Submitted: {}", type.name());
