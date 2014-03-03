@@ -71,6 +71,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.offering.ProductDeposit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -178,15 +179,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             // availability
+            List<PhysicalProperty> properties = null;
             if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
-                YardiILSGuestCardStub ilsStub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-                List<PhysicalProperty> properties = getILSPropertyMarketing(ilsStub, yc, executionMonitor, propertyListCodes);
+                properties = getILSPropertyMarketing(yc, executionMonitor, propertyListCodes);
                 for (PhysicalProperty property : properties) {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
                     // process each property info
-                    importPropertyMarketingInfo(yardiInterfaceId, property, executionMonitor, ilsStub);
+                    importPropertyMarketingInfo(yardiInterfaceId, property, executionMonitor);
                 }
             }
 
@@ -196,7 +197,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
-                    updateProductCatalog(yc, building);
+                    updateProductCatalog(yc, building, getBuildingDepositInfo(building, properties));
                 }
             }
 
@@ -251,6 +252,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building) throws YardiServiceException {
+        YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
+        PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, building.propertyCode().getValue());
+        updateProductCatalog(yc, building, getBuildingDepositInfo(building, Arrays.asList(propertyMarketing)));
+    }
+
+    // TODO - ValdL: process depositInfo
+    public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, ProductDeposit> depositInfo) throws YardiServiceException {
         YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
         RentableItems rentableItems = stub.getRentableItems(yc, building.propertyCode().getValue());
         if (rentableItems != null && !rentableItems.getItemType().isEmpty()) {
@@ -275,6 +283,18 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     public List<YardiPropertyConfiguration> getPropertyConfigurations(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws YardiServiceException,
             RemoteException {
         return getPropertyConfigurations(stub.getPropertyConfigurations(yc));
+    }
+
+    private Map<String, ProductDeposit> getBuildingDepositInfo(Building building, List<PhysicalProperty> marketingInfo) {
+        for (PhysicalProperty propertyInfo : marketingInfo) {
+            for (com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
+                String propertyCode = property.getPropertyID().getIdentification().getPrimaryID();
+                if (propertyCode != null && propertyCode.equals(building.propertyCode().getValue())) {
+                    return new YardiILSMarketingProcessor().getDepositInfo(property);
+                }
+            }
+        }
+        return null;
     }
 
     private List<YardiPropertyConfiguration> getPropertyConfigurations(Properties properties) {
@@ -746,8 +766,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return transactions;
     }
 
-    private List<PhysicalProperty> getILSPropertyMarketing(YardiILSGuestCardStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
-            List<String> propertyListCodes) {
+    private List<PhysicalProperty> getILSPropertyMarketing(PmcYardiCredential yc, ExecutionMonitor executionMonitor, List<String> propertyListCodes) {
+        YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
         List<PhysicalProperty> marketingInfo = new ArrayList<PhysicalProperty>();
         for (String propertyListCode : propertyListCodes) {
             if (executionMonitor.isTerminationRequested()) {
@@ -768,8 +788,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return marketingInfo;
     }
 
-    private void importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, final ExecutionMonitor executionMonitor,
-            final ExternalInterfaceLoggingStub interfaceLog) {
+    private void importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, final ExecutionMonitor executionMonitor) {
         log.info("PropertyMarketing: import started...");
 
         for (final com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
@@ -796,10 +815,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             } catch (YardiServiceException e) {
                 executionMonitor.addFailedEvent("Building", propertyCode, e);
-                interfaceLog.logRecordedTracastions();
             } catch (Throwable t) {
                 executionMonitor.addErredEvent("Building", propertyCode, t);
-                interfaceLog.logRecordedTracastions();
             }
 
             if (executionMonitor.isTerminationRequested()) {
