@@ -32,11 +32,14 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFacade {
 
@@ -135,6 +138,37 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     // internals:
 
+    @Override
+    public void fillDefaultDeposits(Product<?> entity) {
+
+        entity.version().depositLMR().enabled().setValue(false);
+        entity.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
+        entity.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.DepositLMR));
+        entity.version().depositLMR().valueType().setValue(ValueType.Percentage);
+        entity.version().depositLMR().value().setValue(BigDecimal.ONE);
+        entity.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
+
+        entity.version().depositMoveIn().enabled().setValue(false);
+        entity.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
+        entity.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.DepositMoveIn));
+        entity.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
+        entity.version().depositMoveIn().value().setValue(BigDecimal.ONE);
+        entity.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
+
+        entity.version().depositSecurity().enabled().setValue(false);
+        entity.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
+        entity.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.DepositSecurity));
+        entity.version().depositSecurity().valueType().setValue(ValueType.Percentage);
+        entity.version().depositSecurity().value().setValue(BigDecimal.ONE);
+        entity.version().depositSecurity().description().setValue(DepositType.SecurityDeposit.toString());
+    }
+
+    private ARCode getARCode(ARCode.Type type) {
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.eq(criteria.proto().type(), type);
+        return Persistence.service().retrieve(criteria);
+    }
+
     private void deleteDefaultServices(ProductCatalog catalog) {
         Iterator<Service> serviceIterator = catalog.services().iterator();
         while (serviceIterator.hasNext()) {
@@ -166,6 +200,8 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         service.code().set(code);
         service.version().name().setValue(code.name().getValue());
         service.version().availableOnline().setValue(false);
+
+        fillDefaultDeposits(service);
 
         return service;
     }
@@ -203,6 +239,8 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         feature.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(code));
         feature.version().mandatory().setValue(false);
         feature.version().availableOnline().setValue(false);
+
+        fillDefaultDeposits(feature);
 
         feature.version().items().add(createFeatureItem(code));
 

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.preloader;
 
+import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
@@ -64,4 +65,12 @@ public interface DefaultProductCatalogFacade {
      * @param unit
      */
     void updateUnit(Building buildingId, AptUnit unit);
+
+    /**
+     * Fills Service/Feature with default (disabled) deposits.
+     * 
+     * @param entity
+     *            - Service/Feature entity to fill
+     */
+    void fillDefaultDeposits(Product<?> entity);
 }

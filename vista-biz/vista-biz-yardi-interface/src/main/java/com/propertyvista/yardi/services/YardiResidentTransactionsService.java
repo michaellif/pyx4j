@@ -261,7 +261,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
         RentableItems rentableItems = stub.getRentableItems(yc, building.propertyCode().getValue());
         if (rentableItems != null && !rentableItems.getItemType().isEmpty()) {
-            importProductCatalog(yc.getPrimaryKey(), building, rentableItems);
+            importProductCatalog(yc.getPrimaryKey(), building, rentableItems, depositInfo);
         }
     }
 
@@ -540,14 +540,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return state;
     }
 
-    private void importProductCatalog(final Key yardiInterfaceId, final Building building, final RentableItems rentableItems) throws YardiServiceException {
+    private void importProductCatalog(final Key yardiInterfaceId, final Building building, final RentableItems rentableItems,
+            final Map<String, BigDecimal> depositInfo) throws YardiServiceException {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
                 YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor();
 
                 processor.processCatalog(building, rentableItems, yardiInterfaceId);
-                processor.updateUnits(building);
+                processor.updateUnits(building, depositInfo);
                 processor.persistCatalog(building);
 
                 return null;

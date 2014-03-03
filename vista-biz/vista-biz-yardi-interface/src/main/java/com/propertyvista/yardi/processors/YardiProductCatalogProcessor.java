@@ -20,19 +20,21 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -54,7 +56,7 @@ public class YardiProductCatalogProcessor {
         updateEligibilityMatrixes(building.productCatalog());
     }
 
-    public void updateUnits(Building building) {
+    public void updateUnits(Building building, Map<String, BigDecimal> depositInfo) {
         assert (!building.productCatalog().services().isValueDetached());
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
@@ -65,7 +67,7 @@ public class YardiProductCatalogProcessor {
         ARCode arCode = getServiceArCode();
         for (Service service : building.productCatalog().services()) {
             if (!service.defaultCatalogItem().isBooleanTrue() && service.code().equals(arCode)) {
-                updateUnitItems(service, units);
+                updateUnitItems(service, units, depositInfo);
             }
         }
     }
@@ -156,11 +158,14 @@ public class YardiProductCatalogProcessor {
         Service service = Persistence.service().retrieve(criteria);
         if (service == null) {
             service = EntityFactory.create(Service.class);
+
             service.defaultCatalogItem().setValue(false);
             service.catalog().set(catalog);
             service.code().set(arCode);
             service.version().name().setValue(arCode.name().getValue());
             service.version().availableOnline().setValue(true);
+
+            ServerSideFactory.create(DefaultProductCatalogFacade.class).fillDefaultDeposits(service);
         }
 
         service.expiredFrom().setValue(null);
@@ -205,6 +210,7 @@ public class YardiProductCatalogProcessor {
         Feature feature = Persistence.service().retrieve(criteria);
         if (feature == null) {
             feature = EntityFactory.create(Feature.class);
+
             feature.defaultCatalogItem().setValue(false);
             feature.catalog().set(catalog);
             feature.code().set(typeData.getArCode());
@@ -214,6 +220,8 @@ public class YardiProductCatalogProcessor {
             feature.version().mandatory().setValue(false);
             feature.version().availableOnline().setValue(true);
             feature.version().items().add(createFeatureItem(typeData.getArCode()));
+
+            ServerSideFactory.create(DefaultProductCatalogFacade.class).fillDefaultDeposits(feature);
         } else {
             if (isFeatureChanged(feature, typeData)) {
                 feature = Persistence.service().retrieve(Feature.class, feature.getPrimaryKey().asDraftKey());
@@ -288,8 +296,10 @@ public class YardiProductCatalogProcessor {
         }
     };
 
-    private void updateUnitItems(Service service, List<AptUnit> units) {
+    private void updateUnitItems(Service service, List<AptUnit> units, Map<String, BigDecimal> depositInfo) {
         Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
+        // disable deposit till further processing:
+        service.version().depositSecurity().enabled().setValue(!units.isEmpty());
 
         List<ProductItem> serviceItems = new ArrayList<ProductItem>(service.version().items());
         Collections.sort(serviceItems, new ProductItemByElementComparator());
@@ -300,11 +310,20 @@ public class YardiProductCatalogProcessor {
 
             int found = Collections.binarySearch(serviceItems, item, new ProductItemByElementComparator());
             if (found >= 0) {
-                serviceItems.get(found).price().setValue(unit.financial()._marketRent().getValue());
+                item = serviceItems.get(found);
+                item.price().setValue(unit.financial()._marketRent().getValue());
             } else {
                 item.name().setValue(service.code().name().getStringView());
                 item.price().setValue(unit.financial()._marketRent().getValue());
                 service.version().items().add(item);
+            }
+
+            // update deposit:
+            BigDecimal depositValue = depositInfo.get(unit.info().number().getValue());
+            if (depositValue != null) {
+                item.depositSecurity().setValue(depositValue);
+                // disable service deposit:
+                service.version().depositSecurity().enabled().setValue(true);
             }
         }
     }

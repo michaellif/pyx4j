@@ -13,20 +13,16 @@
  */
 package com.propertyvista.crm.server.services.building.catalog;
 
-import java.math.BigDecimal;
-
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> implements FeatureCrudService {
 
@@ -48,34 +44,9 @@ public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> imp
         entity.catalog().setPrimaryKey(initData.parent().getPrimaryKey());
         entity.catalog().setValueDetached();
 
-        entity.version().depositLMR().enabled().setValue(false);
-        entity.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
-        entity.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.DepositLMR));
-        entity.version().depositLMR().valueType().setValue(ValueType.Percentage);
-        entity.version().depositLMR().value().setValue(BigDecimal.ONE);
-        entity.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
-
-        entity.version().depositMoveIn().enabled().setValue(false);
-        entity.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
-        entity.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.DepositMoveIn));
-        entity.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
-        entity.version().depositMoveIn().value().setValue(BigDecimal.ONE);
-        entity.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
-
-        entity.version().depositSecurity().enabled().setValue(false);
-        entity.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
-        entity.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.DepositSecurity));
-        entity.version().depositSecurity().valueType().setValue(ValueType.Percentage);
-        entity.version().depositSecurity().value().setValue(BigDecimal.ONE);
-        entity.version().depositSecurity().description().setValue(DepositType.SecurityDeposit.toString());
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).fillDefaultDeposits(entity);
 
         return entity;
-    }
-
-    private ARCode getARCode(ARCode.Type type) {
-        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
-        criteria.eq(criteria.proto().type(), type);
-        return Persistence.service().retrieve(criteria);
     }
 
     @Override
