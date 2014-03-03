@@ -185,10 +185,6 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @ReadOnly
     IPrimitive<String> yardiDocumentNumber();
 
-    @Editor(type = EditorType.label)
-    @Format("MM/dd/yyyy HH:mm:ss")
-    IPrimitive<Date> createdDate();
-
     IPrimitive<LogicalDate> receivedDate();
 
     @Editor(type = EditorType.label)
@@ -276,6 +272,11 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @Editor(type = EditorType.label)
     @Format("MM/dd/yyyy HH:mm:ss")
     IPrimitive<Date> updated();
+
+    @Editor(type = EditorType.label)
+    @Format("MM/dd/yyyy HH:mm:ss")
+    @Caption(name = "Created")
+    IPrimitive<Date> createdDate();
 
     @ReadOnly
     @Detached(level = AttachLevel.ToStringMembers)

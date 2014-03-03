@@ -242,6 +242,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().createdDate()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().updated()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().receivedDate()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().targetDate()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().finalizeDate()), 10).build());
@@ -382,6 +383,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().rejectedWithNSF()).setVisible(!isNew && !getValue().rejectedWithNSF().isNull());
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
         get(proto().finalizeDate()).setVisible(!isEditable());
+        get(proto().updated()).setVisible(!getValue().updated().isNull());
         get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
         get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());
         get(proto().notes()).setVisible(isEditable() || !getValue().notes().isNull());
