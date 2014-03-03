@@ -30,8 +30,7 @@ public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
     protected void generate() {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
-        policy.annualInterestRate().setValue(new BigDecimal("0.11"));
-        policy.securityDepositRefundWindow().setValue(11);
+        policy.annualInterestRate().setValue(new BigDecimal("0.12"));
 
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 
