@@ -20,7 +20,6 @@
  */
 package com.propertyvista.biz.financial.billing.internal;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -33,7 +32,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
-@Ignore
 @Category(RegressionTests.class)
 public class BillingSunnyDayScenarioTest extends LeaseFinancialTestBase {
 

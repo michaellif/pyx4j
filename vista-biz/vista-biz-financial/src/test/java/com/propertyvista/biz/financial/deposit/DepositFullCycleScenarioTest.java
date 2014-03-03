@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.deposit;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -24,7 +23,6 @@ import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
-@Ignore
 @Category(FunctionalTests.class)
 public class DepositFullCycleScenarioTest extends LeaseFinancialTestBase {
 
