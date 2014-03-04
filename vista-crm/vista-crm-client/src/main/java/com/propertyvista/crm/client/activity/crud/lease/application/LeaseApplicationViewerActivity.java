@@ -25,6 +25,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -33,6 +34,7 @@ import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.HandledErrorAsyncCallback;
 import com.propertyvista.crm.client.CrmSite;
@@ -103,6 +105,15 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                 ((LeaseApplicationViewerView) getView()).reportStartOnlineApplicationSuccess();
                 populate();
 
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    MessageDialog.error("Warning", caught.getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
             }
         }, getEntityId());
     }
