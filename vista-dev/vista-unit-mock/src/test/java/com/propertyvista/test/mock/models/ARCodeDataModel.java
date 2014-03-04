@@ -26,7 +26,17 @@ import com.propertyvista.test.mock.MockDataModel;
 public class ARCodeDataModel extends MockDataModel<ARCode> {
 
     public static enum Code {
-        rent, outdoorParking, indoorParking, smallLocker, largeLocker, catRent, dogRent, booking, legalFee, superintendentDiscount, nsf, deposit;
+        rent,
+
+        outdoorParking, indoorParking,
+
+        smallLocker, largeLocker,
+
+        catRent, dogRent,
+
+        booking, legalFee, superintendentDiscount, nsf,
+
+        depositLMR, depositMoveIn, depositSecurity;
     }
 
     private final Map<Code, ARCode> codeMap;
@@ -86,8 +96,14 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
         generateARCode("Unknown External Credit", ARCode.Type.ExternalCredit, 0, 1, true);
         generateARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, 1, true);
 
-        code = generateARCode("Deposit", ARCode.Type.DepositSecurity, 0, 1, true);
-        codeMap.put(Code.deposit, code);
+        code = generateARCode("LMR Deposit", ARCode.Type.DepositLMR, 0, 1, true);
+        codeMap.put(Code.depositLMR, code);
+
+        code = generateARCode("Move InDeposit", ARCode.Type.DepositMoveIn, 0, 1, true);
+        codeMap.put(Code.depositMoveIn, code);
+
+        code = generateARCode("Security Deposit", ARCode.Type.DepositSecurity, 0, 1, true);
+        codeMap.put(Code.depositSecurity, code);
 
         generateARCode("LatePayment", ARCode.Type.LatePayment, 0, 1, true);
 
@@ -114,8 +130,8 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
     }
 
     private ARCode generateARCode(String name, ARCode.Type codeType, int glCodeId, int glCategoryId, boolean reserved, String[] yardiChargeCodes) {
-
         ARCode code = EntityFactory.create(ARCode.class);
+
         code.name().setValue(name);
         code.type().setValue(codeType);
         code.glCode().set(getDataModel(GLCodeDataModel.class).addGLCode(name, glCodeId, glCategoryId, reserved));
@@ -136,5 +152,4 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
         return code;
 
     }
-
 }
