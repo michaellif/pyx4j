@@ -119,19 +119,19 @@ class PaymentUtils {
 
     public static boolean isElectronicPaymentsSetup(Lease leaseId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases(), leaseId));
+        criteria.eq(criteria.proto()._buildings().$().units().$().leases(), leaseId);
         return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
     public static boolean isElectronicPaymentsSetup(LeaseTerm leaseTermId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().leaseTerms(), leaseTermId));
+        criteria.eq(criteria.proto()._buildings().$().units().$().leases().$().leaseTerms(), leaseTermId);
         return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
     static MerchantAccount retrieveMerchantAccount(PaymentRecord paymentRecord) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), paymentRecord.billingAccount()));
+        criteria.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), paymentRecord.billingAccount());
         return Persistence.service().retrieve(criteria);
     }
 
@@ -150,6 +150,12 @@ class PaymentUtils {
             }
         }
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
+    }
+
+    public static MerchantAccount retrieveValidMerchantAccount(Building buildingId) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.eq(criteria.proto()._buildings(), buildingId);
+        return Persistence.service().retrieve(criteria);
     }
 
     static AllowedPaymentsSetup getAllowedPaymentsSetup(BillingAccount billingAccountId, VistaApplication vistaApplication) {

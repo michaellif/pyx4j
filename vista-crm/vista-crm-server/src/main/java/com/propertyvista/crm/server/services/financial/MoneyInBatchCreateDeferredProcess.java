@@ -35,7 +35,6 @@ import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInPaymentDTO;
 import com.propertyvista.domain.financial.PaymentPostingBatch;
-import com.propertyvista.domain.financial.PaymentPostingBatch.PostingStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
@@ -50,23 +49,18 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
 
     private static final long serialVersionUID = 4099464017607928359L;
 
-    private volatile int progress;
-
-    private volatile int progressMax;
-
     private final List<MoneyInPaymentDTO> payments;
 
     private volatile Throwable error;
 
     public MoneyInBatchCreateDeferredProcess(LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments) {
-        progressMax = payments.size();
-        progress = 0;
+        progress.progressMaximum.set(payments.size());
+        progress.progress.set(0);
         this.payments = payments;
     }
 
     @Override
     public void execute() {
-        // TODO implement progress
         try {
             Map<Building, Collection<MoneyInPaymentDTO>> batchesMap = partitionPayments();
             for (Entry<Building, Collection<MoneyInPaymentDTO>> buildingPayments : batchesMap.entrySet()) {
@@ -82,12 +76,7 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public DeferredProcessProgressResponse status() {
-        DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
-        r.setProgress(progress);
-        r.setProgressMaximum(progressMax);
-        if (completed) {
-            r.setCompleted();
-        }
+        DeferredProcessProgressResponse r = super.status();
         if (error != null) {
             r.setError();
             r.setErrorStatusMessage(error.getMessage());
@@ -117,21 +106,17 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
     }
 
     private PaymentPostingBatch createBatch(Building buildingIdStub, Collection<MoneyInPaymentDTO> payments) throws PaymentException {
-        PaymentPostingBatch batch = EntityFactory.create(PaymentPostingBatch.class);
-        batch.status().setValue(PostingStatus.Created);
-        batch.building().set(buildingIdStub);
-        for (MoneyInPaymentDTO paymentDto : payments) {
-            PaymentRecord paymentRecord = createPaymentRecord(paymentDto);
-            batch.payments().add(paymentRecord);
+        PaymentPostingBatch batch = ServerSideFactory.create(PaymentFacade.class).createPostingBatch(buildingIdStub);
 
-            progress += 1;
+        for (MoneyInPaymentDTO paymentDto : payments) {
+            createPaymentRecord(paymentDto, batch);
+            progress.progress.incrementAndGet();
         }
-        Persistence.service().persist(batch);
 
         return batch;
     }
 
-    private PaymentRecord createPaymentRecord(MoneyInPaymentDTO dto) throws PaymentException {
+    private PaymentRecord createPaymentRecord(MoneyInPaymentDTO dto, PaymentPostingBatch batch) throws PaymentException {
         Lease lease = Persistence.service().retrieve(Lease.class, dto.leaseIdStub().getPrimaryKey());
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.receivedDate().setValue(dto.paymentReceiptDate().getValue());
@@ -151,8 +136,10 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
         ServerSideFactory.create(PaymentFacade.class)
                 .validatePaymentMethod(paymentRecord.billingAccount(), paymentRecord.paymentMethod(), VistaApplication.crm);
         ServerSideFactory.create(PaymentFacade.class).validatePayment(paymentRecord, VistaApplication.crm);
+
+        paymentRecord.batch().set(batch);
+
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-        // TODO post the payment to AR!!!! Without submitting it to Yardi (if such thing possible).
         return paymentRecord;
     }
 }

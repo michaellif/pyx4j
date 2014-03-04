@@ -36,6 +36,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess.RunningProcess;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.NotificationFacade;
@@ -51,6 +52,7 @@ import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferS
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.PaymentPostingBatch;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -475,4 +477,18 @@ public class PaymentFacadeImpl implements PaymentFacade {
         return result;
     }
 
+    @Override
+    public PaymentPostingBatch createPostingBatch(Building buildingId) {
+        return new MoneyInBatchManager().createPostingBatch(buildingId);
+    }
+
+    @Override
+    public void cancelPostingBatch(PaymentPostingBatch paymentPostingBatchId, RunningProcess progress) {
+        new MoneyInBatchManager().cancelPostingBatch(paymentPostingBatchId, progress);
+    }
+
+    @Override
+    public void processPostingBatch(PaymentPostingBatch paymentPostingBatchId, RunningProcess progress) {
+        new MoneyInBatchManager().processPostingBatch(paymentPostingBatchId, progress);
+    }
 }

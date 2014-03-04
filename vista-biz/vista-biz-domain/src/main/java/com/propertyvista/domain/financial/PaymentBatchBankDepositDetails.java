@@ -15,11 +15,11 @@ package com.propertyvista.domain.financial;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-@Transient
+@EmbeddedEntity
 public interface PaymentBatchBankDepositDetails extends IEntity {
 
     IPrimitive<LogicalDate> depositDate();

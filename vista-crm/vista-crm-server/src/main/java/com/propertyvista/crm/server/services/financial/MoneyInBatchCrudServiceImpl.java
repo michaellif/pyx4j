@@ -48,10 +48,15 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
     }
 
     @Override
+    protected void retrievedForList(PaymentPostingBatch bo) {
+        super.retrievedForList(bo);
+        Persistence.service().retrieve(bo.building());
+    }
+
+    @Override
     protected void enhanceListRetrieved(PaymentPostingBatch bo, MoneyInBatchDTO dto) {
         super.enhanceListRetrieved(bo, dto);
 
-        Persistence.service().retrieve(bo.building());
         dto.depositSlipNumber().setValue((int) bo.getPrimaryKey().asLong());
 
         dto.isPosted().setValue(bo.status().getValue() == PostingStatus.Posted);
@@ -63,6 +68,13 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         }
         dto.totalReceivedAmount().setValue(total);
         dto.numberOfReceipts().setValue(bo.payments().size());
+    }
+
+    @Override
+    protected void retrievedSingle(PaymentPostingBatch bo, RetrieveTarget retrieveTarget) {
+        super.retrievedSingle(bo, retrieveTarget);
+        Persistence.service().retrieve(bo.depositDetails().merchantAccount());
+        Persistence.service().retrieve(bo.building());
     }
 
     @Override

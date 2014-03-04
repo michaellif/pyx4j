@@ -17,9 +17,12 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
+import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess.RunningProcess;
+
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.PaymentPostingBatch;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -84,8 +87,15 @@ public interface PaymentFacade {
 
     // PMC AggregatedTransfer management
 
-    public void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransferStub);
+    void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransferStub);
 
     /** get payments for the last 3 months */
-    public List<PaymentRecord> getLatestPaymentActivity(BillingAccount billingAccount);
+    List<PaymentRecord> getLatestPaymentActivity(BillingAccount billingAccount);
+
+    PaymentPostingBatch createPostingBatch(Building buildingId);
+
+    void cancelPostingBatch(PaymentPostingBatch paymentPostingBatchId, RunningProcess progress);
+
+    void processPostingBatch(PaymentPostingBatch paymentPostingBatchId, RunningProcess progress);
+
 }
