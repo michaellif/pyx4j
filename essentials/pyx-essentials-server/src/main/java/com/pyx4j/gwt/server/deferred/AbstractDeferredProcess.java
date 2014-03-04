@@ -28,13 +28,21 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
 
     private static final long serialVersionUID = -7013680464201337453L;
 
+    public static class RunningProcess {
+
+        public final AtomicInteger progress = new AtomicInteger();
+
+        public final AtomicInteger progressMaximum = new AtomicInteger();
+
+    }
+
     protected volatile boolean completed = false;
 
     //TODO use AtomicBoolean
     protected volatile boolean canceled = false;
 
     //TODO Use,this
-    protected AtomicInteger progress;
+    protected final RunningProcess progress = new RunningProcess();
 
     @Override
     public void cancel() {
@@ -44,6 +52,8 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
     @Override
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
+        r.setProgress(progress.progress.get());
+        r.setProgressMaximum(progress.progressMaximum.get());
         if (completed) {
             r.setCompleted();
         } else if (canceled) {
