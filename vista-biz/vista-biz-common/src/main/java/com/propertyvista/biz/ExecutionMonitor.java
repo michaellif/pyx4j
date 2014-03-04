@@ -158,7 +158,11 @@ public class ExecutionMonitor {
 
         log.debug("Execution event [sectionName={} type={} value={} message={}]", sectionName, type, value, message);
         dirty = true;
+        onEventAdded();
+    }
 
+    //TODO unify RunningProcess  and ExecutionMonitor
+    protected void onEventAdded() {
     }
 
     public BigDecimal getValue(String sectionName, CompletionType type) {

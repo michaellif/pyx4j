@@ -36,9 +36,9 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 
 class ScheduledPaymentsManager {
@@ -62,7 +62,7 @@ class ScheduledPaymentsManager {
         criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
         criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
 
-        for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
+        for (PaymentRecord paymentRecord : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
             ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
         }
     }
@@ -72,7 +72,7 @@ class ScheduledPaymentsManager {
         criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
         criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
 
-        for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
+        for (PaymentRecord paymentRecord : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
             ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
         }
     }

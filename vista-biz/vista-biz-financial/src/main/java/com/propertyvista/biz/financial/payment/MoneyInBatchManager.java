@@ -13,12 +13,22 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import com.pyx4j.commons.Validate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess.RunningProcess;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.PaymentPostingBatch;
 import com.propertyvista.domain.financial.PaymentPostingBatch.PostingStatus;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 
 class MoneyInBatchManager {
@@ -27,19 +37,67 @@ class MoneyInBatchManager {
     }
 
     PaymentPostingBatch createPostingBatch(Building buildingId) {
-        PaymentPostingBatch batch = EntityFactory.create(PaymentPostingBatch.class);
-        batch.status().setValue(PostingStatus.Created);
-        batch.building().set(buildingId);
-        batch.depositDetails().merchantAccount().set(PaymentUtils.retrieveMerchantAccount(buildingId));
-        Persistence.service().persist(batch);
-        return batch;
+        PaymentPostingBatch postingBatch = EntityFactory.create(PaymentPostingBatch.class);
+        postingBatch.status().setValue(PostingStatus.Created);
+        postingBatch.building().set(buildingId);
+        postingBatch.depositDetails().merchantAccount().set(PaymentUtils.retrieveMerchantAccount(buildingId));
+        Persistence.service().persist(postingBatch);
+        return postingBatch;
     }
 
-    void cancelPostingBatch(PaymentPostingBatch paymentPostingBatchId, RunningProcess progress) {
+    void cancelPostingBatch(final PaymentPostingBatch paymentPostingBatchId, final RunningProcess progress) {
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+                PaymentPostingBatch postingBatch = Persistence.service().retrieve(PaymentPostingBatch.class, paymentPostingBatchId.getPrimaryKey());
+                Validate.isEquals(PostingStatus.Created, postingBatch.status().getValue(), "Processed batch can't be canceled");
+                postingBatch.status().setValue(PostingStatus.Canceled);
+                Persistence.service().persist(postingBatch);
 
+                EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+                criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted);
+                criteria.eq(criteria.proto().batch(), paymentPostingBatchId);
+                progress.progressMaximum.set(Persistence.service().count(criteria));
+
+                for (PaymentRecord paymentRecord : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
+                    progress.progress.incrementAndGet();
+                    ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+                }
+
+                return null;
+            }
+        });
     }
 
-    void processPostingBatch(PaymentPostingBatch paymentPostingBatchId, RunningProcess progress) {
+    void processPostingBatch(final PaymentPostingBatch paymentPostingBatchId, final RunningProcess progress) {
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+                PaymentPostingBatch postingBatch = Persistence.service().retrieve(PaymentPostingBatch.class, paymentPostingBatchId.getPrimaryKey());
+                Validate.isEquals(PostingStatus.Created, postingBatch.status().getValue(), "Processed batch can't be posted");
+                postingBatch.status().setValue(PostingStatus.Posted);
+                postingBatch.depositDetails().merchantAccount().set(PaymentUtils.retrieveMerchantAccount(postingBatch.building()));
+                Persistence.service().persist(postingBatch);
+
+                EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+                criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted);
+                criteria.eq(criteria.proto().batch(), paymentPostingBatchId);
+                criteria.asc(criteria.proto().billingAccount().lease().unit().building());
+                progress.progressMaximum.set(Persistence.service().count(criteria));
+
+                // TODO unify RunningProcess  and ExecutionMonitor
+                ExecutionMonitor executionMonitor = new ExecutionMonitor() {
+                    @Override
+                    protected void onEventAdded() {
+                        progress.progress.set(this.getProcessed().intValue());
+                    }
+                };
+
+                new PaymentBatchPosting().processPayments(criteria, false, executionMonitor);
+
+                return null;
+            }
+        });
 
     }
 
