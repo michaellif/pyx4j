@@ -52,8 +52,6 @@ import com.propertyvista.crm.client.ui.crud.lease.application.components.Emergen
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -80,12 +78,13 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        boolean financialyEligible = (getValue().role().getValue() != Role.Dependent);
-        Lease.Status leaseStatus = getValue().lease().status().getValue();
-
-        setTabVisible(paymentMethodsTab, financialyEligible && (leaseStatus.isDraft() || leaseStatus.isCurrent()));
-        setTabVisible(autoPaymentsTab, financialyEligible && !getValue().lease().status().getValue().isNoAutoPay());
-        setTabVisible(insuranceTab, financialyEligible && (leaseStatus.isDraft() || leaseStatus.isCurrent()));
+// VISTA-3517 - reopen       
+//        boolean financialyEligible = (getValue().role().getValue() != Role.Dependent);
+//        Lease.Status leaseStatus = getValue().lease().status().getValue();
+//
+//        setTabVisible(paymentMethodsTab, financialyEligible && (leaseStatus.isDraft() || leaseStatus.isCurrent()));
+//        setTabVisible(autoPaymentsTab, financialyEligible && !getValue().lease().status().getValue().isNoAutoPay());
+//        setTabVisible(insuranceTab, financialyEligible && (leaseStatus.isDraft() || leaseStatus.isCurrent()));
 
         get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 
