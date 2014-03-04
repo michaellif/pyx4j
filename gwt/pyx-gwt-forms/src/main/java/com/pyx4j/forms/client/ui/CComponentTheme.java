@@ -64,6 +64,7 @@ public class CComponentTheme extends Theme {
     private void initCheckBoxStyle() {
         Style style = new Style(".", StyleName.FieldEditorPanel, " .", StyleName.Signature);
         style.addProperty("line-height", "20px");
+        style.addProperty("width", "100%");
         addStyle(style);
     }
 
