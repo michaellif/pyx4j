@@ -46,7 +46,8 @@ public class PaymentStep extends ApplicationWizardStep {
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
-    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(
+            LeasePaymentMethod.class) {
 
         @Override
         public Set<PaymentType> getPaymentTypes() {
@@ -80,11 +81,13 @@ public class PaymentStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
+        panel.setH3(++row, 0, 1, i18n.tr("Deposits"));
         panel.setWidget(++row, 0, inject(proto().payment().deposits(), new DepositFolder()));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Fees"));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().applicationFee(), new CMoneyLabel())).build());
 
-        panel.setHR(++row, 0, 1);
-
+        panel.setH3(++row, 0, 1, i18n.tr("Payment Method"));
         panel.setWidget(
                 ++row,
                 0,

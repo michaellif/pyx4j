@@ -65,7 +65,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().type(), new CComboBox<PaymentType>())).build());
         content.setWidget(++row, 0, paymentDetailsHolder);
 
-        content.setH1(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
+        content.setH4(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = content.getWidget(row, 0);
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().sameAsCurrent())).build());
         content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
