@@ -157,24 +157,27 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
 
     @Override
     public void adopt(CComponent<?> component) {
-        IObject<?> member = proto().getMember(binding.get(component));
-        MemberMeta mm = member.getMeta();
-        if (mm.isValidatorAnnotationPresent(NotNull.class)) {
-            component.setMandatory(true);
-        }
-        if (component instanceof CTextComponent) {
-            ((CTextComponent<?, ?>) component).setMaxLength(mm.getLength());
-            if (mm.getWatermark() != null) {
-                ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
-            } else if (mm.getDescription() != null) {
-                ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
+        Path path = binding.get(component);
+        if (path != null) {
+            IObject<?> member = proto().getMember(path);
+            MemberMeta mm = member.getMeta();
+            if (mm.isValidatorAnnotationPresent(NotNull.class)) {
+                component.setMandatory(true);
             }
+            if (component instanceof CTextComponent) {
+                ((CTextComponent<?, ?>) component).setMaxLength(mm.getLength());
+                if (mm.getWatermark() != null) {
+                    ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
+                } else if (mm.getDescription() != null) {
+                    ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
+                }
+            }
+            if (mm.getDescription() != null) {
+                component.setTooltip(mm.getDescription());
+            }
+            component.setTitle(mm.getCaption());
+            component.setDebugIdSuffix(new StringDebugId(member.getFieldName()));
         }
-        if (mm.getDescription() != null) {
-            component.setTooltip(mm.getDescription());
-        }
-        component.setTitle(mm.getCaption());
-        component.setDebugIdSuffix(new StringDebugId(member.getFieldName()));
         super.adopt(component);
     }
 
