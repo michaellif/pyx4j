@@ -71,11 +71,13 @@ BEGIN
         
         
         -- check constraints
+        ALTER TABLE aging_buckets DROP CONSTRAINT aging_buckets_ar_code_e_ck;
         ALTER TABLE application_document_file DROP CONSTRAINT application_document_file_owner_discriminator_d_ck;
         ALTER TABLE application_documentation_policy DROP CONSTRAINT application_documentation_policy_node_discriminator_d_ck;
         ALTER TABLE application_wizard_step DROP CONSTRAINT application_wizard_step_status_e_ck;
         ALTER TABLE application_wizard_substep DROP CONSTRAINT application_wizard_substep_status_e_ck;
         ALTER TABLE apt_unit_occupancy_segment DROP CONSTRAINT apt_unit_occupancy_segment_status_e_ck;
+        ALTER TABLE arcode DROP CONSTRAINT arcode_code_type_e_ck;
         ALTER TABLE arpolicy DROP CONSTRAINT arpolicy_node_discriminator_d_ck;
         ALTER TABLE auto_pay_policy DROP CONSTRAINT auto_pay_policy_node_discriminator_d_ck;
         ALTER TABLE background_check_policy DROP CONSTRAINT background_check_policy_node_discriminator_d_ck;
@@ -90,6 +92,8 @@ BEGIN
         ALTER TABLE id_assignment_policy DROP CONSTRAINT id_assignment_policy_node_discriminator_d_ck;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_owner_discriminator_d_ck;
         ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_certificate_discriminator_d_ck;
+        ALTER TABLE lead DROP CONSTRAINT lead_lease_type_e_ck;
+        ALTER TABLE lease DROP CONSTRAINT lease_lease_type_e_ck;
         ALTER TABLE lease_adjustment_policy DROP CONSTRAINT lease_adjustment_policy_node_discriminator_d_ck;
         ALTER TABLE lease_billing_policy DROP CONSTRAINT lease_billing_policy_node_discriminator_d_ck;
         ALTER TABLE legal_documentation DROP CONSTRAINT legal_documentation_node_discriminator_d_ck;
@@ -347,6 +351,12 @@ BEGIN
 		-- deposit
 		
 		ALTER TABLE deposit ADD COLUMN charge_code BIGINT;
+        
+        
+        -- deposit_policy
+        
+        ALTER TABLE deposit_policy  ADD COLUMN annual_interest_rate NUMERIC(18,2),
+                                    ADD COLUMN security_deposit_refund_window INT;
 		
 		
 		-- deposit_policy_item
@@ -1135,15 +1145,54 @@ BEGIN
         ALTER TABLE product RENAME COLUMN is_default_catalog_item TO default_catalog_item;
         
         
+        -- product_deposit
+        
+        CREATE TABLE product_deposit
+        (
+            id                          BIGINT      NOT NULL,
+            enabled                     BOOLEAN,
+            charge_code                 BIGINT,
+            deposit_value               NUMERIC(18,2),
+            value_type                  VARCHAR(50),
+            description                 VARCHAR(40),
+            deposit_type                VARCHAR(50),
+                CONSTRAINT product_deposit_pk PRIMARY KEY(id)
+        );
+        
+        
+        ALTER TABLE product_deposit OWNER TO vista;
+        
+        
         -- product_item
         
-        ALTER TABLE product_item ADD COLUMN name VARCHAR(50);
+        ALTER TABLE product_item    ADD COLUMN name VARCHAR(50),
+                                    ADD COLUMN deposit_lmr NUMERIC(18,2),
+                                    ADD COLUMN deposit_move_in NUMERIC(18,2),
+                                    ADD COLUMN deposit_security NUMERIC(18,2);
         
         
         -- product_v
         
         ALTER TABLE product_v   ADD COLUMN available_online BOOLEAN,
-                                ADD COLUMN price NUMERIC(18,2);
+                                ADD COLUMN price NUMERIC(18,2),
+                                ADD COLUMN deposit_lmr_enabled BOOLEAN,
+                                ADD COLUMN deposit_lmr_charge_code BIGINT,
+                                ADD COLUMN deposit_lmr_deposit_value NUMERIC(18,2),
+                                ADD COLUMN deposit_lmr_value_type VARCHAR(50),
+                                ADD COLUMN deposit_lmr_description VARCHAR(40),
+                                ADD COLUMN deposit_lmr_deposit_type VARCHAR(50),
+                                ADD COLUMN deposit_move_in_enabled BOOLEAN,
+                                ADD COLUMN deposit_move_in_charge_code BIGINT,
+                                ADD COLUMN deposit_move_in_deposit_value NUMERIC(18,2),
+                                ADD COLUMN deposit_move_in_value_type VARCHAR(50),
+                                ADD COLUMN deposit_move_in_description VARCHAR(40),
+                                ADD COLUMN deposit_move_in_deposit_type VARCHAR(50),
+                                ADD COLUMN deposit_security_enabled BOOLEAN,
+                                ADD COLUMN deposit_security_charge_code BIGINT,
+                                ADD COLUMN deposit_security_deposit_value NUMERIC(18,2),
+                                ADD COLUMN deposit_security_value_type VARCHAR(50),
+                                ADD COLUMN deposit_security_description VARCHAR(40),
+                                ADD COLUMN deposit_security_deposit_type VARCHAR(50);
         
         
         -- proof_of_asset_document_blob
@@ -1347,6 +1396,14 @@ BEGIN
                 ||'JOIN         '||v_schema_name||'.advertising_blurb a ON (a.id = mb.value) '
                 ||'ORDER BY b.id )';
                 
+        -- aging_buckets
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.aging_buckets '
+                ||'SET  ar_code = ''DepositSecurity'' '
+                ||'WHERE    ar_code = ''Deposit'' ';
+                
+                
+        
                 
         -- apt_unit_effective_availability
         
@@ -1357,10 +1414,26 @@ BEGIN
                 ||'FROM         '||v_schema_name||'.apt_unit AS a '
                 ||'ORDER BY     a.id )';
                 
+        -- arcode
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.arcode '
+                ||'SET  code_type = ''DepositSecurity'', '
+                ||'     name = ''Security Deposit'' '
+                ||'WHERE    code_type = ''Deposit'' ';
+                
+        EXECUTE 'INSERT INTO '||v_schema_name||'.arcode (id,code_type,name,updated,reserved) VALUES '
+                ||'(nextval(''public.arcode_seq''),''DepositLMR'',''LMR Deposit'',DATE_TRUNC(''second'',current_timestamp)::timestamp,TRUE),'
+                ||'(nextval(''public.arcode_seq''),''DepositMoveIn'',''Move In Deposit'',DATE_TRUNC(''second'',current_timestamp)::timestamp,TRUE),'
+                ||'(nextval(''public.arcode_seq''),''DepositRefund'',''DepositRefund'',DATE_TRUNC(''second'',current_timestamp)::timestamp,TRUE)';
+                
+        
+                
 		-- billable_item
 		
 		EXECUTE 'UPDATE '||v_schema_name||'.billable_item b '
-				||'SET	yardi_charge_code = y.charge_code '
+				||'SET	yardi_charge_code = y.charge_code, '
+                ||'     extra_data_discriminator = NULL, '
+                ||'     extra_data = NULL '
 				||'FROM '||v_schema_name||'.yardi_lease_charge_data y '
 				||'WHERE	extra_data_discriminator = ''YardiLeaseCharge'' '
 				||'AND	b.extra_data = y.id ';
@@ -1983,6 +2056,14 @@ BEGIN
         ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_company_info_fk FOREIGN KEY(company_info) 
                 REFERENCES pmc_company_info(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE product ADD CONSTRAINT product_code_fk FOREIGN KEY(code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE product_deposit ADD CONSTRAINT product_deposit_charge_code_fk FOREIGN KEY(charge_code) 
+            REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_lmr_charge_code_fk FOREIGN KEY(deposit_lmr_charge_code) 
+            REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_move_in_charge_code_fk FOREIGN KEY(deposit_move_in_charge_code) 
+            REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_security_charge_code_fk FOREIGN KEY(deposit_security_charge_code) 
+            REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE proof_of_asset_document_file ADD CONSTRAINT proof_of_asset_document_file_owner_fk FOREIGN KEY(owner) 
                 REFERENCES proof_of_asset_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE proof_of_asset_document_folder ADD CONSTRAINT proof_of_asset_document_folder_owner_fk FOREIGN KEY(owner) 
@@ -2012,6 +2093,10 @@ BEGIN
                 
         -- check constraints
         
+        ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_ar_code_e_ck 
+            CHECK ((ar_code) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 
+            'DepositLMR', 'DepositMoveIn', 'DepositRefund', 'DepositSecurity', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 
+            'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_id_discriminator_ck CHECK ((id_discriminator) IN ('Digital', 'Ink'));
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_participant_discriminator_d_ck 
                 CHECK ((lease_term_participant_discriminator) IN ('Guarantor', 'Tenant'));
@@ -2019,6 +2104,10 @@ BEGIN
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE apt_unit_occupancy_segment ADD CONSTRAINT apt_unit_occupancy_segment_status_e_ck 
             CHECK ((status) IN ('available', 'migrated', 'occupied', 'offMarket', 'pending', 'renovation'));
+        ALTER TABLE arcode ADD CONSTRAINT arcode_code_type_e_ck 
+            CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 
+            'DepositLMR', 'DepositMoveIn', 'DepositRefund', 'DepositSecurity', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
+            'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE arpolicy ADD CONSTRAINT arpolicy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE auto_pay_policy ADD CONSTRAINT auto_pay_policy_node_discriminator_d_ck 
@@ -2053,6 +2142,14 @@ BEGIN
         ALTER TABLE ilsemail_config ADD CONSTRAINT ilsemail_config_frequency_e_ck CHECK ((frequency) IN ('daily', 'monthly', 'weekly'));
         ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_certificate_discriminator_d_ck 
                 CHECK ((certificate_discriminator) IN ('InsuranceGeneral', 'InsuranceTenantSure'));
+        ALTER TABLE lead ADD CONSTRAINT lead_lease_type_e_ck 
+            CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'DepositLMR', 
+            'DepositMoveIn', 'DepositRefund', 'DepositSecurity', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 
+            'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+        ALTER TABLE lease ADD CONSTRAINT lease_lease_type_e_ck 
+            CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'DepositLMR', 
+            'DepositMoveIn', 'DepositRefund', 'DepositSecurity', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 
+            'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_apply_to_role_e_ck CHECK ((apply_to_role) IN ('All', 'Applicant', 'Guarantor'));
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_signature_format_e_ck 
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
@@ -2127,9 +2224,20 @@ BEGIN
         ALTER TABLE pet_policy ADD CONSTRAINT pet_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE pmc_company_info_contact ADD CONSTRAINT pmc_company_info_contact_tp_e_ck CHECK ((tp) IN ('administrator', 'privacyIssues'));
+        ALTER TABLE product_deposit ADD CONSTRAINT product_deposit_deposit_type_e_ck CHECK ((deposit_type) IN ('LastMonthDeposit', 'MoveInDeposit', 'SecurityDeposit'));
+        ALTER TABLE product_deposit ADD CONSTRAINT product_deposit_value_type_e_ck CHECK ((value_type) IN ('Monetary', 'Percentage'));
         ALTER TABLE product_item ADD CONSTRAINT product_item_element_discriminator_d_ck CHECK ((element_discriminator) IN ('AptUnit', 'LockerArea', 'Parking', 'Roof'));
         ALTER TABLE product_tax_policy ADD CONSTRAINT product_tax_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_lmr_deposit_type_e_ck 
+            CHECK ((deposit_lmr_deposit_type) IN ('LastMonthDeposit', 'MoveInDeposit', 'SecurityDeposit'));
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_lmr_value_type_e_ck CHECK ((deposit_lmr_value_type) IN ('Monetary', 'Percentage'));
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_move_in_deposit_type_e_ck 
+            CHECK ((deposit_move_in_deposit_type) IN ('LastMonthDeposit', 'MoveInDeposit', 'SecurityDeposit'));
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_move_in_value_type_e_ck CHECK ((deposit_move_in_value_type) IN ('Monetary', 'Percentage'));
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_security_deposit_type_e_ck 
+            CHECK ((deposit_security_deposit_type) IN ('LastMonthDeposit', 'MoveInDeposit', 'SecurityDeposit'));
+        ALTER TABLE product_v ADD CONSTRAINT product_v_deposit_security_value_type_e_ck CHECK ((deposit_security_value_type) IN ('Monetary', 'Percentage'));
         ALTER TABLE prospect_portal_policy ADD CONSTRAINT prospect_portal_policy_fee_payment_e_ck CHECK ((fee_payment) IN ('none', 'perApplicant', 'perLease'));
         ALTER TABLE prospect_portal_policy ADD CONSTRAINT prospect_portal_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
