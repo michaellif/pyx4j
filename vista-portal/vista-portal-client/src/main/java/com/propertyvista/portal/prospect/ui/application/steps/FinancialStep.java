@@ -13,16 +13,20 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import java.util.List;
+
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
-import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.util.editors.PersonalAssetFolder;
 import com.propertyvista.portal.shared.ui.util.editors.PersonalIncomeFolder;
 
@@ -64,15 +68,17 @@ public class FinancialStep extends ApplicationWizardStep {
     public void addValidations() {
         super.addValidations();
 
-        getWizard().addComponentValidator(new AbstractComponentValidator<OnlineApplicationDTO>() {
+        get(proto().applicant().incomes()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningIncome>>() {
             @Override
             public FieldValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (getComponent().getValue().applicant().assets().size() > 0) || (getComponent().getValue().applicant().incomes().size() > 0) ? null
-                            : new FieldValidationError(getComponent(), i18n.tr("At least one source of income or one asset is required"));
+                    return (getValue().applicant().assets().size() > 0) || (getValue().applicant().incomes().size() > 0) ? null : new FieldValidationError(
+                            getComponent(), i18n.tr("At least one source of income or one asset is required"));
                 }
                 return null;
             }
         });
+        get(proto().applicant().assets()).addValueChangeHandler(
+                new RevalidationTrigger<List<CustomerScreeningPersonalAsset>>(get(proto().applicant().incomes())));
     }
 }
