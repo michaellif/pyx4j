@@ -19,14 +19,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -46,6 +50,7 @@ import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.shared.VistaUserVisit;
+import com.propertyvista.shared.exceptions.LoginTokenExpiredUserRuntimeException;
 
 public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, CustomerUserCredential> implements
         ResidentAuthenticationService {
@@ -177,6 +182,16 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
             ServerSideFactory.create(CommunicationFacade.class).sendProspectPasswordRetrievalToken(customer);
         }
         Persistence.service().commit();
+    }
+
+    @Override
+    public void authenticateWithToken(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String accessToken) {
+        try {
+            super.authenticateWithToken(callback, clientSystemInfo, accessToken);
+        } catch (LoginTokenExpiredUserRuntimeException e) {
+            throw new LoginTokenExpiredUserRuntimeException(
+                    i18n.tr("You have been logged out of your account for security reasons.\nTo continue you must sign in with your email and your newly generated password.\nPressing the OK button below will redirect you to the login page"));
+        }
     }
 
 }

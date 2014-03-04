@@ -18,6 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -63,7 +64,11 @@ public class AbstractLoginWithTokenActivity extends AbstractActivity {
     }
 
     protected void onLoginFailure(Throwable caught) {
-        MessageDialog.error(i18n.tr("Authentication failed"), i18n.tr("The URL you have used is either incorrect or expired."));
+        if (caught instanceof UserRuntimeException) {
+            MessageDialog.error(i18n.tr("Authentication failed"), caught.getMessage());
+        } else {
+            MessageDialog.error(i18n.tr("Authentication failed"), i18n.tr("The URL you have used is either incorrect or expired."));
+        }
         AppSite.getPlaceController().goTo(loginPlace);
     }
 }

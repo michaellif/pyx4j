@@ -75,6 +75,7 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.shared.VistaSystemIdentification;
 import com.propertyvista.shared.VistaUserVisit;
+import com.propertyvista.shared.exceptions.LoginTokenExpiredUserRuntimeException;
 
 public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
         com.pyx4j.security.server.AuthenticationServiceImpl implements AclRevalidator {
@@ -197,18 +198,18 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             if (cr == null) {
                 throw new UserRuntimeException(true, i18n.tr("Invalid User Account. Please Contact Support"));
             }
-            if (!cr.enabled().isBooleanTrue()) {
+            if (!cr.enabled().getValue(false)) {
                 log.warn("Invalid log-in attempt {} : disabled user", email);
                 throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
 
             if (!token.accessKey.equals(cr.accessKey().getValue())) {
                 AbstractAntiBot.authenticationFailed(LoginType.accessToken, token.email);
-                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new LoginTokenExpiredUserRuntimeException(i18n.tr("The URL you have used is either incorrect or expired."));
             }
 
             if ((new Date().after(cr.accessKeyExpire().getValue()))) {
-                throw new UserRuntimeException(true, i18n.tr("Token Has Expired"));
+                throw new LoginTokenExpiredUserRuntimeException(i18n.tr("The URL you have used is either incorrect or expired."));
             }
             credentialsOk = true;
         } finally {
@@ -282,7 +283,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             if (cr == null) {
                 throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
             }
-            if (!cr.enabled().isBooleanTrue()) {
+            if (!cr.enabled().getValue(false)) {
                 log.warn("Invalid log-in attempt {} : disabled user", email);
                 throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
@@ -306,7 +307,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             Persistence.service().persist(cr);
             Persistence.service().commit();
         }
-        if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
+        if (cr.requiredPasswordChangeOnNextLogIn().getValue(false)) {
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.add(getVistaApplication());
             behaviors.add(getPasswordChangeRequiredBehavior());
@@ -339,7 +340,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     @Override
     public final Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp) {
         E userCredential = Persistence.service().retrieve(credentialClass, principalPrimaryKey);
-        if ((userCredential == null) || (!userCredential.enabled().isBooleanTrue())) {
+        if ((userCredential == null) || (!userCredential.enabled().getValue(false))) {
             return null;
         } else if (containsAnyBehavior(currentBehaviours, getAccountSetupRequiredBehaviors())) {
             return currentBehaviours;
