@@ -207,8 +207,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
-        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CreditCardValidationService.class));
 
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(IdentificationDocumentProspectUploadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ProofOfEmploymentDocumentProspectUploadService.class));
