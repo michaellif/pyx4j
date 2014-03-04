@@ -181,7 +181,7 @@ public class XYChart extends GridBase implements IsSvgElement {
                 int scaledPosition = xstart + tick.getScaledPosition();
                 if (Rank.MAJOR.equals(tick.getRank())) {
                     xA += "M" + scaledPosition + "," + ystart + "L" + scaledPosition + "," + (ystart + MAJOR_TICK_LENGTH);
-                    String valueRepr = formatXDouble(tick.getValue() / xPostfix.getFactor(), configurator.getLabelPrecision()) + xPostfix.getName();
+                    String valueRepr = configurator.getXLabelFormatter().format(tick.getValue() / xPostfix.getFactor()) + xPostfix.getName();
                     Text lbl = factory.createText(valueRepr, scaledPosition, ystart + PADDING);
                     lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
                     lbl.setAttribute("text-anchor", "middle");
@@ -220,7 +220,7 @@ public class XYChart extends GridBase implements IsSvgElement {
                 if (Rank.MAJOR.equals(tick.getRank())) {
                     int scaledPosition = ystart - tick.getScaledPosition();
                     yA += "M" + xstart + "," + scaledPosition + "L" + (xstart - MAJOR_TICK_LENGTH) + "," + scaledPosition;
-                    String valueRepr = formatYDouble(tick.getValue() / yPostfix.getFactor(), configurator.getLabelPrecision()) + yPostfix.getName();
+                    String valueRepr = configurator.getYLabelFormatter().format(tick.getValue() / yPostfix.getFactor()) + yPostfix.getName();
                     Text lbl = factory.createText(valueRepr, lblxstart, scaledPosition);
                     lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
                     lbl.setAttribute("text-anchor", "end");
@@ -333,7 +333,7 @@ public class XYChart extends GridBase implements IsSvgElement {
                 }
 
                 if (configurator.isShowValueLabels()) {
-                    String valueRepr = formatYDouble(value.y, configurator.getLabelPrecision());
+                    String valueRepr = configurator.getYLabelFormatter().format(value.y);
                     Text label = factory.createText(valueRepr, (int) x, (int) (y - DOT_RADIUS - CHART_LABEL_PADDING));
                     label.setAttribute("text-anchor", "middle");
                     label.setFill(color);
@@ -365,26 +365,6 @@ public class XYChart extends GridBase implements IsSvgElement {
         for (Text label : labels) {
             container.add(label);
         }
-    }
-
-    protected String formatYDouble(double value, int precision) {
-        String valueRepr = String.valueOf(value);
-        int dotIndex = valueRepr.indexOf(".");
-
-        if (dotIndex != -1) {
-            valueRepr = valueRepr.substring(0, Math.min(precision + dotIndex + 1, valueRepr.length()));
-        }
-        return valueRepr;
-    }
-
-    protected String formatXDouble(double value, int precision) {
-        String valueRepr = String.valueOf(value);
-        int dotIndex = valueRepr.indexOf(".");
-
-        if (dotIndex != -1) {
-            valueRepr = valueRepr.substring(0, Math.min(precision + dotIndex + 1, valueRepr.length()));
-        }
-        return valueRepr;
     }
 
     private Group createLegend() {

@@ -36,6 +36,10 @@ public class XYChartConfigurator extends GridBasedChartConfigurator {
 
     private int barWidth = 10;
 
+    private LabelFormatter xLabelFormatter;
+
+    private LabelFormatter yLabelFormatter;
+
     public enum ChartType {
         Line, Bar, BarDistribution
     }
@@ -80,5 +84,27 @@ public class XYChartConfigurator extends GridBasedChartConfigurator {
 
     public void setBarWidth(int barWidth) {
         this.barWidth = barWidth;
+    }
+
+    public LabelFormatter getXLabelFormatter() {
+        if (xLabelFormatter == null) {
+            xLabelFormatter = new DefaultLabelFormatter(this.getLabelPrecision());
+        }
+        return xLabelFormatter;
+    }
+
+    public void setXLabelFormatter(LabelFormatter xLabelFormatter) {
+        this.xLabelFormatter = xLabelFormatter;
+    }
+
+    public LabelFormatter getYLabelFormatter() {
+        if (yLabelFormatter == null) {
+            yLabelFormatter = new DefaultLabelFormatter(this.getLabelPrecision());
+        }
+        return yLabelFormatter;
+    }
+
+    public void setYLabelFormatter(LabelFormatter yLabelFormatter) {
+        this.yLabelFormatter = yLabelFormatter;
     }
 }
