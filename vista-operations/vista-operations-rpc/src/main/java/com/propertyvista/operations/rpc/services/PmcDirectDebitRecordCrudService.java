@@ -22,5 +22,5 @@ import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public interface PmcDirectDebitRecordCrudService extends AbstractCrudService<DirectDebitRecord> {
 
-    void markRefunded(AsyncCallback<VoidSerializable> defaultAsyncCallback, String operationNotes, DirectDebitRecord entityId);
+    void markRefunded(AsyncCallback<VoidSerializable> callback, String operationNotes, DirectDebitRecord entityId);
 }

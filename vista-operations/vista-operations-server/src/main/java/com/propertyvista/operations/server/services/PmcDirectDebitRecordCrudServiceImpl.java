@@ -13,14 +13,20 @@
  */
 package com.propertyvista.operations.server.services;
 
+import java.util.Date;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecordProcessingStatus;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
+import com.propertyvista.shared.VistaUserVisit;
 
 public class PmcDirectDebitRecordCrudServiceImpl extends AbstractCrudServiceImpl<DirectDebitRecord> implements PmcDirectDebitRecordCrudService {
 
@@ -45,7 +51,14 @@ public class PmcDirectDebitRecordCrudServiceImpl extends AbstractCrudServiceImpl
     }
 
     @Override
-    public void markRefunded(AsyncCallback<VoidSerializable> defaultAsyncCallback, String operationNotes, DirectDebitRecord entityId) {
-        // TODO Auto-generated method stub
+    public void markRefunded(AsyncCallback<VoidSerializable> callback, String operationNotes, DirectDebitRecord entityId) {
+        DirectDebitRecord record = Persistence.service().retrieve(DirectDebitRecord.class, entityId.getPrimaryKey());
+        Validate.isEquals(DirectDebitRecordProcessingStatus.Invalid, record.processingStatus().getValue(), "Can't Refund processed records");
+        record.operationsNotes().setValue(
+                operationNotes + "\n" + new Date() + "\nby " + Context.getUserVisit(VistaUserVisit.class).getCurrentUser().getStringView());
+        record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Refunded);
+        Persistence.service().persist(record);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 }
