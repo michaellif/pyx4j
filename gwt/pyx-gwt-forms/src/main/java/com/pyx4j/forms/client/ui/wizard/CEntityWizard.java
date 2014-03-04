@@ -22,6 +22,9 @@ package com.pyx4j.forms.client.ui.wizard;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -42,6 +45,8 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
 
     private static final I18n i18n = I18n.get(CEntityWizard.class);
+
+    private static final Logger log = LoggerFactory.getLogger(PropertyChangeEvent.class);
 
     private final WizardPanel wizardPanel;
 
@@ -178,6 +183,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         setVisitedRecursive();
         if (!isValid()) {
             MessageDialog.error(i18n.tr("Error"), i18n.tr("Please correct errors or omissions and try to submit again."));
+            log.error("Wizard steps contain errors or omissions: {}", getValidationResults().getValidationMessage(false));
         } else {
             onFinish();
         }
