@@ -13,17 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.common;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -37,7 +32,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeForm;
-import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingFolder extends VistaTableFolder<Building> {
@@ -103,39 +97,6 @@ public class BuildingFolder extends VistaTableFolder<Building> {
             public void onClickOk() {
                 for (Building selected : getSelectedItems()) {
                     addItem(selected);
-                }
-            }
-
-            @Override
-            protected void setFilters(List<Criterion> filters) {
-                super.setFilters(filters);
-
-                if (employeeForm != null) {
-                    if (employeeForm.isRestrictAccessSet()) {
-                        List<Key> buildingAccessKeys = new ArrayList<Key>();
-
-                        List<Building> buildingAccess = employeeForm.getBuildingAccess();
-                        if (buildingAccess != null && !buildingAccess.isEmpty()) {
-                            for (Building entity : buildingAccess) {
-                                buildingAccessKeys.add(entity.getPrimaryKey());
-                            }
-                        }
-
-                        List<Portfolio> portfolioAccess = employeeForm.getPortfolioAccess();
-                        if (portfolioAccess != null && !portfolioAccess.isEmpty()) {
-                            for (Portfolio portfolio : portfolioAccess) {
-                                for (Building building : portfolio.buildings()) {
-                                    buildingAccessKeys.add(building.getPrimaryKey());
-                                }
-                            }
-                        }
-
-                        if (!buildingAccessKeys.isEmpty()) {
-                            addFilter(PropertyCriterion.in(EntityFactory.getEntityPrototype(Building.class).id(), buildingAccessKeys));
-                        } else {
-                            addFilter(PropertyCriterion.isNull(EntityFactory.getEntityPrototype(Building.class).id()));
-                        }
-                    }
                 }
             }
         }.show();
