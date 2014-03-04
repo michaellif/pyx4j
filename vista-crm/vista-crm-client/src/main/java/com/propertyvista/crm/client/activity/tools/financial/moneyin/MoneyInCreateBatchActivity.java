@@ -448,7 +448,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
                 MoneyInCreateBatchActivity.this.search();
             }            
         };
-        view.confirm(i18n.tr("Batch has been created successfully. Do you wish to see the created batch?"), displayBatches, refreshData);        
+        view.confirm(i18n.tr("Batch has been created successfully. Do you wish to see the created batches?"), displayBatches, refreshData);        
     }
 
 }
