@@ -62,7 +62,7 @@ public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
         agingBucketsCurrent(new BigDecimal("1338.82"), null).
         agingBucketsCurrent(new BigDecimal("302.50"), ARCode.Type.Residential).
         agingBucketsCurrent(new BigDecimal("26.02"), ARCode.Type.Parking).
-        agingBucketsCurrent(new BigDecimal("1010.30"), ARCode.Type.DepositSecurity);
+        agingBucketsCurrent(new BigDecimal("1010.30"), ARCode.Type.Deposit);
         // @formatter:on
 
         // Partial payment - default test ARPolicy rule "oldestDebtFirst" so for same bucket age the smallest amounts covered first
@@ -74,7 +74,7 @@ public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
         notCoveredDebitLineItemSize(1).
         notConsumedCreditInvoiceItemSize(0).
         agingBucketsCurrent(new BigDecimal("298.82"), null).
-        agingBucketsCurrent(new BigDecimal("298.82"), ARCode.Type.DepositSecurity);
+        agingBucketsCurrent(new BigDecimal("298.82"), ARCode.Type.Deposit);
         // @formatter:on
 
         //==================== RUN 2 ======================//

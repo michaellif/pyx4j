@@ -74,7 +74,7 @@ public interface ARCode extends IEntity {
 
         DepositRefund(ActionType.Credit),
 
-        DepositLMR(ActionType.Debit), DepositMoveIn(ActionType.Debit), DepositSecurity(ActionType.Debit),
+        Deposit(ActionType.Debit),
 
         AccountCredit(ActionType.Credit),
 
@@ -132,7 +132,7 @@ public interface ARCode extends IEntity {
         }
 
         public static EnumSet<Type> deposits() {
-            return EnumSet.of(DepositLMR, DepositMoveIn, DepositSecurity);
+            return EnumSet.of(Deposit);
         }
 
         public static EnumSet<Type> leaseAjustments() {

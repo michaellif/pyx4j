@@ -232,6 +232,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
         deposit.value().setValue(value);
         String description = deposit.depositType().getStringView() + ", " + desc;
         deposit.description().setValue(description.length() > 40 ? description.substring(0, 40) : description);
+        deposit.chargeCode().set(arCodes.get(ARCode.Type.Deposit).get(0));
         return deposit;
     }
 

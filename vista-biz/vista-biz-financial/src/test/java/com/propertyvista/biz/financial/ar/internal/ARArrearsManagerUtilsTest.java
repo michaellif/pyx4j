@@ -166,7 +166,7 @@ public class ARArrearsManagerUtilsTest extends TestCase {
             LeaseArrearsSnapshot b8 = EntityFactory.create(LeaseArrearsSnapshot.class);
             b8.agingBuckets().addAll(Arrays.asList(//@formatter:off
                     new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
-                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.DepositSecurity).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.Deposit).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
                     new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AddOn).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("5.00").build()
                     ));//@formatter:on
             b8.agingBuckets().get(0).arrearsSnapshot().setPrimaryKey(new Key(3));

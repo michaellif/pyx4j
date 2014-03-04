@@ -140,8 +140,8 @@ public class BillingProductRefundTest extends LeaseFinancialTestBase {
         new BillTester(bill).
         billSequenceNumber(4).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-June-2011").
-        billingPeriodEndDate("30-June-2011").
+        billingPeriodStartDate("1-Jun-2011").
+        billingPeriodEndDate("30-Jun-2011").
         numOfProductCharges(2). // lease + parking (prev)
         paymentReceivedAmount("-1124.56").
         serviceCharge("930.30").

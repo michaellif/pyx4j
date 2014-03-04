@@ -70,14 +70,15 @@ public class ARCodesGenerator {
         createARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, true);
 
         // reserved codes:
-        createARCode("LMR Deposit", ARCode.Type.DepositLMR, 0, true);
-        createARCode("Move In Deposit", ARCode.Type.DepositMoveIn, 0, true);
-        createARCode("Security Deposit", ARCode.Type.DepositSecurity, 0, true, "rsecdep");
+        createARCode("Deposit", ARCode.Type.Deposit, 0, true);
+        createARCode("LMR Deposit", ARCode.Type.Deposit, 0, false);
+        createARCode("Move In Deposit", ARCode.Type.Deposit, 0, false);
+        createARCode("Security Deposit", ARCode.Type.Deposit, 0, false, "rsecdep");
         if (VistaFeatures.instance().yardiIntegration() && ApplicationMode.isDevelopment()) {
-            createARCode("Deposit Key", ARCode.Type.DepositSecurity, 0, true, "rkeydep");
-            createARCode("Deposit Parking", ARCode.Type.DepositLMR, 0, true, "secdepot");
-            createARCode("Deposit Locker", ARCode.Type.DepositLMR, 0, true, "csecont");
-            createARCode("Deposit Pet", ARCode.Type.DepositMoveIn, 0, true, "rpet");
+            createARCode("Deposit Key", ARCode.Type.Deposit, 0, false, "rkeydep");
+            createARCode("Deposit Parking", ARCode.Type.Deposit, 0, false, "secdepot");
+            createARCode("Deposit Locker", ARCode.Type.Deposit, 0, false, "csecont");
+            createARCode("Deposit Pet", ARCode.Type.Deposit, 0, false, "rpet");
         }
         createARCode("DepositRefund", ARCode.Type.DepositRefund, 0, true);
         createARCode("LatePayment", ARCode.Type.LatePayment, 0, true);

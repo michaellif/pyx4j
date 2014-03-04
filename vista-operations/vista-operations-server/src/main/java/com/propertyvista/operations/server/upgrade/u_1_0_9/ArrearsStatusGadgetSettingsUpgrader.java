@@ -42,7 +42,7 @@ class ArrearsStatusGadgetSettingsUpgrader {
         map.put("utility", ARCode.Type.Utility.name());
         map.put("locker", ARCode.Type.Locker.name());
         map.put("booking", ARCode.Type.OneTime.name());
-        map.put("deposit", ARCode.Type.DepositSecurity.name());
+        map.put("deposit", ARCode.Type.Deposit.name());
         map.put("accountCharge", ARCode.Type.AccountCharge.name());
         map.put("nsf", ARCode.Type.NSF.name());
         map.put("latePayment", ARCode.Type.LatePayment.name());
