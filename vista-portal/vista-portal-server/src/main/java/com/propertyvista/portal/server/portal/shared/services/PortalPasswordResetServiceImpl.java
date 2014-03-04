@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.portal.shared.services;
 
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetService;
@@ -31,10 +32,13 @@ public class PortalPasswordResetServiceImpl extends VistaPasswordResetServiceImp
 
     @Override
     protected AuthenticationResponse authorize(CustomerUserCredential credentials) {
+        // Actually do logout to return user to login page
         if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectPortalPasswordChangeRequired)) {
-            return new ProspectAuthenticationServiceImpl().authenticate(credentials, null);
+            Lifecycle.endSession();
+            return new ProspectAuthenticationServiceImpl().createAuthenticationResponse(null);
         } else {
-            return new ResidentAuthenticationServiceImpl().authenticate(credentials, null);
+            Lifecycle.endSession();
+            return new ResidentAuthenticationServiceImpl().createAuthenticationResponse(null);
         }
     }
 
