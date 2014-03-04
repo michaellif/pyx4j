@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Caption;
@@ -57,6 +60,25 @@ public interface IdentificationDocumentType extends IEntity {
         }
     }
 
+    @I18n
+    @XmlType(name = "IdentificationDocumentImportance")
+    public enum Importance {
+        Required,
+
+        Preferred,
+
+        Optional;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+
+        public static Set<Importance> activate() {
+            return EnumSet.of(Importance.Preferred, Importance.Required);
+        }
+    }
+
     @Owner
     @NotNull
     @MemberColumn(notNull = true)
@@ -72,7 +94,7 @@ public interface IdentificationDocumentType extends IEntity {
     @Caption(name = "ID Name")
     IPrimitive<String> name();
 
-    IPrimitive<Boolean> required();
+    IPrimitive<Importance> importance();
 
     @NotNull
     @ToString(index = 0)

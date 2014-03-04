@@ -56,6 +56,7 @@ import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -948,7 +949,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void initializeRequiredDocuments(ApplicantDTO applicant) {
         for (IdentificationDocumentType docType : applicant.documentsPolicy().allowedIDs()) {
-            if (docType.required().getValue(false)) {
+            if (Importance.activate().contains(docType.importance().getValue())) {
                 // Find if we already have it.
                 boolean found = false;
                 for (IdentificationDocumentFolder doc : applicant.documents()) {

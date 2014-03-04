@@ -18,6 +18,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
@@ -36,23 +37,26 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
 
         IdentificationDocumentType id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue(i18n.tr("SIN"));
-        id.required().setValue(true);
         id.type().setValue(Type.canadianSIN);
+        id.importance().setValue(Importance.Required);
         policy.allowedIDs().add(id);
 
         id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue(i18n.tr("Passport"));
         id.type().setValue(Type.passport);
+        id.importance().setValue(Importance.Optional);
         policy.allowedIDs().add(id);
 
         id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue(i18n.tr("Citizenship Card"));
         id.type().setValue(Type.citizenship);
+        id.importance().setValue(Importance.Optional);
         policy.allowedIDs().add(id);
 
         id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue(i18n.tr("Driver License"));
         id.type().setValue(Type.license);
+        id.importance().setValue(Importance.Optional);
         policy.allowedIDs().add(id);
 
         policy.mandatoryProofOfIncome().setValue(false);

@@ -46,9 +46,6 @@ public interface IdentificationDocumentFolder extends IEntity {
     @Caption(name = "Document Type")
     IdentificationDocumentType idType();
 
-    @Caption(name = "I do not have it", description = "Check here if you do not have this Document")
-    IPrimitive<Boolean> donotHave();
-
     @NotNull
     @ToString(index = 1)
     @Caption(name = "Document Number")

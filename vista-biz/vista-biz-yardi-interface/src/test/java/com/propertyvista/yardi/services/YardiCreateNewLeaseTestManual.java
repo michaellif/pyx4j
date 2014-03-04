@@ -42,14 +42,12 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -131,30 +129,31 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         setCurrentAddress(getAddress());
         fixTenantName(null);
         setMoveIn(new LogicalDate());
-
-        BillableItem park = addOutdoorParking();
-        BillableItem lock = addLargeLocker();
-
-        // add yardi deposit charge codes
-        Lease lease = retrieveLeaseDraft();
-        for (Deposit deposit : lease.currentTerm().version().leaseProducts().serviceItem().deposits()) {
-            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
-            code.yardiChargeCode().setValue("rsecdep");
-            deposit.chargeCode().yardiChargeCodes().add(code);
-            Persistence.service().persist(deposit.chargeCode());
-        }
-        for (Deposit deposit : park.deposits()) {
-            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
-            code.yardiChargeCode().setValue("secdepot");
-            deposit.chargeCode().yardiChargeCodes().add(code);
-            Persistence.service().persist(deposit.chargeCode());
-        }
-        for (Deposit deposit : lock.deposits()) {
-            YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
-            code.yardiChargeCode().setValue("rpet");
-            deposit.chargeCode().yardiChargeCodes().add(code);
-            Persistence.service().persist(deposit.chargeCode());
-        }
+/*
+ * BillableItem park = addOutdoorParking();
+ * BillableItem lock = addLargeLocker();
+ * 
+ * // add yardi deposit charge codes
+ * Lease lease = retrieveLeaseDraft();
+ * for (Deposit deposit : lease.currentTerm().version().leaseProducts().serviceItem().deposits()) {
+ * YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+ * code.yardiChargeCode().setValue("rsecdep");
+ * deposit.chargeCode().yardiChargeCodes().add(code);
+ * Persistence.service().persist(deposit.chargeCode());
+ * }
+ * for (Deposit deposit : park.deposits()) {
+ * YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+ * code.yardiChargeCode().setValue("secdepot");
+ * deposit.chargeCode().yardiChargeCodes().add(code);
+ * Persistence.service().persist(deposit.chargeCode());
+ * }
+ * for (Deposit deposit : lock.deposits()) {
+ * YardiChargeCode code = deposit.chargeCode().yardiChargeCodes().$();
+ * code.yardiChargeCode().setValue("rpet");
+ * deposit.chargeCode().yardiChargeCodes().add(code);
+ * Persistence.service().persist(deposit.chargeCode());
+ * }
+ */
         ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
         Persistence.service().commit();
 
@@ -170,8 +169,8 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
             log.info("Created Guest: {}", lease.leaseApplication().yardiApplicationId().getValue());
 
             // NOTE: if added before, the room mates must be removed manually
-            addCoTenant();
-            addGuarantor();
+//            addCoTenant();
+//            addGuarantor();
 
             ServerSideFactory.create(YardiApplicationFacade.class).addLeaseParticipants(lease);
             lease = retrieveLease();
@@ -181,7 +180,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
                 log.info("  Participant {} = {}", p.leaseTermParticipants().iterator().next().role().getValue().name(), p.yardiApplicantId().getValue());
             }
 
-            ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(retrieveLease());
+//            ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(retrieveLease());
             lease = retrieveLease();
             log.info("Unit held for: {}", lease.leaseApplication().yardiApplicationId().getValue());
 

@@ -16,8 +16,6 @@ package com.propertyvista.portal.shared.ui.util.editors;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
@@ -27,6 +25,8 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -37,6 +37,7 @@ import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
@@ -119,6 +120,28 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
         }
     }
 
+    @Override
+    protected CEntityFolderItem<IdentificationDocumentFolder> createItem(boolean first) {
+        return new CEntityFolderItem<IdentificationDocumentFolder>(IdentificationDocumentFolder.class) {
+            @Override
+            public IFolderItemDecorator<IdentificationDocumentFolder> createItemDecorator() {
+                return IdUploaderFolder.this.createItemDecorator();
+            }
+
+            @Override
+            public void onValueSet(boolean populate) {
+                // update removable
+                setRemovable(!Importance.Required.equals(getValue().idType().importance().getValue()));
+            }
+
+            // TODO - here for testing - remove
+            @Override
+            public void setRemovable(boolean removable) {
+                super.setRemovable(removable);
+            }
+        };
+    }
+
     private class IdentificationDocumentEditor extends CEntityForm<IdentificationDocumentFolder> {
 
         public IdentificationDocumentEditor() {
@@ -131,7 +154,6 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
             int row = -1;
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idType(), new CEntityLabel<IdentificationDocumentType>())).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().donotHave())).componentWidth("auto").build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idNumber())).build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().notes())).build());
 
@@ -147,13 +169,6 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                 }
             });
 
-            get(proto().donotHave()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    updateEditablity();
-                }
-            });
-
             content.setH3(++row, 0, 2, i18n.tr("Files"));
             content.setWidget(++row, 0, 2, inject(proto().files(), docPagesFolder));
             return content;
@@ -166,15 +181,9 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             if (isViewable()) {
                 get(proto().notes()).setVisible(!getValue().notes().isNull());
             }
-            get(proto().donotHave()).setVisible(getValue().idType().required().getValue(false));
-            updateEditablity();
-        }
 
-        private void updateEditablity() {
-            boolean canEdit = !getValue().donotHave().getValue(false);
-            get(proto().idNumber()).setEnabled(canEdit);
-            get(proto().notes()).setEnabled(canEdit);
-            get(proto().files()).setEnabled(canEdit);
+//            CEntityFolderItem<?> parent = (CEntityFolderItem<?>) getParent();
+//            parent.setRemovable(!Importance.Required.equals(getValue().idType().importance().getValue()));
         }
 
         @Override

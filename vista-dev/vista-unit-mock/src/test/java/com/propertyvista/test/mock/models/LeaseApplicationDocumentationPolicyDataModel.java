@@ -18,6 +18,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.test.mock.MockDataModel;
 
@@ -31,7 +32,7 @@ public class LeaseApplicationDocumentationPolicyDataModel extends MockDataModel<
 
         IdentificationDocumentType id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue("SIN");
-        id.required().setValue(true);
+        id.importance().setValue(Importance.Required);
         id.type().setValue(Type.canadianSIN);
         policy.allowedIDs().add(id);
 
