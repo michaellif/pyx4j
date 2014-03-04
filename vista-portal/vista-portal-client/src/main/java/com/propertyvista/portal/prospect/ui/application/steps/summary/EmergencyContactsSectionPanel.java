@@ -17,9 +17,9 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.EmergencyContactsStep;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
 
-public class ContactsSectionPanel extends AbstractSectionPanel {
+public class EmergencyContactsSectionPanel extends AbstractSectionPanel {
 
-    public ContactsSectionPanel(int index, SummaryForm form, EmergencyContactsStep step) {
+    public EmergencyContactsSectionPanel(int index, SummaryForm form, EmergencyContactsStep step) {
         super(index, OnlineApplicationWizardStepMeta.EmergencyContacts.toString(), form, step);
 
         EmergencyContactFolder emergencyContactFolder = new EmergencyContactFolder();

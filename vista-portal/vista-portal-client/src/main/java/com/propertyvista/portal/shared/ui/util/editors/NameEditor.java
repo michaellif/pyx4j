@@ -44,6 +44,8 @@ public class NameEditor extends CEntityForm<Name> {
 
         nameComp = new CEntityLabel<Name>();
         nameComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
+        adopt(nameComp);
     }
 
     /**
@@ -58,14 +60,12 @@ public class NameEditor extends CEntityForm<Name> {
         BasicFlexFormPanel main = new BasicFlexFormPanel();
         int row = -1;
 
-        main.setWidget(0, 0, 1, new FormWidgetDecoratorBuilder(nameComp, 200).customLabel(customViewLabel).build());
-
+        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(nameComp, 200).customLabel(customViewLabel).build());
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName()), 200).build());
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName()), 200).build());
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().middleName()), 60).build());
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().namePrefix()), 60).build());
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nameSuffix()), 60).build());
-//        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().maidenName()), 200).build());
 
         calculateFieldsStatus();
 
@@ -93,6 +93,7 @@ public class NameEditor extends CEntityForm<Name> {
 
             get(proto().firstName()).setVisible(false);
             get(proto().lastName()).setVisible(false);
+            get(proto().middleName()).setVisible(false);
             get(proto().namePrefix()).setVisible(false);
             get(proto().nameSuffix()).setVisible(false);
         } else {
@@ -100,6 +101,7 @@ public class NameEditor extends CEntityForm<Name> {
 
             get(proto().firstName()).setVisible(true);
             get(proto().lastName()).setVisible(true);
+            get(proto().middleName()).setVisible(true);
             get(proto().namePrefix()).setVisible(true);
             get(proto().nameSuffix()).setVisible(true);
         }
@@ -108,8 +110,7 @@ public class NameEditor extends CEntityForm<Name> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        if (!isEditable()) {
+        if (isViewable()) {
             nameComp.setValue(getValue());
         }
     }

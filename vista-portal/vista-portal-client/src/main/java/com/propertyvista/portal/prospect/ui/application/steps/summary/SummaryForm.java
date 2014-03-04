@@ -75,7 +75,7 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
             } else if (step instanceof FinancialStep) {
                 panel = new FinancialSectionPanel(index, this, (FinancialStep) step);
             } else if (step instanceof EmergencyContactsStep) {
-                panel = new ContactsSectionPanel(index, this, (EmergencyContactsStep) step);
+                panel = new EmergencyContactsSectionPanel(index, this, (EmergencyContactsStep) step);
             } else if (step instanceof LegalStep) {
                 panel = new LegalSectionPanel(index, this, (LegalStep) step);
             }
