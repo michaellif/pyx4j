@@ -23,6 +23,13 @@ public interface MoneyInBatchViewerView extends IViewer<MoneyInBatchDTO> {
 
         void createDownloadableDepositSlipPrintout();
 
+        void postToYardi();
+
+        boolean canPostToYardi();
+
+        void cancelPosting();
+
+        boolean canCancelPosting();
     }
 
 }

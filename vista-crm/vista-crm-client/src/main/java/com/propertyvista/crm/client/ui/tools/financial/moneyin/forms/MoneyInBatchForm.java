@@ -67,7 +67,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().building())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().totalReceivedAmount())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().numberOfReceipts())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().isPosted())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().postingStatus())).build());
 
         row = -1;
         panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().depositSlipNumber())).build());
@@ -85,7 +85,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         get(proto().depositSlipNumber()).setViewable(true);
         get(proto().totalReceivedAmount()).setViewable(true);
         get(proto().numberOfReceipts()).setViewable(true);
-        get(proto().isPosted()).setViewable(true);
+        get(proto().postingStatus()).setViewable(true);
         get(proto().payments()).setViewable(true);
 
         get(proto().bankId()).setViewable(true);

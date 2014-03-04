@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.IService;
 
@@ -34,4 +35,7 @@ public interface MoneyInToolService extends IService {
      */
     void createPaymentBatch(AsyncCallback<String> callback, LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments);
 
+    void postPaymentBatch(AsyncCallback<String> callback, Key batchId);
+
+    void cancelPaymentBatchPosting(AsyncCallback<String> callback, Key batchId);
 }

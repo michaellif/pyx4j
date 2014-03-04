@@ -26,7 +26,6 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipCheckDet
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.domain.financial.PaymentPostingBatch;
-import com.propertyvista.domain.financial.PaymentPostingBatch.PostingStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CheckInfo;
 
@@ -45,6 +44,7 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         bind(toProto.bankTransitNumber(), boProto.depositDetails().merchantAccount().branchTransitNumber());
         bind(toProto.bankAccountNumber(), boProto.depositDetails().merchantAccount().accountNumber());
         bind(toProto.bankAccountName(), boProto.depositDetails().merchantAccount().accountName());
+        bind(toProto.postingStatus(), boProto.status());
     }
 
     @Override
@@ -59,7 +59,6 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
 
         dto.depositSlipNumber().setValue((int) bo.getPrimaryKey().asLong());
 
-        dto.isPosted().setValue(bo.status().getValue() == PostingStatus.Posted);
         Persistence.service().retrieveMember(bo.payments());
 
         BigDecimal total = new BigDecimal("0.00");

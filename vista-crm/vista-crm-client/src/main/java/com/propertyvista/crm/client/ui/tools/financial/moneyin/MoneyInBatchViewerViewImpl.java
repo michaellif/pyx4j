@@ -26,6 +26,10 @@ public class MoneyInBatchViewerViewImpl extends CrmViewerViewImplBase<MoneyInBat
 
     private static final I18n i18n = I18n.get(MoneyInBatchViewerViewImpl.class);
 
+    private Button postButton;
+
+    private Button cancelPostingButton;
+
     public MoneyInBatchViewerViewImpl() {
         setBreadcrumbsBar(null);
         setForm(new MoneyInBatchForm(this));
@@ -35,14 +39,41 @@ public class MoneyInBatchViewerViewImpl extends CrmViewerViewImplBase<MoneyInBat
                 MoneyInBatchViewerViewImpl.this.createDepositSlip();
             }
         }));
+        addHeaderToolbarItem(postButton = new Button(i18n.tr("Post to Yardi"), new Command() {
+            @Override
+            public void execute() {
+                MoneyInBatchViewerViewImpl.this.postToYardi();
+            }
+        }));
+        addHeaderToolbarItem(cancelPostingButton = new Button(i18n.tr("Cancel Posting"), new Command() {
+            @Override
+            public void execute() {
+                MoneyInBatchViewerViewImpl.this.cancelPostToYardi();
+            }
+        }));
     }
 
     @Override
-    protected void populateBreadcrumbs(MoneyInBatchDTO value) {
-
+    public void populate(MoneyInBatchDTO value) {
+        super.populate(value);
+        postButton.setVisible(((MoneyInBatchViewerView.Presenter) getPresenter()).canPostToYardi());
+        cancelPostingButton.setVisible(((MoneyInBatchViewerView.Presenter) getPresenter()).canCancelPosting());
     }
 
     private void createDepositSlip() {
         ((MoneyInBatchViewerView.Presenter) getPresenter()).createDownloadableDepositSlipPrintout();
+    }
+
+    private void postToYardi() {
+        ((MoneyInBatchViewerView.Presenter) getPresenter()).postToYardi();
+    }
+
+    private void cancelPostToYardi() {
+        ((MoneyInBatchViewerView.Presenter) getPresenter()).cancelPosting();
+    }
+
+    @Override
+    protected void populateBreadcrumbs(MoneyInBatchDTO value) {
+        // we don't have breadcrumbs for this
     }
 }

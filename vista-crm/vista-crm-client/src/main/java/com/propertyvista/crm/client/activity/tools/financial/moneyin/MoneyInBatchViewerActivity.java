@@ -20,7 +20,10 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -30,14 +33,22 @@ import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInBatchViewe
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
+import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
+import com.propertyvista.domain.financial.PaymentPostingBatch.PostingStatus;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDTO> implements MoneyInBatchViewerView.Presenter {
 
     private static final I18n i18n = I18n.get(MoneyInBatchViewerActivity.class);
 
+    private boolean canPostToYardi;
+
+    private boolean canCancelPosting;
+
     public MoneyInBatchViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(MoneyInBatchViewerView.class), GWT.<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(MoneyInBatchViewerView.class), GWT
+                .<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
+
     }
 
     @Override
@@ -51,6 +62,66 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
         ReportRequest request = new ReportRequest();
         request.setParameters(parameters);
         reportDialog.start(GWT.<MoneyInBatchDepositSlipPrintService> create(MoneyInBatchDepositSlipPrintService.class), request);
+    }
+
+    @Override
+    public void postToYardi() {
+        GWT.<MoneyInToolService> create(MoneyInToolService.class).postPaymentBatch(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String deferredCorrelationId) {
+                MoneyInBatchViewerActivity.this.startProcessingProgress(i18n.tr("Posting to Yardi..."), deferredCorrelationId);
+            }
+        }, getEntityId());
+    }
+
+    @Override
+    public void cancelPosting() {
+        GWT.<MoneyInToolService> create(MoneyInToolService.class).cancelPaymentBatchPosting(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String deferredCorrelationId) {
+                MoneyInBatchViewerActivity.this.startProcessingProgress(i18n.tr("Canceling posting to Yardi..."), deferredCorrelationId);
+            }
+        }, getEntityId());
+    }
+
+    @Override
+    public boolean canEdit() {
+        return false;
+    }
+
+    @Override
+    public boolean canPostToYardi() {
+        return canPostToYardi;
+    }
+
+    @Override
+    public boolean canCancelPosting() {
+        return canCancelPosting;
+    }
+
+    @Override
+    protected void onPopulateSuccess(MoneyInBatchDTO result) {
+        this.canPostToYardi = result.postingStatus().getValue() == PostingStatus.Created;
+        this.canCancelPosting = result.postingStatus().getValue() == PostingStatus.Canceled;
+        super.onPopulateSuccess(result);
+    }
+
+    // TODO maybe this should be part of the View?
+    private void startProcessingProgress(String message, String deferredCorrelationId) {
+        DeferredProcessDialog d = new DeferredProcessDialog("", message, false) {
+            @Override
+            public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                super.onDeferredSuccess(result);
+            }
+
+            @Override
+            protected void onDeferredCompleate() {
+                super.onDeferredCompleate();
+                this.hide();
+            }
+        };
+        d.show();
+        d.startProgress(deferredCorrelationId);
     }
 
 }

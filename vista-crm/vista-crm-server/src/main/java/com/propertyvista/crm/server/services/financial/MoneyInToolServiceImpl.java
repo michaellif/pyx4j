@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
@@ -98,6 +99,16 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInBatchCreateDeferredProcess(receiptDate, payments), ThreadPoolNames.IMPORTS));
     }
 
+    @Override
+    public void postPaymentBatch(AsyncCallback<String> callback, Key batchId) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInBatchPostDeferredProcess(batchId), ThreadPoolNames.IMPORTS));
+    }
+
+    @Override
+    public void cancelPaymentBatchPosting(AsyncCallback<String> callback, Key batchId) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new MoneyInBatchCancelPostingDeferredProcess(batchId), ThreadPoolNames.IMPORTS));
+    }
+
     private EntityQueryCriteria<Lease> makeCriteria(MoneyInCandidateSearchCriteriaDTO criteriaEntity) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.in(criteria.proto().status(), Lease.Status.active());
@@ -168,4 +179,5 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
         }
         return false;
     }
+
 }
