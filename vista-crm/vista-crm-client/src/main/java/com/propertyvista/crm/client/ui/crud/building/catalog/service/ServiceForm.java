@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -29,6 +31,8 @@ import com.propertyvista.misc.VistaTODO;
 public class ServiceForm extends CrmEntityForm<Service> {
 
     private static final I18n i18n = I18n.get(ServiceForm.class);
+
+    private Widget headerLMR, headerMoveIn, headerSecurity;
 
     public ServiceForm(IForm<Service> view) {
         super(Service.class, view);
@@ -57,12 +61,15 @@ public class ServiceForm extends CrmEntityForm<Service> {
         content.setH1(++row, 0, 2, i18n.tr("Deposits"));
 
         content.setH3(++row, 0, 2, i18n.tr("Last Month Rent"));
+        headerLMR = content.getWidget(row, 0);
         content.setWidget(++row, 0, 2, inject(proto().version().depositLMR(), new ProductDepositEditor()));
 
         content.setH3(++row, 0, 2, i18n.tr("Move In"));
+        headerMoveIn = content.getWidget(row, 0);
         content.setWidget(++row, 0, 2, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
 
         content.setH3(++row, 0, 2, i18n.tr("Security"));
+        headerSecurity = content.getWidget(row, 0);
         content.setWidget(++row, 0, 2, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
 
         // tweaks:
@@ -107,5 +114,16 @@ public class ServiceForm extends CrmEntityForm<Service> {
         super.onValueSet(populate);
 
         get(proto().expiredFrom()).setVisible(isEditable() || !getValue().expiredFrom().isNull());
+
+        if (!isEditable()) {
+            headerLMR.setVisible(getValue().version().depositLMR().enabled().isBooleanTrue());
+            get(proto().version().depositLMR()).setVisible(getValue().version().depositLMR().enabled().isBooleanTrue());
+
+            headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().isBooleanTrue());
+            get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().isBooleanTrue());
+
+            headerSecurity.setVisible(getValue().version().depositSecurity().enabled().isBooleanTrue());
+            get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().isBooleanTrue());
+        }
     }
 }
