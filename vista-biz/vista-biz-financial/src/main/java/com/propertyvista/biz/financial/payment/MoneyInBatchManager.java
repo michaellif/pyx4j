@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -37,10 +38,11 @@ class MoneyInBatchManager {
     MoneyInBatchManager() {
     }
 
-    PaymentPostingBatch createPostingBatch(Building buildingId) {
+    PaymentPostingBatch createPostingBatch(Building buildingId, LogicalDate receiptDate) {
         PaymentPostingBatch postingBatch = EntityFactory.create(PaymentPostingBatch.class);
         postingBatch.status().setValue(PostingStatus.Created);
         postingBatch.building().set(buildingId);
+        postingBatch.depositDetails().depositDate().setValue(receiptDate);
         postingBatch.depositDetails().merchantAccount().set(PaymentUtils.retrieveMerchantAccount(buildingId));
         Persistence.service().persist(postingBatch);
         return postingBatch;

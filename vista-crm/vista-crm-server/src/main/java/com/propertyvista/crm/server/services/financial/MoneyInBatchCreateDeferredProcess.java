@@ -49,13 +49,15 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
 
     private static final long serialVersionUID = 4099464017607928359L;
 
+    private final LogicalDate receiptDate;
+
     private final List<MoneyInPaymentDTO> payments;
 
     private volatile Throwable error;
 
     public MoneyInBatchCreateDeferredProcess(LogicalDate receiptDate, Vector<MoneyInPaymentDTO> payments) {
         progress.progressMaximum.set(payments.size());
-        progress.progress.set(0);
+        this.receiptDate = receiptDate;
         this.payments = payments;
     }
 
@@ -106,7 +108,7 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
     }
 
     private PaymentPostingBatch createBatch(Building buildingIdStub, Collection<MoneyInPaymentDTO> payments) throws PaymentException {
-        PaymentPostingBatch batch = ServerSideFactory.create(PaymentFacade.class).createPostingBatch(buildingIdStub);
+        PaymentPostingBatch batch = ServerSideFactory.create(PaymentFacade.class).createPostingBatch(buildingIdStub, receiptDate);
 
         for (MoneyInPaymentDTO paymentDto : payments) {
             createPaymentRecord(paymentDto, batch);
@@ -119,7 +121,11 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
     private PaymentRecord createPaymentRecord(MoneyInPaymentDTO dto, PaymentPostingBatch batch) throws PaymentException {
         Lease lease = Persistence.service().retrieve(Lease.class, dto.leaseIdStub().getPrimaryKey());
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-        paymentRecord.receivedDate().setValue(dto.paymentReceiptDate().getValue());
+        if (!dto.paymentReceiptDate().isNull()) {
+            paymentRecord.receivedDate().setValue(dto.paymentReceiptDate().getValue());
+        } else {
+            paymentRecord.receivedDate().setValue(receiptDate);
+        }
         paymentRecord.billingAccount().set(lease.billingAccount());
         paymentRecord.leaseTermParticipant().set(dto.payerLeaseTermTenantIdStub());
         paymentRecord.amount().setValue(dto.payedAmount().getValue());

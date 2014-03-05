@@ -478,8 +478,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public PaymentPostingBatch createPostingBatch(Building buildingId) {
-        return new MoneyInBatchManager().createPostingBatch(buildingId);
+    public PaymentPostingBatch createPostingBatch(Building buildingId, LogicalDate receiptDate) {
+        return new MoneyInBatchManager().createPostingBatch(buildingId, receiptDate);
     }
 
     @Override

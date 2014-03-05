@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess.RunningProcess;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -92,7 +93,7 @@ public interface PaymentFacade {
     /** get payments for the last 3 months */
     List<PaymentRecord> getLatestPaymentActivity(BillingAccount billingAccount);
 
-    PaymentPostingBatch createPostingBatch(Building buildingId);
+    PaymentPostingBatch createPostingBatch(Building buildingId, LogicalDate receiptDate);
 
     void cancelPostingBatch(PaymentPostingBatch paymentPostingBatchId, RunningProcess progress);
 

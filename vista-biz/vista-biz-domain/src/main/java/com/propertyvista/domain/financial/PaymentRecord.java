@@ -185,6 +185,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @ReadOnly
     IPrimitive<String> yardiDocumentNumber();
 
+    // The latest of receivedDate or Check.targetDate is Post to yardi as TransactionDate
     IPrimitive<LogicalDate> receivedDate();
 
     @Editor(type = EditorType.label)
