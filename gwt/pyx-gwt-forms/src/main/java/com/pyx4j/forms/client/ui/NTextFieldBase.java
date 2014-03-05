@@ -73,7 +73,8 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
             return null;
         } else {
             try {
-                return getCComponent().getFormat().parse(getEditor().getText());
+                // trim user input before parsing
+                return getCComponent().getFormat().parse(getEditor().getText().trim());
             } catch (ParseException e) {
                 throw e;
             }
