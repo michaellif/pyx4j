@@ -221,6 +221,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             if (VistaFeatures.instance().yardiIntegration()) {
                 // The only Yardi Billing type (default) will be added in onValueSet()
                 setAddable(false);
+                setRemovable(false);
             } else {
                 addValueChangeHandler(new ValueChangeHandler<IList<LeaseBillingTypePolicyItem>>() {
                     @Override
