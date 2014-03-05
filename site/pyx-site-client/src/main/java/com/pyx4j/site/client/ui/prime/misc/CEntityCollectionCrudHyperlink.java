@@ -72,6 +72,8 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
 
     }
 
+    private final AppPlaceBuilder<E> placeBuilder;
+
     public CEntityCollectionCrudHyperlink(Class<? extends CrudAppPlace> placeClass) {
         this(new AppPlaceByOwnerBuilder<E>(placeClass));
     }
@@ -82,15 +84,7 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
 
     public CEntityCollectionCrudHyperlink(final AppPlaceBuilder<E> placeBuilder) {
         super();
-        setNavigationCommand(new Command() {
-            @Override
-            public void execute() {
-                AppPlace place = placeBuilder.createAppPlace(getValue());
-                if (place != null) {
-                    AppSite.getPlaceController().goTo(place);
-                }
-            }
-        });
+        this.placeBuilder = placeBuilder;
         setFormat(new IFormat<E>() {
             @Override
             public String format(E value) {
@@ -112,6 +106,20 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
     @Override
     protected void onValueSet(boolean populate) {
         this.setEnabled((getValue() != null) && (getValue().getOwner().getPrimaryKey() != null));
+
+        Command onClick = null;
+        if (getValue() != null && getValue().size() > 0) {
+            onClick = new Command() {
+                @Override
+                public void execute() {
+                    AppPlace place = placeBuilder.createAppPlace(getValue());
+                    if (place != null) {
+                        AppSite.getPlaceController().goTo(place);
+                    }
+                }
+            };
+        }
+        setNavigationCommand(onClick);
     }
 
     /**
