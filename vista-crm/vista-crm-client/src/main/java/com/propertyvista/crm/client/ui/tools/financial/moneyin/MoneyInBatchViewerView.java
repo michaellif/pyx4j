@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
@@ -21,15 +22,18 @@ public interface MoneyInBatchViewerView extends IViewer<MoneyInBatchDTO> {
 
     interface Presenter extends IViewer.Presenter {
 
+        void showPaymentRecord(Key paymentRecordId);
+
         void createDownloadableDepositSlipPrintout();
 
-        void postToYardi();
+        void postBatch();
 
-        boolean canPostToYardi();
+        void cancelBatch();
 
-        void cancelPosting();
+        boolean canPost();
 
-        boolean canCancelPosting();
+        boolean canCancel();
+
     }
 
 }

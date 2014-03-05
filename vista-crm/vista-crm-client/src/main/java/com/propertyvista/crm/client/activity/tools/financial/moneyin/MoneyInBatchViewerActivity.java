@@ -18,18 +18,21 @@ import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInBatchViewerView;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
@@ -41,14 +44,19 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
 
     private static final I18n i18n = I18n.get(MoneyInBatchViewerActivity.class);
 
-    private boolean canPostToYardi;
+    private boolean canPost;
 
-    private boolean canCancelPosting;
+    private boolean canCancel;
 
     public MoneyInBatchViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(MoneyInBatchViewerView.class), GWT
                 .<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
 
+    }
+
+    @Override
+    public void showPaymentRecord(Key paymentRecordId) {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.Payment().formViewerPlace(paymentRecordId));
     }
 
     @Override
@@ -65,21 +73,21 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
     }
 
     @Override
-    public void postToYardi() {
+    public void postBatch() {
         GWT.<MoneyInToolService> create(MoneyInToolService.class).postPaymentBatch(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredCorrelationId) {
-                MoneyInBatchViewerActivity.this.startProcessingProgress(i18n.tr("Posting to Yardi..."), deferredCorrelationId);
+                MoneyInBatchViewerActivity.this.startProcessingProgress(i18n.tr("Posting..."), deferredCorrelationId);
             }
         }, getEntityId());
     }
 
     @Override
-    public void cancelPosting() {
+    public void cancelBatch() {
         GWT.<MoneyInToolService> create(MoneyInToolService.class).cancelPaymentBatchPosting(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredCorrelationId) {
-                MoneyInBatchViewerActivity.this.startProcessingProgress(i18n.tr("Canceling posting to Yardi..."), deferredCorrelationId);
+                MoneyInBatchViewerActivity.this.startProcessingProgress(i18n.tr("Canceling Batch..."), deferredCorrelationId);
             }
         }, getEntityId());
     }
@@ -90,19 +98,19 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
     }
 
     @Override
-    public boolean canPostToYardi() {
-        return canPostToYardi;
+    public boolean canPost() {
+        return canPost;
     }
 
     @Override
-    public boolean canCancelPosting() {
-        return canCancelPosting;
+    public boolean canCancel() {
+        return canCancel;
     }
 
     @Override
     protected void onPopulateSuccess(MoneyInBatchDTO result) {
-        this.canPostToYardi = result.postingStatus().getValue() == PostingStatus.Created;
-        this.canCancelPosting = result.postingStatus().getValue() == PostingStatus.Canceled;
+        this.canPost = result.postingStatus().getValue() == PostingStatus.Created;
+        this.canCancel = result.postingStatus().getValue() == PostingStatus.Created;
         super.onPopulateSuccess(result);
     }
 
@@ -111,6 +119,7 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
         DeferredProcessDialog d = new DeferredProcessDialog("", message, false) {
             @Override
             public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                MoneyInBatchViewerActivity.this.populate();
                 super.onDeferredSuccess(result);
             }
 

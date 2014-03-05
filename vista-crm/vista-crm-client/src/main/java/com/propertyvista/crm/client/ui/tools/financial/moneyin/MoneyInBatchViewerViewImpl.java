@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
@@ -28,27 +29,33 @@ public class MoneyInBatchViewerViewImpl extends CrmViewerViewImplBase<MoneyInBat
 
     private Button postButton;
 
-    private Button cancelPostingButton;
+    private Button cancelBatchButton;
 
     public MoneyInBatchViewerViewImpl() {
         setBreadcrumbsBar(null);
-        setForm(new MoneyInBatchForm(this));
-        addHeaderToolbarItem(new Button(i18n.tr("Create Deposit Slip"), new Command() {
+        setForm(new MoneyInBatchForm(this) {
+            @Override
+            public void onShowToPaymentRecord(Key paymentRecordId) {
+                MoneyInBatchViewerViewImpl.this.showPaymentRecord(paymentRecordId);
+            }
+        });
+
+        addHeaderToolbarItem(new Button(i18n.tr("Create Deposit Slip..."), new Command() {
             @Override
             public void execute() {
                 MoneyInBatchViewerViewImpl.this.createDepositSlip();
             }
         }));
-        addHeaderToolbarItem(postButton = new Button(i18n.tr("Post to Yardi"), new Command() {
+        addHeaderToolbarItem(postButton = new Button(i18n.tr("Post..."), new Command() {
             @Override
             public void execute() {
-                MoneyInBatchViewerViewImpl.this.postToYardi();
+                MoneyInBatchViewerViewImpl.this.post();
             }
         }));
-        addHeaderToolbarItem(cancelPostingButton = new Button(i18n.tr("Cancel Posting"), new Command() {
+        addHeaderToolbarItem(cancelBatchButton = new Button(i18n.tr("Cancel Batch..."), new Command() {
             @Override
             public void execute() {
-                MoneyInBatchViewerViewImpl.this.cancelPostToYardi();
+                MoneyInBatchViewerViewImpl.this.cancelBatch();
             }
         }));
     }
@@ -56,24 +63,29 @@ public class MoneyInBatchViewerViewImpl extends CrmViewerViewImplBase<MoneyInBat
     @Override
     public void populate(MoneyInBatchDTO value) {
         super.populate(value);
-        postButton.setVisible(((MoneyInBatchViewerView.Presenter) getPresenter()).canPostToYardi());
-        cancelPostingButton.setVisible(((MoneyInBatchViewerView.Presenter) getPresenter()).canCancelPosting());
+        postButton.setVisible(((MoneyInBatchViewerView.Presenter) getPresenter()).canPost());
+        cancelBatchButton.setVisible(((MoneyInBatchViewerView.Presenter) getPresenter()).canCancel());
+    }
+
+    @Override
+    protected void populateBreadcrumbs(MoneyInBatchDTO value) {
+        // we don't have breadcrumbs for this view
     }
 
     private void createDepositSlip() {
         ((MoneyInBatchViewerView.Presenter) getPresenter()).createDownloadableDepositSlipPrintout();
     }
 
-    private void postToYardi() {
-        ((MoneyInBatchViewerView.Presenter) getPresenter()).postToYardi();
+    private void post() {
+        ((MoneyInBatchViewerView.Presenter) getPresenter()).postBatch();
     }
 
-    private void cancelPostToYardi() {
-        ((MoneyInBatchViewerView.Presenter) getPresenter()).cancelPosting();
+    private void cancelBatch() {
+        ((MoneyInBatchViewerView.Presenter) getPresenter()).cancelBatch();
     }
 
-    @Override
-    protected void populateBreadcrumbs(MoneyInBatchDTO value) {
-        // we don't have breadcrumbs for this
+    private void showPaymentRecord(Key paymentRecordId) {
+        ((MoneyInBatchViewerView.Presenter) getPresenter()).showPaymentRecord(paymentRecordId);
     }
+
 }

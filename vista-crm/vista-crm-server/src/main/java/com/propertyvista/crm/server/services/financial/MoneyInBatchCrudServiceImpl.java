@@ -14,6 +14,10 @@
 package com.propertyvista.crm.server.services.financial;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -80,25 +84,35 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
     protected void enhanceRetrieved(PaymentPostingBatch bo, MoneyInBatchDTO to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
         this.enhanceListRetrieved(bo, to);
+        List<DepositSlipCheckDetailsRecordDTO> paymentsDto = new ArrayList<>(bo.payments().size());
         for (PaymentRecord paymentRecord : bo.payments()) {
-            DepositSlipCheckDetailsRecordDTO paymentRecordDto = to.payments().$();
+            DepositSlipCheckDetailsRecordDTO paymentDetailsDto = to.payments().$();
+            paymentDetailsDto.id().setValue(paymentRecord.id().getValue());
+            paymentDetailsDto.status().setValue(paymentRecord.paymentStatus().getValue());
             Persistence.service().retrieve(paymentRecord.billingAccount());
             Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-            paymentRecordDto.unit().set(paymentRecord.billingAccount().lease().unit().info().number());
+            paymentDetailsDto.unit().set(paymentRecord.billingAccount().lease().unit().info().number());
             Persistence.service().retrieve(paymentRecord.leaseTermParticipant());
-            paymentRecordDto.tenantId().setValue(paymentRecord.leaseTermParticipant().leaseParticipant().participantId().getValue());
-            paymentRecordDto.tenantName().setValue(paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView());
-            paymentRecordDto.checkNumber().setValue(paymentRecord.paymentMethod().details().duplicate(CheckInfo.class).checkNo().getValue());
-            paymentRecordDto.amount().setValue(paymentRecord.amount().getValue());
-            paymentRecordDto.date().setValue(paymentRecord.targetDate().getValue());
-            to.payments().add(paymentRecordDto);
+            paymentDetailsDto.tenantId().setValue(paymentRecord.leaseTermParticipant().leaseParticipant().participantId().getValue());
+            paymentDetailsDto.tenantName().setValue(paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView());
+            paymentDetailsDto.checkNumber().setValue(paymentRecord.paymentMethod().details().duplicate(CheckInfo.class).checkNo().getValue());
+            paymentDetailsDto.amount().setValue(paymentRecord.amount().getValue());
+            paymentDetailsDto.date().setValue(paymentRecord.targetDate().getValue());
+            paymentsDto.add(paymentDetailsDto);
         }
+        Collections.sort(paymentsDto, new Comparator<DepositSlipCheckDetailsRecordDTO>() {
+            @Override
+            public int compare(DepositSlipCheckDetailsRecordDTO o1, DepositSlipCheckDetailsRecordDTO o2) {
+                return o1.unit().getValue().compareTo(o2.unit().getValue());
+            }
+        });
+        to.payments().addAll(paymentsDto);
 
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        throw new RuntimeException("Not Implemented"); // TODO implement remove batch for not yet posted batches
+        throw new RuntimeException("Not Implemented");
     }
 
     @Override

@@ -22,8 +22,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.financial.PaymentRecord;
+
 @Transient
 public interface DepositSlipCheckDetailsRecordDTO extends IEntity {
+
+    IPrimitive<PaymentRecord.PaymentStatus> status();
 
     IPrimitive<String> unit();
 
