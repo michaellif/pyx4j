@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
@@ -86,7 +87,7 @@ class MoneyInBatchManager {
                 progress.progressMaximum.set(Persistence.service().count(criteria));
 
                 // TODO unify RunningProcess  and ExecutionMonitor
-                ExecutionMonitor executionMonitor = new ExecutionMonitor() {
+                final ExecutionMonitor executionMonitor = new ExecutionMonitor() {
                     @Override
                     protected void onEventAdded() {
                         progress.progress.set(this.getProcessed().intValue());
@@ -94,6 +95,11 @@ class MoneyInBatchManager {
                 };
 
                 new PaymentBatchPosting().processPayments(criteria, false, executionMonitor);
+
+                // Allow to post batch again
+                if (executionMonitor.getErred() > 0) {
+                    throw new UserRuntimeException(executionMonitor.getTextMessages());
+                }
 
                 return null;
             }

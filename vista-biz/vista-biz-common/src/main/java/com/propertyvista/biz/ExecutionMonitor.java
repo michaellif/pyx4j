@@ -425,6 +425,20 @@ public class ExecutionMonitor {
         }
     }
 
+    public String getTextMessages() {
+        StringBuilder textMessage = new StringBuilder();
+
+        for (Map.Entry<ReportSectionId, ReportSection> section : sections.entrySet()) {
+            for (ReportMessage message : section.getValue().messages) {
+                if (textMessage.length() > 0) {
+                    textMessage.append("\n");
+                }
+                textMessage.append(message.message);
+            }
+        }
+        return textMessage.toString();
+    }
+
     //TODO use @Length annotation adapter
     public static String truncErrorMessage(String errorMessage) {
         if ((errorMessage != null) && (errorMessage.length() > 4000)) {
