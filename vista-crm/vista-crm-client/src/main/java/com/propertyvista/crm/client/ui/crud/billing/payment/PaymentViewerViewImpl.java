@@ -13,17 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
-import com.pyx4j.gwt.commons.Print;
-import com.pyx4j.gwt.commons.print.PrintManager;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.PrintUtils;
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
@@ -112,6 +108,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         setActionVisible(rejectAction, false);
         setActionVisible(rejectNSFAction, false);
         setActionVisible(cancelAction, false);
+
         super.reset();
     }
 
