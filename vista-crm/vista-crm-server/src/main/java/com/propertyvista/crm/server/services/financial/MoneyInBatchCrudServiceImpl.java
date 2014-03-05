@@ -68,7 +68,7 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         BigDecimal total = new BigDecimal("0.00");
         int numberOfReceipts = 0;
         for (PaymentRecord paymentRecord : bo.payments()) {
-            if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Canceled) {
+            if (paymentRecord.paymentStatus().getValue() != PaymentRecord.PaymentStatus.Canceled) {
                 total = total.add(paymentRecord.amount().getValue());
                 numberOfReceipts++;
             }
