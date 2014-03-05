@@ -15,14 +15,25 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.dom.client.BrowserEvents;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.TableCellElement;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.commons.IFormat;
@@ -43,12 +54,35 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDT
 
 public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO> {
 
+    private static interface TableCellFocuser {
+
+        void focus(TableCellElement tableCellElement);
+
+    }
+
+    private static class TabKeyNavigationColumnContext {
+
+        private final int columnIndex;
+
+        private final TableCellFocuser tableCellFocuser;
+
+        public TabKeyNavigationColumnContext(int columnIndex, TableCellFocuser tableCellFocuser) {
+            this.columnIndex = columnIndex;
+            this.tableCellFocuser = tableCellFocuser;
+        }
+
+        public int getColumnIndex() {
+            return columnIndex;
+        }
+
+        public TableCellFocuser getFocusElementTagName() {
+            return tableCellFocuser;
+        }
+    }
+
     private static final I18n i18n = I18n.get(MoneyInCandidateDataGrid.class);
 
-    /** This is one way */
     private static final NumberFormat CURRENCY_FORMAT = NumberFormat.getFormat("$#,##0.00");
-
-    private static final int PAGE_SIZE = 50;
 
     private Presenter presenter;
 
@@ -58,8 +92,13 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
 
     private ObjectEditCell<String> checkNumberCell;
 
+    protected List<TabKeyNavigationColumnContext> tabNavigationContext;
+
     public MoneyInCandidateDataGrid() {
         super(MoneyInCandidateDTO.class, false);
+        setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED); // we need this for quirky tab navigation
+
+        tabNavigationContext = new ArrayList<MoneyInCandidateDataGrid.TabKeyNavigationColumnContext>();
 
         moneyEditCellStyle = new ObjectEditCell.DefaultStyle() {//@formatter:off
             @Override public String objectEditCell() {
@@ -68,6 +107,7 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         };//@formatter:on
 
         initColumns();
+        initTabKeyBasedNavigation();
     }
 
     public void setPresenter(MoneyInCreateBatchView.Presenter presenter) {
@@ -142,6 +182,19 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         defColumn(payerSelectionColumn, i18n.tr("Payer"), 100, Unit.PX);
         payerSelectionColumn.setSortable(true);
         payerSelectionColumn.setDataStoreName(proto().payment().payerLeaseTermTenantIdStub().getPath().toString());
+
+        tabNavigationContext.add(new TabKeyNavigationColumnContext(getColumnIndex(payerSelectionColumn), new TableCellFocuser() {
+            @Override
+            public void focus(TableCellElement tableCellElement) {
+                NodeList<Element> inputElements = tableCellElement.getElementsByTagName("select");
+                if (inputElements.getLength() != 0) {
+                    inputElements.getItem(0).focus();
+                    NativeEvent clickEvent = Document.get().createClickEvent(1, 0, 0, 0, 0, false, false, false, false);
+                    inputElements.getItem(0).dispatchEvent(clickEvent);
+                }
+
+            }
+        }));
         return payerSelectionColumn;
     }
 
@@ -176,6 +229,21 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
 
         amountToPayColumn.setSortable(true);
         amountToPayColumn.setDataStoreName(proto().payment().payedAmount().getPath().toString());
+
+        tabNavigationContext.add(new TabKeyNavigationColumnContext(getColumnIndex(amountToPayColumn), new TableCellFocuser() {
+            @Override
+            public void focus(TableCellElement tableCellElement) {
+                NodeList<Element> inputElements = tableCellElement.getElementsByTagName("input");
+                if (inputElements.getLength() != 0) {
+                    inputElements.getItem(0).focus();
+                    NativeEvent clickEvent = Document.get().createClickEvent(1, 0, 0, 0, 0, false, false, false, false);
+                    inputElements.getItem(0).dispatchEvent(clickEvent);
+                    NativeEvent focusEvent = Document.get().createFocusEvent();
+                    inputElements.getItem(0).dispatchEvent(focusEvent);
+
+                }
+            }
+        }));
         return amountToPayColumn;
     }
 
@@ -215,6 +283,18 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         checkNumberColumn.setSortable(true);
         checkNumberColumn.setDataStoreName(proto().payment().checkNumber().getPath().toString());
 
+        tabNavigationContext.add(new TabKeyNavigationColumnContext(getColumnIndex(checkNumberColumn), new TableCellFocuser() {
+            @Override
+            public void focus(TableCellElement tableCellElement) {
+                NodeList<Element> inputElements = tableCellElement.getElementsByTagName("input");
+                if (inputElements.getLength() != 0) {
+                    inputElements.getItem(0).focus();
+                    NativeEvent clickEvent = Document.get().createClickEvent(1, 0, 0, 0, 0, false, false, false, false);
+                    inputElements.getItem(0).dispatchEvent(clickEvent);
+                }
+
+            }
+        }));
         return checkNumberColumn;
     }
 
@@ -223,6 +303,18 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         defColumn(processColumn, createProcessColumnTitle(), 50, Unit.PX);
         processColumn.setSortable(true);
         processColumn.setDataStoreName(proto().processPayment().getPath().toString());
+
+        tabNavigationContext.add(new TabKeyNavigationColumnContext(getColumnIndex(processColumn), new TableCellFocuser() {
+            @Override
+            public void focus(TableCellElement tableCellElement) {
+                NodeList<Element> inputElements = tableCellElement.getElementsByTagName("input");
+                if (inputElements.getLength() != 0) {
+                    inputElements.getItem(0).focus();
+                    NativeEvent focusEvent = Document.get().createFocusEvent();
+                    inputElements.getItem(0).dispatchEvent(focusEvent);
+                }
+            }
+        }));
         return processColumn;
     }
 
@@ -256,4 +348,40 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         return b.toString().trim();
     }
 
+    private void initTabKeyBasedNavigation() {
+        addCellPreviewHandler(new CellPreviewEvent.Handler<MoneyInCandidateDTO>() {
+            @Override
+            public void onCellPreview(CellPreviewEvent<MoneyInCandidateDTO> event) {
+
+                if ((event.getNativeEvent().getType().equals(BrowserEvents.KEYDOWN)) && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB)) {
+                    Iterator<TabKeyNavigationColumnContext> i = tabNavigationContext.iterator();
+                    while (i.hasNext()) {
+                        TabKeyNavigationColumnContext tabNavigationColumnContext = i.next();
+                        if (tabNavigationColumnContext.getColumnIndex() == event.getColumn()) {
+                            // simulate event to go to next cell                                                    
+
+                            TabKeyNavigationColumnContext nextColumnContext = null;
+                            int rowRelativeIndex = event.getIndex() - MoneyInCandidateDataGrid.this.getPageStart();
+                            if (i.hasNext()) {
+                                nextColumnContext = i.next();
+                            } else {
+                                nextColumnContext = tabNavigationContext.get(0);
+                                rowRelativeIndex += 1;
+                                if (rowRelativeIndex == MoneyInCandidateDataGrid.this.getPageSize()) {
+                                    break;
+                                }
+                            }
+
+                            TableCellElement cellItem = MoneyInCandidateDataGrid.this.getRowElement(rowRelativeIndex).getCells()
+                                    .getItem(nextColumnContext.getColumnIndex());
+                            nextColumnContext.tableCellFocuser.focus(cellItem);
+
+                            event.getNativeEvent().stopPropagation();
+                            event.getNativeEvent().preventDefault();
+                        }
+                    }
+                }
+            }
+        });
+    }
 }
