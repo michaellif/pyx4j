@@ -299,7 +299,7 @@ public class YardiProductCatalogProcessor {
     private void updateUnitItems(Service service, List<AptUnit> units, Map<String, BigDecimal> depositInfo) {
         Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
         // disable deposit till further processing:
-        service.version().depositSecurity().enabled().setValue(!units.isEmpty());
+        service.version().depositLMR().enabled().setValue(!units.isEmpty());
 
         List<ProductItem> serviceItems = new ArrayList<ProductItem>(service.version().items());
         Collections.sort(serviceItems, new ProductItemByElementComparator());
@@ -321,9 +321,9 @@ public class YardiProductCatalogProcessor {
             // update deposit:
             BigDecimal depositValue = depositInfo.get(unit.info().number().getValue());
             if (depositValue != null) {
-                item.depositSecurity().setValue(depositValue);
-                // disable service deposit:
-                service.version().depositSecurity().enabled().setValue(true);
+                item.depositLMR().setValue(depositValue);
+                // enable service deposit:
+                service.version().depositLMR().enabled().setValue(true);
             }
         }
     }
