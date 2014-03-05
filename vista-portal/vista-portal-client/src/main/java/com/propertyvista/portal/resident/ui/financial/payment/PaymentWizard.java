@@ -265,7 +265,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         cSignature.setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
             public FieldValidationError isValid() {
-                return (getComponent().getValue() == null || !getComponent().getValue().agree().isBooleanTrue() ? new FieldValidationError(getComponent(), i18n
+                return (getComponent().getValue() == null || !getComponent().getValue().agree().getValue(false) ? new FieldValidationError(getComponent(), i18n
                         .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });
@@ -274,7 +274,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         get(proto().convenienceFeeSignature()).addComponentValidator(new AbstractComponentValidator<CustomerSignature>() {
             @Override
             public FieldValidationError isValid() {
-                if (getComponent().getValue() != null && !getComponent().getValue().agree().isBooleanTrue()) {
+                if (getComponent().getValue() != null && !getComponent().getValue().agree().getValue(false)) {
                     return new FieldValidationError(getComponent(), i18n
                             .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment."));
                 }

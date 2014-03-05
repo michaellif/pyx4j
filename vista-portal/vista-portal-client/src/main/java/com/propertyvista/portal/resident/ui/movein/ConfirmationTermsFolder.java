@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.SignedAgreementConfirmationTerm;
+import com.propertyvista.portal.shared.ui.OriginalSignatureValidator;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -67,6 +68,12 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedAgreementConf
                     .contentWidth("250px").componentWidth("250px").build());
 
             return mainPanel;
+        }
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+            get(proto().signature()).addComponentValidator(new OriginalSignatureValidator());
         }
 
         @Override

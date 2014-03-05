@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
+import com.propertyvista.portal.shared.ui.OriginalSignatureValidator;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -75,6 +76,12 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedOnlineApplica
                     .contentWidth("250px").componentWidth("250px").build());
 
             return mainPanel;
+        }
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+            get(proto().signature()).addComponentValidator(new OriginalSignatureValidator());
         }
 
         @Override
