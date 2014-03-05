@@ -324,6 +324,8 @@ public class YardiProductCatalogProcessor {
                 item.depositLMR().setValue(depositValue);
                 // enable service deposit:
                 service.version().depositLMR().enabled().setValue(true);
+            } else {
+                item.depositLMR().setValue(BigDecimal.ZERO);
             }
         }
     }
