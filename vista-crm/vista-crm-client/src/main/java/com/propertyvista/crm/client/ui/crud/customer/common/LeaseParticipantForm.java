@@ -109,9 +109,6 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             get(((TenantDTO) proto()).customer().registeredInPortal()).setVisible(
                     LeaseTermParticipant.Role.portalAccess().contains(((TenantDTO) getValue()).role().getValue()));
         }
-
-        get(proto().leasesOfThisCustomer()).setEnabled(getValue().leasesOfThisCustomer().size() != 0);
-        get(proto().applicationsOfThisCustomer()).setEnabled(getValue().applicationsOfThisCustomer().size() != 0);
     }
 
     @Override
