@@ -46,6 +46,8 @@ public class MoneyInBatchCancelPostingDeferredProcess extends AbstractDeferredPr
         } catch (Throwable e) {
             log.error("Failed to post the batch", e);
             error = e;
+        } finally {
+            completed = true;
         }
     }
 
