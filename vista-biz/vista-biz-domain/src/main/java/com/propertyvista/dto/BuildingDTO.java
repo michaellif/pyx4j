@@ -13,6 +13,7 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
@@ -43,6 +44,7 @@ public interface BuildingDTO extends Building {
 
     IPrimitive<Boolean> merchantAccountPresent();
 
+    @Caption(name = "ILS Summary")
     IList<ILSSummaryBuilding> ilsSummary();
 
     IList<ILSProfileBuilding> ilsProfile();

@@ -14,12 +14,14 @@
 package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -139,6 +141,13 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         public LegalQuestionWidgetDecoratorBuilder(CComponent<?> component) {
             super(component);
             labelWidth("100%");
+        }
+
+        @Override
+        public WidgetDecorator build() {
+            WidgetDecorator decorator = super.build();
+            decorator.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+            return decorator;
         }
     }
 }
