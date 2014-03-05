@@ -35,7 +35,7 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
 
     private IsWidget descriptionWidget;
 
-    private AbstractComponentValidator<ISignature> signatureComplitionsValidator;
+    private AbstractComponentValidator<ISignature> signatureComplitionValidator;
 
     public CSignature(String text) {
         this(new Label(text));
@@ -90,9 +90,9 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
     }
 
     public void setSignatureCompletionValidator(AbstractComponentValidator<ISignature> validator) {
-        removeComponentValidator(signatureComplitionsValidator);
-        signatureComplitionsValidator = validator;
-        addComponentValidator(signatureComplitionsValidator);
+        removeComponentValidator(signatureComplitionValidator);
+        signatureComplitionValidator = validator;
+        addComponentValidator(signatureComplitionValidator);
     }
 
     public IsWidget getDescriptionWidget() {
