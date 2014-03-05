@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -33,6 +34,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.tenant.lease.Deposit;
 
+@EmbeddedEntity
 @ToStringFormat("{2}, {1,choice,Percentage#{0,number,percent}|Monetary#${0,number,#.##}}, {3}")
 public interface ProductDeposit extends IEntity {
 
