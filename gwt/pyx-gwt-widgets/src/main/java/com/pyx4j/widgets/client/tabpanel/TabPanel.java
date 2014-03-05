@@ -39,6 +39,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -51,8 +52,8 @@ import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 
-public class TabPanel extends ResizeComposite implements ProvidesResize, IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>,
-        HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab> {
+public class TabPanel extends LayoutPanel implements IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>,
+        HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab>, HasWidgets.ForIsWidget {
 
     private static final Logger log = LoggerFactory.getLogger(TabPanel.class);
 
@@ -64,11 +65,7 @@ public class TabPanel extends ResizeComposite implements ProvidesResize, Indexed
 
     private Tab selectedTab;
 
-    private final LayoutPanel mainPanel;
-
     public TabPanel() {
-        mainPanel = new LayoutPanel();
-        initWidget(mainPanel);
 
         setStyleName(DefaultTabTheme.StyleName.TabPanel.name());
 
@@ -77,8 +74,8 @@ public class TabPanel extends ResizeComposite implements ProvidesResize, Indexed
         deckPanel = new DeckLayoutPanel();
         deckPanel.setStyleName(DefaultTabTheme.StyleName.TabDeckPanel.name());
 
-        mainPanel.add(tabBar);
-        mainPanel.add(deckPanel);
+        add(tabBar);
+        add(deckPanel);
         setTabBarVisible(true);
     }
 
@@ -240,17 +237,17 @@ public class TabPanel extends ResizeComposite implements ProvidesResize, Indexed
         double barHeight = StyleManager.getTheme().getTabHeight();
         tabBar.setVisible(visible);
         if (visible) {
-            mainPanel.setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
-            mainPanel.setWidgetTopHeight(tabBar, 0, Unit.PX, barHeight, Unit.EM);
+            setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
+            setWidgetTopHeight(tabBar, 0, Unit.PX, barHeight, Unit.EM);
 
-            mainPanel.setWidgetLeftRight(deckPanel, 0, Unit.PX, 0, Unit.PX);
-            mainPanel.setWidgetTopBottom(deckPanel, barHeight, Unit.EM, 0, Unit.PX);
+            setWidgetLeftRight(deckPanel, 0, Unit.PX, 0, Unit.PX);
+            setWidgetTopBottom(deckPanel, barHeight, Unit.EM, 0, Unit.PX);
         } else {
-            mainPanel.setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
-            mainPanel.setWidgetTopHeight(tabBar, 0, Unit.PX, 0, Unit.PX);
+            setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
+            setWidgetTopHeight(tabBar, 0, Unit.PX, 0, Unit.PX);
 
-            mainPanel.setWidgetLeftRight(deckPanel, 0, Unit.PX, 0, Unit.PX);
-            mainPanel.setWidgetTopBottom(deckPanel, 0, Unit.PX, 0, Unit.PX);
+            setWidgetLeftRight(deckPanel, 0, Unit.PX, 0, Unit.PX);
+            setWidgetTopBottom(deckPanel, 0, Unit.PX, 0, Unit.PX);
 
         }
     }
