@@ -35,6 +35,7 @@ BEGIN TRANSACTION;
         DROP SEQUENCE application_wizard_substep_seq;
         DROP SEQUENCE charges_seq;
         DROP SEQUENCE custom_skin_resource_blob_seq;
+        DROP SEQUENCE deposit_policy_item_seq;
         DROP SEQUENCE digital_signature_seq;
         DROP SEQUENCE general_insurance_policy_blob_seq;
         DROP SEQUENCE identification_document_seq;

@@ -33,6 +33,8 @@ BEGIN
         ALTER TABLE charges DROP CONSTRAINT charges_one_time_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_payment_split_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_prorated_charges_fk;
+        ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_policy_fk;
+        ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_product_code_fk;
         ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_person_fk;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_id_type_fk;
         ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_certificate_fk;
@@ -87,6 +89,8 @@ BEGIN
         ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_street_type_e_ck;
         ALTER TABLE dates_policy DROP CONSTRAINT dates_policy_node_discriminator_d_ck;
         ALTER TABLE deposit_policy DROP CONSTRAINT deposit_policy_node_discriminator_d_ck;
+        ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_deposit_type_e_ck;
+        ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_value_type_e_ck;
         ALTER TABLE email_template DROP CONSTRAINT email_template_template_type_e_ck;
         ALTER TABLE email_templates_policy DROP CONSTRAINT email_templates_policy_node_discriminator_d_ck;
         ALTER TABLE id_assignment_policy DROP CONSTRAINT id_assignment_policy_node_discriminator_d_ck;
@@ -359,9 +363,6 @@ BEGIN
                                     ADD COLUMN security_deposit_refund_window INT;
 		
 		
-		-- deposit_policy_item
-		
-		ALTER TABLE deposit_policy_item ADD COLUMN charge_code BIGINT;
 		
         -- emergency_contact
         
@@ -444,7 +445,6 @@ BEGIN
                 id                              BIGINT                  NOT NULL,
                 owner                           BIGINT                  NOT NULL,
                 id_type                         BIGINT,
-                donot_have                      BOOLEAN,
                 id_number                       VARCHAR(500),
                 notes                           VARCHAR(500),
                         CONSTRAINT identification_document_folder_pk PRIMARY KEY(id)
@@ -454,7 +454,7 @@ BEGIN
         
         -- identification_document_type
         
-        ALTER TABLE identification_document_type ADD COLUMN required BOOLEAN;
+        ALTER TABLE identification_document_type ADD COLUMN importance VARCHAR(50);
         
         
         -- ilsemail_config
@@ -1427,8 +1427,16 @@ BEGIN
                 ||'(nextval(''public.arcode_seq''),''DepositRefund'',''DepositRefund'',DATE_TRUNC(''second'',current_timestamp)::timestamp,TRUE)';
                 
         
+		
+        -- apt_unit_occupancy_segment
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit_occupancy_segment '
+                ||'SET  status = ''available'','
+                ||'     lease = NULL '
+                ||'WHERE    status = ''reserved'' ';
                 
-		-- billable_item
+                
+        -- billable_item
 		
 		EXECUTE 'UPDATE '||v_schema_name||'.billable_item b '
 				||'SET	yardi_charge_code = y.charge_code, '
@@ -1437,13 +1445,6 @@ BEGIN
 				||'FROM '||v_schema_name||'.yardi_lease_charge_data y '
 				||'WHERE	extra_data_discriminator = ''YardiLeaseCharge'' '
 				||'AND	b.extra_data = y.id ';
-		
-        -- apt_unit_occupancy_segment
-        
-        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit_occupancy_segment '
-                ||'SET  status = ''available'','
-                ||'     lease = NULL '
-                ||'WHERE    status = ''reserved'' ';
         
         -- insurance_certificate_scan
         
@@ -1778,6 +1779,11 @@ BEGIN
         DROP TABLE digital_signature;
         
         
+        -- deposit_policy_item
+        
+        DROP TABLE deposit_policy_item;
+        
+        
         -- employee_signature
         
         ALTER TABLE employee_signature  DROP COLUMN caption,
@@ -1966,8 +1972,6 @@ BEGIN
         ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE customer_signature ADD CONSTRAINT customer_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE deposit ADD CONSTRAINT deposit_charge_code_fk FOREIGN KEY(charge_code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
-		ALTER TABLE deposit_policy_item ADD CONSTRAINT deposit_policy_item_charge_code_fk FOREIGN KEY(charge_code) 
-			REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_file ADD CONSTRAINT identification_document_file_owner_fk FOREIGN KEY(owner) 
                 REFERENCES identification_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE identification_document_folder ADD CONSTRAINT identification_document_folder_id_type_fk FOREIGN KEY(id_type) 
@@ -2139,6 +2143,8 @@ BEGIN
                 CHECK ((relationship) IN ('Aunt', 'Daughter', 'Father', 'Friend', 'Grandfather', 'Grandmother', 'Mother', 'Other', 'Son', 'Spouse', 'Uncle'));
         ALTER TABLE id_assignment_policy ADD CONSTRAINT id_assignment_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE identification_document_type ADD CONSTRAINT identification_document_type_importance_e_ck 
+            CHECK ((importance) IN ('Optional', 'Preferred', 'Required'));
         ALTER TABLE ilsemail_config ADD CONSTRAINT ilsemail_config_frequency_e_ck CHECK ((frequency) IN ('daily', 'monthly', 'weekly'));
         ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_certificate_discriminator_d_ck 
                 CHECK ((certificate_discriminator) IN ('InsuranceGeneral', 'InsuranceTenantSure'));
