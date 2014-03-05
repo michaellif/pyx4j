@@ -48,10 +48,10 @@ class PaymentBatchPosting {
 
     }
 
-    private final boolean paymentBatchContextRequired;
+    private final boolean paymentBatchAsSingleTransaction;
 
     PaymentBatchPosting() {
-        this.paymentBatchContextRequired = VistaFeatures.instance().yardiIntegration();
+        this.paymentBatchAsSingleTransaction = VistaFeatures.instance().yardiIntegration();
     }
 
     /**
@@ -62,34 +62,7 @@ class PaymentBatchPosting {
      *            if zero amount or no merchant account should be canceled, disabled for DirectDebit
      * @param executionMonitor
      */
-    void processPayments(EntityQueryCriteria<PaymentRecord> criteria, boolean canCancel, final ExecutionMonitor executionMonitor) {
-        if (!paymentBatchContextRequired) {
-            processPaymentsNoBatch(criteria, canCancel, executionMonitor);
-        } else {
-            processPaymentsInBatch(criteria, canCancel, executionMonitor);
-        }
-    }
-
-    private void processPaymentsNoBatch(EntityQueryCriteria<PaymentRecord> criteria, boolean canCancel, final ExecutionMonitor executionMonitor) {
-        // Simple flow one transaction per record
-        ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        try {
-            while (paymentRecordIterator.hasNext()) {
-                PaymentRecord paymentRecord = paymentRecordIterator.next();
-                if (canCancel && shouldBeCanceled(paymentRecord, executionMonitor)) {
-                    continue;
-                }
-                processPaymentTransaction(paymentRecord, null, executionMonitor);
-                if (executionMonitor.isTerminationRequested()) {
-                    break;
-                }
-            }
-        } finally {
-            paymentRecordIterator.close();
-        }
-    }
-
-    private void processPaymentsInBatch(EntityQueryCriteria<PaymentRecord> criteria, final boolean canCancel, final ExecutionMonitor executionMonitor) {
+    void processPayments(EntityQueryCriteria<PaymentRecord> criteria, final boolean canCancel, final ExecutionMonitor executionMonitor) {
         // Flow with single transaction per batch
         final AtomicReference<PaymentRecord> iteratorPushBack = new AtomicReference<PaymentRecord>();
         final ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
@@ -213,7 +186,7 @@ class PaymentBatchPosting {
     }
 
     private TransactionScopeOption transactionScopeOption() {
-        if (paymentBatchContextRequired) {
+        if (paymentBatchAsSingleTransaction) {
             return TransactionScopeOption.Nested;
         } else {
             return TransactionScopeOption.RequiresNew;
@@ -236,7 +209,8 @@ class PaymentBatchPosting {
 
             executionMonitor.addFailedEvent("Canceled Zero amount", (String) null);
             return true;
-        } else if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
+        } else if (PaymentType.electronicPayments().contains(paymentRecord.paymentMethod().type().getValue())
+                && !PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
 
             new UnitOfWork(transactionScopeOption()).execute(new Executable<Void, RuntimeException>() {
 

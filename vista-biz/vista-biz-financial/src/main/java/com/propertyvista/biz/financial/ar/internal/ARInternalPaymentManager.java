@@ -43,8 +43,7 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
 
     @Override
     protected PaymentBatchContext createPaymentBatchContext(Building building) {
-        // BatchContext not supported
-        return null;
+        return new ARInternalPaymentBatchContext();
     }
 
     @Override
