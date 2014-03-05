@@ -40,6 +40,9 @@ import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -215,12 +218,23 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         public LeaseBillingTypeFolder() {
             super(LeaseBillingTypePolicyItem.class);
-            this.addValueChangeHandler(new ValueChangeHandler<IList<LeaseBillingTypePolicyItem>>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<IList<LeaseBillingTypePolicyItem>> event) {
-                    updateUsedFrequencies();
-                }
-            });
+            if (VistaFeatures.instance().yardiIntegration()) {
+                // The only Yardi Billing type (default) will be added in onValueSet()
+                setAddable(false);
+            } else {
+                addValueChangeHandler(new ValueChangeHandler<IList<LeaseBillingTypePolicyItem>>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<IList<LeaseBillingTypePolicyItem>> event) {
+                        updateUsedFrequencies();
+                    }
+                });
+                addComponentValidator(new AbstractComponentValidator<IList<LeaseBillingTypePolicyItem>>() {
+                    @Override
+                    public AbstractValidationError isValid() {
+                        return getValue().size() > 0 ? null : new FieldValidationError(LeaseBillingTypeFolder.this, i18n.tr("No Billing Types added."));
+                    }
+                });
+            }
         }
 
         private void updateUsedFrequencies() {
@@ -234,7 +248,21 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            updateUsedFrequencies();
+            if (VistaFeatures.instance().yardiIntegration()) {
+                // Add default Yardi Billing Type
+                if (getValue().size() == 0) {
+                    LeaseBillingTypePolicyItem item = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+                    item.billingPeriod().setValue(BillingPeriod.Monthly);
+                    item.billingCycleStartDay().setValue(1);
+                    item.paymentDueDayOffset().setValue(0);
+                    item.finalDueDayOffset().setValue(15);
+                    item.billExecutionDayOffset().setValue(-15);
+                    item.autopayExecutionDayOffset().setValue(0);
+                    LeaseBillingTypeFolder.super.addItem(item);
+                }
+            } else {
+                updateUsedFrequencies();
+            }
         }
 
         @Override
