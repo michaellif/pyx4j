@@ -42,7 +42,7 @@ public class RiaDevConsole extends FlowPanel {
 
             @Override
             public void execute() {
-                setMockValues(riaLayoutPanel);
+                setMockValues(riaLayoutPanel.getContentDisplay());
             }
         });
         add(setMocksButton);
