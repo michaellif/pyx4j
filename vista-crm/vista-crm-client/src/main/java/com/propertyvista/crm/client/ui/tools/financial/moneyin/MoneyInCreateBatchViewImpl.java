@@ -73,6 +73,8 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
     private CDatePicker receiptDate;
 
     public MoneyInCreateBatchViewImpl() {
+        setCaption(i18n.tr("Money In: Create Payments Batch"));
+
         viewPanel = initViewPanel();
 
         viewPanel.add(searchBar = initSearchBar());
