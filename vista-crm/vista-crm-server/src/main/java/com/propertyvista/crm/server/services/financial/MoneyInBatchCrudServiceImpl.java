@@ -66,11 +66,15 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         Persistence.service().retrieveMember(bo.payments());
 
         BigDecimal total = new BigDecimal("0.00");
+        int numberOfReceipts = 0;
         for (PaymentRecord paymentRecord : bo.payments()) {
-            total = total.add(paymentRecord.amount().getValue());
+            if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Canceled) {
+                total = total.add(paymentRecord.amount().getValue());
+                numberOfReceipts++;
+            }
         }
         dto.totalReceivedAmount().setValue(total);
-        dto.numberOfReceipts().setValue(bo.payments().size());
+        dto.numberOfReceipts().setValue(numberOfReceipts);
     }
 
     @Override
