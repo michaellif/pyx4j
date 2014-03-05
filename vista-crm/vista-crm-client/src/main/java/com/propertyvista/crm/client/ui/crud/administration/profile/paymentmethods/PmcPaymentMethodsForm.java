@@ -45,7 +45,9 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         content.setWidget(++row, 0, inject(proto().paymentMethods(), new PmcPaymentMethodFolder()));
+
         selectTab(addTab(content));
+        setTabBarVisible(false);
 
         addComponentValidator(new AbstractComponentValidator<PmcPaymentMethodsDTO>() {
             @Override

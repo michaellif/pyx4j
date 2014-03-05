@@ -34,10 +34,6 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
@@ -50,7 +46,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
@@ -242,35 +237,6 @@ public class TableWidgetDecorator extends FlowPanel implements IDecorator<CCompo
         containerPanel.getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
         containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
 
-        if (ApplicationMode.isDevelopment()) {
-            addDomHandler(new MouseDownHandler() {
-
-                @Override
-                public void onMouseDown(MouseDownEvent event) {
-                    if (event.isControlKeyDown()) {
-                        try {
-                            ((CComponent<Object>) getComnponent()).setValue(builder.mockValue);
-                        } catch (Exception e) {
-                            throw new Error("Failed to set mock value", e);
-                        }
-                    }
-                }
-            }, MouseDownEvent.getType());
-
-            addDomHandler(new MouseOverHandler() {
-
-                @Override
-                public void onMouseOver(MouseOverEvent event) {
-                    if (event.isControlKeyDown() && event.isShiftKeyDown()) {
-                        try {
-                            ((CComponent<Object>) getComnponent()).setValue(builder.mockValue);
-                        } catch (Exception e) {
-                            throw new Error("Failed to set mock value", e);
-                        }
-                    }
-                }
-            }, MouseOverEvent.getType());
-        }
     }
 
     @Override
@@ -456,8 +422,6 @@ public class TableWidgetDecorator extends FlowPanel implements IDecorator<CCompo
 
         private LabelPosition labelPosition = LabelPosition.left;
 
-        private Object mockValue;
-
         public Builder(final CComponent<?> component) {
             this.component = component;
             labelWidth = "15em";
@@ -532,11 +496,6 @@ public class TableWidgetDecorator extends FlowPanel implements IDecorator<CCompo
 
         public Builder assistantWidget(Widget assistantWidget) {
             this.assistantWidget = assistantWidget;
-            return this;
-        }
-
-        public Builder mockValue(Object mockValue) {
-            this.mockValue = mockValue;
             return this;
         }
 
