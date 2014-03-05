@@ -57,12 +57,12 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
                     case None:
                         break;
                     case AgreeBox:
-                        if (!value.agree().isBooleanTrue()) {
+                        if (!value.agree().getValue(false)) {
                             return new FieldValidationError(getComponent(), i18n.tr("You must agree to the Terms to continue"));
                         }
                         break;
                     case AgreeBoxAndFullName:
-                        if (!value.agree().isBooleanTrue()) {
+                        if (!value.agree().getValue(false)) {
                             return new FieldValidationError(getComponent(), i18n.tr("You must agree to the Terms to continue"));
                         }
                     case FullName:
