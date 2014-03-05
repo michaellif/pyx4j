@@ -21,6 +21,7 @@
 package com.pyx4j.svg.chart;
 
 import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.basic.TickProducer;
 
 public class GridBasedChartConfigurator extends BasicChartConfigurator {
 
@@ -39,6 +40,8 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
     public enum GridType {
         None, Both, Metric, Value
     }
+
+    private TickProducer valueTickProducer;
 
     public GridBasedChartConfigurator(SvgFactory factory, DataSource datasource, int width, int height) {
         super(factory, datasource);
@@ -92,4 +95,14 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
         this.zeroBased = zeroBased;
     }
 
+    public TickProducer getValueTickProducer() {
+        if (valueTickProducer == null) {
+            return new BasicTickProducer();
+        }
+        return valueTickProducer;
+    }
+
+    public void setValueTickProducer(TickProducer valueTickProducer) {
+        this.valueTickProducer = valueTickProducer;
+    }
 }

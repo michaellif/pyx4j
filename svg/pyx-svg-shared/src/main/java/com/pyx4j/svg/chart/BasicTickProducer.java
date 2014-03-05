@@ -3,10 +3,9 @@ package com.pyx4j.svg.chart;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.svg.basic.TickProducer;
 import com.pyx4j.svg.common.Tick;
 import com.pyx4j.svg.common.Tick.Rank;
-
-import com.pyx4j.svg.basic.TickProducer;
 
 public class BasicTickProducer implements TickProducer {
 
@@ -36,21 +35,24 @@ public class BasicTickProducer implements TickProducer {
         this.fixedMajorStep = fixedMajorStep;
     }
 
+    // This is Stupido!  the value returned can be only on  Ticks. 
+    @Override
     public double getValuePosition(double value) {
-    	double position = 0;
+        double position = 0;
         List<Tick> ticks = getTicks();
         if (ticks == null) {
             return position;
         }
         for (Tick tick : ticks) {
-        	position = tick.getScaledPosition();
+            position = tick.getScaledPosition();
             if (value <= tick.getValue()) {
-            	break;
+                break;
             }
         }
-       return position;
+        return position;
     }
 
+    @Override
     public List<Tick> updateTicks(double from, double to, int plotSize) {
         boolean recalcTicks = false;
         if (fromValue != from) {
@@ -127,6 +129,7 @@ public class BasicTickProducer implements TickProducer {
         return ticks;
     }
 
+    @Override
     public synchronized List<Tick> getTicks() {
         return ticks;
     }

@@ -36,6 +36,7 @@ import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.basic.TickProducer;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.common.Tick;
 import com.pyx4j.svg.common.Tick.Rank;
@@ -53,9 +54,9 @@ public class XYChart extends GridBase implements IsSvgElement {
 
     private final Group container;
 
-    protected final BasicTickProducer tickProducerY;
+    protected final TickProducer tickProducerY;
 
-    protected final BasicTickProducer tickProducerX;
+    protected final TickProducer tickProducerX;
 
     protected Area canvas;
 
@@ -68,8 +69,8 @@ public class XYChart extends GridBase implements IsSvgElement {
         this.configurator = configurator;
         factory = configurator.getFactory();
         container = factory.createGroup();
-        tickProducerY = new BasicTickProducer();
-        tickProducerX = new BasicTickProducer();
+        tickProducerY = configurator.getYTickProducer();
+        tickProducerX = configurator.getXTickProducer();
         drawBasics();
         drawChart();
     }

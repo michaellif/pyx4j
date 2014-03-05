@@ -10,4 +10,6 @@ public interface TickProducer {
 
     List<Tick> getTicks();
 
+    double getValuePosition(double value);
+
 }

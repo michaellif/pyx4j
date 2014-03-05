@@ -34,6 +34,7 @@ import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.basic.TickProducer;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.common.Tick;
@@ -62,7 +63,7 @@ public abstract class GridBasedChart extends GridBase implements IsSvgElement {
 
     private final GridBasedChartConfigurator configurator;
 
-    private final BasicTickProducer tickProducer;
+    private final TickProducer tickProducer;
 
     private double metricSpacing;
 
@@ -83,7 +84,7 @@ public abstract class GridBasedChart extends GridBase implements IsSvgElement {
         factory = configurator.getFactory();
         datasource = configurator.getDatasourse();
         container = factory.createGroup();
-        tickProducer = new BasicTickProducer();
+        tickProducer = configurator.getValueTickProducer();
         drawBasics();
     }
 
@@ -126,7 +127,7 @@ public abstract class GridBasedChart extends GridBase implements IsSvgElement {
         return numOfSeries;
     }
 
-    protected BasicTickProducer getTickProducer() {
+    protected TickProducer getTickProducer() {
         return tickProducer;
     }
 

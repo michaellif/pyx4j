@@ -23,6 +23,7 @@ package com.pyx4j.svg.chart;
 import java.util.List;
 
 import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.basic.TickProducer;
 
 public class XYChartConfigurator extends GridBasedChartConfigurator {
 
@@ -39,6 +40,8 @@ public class XYChartConfigurator extends GridBasedChartConfigurator {
     private LabelFormatter xLabelFormatter;
 
     private LabelFormatter yLabelFormatter;
+
+    private TickProducer xTickProducer;
 
     public enum ChartType {
         Line, Bar, BarDistribution
@@ -107,4 +110,25 @@ public class XYChartConfigurator extends GridBasedChartConfigurator {
     public void setYLabelFormatter(LabelFormatter yLabelFormatter) {
         this.yLabelFormatter = yLabelFormatter;
     }
+
+    public TickProducer getXTickProducer() {
+        if (xTickProducer == null) {
+            return new BasicTickProducer();
+        }
+        return xTickProducer;
+    }
+
+    public void setXTickProducer(TickProducer xTickProducer) {
+        this.xTickProducer = xTickProducer;
+    }
+
+    //This is just a proper name for super
+    public TickProducer getYTickProducer() {
+        return super.getValueTickProducer();
+    }
+
+    public void setYTickProducer(TickProducer yTickProducer) {
+        super.setValueTickProducer(yTickProducer);
+    }
+
 }
