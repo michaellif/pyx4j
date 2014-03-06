@@ -190,7 +190,7 @@ class CreditCardProcessor {
         if (cc.card().newNumber().isNull() || cc.cardType().isNull() || cc.expiryDate().isNull()) {
             return false;
         }
-        if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
+        if (!ValidationUtils.isCreditCardNumberValid(cc.card().newNumber().getValue())) {
             return false;
         }
         if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().number().getValue())) {
