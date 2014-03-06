@@ -20,8 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
+import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.shared.ui.IWizardView;
 
 public interface PaymentWizardView extends IWizardView<PaymentDTO> {

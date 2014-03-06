@@ -29,9 +29,9 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentWizardView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Financial.Payment;
-import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
+import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
 public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO, PaymentWizardView> implements PaymentWizardView.Presenter {

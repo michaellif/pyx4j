@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.dto.financial;
+package com.propertyvista.portal.rpc.portal.shared.dto;
 
 import java.math.BigDecimal;
 
