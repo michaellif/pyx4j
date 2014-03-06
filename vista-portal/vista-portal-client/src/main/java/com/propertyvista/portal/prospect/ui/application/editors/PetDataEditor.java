@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util.editors;
+package com.propertyvista.portal.prospect.ui.application.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

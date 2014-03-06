@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util.editors;
+package com.propertyvista.portal.prospect.ui.application.editors;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -25,30 +25,31 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
-import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfAssetDocumentProspectUploadService;
+import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentDocumentProspectUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class ProofOfAssetDocumentFileFolder extends PortalBoxFolder<ProofOfAssetDocumentFile> {
+public class ProofOfEmploymentDocumentFileFolder extends PortalBoxFolder<ProofOfEmploymentDocumentFile> {
 
-    private static final I18n i18n = I18n.get(ProofOfAssetDocumentFileFolder.class);
+    private static final I18n i18n = I18n.get(ProofOfEmploymentDocumentFileFolder.class);
 
-    public ProofOfAssetDocumentFileFolder() {
-        super(ProofOfAssetDocumentFile.class, i18n.tr("File"));
+    public ProofOfEmploymentDocumentFileFolder() {
+        super(ProofOfEmploymentDocumentFile.class, i18n.tr("File"));
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof ProofOfAssetDocumentFile) {
+        if (member instanceof ProofOfEmploymentDocumentFile) {
             return new DocumentEditor();
         }
         return super.create(member);
     }
 
-    private class DocumentEditor extends CEntityForm<ProofOfAssetDocumentFile> {
+    private class DocumentEditor extends CEntityForm<ProofOfEmploymentDocumentFile> {
 
         public DocumentEditor() {
-            super(ProofOfAssetDocumentFile.class);
+            super(ProofOfEmploymentDocumentFile.class);
         }
 
         @Override
@@ -56,10 +57,11 @@ public class ProofOfAssetDocumentFileFolder extends PortalBoxFolder<ProofOfAsset
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfAssetDocumentProspectUploadService.class), new VistaFileURLBuilder(
-                    ProofOfAssetDocumentFile.class));
+            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfEmploymentDocumentProspectUploadService.class), new VistaFileURLBuilder(
+                    ProofOfEmploymentDocumentFile.class));
 
-            main.setWidget(++row, 0, 1, inject(proto().file(), cfile));
+            main.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().file(), cfile)).customLabel("").labelWidth("0px").build());
+            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description())).build());
 
             return main;
         }

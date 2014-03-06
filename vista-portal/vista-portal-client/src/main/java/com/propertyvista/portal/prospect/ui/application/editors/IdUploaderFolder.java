@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util.editors;
+package com.propertyvista.portal.prospect.ui.application.editors;
 
 import java.util.ArrayList;
 import java.util.Collection;

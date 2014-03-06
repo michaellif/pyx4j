@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util.editors;
+package com.propertyvista.portal.prospect.ui.application.editors;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -24,8 +24,9 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.editors.AddressStructuredEditor;
 
-public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress> {
+public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
 
     public PriorAddressEditor() {
         super(PriorAddress.class);

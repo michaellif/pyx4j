@@ -30,9 +30,9 @@ import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.prospect.ui.application.editors.IdUploaderFolder;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
-import com.propertyvista.portal.shared.ui.util.editors.IdUploaderFolder;
 import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
 
 public class AboutYouStep extends ApplicationWizardStep {

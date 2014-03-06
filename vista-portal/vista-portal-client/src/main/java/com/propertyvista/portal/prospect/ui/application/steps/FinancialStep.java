@@ -27,8 +27,8 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
-import com.propertyvista.portal.shared.ui.util.editors.PersonalAssetFolder;
-import com.propertyvista.portal.shared.ui.util.editors.PersonalIncomeFolder;
+import com.propertyvista.portal.prospect.ui.application.editors.PersonalAssetFolder;
+import com.propertyvista.portal.prospect.ui.application.editors.PersonalIncomeFolder;
 
 public class FinancialStep extends ApplicationWizardStep {
 

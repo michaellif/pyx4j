@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util.editors;
+package com.propertyvista.portal.prospect.ui.application.editors;
 
 import java.math.BigDecimal;
 
@@ -40,6 +40,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.editors.AddressSimpleEditor;
 
 public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 

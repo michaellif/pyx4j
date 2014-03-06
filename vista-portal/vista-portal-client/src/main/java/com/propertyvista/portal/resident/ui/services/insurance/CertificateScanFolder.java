@@ -21,11 +21,14 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
+import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -57,14 +60,11 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateSc
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
-            content.setWidget(
-                    ++row,
-                    0,
-                    new FormWidgetDecoratorBuilder(inject(proto().file(),
-                            new CFile(GWT.<InsuranceCertificateScanResidentUploadService> create(InsuranceCertificateScanResidentUploadService.class),
-                                    new VistaFileURLBuilder(InsuranceCertificateScan.class))), 250).build());
+            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanResidentUploadService.class), new VistaFileURLBuilder(
+                    InsuranceCertificateScan.class));
 
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).build());
+            content.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().file(), cfile)).customLabel("").labelWidth("0px").build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description())).build());
 
             return content;
         }
