@@ -105,24 +105,24 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
 
     private EntityQueryCriteria<UnitAvailabilityStatus> createAvailabilityCriteria(AvailabilityReportMetadata metadata) {
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = null;
-        if (metadata.isInAdvancedMode().isBooleanTrue()) {
+        if (metadata.isInAdvancedMode().getValue(true)) {
             criteria = ReportCriteriaBuilder.build(UnitAvailabilityStatus.class, metadata.availbilityTableCriteria());
         } else {
             criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
             if (!metadata.vacancyStatus().isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().vacancyStatus(), metadata.vacancyStatus()));
             } else {
-                criteria.add(PropertyCriterion.eq(criteria.proto().vacancyStatus(), (Serializable) null));
+                criteria.isNull(criteria.proto().vacancyStatus());
             }
             if (!metadata.rentedStatus().isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().rentedStatus(), metadata.rentedStatus()));
             } else {
-                criteria.add(PropertyCriterion.eq(criteria.proto().rentedStatus(), (Serializable) null));
+                criteria.isNull(criteria.proto().rentedStatus());
             }
             if (!metadata.rentReadinessStatus().isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().rentReadinessStatus(), metadata.rentReadinessStatus()));
             } else {
-                criteria.add(PropertyCriterion.eq(criteria.proto().rentReadinessStatus(), (Serializable) null));
+                criteria.isNull(criteria.proto().rentReadinessStatus());
             }
 
         }
