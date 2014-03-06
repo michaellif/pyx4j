@@ -54,8 +54,8 @@ import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
-    public boolean isCompleatePaymentMethod(LeasePaymentMethod paymentMethod) {
-        return PaymentMethodPersister.isCompleatePaymentMethod(paymentMethod);
+    public boolean isCompletePaymentMethod(LeasePaymentMethod paymentMethod) {
+        return PaymentMethodPersister.isCompletePaymentMethod(paymentMethod);
     }
 
     @Override

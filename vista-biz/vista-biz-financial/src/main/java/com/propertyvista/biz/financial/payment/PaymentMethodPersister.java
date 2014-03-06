@@ -70,7 +70,7 @@ class PaymentMethodPersister {
         return false;
     }
 
-    static boolean isCompleatePaymentMethod(LeasePaymentMethod paymentMethod) {
+    static boolean isCompletePaymentMethod(LeasePaymentMethod paymentMethod) {
         if (paymentMethod.isNull()) {
             return false;
         }

@@ -45,7 +45,7 @@ public interface PaymentMethodFacade {
      * @param paymentMethod
      * @return is payment method can be saved
      */
-    boolean isCompleatePaymentMethod(LeasePaymentMethod paymentMethod);
+    boolean isCompletePaymentMethod(LeasePaymentMethod paymentMethod);
 
     LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building building);
 
