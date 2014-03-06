@@ -1198,13 +1198,14 @@ BEGIN
         CREATE TABLE proof_of_asset_document_file
         (
                 id                      BIGINT                  NOT NULL,
+                owner                   BIGINT,
                 file_file_name          VARCHAR(500),
                 file_updated_timestamp  BIGINT,
                 file_cache_version      INT,
                 file_file_size          INT,
                 file_content_mime_type  VARCHAR(500),
                 file_blob_key           BIGINT,
-                owner                   BIGINT,
+                description 			VARCHAR(500),
                 order_in_owner          INT,
                         CONSTRAINT proof_of_asset_document_file_pk PRIMARY KEY(id)
         );
@@ -1247,13 +1248,14 @@ BEGIN
         CREATE TABLE proof_of_employment_document_file
         (
                 id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
                 file_file_name                  VARCHAR(500),
                 file_updated_timestamp          BIGINT,
                 file_cache_version              INT,
                 file_file_size                  INT,
                 file_content_mime_type          VARCHAR(500),
                 file_blob_key                   BIGINT,
-                owner                           BIGINT,
+                description 					VARCHAR(500),
                 order_in_owner                  INT,
                         CONSTRAINT proof_of_employment_document_file_pk PRIMARY KEY(id)
         );
@@ -1450,6 +1452,14 @@ BEGIN
                 ||' ''OrganizationPoliciesNode'' AS node_discriminator, id AS node, '
                 ||'DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated '
                 ||'FROM     '||v_schema_name||'.organization_policies_node )';
+                
+		-- lease_agreement_legal_term
+		
+		EXECUTE 'INSERT INTO '||v_schema_name||'.lease_agreement_legal_term(id,policy,title,body,signature_format,order_id) '
+				||'(SELECT 	nextval(''public.lease_agreement_legal_term_seq'') AS id, '
+				||'			p.id AS policy,t.title,t.body,t.signature_format,t.order_id '
+				||'FROM 	'||v_schema_name||'.lease_agreement_legal_policy p, '
+				||'			_dba_.lease_agreement_legal_term t )';
         
         -- lease_application_legal_policy
         
@@ -1458,12 +1468,22 @@ BEGIN
                 ||' ''OrganizationPoliciesNode'' AS node_discriminator, id AS node, '
                 ||'DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated '
                 ||'FROM     '||v_schema_name||'.organization_policies_node )';
+                
+                
+		-- lease_application_legal_term
+		
+		EXECUTE 'INSERT INTO '||v_schema_name||'.lease_application_legal_term(id,policy,title,body,apply_to_role,signature_format,order_id) '
+				||'(SELECT 	nextval(''public.lease_agreement_legal_term_seq'') AS id, '
+				||'			p.id AS policy,t.title,t.body,t.apply_to_role,t.signature_format,t.order_id '
+				||'FROM 	'||v_schema_name||'.lease_application_legal_policy p, '
+				||'			_dba_.lease_application_legal_term t )';
+        
         
         -- legal_terms_policy_item
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.legal_terms_policy_item(id,caption,enabled,content) '
                 ||'(SELECT nextval(''public.legal_terms_policy_item_seq'') AS id, caption, enabled, content '
-                ||'FROM         _dba_.tmp_policies )';
+                ||'FROM         _dba_.legal_terms_policy_item )';
                 
                 
         -- legal_terms_policy
@@ -1708,6 +1728,32 @@ BEGIN
 		
 		EXECUTE 'DELETE FROM '||v_schema_name||'.product '
 				||'WHERE	code IS NULL';
+				
+	
+		-- update product_v with deposits
+		
+		EXECUTE 'UPDATE '||v_schema_name||'.product_v AS p '
+				||'SET	deposit_lmr_enabled = FALSE, '
+				||'		deposit_lmr_charge_code = t0.id, '
+				||'		deposit_lmr_deposit_value = 1,'
+				||'		deposit_lmr_value_type = ''Percentage'', '
+				||'		deposit_lmr_description = ''LMR Deposit'','
+				||'		deposit_lmr_deposit_type = ''LastMonthDeposit'', '
+				||'		deposit_move_in_enabled = FALSE, '
+				||'		deposit_move_in_charge_code = t1.id, '
+				||'		deposit_move_in_deposit_value = 1,'
+				||'		deposit_move_in_value_type = ''Percentage'', '
+				||'		deposit_move_in_description = ''Move In Deposit'','
+				||'		deposit_move_in_deposit_type = ''MoveInDeposit'','
+				||'		deposit_security_enabled = FALSE,'
+				||'		deposit_security_charge_code = t2.id, '
+				||'		deposit_security_deposit_value = 1,'
+				||'		deposit_security_value_type = ''Percentage'','
+				||'		deposit_security_description = ''Security Deposit'','
+				||'		deposit_security_deposit_type = ''SecurityDeposit'' '
+				||'FROM 	(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''LMR Deposit'') AS t0,'
+				||'			(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''Move In Deposit'') AS t1,'
+				||'			(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''Security Deposit'') AS t2 ';
         
                       
         SET CONSTRAINTS ALL IMMEDIATE;
