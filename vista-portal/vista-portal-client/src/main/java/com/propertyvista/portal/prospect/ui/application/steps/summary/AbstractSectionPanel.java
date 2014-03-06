@@ -104,7 +104,7 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
     }
 
     protected void addCaption(String caption) {
-        contentPanel.setH4(++row, 0, 0, caption);
+        contentPanel.setH4(++row, 0, 1, caption);
     }
 
     public OnlineApplicationDTO proto() {
