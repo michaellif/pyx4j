@@ -76,6 +76,8 @@ public interface CreditCardFacade {
     public String completion(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber,
             CreditCardInfo cc);
 
+    public boolean validateCreditCard(CreditCardInfo creditCardInfo);
+
     public boolean validateVisaDebit(CreditCardInfo creditCardInfo);
 
     public ConvenienceFeeCalculationResponseTO getConvenienceFee(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, CreditCardType cardType,

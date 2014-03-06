@@ -186,6 +186,22 @@ class CreditCardProcessor {
         }
     }
 
+    static boolean validateCreditCard(CreditCardInfo cc) {
+        if (cc.card().newNumber().isNull() || cc.cardType().isNull() || cc.expiryDate().isNull()) {
+            return false;
+        }
+        if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
+            return false;
+        }
+        if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().number().getValue())) {
+            return false;
+        }
+        if ((cc.cardType().getValue() == CreditCardType.VisaDebit) && (!validateVisaDebit(cc))) {
+            return false;
+        }
+        return true;
+    }
+
     private static PaymentInstrument createPaymentInstrument(CreditCardInfo cc) {
         if (!cc.token().isNull()) {
             TokenPaymentInstrument token = EntityFactory.create(TokenPaymentInstrument.class);

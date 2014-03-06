@@ -79,6 +79,11 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
+    public boolean validateCreditCard(CreditCardInfo creditCardInfo) {
+        return CreditCardProcessor.validateCreditCard(creditCardInfo);
+    }
+
+    @Override
     public boolean validateVisaDebit(CreditCardInfo creditCardInfo) {
         return CreditCardProcessor.validateVisaDebit(creditCardInfo);
     }

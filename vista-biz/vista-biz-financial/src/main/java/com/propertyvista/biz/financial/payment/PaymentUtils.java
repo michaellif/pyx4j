@@ -35,6 +35,7 @@ import com.propertyvista.domain.financial.MerchantAccount.ElectronicPaymentSetup
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -42,6 +43,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.VistaSystemMaintenanceState;
 
 class PaymentUtils {
@@ -270,6 +272,22 @@ class PaymentUtils {
             }
         }
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
+    }
+
+    public static boolean validateEcheck(EcheckInfo eci) {
+        if (eci.accountNo().newNumber().isNull() || eci.bankId().isNull() || eci.branchTransitNumber().isNull()) {
+            return false;
+        }
+        if (!ValidationUtils.isAccountNumberValid(eci.accountNo().newNumber().getValue())) {
+            return false;
+        }
+        if (!ValidationUtils.isBankIdNumberValid(eci.bankId().getValue())) {
+            return false;
+        }
+        if (!ValidationUtils.isBranchTransitNumberValid(eci.branchTransitNumber().getValue())) {
+            return false;
+        }
+        return true;
     }
 
 }

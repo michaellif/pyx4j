@@ -78,9 +78,7 @@ class PaymentMethodPersister {
         case Echeck:
             EcheckInfo eci = paymentMethod.details().cast();
             if (paymentMethod.details().id().isNull()) {
-                if (eci.accountNo().newNumber().isNull() || eci.bankId().isNull() || eci.branchTransitNumber().isNull()) {
-                    return false;
-                }
+                return PaymentUtils.validateEcheck(eci);
             } else if (eci.bankId().isNull() || eci.branchTransitNumber().isNull()) {
                 return false;
             }
@@ -88,9 +86,7 @@ class PaymentMethodPersister {
         case CreditCard:
             CreditCardInfo cc = paymentMethod.details().cast();
             if (paymentMethod.details().id().isNull()) {
-                if (cc.card().newNumber().isNull() || cc.cardType().isNull() || cc.expiryDate().isNull()) {
-                    return false;
-                }
+                return ServerSideFactory.create(CreditCardFacade.class).validateCreditCard(cc);
             }
             break;
         default:
