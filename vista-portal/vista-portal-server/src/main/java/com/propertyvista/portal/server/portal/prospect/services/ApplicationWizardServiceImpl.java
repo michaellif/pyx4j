@@ -803,13 +803,13 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
             ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), pbo.paymentMethod(), VistaApplication.prospect);
             ServerSideFactory.create(PaymentFacade.class).validatePayment(pbo, VistaApplication.prospect);
-
             ServerSideFactory.create(PaymentFacade.class).persistPayment(pbo);
         }
     }
 
     private void savePaymentMethod(OnlineApplication bo, OnlineApplicationDTO to) {
-        if (to.payment().storeInProfile().getValue(false)
+        if (to.payment().paymentMethod().id().isNull() && to.payment().storeInProfile().getValue(false)
+                && PaymentType.availableInProfile().contains(to.payment().paymentMethod().type().getValue())
                 && ServerSideFactory.create(PaymentMethodFacade.class).isCompletePaymentMethod(to.payment().paymentMethod())) {
             Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
             Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);

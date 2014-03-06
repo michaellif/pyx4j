@@ -111,7 +111,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
         // Do not change profile methods
         if (bo.paymentMethod().id().isNull()) {
-            if (to.storeInProfile().isBooleanTrue() && PaymentType.availableInProfile().contains(to.paymentMethod().type().getValue())) {
+            if (to.storeInProfile().getValue(false) && PaymentType.availableInProfile().contains(to.paymentMethod().type().getValue())) {
                 bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             } else {
                 bo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
