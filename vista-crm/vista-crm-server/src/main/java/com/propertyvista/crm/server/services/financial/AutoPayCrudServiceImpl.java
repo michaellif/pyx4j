@@ -41,6 +41,7 @@ public class AutoPayCrudServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAg
 
         Persistence.ensureRetrieve(to.tenant().lease(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(to.createdBy(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(to.reviewOfPap(), AttachLevel.Attached);
     }
 
     @Override

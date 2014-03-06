@@ -13,18 +13,26 @@
  */
 package com.propertyvista.crm.client.ui.crud.financial.paps;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -59,7 +67,17 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated()), 15).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isDeleted()), 5).build());
-
+        CLabel<Key> reviewOfPapLink;
+        content.setWidget(++row, 0,
+                new FormDecoratorBuilder(reviewOfPapLink = inject(proto().reviewOfPap().id(), new CLabel<Key>()), 5).customLabel(i18n.tr("Reviewed AutoPay"))
+                        .build());
+        reviewOfPapLink.setNavigationCommand(new Command() {
+            @Override
+            public void execute() {
+                CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(AutopayAgreement.class, getValue().reviewOfPap().getPrimaryKey());
+                AppSite.getPlaceController().goTo(place);
+            }
+        });
         content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
         selectTab(addTab(content));
