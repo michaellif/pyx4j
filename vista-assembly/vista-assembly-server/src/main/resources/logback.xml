@@ -77,12 +77,12 @@ start new log file on each application start
         <file>${container-home}/logs/${application-name}/${logs-name}-alert.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${container-home}/logs/${application-name}/${logs-name}-warn.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${container-home}/logs/${application-name}/${logs-name}-alert.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.PyxExtensionSizeAndTimeBasedFNATP">
                 <rolloverOnStart>true</rolloverOnStart>
                 <maxFileSize>3000KB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>30</maxHistory>
+            <maxHistory>90</maxHistory>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -94,7 +94,7 @@ start new log file on each application start
         <file>${container-home}/logs/${application-name}/${logs-name}-client.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${container-home}/logs/${application-name}/${logs-name}.%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
+            <fileNamePattern>${container-home}/logs/${application-name}/${logs-name}-client.%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.PyxExtensionSizeAndTimeBasedFNATP">
                 <rolloverOnStart>true</rolloverOnStart>
                 <maxFileSize>3000KB</maxFileSize>
