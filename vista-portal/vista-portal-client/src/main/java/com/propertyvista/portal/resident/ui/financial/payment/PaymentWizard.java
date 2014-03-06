@@ -71,7 +71,6 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -257,7 +256,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                                 "<span id=\"" + anchorId + "\"></span>"));
 
         HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
-        Anchor termsAnchor = new TermsAnchor(i18n.tr("Web Payment Fee Terms And Conditions"), ResidentPortalTerms.WebPaymentFeeTerms.class);
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Web Payment Fee Terms And Conditions"), PortalSiteMap.PortalTerms.WebPaymentFeeTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
 
         CSignature cSignature = new CSignature(signatureDescriptionPanel);

@@ -68,15 +68,16 @@ public class PortalTermsActivity extends AbstractActivity {
 
         } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms) {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback, TermsAndPoliciesType.TenantBillingTerms);
+        } else if (place instanceof PortalSiteMap.PortalTerms.WebPaymentFeeTerms) {
+            GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
+                    TermsAndPoliciesType.ResidentPortalWebPaymentFeeTerms);
+
         } else if (place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms) {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
                     TermsAndPoliciesType.TenantPreauthorizedPaymentECheckTerms);
         } else if (place instanceof ResidentPortalTerms.CreditCardPolicy) {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
                     TermsAndPoliciesType.TenantPreauthorizedPaymentCardTerms);
-        } else if (place instanceof ResidentPortalTerms.WebPaymentFeeTerms) {
-            GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
-                    TermsAndPoliciesType.ResidentPortalWebPaymentFeeTerms);
         } else if (place instanceof ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms) {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
                     TermsAndPoliciesType.TenantSurePreAuthorizedPaymentsAgreement);

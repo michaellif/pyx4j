@@ -50,6 +50,8 @@ public class ContentActivityMapper implements AppActivityMapper {
         GWT.runAsync(new RunAsyncCallback() {
 
 
+
+
             @Override
             public void onSuccess() {
                 if (place instanceof AppPlace) {
@@ -85,10 +87,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ApplicationConfirmationActivity(appPlace);
 
 // Internals/Terms: @formatter:off
-                    } else if (place instanceof PortalSiteMap.PortalTerms.DirectBankingInstruction 
-                            || place instanceof PortalSiteMap.PortalTerms.BillingTerms
+                    } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms
+                            || place instanceof PortalSiteMap.PortalTerms.WebPaymentFeeTerms
+                            || place instanceof PortalSiteMap.PortalTerms.DirectBankingInstruction
+                            
                             || place instanceof PortalSiteMap.PortalTerms.VistaTermsAndConditions
                             || place instanceof PortalSiteMap.PortalTerms.VistaPrivacyPolicy
+                            
                             || place instanceof PortalSiteMap.PortalTerms.PmcTermsAndConditions
                             || place instanceof PortalSiteMap.PortalTerms.PmcPrivacyPolicy) {
                         activity = new PortalTermsActivity(place);

@@ -35,9 +35,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class CreditCardPolicy extends AppPlace implements PublicPlace {
         }
 
-        public static class WebPaymentFeeTerms extends AppPlace implements PublicPlace {
-        }
-
         public static class TenantSurePreAuthorizedPaymentTerms extends AppPlace implements PublicPlace {
         }
     }

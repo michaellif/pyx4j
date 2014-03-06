@@ -66,6 +66,9 @@ public class PortalTermsActivity extends AbstractActivity {
                     TermsAndPoliciesType.PMCProspectPortalPrivacyPolicy);
         } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms) {
             GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback, TermsAndPoliciesType.TenantBillingTerms);
+        } else if (place instanceof PortalSiteMap.PortalTerms.WebPaymentFeeTerms) {
+            GWT.<PortalTermsAndPoliciesService> create(PortalTermsAndPoliciesService.class).getTerm(callback,
+                    TermsAndPoliciesType.ResidentPortalWebPaymentFeeTerms);
 
         } else if (place instanceof PortalSiteMap.PortalTerms.DirectBankingInstruction) {
             LegalTermTO result = EntityFactory.create(LegalTermTO.class);
