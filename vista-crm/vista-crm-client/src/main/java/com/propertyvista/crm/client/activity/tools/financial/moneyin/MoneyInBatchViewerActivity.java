@@ -93,11 +93,6 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
     }
 
     @Override
-    public boolean canEdit() {
-        return false;
-    }
-
-    @Override
     public boolean canPost() {
         return canPost;
     }
