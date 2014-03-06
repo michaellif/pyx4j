@@ -44,7 +44,8 @@ public class StartEndDateWithinPeriodValidation {
                     return null;
                 }
                 LogicalDate endDate = add(end.getValue(), -months, -days);
-                return (!getComponent().getValue().before(endDate) ? null : new FieldValidationError(getComponent(), msg));
+                return (!getComponent().getValue().after(end.getValue()) && !getComponent().getValue().before(endDate) ? null : new FieldValidationError(
+                        getComponent(), msg));
             }
         });
         start.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(end));
@@ -57,7 +58,8 @@ public class StartEndDateWithinPeriodValidation {
                     return null;
                 }
                 LogicalDate startDate = add(start.getValue(), months, days);
-                return (!getComponent().getValue().after(startDate) ? null : new FieldValidationError(getComponent(), msg));
+                return (!getComponent().getValue().before(start.getValue()) && !getComponent().getValue().after(startDate) ? null : new FieldValidationError(
+                        getComponent(), msg));
             }
         });
         end.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(start));
