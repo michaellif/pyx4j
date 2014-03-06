@@ -59,6 +59,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
         BasicFlexFormPanel content = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
 
+        content.setH3(++row, 0, 1, i18n.tr("Payment Details"));
         content.setWidget(++row, 0, paymentDetailsHolder);
 
         SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();
@@ -85,6 +86,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
         content.setBR(++row, 0, 1);
 
+        content.setH3(++row, 0, 1, i18n.tr("Terms and Conditions"));
         content.setWidget(++row, 0, inject(proto().confirmationTerms(), new ConfirmationTermsFolder(getView())));
 
         return content;
