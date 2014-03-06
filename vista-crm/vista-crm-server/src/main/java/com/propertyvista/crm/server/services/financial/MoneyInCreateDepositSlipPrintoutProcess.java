@@ -14,7 +14,9 @@
 package com.propertyvista.crm.server.services.financial;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,7 +33,9 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
+import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipCheckDetailsRecordDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 
 public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredProcess {
 
@@ -71,8 +75,10 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
             params.put("totalAmount", batch.totalReceivedAmount().getValue());
             params.put("numberOfChecks", batch.numberOfReceipts().getValue());
 
+            List<DepositSlipCheckDetailsRecordDTO> printablePayments = filterPrintablePayments(batch.payments());
+
             JasperReportProcessor.createReport(new JasperReportModel(MoneyInCreateDepositSlipPrintoutProcess.class.getPackage().getName() + ".BankDepositSlip",
-                    batch.payments(), params), JasperFileFormat.PDF, depositSlipOutputStream);
+                    printablePayments, params), JasperFileFormat.PDF, depositSlipOutputStream);
 
             depositSlipOutputStream.flush();
             Downloadable d = new Downloadable(depositSlipOutputStream.toByteArray(), MimeMap.getContentType(DownloadFormat.PDF));
@@ -101,6 +107,16 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
             r.setErrorStatusMessage("failed to create deposit slip printout due to " + error.getMessage());
         }
         return r;
+    }
+
+    private List<DepositSlipCheckDetailsRecordDTO> filterPrintablePayments(List<DepositSlipCheckDetailsRecordDTO> payments) {
+        List<DepositSlipCheckDetailsRecordDTO> printablePayments = new ArrayList<>();
+        for (DepositSlipCheckDetailsRecordDTO payment : payments) {
+            if (payment.status().getValue() != PaymentStatus.Canceled) {
+                printablePayments.add(payment);
+            }
+        }
+        return printablePayments;
     }
 
 }
