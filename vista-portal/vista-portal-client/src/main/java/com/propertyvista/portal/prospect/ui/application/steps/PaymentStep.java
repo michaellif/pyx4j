@@ -87,6 +87,9 @@ public class PaymentStep extends ApplicationWizardStep {
         panel.setH3(++row, 0, 1, i18n.tr("Fees"));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().applicationFee(), new CMoneyLabel())).build());
 
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().amount(), new CMoneyLabel())).build());
+        get(proto().payment().amount()).setVisible(false);
+
         panel.setH3(++row, 0, 1, i18n.tr("Payment Method"));
         panel.setWidget(
                 ++row,

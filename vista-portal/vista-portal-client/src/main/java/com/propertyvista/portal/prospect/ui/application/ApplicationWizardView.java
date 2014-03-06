@@ -18,10 +18,12 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.shared.ui.IWizardView;
 
 public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO> {
@@ -34,8 +36,12 @@ public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO>
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 
+        void getConvenienceFee(AsyncCallback<ConvenienceFeeCalculationResponseTO> callback, PaymentConvenienceFeeDTO inData);
+
         void downloadLeaseAgreementDraft();
+
     }
 
+    @Override
     ApplicationWizard getWizard();
 }

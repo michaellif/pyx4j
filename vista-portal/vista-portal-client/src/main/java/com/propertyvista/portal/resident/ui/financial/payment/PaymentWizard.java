@@ -68,7 +68,6 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -271,16 +270,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         });
 
         panel.setWidget(++row, 0, new SignatureDecorator(inject(proto().convenienceFeeSignature(), cSignature)));
-        get(proto().convenienceFeeSignature()).addComponentValidator(new AbstractComponentValidator<CustomerSignature>() {
-            @Override
-            public FieldValidationError isValid() {
-                if (getComponent().getValue() != null && !getComponent().getValue().agree().getValue(false)) {
-                    return new FieldValidationError(getComponent(), i18n
-                            .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment."));
-                }
-                return null;
-            }
-        });
 
         panel.setHR(++row, 0, 1);
 

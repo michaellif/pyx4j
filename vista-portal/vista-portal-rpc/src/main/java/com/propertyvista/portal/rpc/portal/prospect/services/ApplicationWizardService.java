@@ -22,11 +22,12 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 
 public interface ApplicationWizardService extends IService {
 
@@ -41,7 +42,7 @@ public interface ApplicationWizardService extends IService {
 
     void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unitId);
 
-    void getCurrentDeposits(AsyncCallback<Vector<Deposit>> callback, OnlineApplicationDTO currentValue);
-
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
+
+    public void getConvenienceFee(AsyncCallback<ConvenienceFeeCalculationResponseTO> callback, PaymentConvenienceFeeDTO inData);
 }

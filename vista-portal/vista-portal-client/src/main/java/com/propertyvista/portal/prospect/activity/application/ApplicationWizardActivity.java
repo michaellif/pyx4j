@@ -42,6 +42,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
@@ -53,6 +54,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
@@ -167,6 +169,11 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
                 callback.onSuccess(result);
             }
         });
+    }
+
+    @Override
+    public void getConvenienceFee(AsyncCallback<ConvenienceFeeCalculationResponseTO> callback, PaymentConvenienceFeeDTO inData) {
+        service.getConvenienceFee(callback, inData);
     }
 
     @Override

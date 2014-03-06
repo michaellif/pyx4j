@@ -49,6 +49,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
@@ -79,6 +81,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
@@ -92,6 +96,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.Bathroo
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressConverter;
@@ -180,16 +185,25 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     @Override
-    public void getCurrentDeposits(AsyncCallback<Vector<Deposit>> callback, OnlineApplicationDTO currentValue) {
-        // TODO: implement it:
-        callback.onSuccess(new Vector<Deposit>(/* calculateDeposits(lease) */));
-    }
-
-    @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
                 ProspectPortalContext.getLeaseTermTenant(), PaymentMethodUsage.OneTimePayments, VistaApplication.prospect);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
+    }
+
+    @Override
+    public void getConvenienceFee(AsyncCallback<ConvenienceFeeCalculationResponseTO> callback, PaymentConvenienceFeeDTO to) {
+        ConvenienceFeeCalculationResponseTO result = null;
+        if (to.paymentMethod().details().isInstanceOf(CreditCardInfo.class)) {
+            Lease lease = ProspectPortalContext.getLease();
+            CreditCardType ccType = to.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
+            if (ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.prospect)
+                    .contains(ccType)) {
+                result = ServerSideFactory.create(PaymentFacade.class).getConvenienceFee(lease.billingAccount(), ccType,
+                        DomainUtil.roundMoney(to.amount().getValue()));
+            }
+        }
+        callback.onSuccess(result);
     }
 
     // internals: -----------------------------------------------------------------------------------------------------

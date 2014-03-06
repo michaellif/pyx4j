@@ -13,15 +13,42 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
+import java.math.BigDecimal;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.shared.ISignature;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CSignature;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.Anchor;
+
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
+import com.propertyvista.portal.shared.ui.TermsAnchor;
+import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 
 public class ConfirmationStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(ConfirmationStep.class);
+
+    private final SimplePanel paymentDetailsHolder = new SimplePanel();
 
     public ConfirmationStep() {
         super(OnlineApplicationWizardStepMeta.Confirmation);
@@ -29,12 +56,102 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
+        BasicFlexFormPanel content = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().confirmationTerms(), new ConfirmationTermsFolder(getView())));
+        content.setWidget(++row, 0, paymentDetailsHolder);
+
+        SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();
+        String anchorId = HTMLPanel.createUniqueId();
+        signatureDescriptionBuilder
+                .appendHtmlConstant(i18n
+                        .tr("I agree to the Web Payment Fee being charged and have read the {0}. I further acknowledge and accept that the fee will appear as ''CCS*Web Payment Fee'' on my card/bank statement.",
+                                "<span id=\"" + anchorId + "\"></span>"));
+
+        HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
+        Anchor termsAnchor = new TermsAnchor(i18n.tr("Web Payment Fee Terms And Conditions"), ResidentPortalTerms.WebPaymentFeeTerms.class);
+        signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
+
+        CSignature cSignature = new CSignature(signatureDescriptionPanel);
+        cSignature.setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
+            @Override
+            public FieldValidationError isValid() {
+                return (getComponent().getValue() == null || !getComponent().getValue().agree().getValue(false) ? new FieldValidationError(getComponent(), i18n
+                        .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
+            }
+        });
+
+        content.setWidget(++row, 0, new SignatureDecorator(inject(proto().payment().convenienceFeeSignature(), cSignature)));
+
+        content.setBR(++row, 0, 1);
+
+        content.setWidget(++row, 0, inject(proto().confirmationTerms(), new ConfirmationTermsFolder(getView())));
+
+        return content;
+    }
+
+    @Override
+    public void onStepVizible(boolean flag) {
+        super.onStepVizible(flag);
+
+        get(proto().payment().amount()).setValue(calculatePaymentAmount());
+
+        paymentDetailsHolder.clear();
+        paymentDetailsHolder.setWidget(createPaymentDetailsPanel());
+    }
+
+    private Widget createPaymentDetailsPanel() {
+        final VerticalPanel panel = new VerticalPanel();
+
+        panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().payment().paymentMethod()).getValue().getStringView()));
+        panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CLabel<?>) get(proto().payment().amount())).getFormattedValue()));
+
+        get(proto().payment().convenienceFeeSignature()).setVisible(false);
+
+        PaymentConvenienceFeeDTO inData = EntityFactory.create(PaymentConvenienceFeeDTO.class);
+        inData.paymentMethod().set(getValue().payment().paymentMethod());
+        inData.amount().setValue(getValue().payment().amount().getValue());
+        getWizard().getPresenter().getConvenienceFee(new DefaultAsyncCallback<ConvenienceFeeCalculationResponseTO>() {
+            @Override
+            public void onSuccess(ConvenienceFeeCalculationResponseTO result) {
+                if (result != null) {
+                    panel.add(createDecorator(i18n.tr("Web Payment Fee:"), result.feeAmount().getStringView()));
+                    panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
+
+                    panel.add(new HTML("<br/>"));
+
+                    get(proto().payment().convenienceFeeSignature()).setVisible(true);
+
+                    getValue().payment().convenienceFee().setValue(result.feeAmount().getValue());
+                    getValue().payment().convenienceFeeReferenceNumber().setValue(result.transactionNumber().getValue());
+                }
+            }
+        }, inData);
 
         return panel;
     }
 
+    private BigDecimal calculatePaymentAmount() {
+        BigDecimal amount = BigDecimal.ZERO;
+
+        for (Deposit deposit : getValue().payment().deposits()) {
+            amount = amount.add(deposit.amount().getValue());
+        }
+
+        amount = amount.add(getValue().payment().applicationFee().getValue());
+
+        return amount;
+    }
+
+    private Widget createDecorator(String label, String value) {
+        HorizontalPanel payee = new HorizontalPanel();
+        Widget w;
+
+        payee.add(w = new HTML(label));
+        w.setWidth("12em");
+        payee.add(w = new HTML(value));
+        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+        return payee;
+    }
 }
