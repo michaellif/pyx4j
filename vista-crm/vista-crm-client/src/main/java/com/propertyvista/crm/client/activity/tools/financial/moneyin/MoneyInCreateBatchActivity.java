@@ -421,7 +421,6 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
             public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                 super.onDeferredSuccess(result);
                 MoneyInCreateBatchActivity.this.onProccessingSuccess(result);
-                search();
             }
 
             @Override
