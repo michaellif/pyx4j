@@ -26,8 +26,6 @@ public class VistaFeatures {
 
         boolean tenantSure();
 
-        boolean leases();
-
         boolean onlineApplication();
 
         CountryOfOperation countryOfOperation();

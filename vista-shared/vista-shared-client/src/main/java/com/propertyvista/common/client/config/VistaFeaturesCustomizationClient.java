@@ -28,11 +28,6 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     public static boolean enviromentTitleVisible;
 
     @Override
-    public boolean leases() {
-        return features.leases().getValue(Boolean.FALSE);
-    }
-
-    @Override
     public boolean onlineApplication() {
         return features.onlineApplication().getValue(Boolean.FALSE);
     }

@@ -66,11 +66,6 @@ public class VistaFeatures {
         }
 
         @Override
-        public boolean leases() {
-            return threadLocale.get().leases().getValue(Boolean.FALSE);
-        }
-
-        @Override
         public boolean onlineApplication() {
             return threadLocale.get().onlineApplication().getValue(Boolean.FALSE);
         }

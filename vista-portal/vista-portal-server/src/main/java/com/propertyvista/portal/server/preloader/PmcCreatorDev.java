@@ -40,7 +40,6 @@ public class PmcCreatorDev {
         pmc.name().setValue(pmcName + " Demo");
         pmc.dnsName().setValue(pmcName);
 
-        pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
         pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);

@@ -118,7 +118,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
     public void populate(Lead value) {
         super.populate(value);
 
-        setActionVisible(convertAction, VistaFeatures.instance().leases() && value.status().getValue() != Status.closed && value.lease().isNull());
+        setActionVisible(convertAction, (value.status().getValue() != Status.closed) && value.lease().isNull());
         setActionVisible(closeAction, value.status().getValue() != Status.closed);
 
         setEditingVisible(value.status().getValue() != Lead.Status.closed);

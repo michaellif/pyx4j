@@ -35,7 +35,6 @@ public class PmcFeaturesForm extends CEntityForm<PmcVistaFeatures> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().countryOfOperation()), 25).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leases()), 5).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onlineApplication()), 5).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiIntegration()), 5).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiMaintenance()), 5).build());
