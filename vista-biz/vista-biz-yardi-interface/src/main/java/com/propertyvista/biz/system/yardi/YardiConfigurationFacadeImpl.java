@@ -40,4 +40,19 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
         return YardiCredentials.getAll();
     }
 
+    @Override
+    public void startYardiTimer() {
+        YardiExecutionTimer.start();
+    }
+
+    @Override
+    public void incrementYardiTimer(long interval) {
+        YardiExecutionTimer.add(interval);
+    }
+
+    @Override
+    public long stopYardiTimer() {
+        return YardiExecutionTimer.stop();
+    }
+
 }

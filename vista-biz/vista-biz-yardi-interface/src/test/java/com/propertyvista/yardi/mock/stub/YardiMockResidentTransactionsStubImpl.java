@@ -38,11 +38,6 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     private final static Logger log = LoggerFactory.getLogger(YardiMockResidentTransactionsStubImpl.class);
 
     @Override
-    public long getRequestsTime() {
-        return 0;
-    }
-
-    @Override
     public void logRecordedTracastions() {
     }
 

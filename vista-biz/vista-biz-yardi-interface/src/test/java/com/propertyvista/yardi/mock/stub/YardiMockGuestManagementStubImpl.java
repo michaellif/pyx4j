@@ -46,12 +46,6 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
     }
 
     @Override
-    public long getRequestsTime() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
     public void logRecordedTracastions() {
         // TODO Auto-generated method stub
     }

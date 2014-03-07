@@ -31,8 +31,10 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
+import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
@@ -154,15 +156,10 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
                     }
                 }
 
-                requestsTime += TimeUtils.since(requestStartTime);
+                ServerSideFactory.create(YardiConfigurationFacade.class).incrementYardiTimer(TimeUtils.since(requestStartTime));
             }
 
         });
-    }
-
-    @Override
-    public long getRequestsTime() {
-        return requestsTime;
     }
 
     @Override

@@ -65,6 +65,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -142,6 +143,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         final Key yardiInterfaceId = yc.getPrimaryKey();
         List<String> propertyListCodes = null;
         try {
+            ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
+
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
             if (yc.propertyListCodes().isNull()) {
                 List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(stub, yc);
@@ -201,7 +204,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
         } finally {
-            executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(stub.getRequestsTime()), new BigDecimal(stub.getRequestsTime()));
+            long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer();
+            executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }
 

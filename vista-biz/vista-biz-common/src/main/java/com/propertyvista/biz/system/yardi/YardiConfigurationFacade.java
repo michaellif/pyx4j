@@ -35,4 +35,13 @@ public interface YardiConfigurationFacade {
     PmcYardiCredential getYardiCredential(Building building);
 
     List<PmcYardiCredential> getYardiCredentials();
+
+    /** Initialize ThreadLocal timer to count Yardi execution time */
+    void startYardiTimer();
+
+    /** advance Yardi execution time */
+    void incrementYardiTimer(long interval);
+
+    /** read Yardi execution time and remove the timer */
+    long stopYardiTimer();
 }

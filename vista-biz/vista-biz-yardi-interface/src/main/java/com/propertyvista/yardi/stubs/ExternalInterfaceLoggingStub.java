@@ -15,8 +15,6 @@ package com.propertyvista.yardi.stubs;
 
 public interface ExternalInterfaceLoggingStub {
 
-    long getRequestsTime();
-
     void logRecordedTracastions();
 
 }

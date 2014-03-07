@@ -25,11 +25,6 @@ import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 public class YardiMockILSGuestCardStubImpl implements YardiILSGuestCardStub {
 
     @Override
-    public long getRequestsTime() {
-        return 0;
-    }
-
-    @Override
     public void logRecordedTracastions() {
     }
 
