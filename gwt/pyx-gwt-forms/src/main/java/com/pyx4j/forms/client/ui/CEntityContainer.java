@@ -126,17 +126,15 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
             @Override
             public void onPropertyChange(final PropertyChangeEvent event) {
-                if (!sheduled) {
+                if (!sheduled && event.isEventOfType(PropertyName.valid)) {
                     sheduled = true;
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            if (event.isEventOfType(PropertyName.valid)) {
-                                boolean wasValid = isValid();
-                                CEntityContainer.super.revalidate();
-                                if (wasValid != isValid()) {
-                                    PropertyChangeEvent.fire(CEntityContainer.this, PropertyName.valid);
-                                }
+                            boolean wasValid = isValid();
+                            CEntityContainer.super.revalidate();
+                            if (wasValid != isValid()) {
+                                PropertyChangeEvent.fire(CEntityContainer.this, PropertyName.valid);
                             }
                             sheduled = false;
                         }
