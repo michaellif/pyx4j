@@ -105,7 +105,7 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
 
     private EntityQueryCriteria<UnitAvailabilityStatus> createAvailabilityCriteria(AvailabilityReportMetadata metadata) {
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = null;
-        if (metadata.isInAdvancedMode().getValue(true)) {
+        if (metadata.isInAdvancedMode().getValue(false)) {
             criteria = ReportCriteriaBuilder.build(UnitAvailabilityStatus.class, metadata.availbilityTableCriteria());
         } else {
             criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
