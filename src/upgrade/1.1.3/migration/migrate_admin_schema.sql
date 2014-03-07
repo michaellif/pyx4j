@@ -158,7 +158,7 @@ SET search_path = '_admin_';
         ALTER TABLE admin_pmc_equifax_info      ADD COLUMN member_number_password VARCHAR(500),
                                                 ADD COLUMN security_code_password VARCHAR(500);
                                                 
-                                                      
+                                                    
       
         -- admin_pmc_yardi_credential
         
@@ -307,7 +307,10 @@ SET search_path = '_admin_';
        
         -- admin_pmc_vista_features
         
-        ALTER TABLE admin_pmc_vista_features DROP COLUMN occupancy_model;
+        ALTER TABLE admin_pmc_vista_features    DROP COLUMN occupancy_model,
+                                                DROP COLUMN default_product_catalog,
+                                                DROP COLUMN leases,
+                                                DROP COLUMN product_catalog;
         
         -- dev_card_service_simulation_card
         
