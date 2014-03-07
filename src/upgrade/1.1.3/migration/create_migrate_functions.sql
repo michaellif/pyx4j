@@ -1627,152 +1627,161 @@ BEGIN
                         ||'WHERE code_id = 5110 ) ';
         END IF;                        
                 
-              
+    
+        IF EXISTS ( SELECT  'x' FROM _admin_.admin_pmc a 
+                    JOIN    _admin_.admin_pmc_vista_features f ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
+        THEN
+                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.product_v$features';
+                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.product_item';
+                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.product_v';
+                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.product';
+        ELSE
         
-        EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
-                ||'SET  default_catalog_item = ''FALSE'', '
-                ||'     code = a.id '
-                ||'FROM '||v_schema_name||'.arcode AS a '
-                ||'WHERE a.name = ''Residential'' '
-                ||'AND  p.id_discriminator = ''service'' ';
+            EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
+                    ||'SET  default_catalog_item = ''FALSE'', '
+                    ||'     code = a.id '
+                    ||'FROM '||v_schema_name||'.arcode AS a '
+                    ||'WHERE a.name = ''Residential'' '
+                    ||'AND  p.id_discriminator = ''service'' ';
        
         
-        EXECUTE 'UPDATE '||v_schema_name||'.product_v '
-                ||'SET  price = 0.00 '
-                ||'WHERE holder IN      (SELECT DISTINCT id FROM '||v_schema_name||'.product '
-                ||'                     WHERE   id_discriminator  = ''service'' )';   
+            EXECUTE 'UPDATE '||v_schema_name||'.product_v '
+                    ||'SET  price = 0.00 '
+                    ||'WHERE holder IN      (SELECT DISTINCT id FROM '||v_schema_name||'.product '
+                    ||'                     WHERE   id_discriminator  = ''service'' )';   
                 
                 
-		-- update of old product_v records 
+            -- update of old product_v records 
 		
-		EXECUTE	'UPDATE '||v_schema_name||'.product_v AS pv '
-				||'SET	from_date = DATE_TRUNC(''second'',current_timestamp)::timestamp, '
-				||'		version_number = t.version '
-				||'FROM 	(SELECT id, '
-				||'					row_number() OVER (PARTITION BY holder ORDER BY id) AS version '
-				||'			FROM    '||v_schema_name||'.product_v '
-				||'			WHERE   from_date IS NULL ) AS t '
-				||'WHERE	pv.id = t.id ';
+            EXECUTE	'UPDATE '||v_schema_name||'.product_v AS pv '
+                    ||'SET	from_date = DATE_TRUNC(''second'',current_timestamp)::timestamp, '
+                    ||'		version_number = t.version '
+                    ||'FROM 	(SELECT id, '
+                    ||'					row_number() OVER (PARTITION BY holder ORDER BY id) AS version '
+                    ||'			FROM    '||v_schema_name||'.product_v '
+                    ||'			WHERE   from_date IS NULL ) AS t '
+                    ||'WHERE	pv.id = t.id ';
 		
-        -- Update existing features in product table 
+            -- Update existing features in product table 
         
-        EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
-                ||'SET  code = t.min_code '
-                ||'FROM         (SELECT pv.holder,MIN(pi.code) AS min_code '
-                ||'             FROM    '||v_schema_name||'.product_v pv '
-                ||'             JOIN    '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
-                ||'             WHERE   pi.product_discriminator = ''feature'' '
-                ||'             AND     pv.to_date IS NULL '
-                ||'             AND     pv.from_date IS NOT NULL '
-                ||'             GROUP BY pv.holder ) AS t '
-                ||'WHERE p.id = t.holder ';
+            EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
+                    ||'SET  code = t.min_code '
+                    ||'FROM         (SELECT pv.holder,MIN(pi.code) AS min_code '
+                    ||'             FROM    '||v_schema_name||'.product_v pv '
+                    ||'             JOIN    '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
+                    ||'             WHERE   pi.product_discriminator = ''feature'' '
+                    ||'             AND     pv.to_date IS NULL '
+                    ||'             AND     pv.from_date IS NOT NULL '
+                    ||'             GROUP BY pv.holder ) AS t '
+                    ||'WHERE p.id = t.holder ';
                 
         
-        -- insert new records into product_table 
+            -- insert new records into product_table 
         
-        ALTER TABLE product ALTER COLUMN code_type DROP NOT NULL;
+            ALTER TABLE product ALTER COLUMN code_type DROP NOT NULL;
         
         
-        EXECUTE 'INSERT INTO '||v_schema_name||'.product (id,id_discriminator,catalog,updated,default_catalog_item,code) '
-                ||'(SELECT      nextval(''public.product_seq'') AS id, pi.product_discriminator AS id_discriminator,'
-                ||'             p.catalog,DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated,'
-                ||'             TRUE, pi.code '
-                ||'FROM '||v_schema_name||'.product p '
-                ||'JOIN '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
-                ||'JOIN '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
-                ||'WHERE        pi.product_discriminator = ''feature'' '
-                ||'AND          pv.to_date IS NULL '
-                ||'AND          pv.from_date IS NOT NULL '
-                ||'AND          pi.code != p.code ) ';             
+            EXECUTE 'INSERT INTO '||v_schema_name||'.product (id,id_discriminator,catalog,updated,default_catalog_item,code) '
+                    ||'(SELECT      nextval(''public.product_seq'') AS id, pi.product_discriminator AS id_discriminator,'
+                    ||'             p.catalog,DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated,'
+                    ||'             TRUE, pi.code '
+                    ||'FROM '||v_schema_name||'.product p '
+                    ||'JOIN '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
+                    ||'JOIN '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
+                    ||'WHERE        pi.product_discriminator = ''feature'' '
+                    ||'AND          pv.to_date IS NULL '
+                    ||'AND          pv.from_date IS NOT NULL '
+                    ||'AND          pi.code != p.code ) ';             
         
-        -- new records for product_v table
+            -- new records for product_v table
         
-        EXECUTE 'INSERT INTO '||v_schema_name||'.product_v (id,id_discriminator,version_number,'
-                ||'from_date,holder_discriminator,holder,name,mandatory) '
-                ||'(SELECT  nextval(''public.product_v_seq'') AS id,p.id_discriminator AS id_discriminator, '
-                ||'1,DATE_TRUNC(''second'',current_timestamp)::timestamp AS from_date, '
-                ||'p.id_discriminator AS holder_discriminator,p.id AS holder,a.code_type AS name, FALSE '
-                ||'FROM '||v_schema_name||'.product p '
-                ||'JOIN '||v_schema_name||'.arcode a ON (p.code = a.id) '
-                ||'WHERE    p.id NOT IN (SELECT DISTINCT holder FROM '||v_schema_name||'.product_v ) )';
+            EXECUTE 'INSERT INTO '||v_schema_name||'.product_v (id,id_discriminator,version_number,'
+                    ||'from_date,holder_discriminator,holder,name,mandatory) '
+                    ||'(SELECT  nextval(''public.product_v_seq'') AS id,p.id_discriminator AS id_discriminator, '
+                    ||'1,DATE_TRUNC(''second'',current_timestamp)::timestamp AS from_date, '
+                    ||'p.id_discriminator AS holder_discriminator,p.id AS holder,a.code_type AS name, FALSE '
+                    ||'FROM '||v_schema_name||'.product p '
+                    ||'JOIN '||v_schema_name||'.arcode a ON (p.code = a.id) '
+                    ||'WHERE    p.id NOT IN (SELECT DISTINCT holder FROM '||v_schema_name||'.product_v ) )';
                 
                 
-        -- wondrously perverted update of product_item
+            -- wondrously perverted update of product_item
         
-        EXECUTE 'WITH   t0 AS   (SELECT     p.id AS p_id, p.catalog,p.code, '
-                ||'                         pv.id AS pv_id,'
-                ||'                         pi.id AS pi_id, pi.code AS pi_code '
-                ||'             FROM        '||v_schema_name||'.product p '
-                ||'             JOIN        '||v_schema_name||'.product_v pv  ON (p.id = pv.holder) '
-                ||'             JOIN        '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
-                ||'             WHERE       p.id_discriminator = ''feature'' '
-                ||'             AND         p.code != pi.code), '
-                ||'     t1 AS   (SELECT     p.id AS p_id,p.catalog,p.code,pv.id AS pv_id '
-                ||'             FROM        '||v_schema_name||'.product p '
-                ||'             JOIN        '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
-                ||'             WHERE       p.id_discriminator = ''feature'' '
-                ||'             AND         pv.id NOT IN (SELECT DISTINCT product FROM '||v_schema_name||'.product_item)) '
-                ||'UPDATE   '||v_schema_name||'.product_item pi '
-                ||'SET      product = t2.pv_id '
-                ||'FROM    (SELECT      t0.pi_id, t1.pv_id  '
-                ||'         FROM        t0 '
-                ||'         JOIN        t1 ON (t0.catalog = t1.catalog AND t0.pi_code = t1.code)) AS t2 '
-                ||'WHERE   pi.id = t2.pi_id ';
+            EXECUTE 'WITH   t0 AS   (SELECT     p.id AS p_id, p.catalog,p.code, '
+                    ||'                         pv.id AS pv_id,'
+                    ||'                         pi.id AS pi_id, pi.code AS pi_code '
+                    ||'             FROM        '||v_schema_name||'.product p '
+                    ||'             JOIN        '||v_schema_name||'.product_v pv  ON (p.id = pv.holder) '
+                    ||'             JOIN        '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
+                    ||'             WHERE       p.id_discriminator = ''feature'' '
+                    ||'             AND         p.code != pi.code), '
+                    ||'     t1 AS   (SELECT     p.id AS p_id,p.catalog,p.code,pv.id AS pv_id '
+                    ||'             FROM        '||v_schema_name||'.product p '
+                    ||'             JOIN        '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
+                    ||'             WHERE       p.id_discriminator = ''feature'' '
+                    ||'             AND         pv.id NOT IN (SELECT DISTINCT product FROM '||v_schema_name||'.product_item)) '
+                    ||'UPDATE   '||v_schema_name||'.product_item pi '
+                    ||'SET      product = t2.pv_id '
+                    ||'FROM    (SELECT      t0.pi_id, t1.pv_id  '
+                    ||'         FROM        t0 '
+                    ||'         JOIN        t1 ON (t0.catalog = t1.catalog AND t0.pi_code = t1.code)) AS t2 '
+                    ||'WHERE   pi.id = t2.pi_id ';
                 
-        -- insert on product_v$features
+            -- insert on product_v$features
         
-        EXECUTE 'INSERT INTO '||v_schema_name||'.product_v$features (id,owner,value_discriminator,value) '
-                ||'(SELECT  nextval(''public.product_v$features_seq'') AS id, s.id AS owner, '
-                ||'         f.id_discriminator AS value_discriminator,f.id AS value '
-                ||'FROM    (SELECT      id  '
-                ||'         FROM        '||v_schema_name||'.product_v '
-                ||'         WHERE       id_discriminator = ''service'' '
-                ||'         AND         to_date IS NULL '
-                ||'         AND         name IN (''Residential Unit'',''Commercial Unit'')) AS s, '
-                ||'         (SELECT     id,id_discriminator '
-                ||'         FROM        '||v_schema_name||'.product '
-                ||'         WHERE       code IS NOT NULL '
-                ||'         AND         id_discriminator = ''feature'' '
-                ||'         AND         id NOT IN (SELECT DISTINCT value FROM '||v_schema_name||'.product_v$features)) AS f )';
+            EXECUTE 'INSERT INTO '||v_schema_name||'.product_v$features (id,owner,value_discriminator,value) '
+                    ||'(SELECT  nextval(''public.product_v$features_seq'') AS id, s.id AS owner, '
+                    ||'         f.id_discriminator AS value_discriminator,f.id AS value '
+                    ||'FROM    (SELECT      id  '
+                    ||'         FROM        '||v_schema_name||'.product_v '
+                    ||'         WHERE       id_discriminator = ''service'' '
+                    ||'         AND         to_date IS NULL '
+                    ||'         AND         name IN (''Residential Unit'',''Commercial Unit'')) AS s, '
+                    ||'         (SELECT     id,id_discriminator '
+                    ||'         FROM        '||v_schema_name||'.product '
+                    ||'         WHERE       code IS NOT NULL '
+                    ||'         AND         id_discriminator = ''feature'' '
+                    ||'         AND         id NOT IN (SELECT DISTINCT value FROM '||v_schema_name||'.product_v$features)) AS f )';
                 
 		
-		-- delete those rare rows that do not have a code still
+            -- delete those rare rows that do not have a code still
 		
-		EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
-				||'WHERE 	holder IN 	(SELECT 	id '
-				||'						FROM 	'||v_schema_name||'.product '
-				||'						WHERE	code IS NULL) ';
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
+                    ||'WHERE 	holder IN 	(SELECT 	id '
+                    ||'						FROM 	'||v_schema_name||'.product '
+                    ||'						WHERE	code IS NULL) ';
 		
-		EXECUTE 'DELETE FROM '||v_schema_name||'.product '
-				||'WHERE	code IS NULL';
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product '
+                    ||'WHERE	code IS NULL';
 				
 	
-		-- update product_v with deposits
+            -- update product_v with deposits
 		
-		EXECUTE 'UPDATE '||v_schema_name||'.product_v AS p '
-				||'SET	deposit_lmr_enabled = FALSE, '
-				||'		deposit_lmr_charge_code = t0.id, '
-				||'		deposit_lmr_deposit_value = 1,'
-				||'		deposit_lmr_value_type = ''Percentage'', '
-				||'		deposit_lmr_description = ''LMR Deposit'','
-				||'		deposit_lmr_deposit_type = ''LastMonthDeposit'', '
-				||'		deposit_move_in_enabled = FALSE, '
-				||'		deposit_move_in_charge_code = t1.id, '
-				||'		deposit_move_in_deposit_value = 1,'
-				||'		deposit_move_in_value_type = ''Percentage'', '
-				||'		deposit_move_in_description = ''Move In Deposit'','
-				||'		deposit_move_in_deposit_type = ''MoveInDeposit'','
-				||'		deposit_security_enabled = FALSE,'
-				||'		deposit_security_charge_code = t2.id, '
-				||'		deposit_security_deposit_value = 1,'
-				||'		deposit_security_value_type = ''Percentage'','
-				||'		deposit_security_description = ''Security Deposit'','
-				||'		deposit_security_deposit_type = ''SecurityDeposit'' '
-				||'FROM 	(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''LMR Deposit'') AS t0,'
-				||'			(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''Move In Deposit'') AS t1,'
-				||'			(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''Security Deposit'') AS t2 ';
+            EXECUTE 'UPDATE '||v_schema_name||'.product_v AS p '
+                    ||'SET	deposit_lmr_enabled = FALSE, '
+                    ||'		deposit_lmr_charge_code = t0.id, '
+                    ||'		deposit_lmr_deposit_value = 1,'
+                    ||'		deposit_lmr_value_type = ''Percentage'', '
+                    ||'		deposit_lmr_description = ''LMR Deposit'','
+                    ||'		deposit_lmr_deposit_type = ''LastMonthDeposit'', '
+                    ||'		deposit_move_in_enabled = FALSE, '
+                    ||'		deposit_move_in_charge_code = t1.id, '
+                    ||'		deposit_move_in_deposit_value = 1,'
+                    ||'		deposit_move_in_value_type = ''Percentage'', '
+                    ||'		deposit_move_in_description = ''Move In Deposit'','
+                    ||'		deposit_move_in_deposit_type = ''MoveInDeposit'','
+                    ||'		deposit_security_enabled = FALSE,'
+                    ||'		deposit_security_charge_code = t2.id, '
+                    ||'		deposit_security_deposit_value = 1,'
+                    ||'		deposit_security_value_type = ''Percentage'','
+                    ||'		deposit_security_description = ''Security Deposit'','
+                    ||'		deposit_security_deposit_type = ''SecurityDeposit'' '
+                    ||'FROM 	(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''LMR Deposit'') AS t0,'
+                    ||'			(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''Move In Deposit'') AS t1,'
+                    ||'			(SELECT id FROM '||v_schema_name||'.arcode WHERE name = ''Security Deposit'') AS t2 ';
         
-                      
+        END IF;
+        
         SET CONSTRAINTS ALL IMMEDIATE;
         
         /**
