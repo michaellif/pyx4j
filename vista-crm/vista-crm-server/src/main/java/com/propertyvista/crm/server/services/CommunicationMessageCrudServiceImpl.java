@@ -92,6 +92,8 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         to.thread().setAttachLevel(AttachLevel.Attached);
         to.thread().set(bo.thread());
         to.subject().set(to.thread().subject());
+        to.attachments().setAttachLevel(AttachLevel.Attached);
+        to.attachments().set(bo.attachments());
 
     }
 
@@ -122,6 +124,8 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         dto.sender().set(entity.sender());
         dto.to().setAttachLevel(AttachLevel.Attached);
         dto.to().set(entity.to());
+        dto.attachments().setAttachLevel(AttachLevel.Attached);
+        dto.attachments().set(entity.attachments());
     }
 
     protected void enhanceAll(CommunicationMessage dto) {
@@ -130,6 +134,9 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
 
     protected void enhanceDbo(CommunicationMessage dbo) {
         Persistence.ensureRetrieve(dbo.thread(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dbo.sender(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dbo.to(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dbo.attachments(), AttachLevel.Attached);
         CommunicationThread thread = dbo.thread();
         IList<CommunicationMessage> ms = thread.content();
         if (ms != null && !ms.isNull()) {

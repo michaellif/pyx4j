@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -36,6 +37,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.dto.CommunicationMessageDTO;
 
@@ -90,7 +92,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         @Override
         public IFolderItemDecorator<CommunicationMessage> createItemDecorator() {
             BoxFolderItemDecorator<CommunicationMessage> decor = (BoxFolderItemDecorator<CommunicationMessage>) super.createItemDecorator();
-            decor.setExpended(true);
+            decor.setExpended(false);
             return decor;
         }
 
@@ -139,7 +141,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date(), new CLabel<String>()), 20).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().text()), 20).build());
             content.setH1(++row, 0, 1, "From");
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sender()), 20).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sender(), new SenderLabel()), 20).build());
             content.setH1(++row, 0, 1, "To");
             content.setWidget(++row, 0, inject(proto().to(), receiverSelector));
 
@@ -217,6 +219,24 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
                 btnCancel.setVisible(false);
                 get(proto().date()).setVisible(true);
                 get(proto().sender()).setVisible(true);
+            }
+        }
+    }
+
+    public class SenderLabel extends CEntityLabel<CommunicationEndpoint> {
+
+        @Override
+        public String format(CommunicationEndpoint value) {
+            if (value == null) {
+                return "";
+            } else {
+                StringBuilder result = new StringBuilder();
+
+                result.append(value.name().getStringView());
+                result.append(", ");
+                result.append(value.email().getStringView());
+
+                return result.toString();
             }
         }
     }

@@ -27,7 +27,6 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.CommunicationMessageAttachment;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessageAttachmentUploadPortalService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<CommunicationMessageAttachment> {
@@ -61,7 +60,7 @@ public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<Communi
                     ++row,
                     0,
                     new FormWidgetDecoratorBuilder(inject(proto().file(),
-                            new CFile(GWT.<InsuranceCertificateScanResidentUploadService> create(CommunicationMessageAttachmentUploadPortalService.class),
+                            new CFile(GWT.<CommunicationMessageAttachmentUploadPortalService> create(CommunicationMessageAttachmentUploadPortalService.class),
                                     new VistaFileURLBuilder(CommunicationMessageAttachment.class))), 250).build());
 
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).build());
