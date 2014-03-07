@@ -146,11 +146,12 @@ public class AptDetailsPage extends BasePage {
         });
         add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, params).setBody(new Model<String>(i18n.tr("Request Appointment"))));
 
-        if (VistaFeatures.instance().onlineApplication()) {
-            String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
-                    ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, building.propertyCode().getValue());
-            add(new ExternalLink("applyNow", applyUrl).setBody(new Model<String>(i18n.tr("Apply Now"))));
-        }
+        String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
+                ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, building.propertyCode().getValue());
+        ExternalLink externalLink = new ExternalLink("applyNow", applyUrl);
+        externalLink.setVisible(VistaFeatures.instance().onlineApplication());
+        externalLink.setBody(new Model<String>(i18n.tr("Apply Now")));
+        add(externalLink);
 
     }
 
