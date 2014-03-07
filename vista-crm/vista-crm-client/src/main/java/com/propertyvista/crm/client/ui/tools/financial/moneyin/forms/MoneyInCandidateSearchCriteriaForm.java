@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin.forms;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -73,6 +77,12 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
         return TOP_ROW_HEIGHT + Math.max(portfolioSelector.getElement().getScrollHeight(), buildingSelector.getElement().getScrollHeight());
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        setTextBoxHeightFieldsHack();
+    }
+
     protected void onSuperSelectorResized() {
 
     }
@@ -115,6 +125,29 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
                 MoneyInCandidateSearchCriteriaForm.this.onSuperSelectorResized();
             }
         });//@formatter:on
+    }
+
+    private void setTextBoxHeightFieldsHack() {
+        // we use this hack to set height of text boxes same as selector boxes, because I haven't found any other way to equalize the height
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                try {
+                    if (isEditable()) {
+                        setTextBoxHeightFieldHack(get(proto().unit()).getDecorator().asWidget().getElement().getElementsByTagName("input").getItem(0));
+                        setTextBoxHeightFieldHack(get(proto().lease()).getDecorator().asWidget().getElement().getElementsByTagName("input").getItem(0));
+                        setTextBoxHeightFieldHack(get(proto().tenant()).getDecorator().asWidget().getElement().getElementsByTagName("input").getItem(0));
+                    }
+                } catch (Throwable e) {
+                    // this is a hack, hence it should suffer silently 
+                }
+            }
+        });
+
+    }
+
+    private void setTextBoxHeightFieldHack(Element el) {
+        el.getStyle().setHeight(2.5, Unit.EM);
     }
 
 }
