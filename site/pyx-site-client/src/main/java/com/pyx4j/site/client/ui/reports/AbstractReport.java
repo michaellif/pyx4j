@@ -451,6 +451,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             reportSettingsFormControlBar.disableModeToggle();
         }
         settingsFormPanel.setWidget(activeSettingsForm);
+        activeSettingsForm.reset();
         activeSettingsForm.populate(reportSettings);
     }
 
@@ -517,17 +518,15 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     }
 
     private void apply() {
+        activeSettingsForm.setVisitedRecursive();
         if (activeSettingsForm.isValid()) {
             AbstractReport.this.reportWidget.asWidget().setVisible(false);
             Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-
                 @Override
                 public void execute() {
                     presenter.apply(true);
                 }
             });
-        } else {
-            activeSettingsForm.setVisitedRecursive();
         }
     }
 
