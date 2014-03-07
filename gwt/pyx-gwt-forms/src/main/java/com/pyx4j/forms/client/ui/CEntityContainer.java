@@ -86,7 +86,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         }
 
         contentHolder = new SimplePanel();
-        contentHolder.setStyleName(CEntityContainerTheme.StyleName.CEntityContainerContentHolder.name());
+        contentHolder.setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
 
         containerPanel.add(contentHolder);
         applyAccessibilityRules();
