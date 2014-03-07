@@ -51,6 +51,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class AptDetailsPage extends BasePage {
 
@@ -145,9 +146,11 @@ public class AptDetailsPage extends BasePage {
         });
         add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, params).setBody(new Model<String>(i18n.tr("Request Appointment"))));
 
-        String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
-                ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, building.propertyCode().getValue());
-        add(new ExternalLink("applyNow", applyUrl).setBody(new Model<String>(i18n.tr("Apply Now"))));
+        if (VistaFeatures.instance().onlineApplication()) {
+            String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
+                    ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, building.propertyCode().getValue());
+            add(new ExternalLink("applyNow", applyUrl).setBody(new Model<String>(i18n.tr("Apply Now"))));
+        }
 
     }
 

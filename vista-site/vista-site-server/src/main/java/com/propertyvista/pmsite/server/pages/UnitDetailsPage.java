@@ -43,6 +43,7 @@ import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitDetailsPage extends BasePage {
 
@@ -98,10 +99,12 @@ public class UnitDetailsPage extends BasePage {
         });
         add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, params).setBody(new Model<String>(i18n.tr("Request Appointment"))));
 
-        String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
-                ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, fp.building().propertyCode().getValue(), //
-                ProspectPortalSiteMap.ARG_ILS_FLOORPLAN_ID, fp.name().getValue());
-        add(new ExternalLink("applyNow", applyUrl).setBody(new Model<String>(i18n.tr("Apply Now"))));
+        if (VistaFeatures.instance().onlineApplication()) {
+            String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
+                    ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, fp.building().propertyCode().getValue(), //
+                    ProspectPortalSiteMap.ARG_ILS_FLOORPLAN_ID, fp.name().getValue());
+            add(new ExternalLink("applyNow", applyUrl).setBody(new Model<String>(i18n.tr("Apply Now"))));
+        }
     }
 
     @Override
