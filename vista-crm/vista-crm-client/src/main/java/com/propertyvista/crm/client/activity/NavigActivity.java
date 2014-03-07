@@ -134,7 +134,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool());
         folder.addNavigItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool());
 
-        folder.addNavigItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool());
+        if (false) { // TODO L1 implementation
+            folder.addNavigItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool());
+        }
         list.add(folder);
 
         //Finance
