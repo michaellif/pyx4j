@@ -11,6 +11,8 @@
     
     <!-- OFF in Tomcat -->
 	<define name="consoleLogLevel" class="com.propertyvista.server.config.logback.ConsoleLogLevelProperty"/>
+    <!-- ON in Tomcat -->
+    <define name="logstashLogLevel" class="com.propertyvista.server.config.logback.LogstashLogLevelProperty"/>
     
     <conversionRule conversionWord="message" converterClass="com.pyx4j.logback.IStringViewMessageConverter" />
 
@@ -107,6 +109,28 @@ start new log file on each application start
         </encoder>
     </appender>
 
+    <appender name="FileAppender.json" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${logstashLogLevel}</level>
+        </filter>
+
+        <file>${container-home}/logs/${application-name}/logstash/${logs-name}.json</file>
+                
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${container-home}/logs/${application-name}/logstash/${logs-name}.%d{yyyy-MM-dd}.%i.json</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>3000KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- see fileNamePattern; disabled -->
+            <maxHistory>0</maxHistory>
+            <cleanHistoryOnStart>false</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeCallerInfo>true</includeCallerInfo>
+        </encoder> 
+    </appender>
+
     <logger name="com.propertyvista" level="DEBUG" />
     <logger name="com.pyx4j" level="DEBUG" />
     <logger name="org.apache" level="INFO" />
@@ -126,6 +150,7 @@ start new log file on each application start
         <appender-ref ref="ConsoleAppender.info" />
         <appender-ref ref="FileAppender" />
         <appender-ref ref="FileAppender.warn" />
+        <appender-ref ref="FileAppender.json" />
     </root>
 
 </configuration>
