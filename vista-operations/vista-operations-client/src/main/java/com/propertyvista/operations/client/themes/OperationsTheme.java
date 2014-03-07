@@ -18,14 +18,12 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.forms.client.ui.CEntityContainerTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
-import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme.StyleName;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -86,7 +84,6 @@ public class OperationsTheme extends VistaTheme {
         addTheme(new DefaultDataTableTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new CComponentTheme());
-        addTheme(new CEntityContainerTheme());
 
         addTheme(new DefaultTabTheme());
 
