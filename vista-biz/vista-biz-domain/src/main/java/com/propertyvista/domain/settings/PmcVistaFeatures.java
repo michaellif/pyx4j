@@ -28,16 +28,10 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 public interface PmcVistaFeatures extends IEntity {
 
     @NotNull
-    IPrimitive<Boolean> productCatalog();
-
-    @NotNull
     IPrimitive<Boolean> leases();
 
     @NotNull
     IPrimitive<Boolean> onlineApplication();
-
-    @NotNull
-    IPrimitive<Boolean> defaultProductCatalog();
 
     @NotNull
     IPrimitive<CountryOfOperation> countryOfOperation();

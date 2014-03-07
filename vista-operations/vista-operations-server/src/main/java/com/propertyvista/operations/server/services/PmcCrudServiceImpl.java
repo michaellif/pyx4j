@@ -77,10 +77,8 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     protected PmcDTO init(InitializationData initializationData) {
         PmcDTO entity = EntityFactory.create(PmcDTO.class);
 
-        entity.features().productCatalog().setValue(Boolean.TRUE);
         entity.features().leases().setValue(Boolean.TRUE);
         entity.features().onlineApplication().setValue(Boolean.FALSE);
-        entity.features().defaultProductCatalog().setValue(true);
         entity.features().yardiIntegration().setValue(Boolean.FALSE);
         entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         entity.features().tenantSureIntegration().setValue(Boolean.TRUE);
@@ -140,10 +138,6 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         for (PmcDnsName alias : bo.dnsNameAliases()) {
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
-        }
-
-        if (bo.features().yardiIntegration().getValue(false)) {
-            bo.features().defaultProductCatalog().setValue(Boolean.TRUE);
         }
 
         for (PmcYardiCredential yardiCredential : bo.yardiCredentials()) {

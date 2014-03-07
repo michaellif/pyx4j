@@ -40,10 +40,8 @@ public class PmcCreatorDev {
         pmc.name().setValue(pmcName + " Demo");
         pmc.dnsName().setValue(pmcName);
 
-        pmc.features().productCatalog().setValue(Boolean.TRUE);
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
-        pmc.features().defaultProductCatalog().setValue(Boolean.TRUE);
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
         pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
 
@@ -54,7 +52,6 @@ public class PmcCreatorDev {
         }
         if (!mini && pmcName.equals(DemoPmc.star.name())) {
             pmc.features().yardiIntegration().setValue(Boolean.TRUE);
-            pmc.features().defaultProductCatalog().setValue(Boolean.TRUE);
         }
 
         pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);

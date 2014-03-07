@@ -116,9 +116,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         addTab(createMarketingTab());
 
-        if (VistaFeatures.instance().productCatalog() /* && !VistaFeatures.instance().yardiIntegration() */) {
-            setTabEnabled(catalogTab = addTab(createCatalogTab()), !isEditable());
-        }
+        setTabEnabled(catalogTab = addTab(createCatalogTab()), !isEditable());
 
         addTab(createContactTab());
 
@@ -212,7 +210,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 new FormDecoratorBuilder(inject(proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))), 15)
                         .build());
 
-        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
+        if (!VistaFeatures.instance().yardiIntegration()) {
             flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().defaultProductCatalog()), 5).build());
         }
         flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().suspended()), 5).build());

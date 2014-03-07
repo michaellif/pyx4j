@@ -60,7 +60,6 @@ public class PmcDataModel extends MockDataModel<Pmc> {
         final Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.namespace().setValue(NamespaceManager.getNamespace());
 
-        pmc.features().productCatalog().setValue(Boolean.TRUE);
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
 

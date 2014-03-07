@@ -52,7 +52,6 @@ import com.propertyvista.interfaces.importer.model.FloorplanAmenityIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingImporter extends ImportPersister {
 
@@ -181,7 +180,7 @@ public class BuildingImporter extends ImportPersister {
 
         ARCode arCode = null;
 
-        if (VistaFeatures.instance().productCatalog()) {
+        {
             EntityQueryCriteria<ARCode> serviceCriteria = EntityQueryCriteria.create(ARCode.class);
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ARCode.Type.Residential));
             arCode = Persistence.service().retrieve(serviceCriteria);
@@ -257,23 +256,21 @@ public class BuildingImporter extends ImportPersister {
 
                     counters.units += items.size();
 
-                    if (VistaFeatures.instance().productCatalog()) {
-                        for (AptUnit unit : items) {
-                            ProductItem product = EntityFactory.create(ProductItem.class);
-                            BigDecimal price = unit.financial()._marketRent().getValue();
-                            product.name().setValue(arCode.name().getStringView());
-                            product.price().setValue(price);
-                            product.description().setValue(arCode.type().getStringView() + " description");
-                            product.element().set(unit);
+                    for (AptUnit unit : items) {
+                        ProductItem product = EntityFactory.create(ProductItem.class);
+                        BigDecimal price = unit.financial()._marketRent().getValue();
+                        product.name().setValue(arCode.name().getStringView());
+                        product.price().setValue(price);
+                        product.description().setValue(arCode.type().getStringView() + " description");
+                        product.element().set(unit);
 
-                            products.add(product);
-                        }
+                        products.add(product);
                     }
                 }
             }
         }
 
-        if (VistaFeatures.instance().productCatalog()) {
+        {
             List<Service> services = new ArrayList<Service>();
             Service service = EntityFactory.create(Service.class);
             service.code().set(arCode);

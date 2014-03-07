@@ -97,8 +97,8 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
             catalogMarketPricesPanel.setVisible(false);
             get(proto().financial()._marketRent()).setVisible(true);
         } else {
-            get(proto().financial()._marketRent()).setVisible(!VistaFeatures.instance().productCatalog());
-            catalogMarketPricesPanel.setVisible(VistaFeatures.instance().productCatalog() && !getValue().building().defaultProductCatalog().isBooleanTrue());
+            get(proto().financial()._marketRent()).setVisible(false);
+            catalogMarketPricesPanel.setVisible(!getValue().building().defaultProductCatalog().getValue(false));
         }
 
         updateSelectedLegalAddress();
@@ -151,7 +151,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         leftRow = Math.max(leftRow, rightRow);
 
-        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
+        if (!VistaFeatures.instance().yardiIntegration()) {
             catalogMarketPricesPanel.setH1(0, 0, 2, proto().marketPrices().getMeta().getCaption());
             catalogMarketPricesPanel.setWidget(1, 0, 2, inject(proto().marketPrices(), new UnitServicePriceFolder()));
             flexPanel.setWidget(++leftRow, 0, 2, catalogMarketPricesPanel);

@@ -15,7 +15,6 @@ package com.propertyvista.operations.server.upgrade.u_1_1_0;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +50,6 @@ import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.portal.server.preloader.ReferenceDataPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
-import com.propertyvista.server.TaskRunner;
 
 public class UpgradeProcedure110 implements UpgradeProcedure {
 
@@ -122,17 +120,17 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         }
         if (setDefaultCatalog) {
             final Pmc pmc = VistaDeployment.getCurrentPmc();
-            if (pmc.features().defaultProductCatalog().getValue(false)) {
-                pmc.features().defaultProductCatalog().setValue(true);
-                TaskRunner.runInOperationsNamespace(new Callable<Void>() {
-                    @Override
-                    public Void call() {
-                        Persistence.service().persist(pmc.features());
-                        return null;
-                    }
-                });
-                log.info("defaultProductCatalog enabled for PMC {}", pmc.dnsName().getValue());
-            }
+//            if (pmc.features().defaultProductCatalog().getValue(false)) {
+//                pmc.features().defaultProductCatalog().setValue(true);
+//                TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+//                    @Override
+//                    public Void call() {
+//                        Persistence.service().persist(pmc.features());
+//                        return null;
+//                    }
+//                });
+//                log.info("defaultProductCatalog enabled for PMC {}", pmc.dnsName().getValue());
+//            }
         }
     }
 

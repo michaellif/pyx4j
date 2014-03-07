@@ -29,7 +29,6 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
 
@@ -37,20 +36,12 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
 
     @Override
     public void updateUnitMarketPrice(Building building) {
-        if (VistaFeatures.instance().productCatalog()) {
-            UnitMarketPriceCalculator.updateUnitMarketPrice(building);
-        } else {
-            log.info("productCatalog feature disabled");
-        }
+        UnitMarketPriceCalculator.updateUnitMarketPrice(building);
     }
 
     @Override
     public void updateUnitMarketPrice(Service service) {
-        if (VistaFeatures.instance().productCatalog()) {
-            UnitMarketPriceCalculator.updateUnitMarketPrice(service);
-        } else {
-            log.info("productCatalog feature disabled");
-        }
+        UnitMarketPriceCalculator.updateUnitMarketPrice(service);
     }
 
     @Override

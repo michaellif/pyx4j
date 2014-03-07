@@ -58,16 +58,11 @@ public class VistaFeatures {
         public static PmcVistaFeatures getCurrentVistaFeatures() {
             PmcVistaFeatures curFeatures = threadLocale.get();
             // add calculated values
-            if (curFeatures.yardiIntegration().isBooleanTrue()) {
+            if (curFeatures.yardiIntegration().getValue(false)) {
                 curFeatures.yardiInterfaces().setValue(VistaDeployment.getPmcYardiCredentials().size());
             }
 
             return curFeatures;
-        }
-
-        @Override
-        public boolean productCatalog() {
-            return threadLocale.get().productCatalog().getValue(Boolean.FALSE);
         }
 
         @Override
@@ -78,11 +73,6 @@ public class VistaFeatures {
         @Override
         public boolean onlineApplication() {
             return threadLocale.get().onlineApplication().getValue(Boolean.FALSE);
-        }
-
-        @Override
-        public boolean defaultProductCatalog() {
-            return threadLocale.get().defaultProductCatalog().getValue(Boolean.FALSE);
         }
 
         @Override
