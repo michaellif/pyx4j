@@ -56,6 +56,7 @@ import com.propertyvista.domain.settings.ILSEmailConfig;
 import com.propertyvista.domain.settings.ILSVendorConfig;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
 
@@ -76,7 +77,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         entity.suspended().setValue(false);
         entity.marketing().visibility().setValue(PublicVisibilityType.global);
-        entity.defaultProductCatalog().setValue(true);
+        entity.defaultProductCatalog().setValue(!VistaFeatures.instance().yardiIntegration());
         entity.ilsEmailConfigured().setValue(Persistence.service().count(EntityQueryCriteria.create(ILSEmailConfig.class)) > 0);
 
         return entity;

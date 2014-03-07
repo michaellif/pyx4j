@@ -32,6 +32,7 @@ import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingFacadeImpl implements BuildingFacade {
 
@@ -51,7 +52,7 @@ public class BuildingFacadeImpl implements BuildingFacade {
             building.integrationSystemId().setValue(IntegrationSystem.internal);
         }
         if (building.defaultProductCatalog().isNull()) {
-            building.defaultProductCatalog().setValue(true);
+            building.defaultProductCatalog().setValue(!VistaFeatures.instance().yardiIntegration());
         }
         Persistence.service().merge(building);
 
