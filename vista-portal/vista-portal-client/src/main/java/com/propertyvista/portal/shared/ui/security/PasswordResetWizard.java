@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.password.HasDescription;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
@@ -64,6 +65,12 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPassword())).assistantWidget(passwordStrengthWidget).build());
         mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).build());
+
+        if ((passwordStrengthRule != null) && (passwordStrengthRule instanceof HasDescription)) {
+            get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
+        } else {
+            get(proto().newPassword()).setTooltip(get(proto().newPassword()).getTooltip());
+        }
 
         return mainPanel;
     }
