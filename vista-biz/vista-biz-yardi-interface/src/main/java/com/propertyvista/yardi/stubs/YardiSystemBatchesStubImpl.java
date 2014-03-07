@@ -37,11 +37,9 @@ import com.yardi.ws.operations.transactionsbatch.PostReceiptBatch;
 import com.yardi.ws.operations.transactionsbatch.PostReceiptBatchResponse;
 import com.yardi.ws.operations.transactionsbatch.TransactionXml_type1;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
@@ -61,7 +59,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             OpenReceiptBatch request = new OpenReceiptBatch();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -100,7 +98,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             AddReceiptsToBatch request = new AddReceiptsToBatch();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -152,7 +150,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             PostReceiptBatch request = new PostReceiptBatch();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -193,7 +191,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             CancelReceiptBatch request = new CancelReceiptBatch();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());

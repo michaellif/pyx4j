@@ -33,7 +33,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
-import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
+import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.VistaNamespace;
@@ -162,9 +162,9 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         log.info("Created Lease: {}", lease.getPrimaryKey().toString());
 
         try {
-            ServerSideFactory.create(YardiApplicationFacade.class).validateApplicationAcceptance(lease.unit().building());
+            ServerSideFactory.create(YardiLeaseApplicationFacade.class).validateApplicationAcceptance(lease.unit().building());
 
-            ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
+            ServerSideFactory.create(YardiLeaseApplicationFacade.class).createApplication(lease);
             lease = retrieveLease();
             log.info("Created Guest: {}", lease.leaseApplication().yardiApplicationId().getValue());
 
@@ -172,7 +172,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 //            addCoTenant();
 //            addGuarantor();
 
-            ServerSideFactory.create(YardiApplicationFacade.class).addLeaseParticipants(lease);
+            ServerSideFactory.create(YardiLeaseApplicationFacade.class).addLeaseParticipants(lease);
             lease = retrieveLease();
             Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
             for (LeaseParticipant<?> p : lease.leaseParticipants()) {
@@ -185,12 +185,12 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
             log.info("Unit held for: {}", lease.leaseApplication().yardiApplicationId().getValue());
 
             if (false) {
-                ServerSideFactory.create(YardiApplicationFacade.class).unreserveUnit(retrieveLease());
+                ServerSideFactory.create(YardiLeaseApplicationFacade.class).unreserveUnit(retrieveLease());
                 lease = retrieveLease();
                 log.info("Unit released for: {}", lease.leaseApplication().yardiApplicationId().getValue());
             }
 
-            ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
+            ServerSideFactory.create(YardiLeaseApplicationFacade.class).approveApplication(lease);
 
             lease = retrieveLease();
             log.info("Signed lease: {}", lease.leaseId().getValue());

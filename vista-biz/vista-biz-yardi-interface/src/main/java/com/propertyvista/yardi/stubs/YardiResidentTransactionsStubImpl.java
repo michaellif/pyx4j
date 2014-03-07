@@ -49,13 +49,11 @@ import com.yardi.ws.operations.transactions.TransactionXml_type1;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.UnableToPostTerminalYardiServiceException;
 import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
@@ -100,7 +98,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             GetPropertyConfigurations request = new GetPropertyConfigurations();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -145,7 +143,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             GetResidentTransactions_Login request = new GetResidentTransactions_Login();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -198,7 +196,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             GetResidentTransaction_Login request = new GetResidentTransaction_Login();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -244,7 +242,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             ImportResidentTransactions_Login request = new ImportResidentTransactions_Login();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -295,7 +293,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             GetUnitInformation_Login request = new GetUnitInformation_Login();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -344,7 +342,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             GetResidentsLeaseCharges_Login request = new GetResidentsLeaseCharges_Login();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -401,7 +399,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             GetResidentLeaseCharges_Login request = new GetResidentLeaseCharges_Login();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());

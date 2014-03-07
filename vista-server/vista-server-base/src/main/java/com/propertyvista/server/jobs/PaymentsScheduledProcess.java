@@ -17,6 +17,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
@@ -40,8 +42,19 @@ public class PaymentsScheduledProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).processPmcScheduledPayments(context.getExecutionMonitor(), paymentType,
-                new LogicalDate(context.getForDate()));
+        boolean yardiIntegration = VistaDeployment.getCurrentPmc().features().yardiIntegration().isBooleanTrue();
+        try {
+            if (yardiIntegration) {
+                ServerSideFactory.create(YardiConfigurationFacade.class).initYardiCredentialCache();
+            }
+
+            ServerSideFactory.create(PaymentProcessFacade.class).processPmcScheduledPayments(context.getExecutionMonitor(), paymentType,
+                    new LogicalDate(context.getForDate()));
+        } finally {
+            if (yardiIntegration) {
+                ServerSideFactory.create(YardiConfigurationFacade.class).clearYardiCredentialCache();
+            }
+        }
     }
 
     @Override

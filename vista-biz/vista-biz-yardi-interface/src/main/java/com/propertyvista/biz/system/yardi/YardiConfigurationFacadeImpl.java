@@ -7,33 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 7, 2014
- * @author vlads
+ * Created on Mar 7, 2014
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.biz.system.yardi;
 
 import java.util.List;
 
-import com.pyx4j.config.server.ServerSideFactory;
-
-import com.propertyvista.biz.system.yardi.YardiCredentials;
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.domain.tenant.lease.Lease;
 
-public class AbstractYardiFacadeImpl {
+public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
 
-    public static PmcYardiCredential getPmcYardiCredential(Lease leaseId) {
-        return getPmcYardiCredential(ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseId));
+    @Override
+    public void initYardiCredentialCache() {
+        YardiCredentials.init();
     }
 
-    public static PmcYardiCredential getPmcYardiCredential(Building buildingId) {
-        return YardiCredentials.get(buildingId);
+    @Override
+    public void clearYardiCredentialCache() {
+        YardiCredentials.clear();
     }
 
-    public static List<PmcYardiCredential> getPmcYardiCredentials() {
+    @Override
+    public PmcYardiCredential getYardiCredential(Building building) {
+        return YardiCredentials.get(building);
+    }
+
+    @Override
+    public List<PmcYardiCredential> getYardiCredentials() {
         return YardiCredentials.getAll();
     }
+
 }

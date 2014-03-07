@@ -40,11 +40,9 @@ import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 import com.yardi.ws.operations.requests.GetServiceRequest_SearchResponse;
 import com.yardi.ws.operations.requests.ServiceRequestXml_type0;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
@@ -63,7 +61,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             GetPropertyConfigurations request = new GetPropertyConfigurations();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -115,7 +113,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             GetCustomValues request = new GetCustomValues();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -156,7 +154,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             init(Action.GetServiceRequests);
 
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -203,7 +201,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             CreateOrEditServiceRequests request = new CreateOrEditServiceRequests();
             request.setUserName(yc.username().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setPassword(yc.password().number().getValue());
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());

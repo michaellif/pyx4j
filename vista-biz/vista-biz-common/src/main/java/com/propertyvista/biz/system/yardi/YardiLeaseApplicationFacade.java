@@ -19,7 +19,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface YardiApplicationFacade {
+public interface YardiLeaseApplicationFacade {
     /**
      * Create GuestCard; set pId in Lease.leaseId
      * Inside is UnitOfWork

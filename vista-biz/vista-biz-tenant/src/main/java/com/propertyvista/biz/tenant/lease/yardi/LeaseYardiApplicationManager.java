@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
+import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -83,7 +83,7 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
     @Override
     public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         try {
-            ServerSideFactory.create(YardiApplicationFacade.class).createApplication(leaseId);
+            ServerSideFactory.create(YardiLeaseApplicationFacade.class).createApplication(leaseId);
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
         }
@@ -94,14 +94,14 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
         if (lease._applicant().yardiApplicantId().isNull()) {
             try {
-                ServerSideFactory.create(YardiApplicationFacade.class).addLeaseParticipants(lease);
+                ServerSideFactory.create(YardiLeaseApplicationFacade.class).addLeaseParticipants(lease);
             } catch (YardiServiceException e) {
                 throw new UserRuntimeException(i18n.tr("Posting Applicants to Yardi failed") + "\n" + e.getMessage(), e);
             }
         }
 
         try {
-            lease = ServerSideFactory.create(YardiApplicationFacade.class).approveApplication(lease);
+            lease = ServerSideFactory.create(YardiLeaseApplicationFacade.class).approveApplication(lease);
         } catch (YardiServiceException e) {
             throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
         }

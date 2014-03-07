@@ -30,7 +30,6 @@ import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -38,9 +37,9 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.yardi.services.YardiGuestManagementService;
 import com.propertyvista.yardi.services.YardiGuestManagementService.SignLeaseResults;
 
-public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implements YardiApplicationFacade {
+public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl implements YardiLeaseApplicationFacade {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiApplicationFacadeImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiLeaseApplicationFacadeImpl.class);
 
     @Override
     public void createApplication(final Lease leaseId) throws YardiServiceException {
@@ -179,7 +178,7 @@ public class YardiApplicationFacadeImpl extends AbstractYardiFacadeImpl implemen
     @Override
     public void validateApplicationAcceptance(Building buildingId) throws UserRuntimeException {
         Building building = Persistence.service().retrieve(Building.class, buildingId.getPrimaryKey());
-        PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(building);
+        PmcYardiCredential yc = getPmcYardiCredential(building);
         try {
             YardiGuestManagementService.getInstance().validateSettings(yc, building.propertyCode().getValue());
         } catch (YardiServiceException e) {

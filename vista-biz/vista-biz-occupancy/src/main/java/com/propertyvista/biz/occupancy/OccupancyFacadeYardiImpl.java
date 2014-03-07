@@ -33,7 +33,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.biz.system.yardi.YardiApplicationFacade;
+import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -202,7 +202,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
         if (lease.leaseApplication().yardiApplicationId().isNull()) {
             // Application not created, Create it first
             try {
-                ServerSideFactory.create(YardiApplicationFacade.class).createApplication(lease);
+                ServerSideFactory.create(YardiLeaseApplicationFacade.class).createApplication(lease);
             } catch (YardiServiceException e) {
                 throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
             }
@@ -215,7 +215,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
             public Void execute() throws RuntimeException {
                 new ReservationManager().reserve(lease, durationHours);
                 try {
-                    ServerSideFactory.create(YardiApplicationFacade.class).holdUnit(lease);
+                    ServerSideFactory.create(YardiLeaseApplicationFacade.class).holdUnit(lease);
                 } catch (YardiServiceException e) {
                     throw new UserRuntimeException(i18n.tr("Reserve Unit failed") + "\n" + e.getMessage(), e);
                 }
@@ -233,7 +233,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
             public Boolean execute() throws RuntimeException {
                 if (new ReservationManager().unreserveIfReservered(leaseId)) {
                     try {
-                        ServerSideFactory.create(YardiApplicationFacade.class).unreserveUnit(leaseId);
+                        ServerSideFactory.create(YardiLeaseApplicationFacade.class).unreserveUnit(leaseId);
                     } catch (YardiServiceException e) {
                         throw new UserRuntimeException(i18n.tr("Unreserve Unit failed") + "\n" + e.getMessage(), e);
                     }

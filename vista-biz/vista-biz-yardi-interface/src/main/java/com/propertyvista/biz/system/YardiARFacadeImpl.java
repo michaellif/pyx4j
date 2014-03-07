@@ -24,8 +24,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
+import com.propertyvista.biz.system.yardi.YardiCredentials;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -45,7 +45,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
     @Override
     public void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
-        for (PmcYardiCredential yc : VistaDeployment.getPmcYardiCredentials()) {
+        for (PmcYardiCredential yc : getPmcYardiCredentials()) {
             YardiResidentTransactionsService.getInstance().updateAll(yc, executionMonitor);
         }
     }
@@ -70,7 +70,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
 
         Persistence.ensureRetrieve(building, AttachLevel.Attached);
 
-        YardiResidentTransactionsService.getInstance().updateProductCatalog(VistaDeployment.getPmcYardiCredential(building), building);
+        YardiResidentTransactionsService.getInstance().updateProductCatalog(getPmcYardiCredential(building), building);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
         assert VistaFeatures.instance().yardiIntegration();
 
         YardiPaymentBatchContext paymentBatchContext = new YardiPaymentBatchContext();
-        paymentBatchContext.ensureOpenBatch(VistaDeployment.getPmcYardiCredential(building), building.propertyCode().getValue());
+        paymentBatchContext.ensureOpenBatch(getPmcYardiCredential(building), building.propertyCode().getValue());
 
         return paymentBatchContext;
     }
@@ -93,12 +93,12 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
             Building buildingId = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(receipt.billingAccount().lease());
             String propertyCode = Persistence.service().retrieveMember(buildingId.propertyCode());
 
-            YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(buildingId), receipt, propertyCode,
+            YardiSystemBatchesService.getInstance().postReceipt(YardiCredentials.get(buildingId), receipt, propertyCode,
                     (YardiPaymentBatchContext) paymentBatchContext);
         } else {
             Persistence.ensureRetrieve(receipt.billingAccount().lease().unit().building(), AttachLevel.Attached);
             Building building = receipt.billingAccount().lease().unit().building();
-            YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(building), receipt, building.propertyCode().getValue(),
+            YardiSystemBatchesService.getInstance().postReceipt(YardiCredentials.get(building), receipt, building.propertyCode().getValue(),
                     (YardiPaymentBatchContext) paymentBatchContext);
         }
     }
@@ -116,7 +116,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
     public List<YardiPropertyConfiguration> getPropertyConfigurations() throws YardiServiceException, RemoteException {
         List<YardiPropertyConfiguration> propertyConfigurations = new ArrayList<YardiPropertyConfiguration>();
 
-        for (PmcYardiCredential yc : VistaDeployment.getPmcYardiCredentials()) {
+        for (PmcYardiCredential yc : getPmcYardiCredentials()) {
             propertyConfigurations.addAll(YardiResidentTransactionsService.getInstance().getPropertyConfigurations(yc));
         }
 
@@ -125,7 +125,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
 
     @Override
     public void updateUnitAvailability(AptUnit aptUnit) throws YardiServiceException, RemoteException {
-        YardiILSGuestCardService.getInstance().updateUnitAvailability(VistaDeployment.getPmcYardiCredential(aptUnit.building()), aptUnit);
+        YardiILSGuestCardService.getInstance().updateUnitAvailability(getPmcYardiCredential(aptUnit.building()), aptUnit);
     }
 
 }
