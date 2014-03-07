@@ -28,12 +28,16 @@ public class ExtraActivityPortalServiceImpl implements ExtraActivityPortalServic
 
     @Override
     public void retreiveWheather(AsyncCallback<WeatherGadgetDTO> callback) {
-        AptUnit unit = ResidentPortalContext.getUnit();
-        if (unit == null || unit.isEmpty()) {
+        try {
+            AptUnit unit = ResidentPortalContext.getUnit();
+            if (unit == null || unit.isEmpty()) {
+                callback.onSuccess(null);
+                return;
+            }
+            WeatherGadgetDTO forecasts = ServerSideFactory.create(WeatherForecaster.class).currentWeather(AddressRetriever.getUnitLegalAddress(unit));
+            callback.onSuccess(forecasts);
+        } catch (Exception e) {
             callback.onSuccess(null);
-            return;
         }
-        WeatherGadgetDTO forecasts = ServerSideFactory.create(WeatherForecaster.class).currentWeather(AddressRetriever.getUnitLegalAddress(unit));
-        callback.onSuccess(forecasts);
     }
 }
