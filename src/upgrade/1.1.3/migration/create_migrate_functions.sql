@@ -1567,7 +1567,14 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.product_item '
                 ||'SET  element_discriminator = ''Parking'' '
                 ||'WHERE element_discriminator = ''Parking_BuildingElement'' ';
-        
+
+        EXECUTE 'UPDATE '||v_schema_name||'.product_item '
+                ||'SET  element_discriminator = ''Roof'' '
+                ||'WHERE element_discriminator = ''Roof_BuildingElement'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.product_item '
+                ||'SET  element_discriminator = ''LockerArea'' '
+                ||'WHERE element_discriminator = ''LockerArea_BuildingElement'' ';                        
         
         -- restrictions_policy
         
@@ -1694,7 +1701,7 @@ BEGIN
                 ||'             FROM        '||v_schema_name||'.product p '
                 ||'             JOIN        '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
                 ||'             WHERE       p.id_discriminator = ''feature'' '
-                ||'             AND         pv.id NOT IN (SELECT DISTINCT product FROM beona.product_item)) '
+                ||'             AND         pv.id NOT IN (SELECT DISTINCT product FROM '||v_schema_name||'.product_item)) '
                 ||'UPDATE   '||v_schema_name||'.product_item pi '
                 ||'SET      product = t2.pv_id '
                 ||'FROM    (SELECT      t0.pi_id, t1.pv_id  '
