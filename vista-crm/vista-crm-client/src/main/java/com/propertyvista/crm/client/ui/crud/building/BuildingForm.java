@@ -156,7 +156,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         billingCyclesTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.Billing));
 
         if (catalogTab != null) {
-            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog) && !getValue().defaultProductCatalog().isBooleanTrue());
+            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog) && !getValue().defaultProductCatalog().getValue(false));
         }
 
         fillMerchantAccountStatus(getValue().merchantAccount());
