@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.upload;
 
+import com.propertyvista.domain.blob.CommunicationMessageAttachmentBlob;
 import com.propertyvista.domain.blob.CustomerPictureBlob;
 import com.propertyvista.domain.blob.EmployeeSignatureBlob;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
@@ -25,6 +26,7 @@ import com.propertyvista.domain.blob.NoteAttachmentBlob;
 import com.propertyvista.domain.blob.ProofOfAssetDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
 import com.propertyvista.domain.blob.operations.PmcDocumentBlob;
+import com.propertyvista.domain.communication.CommunicationMessageAttachment;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
@@ -45,6 +47,7 @@ public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
         register(CustomerPicture.class, CustomerPictureBlob.class);
         register(MaintenanceRequestPicture.class, MaintenanceRequestPictureBlob.class);
         register(InsuranceCertificateScan.class, InsuranceCertificateScanBlob.class);
+        register(CommunicationMessageAttachment.class, CommunicationMessageAttachmentBlob.class);
         register(EmployeeSignature.class, EmployeeSignatureBlob.class);
         register(ProofOfEmploymentDocumentFile.class, ProofOfEmploymentDocumentBlob.class);
         register(ProofOfAssetDocumentFile.class, ProofOfAssetDocumentBlob.class);

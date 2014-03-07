@@ -26,6 +26,9 @@ import com.propertyvista.portal.resident.activity.LandingActivity;
 import com.propertyvista.portal.resident.activity.LeaseContextSelectionActivity;
 import com.propertyvista.portal.resident.activity.PortalTermsActivity;
 import com.propertyvista.portal.resident.activity.SignUpActivity;
+import com.propertyvista.portal.resident.activity.communication.CommunicationMessagePageActivity;
+import com.propertyvista.portal.resident.activity.communication.CommunicationMessageViewActivity;
+import com.propertyvista.portal.resident.activity.communication.CommunicationMessageWizardActivity;
 import com.propertyvista.portal.resident.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayConfirmationActivity;
@@ -170,7 +173,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new LeaseSigningWizardActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation) {
                         activity = new LeaseSigningConfirmationActivity(appPlace);
-
+// Communication
+                    } else if (place instanceof ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageWizard) {
+                        activity = new CommunicationMessageWizardActivity(appPlace);
+                    } else if (place instanceof ResidentPortalSiteMap.CommunicationMessage.CommunicationMessagePage) {
+                        activity = new CommunicationMessagePageActivity(appPlace);
+                    } else if (place instanceof ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageView) {
+                        activity = new CommunicationMessageViewActivity();
 // Internals
                     } else if (place instanceof Login) {
                         activity = new LandingActivity(place);

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -25,7 +25,6 @@ import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
-import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme.StyleName;
 import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
@@ -137,6 +136,8 @@ public class CrmTheme extends VistaTheme {
                 addStyle(style);
             }
         });
+
+        addTheme(new CommunicationCrmTheme());
 
         initGeneralStyles();
         initBodyStyles();
@@ -802,7 +803,7 @@ public class CrmTheme extends VistaTheme {
         Style style;
 
         // some tweaks for default data grid styles
-        // warning: THIS WILL ONLY WORK WHEN GWT Complier doesn't try to minify selector names (http://www.gwtproject.org/doc/latest/DevGuideClientBundle.html#CssResource)  
+        // warning: THIS WILL ONLY WORK WHEN GWT Complier doesn't try to minify selector names (http://www.gwtproject.org/doc/latest/DevGuideClientBundle.html#CssResource)
         style = new Style("." + VistaDataGridStyles.VistaDataGridHeader.name());
         style.addProperty("border-bottom", "2px solid #6F7277");
         style.addProperty("color", "4B4A4A");
@@ -1103,7 +1104,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("background-color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
-        // DATA GRID        
+        // DATA GRID
         // MultiSelectorCell styles
         style = new Style("." + MultiSelectorCell.Styles.MultiSlectorPresetMenu.name());
         style.addProperty("width", "100px");

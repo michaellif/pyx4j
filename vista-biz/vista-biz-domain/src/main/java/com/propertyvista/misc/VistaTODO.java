@@ -78,4 +78,6 @@ public class VistaTODO {
      */
     public static boolean POSTING_SPEED = false;
 
+    public static boolean COMMUNICATION_FUNCTIONALITY_ENABLED = true;
+
 }

@@ -10,7 +10,6 @@ import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface HeaderView extends IsWidget, IsView {
 
-
     void setPresenter(Presenter presenter);
 
     interface Presenter {
@@ -25,7 +24,7 @@ public interface HeaderView extends IsWidget, IsView {
 
         void showAccount();
 
-        void showMessages();
+        void showMessages(int x, int y);
 
         void showSettings();
 
@@ -49,4 +48,6 @@ public interface HeaderView extends IsWidget, IsView {
     void setDisplayThisIsProductionWarning(boolean displayThisIsProductionWarning);
 
     void setDisplayThisIsDemoWarning(boolean displayThisIsDemoWarning);
+
+    void setNumberOfMessages(int messagesNum);
 }

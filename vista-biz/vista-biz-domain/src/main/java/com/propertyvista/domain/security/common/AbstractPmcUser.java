@@ -17,9 +17,11 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.TABLE_PER_CLASS)
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface AbstractPmcUser extends AbstractUser {
+public interface AbstractPmcUser extends AbstractUser, CommunicationEndpoint {
 
 }

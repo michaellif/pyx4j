@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Toolbar;
@@ -28,6 +29,7 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
@@ -49,6 +51,8 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
     private Anchor login;
 
     private Anchor home;
+
+    private Anchor messages;
 
     private Anchor settings;
 
@@ -148,6 +152,17 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         });
         greetings.ensureDebugId("account");
 
+        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
+            messages = new Anchor(null);
+            messages.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.showMessages(messages.getAbsoluteLeft(), messages.getAbsoluteTop());
+                }
+            });
+            messages.ensureDebugId("messages");
+            messages.setHTML(i18n.tr("Messages"));
+        }
         logout = new Anchor(null);
         logout.addClickHandler(new ClickHandler() {
             @Override
@@ -186,6 +201,7 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         settings.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+
                 presenter.showSettings();
             }
         });
@@ -216,6 +232,9 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         toolbar.addItem(thisIsDemo);
 
         toolbar.addItem(greetings);
+        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
+            toolbar.addItem(messages);
+        }
         toolbar.addItem(home);
         toolbar.addItem(settings);
         toolbar.addItem(login);
@@ -237,6 +256,9 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         login.setVisible(false);
         home.setVisible(false);
         settings.setVisible(false);
+        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
+            messages.setVisible(false);
+        }
         getSatisfaction.setVisible(false);
         greetings.setVisible(false);
         greetings.setHTML("");
@@ -253,6 +275,9 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         logout.setVisible(true);
         login.setVisible(false);
         home.setVisible(true);
+        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
+            messages.setVisible(true);
+        }
         settings.setVisible(true);
         getSatisfaction.setVisible(true);
         greetings.setHTML(i18n.tr("Welcome {0}", userName));
@@ -290,4 +315,12 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         thisIsDemo.setVisible(displayThisIsDemoWarning);
     }
 
+    @Override
+    public void setNumberOfMessages(int number) {
+        if (number > 0) {
+            messages.setText("Messages (" + String.valueOf(number) + ")");
+        } else {
+            messages.setText("Messages");
+        }
+    }
 }

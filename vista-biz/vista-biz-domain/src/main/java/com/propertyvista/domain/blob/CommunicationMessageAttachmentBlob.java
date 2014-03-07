@@ -7,23 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 2, 2012
- * @author stanp
+ * Created on Apr 4, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.communication;
+package com.propertyvista.domain.blob;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-public interface Recipient extends IEntity {
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface CommunicationMessageAttachmentBlob extends IFileBlob {
 
-    enum RecipientType {
-        person, company, group
-    }
-
-    IPrimitive<RecipientType> recipientType();
-
-    IList<Contact> contactList();
+    /**
+     * This is actual BLOB of the Image or PDF stored on server
+     */
+    @Override
+    @RpcTransient
+    @Length(1 * 1024 * 1024)
+    IPrimitive<byte[]> data();
 }

@@ -19,6 +19,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
+import com.propertyvista.crm.rpc.CrmSiteMap.Communication;
 import com.propertyvista.crm.rpc.CrmSiteMap.Dashboard;
 import com.propertyvista.crm.rpc.CrmSiteMap.Finance;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -99,6 +100,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
@@ -204,5 +206,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(CustomerCreditCheckLongReportDTO.class, Tenants.CustomerCreditCheckLongReport.class, defaultImage);
 
         AppPlaceEntityMapper.register(MoneyInBatchDTO.class, Finance.MoneyIn.Batch.class, defaultImage);
+
+        AppPlaceEntityMapper.register(CommunicationMessageDTO.class, Communication.CommunicationMessage.class, defaultImage);
     }
 }

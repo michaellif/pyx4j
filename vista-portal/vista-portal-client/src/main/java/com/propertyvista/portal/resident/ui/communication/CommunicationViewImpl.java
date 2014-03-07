@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -11,13 +11,17 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.resident.ui.communication;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -32,14 +36,14 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.domain.communication.Message;
+import com.propertyvista.dto.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
-
-    private CommunicationPresenter presenter;
 
     private final DockLayoutPanel contentPanel;
 
@@ -102,15 +106,14 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
     }
 
     @Override
-    public void setPresenter(CommunicationPresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void populate(List<Message> messages) {
+    public void populate(List<CommunicationMessageDTO> messages) {
         mainHolder.clear();
-        for (final Message message : messages) {
-            mainHolder.add(new MessagePanel(message));
+        int messagesNum = messages == null || messages.isEmpty() ? 0 : messages.size();
+        headerHolder.setNumberOfMessages(messagesNum);
+        if (messagesNum > 0) {
+            for (final CommunicationMessageDTO message : messages) {
+                mainHolder.add(new MessagePanel(message));
+            }
         }
     }
 
@@ -126,11 +129,19 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         private final Label senderField;
 
-        public MessagePanel(Message message) {
+        public MessagePanel(final CommunicationMessageDTO message) {
             setStyleName(PortalRootPaneTheme.StyleName.CommMessage.name());
 
             photoImage = new Image(PortalImages.INSTANCE.avatar2());
             subjectField = new Label(message.subject().getStringView());
+            getElement().getStyle().setCursor(Cursor.POINTER);
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AppSite.getPlaceController()
+                            .goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessagePage(message.thread().getPrimaryKey()));
+                }
+            });
             messageField = new Label(message.text().getStringView());
             dateField = new Label(message.date().getStringView());
             senderField = new Label("John Smith");
@@ -154,7 +165,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
     class HeaderHolder extends FlowPanel {
 
-        private final Label messagesLabel;
+        private final Anchor messagesAnchor;
 
         private final Image writeActionImage;
 
@@ -164,21 +175,37 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
             getElement().getStyle().setPosition(Position.RELATIVE);
 
-            messagesLabel = new Label("Messages(5)");
-            messagesLabel.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderTitle.name());
-            messagesLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            messagesAnchor = new Anchor("Messages", new Command() {
+
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageView());
+                }
+            });
+            messagesAnchor.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderTitle.name());
+            messagesAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
             writeActionImage = new Image(PortalImages.INSTANCE.writeMessage());
             writeActionImage.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
             writeActionImage.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-            add(messagesLabel);
+            writeActionImage.getElement().getStyle().setCursor(Cursor.POINTER);
+            writeActionImage.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageWizard());
+                }
+            });
+            add(messagesAnchor);
             add(writeActionImage);
 
         }
 
         public void setNumberOfMessages(int number) {
-            messagesLabel.setText(String.valueOf(number));
+            if (number > 0) {
+                messagesAnchor.setText("Messages (" + String.valueOf(number) + ")");
+            } else {
+                messagesAnchor.setText("Messages");
+            }
         }
     }
 

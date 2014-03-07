@@ -17,7 +17,7 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.resident.activity.CommunicationActivity;
+import com.propertyvista.portal.resident.activity.communication.CommunicationActivity;
 
 public class CommunicationActivityMapper implements ActivityMapper {
 

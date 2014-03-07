@@ -26,7 +26,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 
-import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.NotificationsActivity;
 import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
@@ -111,6 +110,9 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
@@ -268,13 +270,13 @@ import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizar
 import com.propertyvista.crm.client.activity.wizard.onlinepayment.OnlinePaymentWizardActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap.Account;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
+import com.propertyvista.crm.rpc.CrmSiteMap.Communication;
 import com.propertyvista.crm.rpc.CrmSiteMap.Dashboard;
 import com.propertyvista.crm.rpc.CrmSiteMap.Finance;
 import com.propertyvista.crm.rpc.CrmSiteMap.LegalAndCollections;
 import com.propertyvista.crm.rpc.CrmSiteMap.Login;
 import com.propertyvista.crm.rpc.CrmSiteMap.LoginWithToken;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.crm.rpc.CrmSiteMap.Message;
 import com.propertyvista.crm.rpc.CrmSiteMap.Notifications;
 import com.propertyvista.crm.rpc.CrmSiteMap.Organization;
 import com.propertyvista.crm.rpc.CrmSiteMap.PasswordChange;
@@ -1348,7 +1350,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new ProspectPortalPolicyViewerActivity(crudPlace);
                             break;
                         }
-// - Security          
+// - Security
                     } else if (crudPlace instanceof Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {
                         case lister:
@@ -1417,8 +1419,22 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new EftVarianceReportActivity((ReportsAppPlace<EftVarianceReportMetadata>) place);
                     } else if (place instanceof Reports.ResidentInsurance) {
                         activity = new ResidentInsuranceReportActivity((ReportsAppPlace<ResidentInsuranceReportMetadata>) place);
-
-                    } // CRUD APP PLACE IF ENDS HERE
+                    }
+                    // Communication
+                    else if (crudPlace instanceof Communication.CommunicationMessage) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new CommunicationMessageListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new CommunicationMessageViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new CommunicationMessageEditorActivity(crudPlace);
+                            break;
+                        }
+                    }
+                    // CRUD APP PLACE IF ENDS HERE
 
                     // Dashboard related stuff again
                 } else if (place instanceof Dashboard.View) {
@@ -1456,8 +1472,6 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof Notifications) {
                     activity = new NotificationsActivity(place);
-                } else if (place instanceof Message) {
-                    activity = new MessageActivity(place);
                 }
 
                 callback.onSuccess(activity);

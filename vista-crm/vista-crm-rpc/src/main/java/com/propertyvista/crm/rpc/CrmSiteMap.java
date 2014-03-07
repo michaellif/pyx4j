@@ -607,8 +607,11 @@ public class CrmSiteMap implements SiteMap {
     public static class Notifications extends AppPlace {
     }
 
-    @PlaceProperties(navigLabel = "Messages")
-    public static class Message extends AppPlace {
+    @PlaceProperties(navigLabel = "Communication")
+    public static class Communication extends AppPlace {
+        public static class CommunicationMessage extends CrmCrudAppPlace {
+        }
+
     }
 
     @PlaceProperties(navigLabel = "Runtime Errors")

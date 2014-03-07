@@ -14,12 +14,15 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.config.shared.ApplicationBackend;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
@@ -36,9 +39,13 @@ import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.HeaderView;
+import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
+import com.propertyvista.crm.rpc.services.CommunicationMessageCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.dto.MessagesDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -46,10 +53,15 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
 
     private final HeaderView view;
 
+    private CommunicationMessageCrudService communicationService;
+
     public HeaderActivity(Place place) {
         view = CrmSite.getViewFactory().getView(HeaderView.class);
         view.setPresenter(this);
         withPlace(place);
+        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
+            communicationService = (CommunicationMessageCrudService) GWT.create(CommunicationMessageCrudService.class);
+        }
     }
 
     @Override
@@ -80,6 +92,16 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
             view.onLogedIn(ClientContext.getUserVisit().getName());
             if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
                 view.setDisplayThisIsProductionWarning(ApplicationBackend.isProductionBackend());
+            }
+            if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
+                communicationService.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
+                    @Override
+                    public void onSuccess(MessagesDTO result) {
+                        int messagesNum = result == null || result.messages() == null || result.messages().isEmpty() ? 0 : result.messages().size();
+                        view.setNumberOfMessages(messagesNum);
+
+                    }
+                }, true);
             }
         } else {
             view.onLogedOut();
@@ -135,8 +157,21 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     }
 
     @Override
-    public void showMessages() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Message());
+    public void showMessages(int x, int y) {
+        final CommunicationView cview = CrmSite.getViewFactory().getView(CommunicationView.class);
+        PopupPanel popupPanel = new PopupPanel(true, true);
+        popupPanel.setWidget(cview);
+        popupPanel.setPopupPosition(x - popupPanel.getOffsetHeight() / 2, y);
+        popupPanel.show();
+        communicationService.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
+            @Override
+            public void onSuccess(MessagesDTO result) {
+                cview.populate(result == null ? null : result.messages());
+                int messagesNum = result == null || result.messages() == null || result.messages().isEmpty() ? 0 : result.messages().size();
+                view.setNumberOfMessages(messagesNum);
+
+            }
+        }, true);
     }
 
     @Override

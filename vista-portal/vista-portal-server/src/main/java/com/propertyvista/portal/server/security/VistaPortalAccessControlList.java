@@ -21,6 +21,9 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.domain.communication.CommunicationMessageAttachment;
+import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -53,6 +56,8 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfAssetDocumen
 import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
+import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessageAttachmentUploadPortalService;
+import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
@@ -194,12 +199,18 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CommunicationMessageAttachmentUploadPortalService.class));
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
         grant(new IServiceExecutePermission(CommunityEventPortalCrudService.class));
+        grant(new IServiceExecutePermission(CommunicationMessagePortalCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationMessage.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationMessageAttachment.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationThread.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
 
         //========================= Prospect Portal
 
@@ -207,6 +218,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CommunicationMessageAttachmentUploadPortalService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CreditCardValidationService.class));
 

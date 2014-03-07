@@ -50,6 +50,27 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
     public static class Profile extends AppPlace {
     }
 
+    @PlaceProperties(navigLabel = "My Messages")
+    public static class CommunicationMessage extends AppPlace {
+        public static class CommunicationMessageWizard extends AppPlace {
+        }
+
+        public static class CommunicationMessagePage extends AppPlace {
+            public CommunicationMessagePage(Key threadId) {
+                formPlace(threadId);
+            }
+
+            public CommunicationMessagePage() {
+            }
+        }
+
+        public static class CommunicationMessageView extends AppPlace {
+        }
+
+        public static class EditCommunicationMessage extends AppPlace {
+        }
+    }
+
     @PlaceProperties(navigLabel = "My Account")
     public static class Account extends AppPlace {
     }
@@ -66,7 +87,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class TransactionHistory extends AppPlace {
         }
 
-        // ---> Old Portal places: 
+        // ---> Old Portal places:
         public static class FinancialSummary extends AppPlace {
 
         }
@@ -74,7 +95,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class BillSummary extends AppPlace {
         }
 
-        // ---> Old Portal places (end) 
+        // ---> Old Portal places (end)
 
         public static class Payment extends AppPlace {
 
@@ -169,10 +190,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class MoveInWizardConfirmation extends AppPlace {
 
         }
-    }
-
-    @PlaceProperties(navigLabel = "Comm Center", caption = "Communication Center")
-    public static class CommunicationCenter extends AppPlace {
     }
 
     @PlaceProperties(navigLabel = "My Perks & Offers")

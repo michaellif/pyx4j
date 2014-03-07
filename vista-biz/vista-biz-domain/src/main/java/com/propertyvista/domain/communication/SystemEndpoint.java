@@ -7,23 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-23
- * @author matheszabi
+ * Created on Feb 24, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.domain.communication;
 
-import com.pyx4j.entity.annotations.ExtendsBO;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
+@DiscriminatorValue("AutomateEndpoint")
+public interface SystemEndpoint extends CommunicationEndpoint {
+    public enum EndpointType {
+        automate, unassigned
+    }
 
-@Transient
-@ExtendsBO
-public interface CommunicationCenterDTO extends CommunicationMessage {
-//TODO add favorites
     @NotNull
-    IPrimitive<String> senderName();
+    IPrimitive<EndpointType> type();
 }
