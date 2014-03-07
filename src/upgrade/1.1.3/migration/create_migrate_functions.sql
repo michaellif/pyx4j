@@ -1631,10 +1631,10 @@ BEGIN
         IF EXISTS ( SELECT  'x' FROM _admin_.admin_pmc a 
                     JOIN    _admin_.admin_pmc_vista_features f ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
         THEN
-                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.product_v$features';
-                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.product_item';
-                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.product_v';
-                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.product';
+                EXECUTE 'DELETE FROM '||v_schema_name||'.product_v$features';
+                EXECUTE 'DELETE FROM '||v_schema_name||'.product_item';
+                EXECUTE 'DELETE FROM '||v_schema_name||'.product_v';
+                EXECUTE 'DELETE FROM '||v_schema_name||'.product';
         ELSE
         
             EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
