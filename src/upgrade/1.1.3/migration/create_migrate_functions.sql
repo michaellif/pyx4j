@@ -1435,7 +1435,17 @@ BEGIN
 				||'FROM '||v_schema_name||'.yardi_lease_charge_data y '
 				||'WHERE	extra_data_discriminator = ''YardiLeaseCharge'' '
 				||'AND	b.extra_data = y.id ';
+                
+        -- building 
         
+        IF EXISTS ( SELECT  'x' FROM _admin_.admin_pmc a 
+                    JOIN    _admin_.admin_pmc_vista_features f ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
+        THEN
+        
+            EXECUTE 'UPDATE '||v_schema_name||'.building '
+                    ||'SET  default_product_catalog = FALSE ';
+        END IF;
+            
         -- insurance_certificate_scan
         
         EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_scan AS s '
