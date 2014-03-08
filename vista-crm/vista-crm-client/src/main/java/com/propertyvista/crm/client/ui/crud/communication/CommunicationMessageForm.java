@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.communication;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -28,6 +29,8 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Toolbar;
@@ -152,6 +155,40 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
             return content;
         }
 
+        @Override
+        protected CommunicationMessage preprocessValue(CommunicationMessage value, boolean fireEvent, boolean populate) {
+            if (value != null && value.getPrimaryKey() != null && !value.getPrimaryKey().isDraft()) {
+                if (!value.isRead().getValue() && userInList(ClientContext.getUserVisit(), value.to())) {
+                    value.isRead().setValue(true);
+                    BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
+                    d.setExpended(true);
+                    ((CommunicationMessageViewerView.Presenter) CommunicationMessageForm.this.getParentView().getPresenter()).saveMessage(
+                            new DefaultAsyncCallback<CommunicationMessage>() {
+                                @Override
+                                public void onSuccess(CommunicationMessage result) {
+                                }
+                            }, value);
+                }
+
+            } else {
+                value.isRead().setValue(false);
+            }
+            return super.preprocessValue(value, fireEvent, populate);
+        }
+
+        private boolean userInList(UserVisit user, IList<CommunicationEndpoint> list) {
+            if (list == null || list.isNull()) {
+                return false;
+            }
+
+            for (CommunicationEndpoint ep : list) {
+                if (user.getPrincipalPrimaryKey().equals(ep.getPrimaryKey())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         protected Toolbar createLowerToolbar() {
             Toolbar tb = new Toolbar();
 
@@ -204,6 +241,8 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             if (getValue().isPrototype() || getValue().text() == null || getValue().text().isNull()) {
+                BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
+                d.setExpended(true);
                 setViewable(false);
                 setEditable(true);
                 setEnabled(true);

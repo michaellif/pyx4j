@@ -81,6 +81,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         bo.sender().set(CrmAppContext.getCurrentUser());
         /////////////bo.to().add(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(EndpointType.unassigned));
 
+        bo.isRead().setValue(false);
         bo.text().set(to.text());
         bo.thread().set(to.thread());
         super.persist(bo, to);
@@ -110,7 +111,6 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         }
 
         super.list(callback, dtoCriteria);
-
     }
 
     @Override
@@ -126,6 +126,12 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         dto.to().set(entity.to());
         dto.attachments().setAttachLevel(AttachLevel.Attached);
         dto.attachments().set(entity.attachments());
+
+        if (userInList(CrmAppContext.getCurrentUser(), dto.to())) {
+            dto.isRead().set(dto.isRead());
+        } else {
+            dto.isRead().setValue(true);
+        }
     }
 
     protected void enhanceAll(CommunicationMessage dto) {
@@ -144,6 +150,11 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
                 Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.to(), AttachLevel.Attached);
+                if (userInList(CrmAppContext.getCurrentUser(), m.to())) {
+                    m.isRead().set(m.isRead());
+                } else {
+                    m.isRead().setValue(true);
+                }
             }
         }
     }
@@ -172,13 +183,17 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         }
         messageCriteria.desc(messageCriteria.proto().date());
 
-        OrCriterion or = messageCriteria.or();
-        or.left().eq(messageCriteria.proto().sender(), CrmAppContext.getCurrentUser());
-
-        OrCriterion or2 = or.right().or();
+        OrCriterion or2 = null;
+        if (newOnly) {
+            or2 = messageCriteria.or();
+        } else {
+            OrCriterion or = messageCriteria.or();
+            or.left().eq(messageCriteria.proto().sender(), CrmAppContext.getCurrentUser());
+            or2 = or.right().or();
+        }
         or2.left().eq(messageCriteria.proto().to(), CrmAppContext.getCurrentUser());
         or2.right().eq(messageCriteria.proto().to(),
-                ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(EndpointType.unassigned));//,
+                ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(EndpointType.unassigned));
 
         List<CommunicationMessage> ms = Persistence.service().query(messageCriteria);
 
@@ -214,8 +229,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
             message.sender().set(m.sender());
             message.to().setAttachLevel(AttachLevel.Attached);
             message.to().set(m.to());
-            if (userInList(CrmAppContext.getCurrentUser(), m.to())
-                    || userInList(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(EndpointType.unassigned), m.to())) {
+            if (userInList(CrmAppContext.getCurrentUser(), m.to())) {
                 message.isRead().set(m.isRead());
             } else {
                 message.isRead().setValue(true);
@@ -253,7 +267,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
     public void takeOwnership(AsyncCallback<CommunicationMessage> callback, CommunicationMessage source) {
         source.thread().responsible().set(CrmAppContext.getCurrentUser());
         for (CommunicationMessage m : source.thread().content()) {
-            if (m.id().equals(source.id())) {
+            if (!m.isRead().getValue() && userInList(CrmAppContext.getCurrentUser(), m.to())) {
                 m.isRead().setValue(true);
             }
         }
@@ -268,7 +282,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         }
 
         for (CommunicationEndpoint ep : list) {
-            if (user.equals(ep)) {
+            if (user.equals(ep) || ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(EndpointType.unassigned).equals(ep)) {
                 return true;
             }
         }

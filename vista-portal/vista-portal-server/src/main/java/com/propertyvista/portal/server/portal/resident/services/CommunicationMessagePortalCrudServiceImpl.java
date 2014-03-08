@@ -174,6 +174,8 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
             message.date().set(m.date());
             message.thread().setAttachLevel(AttachLevel.Attached);
             message.thread().set(m.thread());
+            Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
+            message.sender().setAttachLevel(AttachLevel.Attached);
             message.sender().set(m.sender());
             message.to().set(m.to());
             if (userInList(ResidentPortalContext.getCurrentUser(), m.to())) {
