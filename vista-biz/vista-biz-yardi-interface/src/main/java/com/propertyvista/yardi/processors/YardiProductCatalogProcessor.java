@@ -39,6 +39,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -300,6 +301,9 @@ public class YardiProductCatalogProcessor {
         Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
         // disable deposit till further processing:
         service.version().depositLMR().enabled().setValue(!units.isEmpty());
+        // set Yardi deposit default value/type:
+        service.version().depositLMR().valueType().setValue(ValueType.Monetary);
+        service.version().depositLMR().value().setValue(BigDecimal.ZERO);
 
         List<ProductItem> serviceItems = new ArrayList<ProductItem>(service.version().items());
         Collections.sort(serviceItems, new ProductItemByElementComparator());
