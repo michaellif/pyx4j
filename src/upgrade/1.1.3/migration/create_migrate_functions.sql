@@ -27,12 +27,21 @@ BEGIN
         ALTER TABLE application_wizard_substep DROP CONSTRAINT application_wizard_substep_step_fk;
         ALTER TABLE apt_unit DROP CONSTRAINT apt_unit_marketing_fk;
         ALTER TABLE billing_bill DROP CONSTRAINT billing_bill_lease_fk;
+        ALTER TABLE campaign$audience DROP CONSTRAINT campaign$audience_owner_fk;
+        ALTER TABLE campaign$audience DROP CONSTRAINT campaign$audience_value_fk;
+        ALTER TABLE campaign$media DROP CONSTRAINT campaign$media_owner_fk;
+        ALTER TABLE campaign$media DROP CONSTRAINT campaign$media_value_fk;
+        ALTER TABLE campaign$schedule DROP CONSTRAINT campaign$schedule_owner_fk;
+        ALTER TABLE campaign DROP CONSTRAINT campaign_message_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_application_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_application_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_monthly_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_one_time_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_payment_split_charges_fk;
         ALTER TABLE charges DROP CONSTRAINT charges_prorated_charges_fk;
+        ALTER TABLE communication_message DROP CONSTRAINT communication_message_destination_fk;
+        ALTER TABLE communication_message DROP CONSTRAINT communication_message_parent_fk;
+        ALTER TABLE communication_message DROP CONSTRAINT communication_message_sender_fk;
         ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_policy_fk;
         ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_product_code_fk;
         ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_person_fk;
@@ -66,6 +75,8 @@ BEGIN
         ALTER TABLE product_item DROP CONSTRAINT product_item_code_fk;
         ALTER TABLE property_phone DROP CONSTRAINT property_phone_provider_fk;
         ALTER TABLE summary DROP CONSTRAINT summary_application_fk;
+        ALTER TABLE recipient$contact_list DROP CONSTRAINT recipient$contact_list_owner_fk;
+        ALTER TABLE recipient$contact_list DROP CONSTRAINT recipient$contact_list_value_fk;
         ALTER TABLE tenant_charge_list$charges DROP CONSTRAINT tenant_charge_list$charges_owner_fk;
         ALTER TABLE tenant_charge_list$charges DROP CONSTRAINT tenant_charge_list$charges_value_fk;
         ALTER TABLE tenant_charge DROP CONSTRAINT tenant_charge_tenant_fk;
@@ -84,6 +95,13 @@ BEGIN
         ALTER TABLE background_check_policy DROP CONSTRAINT background_check_policy_node_discriminator_d_ck;
         ALTER TABLE billable_item DROP CONSTRAINT billable_item_extra_data_discriminator_d_ck;
         ALTER TABLE building_utility DROP CONSTRAINT building_utility_building_utility_type_e_ck;
+        ALTER TABLE campaign$audience DROP CONSTRAINT campaign$audience_pk;
+        ALTER TABLE campaign$media DROP CONSTRAINT campaign$media_pk;
+        ALTER TABLE campaign$schedule DROP CONSTRAINT campaign$schedule_pk;
+        ALTER TABLE campaign DROP CONSTRAINT campaign_pk;
+        ALTER TABLE communication_media DROP CONSTRAINT communication_media_pk;
+        ALTER TABLE communication_person DROP CONSTRAINT communication_person_pk;
+        ALTER TABLE contact DROP CONSTRAINT contact_pk;
         ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_street_direction_e_ck;
         ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_street_type_e_ck;
         ALTER TABLE dates_policy DROP CONSTRAINT dates_policy_node_discriminator_d_ck;
@@ -102,6 +120,7 @@ BEGIN
         ALTER TABLE legal_documentation DROP CONSTRAINT legal_documentation_node_discriminator_d_ck;
         ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_id_discriminator_ck;
         ALTER TABLE master_online_application DROP CONSTRAINT master_online_application_status_e_ck;
+        ALTER TABLE message DROP CONSTRAINT message_pk;
         ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_node_discriminator_d_ck;
         ALTER TABLE online_application DROP CONSTRAINT online_application_role_e_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_created_by_discr_d_ck;
@@ -117,6 +136,8 @@ BEGIN
         ALTER TABLE property_phone DROP CONSTRAINT property_phone_designation_e_ck;
         ALTER TABLE property_phone DROP CONSTRAINT property_phone_phone_type_e_ck;
         ALTER TABLE property_phone DROP CONSTRAINT property_phone_visibility_e_ck;
+        ALTER TABLE recipient$contact_list DROP CONSTRAINT recipient$contact_list_pk;
+        ALTER TABLE recipient DROP CONSTRAINT recipient_pk;
         ALTER TABLE restrictions_policy DROP CONSTRAINT restrictions_policy_node_discriminator_d_ck;
         ALTER TABLE tax DROP CONSTRAINT tax_policy_node_discriminator_d_ck;
         ALTER TABLE tenant_charge DROP CONSTRAINT tenant_charge_tenant_discriminator_d_ck;
@@ -275,6 +296,74 @@ BEGIN
         -- building_utility
         
         ALTER TABLE building_utility ADD COLUMN is_deleted BOOLEAN;
+        
+        -- communication_message
+        
+        ALTER TABLE communication_message   ADD COLUMN sender_discriminator VARCHAR(50),
+                                            ADD COLUMN text VARCHAR(2048),
+                                            ADD COLUMN message_date TIMESTAMP,
+                                            ADD COLUMN thread BIGINT;
+        
+        -- communication_message$to
+        
+        CREATE TABLE communication_message$to
+        (
+            id                          BIGINT                      NOT NULL,
+            owner                       BIGINT,
+            value_discriminator         VARCHAR(50),
+            value                       BIGINT,
+            seq                         INT,
+                CONSTRAINT communication_message$to_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_message$to OWNER TO vista;
+        
+        -- communication_message_attachment
+        
+        CREATE TABLE communication_message_attachment
+        (
+            id                          BIGINT                      NOT NULL,
+            file_file_name              VARCHAR(500),
+            file_updated_timestamp      BIGINT,
+            file_cache_version          INT,
+            file_file_size              INT,
+            file_content_mime_type      VARCHAR(500),
+            file_blob_key               BIGINT,
+            message                     BIGINT,
+            description                 VARCHAR(500),
+                CONSTRAINT communication_message_attachment_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_message_attachment OWNER TO vista;
+        
+        -- communication_message_attachment_blob
+        
+        CREATE TABLE communication_message_attachment_blob
+        (
+            id                          BIGINT                      NOT NULL,
+            name                        VARCHAR(500),
+            content_type                VARCHAR(500),
+            updated                     TIMESTAMP,
+            created                     TIMESTAMP,
+            data                        BYTEA,
+                CONSTRAINT communication_message_attachment_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_message_attachment_blob OWNER TO vista;
+        
+        -- communication_thread
+        
+        CREATE TABLE communication_thread
+        (
+            id                          BIGINT                      NOT NULL,
+            subject                     VARCHAR(500),
+            created                     TIMESTAMP,
+            responsible_discriminator   VARCHAR(50),
+            responsible                 BIGINT,
+                CONSTRAINT communication_thread_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_thread OWNER TO vista;
         
         -- community_event
         
@@ -1360,6 +1449,19 @@ BEGIN
         ALTER TABLE site_image_resource RENAME COLUMN file_size TO file_file_size;
         ALTER TABLE site_image_resource RENAME COLUMN updated_timestamp TO file_updated_timestamp;
         
+        -- system_endpoint
+        
+        CREATE TABLE system_endpoint
+        (
+            id                                  BIGINT                  NOT NULL,
+            name                                VARCHAR(500),
+            email                               VARCHAR(64),
+            type                                VARCHAR(50),
+                CONSTRAINT system_endpoint_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE system_endpoint OWNER TO vista;
+        
         
         /**
         ***     =====================================================================================================
@@ -1631,6 +1733,8 @@ BEGIN
         IF EXISTS ( SELECT  'x' FROM _admin_.admin_pmc a 
                     JOIN    _admin_.admin_pmc_vista_features f ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
         THEN
+                EXECUTE 'UPDATE '||v_schema_name||'.billable_item '
+                        ||'SET  item = NULL'; 
                 EXECUTE 'DELETE FROM '||v_schema_name||'.product_v$features';
                 EXECUTE 'DELETE FROM '||v_schema_name||'.product_item';
                 EXECUTE 'DELETE FROM '||v_schema_name||'.product_v';
@@ -1825,9 +1929,46 @@ BEGIN
         
         ALTER TABLE billing_bill DROP COLUMN lease;
         
+        -- campaign
+        
+        DROP TABLE campaign;
+        
+        -- campaign$audience
+        
+        DROP TABLE campaign$audience;
+        
+        -- campaign$media
+        
+        DROP TABLE campaign$media;
+        
+        -- campaign$schedule
+        
+        DROP TABLE campaign$schedule;
+        
         -- charges
         
         DROP TABLE charges;
+        
+        -- communication_media
+        
+        DROP TABLE communication_media;
+        
+        -- communication_message
+        
+        ALTER TABLE communication_message   DROP COLUMN content,
+                                            DROP COLUMN created,
+                                            DROP COLUMN destination,
+                                            DROP COLUMN parent,
+                                            DROP COLUMN topic,
+                                            DROP COLUMN updated;
+        
+        -- communication_person
+        
+        DROP TABLE communication_person;
+        
+        -- contact
+        
+        DROP TABLE contact;
         
         -- custom_skin_resource_blob
         
@@ -1957,6 +2098,10 @@ BEGIN
                                                 DROP COLUMN online_application_id_s;
         
         
+        -- message
+        
+        DROP TABLE message;
+        
         -- n4_policy
         
         ALTER TABLE n4_policy   DROP COLUMN mailing_address_street1,
@@ -2002,6 +2147,14 @@ BEGIN
         
         DROP TABLE property_phone;
         
+        -- recipient
+        
+        DROP TABLE recipient;
+        
+        -- recipient$contact_list
+        
+        DROP TABLE recipient$contact_list;
+        
         -- summary
         
         DROP TABLE summary;
@@ -2044,6 +2197,12 @@ BEGIN
         ALTER TABLE apt_unit_reservation ADD CONSTRAINT apt_unit_reservation_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE apt_unit_reservation ADD CONSTRAINT apt_unit_reservation_unit_fk FOREIGN KEY(unit) REFERENCES apt_unit(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building ADD CONSTRAINT building_landlord_fk FOREIGN KEY(landlord) REFERENCES landlord(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message$to ADD CONSTRAINT communication_message$to_owner_fk FOREIGN KEY(owner) 
+            REFERENCES communication_message(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message_attachment ADD CONSTRAINT communication_message_attachment_message_fk FOREIGN KEY(message) 
+            REFERENCES communication_message(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message ADD CONSTRAINT communication_message_thread_fk FOREIGN KEY(thread) 
+            REFERENCES communication_thread(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE community_event ADD CONSTRAINT community_event_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE customer_signature ADD CONSTRAINT customer_signature_signing_user_fk FOREIGN KEY(signing_user) REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -2189,7 +2348,11 @@ BEGIN
         ALTER TABLE building_utility ADD CONSTRAINT building_utility_building_utility_type_e_ck 
                 CHECK ((building_utility_type) IN ('airConditioning', 'cable', 'electricity', 'garbage', 'gas', 'heating', 'hydro', 'internet', 
                 'other', 'sewage', 'telephone', 'television', 'water'));
-        ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signature_format_e_ck 
+        ALTER TABLE communication_message ADD CONSTRAINT communication_message_sender_discriminator_d_ck 
+            CHECK ((sender_discriminator) IN ('AutomateEndpoint', 'CrmUser', 'CustomerUser'));
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_responsible_discriminator_d_ck 
+            CHECK ((responsible_discriminator) IN ('AutomateEndpoint', 'CrmUser', 'CustomerUser'));
+       ALTER TABLE crm_user_signature ADD CONSTRAINT crm_user_signature_signature_format_e_ck 
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
         ALTER TABLE customer_signature ADD CONSTRAINT customer_signature_signature_format_e_ck 
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
@@ -2313,6 +2476,7 @@ BEGIN
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE restrictions_policy ADD CONSTRAINT restrictions_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE system_endpoint ADD CONSTRAINT system_endpoint_type_e_ck CHECK ((type) IN ('automate', 'unassigned'));
         ALTER TABLE tax ADD CONSTRAINT tax_policy_node_discriminator_d_ck 
                 CHECK ((policy_node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE tenant_insurance_policy ADD CONSTRAINT tenant_insurance_policy_node_discriminator_d_ck 
@@ -2324,6 +2488,7 @@ BEGIN
         
         -- not null
         
+        ALTER TABLE communication_message ALTER COLUMN thread SET NOT NULL;
         ALTER TABLE crm_role ALTER COLUMN name SET NOT NULL;
         ALTER TABLE lease ALTER COLUMN integration_system_id DROP NOT NULL;
         ALTER TABLE lease ALTER COLUMN lease_id DROP NOT NULL;
@@ -2343,6 +2508,7 @@ BEGIN
         CREATE INDEX agreement_signatures_lease_term_participant_idx ON agreement_signatures USING btree (lease_term_participant);
         CREATE INDEX agreement_signatures$legal_terms_signatures_owner_idx ON agreement_signatures$legal_terms_signatures USING btree (owner);
         CREATE INDEX apt_unit_effective_availability_available_for_rent_idx ON apt_unit_effective_availability USING btree (available_for_rent);
+        CREATE INDEX communication_message$to_owner_idx ON communication_message$to USING btree (owner);
         CREATE INDEX ilsprofile_email_building_idx ON ilsprofile_email USING btree (building);
         CREATE INDEX lease_term_v$agreement_confirmation_term_owner_idx ON lease_term_v$agreement_confirmation_term USING btree (owner);
         CREATE INDEX lease_term_v$agreement_legal_terms_owner_idx ON lease_term_v$agreement_legal_terms USING btree (owner);
@@ -2359,6 +2525,8 @@ BEGIN
         CREATE INDEX notes_and_attachments_owner_idx ON notes_and_attachments USING btree (owner);
         CREATE INDEX payment_posting_batch_building_idx ON payment_posting_batch USING btree (building);
         CREATE INDEX permission_to_enter_note_policy_idx ON permission_to_enter_note USING btree (policy);
+        CREATE INDEX system_endpoint_name_idx ON system_endpoint USING btree (name);
+        CREATE UNIQUE INDEX system_endpoint_email_idx ON system_endpoint USING btree (LOWER(email));
 
 
         
