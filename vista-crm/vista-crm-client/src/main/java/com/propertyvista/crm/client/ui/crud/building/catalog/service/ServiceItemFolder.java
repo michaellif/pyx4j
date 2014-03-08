@@ -56,7 +56,6 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         columns.add(new EntityFolderColumnDescriptor(proto().element(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().depositLMR(), "5em"));
         if (VistaFeatures.instance().yardiIntegration()) {
             columns.add(new EntityFolderColumnDescriptor(proto().depositLMR(), "10em"));
         } else {
