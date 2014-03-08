@@ -26,7 +26,6 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
@@ -78,7 +77,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         int row = -1;
 
         flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 22).build());
-        ((CField) get(proto().item())).setNavigationCommand(new Command() {
+        ((CEntityLabel<ProductItem>) get(proto().item())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(getTargetPlace());
@@ -130,14 +129,13 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         // tweak UI for ProductItem:
         if (VistaFeatures.instance().yardiIntegration()) {
 
-            get(proto().item()).setVisible(false);
+            get(proto().item()).setVisible(!getValue().item().isNull());
+            get(proto().yardiChargeCode()).setVisible(!getValue().yardiChargeCode().isNull());
 
-            get(proto().yardiChargeCode()).setVisible(true);
-
-            get(proto().effectiveDate()).setVisible(true);
+            get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
             get(proto().effectiveDate()).setTooltip(null);
 
-            get(proto().expirationDate()).setVisible(true);
+            get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
             get(proto().expirationDate()).setTooltip(null);
 
             adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
@@ -162,7 +160,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
             adjustmentPanel.setVisible(false);
         }
 
-        get(proto().description()).setVisible(VistaFeatures.instance().yardiIntegration() && !getValue().description().isNull());
+        get(proto().description()).setVisible(!getValue().description().isNull());
     }
 
     @Override
