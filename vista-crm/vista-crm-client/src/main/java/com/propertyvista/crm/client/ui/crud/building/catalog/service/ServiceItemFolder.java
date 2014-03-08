@@ -38,6 +38,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.shared.config.VistaFeatures;
 
 class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
@@ -56,8 +57,13 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         columns.add(new EntityFolderColumnDescriptor(proto().element(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().depositLMR(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().depositMoveIn(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().depositSecurity(), "5em"));
+        if (VistaFeatures.instance().yardiIntegration()) {
+            columns.add(new EntityFolderColumnDescriptor(proto().depositLMR(), "10em"));
+        } else {
+            columns.add(new EntityFolderColumnDescriptor(proto().depositLMR(), "5em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().depositMoveIn(), "5em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().depositSecurity(), "5em"));
+        }
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
 
         return columns;
