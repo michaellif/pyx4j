@@ -8,7 +8,10 @@
     <inherits name='com.pyx4j.entity.Entity' />
     <inherits name='com.pyx4j.SVG'/>
 
-    <entry-point class='com.pyx4j.svg.demo.client.SVGChartDemoEntryPoint'/>
+    <inherits name='com.pyx4j.security.Security'/>
+    <inherits name='com.google.gwt.storage.Storage'/>
+
+    <entry-point class='com.pyx4j.tester.svg.client.SVGChartDemoEntryPoint'/>
 
 	<source path="client" />
 </module>

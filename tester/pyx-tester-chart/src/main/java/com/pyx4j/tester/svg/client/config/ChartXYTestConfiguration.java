@@ -18,12 +18,11 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.demo.client.chart;
+package com.pyx4j.tester.svg.client.config;
 
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.svg.chart.XYChartConfigurator;
 
 public interface ChartXYTestConfiguration extends ChartTestConfiguration {
 
@@ -31,11 +30,19 @@ public interface ChartXYTestConfiguration extends ChartTestConfiguration {
         Numbers, Duration, Time
     }
 
-    @NotNull
-    IPrimitive<XYChartConfigurator.ChartType> chartType();
+    public enum ChartType {
+        Line, Bar
+    }
+
+    public enum PointsType {
+        None, Circle
+    }
 
     @NotNull
-    IPrimitive<XYChartConfigurator.PointsType> pointsType();
+    IPrimitive<ChartType> chartType();
+
+    @NotNull
+    IPrimitive<PointsType> pointsType();
 
     @NotNull
     IPrimitive<Integer> points();

@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.demo.client.ui;
+package com.pyx4j.tester.svg.client.ui;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Position;
@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
-import com.pyx4j.svg.demo.client.chart.ChartTestConfiguration;
-import com.pyx4j.svg.demo.client.chart.TestChartBuilder;
+import com.pyx4j.tester.svg.client.chart.TestChartBuilder;
+import com.pyx4j.tester.svg.client.config.ChartTestConfiguration;
 
 public class ChartTestPanel extends SplitLayoutPanel {
 

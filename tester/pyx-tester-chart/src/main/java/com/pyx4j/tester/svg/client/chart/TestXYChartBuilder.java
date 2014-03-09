@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.demo.client.chart;
+package com.pyx4j.tester.svg.client.chart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +32,12 @@ import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.XYChart;
 import com.pyx4j.svg.chart.XYChartConfigurator;
+import com.pyx4j.svg.chart.XYChartConfigurator.ChartType;
+import com.pyx4j.svg.chart.XYChartConfigurator.PointsType;
 import com.pyx4j.svg.chart.XYSeries;
 import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
+import com.pyx4j.tester.svg.client.config.ChartTestConfiguration;
+import com.pyx4j.tester.svg.client.config.ChartXYTestConfiguration;
 
 public class TestXYChartBuilder implements TestChartBuilder {
 
@@ -51,15 +55,17 @@ public class TestXYChartBuilder implements TestChartBuilder {
         SvgRoot svgroot = factory.getSvgRoot();
         Group g = factory.createGroup();
 
-        XYChartConfigurator config = new XYChartConfigurator(factory, testConfiguration.chartType().getValue(), createXYSeries(testConfiguration), width,
-                height);
+        //Serialization convertion
+        ChartType chartType = ChartType.valueOf(testConfiguration.chartType().getValue().name());
+
+        XYChartConfigurator config = new XYChartConfigurator(factory, chartType, createXYSeries(testConfiguration), width, height);
         config.setLegend(true);
         config.setTitle("XYChart");
         config.setGridType(GridType.Both);
         //config.setZeroBased(zeroBased);
         //config.setZeroBasedY(zeroBased);
         config.setChartColors(ChartTheme.bright);
-        config.setPointsType(testConfiguration.pointsType().getValue());
+        config.setPointsType(PointsType.valueOf(testConfiguration.pointsType().getValue().name()));
 
         XYChart lchart = new XYChart(config);
         g.add(lchart);

@@ -18,22 +18,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.demo.client.chart;
+package com.pyx4j.tester.svg.client.config;
 
-import com.google.gwt.user.client.ui.Widget;
+import com.pyx4j.entity.core.IEntity;
 
-public class TestChartBuilderFactory implements TestChartBuilder {
-
-    public TestChartBuilderFactory() {
-    }
-
-    @Override
-    public Widget createChart(int width, int height, ChartTestConfiguration testConfiguration) {
-        if (testConfiguration instanceof ChartXYTestConfiguration) {
-            return new TestXYChartBuilder().createChart(width, height, testConfiguration);
-        } else {
-            throw new Error("TODO");
-        }
-    }
+public interface ChartTestConfiguration extends IEntity {
 
 }

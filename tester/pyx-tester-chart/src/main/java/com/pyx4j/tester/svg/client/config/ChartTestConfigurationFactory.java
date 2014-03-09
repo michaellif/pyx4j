@@ -18,29 +18,46 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.demo.client.chart;
+package com.pyx4j.tester.svg.client.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.storage.client.Storage;
+import com.google.gwt.user.client.rpc.SerializationException;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.svg.chart.XYChartConfigurator;
-import com.pyx4j.svg.demo.client.chart.ChartXYTestConfiguration.ValuesType;
 
 public class ChartTestConfigurationFactory {
 
+    private static final Logger log = LoggerFactory.getLogger(ChartTestConfigurationFactory.class);
+
     public static ChartTestConfiguration getChartTestConfiguration() {
+        if (Storage.isSupported()) {
+            try {
+                String payload = Storage.getLocalStorageIfSupported().getItem("chartTestConfiguration");
+                if (payload != null) {
+                    return EntitySerialization.deserialize(payload);
+                }
+            } catch (SerializationException e) {
+                log.error("deserialize error", e);
+            }
+        }
+
         return defaultConfigChartTestConfiguration();
     }
 
     private static ChartTestConfiguration defaultConfigChartTestConfiguration() {
         ChartXYTestConfiguration defaultConfig = EntityFactory.create(ChartXYTestConfiguration.class);
-        defaultConfig.chartType().setValue(XYChartConfigurator.ChartType.Line);
-        defaultConfig.pointsType().setValue(XYChartConfigurator.PointsType.None);
+        defaultConfig.chartType().setValue(ChartXYTestConfiguration.ChartType.Line);
+        defaultConfig.pointsType().setValue(ChartXYTestConfiguration.PointsType.None);
         defaultConfig.points().setValue(24);
 
-        defaultConfig.xValuesType().setValue(ValuesType.Numbers);
+        defaultConfig.xValuesType().setValue(ChartXYTestConfiguration.ValuesType.Numbers);
         defaultConfig.xFrom().setValue(0.0);
         defaultConfig.xTo().setValue(100.0);
 
-        defaultConfig.yValuesType().setValue(ValuesType.Numbers);
+        defaultConfig.yValuesType().setValue(ChartXYTestConfiguration.ValuesType.Numbers);
         defaultConfig.yFrom().setValue(0.0);
         defaultConfig.yTo().setValue(100.0);
 
@@ -48,7 +65,13 @@ public class ChartTestConfigurationFactory {
     }
 
     public static void save(ChartTestConfiguration testConfiguration) {
-        // TODO use HTML storage
+        if (Storage.isSupported()) {
+            try {
+                Storage.getLocalStorageIfSupported().setItem("chartTestConfiguration", EntitySerialization.serialize(testConfiguration));
+            } catch (SerializationException e) {
+                log.error("serialize error", e);
+            }
+        }
     }
 
 }

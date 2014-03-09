@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.demo.client;
+package com.pyx4j.tester.svg.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -26,14 +26,19 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.svg.demo.client.chart.ChartTestConfiguration;
-import com.pyx4j.svg.demo.client.chart.ChartTestConfigurationFactory;
-import com.pyx4j.svg.demo.client.chart.TestChartBuilder;
-import com.pyx4j.svg.demo.client.chart.TestChartBuilderFactory;
-import com.pyx4j.svg.demo.client.ui.ChartTestPanel;
-import com.pyx4j.svg.demo.client.ui.ChartTestSelectorPanel;
+import com.pyx4j.entity.client.ClientEntityFactory;
+import com.pyx4j.tester.svg.client.chart.TestChartBuilder;
+import com.pyx4j.tester.svg.client.chart.TestChartBuilderFactory;
+import com.pyx4j.tester.svg.client.config.ChartTestConfiguration;
+import com.pyx4j.tester.svg.client.config.ChartTestConfigurationFactory;
+import com.pyx4j.tester.svg.client.ui.ChartTestPanel;
+import com.pyx4j.tester.svg.client.ui.ChartTestSelectorPanel;
 
 public class SVGChartDemoEntryPoint implements EntryPoint {
+
+    static {
+        ClientEntityFactory.ensureIEntityImplementations();
+    }
 
     @Override
     public void onModuleLoad() {

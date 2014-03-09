@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.demo.client.ui;
+package com.pyx4j.tester.svg.client.ui;
 
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -26,8 +26,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.svg.demo.client.chart.ChartTestConfiguration;
-import com.pyx4j.svg.demo.client.chart.ChartXYTestConfiguration;
+import com.pyx4j.tester.svg.client.config.ChartTestConfiguration;
+import com.pyx4j.tester.svg.client.config.ChartXYTestConfiguration;
 
 public class ChartTestSelectorPanel extends SimplePanel {
 

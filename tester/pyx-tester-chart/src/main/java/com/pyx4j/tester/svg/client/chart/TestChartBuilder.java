@@ -18,9 +18,11 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.demo.client.chart;
+package com.pyx4j.tester.svg.client.chart;
 
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.tester.svg.client.config.ChartTestConfiguration;
 
 public interface TestChartBuilder {
 
