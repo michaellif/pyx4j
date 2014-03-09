@@ -58,6 +58,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new N4PolicyPreloader());
         add(new LeaseApplicationPolicyPreloader());
         add(new LeaseAgreementPolicyPreloader());
+        add(new LegalTermsPolicyPreloader());
 
         if (!VistaTODO.Equifax_Off_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
@@ -70,7 +71,6 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new LeaseBillingPolicyPreloader());
             add(new ProspectPortalPolicyPreloader());
         } else {
-            add(new LegalTermsPolicyPreloader());
             add(new MockupProductTaxPolicyPreloader());
             add(new MockupDepositPolicyPreloader());
             add(new MockupLeaseAdjustmentPolicyPreloader());
