@@ -277,7 +277,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             }
         }
 
-        return sum.divide(new BigDecimal(app.stepsStatuses().size()));
+        return sum.divide(new BigDecimal(app.stepsStatuses().size()), 2, RoundingMode.HALF_UP);
     }
 
     private void inviteCoApplicants(Lease lease) {
