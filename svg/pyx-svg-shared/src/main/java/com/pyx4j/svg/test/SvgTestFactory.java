@@ -115,7 +115,7 @@ public class SvgTestFactory {
 
     }
 
-    private static List<XYSeries> xySeries = new ArrayList<>();
+    public static List<XYSeries> xySeries = new ArrayList<>();
 
     static {
         XYSeries a = new XYSeries("Series A");
