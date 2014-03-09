@@ -20,10 +20,45 @@
  */
 package com.pyx4j.svg.demo.client.chart;
 
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.svg.chart.XYChartConfigurator;
 
 public interface ChartXYTestConfiguration extends ChartTestConfiguration {
 
+    public enum ValuesType {
+        Numbers, Duration, Time
+    }
+
+    @NotNull
     IPrimitive<XYChartConfigurator.ChartType> chartType();
+
+    @NotNull
+    IPrimitive<XYChartConfigurator.PointsType> pointsType();
+
+    @NotNull
+    IPrimitive<Integer> points();
+
+    @NotNull
+    IPrimitive<ValuesType> xValuesType();
+
+    @NotNull
+    @Format("0.000")
+    IPrimitive<Double> xFrom();
+
+    @NotNull
+    @Format("0.000")
+    IPrimitive<Double> xTo();
+
+    @NotNull
+    IPrimitive<ValuesType> yValuesType();
+
+    @NotNull
+    @Format("0.000")
+    IPrimitive<Double> yFrom();
+
+    @NotNull
+    @Format("0.000")
+    IPrimitive<Double> yTo();
 }

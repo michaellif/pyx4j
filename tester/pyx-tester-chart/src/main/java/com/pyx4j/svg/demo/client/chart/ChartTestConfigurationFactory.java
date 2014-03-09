@@ -22,6 +22,7 @@ package com.pyx4j.svg.demo.client.chart;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.svg.chart.XYChartConfigurator;
+import com.pyx4j.svg.demo.client.chart.ChartXYTestConfiguration.ValuesType;
 
 public class ChartTestConfigurationFactory {
 
@@ -32,6 +33,17 @@ public class ChartTestConfigurationFactory {
     private static ChartTestConfiguration defaultConfigChartTestConfiguration() {
         ChartXYTestConfiguration defaultConfig = EntityFactory.create(ChartXYTestConfiguration.class);
         defaultConfig.chartType().setValue(XYChartConfigurator.ChartType.Line);
+        defaultConfig.pointsType().setValue(XYChartConfigurator.PointsType.None);
+        defaultConfig.points().setValue(24);
+
+        defaultConfig.xValuesType().setValue(ValuesType.Numbers);
+        defaultConfig.xFrom().setValue(0.0);
+        defaultConfig.xTo().setValue(100.0);
+
+        defaultConfig.yValuesType().setValue(ValuesType.Numbers);
+        defaultConfig.yFrom().setValue(0.0);
+        defaultConfig.yTo().setValue(100.0);
+
         return defaultConfig;
     }
 

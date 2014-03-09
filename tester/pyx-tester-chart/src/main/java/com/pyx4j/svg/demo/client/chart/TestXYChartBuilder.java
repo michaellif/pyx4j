@@ -20,6 +20,9 @@
  */
 package com.pyx4j.svg.demo.client.chart;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.svg.basic.Group;
@@ -29,9 +32,8 @@ import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.XYChart;
 import com.pyx4j.svg.chart.XYChartConfigurator;
-import com.pyx4j.svg.chart.XYChartConfigurator.PointsType;
+import com.pyx4j.svg.chart.XYSeries;
 import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
-import com.pyx4j.svg.test.SvgTestFactory;
 
 public class TestXYChartBuilder implements TestChartBuilder {
 
@@ -49,14 +51,15 @@ public class TestXYChartBuilder implements TestChartBuilder {
         SvgRoot svgroot = factory.getSvgRoot();
         Group g = factory.createGroup();
 
-        XYChartConfigurator config = new XYChartConfigurator(factory, testConfiguration.chartType().getValue(), SvgTestFactory.xySeries, width, height);
+        XYChartConfigurator config = new XYChartConfigurator(factory, testConfiguration.chartType().getValue(), createXYSeries(testConfiguration), width,
+                height);
         config.setLegend(true);
         config.setTitle("XYChart");
         config.setGridType(GridType.Both);
         //config.setZeroBased(zeroBased);
         //config.setZeroBasedY(zeroBased);
         config.setChartColors(ChartTheme.bright);
-        config.setPointsType(PointsType.Circle);
+        config.setPointsType(testConfiguration.pointsType().getValue());
 
         XYChart lchart = new XYChart(config);
         g.add(lchart);
@@ -65,4 +68,32 @@ public class TestXYChartBuilder implements TestChartBuilder {
         return (Widget) svgroot;
     }
 
+    private List<XYSeries> createXYSeries(ChartXYTestConfiguration testConfiguration) {
+        List<XYSeries> series = new ArrayList<>();
+
+        double height = testConfiguration.yTo().getValue() - testConfiguration.yFrom().getValue();
+        double width = testConfiguration.xTo().getValue() - testConfiguration.xFrom().getValue();
+        double xStep = width / (testConfiguration.points().getValue() - 1);
+        {
+            XYSeries serie = new XYSeries("sine");
+            series.add(serie);
+            for (int i = 0; i < testConfiguration.points().getValue(); i++) {
+                double x = testConfiguration.xFrom().getValue() + i * xStep;
+                double y = testConfiguration.yFrom().getValue() + 0.5 * height + (height / 2) * Math.sin(4.0 * Math.PI * x / width);
+                serie.add(x, y);
+            }
+        }
+
+        {
+            XYSeries serie = new XYSeries("cosine");
+            series.add(serie);
+            for (int i = 0; i < testConfiguration.points().getValue() - 1; i++) {
+                double x = (xStep / 2) + testConfiguration.xFrom().getValue() + i * xStep;
+                double y = testConfiguration.yFrom().getValue() + 0.5 * height + (height / 2) * Math.cos(4.0 * Math.PI * x / width);
+                serie.add(x, y);
+            }
+        }
+
+        return series;
+    }
 }
