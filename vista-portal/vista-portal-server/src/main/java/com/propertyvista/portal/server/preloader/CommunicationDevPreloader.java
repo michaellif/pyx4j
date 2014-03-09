@@ -97,42 +97,18 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         //(CommunicationPerson from, CommunicationPerson to, CommunicationMessage parent, String topic, String msgContent,boolean highImportance, boolean isRead)
         CommunicationThread msg1 = createMessage(m001, t001, null, "No Water", "It will no water in the whole year! Please go to a Sea sand bring water!",
                 true, true);
-
-        if (msg1 == null) {
-            return "Couldn't create the first CommunicationMessage!";
-        }
-
         CommunicationThread msg2 = createMessage(t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)",
                 true, false);
-        if (msg2 == null) {
-            return "Couldn't create the second CommunicationMessage!";
-        }
         CommunicationThread msg3 = createMessage(t002, e001, null, "How to use this?",
                 "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false);
-        if (msg3 == null) {
-            return "Couldn't create the third CommunicationMessage!";
-        }
         CommunicationThread msg4 = createMessage(m001, e001, null, "We miss you",
                 "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.", false, false);
-        if (msg4 == null) {
-            return "Couldn't create the forth CommunicationMessage!";
-        }
         CommunicationThread msg5 = createMessage(m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false);
-        if (msg5 == null) {
-            return "Couldn't create the fifth CommunicationMessage!";
-        }
         CommunicationThread msg6 = createMessage(m001, t001, null, "Late payment notification",
                 "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false);
-        if (msg6 == null) {
-            return "Couldn't create the sixth CommunicationMessage!";
-        }
         CommunicationThread msg7 = createMessage(t001, m001, msg6, "Late payment notification",
                 "Dear Veronica W Canoy,\nThanks for reminder. My payment it will be delaying one more week, until that please accept my dinner invitation!:)",
                 true, false);
-        if (msg7 == null) {
-            return "Couldn't create the seventh CommunicationMessage!";
-        }
-
         return "persons and messages created";
     }
 
