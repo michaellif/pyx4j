@@ -144,7 +144,9 @@ public class YardiProductCatalogProcessor {
 
     private void deleteServices(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            log.debug("expire Service Id:{} updated {}", service.id(), service.updated());
+            log.debug("v1 expire Service Id:{} updated {}", service.id(), service.updated());
+            Service service2 = Persistence.service().retrieve(Service.class, service.id().getValue());
+            log.debug("v2 expire Service Id:{} updated {}", service2.id(), service2.updated());
             if (!service.defaultCatalogItem().getValue(false) && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(SystemDateManager.getLogicalDate());
                 Persistence.service().merge(service);
