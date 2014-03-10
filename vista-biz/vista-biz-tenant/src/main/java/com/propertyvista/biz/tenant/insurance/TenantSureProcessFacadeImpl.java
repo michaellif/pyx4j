@@ -63,7 +63,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         @Override
         public Void execute() {
             ts.status().setValue(TenantSureStatus.Cancelled);
-            log.info("cancelling TenantSure for certifcate: (#{}, expiry date {})}", ts.certificate().insuranceCertificateNumber().getValue(), ts.certificate()
+            log.info("canceling TenantSure for certificate: (#{}, expiry date {})}", ts.certificate().insuranceCertificateNumber().getValue(), ts.certificate()
                     .expiryDate().getValue());
             Persistence.service().persist(ts);
             return null;
@@ -103,11 +103,14 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                 while (iterator.hasNext()) {
                     TenantSureInsurancePolicy ts = iterator.next();
                     String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
+
                     try {
                         new UnitOfWork().execute(new TenantSureCancellator(ts));
-                        executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+                        executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME, ("By Tenant: Policy ID = " + ts.id().getValue()
+                                + ", Cert. Number = " + certificateNumber));
                     } catch (Throwable cancellationError) {
-                        executionMonitor.addErredEvent(EXECUTION_MONITOR_SECTION_NAME, cancellationError);
+                        executionMonitor.addErredEvent(EXECUTION_MONITOR_SECTION_NAME,
+                                ("Policy ID = " + ts.id().getValue() + ", Cert. Number = " + certificateNumber), cancellationError);
                         log.error("failed to cancel TenatSure insurance certificate: (#{})", certificateNumber);
                         log.error("failure: ", cancellationError);
                     }
@@ -134,19 +137,20 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                         String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
                         try {
                             new UnitOfWork().execute(new TenantSureSkippedPaymentCancellator(ts));
-                            executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+                            executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME, "Skipped Payment: "
+                                    + ("Policy ID = " + ts.id().getValue() + ", Cert. Number = " + certificateNumber));
                         } catch (Throwable cancellationError) {
-                            executionMonitor.addProcessedEvent(//@formatter:off
-                                EXECUTION_MONITOR_SECTION_NAME,
+                            executionMonitor.addErredEvent(//@formatter:off
+                                EXECUTION_MONITOR_SECTION_NAME,                                        
                                 SimpleMessageFormat.format("Failed to cancel (due to skipped payment) TenatSure insurance certificate: #{0}", certificateNumber)
-                        );//@formatter:on
+                            );//@formatter:on
                             log.error("failed to cancel (due to skipped payment) TenatSure insurance certificate: (#{})", certificateNumber);
                             log.error("failure", cancellationError);
                         }
                     }
                 }
             } catch (Throwable error) {
-                log.error("failed to processs skipped payment cancellations due to: ", error);
+                log.error("failed to process skipped payment cancellations due to: ", error);
             } finally {
                 skippedIterator.close();
             }
