@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -63,6 +64,8 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
         content.setH3(++row, 0, 1, i18n.tr("Payment Details"));
         content.setWidget(++row, 0, paymentDetailsHolder);
+        content.setWidget(++row, 0, inject(proto().payment().amount(), new CMoneyLabel()));
+        get(proto().payment().amount()).setVisible(false);
 
         SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();
         String anchorId = HTMLPanel.createUniqueId();
