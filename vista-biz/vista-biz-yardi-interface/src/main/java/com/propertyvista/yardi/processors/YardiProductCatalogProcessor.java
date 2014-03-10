@@ -36,7 +36,10 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.financial.ARCode;
@@ -144,14 +147,42 @@ public class YardiProductCatalogProcessor {
     }
 
     private void deleteServices(ProductCatalog catalog) {
-        for (Service service : catalog.services()) {
+        for (final Service service : catalog.services()) {
             log.debug("v1 expire Service Id:{} updated {}", service.id(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service.updated().getValue()));
-            Service service2 = Persistence.service().retrieve(Service.class, service.id().getValue());
-            log.debug("v2 expire Service Id:{} updated {}", service2.id(),
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.updated().getValue()));
+            {
+                Service service2 = Persistence.service().retrieve(Service.class, service.id().getValue());
+                log.debug("v2 expire Service Id:{} updated {}", service2.id(),
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.getMemberValue("updated")));
+                log.debug("v2 expire Service Id:{} updated {}", service2.id(),
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.updated().getValue()));
+            }
+            {
+                Service service2 = Persistence.service().retrieve(Service.class, service.id().getValue());
+                log.debug("v3 expire Service Id:{} updated {}", service2.id(),
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.getMemberValue("updated")));
+                log.debug("v3 expire Service Id:{} updated {}", service2.id(),
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.updated().getValue()));
+            }
+            {
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                    @Override
+                    public Void execute() throws RuntimeException {
+                        Service service2 = Persistence.service().retrieve(Service.class, service.id().getValue());
+                        log.debug("v4 expire Service Id:{} updated {}", service2.id(),
+                                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.getMemberValue("updated")));
+                        log.debug("v4 expire Service Id:{} updated {}", service2.id(),
+                                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.updated().getValue()));
+                        return null;
+                    }
+                });
+            }
+
             if (!service.defaultCatalogItem().getValue(false) && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(SystemDateManager.getLogicalDate());
                 Persistence.service().merge(service);
+                log.debug("+++++++++++++++");
+            } else {
+                log.debug("---------------");
             }
         }
     }
