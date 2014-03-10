@@ -32,10 +32,11 @@ import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.insurance.TenantSureReportStatusData;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.CancellationType;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyReport;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyReport.ReportedStatus;
-import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 
 public class InsuranceStatusReport implements Report {
 
@@ -78,11 +79,15 @@ public class InsuranceStatusReport implements Report {
                 String specialFlag = "";
                 if (reportedStatusHolder.insurance().status().getValue() == TenantSureStatus.PendingCancellation) {
                     specialFlag = SimpleMessageFormat.format(//@formatter:off
-                            "{0} due to {1} since {2,date,short}",
+                            "{0} due to {1}",
                             TenantSureStatus.PendingCancellation,
-                            reportedStatusHolder.insurance().cancellation().getValue(),
-                            reportedStatusHolder.insurance().cancellationDate().getValue()
+                            reportedStatusHolder.insurance().cancellation().getValue()
                     );//@formatter:on
+
+                    if (reportedStatusHolder.insurance().cancellation().getValue() == CancellationType.CancelledByTenant
+                            || reportedStatusHolder.insurance().cancellation().getValue() == CancellationType.CancelledByTenantSure) {
+                        specialFlag += SimpleMessageFormat.format(" (since {0,date,short})" + reportedStatusHolder.insurance().cancellationDate().getValue());
+                    }
                 }
                 data.cancellation().setValue(specialFlag);
 
@@ -119,27 +124,31 @@ public class InsuranceStatusReport implements Report {
             public TenantSureInsurancePolicyReport execute() throws Error {
                 ReportedStatus reportClientStatus = null;
                 LogicalDate statusFrom = null;
-                boolean needsUpdate = false;
+                boolean statusChanged = false;
                 switch (reportedStatusHolder.insurance().status().getValue()) {
-                case Cancelled:
-                    if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Cancelled) {
-                        reportClientStatus = ReportedStatus.Cancelled;
-                        statusFrom = reportedStatusHolder.insurance().certificate().expiryDate().getValue();
-                    }
-                    break;
 
                 case Active:
                 case PendingCancellation:
                     if (reportedStatusHolder.reportedStatus().getValue() == null) {
+                        statusChanged = true;
                         reportClientStatus = ReportedStatus.New;
                         statusFrom = reportedStatusHolder.insurance().certificate().inceptionDate().getValue();
-                        needsUpdate = true;
 
                     } else if ((reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.Active)
-                            | (reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New)) {
-                        reportClientStatus = ReportedStatus.Active;
-                        needsUpdate = reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New;
-                        statusFrom = reportedStatusHolder.statusFrom().getValue();
+                            || (reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New)) {
+                        statusChanged = reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New;
+                        if (statusChanged) {
+                            reportClientStatus = ReportedStatus.Active;
+                            statusFrom = reportedStatusHolder.statusFrom().getValue();
+                        }
+                    }
+                    break;
+
+                case Cancelled:
+                    if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Cancelled) {
+                        statusChanged = true;
+                        reportClientStatus = ReportedStatus.Cancelled;
+                        statusFrom = reportedStatusHolder.insurance().certificate().expiryDate().getValue();
                     }
                     break;
 
@@ -153,10 +162,9 @@ public class InsuranceStatusReport implements Report {
                                     .insurance().status().getValue()));
                 }
 
-                if (needsUpdate) {
+                if (statusChanged) {
                     reportedStatusHolder.reportedStatus().setValue(reportClientStatus);
                     reportedStatusHolder.statusFrom().setValue(statusFrom);
-
                     Persistence.service().persist(reportedStatusHolder);
                 }
 
