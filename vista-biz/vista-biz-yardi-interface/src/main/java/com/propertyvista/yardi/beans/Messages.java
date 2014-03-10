@@ -45,7 +45,10 @@ public class Messages {
 
         for (Message message : messages) {
             if (StringUtils.isNotEmpty(message.getValue())) {
-                sb.append(String.format("%s %s", message.getType(), message.getValue())).append("\n");
+                if (message.getType() != null) {
+                    sb.append(message.getType()).append(" ");
+                }
+                sb.append(message.getValue()).append("\n");
             }
         }
 
