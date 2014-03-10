@@ -244,7 +244,7 @@ public class YardiGuestProcessor {
             if (addr.getCountry().equalsIgnoreCase("Canada")) {
                 addr.setProvince(as.province().name().getValue());
             } else {
-                addr.setState(as.province().name().getValue());
+                addr.setState(as.province().code().getValue());
             }
             addr.setPostalCode(as.postalCode().getValue());
             addr.setCity(as.city().getValue());
