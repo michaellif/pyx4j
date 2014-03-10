@@ -27,6 +27,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ProductDepositEditor;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FeatureForm extends CrmEntityForm<Feature> {
 
@@ -65,13 +66,15 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         headerLMR = content.getWidget(row, 0);
         content.setWidget(++row, 0, 2, inject(proto().version().depositLMR(), new ProductDepositEditor()));
 
-        content.setH3(++row, 0, 2, i18n.tr("Move In"));
-        headerMoveIn = content.getWidget(row, 0);
-        content.setWidget(++row, 0, 2, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            content.setH3(++row, 0, 2, i18n.tr("Move In"));
+            headerMoveIn = content.getWidget(row, 0);
+            content.setWidget(++row, 0, 2, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
 
-        content.setH3(++row, 0, 2, i18n.tr("Security"));
-        headerSecurity = content.getWidget(row, 0);
-        content.setWidget(++row, 0, 2, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
+            content.setH3(++row, 0, 2, i18n.tr("Security"));
+            headerSecurity = content.getWidget(row, 0);
+            content.setWidget(++row, 0, 2, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
+        }
 
         // tweaks:
         ProductDepositEditor dpe;
@@ -79,11 +82,13 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         dpe = (ProductDepositEditor) get(proto().version().depositLMR());
         dpe.get(dpe.proto().depositType()).setEditable(false);
 
-        dpe = (ProductDepositEditor) get(proto().version().depositMoveIn());
-        dpe.get(dpe.proto().depositType()).setEditable(false);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            dpe = (ProductDepositEditor) get(proto().version().depositMoveIn());
+            dpe.get(dpe.proto().depositType()).setEditable(false);
 
-        dpe = (ProductDepositEditor) get(proto().version().depositSecurity());
-        dpe.get(dpe.proto().depositType()).setEditable(false);
+            dpe = (ProductDepositEditor) get(proto().version().depositSecurity());
+            dpe.get(dpe.proto().depositType()).setEditable(false);
+        }
 
         return content;
     }
@@ -106,11 +111,13 @@ public class FeatureForm extends CrmEntityForm<Feature> {
             headerLMR.setVisible(getValue().version().depositLMR().enabled().isBooleanTrue());
             get(proto().version().depositLMR()).setVisible(getValue().version().depositLMR().enabled().isBooleanTrue());
 
-            headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().isBooleanTrue());
-            get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().isBooleanTrue());
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().isBooleanTrue());
+                get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().isBooleanTrue());
 
-            headerSecurity.setVisible(getValue().version().depositSecurity().enabled().isBooleanTrue());
-            get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().isBooleanTrue());
+                headerSecurity.setVisible(getValue().version().depositSecurity().enabled().isBooleanTrue());
+                get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().isBooleanTrue());
+            }
         }
     }
 
