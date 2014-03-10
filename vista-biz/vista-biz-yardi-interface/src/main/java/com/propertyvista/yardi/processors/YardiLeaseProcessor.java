@@ -471,6 +471,8 @@ public class YardiLeaseProcessor {
             date = getLogicalDate(yardiLease.getExpectedMoveInDate());
         } else if (yardiLease.getLeaseSignDate() != null) {
             date = getLogicalDate(yardiLease.getLeaseSignDate());
+        } else {
+            log.warn("Empty Yardi 'Lease From' date!?");
         }
 
         return date;
