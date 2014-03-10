@@ -122,7 +122,9 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 }
 
                 if (LeaseTermParticipant.Role.Applicant.equals(userAppStatus.role().getValue())) {
-                    sendUpdateButton.setVisible(true);
+                    if (false) { //TODO VISTA-4301
+                        sendUpdateButton.setVisible(true);
+                    }
                 }
 
                 break;
