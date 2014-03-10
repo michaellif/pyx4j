@@ -15,6 +15,7 @@ package com.propertyvista.biz.system.yardi;
 
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.yardi.services.YardiGuestManagementService;
 import com.propertyvista.yardi.services.YardiGuestManagementService.SignLeaseResults;
 
@@ -122,12 +124,16 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
                 Map<Key, String> participants = YardiGuestManagementService.getInstance().addLeaseParticipants(getPmcYardiCredential(lease), lease);
 
                 // save lease participants ids
-                Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
-                for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-                    String yardiApplicantId = participants.get(participant.getPrimaryKey());
+                Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
+                for (LeaseTermParticipant<?> participant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version()
+                        .guarantors())) {
+                    Persistence.ensureRetrieve(participant.leaseParticipant(), AttachLevel.Attached);
+                    LeaseParticipant<?> lp = participant.leaseParticipant();
+                    String yardiApplicantId = participants.get(lp.getPrimaryKey());
                     Validate.notNull(yardiApplicantId, "yardiApplicantId is null");
-                    participant.yardiApplicantId().setValue(yardiApplicantId);
-                    Persistence.service().persist(participant);
+                    lp.yardiApplicantId().setValue(yardiApplicantId);
+                    Persistence.service().persist(lp);
                 }
 
                 return null;
@@ -143,14 +149,17 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
 
         log.info("leaseId assigned {} for {}", lease.leaseId(), lease.leaseApplication().yardiApplicationId());
 
-        Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
-        for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
+        for (LeaseTermParticipant<?> participant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version().guarantors())) {
+            Persistence.ensureRetrieve(participant.leaseParticipant(), AttachLevel.Attached);
+            LeaseParticipant<?> lp = participant.leaseParticipant();
             // application must be updated (yardi sync) before approval
-            String participantId = signLeaseResults.getParticipants().get(participant.getPrimaryKey());
+            String participantId = signLeaseResults.getParticipants().get(lp.getPrimaryKey());
             Validate.notNull(participantId, "ParticipantId  is null");
-            participant.participantId().setValue(participantId);
+            lp.participantId().setValue(participantId);
             Persistence.service().persist(participant);
-            log.info("participantId assigned {} for {} in leaseId {}", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
+            log.info("participantId assigned {} for {} in leaseId {}", lp.participantId(), lp.yardiApplicantId(), lease.leaseId());
         }
         return lease;
     }

@@ -52,7 +52,6 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -100,20 +99,24 @@ public class YardiGuestProcessor {
 
     public List<Customer> getCoApplicants(Lease lease) {
         List<Customer> result = new ArrayList<Customer>();
-        Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
-        for (LeaseParticipant<?> lp : lease.leaseParticipants()) {
-            Persistence.ensureRetrieve(lp.leaseTermParticipants(), AttachLevel.Attached);
-            LeaseTermParticipant<?> ltp = lp.leaseTermParticipants().iterator().next();
+
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        for (LeaseTermParticipant<?> ltp : lease.currentTerm().version().tenants()) {
+            Persistence.ensureRetrieve(ltp.leaseParticipant(), AttachLevel.Attached);
+            if (ltp.leaseParticipant().getPrimaryKey().equals(lease._applicant().getPrimaryKey())) {
+                continue;
+            }
             Role role = ltp.role().getValue();
             if (Role.roommates().contains(role)) {
                 PersonRelationship relation = ((LeaseTermTenant) ltp).relationship().getValue();
                 Customer roommate = getCustomer( //
                         PersonRelationship.Spouse.equals(relation) ? CustomerInfo.SPOUSE : CustomerInfo.ROOMMATE, //
-                        lp.customer().person().name(), //
-                        getCurrentAddress(lp.customer()), //
+                        ltp.leaseParticipant().customer().person().name(), //
+                        getCurrentAddress(ltp.leaseParticipant().customer()), //
                         lease.unit().building().propertyCode().getValue(), //
-                        lp.getPrimaryKey().toString() // third-party room mate id
+                        ltp.leaseParticipant().getPrimaryKey().toString() // third-party room mate id
                 );
+                // check if the tenant is responsible for lease
                 if (Role.CoApplicant.equals(role)) {
                     LeaseType leaseType = new LeaseType();
                     leaseType.setResponsibleForLease(true);
@@ -127,18 +130,16 @@ public class YardiGuestProcessor {
 
     public List<Customer> getGuarantors(Lease lease) {
         List<Customer> result = new ArrayList<Customer>();
-        Persistence.ensureRetrieve(lease.leaseParticipants(), AttachLevel.Attached);
-        for (LeaseParticipant<?> lp : lease.leaseParticipants()) {
-            Persistence.ensureRetrieve(lp.leaseTermParticipants(), AttachLevel.Attached);
-            if (Role.Guarantor.equals(lp.leaseTermParticipants().iterator().next().role().getValue())) {
-                result.add(getCustomer( //
-                        CustomerInfo.GUARANTOR, //
-                        lp.customer().person().name(), //
-                        getCurrentAddress(lp.customer()), //
-                        lease.unit().building().propertyCode().getValue(), //
-                        lp.getPrimaryKey().toString() //
-                ));
-            }
+        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
+        for (LeaseTermParticipant<?> ltp : lease.currentTerm().version().guarantors()) {
+            Persistence.ensureRetrieve(ltp.leaseParticipant(), AttachLevel.Attached);
+            result.add(getCustomer( //
+                    CustomerInfo.GUARANTOR, //
+                    ltp.leaseParticipant().customer().person().name(), //
+                    getCurrentAddress(ltp.leaseParticipant().customer()), //
+                    lease.unit().building().propertyCode().getValue(), //
+                    ltp.leaseParticipant().getPrimaryKey().toString() //
+            ));
         }
         return result;
     }
@@ -237,7 +238,7 @@ public class YardiGuestProcessor {
 
     private AddressType getAddress(AddressStructured as) {
         AddressType addr = null;
-        if (as != null) {
+        if (as != null && !as.isNull()) {
             addr = new AddressType();
             addr.setCountry(as.country().name().getValue());
             if (addr.getCountry().equalsIgnoreCase("Canada")) {
