@@ -27,6 +27,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -84,14 +85,22 @@ public class LeaseMerger {
     public static boolean isTermDatesChanged(YardiLease imported, LeaseTerm existing) {
         boolean changed = false;
 
-        changed |= isChanged(existing.termFrom(), YardiLeaseProcessor.guessFromDate(imported));
+        LogicalDate date = YardiLeaseProcessor.guessFromDate(imported);
+        if (date != null) {
+            changed |= isChanged(existing.termFrom(), date);
+        }
         changed |= isChanged(existing.termTo(), imported.getLeaseToDate());
 
         return changed;
     }
 
     public LeaseTerm mergeTermDates(YardiLease imported, LeaseTerm existing) {
-        existing.termFrom().setValue(YardiLeaseProcessor.guessFromDate(imported));
+        LogicalDate date = YardiLeaseProcessor.guessFromDate(imported);
+        if (date == null) {
+            date = SystemDateManager.getLogicalDate();
+            log.warn("Empty Yardi 'Lease From' date - substitute with current date!");
+        }
+        existing.termFrom().setValue(date);
         existing.termTo().setValue(getImportedDate(imported.getLeaseToDate()));
 
         // correct term type if yardi changed lease end date:

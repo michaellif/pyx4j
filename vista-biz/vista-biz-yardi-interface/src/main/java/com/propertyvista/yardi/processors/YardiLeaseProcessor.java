@@ -141,7 +141,12 @@ public class YardiLeaseProcessor {
         }
 
         //  dates:
-        lease.currentTerm().termFrom().setValue(guessFromDate(yardiLease));
+        LogicalDate date = guessFromDate(yardiLease);
+        if (date == null) {
+            date = SystemDateManager.getLogicalDate();
+            log.warn("Empty Yardi 'Lease From' date - substitute with current date!");
+        }
+        lease.currentTerm().termFrom().setValue(date);
 
         if (yardiLease.getLeaseToDate() != null) {
             lease.currentTerm().termTo().setValue(getLogicalDate(yardiLease.getLeaseToDate()));
@@ -234,7 +239,6 @@ public class YardiLeaseProcessor {
         if (LeaseMerger.isTermDatesChanged(yardiLease, lease.currentTerm())) {
             lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
             toPersist = true;
-
             log.debug("        - TermDatesChanged...");
         }
 
@@ -457,7 +461,7 @@ public class YardiLeaseProcessor {
      * We badly depends on this termFrom/leaseFrom date - so try to deduct as much as possible in the cases where it absent in Yardi!
      */
     public static LogicalDate guessFromDate(YardiLease yardiLease) {
-        LogicalDate date;
+        LogicalDate date = null;
 
         if (yardiLease.getLeaseFromDate() != null) {
             date = getLogicalDate(yardiLease.getLeaseFromDate());
@@ -467,9 +471,6 @@ public class YardiLeaseProcessor {
             date = getLogicalDate(yardiLease.getExpectedMoveInDate());
         } else if (yardiLease.getLeaseSignDate() != null) {
             date = getLogicalDate(yardiLease.getLeaseSignDate());
-        } else {
-            date = SystemDateManager.getLogicalDate();
-            log.warn("Empty Yardi 'Lease From' date - substitute with current date!");
         }
 
         return date;
