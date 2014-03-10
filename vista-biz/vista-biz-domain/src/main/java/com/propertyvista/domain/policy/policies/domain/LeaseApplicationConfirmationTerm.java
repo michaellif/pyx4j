@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
 
+@ToStringFormat("{0}")
 public interface LeaseApplicationConfirmationTerm extends IEntity {
 
     @Detached

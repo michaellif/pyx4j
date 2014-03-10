@@ -16,13 +16,17 @@ package com.propertyvista.domain.tenant.lease;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmationTerm;
 import com.propertyvista.domain.security.CustomerSignature;
 
+@ToStringFormat("{0}")
 public interface SignedAgreementConfirmationTerm extends IEntity {
 
+    @ToString(index = 0)
     LeaseAgreementConfirmationTerm term();
 
     @Owned
