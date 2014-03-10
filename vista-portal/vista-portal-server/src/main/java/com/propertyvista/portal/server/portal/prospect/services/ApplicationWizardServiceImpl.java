@@ -486,6 +486,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void fillGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
+        if (bo.role().getValue() == Role.Guarantor) {
+            return; // nothing to do!..
+        }
+
         EntityQueryCriteria<LeaseTermGuarantor> criteria = new EntityQueryCriteria<LeaseTermGuarantor>(LeaseTermGuarantor.class);
         criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
         criteria.eq(criteria.proto().tenant().customer(), bo.customer());
@@ -507,6 +511,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void saveGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
+        if (bo.role().getValue() == Role.Guarantor) {
+            return; // nothing to do!..
+        }
+
         LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
         // clear removed:
@@ -515,7 +523,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             Boolean present = false;
             LeaseTermGuarantor ltg = it.next();
             Persistence.ensureRetrieve(ltg, AttachLevel.Attached);
-            if (!ltg.leaseParticipant().customer().equals(bo.customer())) {
+            if (ltg.tenant().customer().equals(bo.customer())) {
                 for (GuarantorDTO grnt : to.guarantors()) {
                     if (!grnt.guarantorId().isNull() && grnt.guarantorId().getPrimaryKey().equals(ltg.getPrimaryKey())) {
                         present = true;
