@@ -28,12 +28,14 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
@@ -81,8 +83,10 @@ public class PaymentStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
-        panel.setH3(++row, 0, 1, i18n.tr("Deposits"));
-        panel.setWidget(++row, 0, inject(proto().payment().deposits(), new DepositFolder()));
+        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+            panel.setH3(++row, 0, 1, i18n.tr("Deposits"));
+            panel.setWidget(++row, 0, inject(proto().payment().deposits(), new DepositFolder()));
+        }
 
         panel.setH3(++row, 0, 1, i18n.tr("Fees"));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().applicationFee(), new CMoneyLabel())).build());

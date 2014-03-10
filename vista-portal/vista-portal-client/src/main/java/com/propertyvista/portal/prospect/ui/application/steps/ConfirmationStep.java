@@ -33,8 +33,10 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
@@ -136,8 +138,10 @@ public class ConfirmationStep extends ApplicationWizardStep {
     private BigDecimal calculatePaymentAmount() {
         BigDecimal amount = BigDecimal.ZERO;
 
-        for (Deposit deposit : getValue().payment().deposits()) {
-            amount = amount.add(deposit.amount().getValue());
+        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+            for (Deposit deposit : getValue().payment().deposits()) {
+                amount = amount.add(deposit.amount().getValue());
+            }
         }
 
         amount = amount.add(getValue().payment().applicationFee().getValue());
