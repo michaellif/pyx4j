@@ -81,11 +81,29 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             public FieldValidationError isValid() {
                 if (getComponent().getValue() != null && documentationPolicy != null) {
                     int requredDocsCount = documentationPolicy.numberOfRequiredIDs().getValue();
-                    int remainingDocsCount = requredDocsCount - getValue().size();
+                    int remainingDocsCount = requredDocsCount - getComponent().getValue().size();
                     if (remainingDocsCount > 0) {
                         return new FieldValidationError(getComponent(), i18n.tr(
                                 "You have to provide {0} identification document(s), {1} more document(s) is/are required", requredDocsCount,
                                 remainingDocsCount));
+                    }
+
+                    // 'Required' check:
+                    for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
+                        if (docType.importance().getValue() == Importance.Required) {
+                            boolean found = false;
+                            for (IdentificationDocumentFolder doc : getComponent().getValue()) {
+                                if (doc.idType().equals(docType)) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found) {
+                                return new FieldValidationError(getComponent(), i18n.tr("You have to provide {0} identification document which is required",
+                                        docType.getStringView()));
+                            }
+                        }
                     }
                 }
                 return null;
@@ -132,12 +150,6 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             public void onValueSet(boolean populate) {
                 // update removable
                 setRemovable(!Importance.Required.equals(getValue().idType().importance().getValue()));
-            }
-
-            // TODO - here for testing - remove
-            @Override
-            public void setRemovable(boolean removable) {
-                super.setRemovable(removable);
             }
         };
     }

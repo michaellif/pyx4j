@@ -256,6 +256,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         case Guarantor:
             fillLeaseTermParticipant(bo, to, ProspectPortalContext.getLeaseTermGuarantor());
             break;
+
         default:
             throw new IllegalArgumentException();
         }
