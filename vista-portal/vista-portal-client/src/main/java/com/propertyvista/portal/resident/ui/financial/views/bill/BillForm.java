@@ -54,11 +54,7 @@ public class BillForm extends CEntityForm<BillDTO> {
         this.showInfoSection = showPreviousBill;
         this.showPreviousBill = showPreviousBill;
 
-        setEditable(false);
-        inheritEditable(false);
-
         setViewable(true);
-        inheritViewable(false);
     }
 
     @Override

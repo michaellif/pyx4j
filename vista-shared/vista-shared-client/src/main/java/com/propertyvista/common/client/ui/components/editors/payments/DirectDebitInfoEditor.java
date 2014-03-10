@@ -27,7 +27,6 @@ public class DirectDebitInfoEditor extends CEntityForm<DirectDebitInfo> {
         super(DirectDebitInfo.class);
 
         setEditable(false);
-        inheritEditable(false);
     }
 
     @Override

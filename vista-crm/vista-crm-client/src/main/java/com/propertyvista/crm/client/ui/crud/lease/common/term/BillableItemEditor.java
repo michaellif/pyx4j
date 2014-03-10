@@ -522,7 +522,6 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
                 if (VistaFeatures.instance().yardiIntegration()) {
                     setEditable(false);
-                    inheritEditable(false);
                 }
             }
 
