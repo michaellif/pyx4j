@@ -21,7 +21,9 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -49,8 +51,10 @@ public class FinancialStep extends ApplicationWizardStep {
         panel.setH3(++row, 0, 1, i18n.tr("Assets"));
         panel.setWidget(++row, 0, inject(proto().applicant().assets(), new PersonalAssetFolder()));
 
-        panel.setH3(++row, 0, 1, i18n.tr("Guarantors"));
-        panel.setWidget(++row, 0, inject(proto().guarantors(), new GuarantorsFolder((ApplicationWizardViewImpl) getView())));
+        if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+            panel.setH3(++row, 0, 1, i18n.tr("Guarantors"));
+            panel.setWidget(++row, 0, inject(proto().guarantors(), new GuarantorsFolder((ApplicationWizardViewImpl) getView())));
+        }
 
         return panel;
     }
