@@ -42,7 +42,7 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
         this.view = view;
 
         setNoDataNotificationWidget(new Label(
-                i18n.tr("Guarantors are individuals who are financially responsible for your lease commitment but will not be leaving in your apartment")));
+                i18n.tr("Guarantors are individuals who are financially responsible for your lease commitment but will not be living in your apartment")));
     }
 
     @Override
