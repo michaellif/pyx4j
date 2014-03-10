@@ -22,6 +22,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 
@@ -47,6 +50,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class YardiProductCatalogProcessor {
 
+    private static final Logger log = LoggerFactory.getLogger(YardiProductCatalogProcessor.class);
+
     public void processCatalog(Building building, RentableItems rentableItems, Key yardiInterfaceId) {
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
@@ -67,7 +72,7 @@ public class YardiProductCatalogProcessor {
 
         ARCode arCode = getServiceArCode();
         for (Service service : building.productCatalog().services()) {
-            if (!service.defaultCatalogItem().isBooleanTrue() && service.code().equals(arCode)) {
+            if (!service.defaultCatalogItem().getValue(false) && service.code().equals(arCode)) {
                 updateUnitItems(service, units, depositInfo);
             }
         }
@@ -79,13 +84,13 @@ public class YardiProductCatalogProcessor {
 
         // Save services and features:
         for (Feature feature : building.productCatalog().features()) {
-            if (!feature.defaultCatalogItem().isBooleanTrue()) {
+            if (!feature.defaultCatalogItem().getValue(false)) {
                 Persistence.service().merge(feature);
             }
         }
 
         for (Service service : building.productCatalog().services()) {
-            if (!service.defaultCatalogItem().isBooleanTrue()) {
+            if (!service.defaultCatalogItem().getValue(false)) {
                 Persistence.service().merge(service);
             }
         }
@@ -139,7 +144,8 @@ public class YardiProductCatalogProcessor {
 
     private void deleteServices(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (!service.defaultCatalogItem().isBooleanTrue() && service.expiredFrom().isNull()) {
+            log.debug("expire Service Id:{} updated {}", service.id(), service.updated());
+            if (!service.defaultCatalogItem().getValue(false) && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(SystemDateManager.getLogicalDate());
                 Persistence.service().merge(service);
             }
