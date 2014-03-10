@@ -495,7 +495,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
     private class DepositFolder extends VistaTableFolder<Deposit> {
 
         public DepositFolder() {
-            super(Deposit.class, i18n.tr("Deposit"), !BillableItemEditor.this.isViewable());
+            super(Deposit.class, i18n.tr("Deposit"), !VistaFeatures.instance().yardiIntegration() && !BillableItemEditor.this.isViewable());
         }
 
         @Override
@@ -519,13 +519,21 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
             public DepositEditor() {
                 super(Deposit.class, columns());
+
+                if (VistaFeatures.instance().yardiIntegration()) {
+                    setEditable(false);
+                    inheritEditable(false);
+                }
             }
 
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-                // disable editing of finalized deposits:
-                setEditable(getValue().lifecycle().isNull());
+
+                if (!VistaFeatures.instance().yardiIntegration()) {
+                    // disable editing of finalized deposits:
+                    setEditable(getValue().lifecycle().isNull());
+                }
             }
         }
     }
