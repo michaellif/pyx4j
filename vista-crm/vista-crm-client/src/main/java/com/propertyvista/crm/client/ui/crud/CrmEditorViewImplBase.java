@@ -14,11 +14,20 @@
 package com.propertyvista.crm.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.prime.form.AbstractEditor;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends AbstractEditor<E> {
 
     public CrmEditorViewImplBase() {
         super();
+    }
+
+    @Override
+    public void setPresenter(IPrimePane.Presenter presenter) {
+        super.setPresenter(presenter);
+        if (presenter != null) {
+            reset(); // initialize the view!..
+        }
     }
 }

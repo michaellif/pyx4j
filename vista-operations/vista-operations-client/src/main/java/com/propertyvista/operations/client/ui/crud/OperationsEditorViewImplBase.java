@@ -14,6 +14,7 @@
 package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.prime.form.AbstractEditor;
 
 public class OperationsEditorViewImplBase<E extends IEntity> extends AbstractEditor<E> {
@@ -22,4 +23,11 @@ public class OperationsEditorViewImplBase<E extends IEntity> extends AbstractEdi
         super();
     }
 
+    @Override
+    public void setPresenter(IPrimePane.Presenter presenter) {
+        super.setPresenter(presenter);
+        if (presenter != null) {
+            reset(); // initialize the view!..
+        }
+    }
 }

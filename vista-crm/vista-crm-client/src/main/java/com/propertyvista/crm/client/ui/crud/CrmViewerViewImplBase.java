@@ -29,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.prime.form.AbstractViewer;
 import com.pyx4j.widgets.client.Button;
 
@@ -233,6 +234,14 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     protected boolean isFinalizationVisible() {
         return (finalizeMenu != null ? finalizeMenu.isVisible() : false);
+    }
+
+    @Override
+    public void setPresenter(IPrimePane.Presenter presenter) {
+        super.setPresenter(presenter);
+        if (presenter != null) {
+            reset(); // initialize the view!..
+        }
     }
 
     @Override
