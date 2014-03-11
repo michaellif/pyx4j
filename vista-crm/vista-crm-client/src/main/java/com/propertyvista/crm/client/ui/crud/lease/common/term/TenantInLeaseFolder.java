@@ -39,6 +39,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -274,15 +275,15 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             super.addValidations();
 
             get(proto().leaseParticipant().customer().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
-            get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
-
-            get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
+            get(proto().leaseParticipant().customer().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                 @Override
-                public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
-                    get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
+                public AbstractValidationError isValid() {
+                    get(proto().role()).revalidate();
+                    return null;
                 }
             });
-            get(proto().role()).addValueChangeHandler(new RevalidationTrigger<Role>(get(proto().leaseParticipant().customer().person().birthDate())));
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
+
             get(proto().role()).addComponentValidator(new AbstractComponentValidator<LeaseTermParticipant.Role>() {
                 @Override
                 public FieldValidationError isValid() {
@@ -307,6 +308,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                         }
                     }
                     return null;
+                }
+            });
+            get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
+                    get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
                 }
             });
 
