@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -37,6 +38,7 @@ public interface ProofOfEmploymentDocumentFolder extends IEntity {
     CustomerScreeningIncome owner();
 
     @NotNull
+    @ToString(index = 0)
     IPrimitive<String> description();
 
     @Owned
