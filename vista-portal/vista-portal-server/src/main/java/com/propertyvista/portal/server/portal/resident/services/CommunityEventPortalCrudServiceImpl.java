@@ -43,32 +43,28 @@ public class CommunityEventPortalCrudServiceImpl extends AbstractCrudServiceImpl
 
     @Override
     public void retreiveCommunityEvents(AsyncCallback<CommunityEventsGadgetDTO> callback) {
-        if (false) {
-            AptUnit unit = ResidentPortalContext.getUnit();
-            if (unit == null || unit.isEmpty()) {
-                callback.onSuccess(null);
-                return;
-            }
-
-            EntityQueryCriteria<CommunityEvent> criteria = EntityQueryCriteria.create(CommunityEvent.class);
-            criteria.eq(criteria.proto().building(), unit.building());
-            criteria.ge(criteria.proto().date(), new LogicalDate());
-            criteria.asc(criteria.proto().date());
-            List<CommunityEvent> events = Persistence.service().query(criteria);
-
-            if (events == null || events.isEmpty()) {
-                callback.onSuccess(null);
-                return;
-            }
-
-            CommunityEventsGadgetDTO data = EntityFactory.create(CommunityEventsGadgetDTO.class);
-            for (CommunityEvent e : events) {
-                data.events().add(e);
-            }
-
-            callback.onSuccess(data);
+        AptUnit unit = ResidentPortalContext.getUnit();
+        if (unit == null || unit.isEmpty()) {
+            callback.onSuccess(null);
+            return;
         }
-        callback.onSuccess(EntityFactory.create(CommunityEventsGadgetDTO.class));
-    }
 
+        EntityQueryCriteria<CommunityEvent> criteria = EntityQueryCriteria.create(CommunityEvent.class);
+        criteria.eq(criteria.proto().building(), unit.building());
+        criteria.ge(criteria.proto().date(), new LogicalDate());
+        criteria.asc(criteria.proto().date());
+        List<CommunityEvent> events = Persistence.service().query(criteria);
+
+        if (events == null || events.isEmpty()) {
+            callback.onSuccess(null);
+            return;
+        }
+
+        CommunityEventsGadgetDTO data = EntityFactory.create(CommunityEventsGadgetDTO.class);
+        for (CommunityEvent e : events) {
+            data.events().add(e);
+        }
+
+        callback.onSuccess(data);
+    }
 }

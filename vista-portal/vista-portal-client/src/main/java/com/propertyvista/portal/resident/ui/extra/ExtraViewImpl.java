@@ -58,16 +58,19 @@ public class ExtraViewImpl extends FlowPanel implements ExtraView {
     public void populateWeather(WeatherGadgetDTO notification) {
         if (notification != null) {
             weatherGadget = new WeatherGadget(notification);
-            populate();
+        } else {
+            weatherGadget = null;
         }
-
+        populate();
     }
 
     @Override
     public void populateCommunityEvents(CommunityEventsGadgetDTO notification) {
-        if (notification != null) {
+        if (notification != null && notification.events() != null && notification.events().size() > 0) {
             communityEventsGadget = new CommunityEventsGadget(notification);
-            populate();
+        } else {
+            communityEventsGadget = null;
         }
+        populate();
     }
 }
