@@ -19,7 +19,10 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -37,6 +40,13 @@ public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
         setOrderable(false);
         setAddable(false);
         setRemovable(false);
+    }
+
+    @Override
+    public IFolderItemDecorator<LeaseTermTenant> createItemDecorator() {
+        BoxFolderItemDecorator<LeaseTermTenant> decor = (BoxFolderItemDecorator<LeaseTermTenant>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
@@ -61,6 +71,7 @@ public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
             int row = -1;
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(
                     inject(proto().leaseParticipant().customer().person().name(), new CEntityLabel<Name>())).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().role(), new CEnumLabel())).build());
             mainPanel.setWidget(++row, 0,
                     new FormWidgetDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email(), new CLabel<String>())).build());
 

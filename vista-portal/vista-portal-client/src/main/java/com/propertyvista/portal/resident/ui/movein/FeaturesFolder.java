@@ -22,6 +22,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -36,6 +38,13 @@ public class FeaturesFolder extends PortalBoxFolder<BillableItem> {
         setOrderable(false);
         setAddable(false);
         setRemovable(false);
+    }
+
+    @Override
+    public IFolderItemDecorator<BillableItem> createItemDecorator() {
+        BoxFolderItemDecorator<BillableItem> decor = (BoxFolderItemDecorator<BillableItem>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
