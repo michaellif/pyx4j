@@ -483,7 +483,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             final ExecutionMonitor executionMonitor) throws YardiServiceException {
         final LeaseFinancialStats state = new LeaseFinancialStats();
 
-        log.info("    Importing lease:");
+        log.info("    Importing Lease (customerId={}):", rtCustomer.getCustomerID());
+
         if (YardiLeaseProcessor.isEligibleForProcessing(rtCustomer)) {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
                 @Override
@@ -497,11 +498,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     new YardiPaymentProcessor().removeOldPayments(account);
 
                     if (rtCustomer.getRTServiceTransactions() != null) {
+                        if (rtCustomer.getRTServiceTransactions().getTransactions().isEmpty()) {
+                            log.info("          No Transactions for Lease customerId={} ", rtCustomer.getCustomerID());
+                        }
                         for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
                             if (tr != null) {
                                 if (tr.getCharge() != null) {
-                                    log.info("          Updating charge");
                                     ChargeDetail detail = tr.getCharge().getDetail();
+                                    log.info("          Updating charge (transactionId={}, due={}, paid={}):", detail.getTransactionID(),
+                                            detail.getBalanceDue(), detail.getAmountPaid());
                                     BigDecimal amountPaid = new BigDecimal(detail.getAmountPaid());
                                     BigDecimal balanceDue = new BigDecimal(detail.getBalanceDue());
                                     BigDecimal amount = amountPaid.add(balanceDue);
@@ -522,13 +527,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                                 }
 
                                 if (tr.getPayment() != null) {
-                                    log.info("          Updating payment");
+                                    log.info("          Updating payment (transactionId={}, amount={}) ", tr.getPayment().getDetail().getTransactionID(), tr
+                                            .getPayment().getDetail().getAmount());
                                     YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
                                     Persistence.service().persist(payment);
                                     state.addPayment(payment.amount().getValue());
                                 }
                             }
                         }
+                    } else {
+                        log.info("          No RT Service Transactions Received for Lease customerId={} ", rtCustomer.getCustomerID());
                     }
 
                     return null;
