@@ -53,6 +53,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermGuarantor> {
 
@@ -179,8 +180,12 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
 
             if (isEditable()) {
-                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseParticipant().participantId()), getValue()
-                        .getPrimaryKey());
+                if (VistaFeatures.instance().yardiIntegration()) {
+                    get(proto().leaseParticipant().participantId()).setVisible(false);
+                } else {
+                    ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseParticipant().participantId()), getValue()
+                            .getPrimaryKey());
+                }
 
                 get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(getEnforceAgeOfMajority());
                 get(proto().leaseParticipant().customer().person().email()).setMandatory(!getValue().leaseParticipant().customer().user().isNull());
