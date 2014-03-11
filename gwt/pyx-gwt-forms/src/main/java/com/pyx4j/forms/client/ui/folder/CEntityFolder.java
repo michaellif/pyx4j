@@ -144,8 +144,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             ((IFolderDecorator) getDecorator()).setAddButtonVisible(addable);
         }
         for (CEntityFolderItem<E> item : itemsList) {
-            item.setRemovable(removable);
-            item.setMovable(orderable);
             item.calculateActionsState();
         }
     }
@@ -177,20 +175,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     private CEntityFolderItem<E> createItemPrivate() {
-
-        boolean first = container.getWidgetCount() == 0;
-
-        CEntityFolderItem<E> item = createItem(first);
-
-        if (removable == false) {
-            item.setRemovable(false);
-        }
-
-        if (orderable == false) {
-            item.setMovable(false);
-        }
-
-        return item;
+        return createItem(container.getWidgetCount() == 0);
     }
 
     protected abstract IFolderDecorator<E> createFolderDecorator();

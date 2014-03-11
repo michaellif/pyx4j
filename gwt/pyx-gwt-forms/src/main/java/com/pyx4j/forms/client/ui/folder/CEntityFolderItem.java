@@ -204,7 +204,8 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
             CEntityFolderItem<?> previousSibling = parent.getItem(index - 1);
             CEntityFolderItem<?> nextSibling = parent.getItem(index + 1);
 
-            actionsBar.setDefaultActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last && nextSibling.isMovable());
+            actionsBar.setDefaultActionsState(removable && parent.isRemovable(), movable && !first && previousSibling.isMovable() && parent.isOrderable(),
+                    movable && !last && nextSibling.isMovable() && parent.isOrderable());
         }
 
     }
