@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
@@ -60,7 +61,7 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
 
     protected long requestsTime;
 
-    protected final List<String> recordedTracastionsLogs = new ArrayList<String>();
+    private final List<String> recordedTracastionsLogs = new ArrayList<String>();
 
     static {
         testSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com/");
@@ -164,7 +165,11 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
 
     @Override
     public void logRecordedTracastions() {
-        log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+        log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
+    }
+
+    public String printableListOfRecordedTracastionFiles() {
+        return ConverterUtils.convertStringCollection(recordedTracastionsLogs, "\n");
     }
 
     protected void setTransportOptions(Stub stub, PmcYardiCredential yc) {

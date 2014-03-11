@@ -92,23 +92,23 @@ public class TransactionLog {
             return null;
         }
         try {
-            File dir = logsDir();
+            File rootDir = logsDir();
             long transactionGroup = transactionId / 1000;
             NumberFormat gnf = new DecimalFormat("0000");
-            dir = new File(dir, gnf.format(transactionGroup) + "000-" + gnf.format(transactionGroup) + "999");
-            FileUtils.forceMkdir(dir);
+            File subDir = new File(rootDir, gnf.format(transactionGroup) + "000-" + gnf.format(transactionGroup) + "999");
+            FileUtils.forceMkdir(subDir);
 
             NumberFormat nf = new DecimalFormat("000000");
             StringBuffer fname = new StringBuffer(nf.format(transactionId));
             fname.append('-').append(contextName);
 
-            File out = new File(dir, fname.toString() + "." + fileExt);
+            File out = new File(subDir, fname.toString() + "." + fileExt);
             int repeat = 0;
             while (out.exists()) {
-                out = new File(dir, fname.toString() + "-" + (++repeat) + "." + fileExt);
+                out = new File(subDir, fname.toString() + "-" + (++repeat) + "." + fileExt);
             }
             FileIOUtils.writeToFile(out, prettyXmlFormat(context), StandardCharsets.UTF_8);
-            return out.getAbsolutePath();
+            return rootDir.getName() + "/" + subDir.getName() + "/" + out.getName();
         } catch (Throwable t) {
             log.error("failed to create transaction log", t);
             return null;

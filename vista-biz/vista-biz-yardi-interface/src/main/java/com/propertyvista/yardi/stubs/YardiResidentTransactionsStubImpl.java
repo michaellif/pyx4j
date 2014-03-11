@@ -182,7 +182,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
@@ -229,7 +229,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
@@ -280,7 +280,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
@@ -325,7 +325,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
@@ -382,7 +382,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
@@ -438,7 +438,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }

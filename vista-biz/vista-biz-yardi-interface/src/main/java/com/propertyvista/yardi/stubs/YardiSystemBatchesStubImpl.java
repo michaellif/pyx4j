@@ -83,7 +83,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             return result;
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
@@ -136,7 +136,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
@@ -177,7 +177,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
@@ -218,7 +218,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             throw new Error(e);
         } finally {
             if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
     }
