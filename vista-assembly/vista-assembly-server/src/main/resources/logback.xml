@@ -39,11 +39,11 @@ start new log file on each application start
             <fileNamePattern>${container-home}/logs/${application-name}/${logs-name}.%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.PyxExtensionSizeAndTimeBasedFNATP">
                 <rolloverOnStart>true</rolloverOnStart>
-                <maxFileSize>7000KB</maxFileSize>
+                <maxFileSize>10000KB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <!-- see fileNamePattern; hours, disabled because of the VISTA-4094 -->
-            <maxHistory>0</maxHistory>
-            <cleanHistoryOnStart>false</cleanHistoryOnStart>
+            <!-- see fileNamePattern; hours (100 days) -->
+            <maxHistory>2400</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -64,7 +64,7 @@ start new log file on each application start
                 <rolloverOnStart>true</rolloverOnStart>
                 <maxFileSize>3000KB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>30</maxHistory>
+            <maxHistory>100</maxHistory>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -84,7 +84,7 @@ start new log file on each application start
                 <rolloverOnStart>true</rolloverOnStart>
                 <maxFileSize>3000KB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>90</maxHistory>
+            <maxHistory>100</maxHistory>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -101,7 +101,7 @@ start new log file on each application start
                 <rolloverOnStart>true</rolloverOnStart>
                 <maxFileSize>3000KB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>30</maxHistory>
+            <maxHistory>2400</maxHistory>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
