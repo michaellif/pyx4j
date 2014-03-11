@@ -85,8 +85,6 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             }
             String xml = response.getGetYardiRentableItems_LoginResult().getExtraElement().toString();
 
-            log.debug("GetYardiRentableItems Result: {}", xml);
-
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -136,8 +134,6 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             OMElement root = response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement();
             String xml = root.toString();
 
-            log.debug("GetYardiMarketingSources Result: {}", xml);
-
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -184,8 +180,6 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
             String xml = response.getUnitAvailability_LoginResult().getExtraElement().toString();
 
-            log.debug("GetMarketingInfo Result: {}", xml);
-
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -229,8 +223,6 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             }
 
             String xml = response.getGetYardiGuestActivity_LoginResult().getExtraElement().toString();
-
-            log.debug("GetYardiGuestActivity Result: {}", xml);
 
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
@@ -285,8 +277,6 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
             String xml = response.getGetYardiGuestActivity_SearchResult().getExtraElement().toString();
 
-            log.debug("GetYardiGuestSearch Result: {}", xml);
-
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -337,8 +327,6 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             }
             String xml = response.getImportYardiGuest_LoginResult().getExtraElement().toString();
 
-            log.debug("ImportYardiGuest: {}", xml);
-
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
                 YardiLicense.handleVendorLicenseError(messages);
@@ -383,8 +371,6 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
                 throw new YardiServiceException("importResidentTransactions received NULL response");
             }
             String xml = response.getImportApplication_LoginResult().getExtraElement().toString();
-
-            log.debug("ImportApplication: {}", xml);
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {

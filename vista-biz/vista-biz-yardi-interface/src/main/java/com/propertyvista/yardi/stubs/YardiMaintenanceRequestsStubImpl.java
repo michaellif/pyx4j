@@ -75,8 +75,6 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
-            log.info("GetPropertyConfigurations Result: {}", xml);
-
             // When Yardi has problems it returns invalid request with undocumented Error element inside !?
             String error = yardiErrorCheck(xml);
             if (error != null) {
@@ -95,9 +93,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
 
-            if (log.isDebugEnabled()) {
-                log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
-            }
+            log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
 
             return properties;
 
@@ -123,7 +119,6 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             GetCustomValuesResponse response = getMaintenanceRequestsService(yc).getCustomValues(request);
             String xml = response.getGetCustomValuesResult().getExtraElement().toString();
 
-            log.info("GetCustomValues: {}", xml);
             // When Yardi has problems it returns invalid request with undocumented Error element inside !?
             String error = yardiErrorCheck(xml);
             if (error != null) {
@@ -163,8 +158,6 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             GetServiceRequest_SearchResponse response = getMaintenanceRequestsService(yc).getServiceRequest_Search(request);
             String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
-
-            log.info("GetServiceRequests: {}", xml);
 
             // When Yardi has problems it returns invalid request with undocumented Error element inside !?
             String error = yardiErrorCheck(xml);
@@ -217,7 +210,6 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             CreateOrEditServiceRequestsResponse response = getMaintenanceRequestsService(yc).createOrEditServiceRequests(request);
             String responseXml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
-            log.debug("CreateOrEditServiceRequests: {}", responseXml);
 
             // When Yardi has problems it returns invalid request with undocumented Error element inside !?
             String error = yardiErrorCheck(responseXml);

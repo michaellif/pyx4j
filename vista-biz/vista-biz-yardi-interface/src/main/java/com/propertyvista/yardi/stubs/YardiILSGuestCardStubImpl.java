@@ -68,8 +68,6 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
             }
             String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
-            log.debug("GetPropertyConfigurations Result: {}", xml);
-
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -115,8 +113,6 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
             }
 
             String xml = response.getUnitAvailability_LoginResult().getExtraElement().toString();
-
-            log.info("GetMarketingInfo Result: {}", xml);
 
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
