@@ -505,14 +505,14 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             if (tr != null) {
                                 if (tr.getCharge() != null) {
                                     ChargeDetail detail = tr.getCharge().getDetail();
-                                    log.info("          Updating charge (transactionId={}, due={}, paid={}):", detail.getTransactionID(),
-                                            detail.getBalanceDue(), detail.getAmountPaid());
                                     BigDecimal amountPaid = new BigDecimal(detail.getAmountPaid());
                                     BigDecimal balanceDue = new BigDecimal(detail.getBalanceDue());
                                     BigDecimal amount = amountPaid.add(balanceDue);
                                     InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, detail);
                                     Persistence.service().persist(charge);
                                     state.addCharge(charge.amount().getValue());
+                                    log.info("          Created charge (transactionId={}, chargePk={}, amount={})", detail.getTransactionID(), charge.id()
+                                            .getValue(), charge.amount().getValue());
                                     // for a partially paid charge add fully consumed credit for the amount paid
                                     if (amount.compareTo(BigDecimal.ZERO) > 0 && amountPaid.compareTo(BigDecimal.ZERO) > 0) {
                                         // negate amount
@@ -522,16 +522,19 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                                         detail.setDescription(i18n.tr("{0} amount paid", detail.getDescription()));
                                         charge = YardiARIntegrationAgent.createCharge(account, detail);
                                         Persistence.service().persist(charge);
+                                        log.info("          Created charge (transactionId={}, chargePk={}, amount={})", detail.getTransactionID(), charge.id()
+                                                .getValue(), charge.amount().getValue());
                                         state.addCharge(charge.amount().getValue());
                                     }
+
                                 }
 
                                 if (tr.getPayment() != null) {
-                                    log.info("          Updating payment (transactionId={}, amount={}) ", tr.getPayment().getDetail().getTransactionID(), tr
-                                            .getPayment().getDetail().getAmount());
                                     YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
                                     Persistence.service().persist(payment);
                                     state.addPayment(payment.amount().getValue());
+                                    log.info("          Created payment (transactionId={}, amount={}) ", tr.getPayment().getDetail().getTransactionID(),
+                                            payment.amount().getValue());
                                 }
                             }
                         }
