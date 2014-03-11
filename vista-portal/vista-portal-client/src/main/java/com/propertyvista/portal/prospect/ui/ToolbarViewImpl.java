@@ -36,10 +36,11 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -92,6 +93,13 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             }
         });
         residentButtonMenu.addItem(applicationSelectionMenu);
+
+        residentButtonMenu.addItem(new MenuItem(i18n.tr("Status"), new Command() {
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.Status());
+            }
+        }));
 
         logoutMenu = new MenuItem(i18n.tr("Logout"), new Command() {
             @Override

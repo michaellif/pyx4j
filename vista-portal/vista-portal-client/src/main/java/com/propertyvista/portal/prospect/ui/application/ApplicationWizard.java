@@ -129,7 +129,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     @Override
     protected IDecorator<?> createDecorator() {
-        return new ApplicationWizardDecorator();
+        ApplicationWizardDecorator decorator = new ApplicationWizardDecorator();
+        decorator.getBtnCancel().setVisible(false);
+        return decorator;
     }
 
     @Override
