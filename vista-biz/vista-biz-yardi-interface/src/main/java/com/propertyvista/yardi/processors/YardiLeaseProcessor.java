@@ -266,7 +266,9 @@ public class YardiLeaseProcessor {
 
         if (toPersist) {
             lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            log.debug("        >> Persisting/Finalizing lease! <<");
+            log.info("        Lease term changes have been processed successfully (set log level to DEBUG to see more details)");
+        } else {
+            log.info("        No lease term changes detected");
         }
 
         // manage state:
@@ -275,16 +277,20 @@ public class YardiLeaseProcessor {
             if (isOnNotice(rtCustomer)) {
                 if (lease.completion().getValue() != CompletionType.Notice) {
                     lease = markLeaseOnNotice(lease, yardiLease);
+                    log.info("        Set NOTICE");
                 }
             } else if (lease.completion().getValue() == CompletionType.Notice) {
                 lease = cancelMarkLeaseOnNotice(lease, yardiLease);
+                log.info("        Cancel NOTICE");
             }
             if (isFormerLease(rtCustomer)) { // active -> past transition:
                 lease = completeLease(lease, yardiLease);
+                log.info("        Complete Lease");
             }
         } else { // past -> active transition (cancel Move Out in Yardi!):
             if (isCurrentLease(rtCustomer) || isFutureLease(rtCustomer)) {
                 lease = cancelLeaseCompletion(lease, yardiLease);
+                log.info("        Cancel Lease Completion");
             }
         }
 

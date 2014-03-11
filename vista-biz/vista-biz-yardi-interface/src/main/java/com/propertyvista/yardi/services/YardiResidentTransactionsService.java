@@ -497,6 +497,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     new YardiChargeProcessor().removeOldCharges(account);
                     new YardiPaymentProcessor().removeOldPayments(account);
 
+                    log.info("        Importing Lease Transactions:", rtCustomer.getCustomerID());
                     if (rtCustomer.getRTServiceTransactions() != null) {
                         if (rtCustomer.getRTServiceTransactions().getTransactions().isEmpty()) {
                             log.info("          No Transactions for Lease customerId={} ", rtCustomer.getCustomerID());
