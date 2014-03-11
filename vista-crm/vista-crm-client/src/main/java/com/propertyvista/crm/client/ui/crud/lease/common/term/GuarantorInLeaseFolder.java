@@ -197,9 +197,9 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             get(proto().leaseParticipant().customer().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                 @Override
                 public FieldValidationError isValid() {
-                    if (getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                    if (getComponent().getValue() != null) {
                         if (getEnforceAgeOfMajority()) {
-                            if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
+                            if (!TimeUtils.isOlderThan(getComponent().getValue(), getAgeOfMajority())) {
                                 return new FieldValidationError(getComponent(), i18n.tr("The minimum age requirement for a guarantor is {0}.",
                                         getAgeOfMajority()));
                             }
