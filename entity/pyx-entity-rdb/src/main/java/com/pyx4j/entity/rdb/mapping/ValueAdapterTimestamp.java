@@ -27,10 +27,17 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
 class ValueAdapterTimestamp extends ValueAdapterPrimitive {
+
+    private static final Logger log = LoggerFactory.getLogger(ValueAdapterTimestamp.class);
+
+    static Calendar cal = Calendar.getInstance();
 
     protected ValueAdapterTimestamp(Dialect dialect) {
         super(dialect, java.util.Date.class);
@@ -45,17 +52,18 @@ class ValueAdapterTimestamp extends ValueAdapterPrimitive {
             c.setTime((java.util.Date) value);
             // DB does not store Milliseconds
             c.set(Calendar.MILLISECOND, 0);
-            stmt.setTimestamp(parameterIndex, new java.sql.Timestamp(c.getTimeInMillis()));
+            stmt.setTimestamp(parameterIndex, new java.sql.Timestamp(c.getTimeInMillis()), cal);
         }
         return 1;
     }
 
     @Override
     public Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
-        java.sql.Timestamp value = rs.getTimestamp(memberSqlName);
+        java.sql.Timestamp value = rs.getTimestamp(memberSqlName, cal);
         if (rs.wasNull()) {
             return null;
         } else {
+            log.debug("got DB Timestamp {} {}", memberSqlName, value.getTime());
             return new java.util.Date(value.getTime());
         }
     }

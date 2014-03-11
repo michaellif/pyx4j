@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.derby.TestConfigurationDerby;
 import com.pyx4j.entity.rdb.hsql.TestConfigurationHSQL;
 import com.pyx4j.entity.rdb.mysql.TestConfigurationMySQL;
@@ -47,5 +48,22 @@ public class PersistenceEnvironmentFactory {
 
     public static PersistenceEnvironment getDerbyPersistenceEnvironment() {
         return new RDBDatastorePersistenceEnvironment(new TestConfigurationDerby());
+    }
+
+    public static PersistenceEnvironment getPersistenceEnvironment(DatabaseType databaseType) {
+        switch (databaseType) {
+        case Oracle:
+            return getOraclePersistenceEnvironment();
+        case MySQL:
+            return getMySQLPersistenceEnvironment();
+        case PostgreSQL:
+            return getPostgreSQLPersistenceEnvironment();
+        case HSQLDB:
+            return getHSQLPersistenceEnvironment();
+        case Derby:
+            return getDerbyPersistenceEnvironment();
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 }
