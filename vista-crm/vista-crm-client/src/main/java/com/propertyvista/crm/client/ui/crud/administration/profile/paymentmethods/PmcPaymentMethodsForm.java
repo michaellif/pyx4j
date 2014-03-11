@@ -13,9 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.profile.paymentmethods;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -49,13 +50,29 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
         selectTab(addTab(content));
         setTabBarVisible(false);
 
-        addComponentValidator(new AbstractComponentValidator<PmcPaymentMethodsDTO>() {
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        get(proto().paymentMethods()).addComponentValidator(new AbstractComponentValidator<List<PmcPaymentMethod>>() {
+            @Override
+            public FieldValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
+                    return new FieldValidationError(getComponent(), i18n.tr("At least one payment method is required"));
+                } else {
+                    return null;
+                }
+            }
+        });
+        get(proto().paymentMethods()).addComponentValidator(new AbstractComponentValidator<List<PmcPaymentMethod>>() {
+
             @Override
             public FieldValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     boolean hasEquifaxMethod = false;
-                    for (PmcPaymentMethod pmcPaymentMethod : getComponent().getValue().paymentMethods()) {
-                        if (pmcPaymentMethod.selectForEquifaxPayments().isBooleanTrue()) {
+                    for (PmcPaymentMethod pmcPaymentMethod : getComponent().getValue()) {
+                        if (pmcPaymentMethod.selectForEquifaxPayments().getValue(false)) {
                             hasEquifaxMethod = true;
                             break;
                         }
@@ -65,16 +82,6 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
                     } else {
                         return null;
                     }
-                } else {
-                    return null;
-                }
-            }
-        });
-        addComponentValidator(new AbstractComponentValidator<PmcPaymentMethodsDTO>() {
-            @Override
-            public FieldValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().paymentMethods().isEmpty()) {
-                    return new FieldValidationError(getComponent(), i18n.tr("At least one payment method is required"));
                 } else {
                     return null;
                 }
