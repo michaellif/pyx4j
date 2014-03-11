@@ -77,7 +77,7 @@ public class UnitsMapper {
         if (info.getUnitEcomomicStatus() == Uniteconstatusinfo.RESIDENTIAL) {
             unitTo.info().economicStatus().setValue(EconomicStatus.residential);
         } else {
-            log.debug("Unknown economic status {}", info.getUnitEcomomicStatus());
+            log.debug("Got unknown unit economic status ('{}') for unit {}: will be imported as 'other'", info.getUnitEcomomicStatus(), info.getUnitID());
             unitTo.info().economicStatus().setValue(EconomicStatus.other);
         }
         unitTo.info().economicStatusDescription().setValue(info.getUnitEconomicStatusDescription());
