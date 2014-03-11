@@ -55,7 +55,7 @@ public interface AddressSimple extends IEntity {
 
     @NotNull
     @ToString(index = 4)
-    @Editor(type = EditorType.suggest)
+    @Editor(type = EditorType.combo)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 
