@@ -83,9 +83,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 }
             });
             addStep(new SummaryStep());
-            if (feePaymentPolicy == FeePayment.perLease || feePaymentPolicy == FeePayment.perApplicant) {
-                addStep(new PaymentStep());
-            }
+            addStep(new PaymentStep());
             addStep(new ConfirmationStep());
         } else {
             addStep(new LeaseStep());

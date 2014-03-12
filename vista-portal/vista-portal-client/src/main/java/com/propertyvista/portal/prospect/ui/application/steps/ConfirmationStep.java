@@ -53,6 +53,8 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
     private final SimplePanel paymentDetailsHolder = new SimplePanel();
 
+    private Widget paymentDetailsHeader;
+
     public ConfirmationStep() {
         super(OnlineApplicationWizardStepMeta.Confirmation);
     }
@@ -63,6 +65,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
         int row = -1;
 
         content.setH3(++row, 0, 1, i18n.tr("Payment Details"));
+        paymentDetailsHeader = content.getWidget(row, 0);
         content.setWidget(++row, 0, paymentDetailsHolder);
         content.setWidget(++row, 0, inject(proto().payment().amount(), new CMoneyLabel()));
         get(proto().payment().amount()).setVisible(false);
@@ -104,7 +107,11 @@ public class ConfirmationStep extends ApplicationWizardStep {
         get(proto().payment().amount()).setValue(calculatePaymentAmount());
 
         paymentDetailsHolder.clear();
-        paymentDetailsHolder.setWidget(createPaymentDetailsPanel());
+        paymentDetailsHeader.setVisible(false);
+        if (!get(proto().payment().amount()).getValue().equals(BigDecimal.ZERO)) {
+            paymentDetailsHeader.setVisible(true);
+            paymentDetailsHolder.setWidget(createPaymentDetailsPanel());
+        }
     }
 
     private Widget createPaymentDetailsPanel() {
@@ -147,7 +154,9 @@ public class ConfirmationStep extends ApplicationWizardStep {
             }
         }
 
-        amount = amount.add(getValue().payment().applicationFee().getValue());
+        if (!getValue().payment().applicationFee().isNull()) {
+            amount = amount.add(getValue().payment().applicationFee().getValue());
+        }
 
         return amount;
     }

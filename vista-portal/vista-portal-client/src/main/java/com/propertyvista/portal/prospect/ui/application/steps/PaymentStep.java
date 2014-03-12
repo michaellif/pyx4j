@@ -19,6 +19,7 @@ import java.util.Set;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
@@ -72,6 +73,8 @@ public class PaymentStep extends ApplicationWizardStep {
         }
     };
 
+    private Widget feesHeader;
+
     public PaymentStep() {
         super(OnlineApplicationWizardStepMeta.Payment);
 
@@ -89,6 +92,7 @@ public class PaymentStep extends ApplicationWizardStep {
         }
 
         panel.setH3(++row, 0, 1, i18n.tr("Fees"));
+        feesHeader = panel.getWidget(row, 0);
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().applicationFee(), new CMoneyLabel())).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Payment Method"));
@@ -175,6 +179,9 @@ public class PaymentStep extends ApplicationWizardStep {
     @Override
     public void onValueSet(final boolean populate) {
         super.onValueSet(populate);
+
+        feesHeader.setVisible(!getValue().payment().applicationFee().isNull());
+        get(proto().payment().applicationFee()).setVisible(!getValue().payment().applicationFee().isNull());
 
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
