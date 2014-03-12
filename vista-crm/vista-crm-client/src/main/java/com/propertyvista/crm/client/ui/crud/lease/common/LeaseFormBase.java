@@ -56,6 +56,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected LeaseFormBase(Class<DTO> clazz, IForm<DTO> view) {
         super(clazz, view);
+        setEditable(false);
     }
 
     protected void createCommonContent() {
