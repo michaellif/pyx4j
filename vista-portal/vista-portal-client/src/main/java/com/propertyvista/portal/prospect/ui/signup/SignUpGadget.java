@@ -200,8 +200,8 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
                 @Override
                 public FieldValidationError isValid() {
                     String password = (get(proto().password())).getValue();
-                    if ((password == null & getComponent().getValue() != null) | (password != null & getComponent().getValue() == null)
-                            || (!password.equals(getComponent().getValue()))) {
+                    if ((password == null && getComponent().getValue() != null) || (password != null && getComponent().getValue() == null)
+                            || (password != null && !password.equals(getComponent().getValue()))) {
                         return new FieldValidationError(getComponent(), i18n.tr("Passwords don't match"));
                     }
                     return null;
