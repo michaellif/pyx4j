@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -211,12 +212,13 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             int leftRow = -1;
             main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
-            main.setWidget(++leftRow, 0, 2, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
-                @Override
-                public Key getLinkKey() {
-                    return TenantInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
-                }
-            }));
+            main.setWidget(++leftRow, 0, 2,
+                    inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class, false) {
+                        @Override
+                        public Key getLinkKey() {
+                            return TenantInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
+                        }
+                    }));
             main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
             main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
 
@@ -230,7 +232,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                             .build());
             main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
 
-            int rightRow = 1;
+            int rightRow = -1;
+            main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().yardiApplicantId(), new CLabel<>()), 10).build());
+            main.setBR(++rightRow, 1, 1);
             main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
             main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
             main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
@@ -248,6 +252,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
+            get(proto().leaseParticipant().yardiApplicantId()).setVisible(VistaFeatures.instance().yardiIntegration());
+
             get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
             get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseTermParticipant.Role.Applicant);
             preauthorizedPaymentsPanel.setVisible(!isEditable() && !getValue().leaseParticipant().preauthorizedPayments().isEmpty());
@@ -255,6 +261,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             if (isEditable()) {
                 if (VistaFeatures.instance().yardiIntegration()) {
                     get(proto().leaseParticipant().participantId()).setVisible(false);
+                    get(proto().leaseParticipant().yardiApplicantId()).setVisible(false);
                 } else {
                     ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseParticipant().participantId()), getValue()
                             .getPrimaryKey());

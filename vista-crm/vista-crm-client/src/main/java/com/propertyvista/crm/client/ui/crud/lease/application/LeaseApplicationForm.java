@@ -63,6 +63,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         super.onValueSet(populate);
 
         get(proto().leaseApplication().applicationId()).setVisible(true);
+        get(proto().leaseApplication().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());
 
         if (onlineStatusTab != null) {
             setTabVisible(onlineStatusTab, !getValue().leaseApplication().onlineApplication().isNull());

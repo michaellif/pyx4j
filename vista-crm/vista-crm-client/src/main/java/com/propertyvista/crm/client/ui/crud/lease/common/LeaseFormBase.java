@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -81,6 +82,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         get(proto().leaseId()).setVisible(false);
         get(proto().leaseApplication().applicationId()).setVisible(false);
+        get(proto().leaseApplication().yardiApplicationId()).setVisible(false);
 
         get(proto().isUnitReserved()).setVisible(
                 !getValue().unit().isNull() && getValue().status().getValue().isDraft() && getValue().status().getValue() != Lease.Status.ExistingLease);
@@ -152,6 +154,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseId()), 10).build());
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseApplication().applicationId()), 10).build());
+        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseApplication().yardiApplicationId(), new CLabel<>()), 10).build());
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().billingAccount().accountNumber()), 15).build());
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());

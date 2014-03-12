@@ -52,24 +52,24 @@ public class NameEditor extends CEntityForm<Name> {
     }
 
     public NameEditor(String customViewLabel) {
-        this(customViewLabel, null);
+        this(customViewLabel, null, false);
     }
 
     public NameEditor(String customViewLabel, boolean oneColumn) {
-        this(customViewLabel, null);
-        this.oneColumn = oneColumn;
+        this(customViewLabel, null, oneColumn);
     }
 
     @SuppressWarnings("rawtypes")
-    public NameEditor(String customViewLabel, Class<? extends IEntity> linkType) {
+    public NameEditor(String customViewLabel, Class<? extends IEntity> linkType, boolean oneColumn) {
         super(Name.class);
         this.customViewLabel = customViewLabel;
+        this.oneColumn = oneColumn;
 
-        linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
         viewComp = new CEntityLabel<Name>();
         viewComp.setViewable(true);
         viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
+        linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
         if (linkPlace != null) {
             ((CField) viewComp).setNavigationCommand(new Command() {
                 @Override
@@ -91,7 +91,7 @@ public class NameEditor extends CEntityForm<Name> {
 
     @Override
     public IsWidget createContent() {
-        BasicFlexFormPanel main = (oneColumn ? new BasicFlexFormPanel() : new TwoColumnFlexFormPanel());
+        BasicFlexFormPanel main = new TwoColumnFlexFormPanel();
         if (BrowserType.isIE()) {
             // IE won't set table width based on the width of colgroup.col elements
             // (see FormFlexPanelLeftColumn, FormFlexPanelRightColumn classes).

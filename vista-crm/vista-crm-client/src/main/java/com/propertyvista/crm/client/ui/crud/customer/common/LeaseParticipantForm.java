@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -89,6 +90,9 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
 
+        get(proto().yardiApplicantId()).setVisible(VistaFeatures.instance().yardiIntegration());
+        get(proto().screening()).setVisible(getValue().screening().getPrimaryKey() != null);
+
         if (isEditable()) {
             IdTarget idTarget = null;
             if (rootClass.equals(TenantDTO.class)) {
@@ -101,8 +105,6 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             ClientPolicyManager.setIdComponentEditabilityByPolicy(idTarget, get(proto().participantId()), getValue().getPrimaryKey());
 
             get(proto().customer().person().birthDate()).setMandatory(!getValue().ageOfMajority().isNull());
-        } else {
-            get(proto().screening()).setVisible(getValue().screening().getPrimaryKey() != null);
         }
 
         if (rootClass.equals(TenantDTO.class)) {
@@ -146,11 +148,15 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 7).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 10).build());
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().picture().file(), imageHolder)).customLabel("").build());
         main.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_BOTTOM);
 
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiApplicantId(), new CLabel<>()), 10).build());
+
         main.setWidget(++row, 0, 2, inject(proto().customer().person().name(), new NameEditor(participant)));
+        get(proto().customer().person().name()).setEditable(!VistaFeatures.instance().yardiIntegration());
+
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
@@ -175,10 +181,6 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         if (rootClass.equals(TenantDTO.class)) {
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role(), new CEnumLabel()), 10).build());
             main.setWidget(row, 1, new FormDecoratorBuilder(inject(((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel()), 2).build());
-        }
-
-        if (VistaFeatures.instance().yardiIntegration()) {
-            get(proto().customer().person().name()).setViewable(true);
         }
 
         main.setHR(++row, 0, 2);
