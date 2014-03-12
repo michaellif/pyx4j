@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -45,11 +44,11 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
                 if (AppSite.getViewFactory() instanceof SingletonViewFactory) {
                     ((SingletonViewFactory) AppSite.getViewFactory()).invalidate();
                 }
-                Place current = AppSite.getPlaceController().getWhere();
+                AppPlace current = AppSite.getPlaceController().getWhere();
                 if ((current instanceof PublicPlace) || (!ClientContext.isAuthenticated())) {
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
-                } else if (current instanceof AppPlace) {
-                    isPlaceNavigable((AppPlace) current, new DefaultAsyncCallback<Boolean>() {
+                } else {
+                    isPlaceNavigable(current, new DefaultAsyncCallback<Boolean>() {
                         @Override
                         public void onSuccess(Boolean result) {
                             if (!result) {
@@ -78,6 +77,12 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
      */
     protected abstract AppPlace mandatoryActionForward(AppPlace newPlace);
 
+    @Deprecated
+    //TODO reimplement forwardTo() to use same mandatoryActionForward to handle all forward events except authentication which should use some authenticationActionForward() for it
+    protected AppPlace mandatoryPublicActionForward(AppPlace newPlace) {
+        return newPlace;
+    }
+
     @Override
     public NotificationAppPlace getNotificationPlace(Notification notification) {
         return null;
@@ -85,6 +90,12 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
     @Override
     public final void forwardTo(AppPlace newPlace, final AsyncCallback<AppPlace> callback) {
+        AppPlace mandatoryPublicPlace = mandatoryPublicActionForward(newPlace);
+        if (mandatoryPublicPlace != newPlace) {
+            callback.onSuccess(mandatoryPublicPlace);
+            return;
+        }
+
         if (newPlace instanceof PublicPlace) {
             callback.onSuccess(newPlace);
         } else if (ClientContext.isAuthenticated()) {
