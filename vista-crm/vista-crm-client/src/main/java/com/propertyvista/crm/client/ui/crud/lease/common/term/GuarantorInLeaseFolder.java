@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -197,7 +199,12 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
                 get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(getEnforceAgeOfMajority());
                 get(proto().leaseParticipant().customer().person().email()).setMandatory(!getValue().leaseParticipant().customer().user().isNull());
 
-                updateTenantList();
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        updateTenantList();
+                    }
+                });
             }
         }
 
