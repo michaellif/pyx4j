@@ -151,15 +151,16 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
-        for (LeaseTermParticipant<?> participant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version().guarantors())) {
-            Persistence.ensureRetrieve(participant.leaseParticipant(), AttachLevel.Attached);
-            LeaseParticipant<?> lp = participant.leaseParticipant();
+        for (LeaseTermParticipant<?> termParticipant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version()
+                .guarantors())) {
+            Persistence.ensureRetrieve(termParticipant.leaseParticipant(), AttachLevel.Attached);
+            LeaseParticipant<?> participant = termParticipant.leaseParticipant();
             // application must be updated (yardi sync) before approval
-            String participantId = signLeaseResults.getParticipants().get(lp.getPrimaryKey());
+            String participantId = signLeaseResults.getParticipants().get(participant.getPrimaryKey());
             Validate.notNull(participantId, "ParticipantId  is null");
-            lp.participantId().setValue(participantId);
+            participant.participantId().setValue(participantId);
             Persistence.service().persist(participant);
-            log.info("participantId assigned {} for {} in leaseId {}", lp.participantId(), lp.yardiApplicantId(), lease.leaseId());
+            log.info("participantId assigned {} for {} in leaseId {}", participant.participantId(), participant.yardiApplicantId(), lease.leaseId());
         }
         return lease;
     }
