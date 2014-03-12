@@ -70,6 +70,14 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         }
 
         @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+            setPaymentTypeSelectionVisible(false);
+            setIsPreauthorizedVisible(true);
+            setBillingAddressVisible(false);
+        }
+
+        @Override
         public void addValidations() {
             super.addValidations();
 
