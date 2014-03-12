@@ -95,7 +95,7 @@ public class AboutYouStep extends ApplicationWizardStep {
                 if (getComponent().getValue() != null && getValue() != null) {
                     if (enforceAgeOfMajority()) {
                         if (!TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
-                            return new FieldValidationError(getComponent(), i18n.tr("The minimum age requirement is {0}.", ageOfMajority()));
+                            return new FieldValidationError(getComponent(), i18n.tr("The minimum age requirement is {0} years.", ageOfMajority()));
                         }
                     }
                 }
