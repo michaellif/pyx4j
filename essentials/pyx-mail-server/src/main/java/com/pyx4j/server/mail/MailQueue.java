@@ -33,6 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.EntityFactory;
@@ -181,8 +182,8 @@ public class MailQueue implements Runnable {
                         return;
                     }
                 }
-                // Do try not to make delivery upon shutdown.  
-                if (shutdown) {
+                // Do try not to make delivery upon shutdown or System Maintenance.  
+                if (shutdown || ServerSideConfiguration.instance().datastoreReadOnly()) {
                     break;
                 }
 
@@ -256,6 +257,8 @@ public class MailQueue implements Runnable {
                     } while (continueDelivery && !shutdown);
                 } catch (Throwable t) {
                     log.error("MailQueue delivery implementation error", t);
+                    // Stop all attempts to send Message
+                    return;
                 }
             } while (!shutdown);
         } finally {
@@ -263,6 +266,7 @@ public class MailQueue implements Runnable {
             synchronized (monitor) {
                 monitor.notifyAll();
             }
+            log.info("MailQueue stopped");
         }
     }
 
