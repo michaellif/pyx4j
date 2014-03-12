@@ -20,45 +20,23 @@
  */
 package com.pyx4j.site.client.ui.devconsole;
 
-import java.util.Iterator;
-
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.IComponentWidget;
 import com.pyx4j.site.client.ui.layout.RiaLayoutPanel;
-import com.pyx4j.widgets.client.Button;
 
-public class RiaDevConsole extends FlowPanel {
+public class RiaDevConsole extends AbstractDevConsole {
+
+    private final RiaLayoutPanel riaLayoutPanel;
 
     public RiaDevConsole(final RiaLayoutPanel riaLayoutPanel) {
+        this.riaLayoutPanel = riaLayoutPanel;
         getElement().getStyle().setPadding(20, Unit.PX);
-        Button setMocksButton = new Button("Set Mock Values", new Command() {
-
-            @Override
-            public void execute() {
-                setMockValues(riaLayoutPanel.getContentDisplay());
-            }
-        });
-        add(setMocksButton);
+        add(new SetMocksButton());
     }
 
-    private void setMockValues(IsWidget widget) {
-
-        if (widget instanceof IComponentWidget) {
-            CComponent<?> component = ((IComponentWidget<?>) widget).getCComponent();
-            component.generateMockData();
-        }
-
-        if (widget instanceof HasWidgets) {
-            for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
-                setMockValues(iterator.next());
-            }
-        }
+    @Override
+    void setMockValues() {
+        setMockValues(riaLayoutPanel);
     }
+
 }

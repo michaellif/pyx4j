@@ -20,48 +20,33 @@
  */
 package com.pyx4j.site.client.ui.devconsole;
 
-import java.util.Iterator;
-
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.IComponentWidget;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 
-public class ResponsiveLayoutDevConsole extends FlowPanel {
+public class ResponsiveLayoutDevConsole extends AbstractDevConsole {
 
     private final Image deviceImage;
 
+    private final ResponsiveLayoutPanel responsiveLayoutPanel;
+
     public ResponsiveLayoutDevConsole(final ResponsiveLayoutPanel responsiveLayoutPanel) {
+        this.responsiveLayoutPanel = responsiveLayoutPanel;
+
         getElement().getStyle().setPadding(20, Unit.PX);
 
         Toolbar toolbar = new Toolbar();
         add(toolbar);
-
-        Button setMocksButton = new Button("Set Mock Values", new Command() {
-
-            @Override
-            public void execute() {
-                setMockValues(responsiveLayoutPanel.getContentDisplay());
-            }
-        });
-        setMocksButton.getElement().getStyle().setProperty("marginRight", "15px");
-        toolbar.addItem(setMocksButton);
+        toolbar.addItem(new SetMocksButton());
 
         deviceImage = new Image();
         SimplePanel deviceImageHolder = new SimplePanel(deviceImage);
@@ -81,18 +66,9 @@ public class ResponsiveLayoutDevConsole extends FlowPanel {
         });
     }
 
-    private void setMockValues(IsWidget widget) {
-
-        if (widget instanceof IComponentWidget) {
-            CComponent<?> component = ((IComponentWidget<?>) widget).getCComponent();
-            component.generateMockData();
-        }
-
-        if (widget instanceof HasWidgets) {
-            for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
-                setMockValues(iterator.next());
-            }
-        }
+    @Override
+    void setMockValues() {
+        setMockValues(responsiveLayoutPanel);
     }
 
     private void doLayout(LayoutType layoutType) {
@@ -119,4 +95,5 @@ public class ResponsiveLayoutDevConsole extends FlowPanel {
             }
         }
     }
+
 }
