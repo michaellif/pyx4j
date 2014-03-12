@@ -104,7 +104,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 switch (userAppStatus.status().getValue()) {
                 case Incomplete:
                 case Invited:
-                    messageLabel.setText(i18n.tr("Your application progress is {} %. Click 'Continue Application' button below to continue your application.",
+                    messageLabel.setText(i18n.tr("Your application progress is {0}%. Click 'Continue Application' button below to continue your application.",
                             masterAppStatus.progress().getValue().multiply(new BigDecimal(100)).setScale(0)));
                     continueApplicationButton.setVisible(true);
                     break;
