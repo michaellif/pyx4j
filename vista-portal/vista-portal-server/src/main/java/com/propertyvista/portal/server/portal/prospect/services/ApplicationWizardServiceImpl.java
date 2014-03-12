@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.prospect.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -806,7 +807,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             }
         }.createBO(pto);
 
-        if (!pto.paymentMethod().isNull()) {
+        if (pto.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
             pbo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
             pbo.billingAccount().set(lease.billingAccount());
 

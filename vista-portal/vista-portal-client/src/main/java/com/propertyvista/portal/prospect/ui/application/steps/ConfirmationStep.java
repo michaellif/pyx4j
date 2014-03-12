@@ -108,6 +108,8 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
         paymentDetailsHolder.clear();
         paymentDetailsHeader.setVisible(false);
+        get(proto().payment().convenienceFeeSignature()).setVisible(false);
+
         if (!get(proto().payment().amount()).getValue().equals(BigDecimal.ZERO)) {
             paymentDetailsHeader.setVisible(true);
             paymentDetailsHolder.setWidget(createPaymentDetailsPanel());

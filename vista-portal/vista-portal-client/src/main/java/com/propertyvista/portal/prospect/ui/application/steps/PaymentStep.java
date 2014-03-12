@@ -19,6 +19,7 @@ import java.util.Set;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -30,9 +31,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -73,12 +76,20 @@ public class PaymentStep extends ApplicationWizardStep {
         }
     };
 
-    private Widget feesHeader;
+    private Widget depositHeader, feesHeader;
+
+    private BasicFlexFormPanel paymentMethodPanel;
+
+    private final SimplePanel paymentMethodHolder = new SimplePanel();
+
+    private final Label noPaymentRequiredLabel = new Label(i18n.tr("No Payment Required"));
 
     public PaymentStep() {
         super(OnlineApplicationWizardStepMeta.Payment);
 
         paymentMethodEditor.setBillingAddressAsCurrentDisplay(false);
+
+        noPaymentRequiredLabel.setStyleName(StyleName.InfoMessage.name());
     }
 
     @Override
@@ -88,6 +99,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             panel.setH3(++row, 0, 1, i18n.tr("Deposits"));
+            depositHeader = panel.getWidget(row, 0);
             panel.setWidget(++row, 0, inject(proto().payment().deposits(), new DepositFolder()));
         }
 
@@ -95,19 +107,25 @@ public class PaymentStep extends ApplicationWizardStep {
         feesHeader = panel.getWidget(row, 0);
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().applicationFee(), new CMoneyLabel())).build());
 
+        panel.setWidget(++row, 0, paymentMethodHolder);
+        paymentMethodPanel = createPaymentMethodPanel();
+
+        return panel;
+    }
+
+    public BasicFlexFormPanel createPaymentMethodPanel() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
+        int row = -1;
+
         panel.setH3(++row, 0, 1, i18n.tr("Payment Method"));
         panel.setWidget(
                 ++row,
                 0,
                 new FormWidgetDecoratorBuilder(inject(proto().payment().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
                         RadioGroup.Layout.HORISONTAL))).build());
-
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().profiledPaymentMethod(), profiledPaymentMethodsCombo)).build());
-
         panel.setWidget(++row, 0, inject(proto().payment().paymentMethod(), paymentMethodEditor));
-
         panel.setHR(++row, 0, 1);
-
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().storeInProfile())).build());
 
         // tweaks:
@@ -180,21 +198,43 @@ public class PaymentStep extends ApplicationWizardStep {
     public void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        feesHeader.setVisible(!getValue().payment().applicationFee().isNull());
-        get(proto().payment().applicationFee()).setVisible(!getValue().payment().applicationFee().isNull());
+        boolean isDepositsPresent = !getValue().payment().deposits().isEmpty();
 
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+            depositHeader.setVisible(isDepositsPresent);
+            get(proto().payment().deposits()).setVisible(isDepositsPresent);
+        }
 
-        loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
+        boolean isFeesPresent = !getValue().payment().applicationFee().isNull();
+        feesHeader.setVisible(isFeesPresent);
+        get(proto().payment().applicationFee()).setVisible(isFeesPresent);
 
-                get(proto().payment().selectPaymentMethod()).reset();
-                get(proto().payment().selectPaymentMethod()).setEnabled(hasProfiledMethods);
-                get(proto().payment().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New, true, populate);
-            }
-        });
+        boolean isPaymentRequired = (isFeesPresent || isDepositsPresent);
+
+        get(proto().payment().storeInProfile()).setEnabled(isPaymentRequired);
+        get(proto().payment().selectPaymentMethod()).setEnabled(isPaymentRequired);
+        profiledPaymentMethodsCombo.setEnabled(isPaymentRequired);
+        paymentMethodEditor.setEnabled(isPaymentRequired);
+
+        if (isPaymentRequired) {
+            paymentMethodPanel.setVisible(true);
+            paymentMethodHolder.setWidget(paymentMethodPanel);
+            paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+            loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
+
+                    get(proto().payment().selectPaymentMethod()).reset();
+                    get(proto().payment().selectPaymentMethod()).setEnabled(hasProfiledMethods);
+                    get(proto().payment().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New, true, populate);
+                }
+            });
+        } else {
+            paymentMethodPanel.setVisible(false);
+            paymentMethodHolder.setWidget(noPaymentRequiredLabel);
+            paymentMethodEditor.reset();
+        }
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
