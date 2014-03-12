@@ -14,7 +14,6 @@
 package com.propertyvista.yardi.processors;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,9 +21,6 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
@@ -36,10 +32,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.financial.ARCode;
@@ -53,8 +46,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class YardiProductCatalogProcessor {
-
-    private static final Logger log = LoggerFactory.getLogger(YardiProductCatalogProcessor.class);
 
     public void processCatalog(Building building, RentableItems rentableItems, Key yardiInterfaceId) {
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
@@ -148,41 +139,9 @@ public class YardiProductCatalogProcessor {
 
     private void deleteServices(ProductCatalog catalog) {
         for (final Service service : catalog.services()) {
-            log.debug("v1 expire Service Id:{} updated {}", service.id(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service.updated().getValue()));
-            {
-                Service service2 = Persistence.service().retrieve(Service.class, service.id().getValue());
-                log.debug("v2 expire Service Id:{} updated {}", service2.id(),
-                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.getMemberValue("updated")));
-                log.debug("v2 expire Service Id:{} updated {}", service2.id(),
-                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.updated().getValue()));
-            }
-            {
-                Service service2 = Persistence.service().retrieve(Service.class, service.id().getValue());
-                log.debug("v3 expire Service Id:{} updated {}", service2.id(),
-                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.getMemberValue("updated")));
-                log.debug("v3 expire Service Id:{} updated {}", service2.id(),
-                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.updated().getValue()));
-            }
-            {
-                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-                    @Override
-                    public Void execute() throws RuntimeException {
-                        Service service2 = Persistence.service().retrieve(Service.class, service.id().getValue());
-                        log.debug("v4 expire Service Id:{} updated {}", service2.id(),
-                                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.getMemberValue("updated")));
-                        log.debug("v4 expire Service Id:{} updated {}", service2.id(),
-                                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(service2.updated().getValue()));
-                        return null;
-                    }
-                });
-            }
-
             if (!service.defaultCatalogItem().getValue(false) && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(SystemDateManager.getLogicalDate());
                 Persistence.service().merge(service);
-                log.debug("+++++++++++++++");
-            } else {
-                log.debug("---------------");
             }
         }
     }
@@ -235,7 +194,7 @@ public class YardiProductCatalogProcessor {
 
     private void deleteFeatures(ProductCatalog catalog) {
         for (Feature feature : catalog.features()) {
-            if (!feature.defaultCatalogItem().isBooleanTrue() && feature.expiredFrom().isNull()) {
+            if (!feature.defaultCatalogItem().getValue(false) && feature.expiredFrom().isNull()) {
                 feature.expiredFrom().setValue(SystemDateManager.getLogicalDate());
                 Persistence.service().merge(feature);
             }
@@ -312,14 +271,14 @@ public class YardiProductCatalogProcessor {
 
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (!service.defaultCatalogItem().isBooleanTrue()) {
+            if (!service.defaultCatalogItem().getValue(false)) {
                 Persistence.ensureRetrieve(service.version().features(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(service.version().concessions(), AttachLevel.Attached);
 
                 service.version().features().clear();
                 for (Feature feature : catalog.features()) {
                     Persistence.ensureRetrieve(feature, AttachLevel.Attached);
-                    if (!feature.defaultCatalogItem().isBooleanTrue()) {
+                    if (!feature.defaultCatalogItem().getValue(false)) {
                         service.version().features().add(feature);
                     }
 
