@@ -95,8 +95,7 @@ public class AboutYouStep extends ApplicationWizardStep {
                 if (getComponent().getValue() != null && getValue() != null) {
                     if (enforceAgeOfMajority()) {
                         if (!TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
-                            return new FieldValidationError(getComponent(), i18n.tr(
-                                    "You are too young to be an Applicant or Co-Applicant: the minimum age required is {0}.", ageOfMajority()));
+                            return new FieldValidationError(getComponent(), i18n.tr("The minimum age requirement is {0}.", ageOfMajority()));
                         }
                     }
                 }
