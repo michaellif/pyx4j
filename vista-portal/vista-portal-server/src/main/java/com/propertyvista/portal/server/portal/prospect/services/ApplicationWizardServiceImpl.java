@@ -58,8 +58,6 @@ import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -301,7 +299,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.applicant().set(to.applicant().documents(), screening.version().documents());
         to.applicant().set(to.applicant().documentsPolicy(),
                 ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ApplicationDocumentationPolicy.class));
-        initializeRequiredDocuments(to.applicant());
 
         to.applicant().set(to.applicant().legalQuestions(), screening.version().legalQuestions());
 
@@ -969,27 +966,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         return res;
-    }
-
-    private void initializeRequiredDocuments(ApplicantDTO applicant) {
-        for (IdentificationDocumentType docType : applicant.documentsPolicy().allowedIDs()) {
-            if (Importance.activate().contains(docType.importance().getValue())) {
-                // Find if we already have it.
-                boolean found = false;
-                for (IdentificationDocumentFolder doc : applicant.documents()) {
-                    if (doc.idType().equals(docType)) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
-                    doc.set(doc.idType(), docType);
-                    applicant.documents().add(doc);
-                }
-            }
-        }
     }
 
     private List<UnitTO> retriveAvailableUnits(Floorplan floorplanId, LogicalDate moveIn) {
