@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -43,7 +44,7 @@ public interface ScreeningFacade {
      */
     CustomerScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel);
 
-    CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId);
+    CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId, PolicyNode documentPolicyNode);
 
     void registerUploadedDocuments(CustomerScreening screening);
 

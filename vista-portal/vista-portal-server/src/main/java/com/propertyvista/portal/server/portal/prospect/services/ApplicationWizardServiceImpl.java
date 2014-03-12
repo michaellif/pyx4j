@@ -287,7 +287,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.applicant().set(to.applicant().emergencyContacts(), customer.emergencyContacts());
 
         // screening:
-        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer);
+        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer, to.policyNode());
         Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
@@ -348,7 +348,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         //DataDump.dump("customer", customer);
 
         // screening:
-        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer);
+        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer, to.policyNode());
         //DataDump.dump("dbScreening", screening);
         //
         screening.version().set(screening.version().currentAddress(), to.applicant().currentAddress());

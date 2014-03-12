@@ -51,7 +51,11 @@ import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -246,6 +250,28 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
     }
 
+    private void initializeRequiredDocuments(CustomerScreening screening, ApplicationDocumentationPolicy docPolicy) {
+        // prepopulate required docs
+        for (IdentificationDocumentType docType : docPolicy.allowedIDs()) {
+            if (Importance.activate().contains(docType.importance().getValue())) {
+                // see if we already have it.
+                boolean found = false;
+                for (IdentificationDocumentFolder doc : screening.version().documents()) {
+                    if (doc.idType().equals(docType)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
+                    doc.set(doc.idType(), docType);
+                    screening.version().documents().add(doc);
+                }
+            }
+        }
+    }
+
     @Override
     public CustomerScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel) {
         EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
@@ -261,15 +287,20 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     @Override
-    public CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId) {
+    public CustomerScreening retrivePersonScreeningDraftForEdit(Customer customerId, PolicyNode documentPolicyNode) {
+        CustomerScreening screening;
         CustomerScreening screeningId = retrivePersonScreeningDraftOrFinal(customerId, AttachLevel.IdOnly);
         if (screeningId == null) {
-            CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
+            screening = EntityFactory.create(CustomerScreening.class);
             screening.screene().set(customerId);
-            return screening;
+            // initialize required docs for new screening
+            ApplicationDocumentationPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(documentPolicyNode,
+                    ApplicationDocumentationPolicy.class);
+            initializeRequiredDocuments(screening, policy);
         } else {
-            return Persistence.retrieveDraftForEdit(CustomerScreening.class, screeningId.getPrimaryKey());
+            screening = Persistence.retrieveDraftForEdit(CustomerScreening.class, screeningId.getPrimaryKey());
         }
+        return screening;
     }
 
     @Override

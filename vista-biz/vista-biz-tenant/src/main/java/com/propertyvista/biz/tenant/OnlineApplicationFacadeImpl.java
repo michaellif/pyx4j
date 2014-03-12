@@ -32,11 +32,7 @@ import com.pyx4j.security.server.EmailValidator;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.domain.media.IdentificationDocumentFolder;
-import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
@@ -328,9 +324,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         app.customer().set(participant.leaseParticipant().customer());
         app.role().setValue(role);
 
-        initializeRequiredDocuments(app);
-
         Persistence.service().persist(app);
+
         return app;
     }
 
@@ -395,34 +390,6 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, building, floorplan);
 
         ServerSideFactory.create(CustomerFacade.class).setCustomerPassword(mainTenant.leaseParticipant().customer(), request.password().getValue());
-    }
-
-    private void initializeRequiredDocuments(OnlineApplication app) {
-        // screening:
-        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(app.customer());
-        // policy
-        ApplicationDocumentationPolicy docPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(getOnlineApplicationPolicyNode(app),
-                ApplicationDocumentationPolicy.class);
-        // prepopulate required docs
-        for (IdentificationDocumentType docType : docPolicy.allowedIDs()) {
-            if (Importance.activate().contains(docType.importance().getValue())) {
-                // see if we already have it.
-                boolean found = false;
-                for (IdentificationDocumentFolder doc : screening.version().documents()) {
-                    if (doc.idType().equals(docType)) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    IdentificationDocumentFolder doc = EntityFactory.create(IdentificationDocumentFolder.class);
-                    doc.set(doc.idType(), docType);
-                    screening.version().documents().add(doc);
-                }
-            }
-        }
-        Persistence.service().merge(screening);
     }
 
     @Override
