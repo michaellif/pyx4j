@@ -68,15 +68,8 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         }
     }
 
-    @Override
-    protected LeaseParticipantScreeningTO init(InitializationData initializationData) {
-        CustomerScreeningInitializationData initData = (CustomerScreeningInitializationData) initializationData;
-        LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
-        to.leaseParticipantId().set(initData.leaseParticipantId());
-
-        LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(LeaseParticipant.class, initData.leaseParticipantId().getPrimaryKey());
-
-        to.screening().screene().set(leaseParticipant.customer());
+    private CustomerScreening retrivePersonScreeningDraftForEdit(Key leaseParticipantId) {
+        LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(LeaseParticipant.class, leaseParticipantId);
 
         Building policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseParticipant.lease());
 
@@ -86,9 +79,18 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
 
-        to.screening().set(screening);
+        ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(screening);
 
-        ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(to.screening());
+        return screening;
+    }
+
+    @Override
+    protected LeaseParticipantScreeningTO init(InitializationData initializationData) {
+        CustomerScreeningInitializationData initData = (CustomerScreeningInitializationData) initializationData;
+        LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
+        to.leaseParticipantId().set(initData.leaseParticipantId());
+
+        to.screening().set(retrivePersonScreeningDraftForEdit(initData.leaseParticipantId().getPrimaryKey()));
 
         return to;
     }
@@ -104,9 +106,9 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
     @Override
     protected void enhanceRetrieved(CustomerScreening bo, LeaseParticipantScreeningTO to, RetrieveTarget retrieveTarget) {
         // If Just created duplicate ForDraftEdit
-        if ((retrieveTarget == RetrieveTarget.Edit) && (to.screening().version().getPrimaryKey() == null)) {
-            ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(to.screening());
+        if (retrieveTarget == RetrieveTarget.Edit) {
+            to.screening().set(retrivePersonScreeningDraftForEdit(to.getPrimaryKey()));
+            Persistence.service().retrieve(to.screening().screene(), AttachLevel.ToStringMembers, false);
         }
     }
-
 }
