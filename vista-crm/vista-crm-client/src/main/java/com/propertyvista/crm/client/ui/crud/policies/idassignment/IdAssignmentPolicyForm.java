@@ -28,7 +28,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.ui.crud.administration.financial.tax.TaxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -57,8 +56,6 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
     }
 
     private static class IdAssignmentItemFolder extends VistaTableFolder<IdAssignmentItem> {
-
-        private static final I18n i18n = I18n.get(TaxFolder.class);
 
         public IdAssignmentItemFolder(boolean modifyable) {
             super(IdAssignmentItem.class, modifyable);
@@ -107,11 +104,11 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
                 if (isEditable()) {
                     // set predefined values for some ID types and do not allow editing:
                     CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
+                    combo.getOptions().clear();
+                    combo.setOptions(IdAssignmentType.selectableInPolicy());
                     switch (getValue().target().getValue()) {
                     case customer:
                     case maintenance:
-//                        combo.getOptions().clear();
-//                        combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
                         combo.setEditable(false);
                         break;
 

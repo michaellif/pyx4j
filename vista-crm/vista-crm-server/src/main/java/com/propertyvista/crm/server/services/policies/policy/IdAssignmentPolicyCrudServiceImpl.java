@@ -37,7 +37,7 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
         if (VistaFeatures.instance().yardiIntegration()) {
             for (IdAssignmentItem item : entity.items()) {
                 // filter out these IDs!..
-                if (!IdTarget.nonEditableWhenYardyIntergation().contains(item.target().getValue())) {
+                if (!IdTarget.nonEditableWhenYardiIntergation().contains(item.target().getValue())) {
                     dto.editableItems().add(item);
                 }
             }
@@ -55,7 +55,7 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
         if (VistaFeatures.instance().yardiIntegration()) {
             for (IdAssignmentItem item : dbo.items()) {
                 // filter out these IDs!..
-                if (IdTarget.nonEditableWhenYardyIntergation().contains(item.target().getValue())) {
+                if (IdTarget.nonEditableWhenYardiIntergation().contains(item.target().getValue())) {
                     newItemsList.add(item);
                 }
             }

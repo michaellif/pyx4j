@@ -168,6 +168,7 @@ public class ClientPolicyManager {
                             switch (targetItem.type().getValue()) {
                             case generatedAlphaNumeric:
                             case generatedNumber:
+                            case systemManaged:
                                 idComp.setEditable(false);
                                 idComp.setVisible(entityKey != null);
                                 break;

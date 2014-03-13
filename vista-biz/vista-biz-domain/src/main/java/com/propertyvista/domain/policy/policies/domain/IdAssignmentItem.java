@@ -62,11 +62,11 @@ public interface IdAssignmentItem extends IEntity {
             return I18nEnum.toString(this);
         }
 
-        public static EnumSet<IdTarget> userAssignedWhenYardyIntergation() {
-            return EnumSet.of(propertyCode, lease, tenant);
+        public static EnumSet<IdTarget> systemManagedWhenYardiIntergation() {
+            return EnumSet.of(propertyCode, lease, tenant, guarantor);
         }
 
-        public static EnumSet<IdTarget> nonEditableWhenYardyIntergation() {
+        public static EnumSet<IdTarget> nonEditableWhenYardiIntergation() {
             return EnumSet.of(propertyCode, lease, customer, tenant, guarantor, lead, maintenance);
         }
     }
@@ -80,11 +80,17 @@ public interface IdAssignmentItem extends IEntity {
 
         generatedNumber,
 
-        generatedAlphaNumeric;
+        generatedAlphaNumeric,
+
+        systemManaged;
 
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        public static EnumSet<IdAssignmentType> selectableInPolicy() {
+            return EnumSet.of(userEditable, userAssigned, generatedNumber, generatedAlphaNumeric);
         }
     }
 

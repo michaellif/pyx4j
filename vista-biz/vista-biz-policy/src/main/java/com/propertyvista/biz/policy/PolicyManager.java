@@ -274,8 +274,8 @@ class PolicyManager {
             // tune up items in case of YardyInegration mode:
             if (VistaFeatures.instance().yardiIntegration()) {
                 for (IdAssignmentItem item : ((IdAssignmentPolicy) policy).items()) {
-                    if (IdTarget.userAssignedWhenYardyIntergation().contains(item.target().getValue())) {
-                        item.type().setValue(IdAssignmentType.userAssigned);
+                    if (IdTarget.systemManagedWhenYardiIntergation().contains(item.target().getValue())) {
+                        item.type().setValue(IdAssignmentType.systemManaged);
                     }
                 }
             }
