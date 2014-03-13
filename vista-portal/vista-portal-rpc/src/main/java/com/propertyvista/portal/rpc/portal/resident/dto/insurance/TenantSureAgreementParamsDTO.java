@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.portal.resident.dto.insurance;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -35,4 +36,6 @@ public interface TenantSureAgreementParamsDTO extends IEntity {
      *          name and phone), or <code>false</code> otherwise.
      */
     IPrimitive<Boolean> isTenantInitializedInCfc();
+
+    IPrimitive<LogicalDate> lastInceptionDate();
 }

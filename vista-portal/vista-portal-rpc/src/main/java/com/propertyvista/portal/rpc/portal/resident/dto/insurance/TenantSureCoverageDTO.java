@@ -90,6 +90,7 @@ public interface TenantSureCoverageDTO extends IEntity {
     @NotNull
     IPrimitive<BigDecimal> deductible();
 
+    @NotNull
     IPrimitive<LogicalDate> inceptionDate();
 
     // these are statement of fact questions

@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,8 +27,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -100,6 +103,8 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     }
 
+    private static int MAX_FUTURE_QUOTE_DAYS = 30;
+
     private static List<BigDecimal> CONTENTS_COVERAGE_OPTIONS;
 
     private static List<BigDecimal> GENERAL_LIABILITY_OPTIONS;
@@ -124,7 +129,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO quotationRequest) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
 
@@ -179,13 +184,14 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void init(final AsyncCallback<TenantSureInsurancePolicyDTO> callback, InitializationData initializationData) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
 
         TenantSureInsurancePolicyDTO tenantInsurancePolicy = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
 
         Tenant tenant = Persistence.service().retrieve(Tenant.class, ResidentPortalContext.getTenant().getPrimaryKey());
+        tenantInsurancePolicy.tenantSureCoverageRequest().inceptionDate().setValue(getDefaultInceptionDate());
         tenantInsurancePolicy.tenantSureCoverageRequest().tenantName().setValue(tenant.customer().person().name().getStringView());
         tenantInsurancePolicy.tenantSureCoverageRequest().tenantPhone().setValue(getDefaultPhone(tenant.customer().person()));
         tenantInsurancePolicy.tenantSureCoverageRequest().paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
@@ -315,7 +321,16 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
         params.deductibleOptions().addAll(getDeductibleOptions());
 
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(SystemDateManager.getDate());
+        cal.add(GregorianCalendar.DAY_OF_YEAR, MAX_FUTURE_QUOTE_DAYS);
+        params.lastInceptionDate().setValue(new LogicalDate(cal.getTime()));
+
         return params;
+    }
+
+    private LogicalDate getDefaultInceptionDate() {
+        return new LogicalDate();
     }
 
     @Override

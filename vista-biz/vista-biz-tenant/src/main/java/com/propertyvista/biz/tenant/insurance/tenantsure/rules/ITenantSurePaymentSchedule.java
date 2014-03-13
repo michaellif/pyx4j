@@ -15,15 +15,17 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.rules;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 
 public interface ITenantSurePaymentSchedule {
 
     void prepareQuote(TenantSureQuoteDTO quote, BigDecimal annualPremium, BigDecimal underwritingFee, BigDecimal totalAnnualTax);
 
-    TenantSureTransaction initFirstTransaction(TenantSureInsurancePolicy insurancePolicy, InsurancePaymentMethod paymentMethod);
+    TenantSureTransaction initFirstTransaction(TenantSureInsurancePolicy insurancePolicy, InsurancePaymentMethod paymentMethod, LogicalDate paymentDue);
 
 }

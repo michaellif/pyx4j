@@ -15,12 +15,13 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.rules;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
+import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 
 public class TenantSureAnnualPaymentSchedule implements ITenantSurePaymentSchedule {
@@ -36,13 +37,14 @@ public class TenantSureAnnualPaymentSchedule implements ITenantSurePaymentSchedu
     }
 
     @Override
-    public TenantSureTransaction initFirstTransaction(TenantSureInsurancePolicy insuranceTenantSure, InsurancePaymentMethod paymentMethod) {
+    public TenantSureTransaction initFirstTransaction(TenantSureInsurancePolicy insuranceTenantSure, InsurancePaymentMethod paymentMethod,
+            LogicalDate paymentDue) {
         TenantSureTransaction transaction = EntityFactory.create(TenantSureTransaction.class);
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(paymentMethod);
         transaction.status().setValue(TenantSureTransaction.TransactionStatus.Draft);
         transaction.amount().setValue(insuranceTenantSure.totalAnnualPayable().getValue());
-        transaction.paymentDue().setValue(insuranceTenantSure.certificate().inceptionDate().getValue());
+        transaction.paymentDue().setValue(paymentDue);
         return transaction;
     }
 

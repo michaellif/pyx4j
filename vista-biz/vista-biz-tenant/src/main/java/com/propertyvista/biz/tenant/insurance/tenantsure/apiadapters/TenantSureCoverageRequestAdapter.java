@@ -73,7 +73,9 @@ public class TenantSureCoverageRequestAdapter {
         optionQuote.setOptionCode(matchOptionCode(coverageRequest.personalLiabilityCoverage().getValue(), coverageRequest.contentsCoverage().getValue()));
         optionQuote.setActivityCode(TENANT_SURE_INSURED_ACTIVITY_CODE);
         optionQuote.setClientID(tenantSureClient.clientReferenceNumber().getValue());
-        optionQuote.setInceptionDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));
+        GregorianCalendar inceptionDate = new GregorianCalendar();
+        inceptionDate.setTime(coverageRequest.inceptionDate().getValue());
+        optionQuote.setInceptionDate(dataTypeFactory.newXMLGregorianCalendar(inceptionDate));
         optionQuote.setRevenue(tenantSureClient.tenant().lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
         optionQuote.setEmployeeCount(countNumberOfTenants(tenantSureClient.tenant().lease().currentTerm()));
         optionQuote.setUsExposure(BigDecimal.ZERO);

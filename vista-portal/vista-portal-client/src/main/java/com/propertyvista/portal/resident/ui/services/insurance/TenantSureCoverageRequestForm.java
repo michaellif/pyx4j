@@ -17,9 +17,13 @@ import java.math.BigDecimal;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
@@ -32,6 +36,8 @@ import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBui
 public class TenantSureCoverageRequestForm extends CEntityForm<TenantSureCoverageDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureCoverageRequestForm.class);
+
+    private LogicalDate lastInceptionDate;
 
     public TenantSureCoverageRequestForm() {
         this(false);
@@ -48,6 +54,7 @@ public class TenantSureCoverageRequestForm extends CEntityForm<TenantSureCoverag
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
+        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().inceptionDate())).build());
         contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage"));
         contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
         contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
@@ -70,5 +77,26 @@ public class TenantSureCoverageRequestForm extends CEntityForm<TenantSureCoverag
         ((CComboBox<BigDecimal>) (get(proto().personalLiabilityCoverage()))).setOptions(params.generalLiabilityCoverageOptions());
         ((CComboBox<BigDecimal>) (get(proto().contentsCoverage()))).setOptions(params.contentsCoverageOptions());
         ((CComboBox<BigDecimal>) (get(proto().deductible()))).setOptions(params.deductibleOptions());
+        this.lastInceptionDate = params.lastInceptionDate().getValue();
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        get(proto().inceptionDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
+            @Override
+            public AbstractValidationError isValid() {
+                if (TenantSureCoverageRequestForm.this.lastInceptionDate != null) {
+                    if (getComponent().getValue() != null && getComponent().getValue().compareTo(lastInceptionDate) > 0) {
+                        return new FieldValidationError(getComponent(), i18n.tr("Maximum possible value for inception date is {0,short,date}",
+                                lastInceptionDate));
+                    }
+                    if (getComponent().getValue() != null & getComponent().getValue().compareTo(new LogicalDate()) < 0) {
+                        return new FieldValidationError(getComponent(), i18n.tr("This date cannot be in the past", lastInceptionDate));
+                    }
+                }
+                return null;
+            }
+        });
     }
 }

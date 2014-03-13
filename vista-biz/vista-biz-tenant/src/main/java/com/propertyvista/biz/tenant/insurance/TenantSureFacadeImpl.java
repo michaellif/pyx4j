@@ -212,7 +212,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             certificate.insuranceCertificateNumber().setValue(null); // we will get certificate number later: after we have managed to preauthorize a payment transaction
             certificate.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
             certificate.liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
-            certificate.inceptionDate().setValue(new LogicalDate());
+            certificate.inceptionDate().setValue(quote.coverage().inceptionDate().getValue());
             certificate.expiryDate().setValue(null); // TODO actually this is one year, but maybe it's supposed to be renewed somehow
             tenantSurePolicy.certificate().set(certificate);
 
@@ -221,7 +221,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             // Start payment
             InsurancePaymentMethod paymentMethod = TenantSurePayments.getPaymentMethod(tenantId);
             TenantSureTransaction transaction = TenantSurePaymentScheduleFactory.create(tenantSurePolicy.paymentSchedule().getValue()).initFirstTransaction(
-                    tenantSurePolicy, paymentMethod);
+                    tenantSurePolicy, paymentMethod, SystemDateManager.getLogicalDate());
             Persistence.service().persist(transaction);
 
             Persistence.service().commit();
