@@ -30,12 +30,11 @@ public class CreditCardValidationServiceImpl implements CreditCardValidationServ
 
     @Override
     public void validate(AsyncCallback<Boolean> callback, CreditCardInfo creditCardInfo) {
-        creditCardInfo.card().number().setValue(creditCardInfo.card().newNumber().getValue());
         boolean valid = ServerSideFactory.create(CreditCardFacade.class).validateVisaDebit(creditCardInfo);
         if (valid) {
             log.debug("card {} valid {}", creditCardInfo.cardType(), valid);
         } else {
-            log.debug("card {} {}XXX not valid {}", creditCardInfo.cardType(), trim6(creditCardInfo.card().number().getValue()), valid);
+            log.debug("card {} {}XXX not valid {}", creditCardInfo.cardType(), trim6(creditCardInfo.card().newNumber().getValue()), valid);
         }
         callback.onSuccess(valid);
     }

@@ -179,7 +179,7 @@ class CreditCardProcessor {
             return false;
         } else {
             CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
-            ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
+            ccInfo.creditCardNumber().setValue(cc.card().newNumber().getValue());
 
             PaymentResponse response = getPaymentProcessor().validateVisaDebit(ccInfo);
             return response.success().getValue();
@@ -193,7 +193,7 @@ class CreditCardProcessor {
         if (!ValidationUtils.isCreditCardNumberValid(cc.card().newNumber().getValue())) {
             return false;
         }
-        if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().number().getValue())) {
+        if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().newNumber().getValue())) {
             return false;
         }
         if ((cc.cardType().getValue() == CreditCardType.VisaDebit) && (!validateVisaDebit(cc))) {
@@ -209,17 +209,17 @@ class CreditCardProcessor {
             token.cardType().setValue(cc.cardType().getValue());
             return token;
         } else {
-            if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
+            if (!ValidationUtils.isCreditCardNumberValid(cc.card().newNumber().getValue())) {
                 throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
             }
-            if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().number().getValue())) {
+            if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().newNumber().getValue())) {
                 throw new UserRuntimeException(i18n.tr("The credit card number doesn't match the credit card type"));
             }
             if ((cc.cardType().getValue() == CreditCardType.VisaDebit) && (!validateVisaDebit(cc))) {
                 throw new UserRuntimeException(i18n.tr("The credit card number doesn't match the credit card type"));
             }
             CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
-            ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
+            ccInfo.creditCardNumber().setValue(cc.card().newNumber().getValue());
             ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
             ccInfo.securityCode().setValue(cc.securityCode().getValue());
             ccInfo.cardType().setValue(cc.cardType().getValue());
