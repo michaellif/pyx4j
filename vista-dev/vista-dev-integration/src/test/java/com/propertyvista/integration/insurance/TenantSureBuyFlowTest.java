@@ -39,15 +39,15 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
         super.setUp();
         preloadData();
 
-        createLease("01-01-2010", "01-09-2012");
+        createLease("2010-01-01", "2012-09-01");
     }
 
     public void testBuyTenantSure() throws Exception {
-        setSysDate("05-01-2011");
+        setSysDate("2011-01-05");
 
         TenantSureCoverageDTO quotationRequest = EntityFactory.create(TenantSureCoverageDTO.class);
         quotationRequest.paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
-        quotationRequest.inceptionDate().setValue(new LogicalDate(DateUtils.detectDateformat("05-01-2011")));
+        quotationRequest.inceptionDate().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-05")));
 
         TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(quotationRequest, getLease()._applicant());
 
@@ -63,11 +63,18 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
                 .count(1) //    
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared);
 
-        advanceSysDate("06-02-2011");
+        advanceSysDate("2011-02-07");
 
         new TenantSureTransactionTester(tenantSurePolicy)//
                 .count(2) //    
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
-                .lastRecordDate("06-02-2011");
+                .lastRecordDate("2011-02-06");
+
+        advanceSysDate("2011-03-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(3) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordDate("2011-03-06");
     }
 }

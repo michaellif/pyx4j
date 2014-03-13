@@ -668,7 +668,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         String tenantsEmail = null;
 
         SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
-        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
+        if ((mailConfig != null) && CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
             tenantsEmail = mailConfig.getForwardAllTo();
         } else {
             tenantsEmail = tenant.customer().person().email().getValue();
