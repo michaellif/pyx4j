@@ -44,7 +44,8 @@ public class PaymentMethodPersistenceTestBase extends LeaseFinancialTestBase {
         setSysDate("01-Feb-2012");
         customerDataModel = getDataModel(CustomerDataModel.class);
         customer = customerDataModel.addCustomer();
-        createLease("01-Feb-2012", "01-Sep-2012", new BigDecimal(100), null, customer);
+        createLease("01-Feb-2012", "01-Sep-2012", new BigDecimal(100), BigDecimal.ZERO, customer);
+        activateLease();
     }
 
     protected void testPersistPaymentMethod(PaymentType type) throws PaymentException {

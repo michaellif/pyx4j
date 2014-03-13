@@ -243,20 +243,20 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     }
 
     protected void approveExistingLease(boolean printBill) {
-        ServerSideFactory.create(LeaseFacade.class).approve(retrieveLease(), null, null);
+        ServerSideFactory.create(LeaseFacade.class).approve(getLease(), null, null);
         Persistence.service().commit();
     }
 
     protected void activateLease() {
-        ServerSideFactory.create(LeaseFacade.class).activate(retrieveLease());
+        ServerSideFactory.create(LeaseFacade.class).activate(getLease());
     }
 
     protected void completeLease() {
-        ServerSideFactory.create(LeaseFacade.class).complete(retrieveLease());
+        ServerSideFactory.create(LeaseFacade.class).complete(getLease());
     }
 
     protected void closeLease() {
-        ServerSideFactory.create(LeaseFacade.class).close(retrieveLease());
+        ServerSideFactory.create(LeaseFacade.class).close(getLease());
     }
 
     protected void terminateLease(CompletionType reason) {

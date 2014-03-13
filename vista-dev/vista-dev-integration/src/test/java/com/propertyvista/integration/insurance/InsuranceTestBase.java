@@ -94,7 +94,7 @@ public class InsuranceTestBase extends IntegrationTestBase {
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo) {
-        lease = getDataModel(LeaseDataModel.class).addLease(getBuilding(), leaseDateFrom, leaseDateTo, BigDecimal.TEN, null,
+        lease = getDataModel(LeaseDataModel.class).addLease(getBuilding(), leaseDateFrom, leaseDateTo, BigDecimal.TEN, BigDecimal.ZERO,
                 Arrays.asList(new Customer[] { getDataModel(CustomerDataModel.class).addCustomer() }));
     }
 

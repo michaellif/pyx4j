@@ -61,7 +61,8 @@ public class FundsTransferProcessErrorRecoveryTest extends LeaseFinancialTestBas
 
         customerDataModel = getDataModel(CustomerDataModel.class);
         customer = customerDataModel.addCustomer();
-        createLease("01-Feb-2011", "01-Sep-2012", new BigDecimal(100), null, customer);
+        createLease("01-Feb-2011", "01-Sep-2012", new BigDecimal(100), BigDecimal.ZERO, customer);
+        activateLease();
         paymentMethod = customerDataModel.addPaymentMethod(customer, getBuilding(), PaymentType.Echeck);
     }
 
