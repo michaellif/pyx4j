@@ -155,6 +155,7 @@ BEGIN
         ALTER TABLE digital_signature DROP CONSTRAINT digital_signature_pk;
         ALTER TABLE file_blob DROP CONSTRAINT file_blob_pk;
         ALTER TABLE general_insurance_policy_blob DROP CONSTRAINT general_insurance_policy_blob_pk;
+        ALTER TABLE id_assignment_item DROP CONSTRAINT id_assignment_item_tp_e_ck;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_pk;
         ALTER TABLE insurance_certificate_doc DROP CONSTRAINT insurance_certificate_doc_pk;
         ALTER TABLE legal_documentation$co_application DROP CONSTRAINT legal_documentation$co_application_pk;
@@ -2372,6 +2373,8 @@ BEGIN
                 CHECK ((relationship) IN ('Aunt', 'Daughter', 'Father', 'Friend', 'Grandfather', 'Grandmother', 'Mother', 'Other', 'Son', 'Spouse', 'Uncle'));
         ALTER TABLE id_assignment_policy ADD CONSTRAINT id_assignment_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+        ALTER TABLE id_assignment_item ADD CONSTRAINT id_assignment_item_tp_e_ck 
+            CHECK ((tp) IN ('generatedAlphaNumeric', 'generatedNumber', 'systemManaged', 'userAssigned', 'userEditable'));
         ALTER TABLE identification_document_type ADD CONSTRAINT identification_document_type_importance_e_ck 
             CHECK ((importance) IN ('Optional', 'Preferred', 'Required'));
         ALTER TABLE ilsemail_config ADD CONSTRAINT ilsemail_config_frequency_e_ck CHECK ((frequency) IN ('daily', 'monthly', 'weekly'));
