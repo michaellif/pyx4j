@@ -176,7 +176,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             get(proto().idNumber()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
                 public FieldValidationError isValid() {
-                    if (get(proto().idType()).getValue() != null) {
+                    if (get(proto().idType()).getValue() != null && getComponent().getValue() != null) {
                         switch (get(proto().idType()).getValue().type().getValue()) {
                         case canadianSIN:
                             if (!ValidationUtils.isSinValid(getComponent().getValue().trim().replaceAll(" ", ""))) {
