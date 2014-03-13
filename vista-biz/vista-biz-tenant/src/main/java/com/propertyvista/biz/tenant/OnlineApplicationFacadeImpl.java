@@ -265,19 +265,30 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     // implementation internals
 
     private BigDecimal calculateProgress(OnlineApplication app) {
-        if (app.stepsStatuses().isNull()) {
+        switch (app.status().getValue()) {
+        case Invited:
+            return BigDecimal.ZERO;
+        case Incomplete:
+            if (app.stepsStatuses().isNull()) {
+                return BigDecimal.ZERO;
+            }
+            BigDecimal sum = BigDecimal.ZERO;
+            for (OnlineApplicationWizardStepStatus stepStatus : app.stepsStatuses()) {
+                if (stepStatus.complete().getValue(false)) {
+                    sum = sum.add(new BigDecimal(1));
+                } else if (stepStatus.visited().getValue(false)) {
+                    sum = sum.add(new BigDecimal(0.5));
+                }
+            }
+            return sum.divide(new BigDecimal(app.stepsStatuses().size()), 2, RoundingMode.CEILING);
+        case InformationRequested:
+            return new BigDecimal(1);
+        case Submitted:
+            return new BigDecimal(1);
+        default:
             return BigDecimal.ZERO;
         }
-        BigDecimal sum = BigDecimal.ZERO;
-        for (OnlineApplicationWizardStepStatus stepStatus : app.stepsStatuses()) {
-            if (stepStatus.complete().isBooleanTrue()) {
-                sum = sum.add(new BigDecimal(1));
-            } else if (stepStatus.visited().isBooleanTrue()) {
-                sum = sum.add(new BigDecimal(0.5));
-            }
-        }
 
-        return sum.divide(new BigDecimal(app.stepsStatuses().size()), 2, RoundingMode.HALF_UP);
     }
 
     private void inviteCoApplicants(Lease lease) {
