@@ -39,8 +39,7 @@ public class CreditCardPaymentProcessorFacadeMock implements CreditCardPaymentPr
 
     @Override
     public PaymentResponse realTimePreAuthorization(Merchant merchant, PaymentRequest request) {
-        // TODO implement Mock
-        throw new Error("Mock not implemented");
+        return PCIMock.instance().realTimePreAuthorization(merchant, request);
     }
 
     @Override
@@ -51,8 +50,7 @@ public class CreditCardPaymentProcessorFacadeMock implements CreditCardPaymentPr
 
     @Override
     public PaymentResponse realTimePreAuthorizationCompletion(Merchant merchant, PaymentRequest request) {
-        // TODO implement Mock
-        throw new Error("Mock not implemented");
+        return PCIMock.instance().realTimePreAuthorizationCompletion(merchant, request);
     }
 
     @Override

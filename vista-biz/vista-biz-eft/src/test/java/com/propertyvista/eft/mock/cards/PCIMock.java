@@ -94,6 +94,36 @@ class PCIMock {
         }
     }
 
+    PaymentResponse realTimePreAuthorization(Merchant merchant, PaymentRequest request) {
+        CardAccountMock account = getAccount(request.paymentInstrument());
+        if (account == null) {
+            return createResponse("1101", "TOKEN NOT FOUND");
+        } else {
+            if (account.preAuthorization(request.amount().getValue(), request.referenceNumber().getValue())) {
+                accountsByTransaction.put(request.referenceNumber().getValue(), account);
+                return createResponse("0000", "OK");
+            } else {
+                return createResponse("0001", "Credit limit exceeded");
+            }
+
+        }
+    }
+
+    PaymentResponse realTimePreAuthorizationCompletion(Merchant merchant, PaymentRequest request) {
+        CardAccountMock account = accountsByTransaction.get(request.referenceNumber().getValue());
+        if (account == null) {
+            return createResponse("1016", "COMPLETION NO MATCH");
+        } else {
+            if (account.completion(request.amount().getValue(), request.referenceNumber().getValue())) {
+                accountsByTransaction.put(request.referenceNumber().getValue(), account);
+                return createResponse("0000", "OK");
+            } else {
+                return createResponse("0001", "Credit limit exceeded");
+            }
+
+        }
+    }
+
     public PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request) {
         boolean convenienceFee = true;
         if (request.convenienceFee().isNull() && request.convenienceFeeReferenceNumber().isNull()) {

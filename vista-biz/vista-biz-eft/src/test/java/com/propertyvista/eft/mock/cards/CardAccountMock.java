@@ -28,6 +28,8 @@ class CardAccountMock {
 
     BigDecimal creditLimit = new BigDecimal("-10000.00");
 
+    BigDecimal reserved = BigDecimal.ZERO;
+
     Map<String, CardTransactionMock> transactions = new HashMap<String, CardTransactionMock>();
 
     CardAccountMock(CreditCardPaymentInstrument ccinfo) {
@@ -48,6 +50,28 @@ class CardAccountMock {
             t.status = TransactionStatus.compleated;
             transactions.put(referenceNumber, t);
             return true;
+        }
+    }
+
+    boolean preAuthorization(BigDecimal amount, String referenceNumber) {
+        if (transactions.containsKey(referenceNumber)) {
+            throw new Error("Duplicate transaction " + referenceNumber);
+        }
+        BigDecimal newBalance = balance.subtract(amount).subtract(reserved);
+        if (newBalance.compareTo(creditLimit) == -1) {
+            return false;
+        } else {
+            reserved = amount.add(reserved);
+            return true;
+        }
+    }
+
+    boolean completion(BigDecimal amount, String referenceNumber) {
+        if (sale(amount, referenceNumber)) {
+            reserved = reserved.subtract(amount);
+            return true;
+        } else {
+            return false;
         }
     }
 

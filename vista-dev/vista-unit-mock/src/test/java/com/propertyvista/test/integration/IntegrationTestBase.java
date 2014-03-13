@@ -209,6 +209,11 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
         scheduler.schedulePmcProcess(PmcProcessType.paymentsReceiveReconciliation, new Schedule());
     }
 
+    protected void setTenantSureBatchProcess() {
+        scheduler.schedulePmcProcess(PmcProcessType.paymentsTenantSure, new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.tenantSureCancellation, new Schedule());
+    }
+
     //TODO move to SchedulerMock
     public static class TaskScheduler {
 

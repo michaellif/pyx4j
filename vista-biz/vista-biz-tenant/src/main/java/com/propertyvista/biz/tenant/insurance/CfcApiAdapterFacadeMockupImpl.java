@@ -43,6 +43,7 @@ public class CfcApiAdapterFacadeMockupImpl implements CfcApiAdapterFacade {
     @Override
     public TenantSureQuoteDTO getQuote(TenantSureInsurancePolicyClient client, TenantSureCoverageDTO coverageRequest) {
         TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
+        quote.paymentSchedule().setValue(coverageRequest.paymentSchedule().getValue());
         quote.annualPremium().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.underwriterFee().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.totalAnnualTax().setValue(new BigDecimal(Math.abs(new Random().nextInt() % 50)));

@@ -47,7 +47,7 @@ public interface TenantSureTransaction extends IEntity {
      * Draft -> PaymentRejected; make insurance "PendingCancellation" and send Email
      * 
      */
-    enum TransactionStatus {
+    public enum TransactionStatus {
 
         Draft,
 
