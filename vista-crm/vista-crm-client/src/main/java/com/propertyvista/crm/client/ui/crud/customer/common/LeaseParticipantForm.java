@@ -31,7 +31,6 @@ import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -152,7 +151,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().picture().file(), imageHolder)).customLabel("").build());
         main.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_BOTTOM);
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiApplicantId(), new CLabel<>()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiApplicantId()), 10).build());
 
         main.setWidget(++row, 0, 2, inject(proto().customer().person().name(), new NameEditor(participant)));
         get(proto().customer().person().name()).setEditable(!VistaFeatures.instance().yardiIntegration());

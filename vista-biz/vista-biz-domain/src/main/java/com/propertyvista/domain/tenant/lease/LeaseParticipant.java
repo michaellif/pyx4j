@@ -16,6 +16,8 @@ package com.propertyvista.domain.tenant.lease;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -65,6 +67,7 @@ public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEn
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> participantId();
 
+    @Editor(type = EditorType.label)
     IPrimitive<String> yardiApplicantId();
 
     //TODO

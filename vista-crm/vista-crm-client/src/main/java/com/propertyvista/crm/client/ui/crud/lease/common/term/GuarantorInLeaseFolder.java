@@ -32,7 +32,6 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -170,7 +169,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
 
             row = -1;
-            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().yardiApplicantId(), new CLabel<>()), 10).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().yardiApplicantId()), 10).build());
             main.setBR(++row, 1, 1);
             main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
             main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());

@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -107,6 +109,7 @@ public interface LeaseApplication extends IEntity {
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> applicationId();
 
+    @Editor(type = EditorType.label)
     IPrimitive<String> yardiApplicationId();
 
     @ToString(index = 0)
