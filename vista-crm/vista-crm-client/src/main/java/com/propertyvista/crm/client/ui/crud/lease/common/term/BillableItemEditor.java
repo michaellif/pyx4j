@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
@@ -59,10 +60,12 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseTermDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillableItemEditor extends CEntityForm<BillableItem> {
@@ -533,6 +536,23 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                     // disable editing of finalized deposits:
                     setEditable(getValue().lifecycle().isNull());
                 }
+
+            }
+
+            @Override
+            protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                // TODO MoveIn Deposits
+                if (VistaTODO.VISTA_4340_MoveInDeposit) {
+                    if (column.getObject() == proto().type()) {
+                        CComponent<?> component = super.createCell(column);
+                        if (component instanceof CComboBox) {
+                            CComboBox<DepositType> typeCombox = (CComboBox<DepositType>) component;
+                            typeCombox.setOptions(Arrays.asList(DepositType.LastMonthDeposit, DepositType.SecurityDeposit));
+                        }
+                        return component;
+                    }
+                }
+                return super.createCell(column);
             }
         }
     }

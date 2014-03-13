@@ -55,6 +55,8 @@ public class VistaTODO {
 
     public static final boolean VISTA_2242_Simple_Lease_Renewal = true;
 
+    public static final boolean VISTA_4340_MoveInDeposit = true;
+
     public static boolean VISTA_2256_Default_Product_Catalog_Show = false;
 
     public static boolean VISTA_2446_Periodic_Lease_Terms = false;
