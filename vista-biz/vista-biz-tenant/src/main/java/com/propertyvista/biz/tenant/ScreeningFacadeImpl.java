@@ -293,13 +293,18 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         if (screeningId == null) {
             screening = EntityFactory.create(CustomerScreening.class);
             screening.screene().set(customerId);
-            // initialize required docs for new screening
-            ApplicationDocumentationPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(documentPolicyNode,
-                    ApplicationDocumentationPolicy.class);
-            initializeRequiredDocuments(screening, policy);
         } else {
             screening = Persistence.retrieveDraftForEdit(CustomerScreening.class, screeningId.getPrimaryKey());
+            // return if draft
+            if (screening.version().getPrimaryKey() != null) {
+                return screening;
+            }
         }
+        // initialize required docs for new screening version
+        ApplicationDocumentationPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(documentPolicyNode,
+                ApplicationDocumentationPolicy.class);
+        initializeRequiredDocuments(screening, policy);
+
         return screening;
     }
 
