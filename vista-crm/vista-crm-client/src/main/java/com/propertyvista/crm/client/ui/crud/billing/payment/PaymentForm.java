@@ -463,7 +463,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             public FieldValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new FieldValidationError(getComponent(), i18n
-                            .tr("Payment amount should be greater then zero!")));
+                            .tr("Payment amount should be greater than zero!")));
                 }
                 return null;
             }
