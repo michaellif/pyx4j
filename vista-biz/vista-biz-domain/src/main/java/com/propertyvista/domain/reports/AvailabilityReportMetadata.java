@@ -20,6 +20,9 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IPrimitiveSet;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
 import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
@@ -30,17 +33,48 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 @Caption(name = "Availability Report")
 public interface AvailabilityReportMetadata extends ReportMetadata, HasAdvancedSettings {
 
+    @I18n
+    public enum RentedStatusPreset {
+
+        All, Rented, Unrented, OffMarket;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        };
+
+    }
+
+    @I18n
+    public enum RentReadinessStatusPreset {
+
+        All,
+
+        RentReady,
+
+        @Translate("Renovation in Progress")
+        RenovationInProgress,
+
+        NeedsRepairs;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        };
+
+    }
+
     /** is null when current */
     @NotNull
     IPrimitive<LogicalDate> asOf();
 
     IPrimitiveSet<UnitAvailabilityStatus.Vacancy> vacancyStatus();
 
-    IPrimitiveSet<UnitAvailabilityStatus.RentedStatus> rentedStatus();
+    @NotNull
+    IPrimitive<RentedStatusPreset> rentedStatus();
 
-    IPrimitiveSet<UnitAvailabilityStatus.RentReadiness> rentReadinessStatus();
-
-    IPrimitiveSet<UnitAvailabilityStatus.Scoping> scopingStatus();
+    @NotNull
+    IPrimitive<RentReadinessStatusPreset> rentReadinessStatus();
 
     IList<PropertyCriterionEntity> availbilityTableCriteria();
 }

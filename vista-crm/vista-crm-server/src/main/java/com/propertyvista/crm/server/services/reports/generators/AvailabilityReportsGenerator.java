@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -26,6 +27,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.services.reports.ReportCriteriaBuilder;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
@@ -40,6 +42,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
 public class AvailabilityReportsGenerator implements ReportGenerator {
+
+    private static final I18n i18n = I18n.get(AvailabilityReportsGenerator.class);
 
     private volatile boolean aborted;
 
@@ -109,20 +113,48 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
             criteria = ReportCriteriaBuilder.build(UnitAvailabilityStatus.class, metadata.availbilityTableCriteria());
         } else {
             criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
+
             if (!metadata.vacancyStatus().isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().vacancyStatus(), metadata.vacancyStatus()));
             } else {
-                criteria.isNull(criteria.proto().vacancyStatus());
+                throw new UserRuntimeException(i18n.tr("Vacancy status filter is required"));
             }
-            if (!metadata.rentedStatus().isEmpty()) {
-                criteria.add(PropertyCriterion.in(criteria.proto().rentedStatus(), metadata.rentedStatus()));
+
+            if (!metadata.rentedStatus().isNull()) {
+                RentedStatus statusFilter = null;
+                switch (metadata.rentedStatus().getValue()) {// @formatter:off
+                case All: /* we don't need to add anything */ break;
+                case Rented: statusFilter = RentedStatus.Rented; break;
+                case Unrented: statusFilter = RentedStatus.Unrented; break;
+                case OffMarket: statusFilter = RentedStatus.OffMarket; break;
+                }//@formatter:on
+                if (statusFilter != null) {
+                    criteria.eq(criteria.proto().rentedStatus(), statusFilter);
+                }
             } else {
-                criteria.isNull(criteria.proto().rentedStatus());
+                throw new UserRuntimeException(i18n.tr("Rented Status filter is required"));
             }
-            if (!metadata.rentReadinessStatus().isEmpty()) {
-                criteria.add(PropertyCriterion.in(criteria.proto().rentReadinessStatus(), metadata.rentReadinessStatus()));
+
+            if (!metadata.rentReadinessStatus().isNull()) {
+                RentReadiness statusFilter = null;
+                switch (metadata.rentReadinessStatus().getValue()) {
+                case All: /* we don't need to add anything */
+                    break;
+                case RentReady:
+                    statusFilter = RentReadiness.RentReady;
+                    break;
+                case RenovationInProgress:
+                    statusFilter = RentReadiness.RenoInProgress;
+                    break;
+                case NeedsRepairs:
+                    statusFilter = RentReadiness.NeedsRepairs;
+                    break;
+                }
+                if (statusFilter != null) {
+                    criteria.eq(criteria.proto().rentReadinessStatus(), statusFilter);
+                }
             } else {
-                criteria.isNull(criteria.proto().rentReadinessStatus());
+                throw new UserRuntimeException(i18n.tr("Rent Readiness Status filter is required"));
             }
 
         }

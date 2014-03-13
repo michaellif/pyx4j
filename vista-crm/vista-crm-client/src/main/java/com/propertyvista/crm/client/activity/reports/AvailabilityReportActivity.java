@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.client.activity.reports;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.reports.availability.AvailabilityReportView;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
+import com.propertyvista.domain.reports.AvailabilityReportMetadata.RentReadinessStatusPreset;
+import com.propertyvista.domain.reports.AvailabilityReportMetadata.RentedStatusPreset;
 
 public class AvailabilityReportActivity extends CrmReportsActivity<AvailabilityReportMetadata> {
 
@@ -25,4 +30,13 @@ public class AvailabilityReportActivity extends CrmReportsActivity<AvailabilityR
         super(AvailabilityReportMetadata.class, reportPlace, CrmSite.getViewFactory().getView(AvailabilityReportView.class));
     }
 
+    @Override
+    protected AvailabilityReportMetadata createDefaultReportMetadata() {
+        AvailabilityReportMetadata metadata = EntityFactory.create(AvailabilityReportMetadata.class);
+        metadata.asOf().setValue(new LogicalDate());
+        metadata.vacancyStatus().setArrayValue(Vacancy.values());
+        metadata.rentedStatus().setValue(RentedStatusPreset.All);
+        metadata.rentReadinessStatus().setValue(RentReadinessStatusPreset.All);
+        return metadata;
+    }
 }
