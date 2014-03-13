@@ -94,6 +94,7 @@ public interface IdentificationDocumentType extends IEntity {
     @Caption(name = "ID Name")
     IPrimitive<String> name();
 
+    @NotNull
     IPrimitive<Importance> importance();
 
     @NotNull
