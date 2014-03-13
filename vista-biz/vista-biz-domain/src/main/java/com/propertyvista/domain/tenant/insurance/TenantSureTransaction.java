@@ -77,7 +77,7 @@ public interface TenantSureTransaction extends IEntity {
     IPrimitive<BigDecimal> amount();
 
     /**
-     * Store the day when the payment should pave been changed if payment was done later.
+     * Store the day when the payment should have been changed if payment was done later.
      */
     IPrimitive<LogicalDate> paymentDue();
 

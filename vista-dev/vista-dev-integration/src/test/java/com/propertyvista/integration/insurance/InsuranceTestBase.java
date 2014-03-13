@@ -36,22 +36,15 @@ import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
-import com.propertyvista.test.mock.models.ARPolicyDataModel;
 import com.propertyvista.test.mock.models.AgreementLegalPolicyDataModel;
-import com.propertyvista.test.mock.models.AutoPayPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
-import com.propertyvista.test.mock.models.DepositPolicyDataModel;
 import com.propertyvista.test.mock.models.GLCodeDataModel;
 import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
-import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
-import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
-import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
-import com.propertyvista.test.mock.models.TaxesDataModel;
 import com.propertyvista.test.mock.models.TenantSureMerchantAccountDataModel;
 
 public class InsuranceTestBase extends IntegrationTestBase {
@@ -75,17 +68,10 @@ public class InsuranceTestBase extends IntegrationTestBase {
         models.add(PmcDataModel.class);
         models.add(CustomerDataModel.class);
         models.add(LocationsDataModel.class);
-        models.add(TaxesDataModel.class);
         models.add(GLCodeDataModel.class);
         models.add(ARCodeDataModel.class);
         models.add(BuildingDataModel.class);
-        models.add(MerchantAccountDataModel.class);
         models.add(IdAssignmentPolicyDataModel.class);
-        models.add(ProductTaxPolicyDataModel.class);
-        models.add(DepositPolicyDataModel.class);
-        models.add(LeaseAdjustmentPolicyDataModel.class);
-        models.add(ARPolicyDataModel.class);
-        models.add(AutoPayPolicyDataModel.class);
         models.add(AgreementLegalPolicyDataModel.class);
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(LeaseDataModel.class);
@@ -98,7 +84,6 @@ public class InsuranceTestBase extends IntegrationTestBase {
     protected Building getBuilding() {
         if (building == null) {
             building = getDataModel(BuildingDataModel.class).addBuilding();
-            getDataModel(MerchantAccountDataModel.class).addMerchantAccount(building);
             Persistence.service().commit();
         }
         return building;

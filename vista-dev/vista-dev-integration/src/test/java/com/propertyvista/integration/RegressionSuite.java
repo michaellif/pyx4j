@@ -18,13 +18,14 @@ import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.propertyvista.integration.insurance.AllTenantSureTestsSuite;
 import com.propertyvista.integration.portal.prospect.AllProspectTestsSuite;
 import com.propertyvista.integration.yardi.AllYardiTestsSuite;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
 @RunWith(Categories.class)
 @IncludeCategory(RegressionTests.class)
-@Suite.SuiteClasses({ AllYardiTestsSuite.class, AllProspectTestsSuite.class })
+@Suite.SuiteClasses({ AllYardiTestsSuite.class, AllProspectTestsSuite.class, AllTenantSureTestsSuite.class })
 public class RegressionSuite {
 
 }

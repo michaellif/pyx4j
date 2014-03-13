@@ -18,6 +18,7 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
@@ -42,7 +43,7 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
         createLease("2010-01-01", "2012-09-01");
     }
 
-    public void testBuyTenantSure() throws Exception {
+    public void testBuyTenantSureNow() throws Exception {
         setSysDate("2011-01-05");
 
         TenantSureCoverageDTO quotationRequest = EntityFactory.create(TenantSureCoverageDTO.class);
@@ -54,27 +55,90 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
         InsurancePaymentMethod paymentMethod = createInsurancePaymentMethod(getLease()._applicant());
         ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod, getLease()._applicant());
 
-        TenantSureInsurancePolicy tenantSurePolicy = EntityFactory.create(TenantSureInsurancePolicy.class);
+        TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(
+                TenantSureInsurancePolicy.class, //
+                ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), "Bob", "1234567",
+                        EntityFactory.create(CustomerSignature.class)));
 
-        tenantSurePolicy.setPrimaryKey(ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), "Bob", "1234567",
-                EntityFactory.create(CustomerSignature.class)));
+        assertEquals("paymentDay", 5, tenantSurePolicy.paymentDay().getValue().intValue());
 
         new TenantSureTransactionTester(tenantSurePolicy)//
                 .count(1) //    
-                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared);
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordPaymentDue("2011-01-05") //
+                .lastRecordTransactionDate("2011-01-05");
 
         advanceSysDate("2011-02-07");
 
         new TenantSureTransactionTester(tenantSurePolicy)//
                 .count(2) //    
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
-                .lastRecordDate("2011-02-06");
+                .lastRecordPaymentDue("2011-02-05") //
+                .lastRecordTransactionDate("2011-02-06");
 
         advanceSysDate("2011-03-07");
 
         new TenantSureTransactionTester(tenantSurePolicy)//
                 .count(3) //    
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
-                .lastRecordDate("2011-03-06");
+                .lastRecordPaymentDue("2011-03-05") //
+                .lastRecordTransactionDate("2011-03-06");
+    }
+
+    public void testBuyTenantSureFutureDate() throws Exception {
+        setSysDate("2011-01-05");
+
+        TenantSureCoverageDTO quotationRequest = EntityFactory.create(TenantSureCoverageDTO.class);
+        quotationRequest.paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
+        quotationRequest.inceptionDate().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-20")));
+
+        TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(quotationRequest, getLease()._applicant());
+
+        InsurancePaymentMethod paymentMethod = createInsurancePaymentMethod(getLease()._applicant());
+        ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod, getLease()._applicant());
+
+        TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(
+                TenantSureInsurancePolicy.class, //
+                ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), "Bob", "1234567",
+                        EntityFactory.create(CustomerSignature.class)));
+
+        assertEquals("paymentDay", 20, tenantSurePolicy.paymentDay().getValue().intValue());
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(1) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordPaymentDue("2011-01-05") //
+                .lastRecordTransactionDate("2011-01-05");
+
+//        //---
+//
+//        setSysDate("2011-01-20");
+//        advanceSysDate("2011-01-21");
+//        new TenantSureTransactionTester(tenantSurePolicy)//
+//                .lastRecordTransactionDate("2011-01-21") //
+//                .count(1);
+//
+//        //-----------
+
+        advanceSysDate("2011-02-07");
+
+        // Now new transaction
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(1) //    
+                .lastRecordTransactionDate("2011-01-05");
+
+        advanceSysDate("2011-02-22");
+
+        // Payment in advance
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(2) //    
+                .lastRecordTransactionDate("2011-02-21");
+
+        advanceSysDate("2011-03-22");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(3) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-03-21");
     }
 }

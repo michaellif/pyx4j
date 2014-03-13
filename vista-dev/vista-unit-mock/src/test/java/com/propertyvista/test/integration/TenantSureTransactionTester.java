@@ -66,10 +66,17 @@ public class TenantSureTransactionTester extends Tester {
         return this;
     }
 
-    public TenantSureTransactionTester lastRecordDate(String dateStr) {
+    public TenantSureTransactionTester lastRecordTransactionDate(String dateStr) {
         TenantSureTransaction lastRecord = lastRecord();
         assertEquals(infor() + " Date of last Record " + lastRecord.getPrimaryKey(), // 
                 dateStr, new LogicalDate(lastRecord.transactionDate().getValue()));
+        return this;
+    }
+
+    public TenantSureTransactionTester lastRecordPaymentDue(String dateStr) {
+        TenantSureTransaction lastRecord = lastRecord();
+        assertEquals(infor() + " PaymentDue of last Record " + lastRecord.getPrimaryKey(), // 
+                dateStr, lastRecord.paymentDue().getValue());
         return this;
     }
 

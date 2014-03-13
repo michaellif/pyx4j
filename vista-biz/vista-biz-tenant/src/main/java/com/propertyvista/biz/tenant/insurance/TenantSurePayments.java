@@ -168,6 +168,7 @@ class TenantSurePayments {
         or.left().isNull(criteria.proto().certificate().expiryDate());
         criteria.eq(criteria.proto().status(), TenantSureStatus.Active);
         criteria.in(criteria.proto().paymentDay(), paymentDays);
+        criteria.lt(criteria.proto().certificate().inceptionDate(), dueDate);
         ICursorIterator<TenantSureInsurancePolicy> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (iterator.hasNext()) {
