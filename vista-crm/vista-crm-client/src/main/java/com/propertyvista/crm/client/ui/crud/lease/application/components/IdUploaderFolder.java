@@ -28,6 +28,8 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -42,6 +44,7 @@ import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 
@@ -123,6 +126,22 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
         } else {
             return super.create(member);
         }
+    }
+
+    @Override
+    protected CEntityFolderItem<IdentificationDocumentFolder> createItem(boolean first) {
+        return new CEntityFolderItem<IdentificationDocumentFolder>(IdentificationDocumentFolder.class) {
+            @Override
+            public IFolderItemDecorator<IdentificationDocumentFolder> createItemDecorator() {
+                return IdUploaderFolder.this.createItemDecorator();
+            }
+
+            @Override
+            public void onValueSet(boolean populate) {
+                // update removable
+                setRemovable(!Importance.Required.equals(getValue().idType().importance().getValue()));
+            }
+        };
     }
 
     private class IdentificationDocumentEditor extends CEntityForm<IdentificationDocumentFolder> {
