@@ -156,7 +156,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
                 loadReportMetadata(place.getReportMetadataId());
                 return;
             } else {
-                place.define(EntityFactory.create(reportMetadataClass));
+                place.define(createDefaultReportMetadata());
             }
         }
         view.getMemento().setCurrentPlace(place);
@@ -317,6 +317,10 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
     protected void onReportMetadataSet(R reportMetadata) {
 
+    }
+
+    protected R createDefaultReportMetadata() {
+        return EntityFactory.create(reportMetadataClass);
     }
 
 }
