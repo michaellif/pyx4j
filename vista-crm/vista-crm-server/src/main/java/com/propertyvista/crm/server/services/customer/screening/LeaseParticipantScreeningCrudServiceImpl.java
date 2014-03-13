@@ -23,9 +23,12 @@ import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<CustomerScreening, LeaseParticipantScreeningTO> implements
@@ -71,9 +74,22 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
         to.leaseParticipantId().set(initData.leaseParticipantId());
 
-        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._tenantInLease(), initData.leaseParticipantId()));
-        to.screening().screene().set(Persistence.service().retrieve(criteria, AttachLevel.ToStringMembers));
+        LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(LeaseParticipant.class, initData.leaseParticipantId().getPrimaryKey());
+
+        to.screening().screene().set(leaseParticipant.customer());
+
+        Building policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseParticipant.lease());
+
+        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(leaseParticipant.customer(),
+                policyNode);
+        Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
+
+        to.screening().set(screening);
+
+        ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(to.screening());
+
         return to;
     }
 

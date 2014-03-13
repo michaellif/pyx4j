@@ -92,6 +92,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class LeaseAbstractManager {
@@ -1273,9 +1274,24 @@ public abstract class LeaseAbstractManager {
             }
             if (building != null) {
                 return building;
-            } else {
-                throw new Error();
             }
+
+            // OnlineApplication, Case of ILS link, see  OnlineApplicationFacadeImpl.getOnlineApplicationPolicyNode
+            {
+
+                EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
+                criteria.eq(criteria.proto().leaseApplication().lease(), leaseId);
+                MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(criteria);
+                if (masterOnlineApplication != null) {
+                    building = masterOnlineApplication.building();
+                }
+            }
+            if (building != null) {
+                return building;
+            }
+
+            throw new Error();
+
         }
     }
 }

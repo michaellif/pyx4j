@@ -295,15 +295,14 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             screening.screene().set(customerId);
         } else {
             screening = Persistence.retrieveDraftForEdit(CustomerScreening.class, screeningId.getPrimaryKey());
-            // return if draft
-            if (screening.version().getPrimaryKey() != null) {
-                return screening;
-            }
         }
+
         // initialize required docs for new screening version
-        ApplicationDocumentationPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(documentPolicyNode,
-                ApplicationDocumentationPolicy.class);
-        initializeRequiredDocuments(screening, policy);
+        if (screening.version().getPrimaryKey() == null) {
+            ApplicationDocumentationPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(documentPolicyNode,
+                    ApplicationDocumentationPolicy.class);
+            initializeRequiredDocuments(screening, policy);
+        }
 
         return screening;
     }
@@ -337,11 +336,10 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
         CustomerScreening screening = Persistence.service().retrieve(criteria, attachLevel);
-        if (screening != null) {
-            return screening;
+        if (screening == null) {
+            criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+            screening = Persistence.service().retrieve(criteria, attachLevel);
         }
-        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-        screening = Persistence.service().retrieve(criteria, attachLevel);
         return screening;
     }
 
