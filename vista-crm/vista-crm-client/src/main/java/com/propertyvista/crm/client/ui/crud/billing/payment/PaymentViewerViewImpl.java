@@ -23,6 +23,7 @@ import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDTO> implements PaymentViewerView {
@@ -125,8 +126,10 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
                 setActionVisible(scheduleAction, true);
                 setActionHighlighted(scheduleAction, true);
             } else {
-                setActionVisible(processAction, true);
-                setActionHighlighted(processAction, true);
+                if (!Lease.Status.noPayment().contains(value.leaseStatus().getValue())) {
+                    setActionVisible(processAction, true);
+                    setActionHighlighted(processAction, true);
+                }
             }
         }
 

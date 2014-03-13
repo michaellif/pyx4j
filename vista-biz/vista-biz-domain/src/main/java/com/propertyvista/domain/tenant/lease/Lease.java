@@ -128,7 +128,11 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
             return result;
         }
 
-        // states:
+        public static EnumSet<Status> noPayment() {
+            EnumSet<Status> result = former();
+            result.addAll(draft());
+            return result;
+        } // states:
 
         public boolean isDraft() {
             return draft().contains(this);

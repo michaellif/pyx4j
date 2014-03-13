@@ -265,6 +265,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord processPayment(PaymentRecord paymentId, PaymentBatchContext paymentBatchContext) throws PaymentException {
         final PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey(), AttachLevel.Attached, true);
+
+        Persistence.ensureRetrieve(paymentRecord.billingAccount().lease(), AttachLevel.Attached);
+        assert !Lease.Status.noPayment().contains(paymentRecord.billingAccount().lease().status().getValue()) : "Cannot process payment for inactive lease";
+
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
                 paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
