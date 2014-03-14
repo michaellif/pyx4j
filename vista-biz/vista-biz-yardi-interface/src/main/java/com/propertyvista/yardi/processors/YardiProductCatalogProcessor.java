@@ -26,7 +26,9 @@ import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -291,15 +293,35 @@ public class YardiProductCatalogProcessor {
     // ----------------------------------------------------------------------------------
 
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
+        List<Feature> newFeatures = new ArrayList<>();
+        for (Feature feature : catalog.features()) {
+            if (!feature.defaultCatalogItem().getValue(false)) {
+                newFeatures.add(feature);
+            }
+        }
+
+        List<Pair<Service, Service>> updatedServices = new ArrayList<>();
+
         for (Service service : catalog.services()) {
             if (!service.defaultCatalogItem().getValue(false)) {
                 Persistence.ensureRetrieve(service.version().features(), AttachLevel.Attached);
 
-                service.version().features().clear();
-                for (Feature feature : catalog.features()) {
-                    if (!feature.defaultCatalogItem().getValue(false)) {
-                        service.version().features().add(feature);
+                if (service.id().isNull()) {
+                    service.version().features().addAll(newFeatures);
+                } else {
+                    if (!EqualsHelper.equals(service.version().features(), newFeatures)) {
+                        Pair<Service, Service> updated = new Pair<>(service, Persistence.retrieveDraftForEdit(Service.class, service.getPrimaryKey()
+                                .asDraftKey()));
+                        updated.getB().version().features().clear();
+                        updated.getB().version().features().addAll(newFeatures);
+                        updated.getB().saveAction().setValue(SaveAction.saveAsFinal);
+                        updatedServices.add(updated);
                     }
+                }
+
+                for (Pair<Service, Service> updated : updatedServices) {
+                    catalog.services().remove(updated.getA());
+                    catalog.services().add(updated.getB());
                 }
             }
         }
