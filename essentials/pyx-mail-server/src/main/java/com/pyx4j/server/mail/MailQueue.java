@@ -116,6 +116,14 @@ public class MailQueue implements Runnable {
         }
     }
 
+    public static boolean isRunning() {
+        if (instance != null) {
+            return instance.running;
+        } else {
+            return false;
+        }
+    }
+
     static void queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
         final AbstractOutgoingMailQueue persistable = EntityFactory.create(persistableEntities.get(mailConfig.configurationId()));
         if (persistable == null) {
@@ -141,15 +149,19 @@ public class MailQueue implements Runnable {
             }
         });
 
-        // Transaction is actually completed, wake up the delivery thread.
-        Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
+        if (isRunning()) {
+            // Transaction is actually completed, wake up the delivery thread.
+            Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
 
-            @Override
-            public Void execute() {
-                sendQueued();
-                return null;
-            }
-        });
+                @Override
+                public Void execute() {
+                    sendQueued();
+                    return null;
+                }
+            });
+        } else {
+            log.warn("MailQueue is not running, email will be delivered after next application restart");
+        }
     }
 
     @Override
