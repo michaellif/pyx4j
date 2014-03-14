@@ -36,6 +36,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
@@ -164,6 +165,7 @@ public class PmcCreator {
             }
         }
         Persistence.service().persist(credential);
+        ServerSideFactory.create(UserManagementFacade.class).createGlobalCrmUserIndex(user);
 
         return user;
     }
