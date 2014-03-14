@@ -171,7 +171,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     public void runCreditCheck(BigDecimal rentAmount, LeaseTermParticipant<?> leaseParticipantId, Employee currentUserEmployee) {
         PmcEquifaxInfo equifaxInfo = getCurrentPmcEquifaxInfo();
         if (!isCreditCheckActivated(equifaxInfo)) {
-            throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated in Onboarding"));
+            throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated"));
         }
 
         LeaseTermParticipant<?> leaseParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
