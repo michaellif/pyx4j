@@ -244,6 +244,14 @@ public abstract class LeaseAbstractManager {
             break;
         }
 
+        // update legal policies
+        if (!leaseTerm.unit().isNull()) {
+            LeaseAgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(leaseTerm.unit().building(),
+                    LeaseAgreementLegalPolicy.class);
+            leaseTerm.version().agreementLegalTerms().set(agreementLegalPolicy.legal());
+            leaseTerm.version().agreementConfirmationTerm().set(agreementLegalPolicy.confirmation());
+        }
+
         Persistence.service().merge(leaseTerm);
 
         return leaseTerm;
@@ -760,11 +768,6 @@ public abstract class LeaseAbstractManager {
                 throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", lease.billingAccount().billingPeriod().getValue()));
             }
         }
-
-        LeaseAgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(leaseTerm.unit().building(),
-                LeaseAgreementLegalPolicy.class);
-        leaseTerm.version().agreementLegalTerms().set(agreementLegalPolicy.legal());
-        leaseTerm.version().agreementConfirmationTerm().set(agreementLegalPolicy.confirmation());
 
         if (updateTermData) {
             updateTermUnitRelatedData(leaseTerm);
