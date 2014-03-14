@@ -238,7 +238,7 @@ public class YardiARIntegrationAgent {
             Persistence.ensureRetrieve(pr.leaseTermParticipant(), AttachLevel.Attached);
             paidBy = pr.leaseTermParticipant().leaseParticipant().participantId().getValue();
         }
-        // There is Max length in YArdi table trans.SUSERDEFINED2 nvarchar(42)
+        // There is Max length in YArdi table trans.SUSERDEFINED2 nvarchar(24)
         if (paidBy.length() > 24) {
             paidBy = paidBy.substring(0, 24);
         }
