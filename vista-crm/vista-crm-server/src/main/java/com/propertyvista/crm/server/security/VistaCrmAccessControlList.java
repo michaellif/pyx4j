@@ -450,7 +450,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCardValidationService.class));
 
-        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(CommunicationMessageCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunicationMessageCrudService.class));
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(MaintenanceCrudService.class));
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
