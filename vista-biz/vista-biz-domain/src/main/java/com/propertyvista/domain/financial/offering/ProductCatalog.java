@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -50,14 +51,17 @@ public interface ProductCatalog extends IEntity {
     // note, that declaration order is important!
 
     @Owned(cascade = {})
+    @OrderBy(PrimaryKey.class)
     @Detached
     IList<Concession> concessions();
 
     @Owned(cascade = {})
+    @OrderBy(PrimaryKey.class)
     @Detached
     IList<Feature> features();
 
     @Owned(cascade = {})
+    @OrderBy(PrimaryKey.class)
     @Detached
     IList<Service> services();
 }
