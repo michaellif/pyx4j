@@ -26,6 +26,7 @@ import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.dto.MessagesDTO;
 
 public interface CommunicationMessageCrudService extends AbstractCrudService<CommunicationMessageDTO> {
+
     void retreiveCommunicationMessages(AsyncCallback<MessagesDTO> callback, boolean newOnly);
 
     void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage source);
