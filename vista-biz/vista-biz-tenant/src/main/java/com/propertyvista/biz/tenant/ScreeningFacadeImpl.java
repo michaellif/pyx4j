@@ -88,7 +88,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
     @Override
     public PmcEquifaxStatus getCreditCheckServiceStatus() {
-        return getCurrentPmcEquifaxInfo().status().getValue();
+        return getCurrentPmcEquifaxInfo().status().getValue(PmcEquifaxStatus.NotRequested);
     }
 
     private boolean isCreditCheckActivated(PmcEquifaxInfo equifaxInfo) {
