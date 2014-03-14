@@ -244,14 +244,6 @@ public abstract class LeaseAbstractManager {
             break;
         }
 
-        // update legal policies
-        if (!leaseTerm.unit().isNull()) {
-            LeaseAgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(leaseTerm.unit().building(),
-                    LeaseAgreementLegalPolicy.class);
-            leaseTerm.version().agreementLegalTerms().set(agreementLegalPolicy.legal());
-            leaseTerm.version().agreementConfirmationTerm().set(agreementLegalPolicy.confirmation());
-        }
-
         Persistence.service().merge(leaseTerm);
 
         return leaseTerm;
@@ -890,6 +882,13 @@ public abstract class LeaseAbstractManager {
         // sync. unit:
         if (!lease.currentTerm().unit().isNull()) {
             lease.unit().set(lease.currentTerm().unit());
+            // update legal policies
+            if (lease.status().getValue().isDraft()) {
+                LeaseAgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                        lease.currentTerm().unit().building(), LeaseAgreementLegalPolicy.class);
+                lease.currentTerm().version().agreementLegalTerms().set(agreementLegalPolicy.legal());
+                lease.currentTerm().version().agreementConfirmationTerm().set(agreementLegalPolicy.confirmation());
+            }
         }
 
         if (finalize) {
