@@ -31,6 +31,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
@@ -133,15 +134,13 @@ public class YardiProductCatalogProcessor {
     // ----------------------------------------------------------------------------------
     private void updateServices(ProductCatalog catalog) {
         deleteServices(catalog);
-        catalog.services().clear();
-        catalog.services().add(ensureService(catalog));
+        ensureService(catalog);
     }
 
     private void deleteServices(ProductCatalog catalog) {
-        for (final Service service : catalog.services()) {
+        for (Service service : catalog.services()) {
             if (!service.defaultCatalogItem().getValue(false) && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(SystemDateManager.getLogicalDate());
-                Persistence.service().merge(service);
             }
         }
     }
@@ -151,14 +150,10 @@ public class YardiProductCatalogProcessor {
 
         assert (arCode != null);
 
-        EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
-        criteria.eq(criteria.proto().catalog(), catalog);
-        criteria.eq(criteria.proto().defaultCatalogItem(), false);
-        criteria.eq(criteria.proto().code(), arCode);
-
-        Service service = Persistence.service().retrieve(criteria);
+        Service service = findService(catalog, arCode);
         if (service == null) {
             service = EntityFactory.create(Service.class);
+            catalog.services().add(service);
 
             service.defaultCatalogItem().setValue(false);
             service.catalog().set(catalog);
@@ -182,13 +177,25 @@ public class YardiProductCatalogProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
+    private Service findService(ProductCatalog catalog, ARCode arCode) {
+        Service result = null;
+
+        for (Service item : catalog.services()) {
+            if (!item.defaultCatalogItem().getValue(false) && item.code().equals(arCode)) {
+                result = item;
+                break;
+            }
+        }
+
+        return result;
+    }
+
     // ----------------------------------------------------------------------------------
 
     private void updateFeatures(ProductCatalog catalog, RentableItems rentableItems) {
         deleteFeatures(catalog);
-        catalog.features().clear();
         for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.features())) {
-            catalog.features().add(ensureFeature(catalog, typeData));
+            ensureFeature(catalog, typeData);
         }
     }
 
@@ -196,21 +203,15 @@ public class YardiProductCatalogProcessor {
         for (Feature feature : catalog.features()) {
             if (!feature.defaultCatalogItem().getValue(false) && feature.expiredFrom().isNull()) {
                 feature.expiredFrom().setValue(SystemDateManager.getLogicalDate());
-                Persistence.service().merge(feature);
             }
         }
     }
 
     private Feature ensureFeature(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
-        EntityQueryCriteria<Feature> criteria = EntityQueryCriteria.create(Feature.class);
-        criteria.eq(criteria.proto().catalog(), catalog);
-        criteria.eq(criteria.proto().defaultCatalogItem(), false);
-        criteria.eq(criteria.proto().code(), typeData.getArCode());
-        criteria.eq(criteria.proto().yardiCode(), typeData.getItemType().getCode());
-
-        Feature feature = Persistence.service().retrieve(criteria);
+        Feature feature = findFeature(catalog, typeData);
         if (feature == null) {
             feature = EntityFactory.create(Feature.class);
+            catalog.features().add(feature);
 
             feature.defaultCatalogItem().setValue(false);
             feature.catalog().set(catalog);
@@ -225,7 +226,10 @@ public class YardiProductCatalogProcessor {
             ServerSideFactory.create(DefaultProductCatalogFacade.class).fillDefaultDeposits(feature);
         } else {
             if (isFeatureChanged(feature, typeData)) {
-                feature = Persistence.service().retrieve(Feature.class, feature.getPrimaryKey().asDraftKey());
+                catalog.features().remove(feature);
+                feature = Persistence.retrieveDraftForEdit(Feature.class, feature.getPrimaryKey().asDraftKey());
+                feature.saveAction().setValue(SaveAction.saveAsFinal);
+                catalog.features().add(feature);
             }
         }
 
@@ -241,6 +245,23 @@ public class YardiProductCatalogProcessor {
         feature.expiredFrom().setValue(null);
 
         return feature;
+    }
+
+    private Feature findFeature(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
+        Feature result = null;
+
+        for (Feature item : catalog.features()) {
+            //@formatter:off
+            if (!item.defaultCatalogItem().getValue(false) 
+              && item.code().equals(typeData.getArCode())
+              && CommonsStringUtils.equals(item.yardiCode().getValue(), typeData.getItemType().getCode())) {
+            //@formatter:on
+                result = item;
+                break;
+            }
+        }
+
+        return result;
     }
 
     private boolean isFeatureChanged(Feature feature, YardiRentableItemTypeData itemTypeData) {
@@ -273,16 +294,12 @@ public class YardiProductCatalogProcessor {
         for (Service service : catalog.services()) {
             if (!service.defaultCatalogItem().getValue(false)) {
                 Persistence.ensureRetrieve(service.version().features(), AttachLevel.Attached);
-                Persistence.ensureRetrieve(service.version().concessions(), AttachLevel.Attached);
 
                 service.version().features().clear();
                 for (Feature feature : catalog.features()) {
-                    Persistence.ensureRetrieve(feature, AttachLevel.Attached);
                     if (!feature.defaultCatalogItem().getValue(false)) {
                         service.version().features().add(feature);
                     }
-
-                    service.version().concessions().clear();
                 }
             }
         }

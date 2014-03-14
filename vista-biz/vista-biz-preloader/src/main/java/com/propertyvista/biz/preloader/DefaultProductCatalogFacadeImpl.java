@@ -266,8 +266,6 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
                     if (feature.defaultCatalogItem().isBooleanTrue()) {
                         service.version().features().add(feature);
                     }
-
-                    service.version().concessions().clear();
                 }
             }
         }
