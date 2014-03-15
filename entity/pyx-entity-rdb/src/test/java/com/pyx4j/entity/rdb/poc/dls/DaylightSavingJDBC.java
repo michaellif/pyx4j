@@ -24,10 +24,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.dbcp2.ConnectionFactory;
+import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
+import org.apache.commons.dbcp2.PoolableConnection;
+import org.apache.commons.dbcp2.PoolableConnectionFactory;
+import org.apache.commons.dbcp2.PoolingDataSource;
+import org.apache.commons.pool2.impl.GenericObjectPool;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -54,6 +64,8 @@ public class DaylightSavingJDBC {
     }
 
     static boolean init = true;
+
+    static boolean firstRun = true;
 
     public static void main(String[] args) throws Exception {
         Connection con;
@@ -115,8 +127,14 @@ public class DaylightSavingJDBC {
 
             if (init) {
                 init = false;
-                con.createStatement().executeUpdate(
-                        "CREATE TABLE test(id SERIAL NOT NULL, name varchar(500), dval timestamp, CONSTRAINT TEST_PK PRIMARY KEY (id))");
+                try {
+                    con.createStatement().executeUpdate(
+                            "CREATE TABLE test(id SERIAL NOT NULL, name varchar(500), dval timestamp, CONSTRAINT TEST_PK PRIMARY KEY (id))");
+                } catch (SQLException e) {
+                    if (!e.getMessage().contains("already exists")) {
+                        throw e;
+                    }
+                }
             } else {
                 con.createStatement().executeUpdate("DELETE FROM test");
             }
@@ -146,13 +164,34 @@ public class DaylightSavingJDBC {
 
         con.commit();
 
-        ComboPooledDataSource dataSource = new ComboPooledDataSource(true);
-        dataSource.setDriverClass(driverClass);
-        dataSource.setJdbcUrl(url);
-        dataSource.setUser(user);
-        dataSource.setPassword(password);
+        ComboPooledDataSource dataSourceC3PO = new ComboPooledDataSource(true);
+        {
+            dataSourceC3PO.setDriverClass(driverClass);
+            dataSourceC3PO.setJdbcUrl(url);
+            dataSourceC3PO.setUser(user);
+            dataSourceC3PO.setPassword(password);
 
-        dataSource.setMaxStatements(2); //   <-------------------- this makes the difference
+            dataSourceC3PO.setMaxPoolSize(5);
+
+            dataSourceC3PO.setMaxStatements(200); //   <-------------------- this makes the difference  (0 is OK)
+        }
+
+        DataSource dataSourceDBCP;
+        GenericObjectPool<PoolableConnection> connectionPool;
+        {
+            ConnectionFactory driverConnectionFactory = new DriverManagerConnectionFactory(url, user, password);
+
+            PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(driverConnectionFactory, null);
+
+            poolableConnectionFactory.setPoolStatements(true); //   <-------------------- this makes the difference  (false is OK)
+            poolableConnectionFactory.setMaxOpenPrepatedStatements(30);
+
+            connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
+            connectionPool.setMaxTotal(3);
+
+            poolableConnectionFactory.setPool(connectionPool);
+            dataSourceDBCP = new PoolingDataSource<PoolableConnection>(connectionPool);
+        }
 
         try {
             for (int i = 0; i <= 20; i++) {
@@ -161,43 +200,51 @@ public class DaylightSavingJDBC {
 
                 //con2 = con; // <-------------  Not pooled connection works fine!
                 //con2 = DriverManager.getConnection(url, user, password); // <-------------  Driver Managed connection works fine!
-                con2 = dataSource.getConnection(); // <-- this will create error
+                //con2 = dataSourceC3PO.getConnection(); // <-- this will create error
+                con2 = dataSourceDBCP.getConnection(); // <-- this will create error
 
                 String sql = "SELECT dval FROM test  WHERE name = ?";
                 PreparedStatement stmt = con2.prepareStatement(sql);
                 stmt.setString(1, uniqueName);
 
-                ResultSet rs = stmt.executeQuery(); // <--  Executions Locks here
+                ResultSet rs = stmt.executeQuery();
+                try {
+                    if (rs.next()) {
 
-                if (rs.next()) {
+                        java.sql.Timestamp value;
 
-                    java.sql.Timestamp value;
+                        value = rs.getTimestamp("dval");
+                        //value = rs.getTimestamp("dval", Calendar.getInstance()); // <-- this changes nothing
 
-                    value = rs.getTimestamp("dval");
-                    //value = rs.getTimestamp("dval", Calendar.getInstance()); // <-- this changes nothing
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(value);
 
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(value);
+                        //System.out.println(value.getTimezoneOffset()); // this prints the same value
 
-                    //System.out.println(value.getTimezoneOffset()); // this prints the same value
-
-                    if (testHour != c.get(Calendar.HOUR_OF_DAY)) {
-                        throw new Error("try# " + i + "; hour of " + value + " expected " + testHour + " but was " + c.get(Calendar.HOUR_OF_DAY));
+                        if (testHour != c.get(Calendar.HOUR_OF_DAY)) {
+                            throw new Error("try# " + i + "; hour of " + value + " expected " + testHour + " but was " + c.get(Calendar.HOUR_OF_DAY));
+                        }
+                    } else {
+                        throw new Error();
                     }
-                } else {
-                    throw new Error();
+                } finally {
+                    rs.close();
                 }
 
-                if (con2 != con) {
+                if (con2 != con) { // if pooled connection
                     con2.close();
                 }
             }
         } finally {
-            dataSource.close();
+            dataSourceC3PO.close();
+            connectionPool.close();
             con.close();
         }
 
-        //System.out.println("Ok");
+        if (firstRun) {
+            System.out.println("Ok :) no problem with date: " + dateTimeInSaylightSavingDay);
+            firstRun = false;
+        }
 
     }
 }

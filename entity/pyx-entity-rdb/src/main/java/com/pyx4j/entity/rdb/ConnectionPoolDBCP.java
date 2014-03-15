@@ -23,53 +23,80 @@ package com.pyx4j.entity.rdb;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.dbcp.PoolingDataSource;
-import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.commons.dbcp2.ConnectionFactory;
+import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
+import org.apache.commons.dbcp2.PoolableConnection;
+import org.apache.commons.dbcp2.PoolableConnectionFactory;
+import org.apache.commons.dbcp2.PoolingDataSource;
+import org.apache.commons.pool2.impl.GenericObjectPool;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
 import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
+import com.pyx4j.log4j.LoggerConfig;
 
 public class ConnectionPoolDBCP implements ConnectionPool {
 
     private final Map<ConnectionPoolType, DataSource> dataSources = new HashMap<ConnectionPoolType, DataSource>();
 
-    private final Map<ConnectionPoolType, GenericObjectPool> connectionPools = new HashMap<ConnectionPoolType, GenericObjectPool>();
+    private final Map<ConnectionPoolType, GenericObjectPool<PoolableConnection>> connectionPools = new HashMap<>();
+
+    private ObjectName jndiName(String type) {
+        try {
+            return new ObjectName("org.apache.commons.dbcp2." + LoggerConfig.getContextName() + ":type=dbpool");
+        } catch (MalformedObjectNameException e) {
+            throw new Error(e);
+        }
+    }
 
     public ConnectionPoolDBCP(Configuration cfg) {
 
         for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
-            GenericObjectPool connectionPool = new GenericObjectPool(null);
-            connectionPool.setTestWhileIdle(true);
+            ConnectionPoolConfiguration cpc = cfg.connectionPoolConfiguration(connectionType);
 
             ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());
 
-            PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPool, null, cfg.connectionValidationQuery(),
-                    cfg.readOnly(), true);
-            poolable.setValidationQueryTimeout(1);
+            PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, jndiName(connectionType.name().toString()));
+            poolableConnectionFactory.setValidationQueryTimeout(2);
+            poolableConnectionFactory.setValidationQuery(cfg.connectionValidationQuery());
 
-            DataSource dataSource = new PoolingDataSource(connectionPool);
+            if (cpc.maxPoolPreparedStatements() > 0) {
+                poolableConnectionFactory.setPoolStatements(true);
+                poolableConnectionFactory.setMaxOpenPrepatedStatements(cpc.maxPoolPreparedStatements());
+            }
+
+            poolableConnectionFactory.setMaxConnLifetimeMillis(Consts.SEC2MILLISECONDS * cpc.unreturnedConnectionTimeout());
+
+            GenericObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
+            connectionPool.setTestWhileIdle(true);
+
+            //connectionPool.setMinIdle(cpc.minPoolSize());
+            connectionPool.setMaxTotal(cpc.maxPoolSize());
+
+            poolableConnectionFactory.setPool(connectionPool);
+            DataSource dataSource = new PoolingDataSource<PoolableConnection>(connectionPool);
 
             dataSources.put(connectionType, dataSource);
             connectionPools.put(connectionType, connectionPool);
         }
 
         {
-            GenericObjectPool connectionPool = new GenericObjectPool(null);
-            connectionPool.setTestWhileIdle(true);
-
             ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.dbAdministrationUserName(),
                     cfg.dbAdministrationPassword());
 
-            PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPool, null, cfg.connectionValidationQuery(),
-                    cfg.readOnly(), true);
-            poolable.setValidationQueryTimeout(1);
+            PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, jndiName("DDL"));
+            poolableConnectionFactory.setValidationQueryTimeout(1);
+            poolableConnectionFactory.setValidationQuery(cfg.connectionValidationQuery());
 
-            DataSource dataSourceAministration = new PoolingDataSource(connectionPool);
+            GenericObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
+            connectionPool.setTestWhileIdle(true);
+
+            DataSource dataSourceAministration = new PoolingDataSource<PoolableConnection>(connectionPool);
 
             dataSources.put(ConnectionPoolType.DDL, dataSourceAministration);
             connectionPools.put(ConnectionPoolType.DDL, connectionPool);
@@ -89,7 +116,7 @@ public class ConnectionPoolDBCP implements ConnectionPool {
     @Override
     public void close() throws Throwable {
         Throwable closeError = null;
-        for (GenericObjectPool connectionPool : connectionPools.values()) {
+        for (GenericObjectPool<PoolableConnection> connectionPool : connectionPools.values()) {
             try {
                 connectionPool.close();
             } catch (Exception e) {

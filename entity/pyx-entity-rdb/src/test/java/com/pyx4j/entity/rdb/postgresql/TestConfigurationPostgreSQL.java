@@ -50,6 +50,11 @@ public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Config
     }
 
     @Override
+    public ConnectionPoolProvider connectionPool() {
+        return ConnectionPoolProvider.c3p0;
+    }
+
+    @Override
     public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new TestsConnectionPoolConfiguration(connectionType);
     }
