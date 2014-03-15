@@ -27,7 +27,6 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -122,45 +121,27 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     public void adopt(final CComponent<?> component) {
 
         propertyChangeHandlerRegistrations.put(component, component.addPropertyChangeHandler(new PropertyChangeHandler() {
-            boolean sheduled = false;
 
             @Override
             public void onPropertyChange(final PropertyChangeEvent event) {
-                if (!sheduled && event.isEventOfType(PropertyName.valid)) {
-                    sheduled = true;
-                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            boolean wasValid = isValid();
-                            CEntityContainer.super.revalidate();
-                            if (wasValid != isValid()) {
-                                PropertyChangeEvent.fire(CEntityContainer.this, PropertyName.valid);
-                            }
-                            sheduled = false;
-                        }
-                    });
+                if (event.isEventOfType(PropertyName.valid)) {
+                    boolean wasValid = isValid();
+                    CEntityContainer.super.revalidate();
+                    if (wasValid != isValid()) {
+                        PropertyChangeEvent.fire(CEntityContainer.this, PropertyName.valid);
+                    }
+
                 }
             }
         }));
 
         valueChangeHandlerRegistrations.put(component, component.addValueChangeHandler(new ValueChangeHandler() {
-            boolean sheduled = false;
 
             @Override
             public void onValueChange(final ValueChangeEvent event) {
-                if (!sheduled) {
-                    sheduled = true;
-                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            CEntityContainer.super.revalidate();
-                            log.trace("CContainer.onValueChange fired from {}", shortDebugInfo());
-                            ValueChangeEvent.fire(CEntityContainer.this, getValue());
-                            sheduled = false;
-                        }
-                    });
-                }
-
+                CEntityContainer.super.revalidate();
+                log.trace("CContainer.onValueChange fired from {}", shortDebugInfo());
+                ValueChangeEvent.fire(CEntityContainer.this, getValue());
             }
         }));
 
