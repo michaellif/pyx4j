@@ -47,7 +47,7 @@ public interface CustomerScreeningIncome extends IEntity {
     @MemberColumn(notNull = true)
     IPrimitive<IncomeSource> incomeSource();
 
-    @Owned
+    @Owned(forceCreation = true)
     @ToString(index = 1)
     @MemberColumn(notNull = true)
     CustomerScreeningIncomeInfo details();
