@@ -26,8 +26,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.sql.DataSource;
@@ -63,11 +65,17 @@ public class DaylightSavingJDBC {
         HSQL, MySQL, PostgreSql, Oracle
     }
 
+    public enum ConnectionPoolProvider {
+        none, dbcp, c3p0
+    };
+
     static boolean init = true;
 
     static boolean firstRun = true;
 
     public static void main(String[] args) throws Exception {
+        List<String> arguments = Arrays.asList(args);
+
         Connection con;
 
         DBType testDB;
@@ -75,6 +83,25 @@ public class DaylightSavingJDBC {
         //testDB = DBType.HSQL;
         //testDB = DBType.MySQL;
         testDB = DBType.PostgreSql;
+
+        if (arguments.contains("-PostgreSql")) {
+            testDB = DBType.PostgreSql;
+        } else if (arguments.contains("-MySQL")) {
+            testDB = DBType.MySQL;
+        } else if (arguments.contains("-HSQL")) {
+            testDB = DBType.HSQL;
+        }
+
+        ConnectionPoolProvider connectionPoolProvider = ConnectionPoolProvider.c3p0;
+        if (arguments.contains("-c3p0")) {
+            connectionPoolProvider = ConnectionPoolProvider.c3p0;
+        } else if (arguments.contains("-dbcp")) {
+            connectionPoolProvider = ConnectionPoolProvider.dbcp;
+        } else if (arguments.contains("-none")) {
+            connectionPoolProvider = ConnectionPoolProvider.none;
+        }
+
+        System.out.println("DB type: " + testDB + " ConnectionPool:" + connectionPoolProvider);
 
         String driverClass;
         String url;
@@ -196,12 +223,20 @@ public class DaylightSavingJDBC {
         try {
             for (int i = 0; i <= 20; i++) {
 
-                Connection con2;
+                Connection con2 = null;
 
-                //con2 = con; // <-------------  Not pooled connection works fine!
-                //con2 = DriverManager.getConnection(url, user, password); // <-------------  Driver Managed connection works fine!
-                //con2 = dataSourceC3PO.getConnection(); // <-- this will create error
-                con2 = dataSourceDBCP.getConnection(); // <-- this will create error
+                switch (connectionPoolProvider) {
+                case none:
+                    con2 = con; // <-------------  Not pooled connection works fine!
+                    //con2 = DriverManager.getConnection(url, user, password); // <-------------  Driver Managed connection works fine!
+                    break;
+                case c3p0:
+                    con2 = dataSourceC3PO.getConnection(); // <-- this will create error
+                    break;
+                case dbcp:
+                    con2 = dataSourceDBCP.getConnection(); // <-- this will create error
+                    break;
+                }
 
                 String sql = "SELECT dval FROM test  WHERE name = ?";
                 PreparedStatement stmt = con2.prepareStatement(sql);
