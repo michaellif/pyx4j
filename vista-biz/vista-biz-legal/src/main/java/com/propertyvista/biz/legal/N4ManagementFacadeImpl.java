@@ -188,8 +188,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
                     leaseId,
                     Status.N4,
                     SimpleMessageFormat.format("termination date: {0,date,short}", n4LeaseData.terminationDate().getValue()),
-                    "created via issue of N4 notice",
+                    "created via issue of N4 notice",                    
                     EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()),
+                    generationTime,
                     Arrays.<LegalLetter>asList(n4Letter)
             );//@formatter:on
 

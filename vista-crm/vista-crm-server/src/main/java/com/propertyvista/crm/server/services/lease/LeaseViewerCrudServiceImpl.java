@@ -292,8 +292,15 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void setLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatusDTO status) {
-        ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(leaseId, status.status().getValue(), status.details().getValue(),
-                "set manually via CRM", CrmAppContext.getCurrentUser(), status.letters());
+        ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
+                leaseId,
+                status.status().getValue(),
+                status.details().getValue(),
+                "set manually via CRM",  // this is for inner use no need for i18n
+                CrmAppContext.getCurrentUser(),
+                SystemDateManager.getDate(),
+                status.letters()
+        );//@formatter:on
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -331,7 +338,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Iterator<LeaseTermAgreementDocument> i = leaseAgreementDocuments.inkSignedDocuments().iterator();
         while (i.hasNext()) {
             LeaseTermAgreementDocument doc = i.next();
-            if (!doc.isSignedByInk().isBooleanTrue()) {
+            if (!doc.isSignedByInk().getValue(false)) {
                 leaseAgreementDocuments.digitallySignedDocument().set(doc);
                 i.remove();
                 break;

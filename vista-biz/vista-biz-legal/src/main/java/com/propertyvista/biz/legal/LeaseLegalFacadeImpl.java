@@ -20,9 +20,9 @@
  */
 package com.propertyvista.biz.legal;
 
+import java.util.Date;
 import java.util.List;
 
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -52,14 +52,14 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
     }
 
     @Override
-    public void setLegalStatus(Lease leaseId, Status status, String details, String notes, CrmUser setBy, List<LegalLetter> letters) {
+    public void setLegalStatus(Lease leaseId, Status status, String details, String notes, CrmUser setBy, Date asOf, List<LegalLetter> letters) {
         LegalStatus legalStatus = EntityFactory.create(LegalStatus.class);
         legalStatus.lease().set(leaseId);
         legalStatus.status().setValue(status);
         legalStatus.details().setValue(details);
         legalStatus.notes().setValue(notes);
         legalStatus.setBy().set(setBy);
-        legalStatus.setOn().setValue(SystemDateManager.getDate());
+        legalStatus.setOn().setValue(asOf);
         Persistence.service().persist(legalStatus);
 
         if (letters != null) {

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.legal;
 
+import java.util.Date;
 import java.util.List;
 
 import com.propertyvista.domain.legal.LegalLetter;
@@ -26,6 +27,6 @@ public interface LeaseLegalFacade {
 
     List<LegalStatus> getLegalStatusHistory(Lease leaseId);
 
-    void setLegalStatus(Lease leaseId, LegalStatus.Status status, String details, String notes, CrmUser setBy, List<LegalLetter> attachedLetters);
+    void setLegalStatus(Lease leaseId, LegalStatus.Status status, String details, String notes, CrmUser setBy, Date asOf, List<LegalLetter> attachedLetters);
 
 }
