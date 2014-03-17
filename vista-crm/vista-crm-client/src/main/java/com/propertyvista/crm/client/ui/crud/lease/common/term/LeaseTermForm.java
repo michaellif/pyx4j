@@ -23,6 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.LogicalDate;
@@ -395,6 +396,18 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 }
             });
         }
+
+        get(proto().termFrom()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                LogicalDate endDate = new LogicalDate(event.getValue());
+
+                CalendarUtil.addMonthsToDate(endDate, 12);
+                CalendarUtil.addDaysToDate(endDate, -1);
+
+                get(proto().termTo()).setValue(endDate);
+            }
+        });
 
         crossValidate(get(proto().termFrom()), get(proto().termTo()), null);
 

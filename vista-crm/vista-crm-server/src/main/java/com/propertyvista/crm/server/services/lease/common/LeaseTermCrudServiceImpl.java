@@ -28,6 +28,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
@@ -93,10 +94,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
             case NewLease:
                 term.termFrom().setValue(SystemDateManager.getLogicalDate());
+                term.termTo().setValue(calcLeaseEndDate(term.termFrom().getValue()));
                 break;
 
             case Application:
                 term.termFrom().setValue(SystemDateManager.getLogicalDate());
+                term.termTo().setValue(calcLeaseEndDate(term.termFrom().getValue()));
                 break;
             }
 
@@ -420,5 +423,14 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         ServerSideFactory.create(LeaseFacade.class).init(newLease);
 
         return newLease;
+    }
+
+    private LogicalDate calcLeaseEndDate(LogicalDate startDate) {
+        LogicalDate endDate = new LogicalDate(startDate);
+
+        endDate = DateUtils.monthAdd(endDate, 13);
+        endDate = DateUtils.daysAdd(endDate, -1);
+
+        return endDate;
     }
 }
