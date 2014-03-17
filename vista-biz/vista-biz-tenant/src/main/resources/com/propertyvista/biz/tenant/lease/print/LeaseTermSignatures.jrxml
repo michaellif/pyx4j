@@ -19,8 +19,8 @@
 				</textElement>
 				<text><![CDATA[Name:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="0" y="21" width="182" height="20"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="21" width="182" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{fullName}]]></textFieldExpression>
 			</textField>
@@ -51,8 +51,8 @@
 		</band>
 		<band height="15">
 			<printWhenExpression><![CDATA[$F{signatureFormat} == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials]]></printWhenExpression>
-			<textField>
-				<reportElement x="0" y="0" width="450" height="15"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="450" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["I Agree to the terms above (" + $F{initials} +")"]]></textFieldExpression>
 			</textField>
