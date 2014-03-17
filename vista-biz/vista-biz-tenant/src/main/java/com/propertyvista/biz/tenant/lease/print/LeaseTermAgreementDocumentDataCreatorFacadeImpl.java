@@ -39,6 +39,7 @@ import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -53,28 +54,9 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
 
     @Override
     public LeaseAgreementDocumentDataDTO createAgreementData(LeaseTerm leaseTerm, LeaseTermAgreementSignaturesMode signaturesMode, boolean makeDraft) {
-        Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.version().agreementLegalTerms(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.version().agreementConfirmationTerm(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.version().utilities(), AttachLevel.Attached);
-
-        for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
-            Persistence.service().retrieveMember(tenant.agreementSignatures(), AttachLevel.Attached);
-            if (tenant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
-                AgreementDigitalSignatures agreementSignatures = tenant.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
-                for (SignedAgreementLegalTerm legalTermSignature : agreementSignatures.legalTermsSignatures()) {
-                    Persistence.ensureRetrieve(legalTermSignature.signature(), AttachLevel.Attached);
-                }
-                tenant.agreementSignatures().set(agreementSignatures);
-            }
-        }
+        retrieve(leaseTerm);
 
         LeaseAgreementDocumentDataDTO leaseAgreementData = EntityFactory.create(LeaseAgreementDocumentDataDTO.class);
-
-        Persistence.ensureRetrieve(leaseTerm.lease().unit().building(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord().logo(), AttachLevel.Attached);
 
         leaseAgreementData.landlordName().setValue(leaseTerm.lease().unit().building().landlord().name().getValue());
         leaseAgreementData.landlordAddress().setValue(leaseTerm.lease().unit().building().landlord().address().getStringView());
@@ -92,6 +74,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         leaseAgreementData.terms().add(makeRentTerm(leaseTerm));
         leaseAgreementData.terms().addAll(makeTermsForPrint(leaseTerm, !makeDraft ? signaturesMode : LeaseTermAgreementSignaturesMode.None));
 
+        // Add Landlords Signature
         if (!makeDraft
                 && (signaturesMode == LeaseTermAgreementSignaturesMode.SignaturesOnly || signaturesMode == LeaseTermAgreementSignaturesMode.PlaceholdersAndAvailableSignatures)) {
             if (leaseTerm.version().employeeSignature().hasValues()) {
@@ -116,6 +99,38 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
             }
         }
         return leaseAgreementData;
+    }
+
+    private void retrieve(LeaseTerm leaseTerm) {
+        Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.version().agreementLegalTerms(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.version().agreementConfirmationTerm(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.version().utilities(), AttachLevel.Attached);
+        for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
+            Persistence.service().retrieveMember(tenant.agreementSignatures(), AttachLevel.Attached);
+            if (tenant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
+                AgreementDigitalSignatures agreementSignatures = tenant.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
+                for (SignedAgreementLegalTerm legalTermSignature : agreementSignatures.legalTermsSignatures()) {
+                    Persistence.ensureRetrieve(legalTermSignature.signature(), AttachLevel.Attached);
+                }
+                tenant.agreementSignatures().set(agreementSignatures);
+            }
+        }
+        for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
+            Persistence.service().retrieveMember(guarantor.agreementSignatures(), AttachLevel.Attached);
+            if (guarantor.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
+                AgreementDigitalSignatures agreementSignatures = guarantor.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
+                for (SignedAgreementLegalTerm legalTermSignature : agreementSignatures.legalTermsSignatures()) {
+                    Persistence.ensureRetrieve(legalTermSignature.signature(), AttachLevel.Attached);
+                }
+                guarantor.agreementSignatures().set(agreementSignatures);
+            }
+        }
+
+        Persistence.ensureRetrieve(leaseTerm.lease().unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord().logo(), AttachLevel.Attached);
     }
 
     private LeaseAgreementDocumentLegalTerm4PrintDTO makePremisesTerm(AddressStructured premisesAddress) {
@@ -301,11 +316,11 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         return (signatureFormat == SignatureFormat.FullName || signatureFormat == SignatureFormat.AgreeBoxAndFullName);
     }
 
-    private boolean isPrintableSignature(ISignature signature) {
+    private boolean isPrintableSignature(ISignature signature) {//@formatter:off
         return signature.signatureFormat().getValue() == SignatureFormat.AgreeBoxAndFullName
-                || signature.signatureFormat().getValue() == SignatureFormat.AgreeBoxAndFullName
+                || signature.signatureFormat().getValue() == SignatureFormat.FullName
                 || signature.signatureFormat().getValue() == SignatureFormat.Initials;
-    }
+    }//@formatter:on
 
     private CustomerSignature getSignature(LeaseAgreementLegalTerm legalTerm, LeaseTermParticipant<?> participant) {
         if (!participant.agreementSignatures().isNull() && participant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
