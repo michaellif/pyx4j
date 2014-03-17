@@ -39,8 +39,10 @@ public interface Vehicle extends BillableItemExtraData {
     @BusinessEqualValue
     IPrimitive<String> plateNumber();
 
+    @NotNull
     IPrimitive<String> make();
 
+    @NotNull
     IPrimitive<String> model();
 
     IPrimitive<String> color();
