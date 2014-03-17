@@ -407,7 +407,7 @@ public class YardiProductCatalogProcessor {
         service.version().depositLMR().enabled().setValue(!units.isEmpty());
         // set Yardi deposit default value/type:
         service.version().depositLMR().valueType().setValue(ValueType.Monetary);
-        service.version().depositLMR().value().setValue(BigDecimal.ZERO);
+        service.version().depositLMR().value().setValue(new BigDecimal("0.00"));
 
         List<ProductItem> serviceItems = new ArrayList<ProductItem>(service.version().items());
         Collections.sort(serviceItems, new ProductItemByElementComparator());
@@ -433,7 +433,7 @@ public class YardiProductCatalogProcessor {
                 // enable service deposit:
                 service.version().depositLMR().enabled().setValue(true);
             } else {
-                item.depositLMR().setValue(BigDecimal.ZERO);
+                item.depositLMR().setValue(new BigDecimal("0.00"));
             }
         }
     }

@@ -69,7 +69,7 @@ public class YardiILSMarketingProcessor {
             // process deposit data
             DepositType depositType = ilsUnit.getDeposit();
             if (ilsUnit.getUnit().getInformation().size() == 1 && depositType != null && depositType.getAmount().getValue() != null) {
-                depositInfo.put(ilsUnit.getUnit().getInformation().get(0).getUnitID(), depositType.getAmount().getValue());
+                depositInfo.put(ilsUnit.getUnit().getInformation().get(0).getUnitID(), depositType.getAmount().getValue().setScale(2));
             }
         }
         return depositInfo;
