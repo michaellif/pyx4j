@@ -83,7 +83,7 @@ public class UnitsMapper {
         unitTo.info().economicStatusDescription().setValue(info.getUnitEconomicStatusDescription());
 
         // financial
-        unitTo.financial()._marketRent().setValue(info.getMarketRent().setScale(2));
+        unitTo.financial()._marketRent().setValue(info.getMarketRent() == null ? null : info.getMarketRent().setScale(2));
 
         return unitTo;
     }
