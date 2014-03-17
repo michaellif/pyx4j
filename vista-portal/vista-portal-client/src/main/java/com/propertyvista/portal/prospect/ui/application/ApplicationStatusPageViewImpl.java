@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +25,7 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.formatters.PercentageFormat;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -104,8 +104,8 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 switch (userAppStatus.status().getValue()) {
                 case Incomplete:
                 case Invited:
-                    messageLabel.setText(i18n.tr("Your application progress is {0}%. Click 'Continue Application' button below to continue your application.",
-                            userAppStatus.progress().getValue().multiply(new BigDecimal(100)).setScale(0)));
+                    messageLabel.setText(i18n.tr("Your application progress is {0}. Click 'Continue Application' button below to continue your application.",
+                            new PercentageFormat("#").format(userAppStatus.progress().getValue())));
                     continueApplicationButton.setVisible(true);
                     break;
                 case Submitted:
@@ -267,7 +267,5 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 }
             }
         }
-
     }
-
 }

@@ -34,7 +34,7 @@ public interface MasterOnlineApplicationStatus extends IEntity {
     /**
      * Completed steps/total steps in %
      */
-    @Format("#0")
+    @Format("#")
     @Caption(name = "Overall Application Progress")
     @Editor(type = EditorType.percentagelabel)
     IPrimitive<BigDecimal> progress();
