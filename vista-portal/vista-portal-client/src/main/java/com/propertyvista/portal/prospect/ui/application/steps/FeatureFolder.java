@@ -100,7 +100,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
             int row = -1;
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().name(), new CLabel<String>())).build());
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreedPrice(), new CMoneyLabel())).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().description(), new CLabel<String>())).build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>())).build());
             content.setWidget(++row, 0, extraDataPanel);
             content.setWidget(++row, 0, depositPanel);
 
@@ -119,6 +119,8 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
             item.setRemovable(!isMandatoryFeature(getValue().item().product()));
 
             depositPanel.setVisible(!getValue().deposits().isEmpty());
+
+            get(proto().description()).setVisible(!getValue().description().isNull());
         }
 
         private boolean isMandatoryFeature(Product.ProductV product) {
