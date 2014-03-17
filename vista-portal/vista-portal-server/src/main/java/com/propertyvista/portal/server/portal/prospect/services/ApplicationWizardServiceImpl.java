@@ -860,7 +860,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             if (!to.unitSelection().isNull()) {
                 // from lease term of 1 year from entered move in date:  
                 leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
+
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.yearsAdd(leaseTerm.termFrom().getValue(), 1)));
+                leaseTerm.termTo().setValue(new LogicalDate(DateUtils.daysAdd(leaseTerm.termTo().getValue(), -1)));
             }
             saveUnitOptionsData(bo, to);
             saveOccupants(bo, to);
