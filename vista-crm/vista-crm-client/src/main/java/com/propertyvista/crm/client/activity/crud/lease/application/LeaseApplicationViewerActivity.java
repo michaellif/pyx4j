@@ -25,7 +25,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -44,12 +43,15 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -204,6 +206,31 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
         ReportRequest request = new ReportRequest();
         request.setParameters(params);
         reportDialog.start(GWT.<LeaseTermBlankAgreementDocumentDownloadService> create(LeaseTermBlankAgreementDocumentDownloadService.class), request);
+    }
+
+    @Override
+    public void saveLeaseApplicationDocument(LeaseApplicationDocument value) {
+        value.lease().setPrimaryKey(getEntityId());
+        ((LeaseApplicationViewerCrudService) getService()).saveApplicationDocument(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, value);
+    }
+
+    @Override
+    public void downloadBlankLeaseApplicationDocument(Customer customerId) {
+        ReportDialog reportDialog = new ReportDialog(i18n.tr("Creating Lease Application Document for Signing"), "");
+        reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+
+        ReportRequest request = new ReportRequest();
+        HashMap<String, Serializable> params = new HashMap<String, Serializable>();
+        params.put(BlankApplicationDocumentDownloadService.LEASE_ID_PARAM_KEY, getEntityId());
+        params.put(BlankApplicationDocumentDownloadService.CUSTOMER_ID_PARAM_KEY, customerId.getPrimaryKey());
+        request.setParameters(params);
+
+        reportDialog.start(GWT.<LeaseTermBlankAgreementDocumentDownloadService> create(BlankApplicationDocumentDownloadService.class), request);
     }
 
     protected void populatePayments(Lease result) {

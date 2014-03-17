@@ -7,18 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 2, 2014
- * @author vlads
+ * Created on 2014-02-06
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.blob;
+package com.propertyvista.crm.rpc.services.lease;
 
-import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 
-/**
- * Contains signed Lease Application
- */
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface LeaseTermAgreementDocumentBlob extends IFileBlob {
+import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
+
+public interface LeaseApplicationDocumentUploadService extends UploadService<IEntity, LeaseApplicationDocumentBlob> {
 
 }

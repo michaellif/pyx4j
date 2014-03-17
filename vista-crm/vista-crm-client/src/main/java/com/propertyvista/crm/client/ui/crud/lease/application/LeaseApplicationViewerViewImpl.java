@@ -13,15 +13,25 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -29,21 +39,30 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.YesNoOption;
 
+import com.propertyvista.common.client.VistaFileURLBuilder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
+import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -89,6 +108,26 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setForm(new LeaseApplicationForm(this));
 
         // Buttons:
+        Button applicationDocumentButton = new Button(i18n.tr("Application Document"));
+        addHeaderToolbarItem(applicationDocumentButton.asWidget());
+        ButtonMenuBar applicationDocumentMenu = new ButtonMenuBar();
+        applicationDocumentButton.setMenu(applicationDocumentMenu);
+
+        MenuItem uploadApplicationDocumentMenuItem = new MenuItem(i18n.tr("Upload..."), new Command() {//formatter:off            
+                    @Override
+                    public void execute() {
+                        uploadApplicationDocument();
+                    }
+                });//formatter:on
+        applicationDocumentMenu.addItem(uploadApplicationDocumentMenuItem);
+        MenuItem downloadApplicationDocumentMenuItem = new MenuItem(i18n.tr("Download Blank..."), new Command() {//formatter:off            
+                    @Override
+                    public void execute() {
+                        downloadApplicationDocument();
+                    }
+                });//formatter:on
+        applicationDocumentMenu.addItem(downloadApplicationDocumentMenuItem);
+
         Button downloadDraftLeaseAgreement = new Button(i18n.tr("Draft Lease Agreement"), new Command() {
             @Override
             public void execute() {
@@ -350,6 +389,25 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         MessageDialog.info(i18n.tr("No credit check service for this account has been set activated."));
     }
 
+    private void uploadApplicationDocument() {
+        new UploadApplicationDocumentDialog(getCustomers()).show();
+    }
+
+    private void downloadApplicationDocument() {
+        new DownloadApplicationDocumentDialog(getCustomers()).show();
+    }
+
+    private List<Customer> getCustomers() {
+        List<Customer> customers = new LinkedList<>();
+        for (LeaseTermTenant leaseTermTenant : getForm().getValue().currentTerm().version().tenants()) {
+            customers.add(leaseTermTenant.leaseParticipant().customer());
+        }
+        for (LeaseTermGuarantor leaseTermGuarantor : getForm().getValue().currentTerm().version().guarantors()) {
+            customers.add(leaseTermGuarantor.leaseParticipant().customer());
+        }
+        return customers;
+    }
+
     private class CreditCheckSubscribeDialog extends Dialog implements YesNoOption {
 
         public CreditCheckSubscribeDialog() {
@@ -369,4 +427,135 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             return true;
         }
     }
+
+    private class DownloadApplicationDocumentDialog extends OkCancelDialog {
+
+        private final SelectCustomerForm form;
+
+        public DownloadApplicationDocumentDialog(List<Customer> customers) {
+            super(i18n.tr("Download Blank Application Document "));
+            form = new SelectCustomerForm(customers);
+            form.initContent();
+            form.populateNew();
+            setBody(form);
+        }
+
+        @Override
+        public boolean onClickOk() {
+            form.setVisitedRecursive();
+            form.revalidate();
+            if (form.isValid()) {
+                ((LeaseApplicationViewerView.Presenter) LeaseApplicationViewerViewImpl.this.getPresenter()).downloadBlankLeaseApplicationDocument(form
+                        .getValue().selectCustomer());
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    }
+
+    @Transient
+    public interface SelectCustomer extends IEntity {
+        Customer selectCustomer();
+    }
+
+    private static class SelectCustomerForm extends CEntityForm<SelectCustomer> {
+
+        private CComboBox<Customer> selectCombo;
+
+        public SelectCustomerForm(List<Customer> customers) {
+            super(SelectCustomer.class);
+            selectCombo = new CComboBox<Customer>() {
+                @Override
+                public String getItemName(Customer o) {
+                    return (o != null) ? o.getStringView() : super.getItemName(o);
+                }
+            };
+            selectCombo.setOptions(customers);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+            panel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().selectCustomer(), selectCombo)).componentWidth("200px").build());
+            return panel;
+        }
+
+    }
+
+    private class UploadApplicationDocumentDialog extends OkCancelDialog {
+
+        private final LeaseApplicationDocumentUploadForm form;
+
+        public UploadApplicationDocumentDialog(List<Customer> signerOptions) {
+            super(i18n.tr("Upload Application Document"));
+            form = new LeaseApplicationDocumentUploadForm(signerOptions);
+            form.initContent();
+            form.populateNew();
+            setBody(form);
+        }
+
+        @Override
+        public boolean onClickOk() {
+            form.setVisitedRecursive();
+            form.revalidate();
+            if (form.isValid()) {
+                ((LeaseApplicationViewerView.Presenter) LeaseApplicationViewerViewImpl.this.getPresenter()).saveLeaseApplicationDocument(form.getValue());
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    private static class LeaseApplicationDocumentUploadForm extends CEntityForm<LeaseApplicationDocument> {
+
+        private CComboBox<Customer> signedByCombo;
+
+        public LeaseApplicationDocumentUploadForm(List<Customer> signerOptions) {
+            super(LeaseApplicationDocument.class);
+            signedByCombo = new CComboBox<Customer>() {
+                @Override
+                public String getItemName(Customer o) {
+                    return (o != null) ? o.getStringView() : super.getItemName(o);
+                }
+            };
+            signedByCombo.setOptions(signerOptions);
+        }
+
+        @Override
+        public IsWidget createContent() {//@formatter:off
+            int row = -1;
+            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+            panel.setWidget(++row, 0,
+                    new FormDecoratorBuilder(inject(proto().file(), 
+                                                    new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class),
+                                                              new VistaFileURLBuilder(LeaseApplicationDocument.class)
+                                                    )
+                                             )
+                    ).componentWidth("200px")
+                     .customLabel(i18n.tr("Agreement Document File"))                     
+                     .build()
+            );
+            panel.setWidget(++row, 0,
+                    new FormDecoratorBuilder(inject(proto().signedBy(), signedByCombo))
+                        .componentWidth("200px")
+                        .build()            
+            );
+            panel.setWidget(++row, 0,
+                    new FormDecoratorBuilder(inject(proto().signedByRole()))
+                        .componentWidth("200x")
+                        .build()            
+            );
+            return panel;
+        }//@formatter:on
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+            get(proto().file()).setMandatory(true);
+        }
+    }
+
 }

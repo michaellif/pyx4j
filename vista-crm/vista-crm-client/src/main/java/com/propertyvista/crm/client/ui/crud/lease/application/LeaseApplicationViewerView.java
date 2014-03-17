@@ -25,7 +25,9 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -48,6 +50,10 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
         void isCreditCheckViewAllowed(AsyncCallback<VoidSerializable> callback);
 
         void downloadDraftLeaseAgreement();
+
+        void saveLeaseApplicationDocument(LeaseApplicationDocument value);
+
+        void downloadBlankLeaseApplicationDocument(Customer customerId);
 
     }
 

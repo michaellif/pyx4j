@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -28,6 +29,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.ApplicationStatusFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.FinancialViewForm;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.InfoViewForm;
+import com.propertyvista.crm.client.ui.crud.lease.application.components.LeaseApplicationDocumentFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -52,6 +54,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
         addTab(createFinancialTab());
         addTab(createApprovalTab());
+        addTab(createApplicationDocumentsTab());
 
         if (VistaFeatures.instance().onlineApplication()) {
             onlineStatusTab = addTab(createOnlineStatusTab());
@@ -177,5 +180,12 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setWidget(++row, 0, 2, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));
 
         return main;
+    }
+
+    private BasicFlexFormPanel createApplicationDocumentsTab() {
+        int row = -1;
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Application Documents"));
+        panel.setWidget(++row, 0, 2, inject(proto().applicationDocuments(), new LeaseApplicationDocumentFolder()));
+        return panel;
     }
 }

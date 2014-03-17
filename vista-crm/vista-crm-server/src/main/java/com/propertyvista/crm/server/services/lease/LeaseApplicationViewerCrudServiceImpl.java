@@ -24,6 +24,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -52,6 +53,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -100,6 +102,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         to.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(to.leaseApplication().onlineApplication()));
+
+        loadLeaseApplicationDocuments(to);
     }
 
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {
@@ -182,6 +186,13 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
             dto.leaseApproval().participants().add(approval);
         }
+    }
+
+    private void loadLeaseApplicationDocuments(LeaseApplicationDTO application) {
+        EntityQueryCriteria<LeaseApplicationDocument> criteria = EntityQueryCriteria.create(LeaseApplicationDocument.class);
+        criteria.eq(criteria.proto().lease(), application.getPrimaryKey());
+        criteria.asc(criteria.proto().file().timestamp());
+        application.applicationDocuments().addAll(Persistence.service().query(criteria));
     }
 
     private TenantInfoDTO fillQuickSummary(TenantInfoDTO tenantInfo) {
@@ -318,6 +329,19 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         if (ServerSideFactory.create(ScreeningFacade.class).isReadReportLimitReached()) {
             throw new UserRuntimeException(i18n.tr("Read Report Daily limit exceeded"));
         }
+
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void saveApplicationDocument(AsyncCallback<VoidSerializable> callback, LeaseApplicationDocument doc) {
+        Persistence.secureRetrieve(Lease.class, doc.lease().getPrimaryKey()); // security enforcement
+
+        doc.uploader().set(CrmAppContext.getCurrentUser());
+        doc.isSignedByInk().setValue(false);
+
+        Persistence.service().persist(doc);
+        Persistence.service().commit();
 
         callback.onSuccess(null);
     }

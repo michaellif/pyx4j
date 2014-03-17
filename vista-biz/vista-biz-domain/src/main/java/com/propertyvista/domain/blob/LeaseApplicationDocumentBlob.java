@@ -16,9 +16,9 @@ package com.propertyvista.domain.blob;
 import com.pyx4j.i18n.annotations.I18n;
 
 /**
- * Contains signed Lease Application
+ * Contains generate PDF of Signed LeaseTerm
  */
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface LeaseTermAgreementDocumentBlob extends IFileBlob {
+public interface LeaseApplicationDocumentBlob extends IFileBlob {
 
 }

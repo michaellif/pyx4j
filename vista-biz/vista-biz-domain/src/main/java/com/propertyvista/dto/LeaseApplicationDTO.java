@@ -19,6 +19,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 
 @Transient
@@ -40,5 +41,7 @@ public interface LeaseApplicationDTO extends LeaseDTO {
     IPrimitive<Integer> numberOfDepentands();
 
     IPrimitive<Integer> numberOfGuarantors();
+
+    IList<LeaseApplicationDocument> applicationDocuments();
 
 }
