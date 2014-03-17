@@ -269,6 +269,7 @@ COMMIT;
 
 DROP FUNCTION _dba_.migrate_pmc_113(text);
 DROP FUNCTION _dba_.update_policy_tables(text);
+DROP TABLE _dba_.email_template;
 DROP TABLE _dba_.legal_terms_policy_item;
 DROP TABLE _dba_.lease_agreement_legal_term;
 DROP TABLE _dba_.lease_application_legal_term;

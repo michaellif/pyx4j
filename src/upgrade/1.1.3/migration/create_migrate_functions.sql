@@ -1548,6 +1548,18 @@ BEGIN
             EXECUTE 'UPDATE '||v_schema_name||'.building '
                     ||'SET  default_product_catalog = FALSE ';
         END IF;
+        
+        
+        -- email_template
+        
+        EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.email_template';
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.email_template '
+                ||'(id,policy,order_in_policy,subject,use_header,use_footer,content,template_type) '
+                ||'(SELECT nextval(''public.email_template_seq'') AS id, p.id AS policy, '
+                ||' t.order_in_policy,t.subject,t.use_header,t.use_footer,t.content,t.template_type '
+                ||'FROM     '||v_schema_name||'.email_templates_policy  AS p, '
+                ||'         _dba_.email_template AS t ) ';
             
         -- insurance_certificate_scan
         
@@ -1967,6 +1979,12 @@ BEGIN
         
         DROP TABLE communication_person;
         
+        
+        -- concession
+        
+        ALTER TABLE concession DROP COLUMN order_in_catalog;
+        
+        
         -- contact
         
         DROP TABLE contact;
@@ -2132,7 +2150,8 @@ BEGIN
         
         -- product
         
-        ALTER TABLE product     DROP COLUMN code_type;
+        ALTER TABLE product     DROP COLUMN code_type,
+                                DROP COLUMN order_in_catalog;
                                                        
         -- product_item
         
