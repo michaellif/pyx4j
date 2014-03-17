@@ -55,8 +55,8 @@ public interface Pet extends BillableItemExtraData {
     @NotNull
     public IPrimitive<Integer> weight();
 
-    @Caption(name = "Units")
     @NotNull
+    @Caption(name = "Units")
     public IPrimitive<WeightUnit> weightUnit();
 
     @NotNull

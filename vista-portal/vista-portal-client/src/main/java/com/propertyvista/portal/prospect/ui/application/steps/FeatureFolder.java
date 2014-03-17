@@ -166,7 +166,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
                 }
 
                 if (editor != null) {
-                    editor.setEditable(FeatureFolder.this.isEditable());
+                    editor.setEditable(true);
                     editor.inheritEditable(false);
                     this.inject(proto().extraData(), editor);
                     editor.populate(extraData.cast());

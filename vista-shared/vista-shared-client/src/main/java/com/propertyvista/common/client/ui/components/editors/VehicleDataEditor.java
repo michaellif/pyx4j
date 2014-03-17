@@ -17,10 +17,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.events.DevShortcutEvent;
-import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
@@ -61,10 +57,10 @@ public class VehicleDataEditor extends CEntityForm<Vehicle> {
 
         row = 0; // skip header
         panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().plateNumber()), 10).build());
-        CComponent<Country> country;
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(country = (CComponent<Country>) inject(proto().country()), 13).build());
         CComponent<Province> province;
         panel.setWidget(++row, 1, new FormDecoratorBuilder(province = (CComponent<Province>) inject(proto().province()), 17).build());
+        CComponent<Country> country;
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(country = (CComponent<Country>) inject(proto().country()), 13).build());
 
         ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
             @Override
@@ -78,7 +74,19 @@ public class VehicleDataEditor extends CEntityForm<Vehicle> {
             }
         });
 
+        removeMandatory();
+
         return panel;
+    }
+
+    public void removeMandatory() {
+        get(proto().make()).setMandatory(false);
+        get(proto().model()).setMandatory(false);
+        get(proto().color()).setMandatory(false);
+        get(proto().year()).setMandatory(false);
+        get(proto().plateNumber()).setMandatory(false);
+        get(proto().province()).setMandatory(false);
+        get(proto().country()).setMandatory(false);
     }
 
     @Override
@@ -89,6 +97,5 @@ public class VehicleDataEditor extends CEntityForm<Vehicle> {
         get(proto().year()).setMockValue(new LogicalDate());
         get(proto().plateNumber()).setMockValue("LastTimeDrive");
         get(proto().province()).setMockValueByString("Ontario");
-
     }
 }

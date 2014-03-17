@@ -16,9 +16,6 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.events.DevShortcutEvent;
-import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -57,7 +54,17 @@ public class PetDataEditor extends CEntityForm<Pet> {
         panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().weightUnit()), 4).build());
         panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
 
+        removeMandatory();
         return panel;
+    }
+
+    public void removeMandatory() {
+        get(proto().name()).setMandatory(false);
+        get(proto().color()).setMandatory(false);
+        get(proto().breed()).setMandatory(false);
+        get(proto().weight()).setMandatory(false);
+        get(proto().weightUnit()).setMandatory(false);
+        get(proto().birthDate()).setMandatory(false);
     }
 
     @Override
