@@ -172,6 +172,7 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
         service.catalog().set(catalog);
         service.code().set(code);
         service.version().name().setValue(code.name().getValue());
+        service.version().description().setValue("Default " + code.name().getValue() + " service");
         service.version().availableOnline().setValue(false);
 
         fillDefaultDeposits(service);
@@ -209,6 +210,7 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
         feature.catalog().set(catalog);
         feature.code().set(code);
         feature.version().name().setValue(code.name().getValue());
+        feature.version().description().setValue("Default " + code.name().getValue() + " feature");
         feature.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(code));
         feature.version().mandatory().setValue(false);
         feature.version().availableOnline().setValue(false);
