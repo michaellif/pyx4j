@@ -36,4 +36,5 @@ public interface LeaseAgreementDocumentDataDTO extends IEntity {
     IList<CrmUserSignature> landlordAgentsSignatures();
 
     IPrimitive<byte[]> leaseAgreementBackground();
+
 }

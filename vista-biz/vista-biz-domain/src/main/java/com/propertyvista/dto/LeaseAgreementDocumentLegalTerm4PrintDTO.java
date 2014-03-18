@@ -24,10 +24,11 @@ public interface LeaseAgreementDocumentLegalTerm4PrintDTO extends IEntity {
 
     IPrimitive<String> title();
 
-    /** this is body in HTML format **/
+    /** Body in HTML format */
     IPrimitive<String> body();
 
     IList<ISignature> signatures();
 
     IList<LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO> signaturePlaceholders();
+
 }
