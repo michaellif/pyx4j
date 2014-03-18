@@ -32,6 +32,7 @@ import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.domain.financial.PaymentPostingBatch;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CheckInfo;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentPostingBatch, MoneyInBatchDTO> implements MoneyInBatchCrudService {
 
@@ -49,6 +50,7 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         bind(toProto.bankAccountNumber(), boProto.depositDetails().merchantAccount().accountNumber());
         bind(toProto.bankAccountName(), boProto.depositDetails().merchantAccount().accountName());
         bind(toProto.postingStatus(), boProto.status());
+        bind(toProto.batchNumber(), boProto.externalBatchNumber());
     }
 
     @Override
@@ -75,6 +77,10 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
         }
         dto.totalReceivedAmount().setValue(total);
         dto.numberOfReceipts().setValue(numberOfReceipts);
+
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            dto.batchNumber().setValue(dto.id().getValue().toString());
+        }
     }
 
     @Override

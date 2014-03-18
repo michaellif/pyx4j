@@ -40,6 +40,11 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
         return batchId;
     }
 
+    @Override
+    public String getBatchNumber() {
+        return Long.toString(batchId, 10);
+    }
+
     public void ensureOpenBatch(PmcYardiCredential yc, String propertyCode) throws RemoteException, YardiServiceException {
         if (isOpen()) {
             Validate.isTrue(this.propertyCode.equals(propertyCode), "Single propertyCode " + this.propertyCode + " expected in one batch, but not "

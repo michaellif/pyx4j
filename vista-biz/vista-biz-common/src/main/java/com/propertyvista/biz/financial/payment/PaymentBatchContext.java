@@ -19,6 +19,8 @@ public interface PaymentBatchContext {
 
     boolean isBatchFull();
 
+    public String getBatchNumber();
+
     public void postBatch() throws ARException;
 
     public void cancelBatch() throws ARException;

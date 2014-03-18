@@ -61,9 +61,11 @@ class PaymentBatchPosting {
      * @param canCancel
      *            if zero amount or no merchant account should be canceled, disabled for DirectDebit
      * @param executionMonitor
+     * @return batch number
      */
-    void processPayments(EntityQueryCriteria<PaymentRecord> criteria, final boolean canCancel, final ExecutionMonitor executionMonitor) {
+    String processPayments(EntityQueryCriteria<PaymentRecord> criteria, final boolean canCancel, final ExecutionMonitor executionMonitor) {
         // Flow with single transaction per batch
+        String batchNumber = null;
         final AtomicReference<PaymentRecord> iteratorPushBack = new AtomicReference<PaymentRecord>();
         final ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         final AtomicReference<Building> lastFailedBuilding = new AtomicReference<Building>();
@@ -77,10 +79,10 @@ class PaymentBatchPosting {
                 final AtomicReference<String> curentBuildingCode = new AtomicReference<String>();
 
                 try {
-                    new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, ARException>() {
+                    batchNumber = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<String, ARException>() {
 
                         @Override
-                        public Void execute() throws ARException {
+                        public String execute() throws ARException {
 
                             PaymentRecord firstPaymentRecord = iteratorPushBack.get();
                             if (firstPaymentRecord == null) {
@@ -163,9 +165,10 @@ class PaymentBatchPosting {
                                 executionMonitor.addErredEvent("Batch", null, "propertyCode " + curentBuildingCode.get(), e);
                             }
                             curentBuildingCode.set(null);
-                            return null;
+                            return paymentBatchContext.getBatchNumber();
                         }
                     });
+
                 } catch (Throwable e) {
                     log.error("Unable to create batch for propertyCode {}", curentBuildingCode.get(), e);
                     executionMonitor.addErredEvent("Batch", null, "BuildingCode " + curentBuildingCode.get(), e);
@@ -175,6 +178,8 @@ class PaymentBatchPosting {
         } finally {
             paymentRecordIterator.close();
         }
+
+        return batchNumber;
     }
 
     private static Building getBuilding(PaymentRecord payment) {

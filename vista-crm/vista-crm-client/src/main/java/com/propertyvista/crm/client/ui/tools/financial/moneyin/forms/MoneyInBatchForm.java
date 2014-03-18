@@ -107,6 +107,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().totalReceivedAmount())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().numberOfReceipts())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().postingStatus())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().batchNumber())).build());
 
         row = -1;
         panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().depositSlipNumber())).build());

@@ -28,6 +28,8 @@ import com.propertyvista.domain.financial.PaymentPostingBatch;
 @Transient
 public interface MoneyInBatchDTO extends IEntity {
 
+    IPrimitive<String> batchNumber();
+
     IPrimitive<String> building();
 
     IPrimitive<String> bankAccountName();

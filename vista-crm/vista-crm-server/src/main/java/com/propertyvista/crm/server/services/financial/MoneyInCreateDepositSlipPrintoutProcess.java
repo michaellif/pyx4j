@@ -65,6 +65,8 @@ public class MoneyInCreateDepositSlipPrintoutProcess extends AbstractDeferredPro
         try {
             ByteArrayOutputStream depositSlipOutputStream = new ByteArrayOutputStream();
             Map<String, Object> params = new HashMap<String, Object>();
+            params.put("batchNumber", batch.batchNumber().getValue());
+            params.put("buildingCode", batch.building().getValue());
             params.put("depositSlipNumber", batch.depositSlipNumber().getValue());
             params.put("depositDate", batch.depositDate().getValue());
             params.put("accountName", batch.bankAccountName().getValue());

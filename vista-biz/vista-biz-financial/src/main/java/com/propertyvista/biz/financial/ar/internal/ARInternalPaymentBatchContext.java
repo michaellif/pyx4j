@@ -32,4 +32,9 @@ public class ARInternalPaymentBatchContext implements PaymentBatchContext {
     public void cancelBatch() throws ARException {
     }
 
+    @Override
+    public String getBatchNumber() {
+        return "InternalBatch";
+    }
+
 }

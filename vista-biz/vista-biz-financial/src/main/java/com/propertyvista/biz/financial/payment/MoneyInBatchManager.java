@@ -73,6 +73,7 @@ class MoneyInBatchManager {
     }
 
     void processPostingBatch(final PaymentPostingBatch paymentPostingBatchId, final RunningProcess progress) {
+
         new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() {
@@ -96,13 +97,15 @@ class MoneyInBatchManager {
                     }
                 };
 
-                new PaymentBatchPosting().processPayments(criteria, false, executionMonitor);
+                String batchNumber = new PaymentBatchPosting().processPayments(criteria, false, executionMonitor);
 
                 // Allow to post batch again
                 if (executionMonitor.getErred() > 0) {
                     throw new UserRuntimeException(executionMonitor.getTextMessages());
                 }
 
+                postingBatch.externalBatchNumber().setValue(batchNumber);
+                Persistence.service().persist(postingBatch);
                 return null;
             }
         });

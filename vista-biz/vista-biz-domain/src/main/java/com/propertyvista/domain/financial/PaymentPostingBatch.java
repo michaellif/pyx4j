@@ -68,6 +68,9 @@ public interface PaymentPostingBatch extends IEntity, HasNotesAndAttachments {
     @JoinColumn
     Building building();
 
+    /** This is external batch number i.e. in Yardi */
+    IPrimitive<String> externalBatchNumber();
+
     IPrimitive<PostingStatus> status();
 
     @ReadOnly
