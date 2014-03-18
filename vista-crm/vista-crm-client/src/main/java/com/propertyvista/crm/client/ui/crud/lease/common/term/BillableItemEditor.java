@@ -536,7 +536,6 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                     // disable editing of finalized deposits:
                     setEditable(getValue().lifecycle().isNull());
                 }
-
             }
 
             @Override
@@ -552,7 +551,17 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                         return component;
                     }
                 }
-                return super.createCell(column);
+
+                CComponent<?> comp = super.createCell(column);
+
+                if (VistaFeatures.instance().yardiIntegration()) {
+                    if (column.getObject() == proto().description()) {
+                        comp.setEditable(true);
+                        comp.inheritEditable(false);
+                    }
+                }
+
+                return comp;
             }
         }
     }
