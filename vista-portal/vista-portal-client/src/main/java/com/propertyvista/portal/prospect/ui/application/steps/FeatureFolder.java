@@ -29,11 +29,13 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
+import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
@@ -166,8 +168,10 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
                 }
 
                 if (editor != null) {
-                    editor.setEditable(true);
-                    editor.inheritEditable(false);
+                    if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+                        editor.setEditable(true);
+                        editor.inheritEditable(false);
+                    }
                     this.inject(proto().extraData(), editor);
                     editor.populate(extraData.cast());
                     extraDataPanel.setWidget(editor);

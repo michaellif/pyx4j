@@ -872,6 +872,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.yearsAdd(leaseTerm.termFrom().getValue(), 1)));
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.daysAdd(leaseTerm.termTo().getValue(), -1)));
             }
+
+            saveFeaturesExtraData(bo, to);
+
             saveUnitOptionsData(bo, to);
             saveOccupants(bo, to);
             saveGuarantors(bo, to);
@@ -905,6 +908,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             // update application status:
             bo.status().setValue(OnlineApplication.Status.Incomplete);
             Persistence.service().merge(bo);
+        }
+    }
+
+    private void saveFeaturesExtraData(OnlineApplication bo, OnlineApplicationDTO to) {
+        LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
+
+        for (BillableItem item : to.selectedFeatures()) {
+            leaseTerm.version().leaseProducts().featureItems().get(item).extraData().set(item.extraData());
         }
     }
 

@@ -26,7 +26,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
@@ -78,14 +77,7 @@ public class LeaseStep extends ApplicationWizardStep {
 
         panel.setWidget(++row, 0, featurePanel);
         featurePanel.setH3(0, 0, 1, i18n.tr("Features"));
-        featurePanel.setWidget(++row, 0, inject(proto().selectedFeatures(), new FeatureFolder() {
-            @Override
-            public IFolderItemDecorator<BillableItem> createItemDecorator() {
-                BoxFolderItemDecorator<BillableItem> decor = (BoxFolderItemDecorator<BillableItem>) super.createItemDecorator();
-                decor.setExpended(false);
-                return decor;
-            }
-        }));
+        featurePanel.setWidget(++row, 0, inject(proto().selectedFeatures(), new FeatureFolder()));
         get(proto().selectedFeatures()).setEditable(false);
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
