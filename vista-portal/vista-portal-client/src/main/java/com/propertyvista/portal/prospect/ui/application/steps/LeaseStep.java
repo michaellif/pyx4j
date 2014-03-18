@@ -96,6 +96,7 @@ public class LeaseStep extends ApplicationWizardStep {
         depositPanel.setVisible(!getValue().selectedService().deposits().isEmpty());
         featurePanel.setVisible(!getValue().selectedFeatures().isEmpty());
 
+        get(proto().utilities()).setVisible(!getValue().utilities().isNull());
         get(proto().selectedService().description()).setVisible(!getValue().selectedService().description().isNull());
     }
 }
