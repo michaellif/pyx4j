@@ -83,7 +83,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         super.start(panel, eventBus);
-
+        getView().reset(); // initialize the view!..
         service.init(new DefaultAsyncCallback<OnlineApplicationDTO>() {
             @Override
             public void onSuccess(OnlineApplicationDTO result) {
