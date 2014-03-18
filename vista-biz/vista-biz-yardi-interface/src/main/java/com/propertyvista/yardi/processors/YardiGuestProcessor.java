@@ -16,6 +16,7 @@ package com.propertyvista.yardi.processors;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,8 @@ import com.yardi.entity.guestcard40.Identification;
 import com.yardi.entity.guestcard40.LeaseType;
 import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.NumericRangeType;
+import com.yardi.entity.guestcard40.PhoneInfo;
+import com.yardi.entity.guestcard40.PhoneType;
 import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Quote;
 import com.yardi.entity.guestcard40.Quotes;
@@ -76,6 +79,11 @@ public class YardiGuestProcessor {
                 lease.getPrimaryKey().toString(), // use primary key as third-party guest id
                 lease.unit().building().propertyCode().getValue() //
         );
+        addPhone(prospect, PhoneInfo.HOME, lease._applicant().customer().person().homePhone().getValue());
+        addPhone(prospect, PhoneInfo.OFFICE, lease._applicant().customer().person().workPhone().getValue());
+        addPhone(prospect, PhoneInfo.CELL, lease._applicant().customer().person().mobilePhone().getValue());
+        addEmail(prospect, lease._applicant().customer().person().email().getValue());
+
         return prospect;
     }
 
@@ -95,6 +103,30 @@ public class YardiGuestProcessor {
         guest.setCustomers(customers);
 
         return guest;
+    }
+
+    public void addPhone(Prospect guest, PhoneInfo type, String number) {
+        if (number == null) {
+            return;
+        }
+        Customer cust = guest.getCustomers().getCustomer().get(0);
+        assert cust != null : "Prospect not initialized";
+
+        PhoneType phone = new PhoneType();
+        phone.setPhoneType(type);
+        phone.setPhoneNumber(number);
+        // use type.ordinal as list index to prevent duplicate types
+        cust.getPhone().set(type.ordinal(), phone);
+    }
+
+    public void addEmail(Prospect guest, String email) {
+        if (email == null) {
+            return;
+        }
+        Customer cust = guest.getCustomers().getCustomer().get(0);
+        assert cust != null : "Prospect not initialized";
+
+        cust.setEmail(email);
     }
 
     public List<Customer> getCoApplicants(Lease lease) {
@@ -224,6 +256,8 @@ public class YardiGuestProcessor {
         customer.getIdentification().add(getPropertyId(propertyId));
         customer.setName(toNameType(name));
         customer.getAddress().add(getAddress(addr));
+        // init phone holder list - use PhoneInfo.ordinal as index to prevent duplicate types
+        customer.getPhone().addAll(Arrays.asList(new PhoneType[PhoneInfo.values().length]));
         return customer;
     }
 
