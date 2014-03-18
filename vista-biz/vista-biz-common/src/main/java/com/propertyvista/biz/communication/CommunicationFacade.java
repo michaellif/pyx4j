@@ -31,6 +31,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 
 /**
  * to Tenant/Applicant (Lease)
@@ -55,6 +56,8 @@ public interface CommunicationFacade {
     void sendCoApplicantApplicationInvitation(LeaseTermTenant tenant);
 
     void sendGuarantorApplicationInvitation(LeaseTermGuarantor guarantor);
+
+    void sendApplicationDocumentCopy(LeaseApplicationDocument documentId);
 
     void sendApplicationApproved(LeaseTermParticipant<?> participantId);
 

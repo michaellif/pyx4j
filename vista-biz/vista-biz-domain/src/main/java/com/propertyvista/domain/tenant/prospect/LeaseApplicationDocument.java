@@ -51,7 +51,6 @@ public interface LeaseApplicationDocument extends IHasFile<LeaseApplicationDocum
 
     @Caption(name = "Uploaded By")
     @ReadOnly
-    @MemberColumn(notNull = true)
     CrmUser uploader();
 
     @NotNull

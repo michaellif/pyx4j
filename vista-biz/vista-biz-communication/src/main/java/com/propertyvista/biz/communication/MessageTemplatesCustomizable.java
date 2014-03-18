@@ -15,6 +15,7 @@ package com.propertyvista.biz.communication;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.slf4j.Logger;
@@ -30,12 +31,14 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.mail.MailAttachment;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObjectLoader;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -51,6 +54,7 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 
 class MessageTemplatesCustomizable {
 
@@ -156,6 +160,25 @@ class MessageTemplatesCustomizable {
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, context, data);
+
+        return email;
+    }
+
+    public static MailMessage createApplcationDocumentEmail(LeaseApplicationDocument documentId) {
+        LeaseApplicationDocument document = Persistence.service().retrieve(LeaseApplicationDocument.class, documentId.getPrimaryKey());
+        Persistence.ensureRetrieve(document.lease(), AttachLevel.Attached);
+        MailMessage email = new MailMessage();
+        email.setTo(Arrays.asList(document.signedBy().person().email().getValue()));
+        email.setSender(getSender());
+
+        LeaseApplicationDocumentBlob blob = Persistence.service().retrieve(LeaseApplicationDocumentBlob.class, document.file().blobKey().getValue());
+        MailAttachment attachment = new MailAttachment(document.file().fileName().getValue(), document.file().contentMimeType().getValue(), blob.data()
+                .getValue());
+        email.addAttachment(attachment);
+
+        // TODO make proper email with blackjack and templates
+        email.setSubject(i18n.tr("Lease Application"));
+        email.setTextBody(i18n.tr("Dear {0}, please find your copy of lease application.", document.signedBy().person().name().getStringView()));
 
         return email;
     }

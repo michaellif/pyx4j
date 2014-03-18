@@ -44,6 +44,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -75,6 +76,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendGuarantorApplicationInvitation(LeaseTermGuarantor guarantor) {
         sendInvitationEmail(guarantor, EmailTemplateType.ApplicationCreatedGuarantor);
+    }
+
+    @Override
+    public void sendApplicationDocumentCopy(LeaseApplicationDocument documentId) {
+        MailMessage msg = MessageTemplatesCustomizable.createApplcationDocumentEmail(documentId);
+        Mail.queue(msg, null, null);
     }
 
     private static void sendInvitationEmail(LeaseTermParticipant<?> leaseParticipant, EmailTemplateType emailTemplateType) {

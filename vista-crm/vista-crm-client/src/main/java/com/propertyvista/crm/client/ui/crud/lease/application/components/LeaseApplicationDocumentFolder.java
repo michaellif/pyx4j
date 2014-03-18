@@ -89,5 +89,13 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
             );
             return panel;
         }//@formatter:on
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+            get(proto().uploader()).setVisible(!getValue().uploader().isNull());
+        };
+
     }
+
 }
