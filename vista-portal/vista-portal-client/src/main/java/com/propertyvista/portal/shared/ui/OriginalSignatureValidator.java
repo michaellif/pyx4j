@@ -84,8 +84,15 @@ public class OriginalSignatureValidator extends AbstractComponentValidator<Custo
 
         String name = ClientContext.getUserVisit().getName();
         List<Character> nameInitialsTokens = new ArrayList<>();
-        for (char ch : name.trim().toLowerCase().replaceAll("(?<=\\w)\\w*(?=\\s)*", "").replaceAll("\\s", "").toCharArray()) {
-            nameInitialsTokens.add(ch);
+        boolean expectFirstLetter = true;
+        for (char ch : name.trim().toLowerCase().replace("\\s", " ").toCharArray()) {
+            if (expectFirstLetter == true) {
+                nameInitialsTokens.add(ch);
+                expectFirstLetter = false;
+                continue;
+            } else if (ch == ' ') {
+                expectFirstLetter = true;
+            }
         }
 
         if (signatureInitialsTokens.size() < 2 && nameInitialsTokens.size() >= 2) {
