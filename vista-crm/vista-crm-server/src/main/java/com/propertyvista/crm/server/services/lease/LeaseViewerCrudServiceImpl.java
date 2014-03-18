@@ -356,14 +356,19 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Persistence.ensureRetrieve(lease.currentTerm().version().agreementDocuments(), AttachLevel.Attached);
 
         List<LeaseTermAgreementDocument> newDocs = new LinkedList<>();
-        for (LeaseTermAgreementDocument incomingDoc : documents.inkSignedDocuments()) {
-            if (incomingDoc.getPrimaryKey() == null) {
-                newDocs.add(incomingDoc);
+        for (LeaseTermAgreementDocument incomingInkSignedDoc : documents.inkSignedDocuments()) {
+            if (incomingInkSignedDoc.getPrimaryKey() == null) {
+                newDocs.add(incomingInkSignedDoc);
             }
         }
 
         List<LeaseTermAgreementDocument> deletedDocs = new LinkedList<>();
         for (LeaseTermAgreementDocument doc : lease.currentTerm().version().agreementDocuments()) {
+            if (doc.isSignedByInk().getValue(false) == false) {
+                // we cannot allow user to delete digitally signed docs
+                continue;
+            }
+
             boolean found = false;
             for (LeaseTermAgreementDocument inkSignedDocument : documents.inkSignedDocuments()) {
                 if (doc.getPrimaryKey().equals(inkSignedDocument.getPrimaryKey())) {
