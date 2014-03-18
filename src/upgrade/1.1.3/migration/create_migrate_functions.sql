@@ -759,6 +759,44 @@ BEGIN
         
         ALTER TABLE lease_application_confirmation_term OWNER TO vista;
         
+        -- lease_application_document
+        
+        CREATE TABLE lease_application_document
+        (
+                id                              BIGINT                  NOT NULL,
+                file_file_name                  VARCHAR(500),
+                file_updated_timestamp          BIGINT,
+                file_cache_version              INT,
+                file_file_size                  INT,
+                file_content_mime_type          VARCHAR(500),
+                file_blob_key                   BIGINT,
+                lease                           BIGINT                  NOT NULL,
+                uploader                        BIGINT                  NOT NULL,
+                is_signed_by_ink                BOOLEAN                 NOT NULL,
+                signed_by                       BIGINT                  NOT NULL,
+                signed_by_role                  VARCHAR(50),
+                    CONSTRAINT lease_application_document_pk PRIMARY KEY(id)
+        );
+        
+        
+        ALTER TABLE lease_application_document OWNER TO vista;
+        
+        -- lease_application_document_blob
+        
+        CREATE TABLE lease_application_document_blob
+        (
+                id                          BIGINT                      NOT NULL,
+                name                        VARCHAR(500),
+                data                        BYTEA,
+                content_type                VARCHAR(500),
+                updated                     TIMESTAMP,
+                created                     TIMESTAMP,
+                    CONSTRAINT lease_application_document_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE lease_application_document_blob OWNER TO vista;
+        
+        
          -- lease_application_legal_policy
         
         CREATE TABLE lease_application_legal_policy
@@ -2252,6 +2290,12 @@ BEGIN
         ALTER TABLE lease_application ADD CONSTRAINT lease_application_created_by_fk FOREIGN KEY(created_by) REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_application_confirmation_term ADD CONSTRAINT lease_application_confirmation_term_policy_fk FOREIGN KEY(policy) 
                 REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_lease_fk FOREIGN KEY(lease) 
+            REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_signed_by_fk FOREIGN KEY(signed_by) 
+            REFERENCES customer(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_uploader_fk FOREIGN KEY(uploader) 
+            REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_policy_fk FOREIGN KEY(policy) 
                 REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_lease_term_v_fk FOREIGN KEY(lease_term_v) 
@@ -2407,6 +2451,8 @@ BEGIN
             CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 
             'Deposit', 'DepositRefund', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 
             'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+        ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_signed_by_role_e_ck 
+            CHECK ((signed_by_role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_apply_to_role_e_ck CHECK ((apply_to_role) IN ('All', 'Applicant', 'Guarantor'));
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_signature_format_e_ck 
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
@@ -2540,6 +2586,7 @@ BEGIN
         CREATE INDEX ilssummary_building_building_idx ON ilssummary_building USING btree (building);
         CREATE INDEX ilssummary_floorplan_floorplan_idx ON ilssummary_floorplan USING btree (floorplan);
         CREATE UNIQUE INDEX lease_application_application_id_idx ON lease_application USING btree (LOWER(application_id));
+        CREATE INDEX lease_application_document_lease_idx ON lease_application_document USING btree (lease);
         CREATE INDEX lease_term_agreement_document_lease_term_v_idx ON lease_term_agreement_document USING btree (lease_term_v);
         CREATE INDEX lease_term_agreement_document$signed_participants_owner_idx ON lease_term_agreement_document$signed_participants USING btree (owner);
         CREATE INDEX maintenance_request_status_record_request_idx ON maintenance_request_status_record USING btree (request);
