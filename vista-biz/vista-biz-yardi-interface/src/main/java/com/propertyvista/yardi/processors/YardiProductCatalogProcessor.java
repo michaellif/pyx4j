@@ -146,8 +146,8 @@ public class YardiProductCatalogProcessor {
             assert (arCode != null);
 
             RentableItemType itemType = new RentableItemType();
-            itemType.setCode("");
             itemType.setRent("0.00");
+            itemType.setCode("Residential");
             itemType.setDescription("Residential Unit Rent");
 
             ensureService(catalog, new YardiRentableItemTypeData(itemType, arCode));
