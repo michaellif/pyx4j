@@ -27,8 +27,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.ISignature;
-import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 
 import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -285,7 +283,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
                 }
 
                 case PlaceholdersOnly: {
-                    if (needsPlaceholder(legalTerm.signatureFormat().getValue())) {
+                    if (PrintableSignatureChecker.needsPlaceholder(legalTerm.signatureFormat().getValue())) {
                         legalTerm4Print.signaturePlaceholders().add(makeSignaturePlaceholder(participant));
                     }
                     break;
@@ -295,7 +293,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
                     CustomerSignature tenantsSignature = getSignature(legalTerm, participant);
                     if (tenantsSignature != null) {
                         legalTerm4Print.signatures().add(tenantsSignature);
-                    } else if (needsPlaceholder(legalTerm.signatureFormat().getValue())) {
+                    } else if (PrintableSignatureChecker.needsPlaceholder((legalTerm.signatureFormat().getValue()))) {
                         legalTerm4Print.signaturePlaceholders().add(makeSignaturePlaceholder(participant));
                     }
                     break;
@@ -312,23 +310,13 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         return legalTerm4Print;
     }
 
-    private boolean needsPlaceholder(SignatureFormat signatureFormat) {
-        return (signatureFormat == SignatureFormat.FullName || signatureFormat == SignatureFormat.AgreeBoxAndFullName);
-    }
-
-    private boolean isPrintableSignature(ISignature signature) {//@formatter:off
-        return signature.signatureFormat().getValue() == SignatureFormat.AgreeBoxAndFullName
-                || signature.signatureFormat().getValue() == SignatureFormat.FullName
-                || signature.signatureFormat().getValue() == SignatureFormat.Initials;
-    }//@formatter:on
-
     private CustomerSignature getSignature(LeaseAgreementLegalTerm legalTerm, LeaseTermParticipant<?> participant) {
         if (!participant.agreementSignatures().isNull() && participant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
             // find a signature that belongs to the term
             for (SignedAgreementLegalTerm signedLegalTerm : (participant.agreementSignatures().duplicate(AgreementDigitalSignatures.class)
                     .legalTermsSignatures())) {
                 if (signedLegalTerm.term().getPrimaryKey().equals(legalTerm.getPrimaryKey())) {
-                    if (isPrintableSignature(signedLegalTerm.signature())) {
+                    if (PrintableSignatureChecker.isPrintable(signedLegalTerm.signature())) {
                         CustomerSignature signature = signedLegalTerm.signature().duplicate(CustomerSignature.class);
                         String roleName = participant.role().getValue() == Role.Guarantor ? "Guarantor" : "Tenant";
                         signature.fullName().setValue(signature.fullName().getValue() + " (" + roleName + ")");

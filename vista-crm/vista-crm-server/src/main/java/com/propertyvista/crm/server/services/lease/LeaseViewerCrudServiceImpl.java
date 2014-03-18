@@ -320,7 +320,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Persistence.service().merge(lease.currentTerm().version());
         Persistence.service().commit();
 
-        String correlationId = DeferredProcessRegistry.fork(new LeaseSignedTermAgreementCreatorDeferredProcess(lease.currentTerm()),
+        String correlationId = DeferredProcessRegistry.fork(new SignedLeaseTermAgreementDocumentCreatorDeferredProcess(lease.currentTerm()),
                 DeferredProcessRegistry.THREAD_POOL_DOWNLOADS);
         callback.onSuccess(correlationId);
 

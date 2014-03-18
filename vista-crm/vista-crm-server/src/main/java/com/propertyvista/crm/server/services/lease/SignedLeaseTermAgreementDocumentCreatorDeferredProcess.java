@@ -41,15 +41,15 @@ import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO;
 import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO.SignatureType;
 
 @SuppressWarnings("serial")
-class LeaseSignedTermAgreementCreatorDeferredProcess extends AbstractDeferredProcess {
+class SignedLeaseTermAgreementDocumentCreatorDeferredProcess extends AbstractDeferredProcess {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaseSignedTermAgreementCreatorDeferredProcess.class);
+    private static final Logger log = LoggerFactory.getLogger(SignedLeaseTermAgreementDocumentCreatorDeferredProcess.class);
 
     private final LeaseTerm leaseTerm;
 
     private final LeaseTermAgreementDocument agreementDocument;
 
-    public LeaseSignedTermAgreementCreatorDeferredProcess(LeaseTerm leaseTerm) {
+    public SignedLeaseTermAgreementDocumentCreatorDeferredProcess(LeaseTerm leaseTerm) {
         super();
         this.leaseTerm = leaseTerm;
         this.agreementDocument = EntityFactory.create(LeaseTermAgreementDocument.class);

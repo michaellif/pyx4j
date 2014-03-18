@@ -230,7 +230,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
         params.put(BlankApplicationDocumentDownloadService.CUSTOMER_ID_PARAM_KEY, customerId.getPrimaryKey());
         request.setParameters(params);
 
-        reportDialog.start(GWT.<LeaseTermBlankAgreementDocumentDownloadService> create(BlankApplicationDocumentDownloadService.class), request);
+        reportDialog.start(GWT.<BlankApplicationDocumentDownloadService> create(BlankApplicationDocumentDownloadService.class), request);
     }
 
     protected void populatePayments(Lease result) {

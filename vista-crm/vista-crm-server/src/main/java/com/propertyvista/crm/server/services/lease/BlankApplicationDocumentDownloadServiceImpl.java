@@ -26,7 +26,7 @@ import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.lease.LeaseApplicationDocumentCreationProcess;
+import com.propertyvista.server.common.lease.SignedLeaseApplicationDocumentCreatorDeferredProcess;
 
 public class BlankApplicationDocumentDownloadServiceImpl extends ReportServiceImpl<IEntity> implements BlankApplicationDocumentDownloadService {
 
@@ -34,6 +34,6 @@ public class BlankApplicationDocumentDownloadServiceImpl extends ReportServiceIm
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, (Key) reportRequest.getParameters().get(LEASE_ID_PARAM_KEY));
         Customer customerId = EntityFactory.createIdentityStub(Customer.class, (Key) reportRequest.getParameters().get(CUSTOMER_ID_PARAM_KEY));
-        callback.onSuccess(DeferredProcessRegistry.fork(new LeaseApplicationDocumentCreationProcess(leaseId, customerId), ThreadPoolNames.DOWNLOADS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new SignedLeaseApplicationDocumentCreatorDeferredProcess(leaseId, customerId), ThreadPoolNames.DOWNLOADS));
     }
 }

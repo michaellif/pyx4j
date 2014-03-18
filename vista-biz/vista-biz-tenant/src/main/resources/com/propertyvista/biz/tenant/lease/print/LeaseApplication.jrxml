@@ -130,7 +130,7 @@
 					<font fontName="SansSerif" isBold="true" isUnderline="true"/>
 					<paragraph spacingAfter="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Signatures:"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Signature:"]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="1" splitType="Stretch">

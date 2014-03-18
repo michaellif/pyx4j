@@ -13,8 +13,6 @@
  */
 package com.propertyvista.server.common.lease;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +23,8 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
-import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
@@ -47,19 +43,11 @@ import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
 /**
  * Creates Signed Lease Application
  */
-public class LeaseApplicationDocumentCreationProcess extends AbstractDeferredProcess {
+public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends AbstractDeferredProcess {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaseApplicationDocumentCreationProcess.class);
+    private static final Logger log = LoggerFactory.getLogger(SignedLeaseApplicationDocumentCreatorDeferredProcess.class);
 
     private static final long serialVersionUID = 1L;
-
-    private final AtomicInteger progress;
-
-    private final int progressMax;
-
-    private volatile String fileName;
-
-    private volatile Throwable error;
 
     private final Lease leaseId;
 
@@ -67,10 +55,7 @@ public class LeaseApplicationDocumentCreationProcess extends AbstractDeferredPro
 
     private OnlineApplication onlineApplication;
 
-    public LeaseApplicationDocumentCreationProcess(Lease leaseId, Customer customerId) {
-        this.progress = new AtomicInteger();
-        this.progress.set(0);
-        this.progressMax = 1;
+    public SignedLeaseApplicationDocumentCreatorDeferredProcess(Lease leaseId, Customer customerId) {
         this.leaseId = leaseId;
         this.customerId = customerId;
     }
@@ -82,18 +67,13 @@ public class LeaseApplicationDocumentCreationProcess extends AbstractDeferredPro
             @Override
             public Void execute() throws RuntimeException {
                 try {
-                    onlineApplication = retrieveOnlineApplication();
-                    if (onlineApplication == null) {
-                        throw new Exception("Online Application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey()
-                                + " not found");
-                    }
+                    retrieveOnlineApplication();
                     LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class).createApplicationData(
                             onlineApplication, SignaturesMode.SignaturesOnly);
                     byte[] pdfBytes = ServerSideFactory.create(LeaseApplicationDocumentPdfCreatorFacade.class).createPdf(data);
                     LeaseApplicationDocument documentId = saveDocument(pdfBytes);
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationDocumentCopy(documentId);
                 } catch (Throwable e) {
-                    error = e;
                     log.error("failed to create online application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey(), e);
                 } finally {
                     completed = true;
@@ -104,11 +84,14 @@ public class LeaseApplicationDocumentCreationProcess extends AbstractDeferredPro
         });
     }
 
-    private OnlineApplication retrieveOnlineApplication() {
+    private void retrieveOnlineApplication() {
         EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
         criteria.eq(criteria.proto().customer(), this.customerId);
         criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication().lease(), this.leaseId);
-        return Persistence.service().retrieve(criteria);
+        onlineApplication = Persistence.service().retrieve(criteria);
+        if (onlineApplication == null) {
+            throw new RuntimeException("Online Application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey() + " not found");
+        }
     }
 
     private LeaseApplicationDocument saveDocument(byte[] pdfBytes) {
@@ -131,22 +114,6 @@ public class LeaseApplicationDocumentCreationProcess extends AbstractDeferredPro
         FileUploadRegistry.register(document.file());
 
         return document.createIdentityStub();
-    }
-
-    @Override
-    public DeferredProcessProgressResponse status() {
-        DeferredReportProcessProgressResponse r = new DeferredReportProcessProgressResponse();
-        r.setProgress(progress.get());
-        r.setProgressMaximum(progressMax);
-        if (completed) {
-            r.setCompleted();
-            r.setDownloadLink(System.currentTimeMillis() + "/" + fileName);
-        }
-        if (error != null) {
-            r.setError();
-            r.setErrorStatusMessage("Failed to agreement document printout due to system error");
-        }
-        return r;
     }
 
 }

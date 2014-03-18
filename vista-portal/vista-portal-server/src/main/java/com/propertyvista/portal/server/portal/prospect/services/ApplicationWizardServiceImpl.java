@@ -34,6 +34,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -44,6 +45,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -98,6 +100,7 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardSe
 import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.server.common.lease.SignedLeaseApplicationDocumentCreatorDeferredProcess;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
@@ -144,7 +147,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     @Override
     public void save(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
         saveApplicationData(editableEntity, false);
-
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -154,6 +156,12 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         saveApplicationData(editableEntity, true);
 
         Persistence.service().commit();
+
+        OnlineApplication onlineApplication = ProspectPortalContext.getOnlineApplication();
+        Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
+        DeferredProcessRegistry.fork(new SignedLeaseApplicationDocumentCreatorDeferredProcess(onlineApplication.masterOnlineApplication().leaseApplication()
+                .lease().<Lease> createIdentityStub(), onlineApplication.customer().<Customer> createIdentityStub()), ThreadPoolNames.DOWNLOADS);
+
         callback.onSuccess(null);
     }
 

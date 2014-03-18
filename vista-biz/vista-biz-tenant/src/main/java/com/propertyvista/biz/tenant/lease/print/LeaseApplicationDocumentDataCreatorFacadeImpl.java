@@ -67,13 +67,27 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         term4print.title().setValue(signedTerm.term().title().getValue());
         term4print.body().setValue(signedTerm.term().body().getValue());
 
-        if (signaturesMode == SignaturesMode.SignaturesOnly) {
-            term4print.signatures().add(signedTerm.signature());
-        } else if (signaturesMode == SignaturesMode.PlaceholdersOnly) {
-            LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO signaturePlaceHolder = EntityFactory
-                    .create(LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO.class);
-            signaturePlaceHolder.tenantName().setValue(customer.person().name().getStringView());
-            term4print.signaturePlaceholders().add(signaturePlaceHolder);
+        if (signaturesMode == null) {
+            signaturesMode = SignaturesMode.None;
+        }
+        switch (signaturesMode) {
+        case SignaturesOnly:
+            if (PrintableSignatureChecker.isPrintable(signedTerm.signature())) {
+                term4print.signatures().add(signedTerm.signature());
+            }
+            break;
+
+        case PlaceholdersOnly:
+            if (PrintableSignatureChecker.needsPlaceholder(signedTerm.signature())) {
+                LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO signaturePlaceHolder = EntityFactory
+                        .create(LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO.class);
+                signaturePlaceHolder.tenantName().setValue(customer.person().name().getStringView());
+                term4print.signaturePlaceholders().add(signaturePlaceHolder);
+            }
+            break;
+
+        default:
+            break;
         }
 
         return term4print;
