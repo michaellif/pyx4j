@@ -39,7 +39,6 @@ import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 
@@ -280,7 +279,13 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         public void setEntityValidationError(EntityValidationException caught) {
             this.entityValidationError = caught;
-            setVisitedRecursive();
+            if (caught != null) {
+                // call revalidate() explicitly as the children have already been visited (visited = true)
+                for (MemberValidationError memberValidationError : caught.getErrors()) {
+                    CComponent<?> comp = get(memberValidationError.getMember());
+                    comp.revalidate();
+                }
+            }
         }
 
         @Override

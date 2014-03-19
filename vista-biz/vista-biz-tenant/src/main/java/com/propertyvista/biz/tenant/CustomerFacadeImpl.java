@@ -251,7 +251,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
         if (tenants.size() == 0) {
             throw EntityValidationException.make(ResidentSelfRegistrationDTO.class)
-                    .addError(selfRegistration.securityCode(), i18n.tr("The Security Code was incorrect")).build();
+                    .addError(selfRegistration.securityCode(), i18n.tr("The Security Code is incorrect")).build();
         }
 
         Tenant tenant = null;
