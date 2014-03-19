@@ -38,6 +38,8 @@ public interface SignUpView extends IsView {
 
     void init(List<SelfRegistrationBuildingDTO> buildings);
 
+    void reset();
+
     void showError(String message);
 
     void showValidationError(EntityValidationException caught);

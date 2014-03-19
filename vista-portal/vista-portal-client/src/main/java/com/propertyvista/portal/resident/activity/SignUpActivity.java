@@ -83,6 +83,23 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
         }, value);
     }
 
+    protected void onDiscard() {
+        view.setPresenter(null);
+        view.reset();
+    }
+
+    @Override
+    public void onCancel() {
+        onDiscard();
+        super.onCancel();
+    }
+
+    @Override
+    public void onStop() {
+        onDiscard();
+        super.onStop();
+    }
+
     private void authenticate(AuthenticationRequest request) {
         ClientContext.authenticate(request, new DefaultAsyncCallback<Boolean>() {
 

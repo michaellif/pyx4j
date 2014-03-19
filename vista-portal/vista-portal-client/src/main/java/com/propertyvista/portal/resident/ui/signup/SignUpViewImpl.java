@@ -82,4 +82,9 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
         gadget.showValidationError(caught);
     }
 
+    @Override
+    public void reset() {
+        gadget.reset();
+    }
+
 }
