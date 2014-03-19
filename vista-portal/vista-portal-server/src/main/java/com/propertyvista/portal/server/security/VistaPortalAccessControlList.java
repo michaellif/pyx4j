@@ -21,9 +21,9 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.communication.CommunicationMessageAttachment;
 import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -46,6 +46,7 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
+import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
@@ -191,6 +192,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseSigningCrudService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
+        grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new EntityPermission(AgreementDigitalSignatures.class, EntityPermission.CREATE));
+
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
 
@@ -261,7 +264,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
             grant(new IServiceExecutePermission(MockDataGenerator.class));
         }
 
-        // Data Access
+        // Data Access       
         grant(PortalResidentBehavior.Resident, VistaDataAccessBehavior.ResidentInPortal);
         grant(VistaDataAccessBehavior.ResidentInPortal, new CustomerPictureTenantDatasetAccessRule(), CustomerPicture.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new PaymentRecordTenantDatasetAccessRule(), PaymentRecord.class);
