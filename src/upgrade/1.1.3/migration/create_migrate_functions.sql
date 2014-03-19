@@ -771,7 +771,7 @@ BEGIN
                 file_content_mime_type          VARCHAR(500),
                 file_blob_key                   BIGINT,
                 lease                           BIGINT                  NOT NULL,
-                uploader                        BIGINT                  NOT NULL,
+                uploader                        BIGINT,
                 is_signed_by_ink                BOOLEAN                 NOT NULL,
                 signed_by                       BIGINT                  NOT NULL,
                 signed_by_role                  VARCHAR(50),
@@ -1196,6 +1196,7 @@ BEGIN
         (
                 id                                      BIGINT                  NOT NULL,
                 building                                BIGINT                  NOT NULL,
+                external_batch_number					VARCHAR(500),
                 status                                  VARCHAR(50),
                 creation_date                           DATE,
                 updated                                 TIMESTAMP,
