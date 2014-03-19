@@ -196,10 +196,10 @@ public class YardiProductCatalogProcessor {
             ServerSideFactory.create(DefaultProductCatalogFacade.class).fillDefaultDeposits(service);
         } else {
             if (isServiceChanged(service, typeData)) {
-                catalog.services().remove(service);
+                int index = catalog.features().indexOf(service);
                 service = Persistence.retrieveDraftForEdit(Service.class, service.getPrimaryKey().asDraftKey());
                 service.saveAction().setValue(SaveAction.saveAsFinal);
-                catalog.services().add(service);
+                catalog.services().set(index, service);
             }
         }
 
@@ -287,10 +287,10 @@ public class YardiProductCatalogProcessor {
             ServerSideFactory.create(DefaultProductCatalogFacade.class).fillDefaultDeposits(feature);
         } else {
             if (isFeatureChanged(feature, typeData)) {
-                catalog.features().remove(feature);
+                int index = catalog.features().indexOf(feature);
                 feature = Persistence.retrieveDraftForEdit(Feature.class, feature.getPrimaryKey().asDraftKey());
                 feature.saveAction().setValue(SaveAction.saveAsFinal);
-                catalog.features().add(feature);
+                catalog.features().set(index, feature);
             }
         }
 
@@ -391,6 +391,8 @@ public class YardiProductCatalogProcessor {
         for (Feature item : newOnes) {
             if (item.getPrimaryKey() != null) {
                 newKeys.add(item.getPrimaryKey().asCurrentKey());
+            } else {
+                newKeys.add(new Key(-1));
             }
         }
 
@@ -410,8 +412,7 @@ public class YardiProductCatalogProcessor {
     private void replaceOriginalDraftServices(ProductCatalog catalog, List<Pair<Service, Service>> updatedServices) {
         for (Pair<Service, Service> updated : updatedServices) {
             if (!updated.getA().equals(updated.getB())) {
-                catalog.services().remove(updated.getA());
-                catalog.services().add(updated.getB());
+                catalog.services().set(catalog.services().indexOf(updated.getA()), updated.getB());
             }
         }
     }
