@@ -382,17 +382,17 @@ public class YardiProductCatalogProcessor {
     }
 
     private boolean compareEligibilityMatrixData(List<Feature> current, List<Feature> newOnes) {
-        Collection<Key> currentKeys = new ArrayList<>(current.size());
+        Collection<Long> currentKeys = new ArrayList<>(current.size());
         for (Feature item : current) {
-            currentKeys.add(item.getPrimaryKey());
+            currentKeys.add(item.getPrimaryKey().asLong());
         }
 
-        Collection<Key> newKeys = new ArrayList<>(newOnes.size());
+        Collection<Long> newKeys = new ArrayList<>(newOnes.size());
         for (Feature item : newOnes) {
             if (item.getPrimaryKey() != null) {
-                newKeys.add(item.getPrimaryKey().asCurrentKey());
+                newKeys.add(item.getPrimaryKey().asLong());
             } else {
-                newKeys.add(new Key(-1));
+                newKeys.add(0L);
             }
         }
 
