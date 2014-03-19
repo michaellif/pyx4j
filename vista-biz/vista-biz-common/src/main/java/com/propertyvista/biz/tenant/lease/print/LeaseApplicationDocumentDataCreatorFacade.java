@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
-import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
 
 public interface LeaseApplicationDocumentDataCreatorFacade {
@@ -24,6 +24,8 @@ public interface LeaseApplicationDocumentDataCreatorFacade {
 
     }
 
-    LeaseApplicationDocumentDataDTO createApplicationData(OnlineApplication onlineApplication, SignaturesMode signaturesMode);
+    LeaseApplicationDocumentDataDTO createApplicationDataForSignedForm(LeaseApplication application);
+
+    LeaseApplicationDocumentDataDTO createApplicationDataForBlankForm(LeaseApplication application);
 
 }

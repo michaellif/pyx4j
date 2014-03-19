@@ -33,9 +33,9 @@ import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementPdfCreatorFaca
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 
-public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDeferredProcess {
+public class BlankLeaseTermAgreementDocumentCreatorDeferredProcess extends AbstractDeferredProcess {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaseTermBlankAgreementDocumentCreationProcess.class);
+    private static final Logger log = LoggerFactory.getLogger(BlankLeaseTermAgreementDocumentCreatorDeferredProcess.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -51,7 +51,7 @@ public class LeaseTermBlankAgreementDocumentCreationProcess extends AbstractDefe
 
     private final boolean createDraft;
 
-    public LeaseTermBlankAgreementDocumentCreationProcess(Lease leaseId, boolean createDraft) {
+    public BlankLeaseTermAgreementDocumentCreatorDeferredProcess(Lease leaseId, boolean createDraft) {
         this.progress = new AtomicInteger();
         this.progress.set(0);
         this.progressMax = 1;

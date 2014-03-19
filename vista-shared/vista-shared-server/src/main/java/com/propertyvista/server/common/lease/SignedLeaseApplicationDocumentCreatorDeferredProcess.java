@@ -30,16 +30,15 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentDataCreatorFacade;
-import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentDataCreatorFacade.SignaturesMode;
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentPdfCreatorFacade;
 import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
 
-// TODO There will be probably a need for another process for creating blank (i.e. for ink signing) lease application documents
 /**
  * Creates Signed Lease Application
  */
@@ -53,7 +52,7 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
 
     private final Customer customerId;
 
-    private OnlineApplication onlineApplication;
+    private LeaseApplication application;
 
     public SignedLeaseApplicationDocumentCreatorDeferredProcess(Lease leaseId, Customer customerId) {
         this.leaseId = leaseId;
@@ -67,9 +66,9 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
             @Override
             public Void execute() throws RuntimeException {
                 try {
-                    retrieveOnlineApplication();
-                    LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class).createApplicationData(
-                            onlineApplication, SignaturesMode.SignaturesOnly);
+                    retrieveApplication();
+                    LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class)
+                            .createApplicationDataForSignedForm(application);
                     byte[] pdfBytes = ServerSideFactory.create(LeaseApplicationDocumentPdfCreatorFacade.class).createPdf(data);
                     LeaseApplicationDocument documentId = saveDocument(pdfBytes);
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationDocumentCopy(documentId);
@@ -84,13 +83,13 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
         });
     }
 
-    private void retrieveOnlineApplication() {
-        EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
-        criteria.eq(criteria.proto().customer(), this.customerId);
-        criteria.eq(criteria.proto().masterOnlineApplication().leaseApplication().lease(), this.leaseId);
-        onlineApplication = Persistence.service().retrieve(criteria);
-        if (onlineApplication == null) {
-            throw new RuntimeException("Online Application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey() + " not found");
+    private void retrieveApplication() {
+        EntityQueryCriteria<LeaseApplication> criteria = EntityQueryCriteria.create(LeaseApplication.class);
+        criteria.eq(criteria.proto().lease(), this.leaseId);
+        application = Persistence.service().retrieve(criteria);
+
+        if (application == null) {
+            throw new RuntimeException("application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey() + " not found");
         }
     }
 
@@ -106,6 +105,11 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
         document.file().blobKey().setValue(blob.getPrimaryKey());
         document.lease().set(leaseId);
         document.signedBy().set(customerId);
+
+        EntityQueryCriteria<OnlineApplication> onlineApplicationCriteria = EntityQueryCriteria.create(OnlineApplication.class);
+        onlineApplicationCriteria.eq(onlineApplicationCriteria.proto().masterOnlineApplication().leaseApplication(), application);
+        OnlineApplication onlineApplication = Persistence.service().retrieve(onlineApplicationCriteria);
+
         document.signedByRole().setValue(onlineApplication.role().getValue());
         document.isSignedByInk().setValue(false);
 
@@ -115,5 +119,4 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
 
         return document.createIdentityStub();
     }
-
 }

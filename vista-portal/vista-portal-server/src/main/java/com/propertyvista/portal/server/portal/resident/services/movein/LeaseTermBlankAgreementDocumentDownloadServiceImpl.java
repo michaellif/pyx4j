@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
-import com.propertyvista.server.common.lease.LeaseTermBlankAgreementDocumentCreationProcess;
+import com.propertyvista.server.common.lease.BlankLeaseTermAgreementDocumentCreatorDeferredProcess;
 
 public class LeaseTermBlankAgreementDocumentDownloadServiceImpl extends ReportServiceImpl<IEntity> implements LeaseTermBlankAgreementDocumentDownloadService {
 
@@ -47,7 +47,7 @@ public class LeaseTermBlankAgreementDocumentDownloadServiceImpl extends ReportSe
         }
 
         if (leaseIdStub != null) {
-            callback.onSuccess(DeferredProcessRegistry.fork(new LeaseTermBlankAgreementDocumentCreationProcess(leaseIdStub, true), ThreadPoolNames.DOWNLOADS));
+            callback.onSuccess(DeferredProcessRegistry.fork(new BlankLeaseTermAgreementDocumentCreatorDeferredProcess(leaseIdStub, true), ThreadPoolNames.DOWNLOADS));
         } else {
             throw new IllegalStateException("lease was not found");
         }

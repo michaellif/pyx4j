@@ -24,8 +24,8 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 
-import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
+import com.propertyvista.dto.LeaseApplicationDocumentDataSectionsDTO;
 
 public class LeaseApplicationDocumentPdfCreatorFacadeImpl implements LeaseApplicationDocumentPdfCreatorFacade {
 
@@ -45,7 +45,7 @@ public class LeaseApplicationDocumentPdfCreatorFacadeImpl implements LeaseApplic
 
         ByteOutputStream bos = new ByteOutputStream();
         JasperReportProcessor.createReport(new JasperReportModel(LeaseTermAgreementPdfCreatorFacadeImpl.class.getPackage().getName() + ".LeaseApplication",
-                new LinkedList<LeaseAgreementDocumentLegalTerm4PrintDTO>(data.terms()), params), JasperFileFormat.PDF, bos);
+                new LinkedList<LeaseApplicationDocumentDataSectionsDTO>(data.sections()), params), JasperFileFormat.PDF, bos);
 
         return bos.getBytes();
     }

@@ -25,7 +25,7 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.lease.LeaseTermBlankAgreementDocumentCreationProcess;
+import com.propertyvista.server.common.lease.BlankLeaseTermAgreementDocumentCreatorDeferredProcess;
 
 public class LeaseTermBlankAgreementDocumentDownloadServiceImpl extends ReportServiceImpl<IEntity> implements LeaseTermBlankAgreementDocumentDownloadService {
 
@@ -35,6 +35,6 @@ public class LeaseTermBlankAgreementDocumentDownloadServiceImpl extends ReportSe
                 (Key) reportRequest.getParameters().get(LeaseTermBlankAgreementDocumentDownloadService.LEASE_ID_PARAM_KEY));
         boolean createDraft = reportRequest.getParameters().get(LeaseTermBlankAgreementDocumentDownloadService.CREATE_DRAFT_PARAM_KEY) != null;
 
-        callback.onSuccess(DeferredProcessRegistry.fork(new LeaseTermBlankAgreementDocumentCreationProcess(leaseId, createDraft), ThreadPoolNames.DOWNLOADS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new BlankLeaseTermAgreementDocumentCreatorDeferredProcess(leaseId, createDraft), ThreadPoolNames.DOWNLOADS));
     }
 }
