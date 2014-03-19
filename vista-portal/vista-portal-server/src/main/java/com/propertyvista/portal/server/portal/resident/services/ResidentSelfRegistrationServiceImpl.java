@@ -39,6 +39,8 @@ public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistra
     @Override
     public void obtainBuildings(AsyncCallback<EntitySearchResult<SelfRegistrationBuildingDTO>> callback) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().suspended(), false);
+
         List<Building> buildingsDbo = new Vector<Building>(Persistence.service().query(criteria));
         Collections.sort(buildingsDbo, new Comparator<Building>() {
             @Override
