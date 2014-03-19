@@ -293,7 +293,19 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     public TYPE set(int index, TYPE element) {
         List<Map<String, Serializable>> value = getValue();
         if (value != null) {
-            return createTypedEntity(value.set(index, ensureTypedValue(element)));
+            TYPE prev = createTypedEntity(value.set(index, ensureTypedValue(element)));
+
+            if (prev.getPrimaryKey() != null && element.getPrimaryKey() != null) {
+                if (prev.getPrimaryKey().equalsIgnoreVersion(element.getPrimaryKey())) {
+                    return prev; // do not removeValueFromGraph() the same versioned entity!..
+                }
+            }
+
+            if (getMeta().isOwnedRelationships()) {
+                ((SharedEntityHandler) getOwner()).removeValueFromGraph(prev);
+            }
+
+            return prev;
         } else {
             throw new NullPointerException();
         }
