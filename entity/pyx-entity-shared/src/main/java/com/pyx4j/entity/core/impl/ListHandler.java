@@ -236,8 +236,16 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public int lastIndexOf(Object o) {
-        // TODO implement this
-        throw new UnsupportedOperationException();
+        if (o instanceof IEntity) {
+            List<?> value = getValue();
+            if (value != null) {
+                return value.lastIndexOf(comparableValue((IEntity) o));
+            } else {
+                return -1;
+            }
+        } else {
+            throw new ClassCastException("Value of class " + getValueClass() + " expected");
+        }
     }
 
     @Override
@@ -283,8 +291,12 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public TYPE set(int index, TYPE element) {
-        // TODO implement this
-        throw new UnsupportedOperationException();
+        List<Map<String, Serializable>> value = getValue();
+        if (value != null) {
+            return createTypedEntity(value.set(index, ensureTypedValue(element)));
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     @Override
