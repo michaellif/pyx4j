@@ -66,6 +66,7 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
     static {
         testSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com/");
         testSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com:8080/");
+        testSystemsUrl.add("http://yardi2.birchwoodsoftwaregroup.com:8080/");
         testSystemsUrl.add("https://www.iyardiasp.com/8223");
         testSystemsUrl.add("https://testvyr.realstar.ca/");
         testSystemsUrl.add("http://192.168.50.10");
