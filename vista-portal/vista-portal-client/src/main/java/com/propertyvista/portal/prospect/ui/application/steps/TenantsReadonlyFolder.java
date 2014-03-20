@@ -32,8 +32,8 @@ public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
     private static final I18n i18n = I18n.get(TenantsReadonlyFolder.class);
 
     public TenantsReadonlyFolder() {
-        super(TenantDTO.class, i18n.tr("Co-Applicant"), false);
-        setViewable(true);
+        super(TenantDTO.class, false);
+        setNoDataNotificationWidget(null);
     }
 
     @Override

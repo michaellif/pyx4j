@@ -35,6 +35,7 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
 
     public FeatureReadOnlyFolder() {
         super(BillableItem.class, false);
+        setNoDataNotificationWidget(null);
     }
 
     @Override
