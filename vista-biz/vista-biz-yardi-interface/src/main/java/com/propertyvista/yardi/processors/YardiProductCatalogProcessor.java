@@ -22,6 +22,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
+
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 
@@ -167,16 +170,12 @@ public class YardiProductCatalogProcessor {
     }
 
     private boolean isAnyServicePresent(ProductCatalog catalog) {
-        boolean found = false;
-
-        for (Service service : catalog.services()) {
-            if (!service.defaultCatalogItem().getValue(false) && service.expiredFrom().isNull()) {
-                found = true;
-                break;
+        return (CollectionUtils.find(catalog.services(), new Predicate<Service>() {
+            @Override
+            public boolean evaluate(Service service) {
+                return (!service.defaultCatalogItem().getValue(false) && service.expiredFrom().isNull());
             }
-        }
-
-        return found;
+        }) != null);
     }
 
     private Service ensureService(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
@@ -219,21 +218,18 @@ public class YardiProductCatalogProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    private Service findService(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
-        Service result = null;
+    private Service findService(ProductCatalog catalog, final YardiRentableItemTypeData typeData) {
+        return CollectionUtils.find(catalog.services(), new Predicate<Service>() {
 
-        for (Service item : catalog.services()) {
-            //@formatter:off
-            if (!item.defaultCatalogItem().getValue(false) 
-              && item.code().equals(typeData.getArCode())
-              && CommonsStringUtils.equals(item.yardiCode().getValue(), typeData.getItemType().getCode())) {
-            //@formatter:on
-                result = item;
-                break;
+            @Override
+            public boolean evaluate(Service service) {
+                //@formatter:off
+                return (!service.defaultCatalogItem().getValue(false) 
+                      && service.code().equals(typeData.getArCode())
+                      && CommonsStringUtils.equals(service.yardiCode().getValue(), typeData.getItemType().getCode()));
+                //@formatter:on
             }
-        }
-
-        return result;
+        });
     }
 
     private boolean isServiceChanged(Service service, YardiRentableItemTypeData itemTypeData) {
@@ -308,21 +304,18 @@ public class YardiProductCatalogProcessor {
         return feature;
     }
 
-    private Feature findFeature(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
-        Feature result = null;
+    private Feature findFeature(ProductCatalog catalog, final YardiRentableItemTypeData typeData) {
+        return CollectionUtils.find(catalog.features(), new Predicate<Feature>() {
 
-        for (Feature item : catalog.features()) {
-            //@formatter:off
-            if (!item.defaultCatalogItem().getValue(false) 
-              && item.code().equals(typeData.getArCode())
-              && CommonsStringUtils.equals(item.yardiCode().getValue(), typeData.getItemType().getCode())) {
-            //@formatter:on
-                result = item;
-                break;
+            @Override
+            public boolean evaluate(Feature feature) {
+                //@formatter:off
+                return (!feature.defaultCatalogItem().getValue(false) 
+                      && feature.code().equals(typeData.getArCode())
+                      && CommonsStringUtils.equals(feature.yardiCode().getValue(), typeData.getItemType().getCode()));
+                //@formatter:on
             }
-        }
-
-        return result;
+        });
     }
 
     private boolean isFeatureChanged(Feature feature, YardiRentableItemTypeData itemTypeData) {
