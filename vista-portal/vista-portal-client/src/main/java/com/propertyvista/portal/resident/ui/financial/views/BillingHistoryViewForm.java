@@ -24,17 +24,15 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO> {
@@ -55,17 +53,10 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
         return content;
     }
 
-    class BillDataFolder extends VistaBoxFolder<BillDataDTO> {
+    class BillDataFolder extends PortalBoxFolder<BillDataDTO> {
 
         public BillDataFolder() {
             super(BillDataDTO.class, false);
-        }
-
-        @Override
-        public IFolderItemDecorator<BillDataDTO> createItemDecorator() {
-            BoxFolderItemDecorator<BillDataDTO> decor = (BoxFolderItemDecorator<BillDataDTO>) super.createItemDecorator();
-            decor.setExpended(false);
-            return decor;
         }
 
         @Override

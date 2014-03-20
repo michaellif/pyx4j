@@ -28,9 +28,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.commons.ClientEventBus;
@@ -228,13 +226,6 @@ public class UnitStep extends ApplicationWizardStep {
 
         public AvailableUnitsFolder() {
             super(UnitTO.class, false);
-        }
-
-        @Override
-        public IFolderItemDecorator<UnitTO> createItemDecorator() {
-            BoxFolderItemDecorator<UnitTO> decor = (BoxFolderItemDecorator<UnitTO>) super.createItemDecorator();
-            decor.setExpended(false);
-            return decor;
         }
 
         @Override

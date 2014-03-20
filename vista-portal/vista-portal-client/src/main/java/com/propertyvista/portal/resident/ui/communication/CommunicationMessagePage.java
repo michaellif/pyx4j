@@ -37,13 +37,13 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePageView.CommunicationMessagePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMessageDTO> {
@@ -52,7 +52,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
 
     private final Button btnReplay;
 
-    private final OpenMessageFolder messagesFolder;
+    private final OpenMessageFolder messagesFolder = new OpenMessageFolder();
 
     public CommunicationMessagePage(CommunicationMessagePageView view) {
         super(CommunicationMessageDTO.class, view, "Message", ThemeColor.contrast5);
@@ -64,12 +64,6 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
             }
         });
 
-        messagesFolder = new OpenMessageFolder();
-        inheritEditable(false);
-        inheritViewable(false);
-        inheritEnabled(false);
-        setEditable(true);
-        setEnabled(true);
         asWidget().setStyleName(com.propertyvista.portal.shared.themes.EntityViewTheme.StyleName.EntityView.name());
     }
 
@@ -95,18 +89,11 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         return mainPanel;
     }
 
-    private class OpenMessageFolder extends VistaBoxFolder<CommunicationMessage> {
+    private class OpenMessageFolder extends PortalBoxFolder<CommunicationMessage> {
 
         public OpenMessageFolder() {
-            super(CommunicationMessage.class, false);
-            setAddable(true);
-        }
-
-        @Override
-        public BoxFolderItemDecorator<CommunicationMessage> createItemDecorator() {
-            BoxFolderItemDecorator<CommunicationMessage> decor = (BoxFolderItemDecorator<CommunicationMessage>) super.createItemDecorator();
-            decor.setExpended(false);
-            return decor;
+            super(CommunicationMessage.class, true);
+            setExpended(false);
         }
 
         @Override
@@ -242,7 +229,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-            if (getValue().isPrototype() || getValue().text() == null || getValue().text().isNull()) {
+            if (getValue().isPrototype() || getValue().id().isNull()) {
                 BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);

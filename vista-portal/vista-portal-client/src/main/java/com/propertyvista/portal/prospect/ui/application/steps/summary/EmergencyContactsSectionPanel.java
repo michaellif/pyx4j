@@ -13,28 +13,15 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-
-import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.EmergencyContactsStep;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
 
 public class EmergencyContactsSectionPanel extends AbstractSectionPanel {
 
-    private final EmergencyContactFolder emergencyContactFolder = new EmergencyContactFolder(false) {
-        @Override
-        public IFolderItemDecorator<EmergencyContact> createItemDecorator() {
-            BoxFolderItemDecorator<EmergencyContact> decor = (BoxFolderItemDecorator<EmergencyContact>) super.createItemDecorator();
-            decor.setExpended(false);
-            return decor;
-        }
-    };
-
     public EmergencyContactsSectionPanel(int index, SummaryForm form, EmergencyContactsStep step) {
         super(index, OnlineApplicationWizardStepMeta.EmergencyContacts.toString(), form, step);
 
-        addField(proto().applicant().emergencyContacts(), emergencyContactFolder, false);
+        addField(proto().applicant().emergencyContacts(), new EmergencyContactFolder(false), false);
     }
 }

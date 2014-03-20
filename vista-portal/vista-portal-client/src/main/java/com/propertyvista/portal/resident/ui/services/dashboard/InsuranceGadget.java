@@ -24,14 +24,11 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceCertificateSummaryDTO;
@@ -39,6 +36,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.Insuran
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
@@ -122,19 +120,11 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
         }
     }
 
-    private class InsuranceCertificatesFolder extends VistaBoxFolder<InsuranceCertificateSummaryDTO> {
+    private class InsuranceCertificatesFolder extends PortalBoxFolder<InsuranceCertificateSummaryDTO> {
 
         public InsuranceCertificatesFolder() {
-            super(InsuranceCertificateSummaryDTO.class, true);
-            setOrderable(false);
-            setAddable(false);
-            setEditable(false);
-        }
-
-        @Override
-        public IFolderItemDecorator<InsuranceCertificateSummaryDTO> createItemDecorator() {
-            BoxFolderItemDecorator<InsuranceCertificateSummaryDTO> decor = (BoxFolderItemDecorator<InsuranceCertificateSummaryDTO>) super.createItemDecorator();
-            return decor;
+            super(InsuranceCertificateSummaryDTO.class, false);
+            setExpended(true);
         }
 
         @Override
@@ -151,9 +141,6 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
             public InsuranceCertificateViewer() {
                 super(InsuranceCertificateSummaryDTO.class);
-
-                setViewable(true);
-                inheritViewable(false);
             }
 
             @Override

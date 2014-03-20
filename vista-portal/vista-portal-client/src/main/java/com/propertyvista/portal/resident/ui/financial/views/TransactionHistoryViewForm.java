@@ -22,15 +22,13 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHistoryDTO> {
@@ -54,17 +52,10 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
         return content;
     }
 
-    class InvoiceLineItemFolder extends VistaBoxFolder<InvoiceLineItem> {
+    class InvoiceLineItemFolder extends PortalBoxFolder<InvoiceLineItem> {
 
         public InvoiceLineItemFolder() {
             super(InvoiceLineItem.class, false);
-        }
-
-        @Override
-        public IFolderItemDecorator<InvoiceLineItem> createItemDecorator() {
-            BoxFolderItemDecorator<InvoiceLineItem> decor = (BoxFolderItemDecorator<InvoiceLineItem>) super.createItemDecorator();
-            decor.setExpended(false);
-            return decor;
         }
 
         @Override
@@ -79,9 +70,6 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
 
             public InvoiceLineItemViewer() {
                 super(InvoiceLineItem.class);
-
-                setViewable(true);
-                inheritViewable(false);
             }
 
             @Override

@@ -29,6 +29,8 @@ public class PortalBoxFolder<E extends IEntity> extends CEntityFolder<E> {
 
     private final String itemName;
 
+    private boolean expended = true;
+
     public PortalBoxFolder(Class<E> clazz) {
         this(clazz, true);
     }
@@ -48,11 +50,18 @@ public class PortalBoxFolder<E extends IEntity> extends CEntityFolder<E> {
         setAddable(modifyable);
         setRemovable(modifyable);
         setOrderable(modifyable);
+
+        expended = modifyable;
+    }
+
+    public void setExpended(boolean expended) {
+        this.expended = expended;
     }
 
     @Override
     public IFolderItemDecorator<E> createItemDecorator() {
         BoxFolderItemDecorator<E> decor = new BoxFolderItemDecorator<E>(VistaImages.INSTANCE);
+        decor.setExpended(expended);
         return decor;
     }
 

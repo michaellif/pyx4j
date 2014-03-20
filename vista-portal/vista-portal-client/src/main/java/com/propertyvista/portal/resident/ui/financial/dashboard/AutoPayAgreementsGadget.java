@@ -33,7 +33,6 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -42,6 +41,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummary
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -103,7 +103,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         }
     }
 
-    private class AutoPayFolder extends VistaBoxFolder<AutoPayInfoDTO> {
+    private class AutoPayFolder extends PortalBoxFolder<AutoPayInfoDTO> {
 
         private final AutoPaysView parentView;
 

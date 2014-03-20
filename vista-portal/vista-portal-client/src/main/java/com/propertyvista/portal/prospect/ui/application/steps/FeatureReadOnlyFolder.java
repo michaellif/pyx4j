@@ -20,8 +20,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -36,13 +34,6 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
     public FeatureReadOnlyFolder() {
         super(BillableItem.class, false);
         setNoDataNotificationWidget(null);
-    }
-
-    @Override
-    public IFolderItemDecorator<BillableItem> createItemDecorator() {
-        BoxFolderItemDecorator<BillableItem> decor = (BoxFolderItemDecorator<BillableItem>) super.createItemDecorator();
-        decor.setExpended(false);
-        return decor;
     }
 
     @Override

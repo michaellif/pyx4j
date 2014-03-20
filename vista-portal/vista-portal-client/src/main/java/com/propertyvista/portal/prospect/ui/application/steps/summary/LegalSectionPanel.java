@@ -22,10 +22,6 @@ public class LegalSectionPanel extends AbstractSectionPanel {
     public LegalSectionPanel(int index, SummaryForm form, LegalStep step) {
         super(index, OnlineApplicationWizardStepMeta.Legal.toString(), form, step);
 
-        LegalTermsFolder legalTermsFolder = new LegalTermsFolder();
-        legalTermsFolder.setViewable(true);
-        addField(proto().legalTerms(), legalTermsFolder, false);
-
+        addField(proto().legalTerms(), new LegalTermsFolder(false), false);
     }
-
 }

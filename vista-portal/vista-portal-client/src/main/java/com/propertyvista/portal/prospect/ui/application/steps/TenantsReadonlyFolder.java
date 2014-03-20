@@ -18,8 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -34,13 +32,6 @@ public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
     public TenantsReadonlyFolder() {
         super(TenantDTO.class, false);
         setNoDataNotificationWidget(null);
-    }
-
-    @Override
-    public IFolderItemDecorator<TenantDTO> createItemDecorator() {
-        BoxFolderItemDecorator<TenantDTO> decor = (BoxFolderItemDecorator<TenantDTO>) super.createItemDecorator();
-        decor.setExpended(false);
-        return decor;
     }
 
     @Override

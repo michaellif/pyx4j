@@ -57,13 +57,5 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
 
             return content;
         }
-
-        @Override
-        protected void onValueSet(boolean populate) {
-            super.onValueSet(populate);
-            // disable editing of finalized deposits:
-            setEditable(getValue().lifecycle().isNull());
-        }
-
     }
 }

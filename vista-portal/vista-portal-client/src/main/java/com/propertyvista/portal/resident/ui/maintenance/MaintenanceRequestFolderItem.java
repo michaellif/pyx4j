@@ -50,8 +50,6 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
         super(MaintenanceRequestStatusDTO.class);
 
         this.presenter = presenter;
-        setViewable(true);
-        inheritViewable(false);
     }
 
     @Override

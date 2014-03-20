@@ -19,17 +19,15 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboardViewImpl> {
 
@@ -82,20 +80,10 @@ public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboar
         }
     }
 
-    private class ClosedMaintenanceRequestsFolder extends VistaBoxFolder<MaintenanceRequestStatusDTO> {
+    private class ClosedMaintenanceRequestsFolder extends PortalBoxFolder<MaintenanceRequestStatusDTO> {
 
         public ClosedMaintenanceRequestsFolder() {
-            super(MaintenanceRequestStatusDTO.class, true);
-            setOrderable(false);
-            setAddable(false);
-            setEditable(false);
-        }
-
-        @Override
-        public IFolderItemDecorator<MaintenanceRequestStatusDTO> createItemDecorator() {
-            BoxFolderItemDecorator<MaintenanceRequestStatusDTO> decor = (BoxFolderItemDecorator<MaintenanceRequestStatusDTO>) super.createItemDecorator();
-            decor.setExpended(false);
-            return decor;
+            super(MaintenanceRequestStatusDTO.class, false);
         }
 
         @Override

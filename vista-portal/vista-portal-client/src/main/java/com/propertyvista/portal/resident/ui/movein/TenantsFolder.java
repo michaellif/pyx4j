@@ -21,8 +21,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -36,17 +34,7 @@ public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
     private static final I18n i18n = I18n.get(TenantsFolder.class);
 
     public TenantsFolder() {
-        super(LeaseTermTenant.class, i18n.tr("Tenant"));
-        setOrderable(false);
-        setAddable(false);
-        setRemovable(false);
-    }
-
-    @Override
-    public IFolderItemDecorator<LeaseTermTenant> createItemDecorator() {
-        BoxFolderItemDecorator<LeaseTermTenant> decor = (BoxFolderItemDecorator<LeaseTermTenant>) super.createItemDecorator();
-        decor.setExpended(false);
-        return decor;
+        super(LeaseTermTenant.class, i18n.tr("Tenant"), false);
     }
 
     @Override

@@ -25,14 +25,12 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateScan> {
+public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateScan> {
 
     private final static I18n i18n = I18n.get(CertificateScanFolder.class);
 

@@ -34,7 +34,6 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
@@ -43,6 +42,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodS
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -101,7 +101,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
     }
 
-    private class PaymentMethodFolder extends VistaBoxFolder<PaymentMethodInfoDTO> {
+    private class PaymentMethodFolder extends PortalBoxFolder<PaymentMethodInfoDTO> {
 
         private final PaymentMethodsView parentView;
 
@@ -115,13 +115,8 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
             setOrderable(false);
             setAddable(false);
             setRemovable(true);
-        }
 
-        @Override
-        public IFolderItemDecorator<PaymentMethodInfoDTO> createItemDecorator() {
-            BoxFolderItemDecorator<PaymentMethodInfoDTO> decor = (BoxFolderItemDecorator<PaymentMethodInfoDTO>) super.createItemDecorator();
-            decor.setExpended(false);
-            return decor;
+            setExpended(false);
         }
 
         @Override
