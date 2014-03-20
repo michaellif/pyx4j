@@ -79,6 +79,9 @@ public class ChargesSummaryGadget extends FlowPanel {
             for (BillableItem billableItem : onlineApplication.selectedFeatures()) {
                 contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getValue()));
             }
+
+            contentBuilder
+                    .append(formatCharge(onlineApplication.totalMonthlyCharge().getValue(), onlineApplication.totalMonthlyCharge().getMeta().getCaption()));
         }
         monthlySection.setContentHTML(contentBuilder.length() > 0 ? contentBuilder.toString() : "&nbsp;");
     }
@@ -104,7 +107,7 @@ public class ChargesSummaryGadget extends FlowPanel {
     }
 
     private String formatCharge(BigDecimal amount, String title) {
-        return title + ": " + amount + "</br>";
+        return title + "&nbsp;" + amount + "</br>";
     }
 
     class InfoSection extends FlowPanel {
