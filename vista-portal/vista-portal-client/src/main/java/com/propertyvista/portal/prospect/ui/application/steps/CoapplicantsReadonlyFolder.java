@@ -18,6 +18,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -30,8 +32,14 @@ public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> 
     private static final I18n i18n = I18n.get(CoapplicantsReadonlyFolder.class);
 
     public CoapplicantsReadonlyFolder() {
-        super(CoapplicantDTO.class, i18n.tr("Co-Applicant"));
-        setViewable(true);
+        super(CoapplicantDTO.class, false);
+    }
+
+    @Override
+    public IFolderItemDecorator<CoapplicantDTO> createItemDecorator() {
+        BoxFolderItemDecorator<CoapplicantDTO> decor = (BoxFolderItemDecorator<CoapplicantDTO>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override

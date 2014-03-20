@@ -36,7 +36,11 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
     private static final I18n i18n = I18n.get(EmergencyContactFolder.class);
 
     public EmergencyContactFolder() {
-        super(EmergencyContact.class, i18n.tr("Emergency Contact"));
+        this(true);
+    }
+
+    public EmergencyContactFolder(boolean modifiable) {
+        super(EmergencyContact.class, i18n.tr("Emergency Contact"), modifiable);
     }
 
     @Override
