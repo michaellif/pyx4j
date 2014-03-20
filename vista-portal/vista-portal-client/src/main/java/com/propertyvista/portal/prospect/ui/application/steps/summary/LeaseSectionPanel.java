@@ -39,7 +39,7 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
         addField(proto().leaseTo());
 
         addCaption(i18n.tr("Lease Options"));
-        addField(proto().selectedService().agreedPrice(), i18n.tr("Unit Rent Price"));
+        addField(proto().selectedService().agreedPrice(), i18n.tr("Unit Rent"));
         addField(proto().selectedFeatures(), new FeatureReadOnlyFolder(), false);
         addField(proto().totalMonthlyCharge());
 

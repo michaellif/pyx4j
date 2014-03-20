@@ -988,17 +988,17 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private String retrieveUtilities(LeaseTerm term) {
         assert (!term.isValueDetached());
 
-        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.Attached);
 
-        String res = new String();
+        StringBuffer res = new StringBuffer();
         for (BuildingUtility utility : term.version().utilities()) {
-            if (!res.isEmpty()) {
-                res += ";";
+            if (res.length() > 0) {
+                res.append(", ");
             }
-            res += utility.getStringView();
+            res.append(utility.name().getStringView());
         }
 
-        return res;
+        return res.toString();
     }
 
     private List<UnitTO> retriveAvailableUnits(Floorplan floorplanId, LogicalDate moveIn) {
