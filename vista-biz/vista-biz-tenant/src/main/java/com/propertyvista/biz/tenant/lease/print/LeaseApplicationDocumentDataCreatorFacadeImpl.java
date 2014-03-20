@@ -35,6 +35,7 @@ import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermTenantDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAboutYouSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
@@ -92,6 +93,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         LeaseApplicationDocumentDataPeopleSectionDTO peopleSection = EntityFactory.create(LeaseApplicationDocumentDataPeopleSectionDTO.class);
         details.peopleSection().add(peopleSection);
 
+        LeaseApplicationDocumentDataAboutYouSectionDTO aboutYouSection = EntityFactory.create(LeaseApplicationDocumentDataAboutYouSectionDTO.class);
+        details.aboutYouSection().add(aboutYouSection);
         return data;
     }
 

@@ -10,6 +10,7 @@
 	<parameter name="applicants" class="com.pyx4j.entity.core.IList"/>
     <field name="leaseSection" class="com.pyx4j.entity.core.IList"/>
     <field name="peopleSection" class="com.pyx4j.entity.core.IList"/>
+    <field name="aboutYouSection" class="com.pyx4j.entity.core.IList"/>
 	<background>
 		<band height="750" splitType="Stretch">
 			<image scaleImage="FillFrame" hAlign="Right" vAlign="Top" isUsingCache="true">
@@ -110,6 +111,13 @@
 				<reportElement x="104" y="0" width="450" height="1"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{peopleSection})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseApplicationPeopleSection")]]></subreportExpression>
+			</subreport>
+		</band>
+        <band height="1" splitType="Stretch">
+			<subreport>
+				<reportElement x="104" y="0" width="450" height="1"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{aboutYouSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseApplicationAboutYouSection")]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

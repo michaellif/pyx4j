@@ -13,17 +13,36 @@
  */
 package com.propertyvista.dto.leaseapplicationdocument;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface LeaseApplicationDocumentDataSectionsDTO extends IEntity {
+public interface LeaseApplicationDocumentDataAboutYouSectionDTO extends IEntity {
 
-    IList<LeaseApplicationDocumentDataLeaseSectionDTO> leaseSection();
+    // Personal Information:
+    IPrimitive<String> firstName();
 
-    IList<LeaseApplicationDocumentDataPeopleSectionDTO> peopleSection();
+    IPrimitive<String> lastName();
 
-    IList<LeaseApplicationDocumentDataAboutYouSectionDTO> aboutYouSection();
+    IPrimitive<String> middleName();
+
+    IPrimitive<String> namePrefix();
+
+    IPrimitive<String> nameSuffix();
+
+    IPrimitive<String> gender();
+
+    IPrimitive<LogicalDate> birthDate();
+
+    // Contact Information:
+    IPrimitive<String> homePhone();
+
+    IPrimitive<String> mobilePhone();
+
+    IPrimitive<String> workPhone();
+
+    IPrimitive<String> email();
 
 }
