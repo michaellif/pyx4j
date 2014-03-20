@@ -18,6 +18,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
+import com.propertyvista.portal.prospect.ui.application.steps.FeatureReadOnlyFolder;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
 import com.propertyvista.portal.prospect.ui.application.steps.TenantsReadonlyFolder;
 
@@ -27,6 +28,7 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
 
     public LeaseSectionPanel(int index, SummaryForm form, LeaseStep step) {
         super(index, OnlineApplicationWizardStepMeta.Lease.toString(), form, step);
+
         addCaption(i18n.tr("Unit"));
         addField(proto().unit().info().number());
         addField(proto().unit().building().info().address());
@@ -37,12 +39,12 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
         addField(proto().leaseTo());
 
         addCaption(i18n.tr("Lease Options"));
-        addField(proto().selectedService().agreedPrice());
+        addField(proto().selectedService().agreedPrice(), i18n.tr("Unit Rent Price"));
+        addField(proto().selectedFeatures(), new FeatureReadOnlyFolder(), false);
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             addCaption(i18n.tr("Peoples"));
             addField(proto().tenants(), new TenantsReadonlyFolder(), false);
         }
     }
-
 }

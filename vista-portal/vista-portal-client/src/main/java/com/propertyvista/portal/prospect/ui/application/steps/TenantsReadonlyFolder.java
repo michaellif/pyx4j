@@ -32,7 +32,7 @@ public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
     private static final I18n i18n = I18n.get(TenantsReadonlyFolder.class);
 
     public TenantsReadonlyFolder() {
-        super(TenantDTO.class, i18n.tr("Co-Applicant"));
+        super(TenantDTO.class, i18n.tr("Co-Applicant"), false);
         setViewable(true);
     }
 
@@ -47,9 +47,8 @@ public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof TenantDTO) {
             return new TenantForm();
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 
     class TenantForm extends CEntityForm<TenantDTO> {

@@ -13,8 +13,12 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalAssetFolder;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalIncomeFolder;
@@ -24,18 +28,31 @@ public class FinancialSectionPanel extends AbstractSectionPanel {
 
     private static final I18n i18n = I18n.get(FinancialSectionPanel.class);
 
+    private final PersonalIncomeFolder personalIncomeFolder = new PersonalIncomeFolder(false) {
+        @Override
+        public IFolderItemDecorator<CustomerScreeningIncome> createItemDecorator() {
+            BoxFolderItemDecorator<CustomerScreeningIncome> decor = (BoxFolderItemDecorator<CustomerScreeningIncome>) super.createItemDecorator();
+            decor.setExpended(false);
+            return decor;
+        }
+    };
+
+    private final PersonalAssetFolder personalAssetFolder = new PersonalAssetFolder(false) {
+        @Override
+        public IFolderItemDecorator<CustomerScreeningPersonalAsset> createItemDecorator() {
+            BoxFolderItemDecorator<CustomerScreeningPersonalAsset> decor = (BoxFolderItemDecorator<CustomerScreeningPersonalAsset>) super.createItemDecorator();
+            decor.setExpended(false);
+            return decor;
+        }
+    };
+
     public FinancialSectionPanel(int index, SummaryForm form, FinancialStep step) {
         super(index, OnlineApplicationWizardStepMeta.Financial.toString(), form, step);
 
         addCaption(i18n.tr("Income"));
-        PersonalIncomeFolder personalIncomeFolder = new PersonalIncomeFolder();
-        personalIncomeFolder.setViewable(true);
         addField(proto().applicant().incomes(), personalIncomeFolder, false);
 
         addCaption(i18n.tr("Assets"));
-        PersonalAssetFolder personalAssetFolder = new PersonalAssetFolder();
-        personalIncomeFolder.setViewable(true);
         addField(proto().applicant().assets(), personalAssetFolder, false);
-
     }
 }

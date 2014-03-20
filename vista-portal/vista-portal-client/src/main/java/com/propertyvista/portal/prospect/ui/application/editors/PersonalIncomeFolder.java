@@ -38,7 +38,11 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
     private ApplicationDocumentationPolicy documentationPolicy;
 
     public PersonalIncomeFolder() {
-        super(CustomerScreeningIncome.class, i18n.tr("Personal Income"));
+        this(true);
+    }
+
+    public PersonalIncomeFolder(boolean modifiable) {
+        super(CustomerScreeningIncome.class, i18n.tr("Personal Income"), modifiable);
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {

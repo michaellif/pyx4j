@@ -35,7 +35,11 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
     private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
 
     public PersonalAssetFolder() {
-        super(CustomerScreeningPersonalAsset.class, i18n.tr("Personal Asset"));
+        this(true);
+    }
+
+    public PersonalAssetFolder(boolean modifiable) {
+        super(CustomerScreeningPersonalAsset.class, i18n.tr("Personal Asset"), modifiable);
     }
 
     @Override
