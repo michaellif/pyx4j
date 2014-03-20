@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
-import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 
 public interface LeaseApplicationDocumentPdfCreatorFacade {
 

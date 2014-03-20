@@ -57,7 +57,6 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadSe
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -390,22 +389,22 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     private void uploadApplicationDocument() {
-        new UploadApplicationDocumentDialog(getCustomers()).show();
+        new UploadApplicationDocumentDialog(getParticipants()).show();
     }
 
     private void downloadApplicationDocument() {
-        new DownloadApplicationDocumentDialog(getCustomers()).show();
+        new DownloadApplicationDocumentDialog(getParticipants()).show();
     }
 
-    private List<Customer> getCustomers() {
-        List<Customer> customers = new LinkedList<>();
+    private List<LeaseTermParticipant<?>> getParticipants() {
+        List<LeaseTermParticipant<?>> leaseTermPariticipants = new LinkedList<>();
         for (LeaseTermTenant leaseTermTenant : getForm().getValue().currentTerm().version().tenants()) {
-            customers.add(leaseTermTenant.leaseParticipant().customer());
+            leaseTermPariticipants.add(leaseTermTenant);
         }
         for (LeaseTermGuarantor leaseTermGuarantor : getForm().getValue().currentTerm().version().guarantors()) {
-            customers.add(leaseTermGuarantor.leaseParticipant().customer());
+            leaseTermPariticipants.add(leaseTermGuarantor);
         }
-        return customers;
+        return leaseTermPariticipants;
     }
 
     private class CreditCheckSubscribeDialog extends Dialog implements YesNoOption {
@@ -430,11 +429,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private class DownloadApplicationDocumentDialog extends OkCancelDialog {
 
-        private final SelectCustomerForm form;
+        private final SelectParticipantForm form;
 
-        public DownloadApplicationDocumentDialog(List<Customer> customers) {
+        public DownloadApplicationDocumentDialog(List<LeaseTermParticipant<?>> participants) {
             super(i18n.tr("Download Blank Application Document "));
-            form = new SelectCustomerForm(customers);
+            form = new SelectParticipantForm(participants);
             form.initContent();
             form.populateNew();
             setBody(form);
@@ -446,7 +445,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             form.revalidate();
             if (form.isValid()) {
                 ((LeaseApplicationViewerView.Presenter) LeaseApplicationViewerViewImpl.this.getPresenter()).downloadBlankLeaseApplicationDocument(form
-                        .getValue().selectCustomer());
+                        .getValue().selectParticipant());
                 return true;
             } else {
                 return false;
@@ -456,29 +455,29 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     @Transient
-    public interface SelectCustomer extends IEntity {
-        Customer selectCustomer();
+    public interface SelectParticipant extends IEntity {
+        LeaseTermParticipant<?> selectParticipant();
     }
 
-    private static class SelectCustomerForm extends CEntityForm<SelectCustomer> {
+    private static class SelectParticipantForm extends CEntityForm<SelectParticipant> {
 
-        private CComboBox<Customer> selectCombo;
+        private CComboBox<LeaseTermParticipant<?>> selectCombo;
 
-        public SelectCustomerForm(List<Customer> customers) {
-            super(SelectCustomer.class);
-            selectCombo = new CComboBox<Customer>() {
+        public SelectParticipantForm(List<LeaseTermParticipant<?>> participants) {
+            super(SelectParticipant.class);
+            selectCombo = new CComboBox<LeaseTermParticipant<?>>() {
                 @Override
-                public String getItemName(Customer o) {
-                    return (o != null) ? o.getStringView() : super.getItemName(o);
+                public String getItemName(LeaseTermParticipant<?> o) {
+                    return (o != null) ? formatLeaseParticipant(o) : super.getItemName(o);
                 }
             };
-            selectCombo.setOptions(customers);
+            selectCombo.setOptions(participants);
         }
 
         @Override
         public IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().selectCustomer(), selectCombo)).componentWidth("200px").build());
+            panel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().selectParticipant(), selectCombo)).componentWidth("200px").build());
             return panel;
         }
 
@@ -488,7 +487,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         private final LeaseApplicationDocumentUploadForm form;
 
-        public UploadApplicationDocumentDialog(List<Customer> signerOptions) {
+        public UploadApplicationDocumentDialog(List<LeaseTermParticipant<?>> signerOptions) {
             super(i18n.tr("Upload Application Document"));
             form = new LeaseApplicationDocumentUploadForm(signerOptions);
             form.initContent();
@@ -511,14 +510,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private static class LeaseApplicationDocumentUploadForm extends CEntityForm<LeaseApplicationDocument> {
 
-        private CComboBox<Customer> signedByCombo;
+        private CComboBox<LeaseTermParticipant<?>> signedByCombo;
 
-        public LeaseApplicationDocumentUploadForm(List<Customer> signerOptions) {
+        public LeaseApplicationDocumentUploadForm(List<LeaseTermParticipant<?>> signerOptions) {
             super(LeaseApplicationDocument.class);
-            signedByCombo = new CComboBox<Customer>() {
+            signedByCombo = new CComboBox<LeaseTermParticipant<?>>() {
                 @Override
-                public String getItemName(Customer o) {
-                    return (o != null) ? o.getStringView() : super.getItemName(o);
+                public String getItemName(LeaseTermParticipant<?> o) {
+                    return (o != null) ? formatLeaseParticipant(o) : super.getItemName(o);
                 }
             };
             signedByCombo.setOptions(signerOptions);
@@ -543,11 +542,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                         .componentWidth("200px")
                         .build()            
             );
-            panel.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().signedByRole()))
-                        .componentWidth("200x")
-                        .build()            
-            );
             return panel;
         }//@formatter:on
 
@@ -556,6 +550,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             super.addValidations();
             get(proto().file()).setMandatory(true);
         }
+    }
+
+    private static String formatLeaseParticipant(LeaseTermParticipant<?> participant) {
+        return !participant.isNull() ? participant.leaseParticipant().customer().person().name().getStringView() + " ("
+                + participant.role().getValue().toString() + ")" : "";
     }
 
 }

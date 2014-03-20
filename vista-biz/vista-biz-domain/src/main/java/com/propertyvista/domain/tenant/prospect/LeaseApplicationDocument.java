@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
@@ -61,10 +60,6 @@ public interface LeaseApplicationDocument extends IHasFile<LeaseApplicationDocum
     @NotNull
     @ReadOnly
     @MemberColumn(notNull = true)
-    Customer signedBy();
-
-    @NotNull
-    @ReadOnly
-    IPrimitive<LeaseTermParticipant.Role> signedByRole();
+    LeaseTermParticipant<?> signedBy();
 
 }

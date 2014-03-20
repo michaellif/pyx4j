@@ -159,8 +159,14 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         OnlineApplication onlineApplication = ProspectPortalContext.getOnlineApplication();
         Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
+
+        EntityQueryCriteria<LeaseTermParticipant> participantCriteria = EntityQueryCriteria.<LeaseTermParticipant> create(LeaseTermParticipant.class);
+        participantCriteria.eq(participantCriteria.proto().leaseParticipant().customer(), ProspectPortalContext.getCustomerUserIdStub());
+        participantCriteria.eq(participantCriteria.proto().leaseParticipant().lease(), ProspectPortalContext.getLease());
+
+        LeaseTermParticipant<?> participantId = Persistence.service().retrieve(participantCriteria, AttachLevel.IdOnly);
         DeferredProcessRegistry.fork(new SignedLeaseApplicationDocumentCreatorDeferredProcess(onlineApplication.masterOnlineApplication().leaseApplication()
-                .lease().<Lease> createIdentityStub(), onlineApplication.customer().<Customer> createIdentityStub()), ThreadPoolNames.DOWNLOADS);
+                .lease().<Lease> createIdentityStub(), participantId), ThreadPoolNames.DOWNLOADS);
 
         callback.onSuccess(null);
     }

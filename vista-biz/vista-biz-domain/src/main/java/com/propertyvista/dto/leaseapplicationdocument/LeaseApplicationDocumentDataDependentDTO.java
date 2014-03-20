@@ -7,19 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-01-08
+ * Created on Mar 20, 2014
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.lease;
+package com.propertyvista.dto.leaseapplicationdocument;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.essentials.rpc.report.ReportService;
+import com.pyx4j.entity.core.IPrimitive;
 
-public interface BlankApplicationDocumentDownloadService extends ReportService<IEntity> {
+@Transient
+public interface LeaseApplicationDocumentDataDependentDTO extends IEntity {
 
-    String LEASE_ID_PARAM_KEY = "LEASE_ID";
+    IPrimitive<String> firstName();
 
-    String PARTICIPANT_ID_PARAM_KEY = "CUSTOMER_ID";
+    IPrimitive<String> lastName();
+
+    IPrimitive<String> relationship();
+
+    IPrimitive<LogicalDate> birthDate();
 
 }

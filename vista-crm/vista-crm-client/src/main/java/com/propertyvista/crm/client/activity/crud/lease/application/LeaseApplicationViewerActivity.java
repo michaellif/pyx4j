@@ -48,7 +48,6 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudServic
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
@@ -220,14 +219,14 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     }
 
     @Override
-    public void downloadBlankLeaseApplicationDocument(Customer customerId) {
+    public void downloadBlankLeaseApplicationDocument(LeaseTermParticipant<?> participantId) {
         ReportDialog reportDialog = new ReportDialog(i18n.tr("Creating Lease Application Document for Signing"), "");
         reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
 
         ReportRequest request = new ReportRequest();
         HashMap<String, Serializable> params = new HashMap<String, Serializable>();
         params.put(BlankApplicationDocumentDownloadService.LEASE_ID_PARAM_KEY, getEntityId());
-        params.put(BlankApplicationDocumentDownloadService.CUSTOMER_ID_PARAM_KEY, customerId.getPrimaryKey());
+        params.put(BlankApplicationDocumentDownloadService.PARTICIPANT_ID_PARAM_KEY, participantId.getPrimaryKey());
         request.setParameters(params);
 
         reportDialog.start(GWT.<BlankApplicationDocumentDownloadService> create(BlankApplicationDocumentDownloadService.class), request);

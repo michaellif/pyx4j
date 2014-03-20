@@ -24,8 +24,8 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 
-import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
-import com.propertyvista.dto.LeaseApplicationDocumentDataSectionsDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataSectionsDTO;
 
 public class LeaseApplicationDocumentPdfCreatorFacadeImpl implements LeaseApplicationDocumentPdfCreatorFacade {
 

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
@@ -29,10 +30,10 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentDataCreatorFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentPdfCreatorFacade;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 
 /**
  * Creates Blank Form for Lease Application
@@ -45,34 +46,37 @@ public class BlankLeaseApplicationDocumentCreatorDeferredProcess extends Abstrac
 
     private final Lease leaseId;
 
-    private final Customer customerId;
-
     private volatile Throwable error;
 
     private LeaseApplication application;
 
     private String fileName;
 
-    public BlankLeaseApplicationDocumentCreatorDeferredProcess(Lease leaseId, Customer customerId) {
+    private final LeaseTermParticipant<?> participantId;
+
+    private LeaseTermParticipant participant;
+
+    public BlankLeaseApplicationDocumentCreatorDeferredProcess(Lease leaseId, LeaseTermParticipant<?> participantId) {
         this.progress.progress.set(0);
         this.progress.progressMaximum.set(1);
 
         this.leaseId = leaseId;
-        this.customerId = customerId;
+        this.participantId = participantId;
     }
 
     @Override
     public void execute() {
         try {
             retrieveApplication();
+            retrieveLeaseParticipant();
             LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class).createApplicationDataForBlankForm(
-                    application);
+                    application, participant);
             byte[] pdfBytes = ServerSideFactory.create(LeaseApplicationDocumentPdfCreatorFacade.class).createPdf(data);
             Downloadable applicationDocument = new Downloadable(pdfBytes, MimeMap.getContentType(DownloadFormat.PDF));
             applicationDocument.save(fileName = "application.pdf");
         } catch (Throwable e) {
             error = e;
-            log.error("failed to create online application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey(), e);
+            log.error("failed to create online application for participant=" + participantId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey(), e);
         } finally {
             completed = true;
         }
@@ -104,7 +108,16 @@ public class BlankLeaseApplicationDocumentCreatorDeferredProcess extends Abstrac
         criteria.eq(criteria.proto().lease(), this.leaseId);
         application = Persistence.service().retrieve(criteria);
         if (application == null) {
-            throw new RuntimeException("Application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey() + " not found");
+            throw new RuntimeException("Application for participant=" + participantId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey() + " not found");
+        }
+    }
+
+    private void retrieveLeaseParticipant() {
+        participant = Persistence.service().retrieve(LeaseTermParticipant.class, participantId.getPrimaryKey());
+        Persistence.ensureRetrieve(participant.leaseParticipant(), AttachLevel.Attached);
+        if (participant == null) {
+            throw new RuntimeException("participant=" + participantId.getPrimaryKey() + " for lease application of lease=" + leaseId.getPrimaryKey()
+                    + " was not found");
         }
     }
 

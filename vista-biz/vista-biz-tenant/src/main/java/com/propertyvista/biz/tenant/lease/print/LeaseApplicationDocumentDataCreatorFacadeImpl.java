@@ -13,58 +13,86 @@
  */
 package com.propertyvista.biz.tenant.lease.print;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermTenantDTO;
-import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
-import com.propertyvista.dto.LeaseApplicationDocumentDataLeaseSectionDTO;
-import com.propertyvista.dto.LeaseApplicationDocumentDataSectionsDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataLeaseSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataPeopleSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataSectionsDTO;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseApplicationDocumentDataCreatorFacade {
 
     @Override
-    public LeaseApplicationDocumentDataDTO createApplicationDataForSignedForm(LeaseApplication application) {
-        return createApplicationDataForBlankForm(application); // TODO 
+    public LeaseApplicationDocumentDataDTO createApplicationDataForSignedForm(LeaseApplication application, LeaseTermParticipant<?> participant) {
+        return createApplicationDataForBlankForm(application, participant); // TODO 
     }
 
     @Override
-    public LeaseApplicationDocumentDataDTO createApplicationDataForBlankForm(LeaseApplication application) {
-        LeaseApplicationDocumentDataDTO leaseApplicationData = EntityFactory.create(LeaseApplicationDocumentDataDTO.class);
+    public LeaseApplicationDocumentDataDTO createApplicationDataForBlankForm(LeaseApplication application, LeaseTermParticipant<?> subjectParticipant) {
+        LeaseApplicationDocumentDataDTO data = makeDocumentData();
 
         Persistence.ensureRetrieve(application.lease().unit().building().landlord(), AttachLevel.Attached);
-        leaseApplicationData.landlordName().setValue(application.lease().unit().building().landlord().name().getValue());
-        leaseApplicationData.landlordAddress().setValue(application.lease().unit().building().landlord().address().getStringView());
+        data.landlordName().setValue(application.lease().unit().building().landlord().name().getValue());
+        data.landlordAddress().setValue(application.lease().unit().building().landlord().address().getStringView());
+        // TODO add landlord's LOGO
 
-        // TODO add landlord's logo
-        LeaseApplicationDocumentDataSectionsDTO details = EntityFactory.create(LeaseApplicationDocumentDataSectionsDTO.class);
-        LeaseApplicationDocumentDataLeaseSectionDTO leaseSection = EntityFactory.create(LeaseApplicationDocumentDataLeaseSectionDTO.class);
-        details.leaseSection().add(leaseSection);
-        leaseApplicationData.sections().add(details);
+        makeDataPlaceholders(data.sections().get(0));
 
-        fillLeaseData(application, leaseSection);
+        // TODO move this to only signed form
+        fillLeaseSection(data.sections().get(0).leaseSection().get(0), application);
+        fillPeopleSection(data.sections().get(0).peopleSection().get(0), application, subjectParticipant);
 
-        return leaseApplicationData;
+        return data;
     }
 
-    private void retrive(OnlineApplication onlineApplication) {
-        Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().building(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().building().landlord(), AttachLevel.Attached);
+    private void makeDataPlaceholders(LeaseApplicationDocumentDataSectionsDTO sections) {
+        sections.peopleSection().get(0).coApplicants().add(EntityFactory.create(LeaseApplicationDocumentDataCoApplicantDTO.class));
+        sections.peopleSection().get(0).coApplicants().add(EntityFactory.create(LeaseApplicationDocumentDataCoApplicantDTO.class));
 
-        for (SignedOnlineApplicationLegalTerm signedTerm : onlineApplication.legalTerms()) {
-            Persistence.ensureRetrieve(signedTerm.signature(), AttachLevel.Attached);
-        }
+        sections.peopleSection().get(0).dependents().add(EntityFactory.create(LeaseApplicationDocumentDataDependentDTO.class));
+        sections.peopleSection().get(0).dependents().add(EntityFactory.create(LeaseApplicationDocumentDataDependentDTO.class));
+        sections.peopleSection().get(0).dependents().add(EntityFactory.create(LeaseApplicationDocumentDataDependentDTO.class));
+        sections.peopleSection().get(0).dependents().add(EntityFactory.create(LeaseApplicationDocumentDataDependentDTO.class));
+    }
 
+    /**
+     * makes a structured document ready for filling with information.
+     */
+    private LeaseApplicationDocumentDataDTO makeDocumentData() {
+        LeaseApplicationDocumentDataDTO data = EntityFactory.create(LeaseApplicationDocumentDataDTO.class);
+        LeaseApplicationDocumentDataSectionsDTO details = EntityFactory.create(LeaseApplicationDocumentDataSectionsDTO.class);
+        data.sections().add(details);
+
+        LeaseApplicationDocumentDataLeaseSectionDTO leaseSection = EntityFactory.create(LeaseApplicationDocumentDataLeaseSectionDTO.class);
+        details.leaseSection().add(leaseSection);
+
+        LeaseApplicationDocumentDataPeopleSectionDTO peopleSection = EntityFactory.create(LeaseApplicationDocumentDataPeopleSectionDTO.class);
+        details.peopleSection().add(peopleSection);
+
+        return data;
     }
 
     private LeaseAgreementDocumentLegalTermTenantDTO makeApplicant(OnlineApplication onlineApplication) {
@@ -105,14 +133,14 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         return term4print;
     }
 
-    private void fillLeaseData(LeaseApplication application, LeaseApplicationDocumentDataLeaseSectionDTO leaseSection) {
+    private void fillLeaseSection(LeaseApplicationDocumentDataLeaseSectionDTO leaseSection, LeaseApplication application) {
         Persistence.ensureRetrieve(application.lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(application.lease().unit().floorplan(), AttachLevel.Attached);
         Persistence.ensureRetrieve(application.lease().unit().building(), AttachLevel.Attached);
 
         LeaseTerm term = Persistence.retrieveDraftForEdit(LeaseTerm.class, application.lease().currentTerm().getPrimaryKey());
         leaseSection.unitNumber().setValue(application.lease().unit().info().number().getValue());
-        leaseSection.address().setValue(application.lease().unit().building().info().address().getStringView());
+        leaseSection.address().setValue(AddressRetriever.getLeaseLegalAddress(application.lease()).getStringView());
         leaseSection.floorplan().setValue(application.lease().unit().floorplan().marketingName().getValue());
         leaseSection.includedUtilities().setValue(retrieveUtilities(term));
 
@@ -122,20 +150,38 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         leaseSection.unitRent().setValue(term.version().leaseProducts().serviceItem().agreedPrice().getValue());
     }
 
-    private String retrieveUtilities(LeaseTerm term) {
-        assert (!term.isValueDetached());
+    private void fillPeopleSection(LeaseApplicationDocumentDataPeopleSectionDTO peopleSection, LeaseApplication application,
+            LeaseTermParticipant<?> subjectParticipant) {
+        EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
+        criteria.eq(criteria.proto().leaseTermV().holder(), application.lease().currentTerm());
 
-        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.ToStringMembers);
-
-        String res = new String();
-        for (BuildingUtility utility : term.version().utilities()) {
-            if (!res.isEmpty()) {
-                res += ";";
+        for (LeaseTermTenant leaseTermTenant : Persistence.service().query(criteria)) {
+            if (leaseTermTenant.role().getValue() == Role.Dependent) {
+                LeaseApplicationDocumentDataDependentDTO dependent = peopleSection.dependents().$();
+                dependent.firstName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().firstName().getValue());
+                dependent.lastName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().lastName().getValue());
+                dependent.relationship().setValue(leaseTermTenant.relationship().getValue().toString());
+                dependent.birthDate().setValue(leaseTermTenant.leaseParticipant().customer().person().birthDate().getValue());
+                peopleSection.dependents().add(dependent);
+            } else if (leaseTermTenant.role().getValue() != Role.Guarantor && !leaseTermTenant.getPrimaryKey().equals(subjectParticipant.getPrimaryKey())) {
+                LeaseApplicationDocumentDataCoApplicantDTO coapplicant = peopleSection.coApplicants().$();
+                coapplicant.firstName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().firstName().getValue());
+                coapplicant.lastName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().lastName().getValue());
+                coapplicant.relationship().setValue(leaseTermTenant.relationship().getValue().toString());
+                coapplicant.email().setValue(leaseTermTenant.leaseParticipant().customer().person().email().getValue());
+                peopleSection.coApplicants().add(coapplicant);
             }
-            res += utility.getStringView();
-        }
 
-        return res;
+        }
+    }
+
+    private String retrieveUtilities(LeaseTerm term) {
+        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.ToStringMembers);
+        List<String> utilites = new ArrayList<>(term.version().utilities().size());
+        for (BuildingUtility utility : term.version().utilities()) {
+            utilites.add(utility.getStringView());
+        }
+        return StringUtils.join(utilites, ";");
     }
 
 }

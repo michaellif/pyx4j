@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
@@ -32,12 +33,12 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentDataCreatorFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentPdfCreatorFacade;
 import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
-import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 
 /**
  * Creates Signed Lease Application
@@ -50,13 +51,15 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
 
     private final Lease leaseId;
 
-    private final Customer customerId;
-
     private LeaseApplication application;
 
-    public SignedLeaseApplicationDocumentCreatorDeferredProcess(Lease leaseId, Customer customerId) {
+    private LeaseTermParticipant<?> participant;
+
+    private final LeaseTermParticipant<?> participantId;
+
+    public SignedLeaseApplicationDocumentCreatorDeferredProcess(Lease leaseId, LeaseTermParticipant<?> participantId) {
         this.leaseId = leaseId;
-        this.customerId = customerId;
+        this.participantId = participantId;
     }
 
     @Override
@@ -67,13 +70,15 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
             public Void execute() throws RuntimeException {
                 try {
                     retrieveApplication();
+                    retrieveLeaseParticipant();
+
                     LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class)
-                            .createApplicationDataForSignedForm(application);
+                            .createApplicationDataForSignedForm(application, participant);
                     byte[] pdfBytes = ServerSideFactory.create(LeaseApplicationDocumentPdfCreatorFacade.class).createPdf(data);
                     LeaseApplicationDocument documentId = saveDocument(pdfBytes);
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationDocumentCopy(documentId);
                 } catch (Throwable e) {
-                    log.error("failed to create online application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey(), e);
+                    log.error("failed to create online application for participant=" + participantId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey(), e);
                 } finally {
                     completed = true;
                 }
@@ -89,7 +94,16 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
         application = Persistence.service().retrieve(criteria);
 
         if (application == null) {
-            throw new RuntimeException("application for customer=" + customerId.getPrimaryKey() + ", lease=" + leaseId.getPrimaryKey() + " not found");
+            throw new RuntimeException("application for lease=" + leaseId.getPrimaryKey() + " not found");
+        }
+    }
+
+    private void retrieveLeaseParticipant() {
+        participant = Persistence.service().retrieve(LeaseTermParticipant.class, participantId.getPrimaryKey());
+        Persistence.ensureRetrieve(participant.leaseParticipant(), AttachLevel.Attached);
+        if (participant == null) {
+            throw new RuntimeException("participant=" + participantId.getPrimaryKey() + " for lease application of lease=" + leaseId.getPrimaryKey()
+                    + " was not found");
         }
     }
 
@@ -104,13 +118,10 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
         document.file().fileSize().setValue(pdfBytes.length);
         document.file().blobKey().setValue(blob.getPrimaryKey());
         document.lease().set(leaseId);
-        document.signedBy().set(customerId);
+        document.signedBy().set(participantId);
 
         EntityQueryCriteria<OnlineApplication> onlineApplicationCriteria = EntityQueryCriteria.create(OnlineApplication.class);
         onlineApplicationCriteria.eq(onlineApplicationCriteria.proto().masterOnlineApplication().leaseApplication(), application);
-        OnlineApplication onlineApplication = Persistence.service().retrieve(onlineApplicationCriteria);
-
-        document.signedByRole().setValue(onlineApplication.role().getValue());
         document.isSignedByInk().setValue(false);
 
         Persistence.service().persist(document);

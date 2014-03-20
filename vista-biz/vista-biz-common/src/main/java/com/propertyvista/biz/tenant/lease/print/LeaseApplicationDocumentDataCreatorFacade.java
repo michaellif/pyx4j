@@ -14,7 +14,8 @@
 package com.propertyvista.biz.tenant.lease.print;
 
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.dto.LeaseApplicationDocumentDataDTO;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 
 public interface LeaseApplicationDocumentDataCreatorFacade {
 
@@ -24,8 +25,8 @@ public interface LeaseApplicationDocumentDataCreatorFacade {
 
     }
 
-    LeaseApplicationDocumentDataDTO createApplicationDataForSignedForm(LeaseApplication application);
+    LeaseApplicationDocumentDataDTO createApplicationDataForSignedForm(LeaseApplication application, LeaseTermParticipant<?> participant);
 
-    LeaseApplicationDocumentDataDTO createApplicationDataForBlankForm(LeaseApplication application);
+    LeaseApplicationDocumentDataDTO createApplicationDataForBlankForm(LeaseApplication application, LeaseTermParticipant<?> participant);
 
 }

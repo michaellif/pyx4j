@@ -77,12 +77,6 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
                         .build()            
             );
             panel.setWidget(++row, 0, 2,
-                    new FormDecoratorBuilder(inject(proto().signedByRole()))
-                        .componentWidth("350px")
-                        .customLabel(i18n.tr("Role"))
-                        .build()            
-            );
-            panel.setWidget(++row, 0, 2,
                     new FormDecoratorBuilder(inject(proto().uploader()))
                         .componentWidth("350px")
                         .build()

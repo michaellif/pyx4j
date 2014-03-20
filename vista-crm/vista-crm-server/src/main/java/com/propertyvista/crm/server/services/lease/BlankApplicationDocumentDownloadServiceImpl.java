@@ -24,8 +24,8 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.server.common.lease.BlankLeaseApplicationDocumentCreatorDeferredProcess;
 
 public class BlankApplicationDocumentDownloadServiceImpl extends ReportServiceImpl<IEntity> implements BlankApplicationDocumentDownloadService {
@@ -33,8 +33,10 @@ public class BlankApplicationDocumentDownloadServiceImpl extends ReportServiceIm
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, (Key) reportRequest.getParameters().get(LEASE_ID_PARAM_KEY));
-        Customer customerId = EntityFactory.createIdentityStub(Customer.class, (Key) reportRequest.getParameters().get(CUSTOMER_ID_PARAM_KEY));
-        callback.onSuccess(DeferredProcessRegistry
-                .fork(new BlankLeaseApplicationDocumentCreatorDeferredProcess(leaseId, customerId), ThreadPoolNames.DOWNLOADS));
+        LeaseTermParticipant<?> participantId = EntityFactory.createIdentityStub(LeaseTermParticipant.class,
+                (Key) reportRequest.getParameters().get(PARTICIPANT_ID_PARAM_KEY));
+
+        callback.onSuccess(DeferredProcessRegistry.fork(new BlankLeaseApplicationDocumentCreatorDeferredProcess(leaseId, participantId),
+                ThreadPoolNames.DOWNLOADS));
     }
 }

@@ -167,8 +167,10 @@ class MessageTemplatesCustomizable {
     public static MailMessage createApplcationDocumentEmail(LeaseApplicationDocument documentId) {
         LeaseApplicationDocument document = Persistence.service().retrieve(LeaseApplicationDocument.class, documentId.getPrimaryKey());
         Persistence.ensureRetrieve(document.lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(document.signedBy().leaseParticipant(), AttachLevel.Attached);
+
         MailMessage email = new MailMessage();
-        email.setTo(Arrays.asList(document.signedBy().person().email().getValue()));
+        email.setTo(Arrays.asList(document.signedBy().leaseParticipant().customer().person().email().getValue()));
         email.setSender(getSender());
 
         LeaseApplicationDocumentBlob blob = Persistence.service().retrieve(LeaseApplicationDocumentBlob.class, document.file().blobKey().getValue());
@@ -178,7 +180,8 @@ class MessageTemplatesCustomizable {
 
         // TODO make proper email with blackjack and templates
         email.setSubject(i18n.tr("Lease Application"));
-        email.setTextBody(i18n.tr("Dear {0}, please find your copy of lease application.", document.signedBy().person().name().getStringView()));
+        email.setTextBody(i18n.tr("Dear {0}, please find your copy of lease application.", document.signedBy().leaseParticipant().customer().person().name()
+                .getStringView()));
 
         return email;
     }
