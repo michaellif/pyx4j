@@ -24,10 +24,12 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.NSuggestBox;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
 public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuildingDTO> {
+    private static final I18n i18n = I18n.get(BuildingSuggestBox.class);
 
     public BuildingSuggestBox() {
         setFormat(new BuildingSuggestFormat());
@@ -83,5 +85,10 @@ public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuil
         if (w != null) {
             ((MultiWordSuggestOracle) w.getEditor().getSuggestOracle()).setDefaultSuggestions(defaultSuggestions);
         }
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        return (getValue() == null) || getValue().isNull() || getValue().buildingKey().isNull();
     }
 }
