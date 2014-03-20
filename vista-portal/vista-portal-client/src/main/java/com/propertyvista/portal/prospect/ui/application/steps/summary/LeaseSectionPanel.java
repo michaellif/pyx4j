@@ -41,6 +41,7 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
         addCaption(i18n.tr("Lease Options"));
         addField(proto().selectedService().agreedPrice(), i18n.tr("Unit Rent Price"));
         addField(proto().selectedFeatures(), new FeatureReadOnlyFolder(), false);
+        addField(proto().totalMonthlyCharge());
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             addCaption(i18n.tr("Peoples"));

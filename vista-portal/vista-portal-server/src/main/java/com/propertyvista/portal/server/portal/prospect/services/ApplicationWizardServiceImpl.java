@@ -236,6 +236,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.selectedService().set(term.version().leaseProducts().serviceItem());
         to.selectedFeatures().addAll(term.version().leaseProducts().featureItems());
 
+        to.totalMonthlyCharge().setValue(to.selectedService().agreedPrice().getValue());
+        for (BillableItem feature : to.selectedFeatures()) {
+            to.totalMonthlyCharge().setValue(to.totalMonthlyCharge().getValue().add(feature.agreedPrice().getValue()));
+        }
+
         fillTenants(bo, to);
     }
 

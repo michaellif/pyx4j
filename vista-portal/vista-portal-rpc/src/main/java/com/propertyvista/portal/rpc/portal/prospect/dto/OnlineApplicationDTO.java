@@ -13,8 +13,12 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -38,16 +42,22 @@ public interface OnlineApplicationDTO extends IEntity {
 
     Building policyNode();
 
+    @Editor(type = EditorType.label)
     @Caption(name = "Included Utilities")
     IPrimitive<String> utilities();
 
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> leaseFrom();
 
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> leaseTo();
 
     BillableItem selectedService();
 
     IList<BillableItem> selectedFeatures();
+
+    @Editor(type = EditorType.moneylabel)
+    IPrimitive<BigDecimal> totalMonthlyCharge();
 
     IList<TenantDTO> tenants();
 
