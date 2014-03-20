@@ -228,6 +228,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 .getPrimaryKey());
 
         to.unit().set(filterUnitData(bo.masterOnlineApplication().leaseApplication().lease().unit()));
+        to.unit().info().legalAddress().set(AddressRetriever.getUnitLegalAddress(to.unit()));
         to.utilities().setValue(retrieveUtilities(term));
 
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());

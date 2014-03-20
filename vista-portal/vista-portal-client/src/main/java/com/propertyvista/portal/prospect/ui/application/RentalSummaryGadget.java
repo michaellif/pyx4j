@@ -80,7 +80,7 @@ public class RentalSummaryGadget extends FlowPanel {
             StringBuilder apartmentBuilder = new StringBuilder();
             apartmentBuilder.append(i18n.tr("Unit")).append(" ").append(onlineApplication.unit().info().number().getStringView()).append("<br/>");
             apartmentBuilder.append(" ").append(onlineApplication.unit().floorplan().marketingName().getStringView()).append("<br/>");
-            apartmentBuilder.append(onlineApplication.unit().building().info().address().getStringView());
+            apartmentBuilder.append(onlineApplication.unit().info().legalAddress().getStringView());
             apartmentHTML.setHTML(apartmentBuilder.toString());
             if (onlineApplication.leaseFrom().isNull() || onlineApplication.leaseTo().isNull()) {
                 termHTML.setHTML("&nbsp;");

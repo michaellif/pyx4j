@@ -50,8 +50,7 @@ public class LeaseStep extends ApplicationWizardStep {
 
         panel.setH3(++row, 0, 1, i18n.tr("Unit"));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().info().number(), new CLabel<String>())).build());
-        panel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().unit().building().info().address(), new CEntityLabel<AddressStructured>())).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>())).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().utilities(), new CLabel<String>())).build());
 
