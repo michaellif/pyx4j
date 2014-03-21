@@ -1714,6 +1714,10 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.notes_and_attachments '
 				||'SET		owner_discriminator = ''service'' '
 				||'WHERE 	owner_discriminator = ''Service'' ';
+				
+		EXECUTE 'UPDATE '||v_schema_name||'.notes_and_attachments '
+				||'SET		owner_discriminator = ''Lease'' '
+				||'WHERE 	owner_discriminator = ''LeaseTerm'' ';
          
         -- policy tables
         
