@@ -16,6 +16,7 @@ package com.propertyvista.dto.leaseapplicationdocument;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
@@ -44,5 +45,9 @@ public interface LeaseApplicationDocumentDataAboutYouSectionDTO extends IEntity 
     IPrimitive<String> workPhone();
 
     IPrimitive<String> email();
+
+    // Identification Documents
+
+    IList<LeaseApplicationDocumentDataIdentificationDocumentDTO> identificationDocuments();
 
 }

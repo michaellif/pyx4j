@@ -19,11 +19,11 @@
 	<detail>
 		<band height="231" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20"/>
+				<reportElement mode="Opaque" x="0" y="0" width="410" height="20" backcolor="#CCCCCC"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Lease:]]></text>
+				<text><![CDATA[LEASE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="20" width="100" height="20"/>

@@ -18,14 +18,18 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.tenant.ScreeningFacade;
+import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -40,6 +44,7 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataIdentificationDocumentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataLeaseSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataPeopleSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataSectionsDTO;
@@ -79,6 +84,9 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         sections.peopleSection().get(0).dependents().add(EntityFactory.create(LeaseApplicationDocumentDataDependentDTO.class));
         sections.peopleSection().get(0).dependents().add(EntityFactory.create(LeaseApplicationDocumentDataDependentDTO.class));
         sections.peopleSection().get(0).dependents().add(EntityFactory.create(LeaseApplicationDocumentDataDependentDTO.class));
+
+        sections.aboutYouSection().get(0).identificationDocuments().add(EntityFactory.create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class));
+        sections.aboutYouSection().get(0).identificationDocuments().add(EntityFactory.create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class));
     }
 
     /**
@@ -197,6 +205,18 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         aboutYou.mobilePhone().setValue(subjectParticipant.leaseParticipant().customer().person().mobilePhone().getValue());
         aboutYou.workPhone().setValue(subjectParticipant.leaseParticipant().customer().person().workPhone().getValue());
         aboutYou.email().setValue(subjectParticipant.leaseParticipant().customer().person().email().getValue());
+
+        // Identification Documents
+        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(
+                subjectParticipant.leaseParticipant().customer(), application.lease().unit().building());
+        for (IdentificationDocumentFolder id : screening.version().documents()) {
+            LeaseApplicationDocumentDataIdentificationDocumentDTO idForPrint = EntityFactory
+                    .create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class);
+            String documentType = id.idType().name().getValue() != null ? id.idType().name().getValue() : id.idType().type().getValue().toString();
+            idForPrint.documentType().setValue(documentType);
+            idForPrint.documentNumber().setValue(id.idNumber().getValue());
+            aboutYou.identificationDocuments().add(idForPrint);
+        }
 
     }
 
