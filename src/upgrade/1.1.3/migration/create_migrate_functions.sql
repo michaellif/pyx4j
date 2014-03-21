@@ -774,7 +774,7 @@ BEGIN
                 uploader                        BIGINT,
                 is_signed_by_ink                BOOLEAN                 NOT NULL,
                 signed_by                       BIGINT                  NOT NULL,
-                signed_by_role                  VARCHAR(50),
+                signed_by_discriminator 		VARCHAR(50)				NOT NULL,
                     CONSTRAINT lease_application_document_pk PRIMARY KEY(id)
         );
         
@@ -1738,7 +1738,18 @@ BEGIN
                 
         EXECUTE 'UPDATE '||v_schema_name||'.product_item '
                 ||'SET  element_discriminator = ''LockerArea'' '
-                ||'WHERE element_discriminator = ''LockerArea_BuildingElement'' ';                        
+                ||'WHERE element_discriminator = ''LockerArea_BuildingElement'' '; 
+              
+		-- prospect_portal_policy
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.prospect_portal_policy (id,node_discriminator,node,updated, '
+				||'unit_availability_span,max_exact_match_units,max_partial_match_units,fee_payment,fee_amount) '
+                ||'(SELECT nextval(''public.prospect_portal_policy_seq'') AS id, '
+                ||' ''OrganizationPoliciesNode'' AS node_discriminator, id AS node, '
+                ||'DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated, '
+                ||'20 AS unit_availability_span, 3 AS max_exact_match_units, '
+                ||'5 AS max_partial_match_units, ''none'' AS fee_payment, 0.00 AS fee_amount '
+                ||'FROM     '||v_schema_name||'.organization_policies_node )';
         
         -- restrictions_policy
         
@@ -2293,8 +2304,8 @@ BEGIN
                 REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_lease_fk FOREIGN KEY(lease) 
             REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_signed_by_fk FOREIGN KEY(signed_by) 
-            REFERENCES customer(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_signed_by_fk 
+			FOREIGN KEY(signed_by) REFERENCES lease_term_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_uploader_fk FOREIGN KEY(uploader) 
             REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_policy_fk FOREIGN KEY(policy) 
@@ -2452,8 +2463,8 @@ BEGIN
             CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 
             'Deposit', 'DepositRefund', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 
             'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
-        ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_signed_by_role_e_ck 
-            CHECK ((signed_by_role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
+        ALTER TABLE lease_application_document ADD CONSTRAINT lease_application_document_signed_by_discriminator_d_ck 
+			CHECK ((signed_by_discriminator) IN ('Guarantor', 'Tenant'));
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_apply_to_role_e_ck CHECK ((apply_to_role) IN ('All', 'Applicant', 'Guarantor'));
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_signature_format_e_ck 
                 CHECK ((signature_format) IN ('AgreeBox', 'AgreeBoxAndFullName', 'FullName', 'Initials', 'None'));
