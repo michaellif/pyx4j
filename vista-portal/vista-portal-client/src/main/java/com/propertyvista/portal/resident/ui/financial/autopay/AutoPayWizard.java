@@ -69,6 +69,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Reside
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
@@ -125,6 +126,8 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         }
     };
 
+    private final FormWidgetDecorator totalWidget;
+
     private AutoPayWizardView.Presenter presenter;
 
     public AutoPayWizard(AutoPayWizardView view) {
@@ -133,6 +136,11 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         detailsStep = addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
+
+        totalWidget = new FormWidgetDecoratorBuilder(inject(proto().total()), 100).build();
+
+        // TODO : workaround!!! onStepSelected is not called for the very first step!?? 
+        switchTotal(detailsTotalHolder);
     }
 
     private BasicFlexFormPanel createDetailsStep() {
@@ -263,6 +271,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         if (selectedStep.equals(detailsStep)) {
             switchTotal(detailsTotalHolder);
         } else if (selectedStep.equals(comfirmationStep)) {
+            switchTotal(confirmationTotalHolder);
 
             confirmationDetailsHolder.clear();
             ((AutoPayWizardView.Presenter) getView().getPresenter()).preview(new DefaultAsyncCallback<AutopayAgreement>() {
@@ -272,19 +281,11 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
                     confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
                 }
             }, getValue());
-
-            switchTotal(confirmationTotalHolder);
         }
     }
 
     private void switchTotal(SimplePanel holder) {
-        BigDecimal total = BigDecimal.ZERO;
-        if (isBound(proto().total())) {
-            total = get(proto().total()).getValue();
-            unbind(proto().total());
-        }
-        holder.setWidget(new FormWidgetDecoratorBuilder(inject(proto().total()), 100).build());
-        get(proto().total()).setValue(total);
+        holder.setWidget(totalWidget);
         get(proto().total()).setViewable(true);
     }
 
