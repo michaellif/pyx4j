@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -65,6 +66,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         // TODO move this to only signed form
         fillLeaseSection(data.sections().get(0).leaseSection().get(0), application);
         fillPeopleSection(data.sections().get(0).peopleSection().get(0), application, subjectParticipant);
+        fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), application, subjectParticipant);
 
         return data;
     }
@@ -176,6 +178,26 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             }
 
         }
+    }
+
+    private void fillAboutYouSection(LeaseApplicationDocumentDataAboutYouSectionDTO aboutYou, LeaseApplication application,
+            LeaseTermParticipant<?> subjectParticipant) {
+        // Personal Information
+        aboutYou.firstName().setValue(subjectParticipant.leaseParticipant().customer().person().name().firstName().getValue());
+        aboutYou.lastName().setValue(subjectParticipant.leaseParticipant().customer().person().name().lastName().getValue());
+        aboutYou.middleName().setValue(subjectParticipant.leaseParticipant().customer().person().name().middleName().getValue());
+        Prefix prefix = subjectParticipant.leaseParticipant().customer().person().name().namePrefix().getValue();
+        aboutYou.namePrefix().setValue(prefix != null ? prefix.toString() : "");
+        aboutYou.nameSuffix().setValue(subjectParticipant.leaseParticipant().customer().person().name().nameSuffix().getValue());
+        aboutYou.gender().setValue(subjectParticipant.leaseParticipant().customer().person().sex().getValue().toString());
+        aboutYou.birthDate().setValue(subjectParticipant.leaseParticipant().customer().person().birthDate().getValue());
+
+        // Contact Information:
+        aboutYou.homePhone().setValue(subjectParticipant.leaseParticipant().customer().person().homePhone().getValue());
+        aboutYou.mobilePhone().setValue(subjectParticipant.leaseParticipant().customer().person().mobilePhone().getValue());
+        aboutYou.workPhone().setValue(subjectParticipant.leaseParticipant().customer().person().workPhone().getValue());
+        aboutYou.email().setValue(subjectParticipant.leaseParticipant().customer().person().email().getValue());
+
     }
 
     private String retrieveUtilities(LeaseTerm term) {
