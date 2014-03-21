@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-03-19
+ * Created on Mar 21, 2014
  * @author ArtyomB
  * @version $Id$
  */
@@ -15,17 +15,14 @@ package com.propertyvista.dto.leaseapplicationdocument;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
-public interface LeaseApplicationDocumentDataSectionsDTO extends IEntity {
+public interface LeaseApplicationDocumentDataGeneralQuestionDTO extends IEntity {
 
-    IList<LeaseApplicationDocumentDataLeaseSectionDTO> leaseSection();
+    IPrimitive<String> question();
 
-    IList<LeaseApplicationDocumentDataPeopleSectionDTO> peopleSection();
+    IPrimitive<Boolean> answerYes();
 
-    IList<LeaseApplicationDocumentDataAboutYouSectionDTO> aboutYouSection();
-
-    IList<LeaseApplicationDocumentDataAdditionalInfoSectionDTO> additionalInfoSection();
-
+    IPrimitive<Boolean> answerNo();
 }

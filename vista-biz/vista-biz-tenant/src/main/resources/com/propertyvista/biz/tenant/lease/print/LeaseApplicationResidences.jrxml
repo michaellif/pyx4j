@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LeaseApplicationResidences" pageWidth="410" pageHeight="450" whenNoDataType="AllSectionsNoDetail" columnWidth="410" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="landlordName" class="java.lang.String"/>
+	<parameter name="landlordAddress" class="java.lang.String"/>
+	<parameter name="landlordLogo" class="java.io.InputStream"/>
+	<parameter name="backgroundImage" class="java.io.InputStream"/>
+	<parameter name="applicants" class="com.pyx4j.entity.core.IList"/>
+	<parameter name="landlordAgentsSignatures" class="java.util.List"/>
+	<field name="moveInDate" class="java.util.Date"/>
+	<field name="isOwned" class="java.lang.Boolean"/>
+	<field name="country" class="java.lang.String"/>
+	<field name="isRented" class="java.lang.Boolean"/>
+	<field name="province" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="postalCode" class="java.lang.String"/>
+	<field name="moveOutDate" class="java.util.Date"/>
+	<field name="streetName" class="java.lang.String"/>
+	<field name="streetDirection" class="java.lang.String"/>
+	<field name="streetNumber" class="java.lang.String"/>
+	<field name="suiteNumber" class="java.lang.String"/>
+	<field name="streetNumberSuffix" class="java.lang.String"/>
+	<detail>
+		<band height="311" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="127" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Province:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="63" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Street Name:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="122" y="41" width="288" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="148" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{postalCode}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="122" y="126" width="288" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="122" y="168" width="288" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="259" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Owned / Rented:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="127" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{province}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="63" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{streetName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="168" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Country:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="122" y="188" width="288" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="122" y="147" width="288" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="42" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Street Number Suffix:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="86" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{streetDirection}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="168" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{country}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="122" y="62" width="288" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="122" y="21" width="288" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="228" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{moveOutDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="228" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Move Out Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="148" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Postal Code:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="86" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Street Direction:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="122" y="83" width="288" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="122" y="106" width="288" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="122" y="248" width="288" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="106" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[City:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="106" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="208" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{moveInDate}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="122" y="279" width="288" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Suite Number:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="260" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{isOwned} == true ? "Owned" : $F{isRented} == true ? "Rented" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="42" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{streetNumberSuffix}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="21" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Street Number:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="143" y="0" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{suiteNumber}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="122" y="228" width="288" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="208" width="143" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Move In Date:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="143" y="20" width="267" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{streetNumber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

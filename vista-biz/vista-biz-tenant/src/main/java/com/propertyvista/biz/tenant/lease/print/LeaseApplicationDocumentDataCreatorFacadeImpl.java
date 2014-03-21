@@ -25,6 +25,8 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -41,12 +43,15 @@ import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermTenantDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAboutYouSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdditionalInfoSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataGeneralQuestionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataIdentificationDocumentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataLeaseSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataPeopleSectionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataResidenceDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataSectionsDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 
@@ -72,6 +77,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         fillLeaseSection(data.sections().get(0).leaseSection().get(0), application);
         fillPeopleSection(data.sections().get(0).peopleSection().get(0), application, subjectParticipant);
         fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), application, subjectParticipant);
+        fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), application, subjectParticipant);
 
         return data;
     }
@@ -87,10 +93,12 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         sections.aboutYouSection().get(0).identificationDocuments().add(EntityFactory.create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class));
         sections.aboutYouSection().get(0).identificationDocuments().add(EntityFactory.create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class));
+
+        // TODO add questions for filling
     }
 
     /**
-     * makes a structured document ready for filling with information.
+     * Makes a structured document ready for filling with information.
      */
     private LeaseApplicationDocumentDataDTO makeDocumentData() {
         LeaseApplicationDocumentDataDTO data = EntityFactory.create(LeaseApplicationDocumentDataDTO.class);
@@ -105,6 +113,14 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         LeaseApplicationDocumentDataAboutYouSectionDTO aboutYouSection = EntityFactory.create(LeaseApplicationDocumentDataAboutYouSectionDTO.class);
         details.aboutYouSection().add(aboutYouSection);
+
+        LeaseApplicationDocumentDataAdditionalInfoSectionDTO additionalInfoSection = EntityFactory
+                .create(LeaseApplicationDocumentDataAdditionalInfoSectionDTO.class);
+        additionalInfoSection.currentResidence().add(new EntityFactory().create(LeaseApplicationDocumentDataResidenceDTO.class));
+        additionalInfoSection.currentResidence().get(0).isRented().setValue(false);
+        additionalInfoSection.currentResidence().get(0).isRented().setValue(false);
+        details.additionalInfoSection().add(additionalInfoSection);
+
         return data;
     }
 
@@ -184,7 +200,6 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
                 coapplicant.email().setValue(leaseTermTenant.leaseParticipant().customer().person().email().getValue());
                 peopleSection.coApplicants().add(coapplicant);
             }
-
         }
     }
 
@@ -218,6 +233,49 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             aboutYou.identificationDocuments().add(idForPrint);
         }
 
+    }
+
+    private void fillAdditionalInfoSection(LeaseApplicationDocumentDataAdditionalInfoSectionDTO additionalInfo, LeaseApplication application,
+            LeaseTermParticipant<?> subjectParticipant) {
+        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(
+                subjectParticipant.leaseParticipant().customer(), application.lease().unit().building());
+
+        fillResidence(additionalInfo.currentResidence().get(0), screening.version().currentAddress());
+        if (!screening.version().previousAddress().isNull()) {
+            LeaseApplicationDocumentDataResidenceDTO residence = EntityFactory.create(LeaseApplicationDocumentDataResidenceDTO.class);
+            additionalInfo.previousResidences().add(residence);
+            fillResidence(residence, screening.version().previousAddress());
+        }
+
+        Persistence.ensureRetrieve(screening.version().legalQuestions(), AttachLevel.Attached);
+        for (String memberName : screening.version().legalQuestions().getEntityMeta().getMemberNames()) {
+            LeaseApplicationDocumentDataGeneralQuestionDTO question = EntityFactory.create(LeaseApplicationDocumentDataGeneralQuestionDTO.class);
+            question.question().setValue(screening.version().legalQuestions().getMember(memberName).getMeta().getCaption());
+            question.answerYes().setValue(screening.version().legalQuestions().getMember(memberName).getValue() == Boolean.TRUE);
+            question.answerNo().setValue(screening.version().legalQuestions().getMember(memberName).getValue() == Boolean.FALSE);
+
+            additionalInfo.generalQuestions().add(question);
+        }
+
+    }
+
+    private void fillResidence(LeaseApplicationDocumentDataResidenceDTO residence, PriorAddress address) {
+        residence.suiteNumber().setValue(address.suiteNumber().getValue());
+        residence.streetNumber().setValue(address.streetNumber().getValue());
+
+        residence.streetNumberSuffix().setValue(address.streetNumberSuffix().getValue());
+        residence.streetName().setValue(address.streetName().getValue());
+        residence.streetType().setValue(address.streetType().getValue() != null ? address.streetType().getValue().toString() : "");
+        residence.streetDirection().setValue(address.streetDirection().getValue() != null ? address.streetDirection().getValue().toString() : "");
+        residence.city().setValue(address.city().getValue());
+        residence.province().setValue(!address.province().name().isNull() ? address.province().name().getValue() : "");
+        residence.postalCode().setValue(address.postalCode().getValue());
+        residence.country().setValue(!address.province().country().name().isNull() ? address.province().country().name().getValue() : "");
+
+        residence.moveInDate().setValue(address.moveInDate().getValue());
+        residence.moveOutDate().setValue(address.moveOutDate().getValue());
+        residence.isOwned().setValue(address.rented().getValue() == OwnedRented.owned);
+        residence.isRented().setValue(address.rented().getValue() == OwnedRented.rented);
     }
 
     private String retrieveUtilities(LeaseTerm term) {

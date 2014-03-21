@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-03-19
+ * Created on Mar 21, 2014
  * @author ArtyomB
  * @version $Id$
  */
@@ -18,14 +18,16 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 
 @Transient
-public interface LeaseApplicationDocumentDataSectionsDTO extends IEntity {
+public interface LeaseApplicationDocumentDataAdditionalInfoSectionDTO extends IEntity {
 
-    IList<LeaseApplicationDocumentDataLeaseSectionDTO> leaseSection();
+    // Current Residence
+    /** This is a list just to reuse the code and report, but actually should contain only one element */
+    IList<LeaseApplicationDocumentDataResidenceDTO> currentResidence();
 
-    IList<LeaseApplicationDocumentDataPeopleSectionDTO> peopleSection();
+    // Previous Residences
+    IList<LeaseApplicationDocumentDataResidenceDTO> previousResidences();
 
-    IList<LeaseApplicationDocumentDataAboutYouSectionDTO> aboutYouSection();
-
-    IList<LeaseApplicationDocumentDataAdditionalInfoSectionDTO> additionalInfoSection();
+    // General Questions
+    IList<LeaseApplicationDocumentDataGeneralQuestionDTO> generalQuestions();
 
 }
