@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+import com.pyx4j.commons.CommonsStringUtils;
+
 public class DefaultPasswordStrengthRule implements PasswordStrengthRule {
 
     private final Collection<String> dictionary;
@@ -49,9 +51,11 @@ public class DefaultPasswordStrengthRule implements PasswordStrengthRule {
     public void setDictionary(Collection<String> dictionary) {
         this.dictionary.clear();
         for (String words : dictionary) {
-            for (String word : split(words)) {
-                if (word.length() > 2) {
-                    this.dictionary.add(word);
+            if (CommonsStringUtils.isStringSet(words)) {
+                for (String word : split(words)) {
+                    if (word.length() > 2) {
+                        this.dictionary.add(word);
+                    }
                 }
             }
         }
