@@ -989,6 +989,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             Serializable value;
             Serializable lastValue;
             if (memberMeta.getObjectClassType() == ObjectClassType.Entity) {
+                if (memberMeta.isOwnedRelationships() && !memberMeta.isCascadePersist()) {
+                    continue;
+                }
                 IEntity memberEntity = (IEntity) member.getMember(entity);
                 if (memberEntity.getAttachLevel() == AttachLevel.Detached) {
                     continue;
@@ -1009,6 +1012,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         lastValue = ((Key) lastValue).asCurrentKey();
                     }
                 }
+            } else if (memberMeta.isOwnedRelationships() && !memberMeta.isCascadePersist()
+                    && ((memberMeta.getObjectClassType() == ObjectClassType.EntityList) || (memberMeta.getObjectClassType() == ObjectClassType.EntitySet))) {
+                continue;
             } else {
                 if (member.getMember(entity).getAttachLevel() == AttachLevel.Detached) {
                     continue;
