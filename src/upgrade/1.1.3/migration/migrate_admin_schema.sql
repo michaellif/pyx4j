@@ -199,6 +199,10 @@ SET search_path = '_admin_';
                                         ADD COLUMN acknowledgment_file_name_date TIMESTAMP,
                                         ADD COLUMN acknowledgment_remote_file_date TIMESTAMP;
                                         
+        -- funds_transfer_record
+        
+        ALTER TABLE funds_transfer_record ADD COLUMN  status_change_date TIMESTAMP;
+                                        
         -- outgoing_mail_queue
         
         CREATE TABLE outgoing_mail_queue
@@ -266,6 +270,15 @@ SET search_path = '_admin_';
         SET     app = 'resident'
         WHERE   app = 'portal';
         
+        
+        -- funds_transfer_record
+        
+        UPDATE  funds_transfer_record AS r
+        SET     status_change_date = DATE_TRUNC('day',f.acknowledged)
+        FROM    _admin_.funds_transfer_file f,
+                _admin_._admin_.funds_transfer_batch b
+        WHERE   r.pad_batch = b.id 
+        AND     b.pad_file = f.id;
         
         -- vista_terms
         
