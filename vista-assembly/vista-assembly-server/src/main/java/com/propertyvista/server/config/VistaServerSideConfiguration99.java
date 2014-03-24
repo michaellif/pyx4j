@@ -14,7 +14,7 @@
 package com.propertyvista.server.config;
 
 /**
- * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista33
+ * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista99
  * 
  */
 public class VistaServerSideConfiguration99 extends VistaServerSideConfigurationCustom {

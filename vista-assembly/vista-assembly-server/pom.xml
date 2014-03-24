@@ -556,7 +556,7 @@
             <id>deploy-target-env-99</id>
             <properties>
                 <deployContext>vista99</deployContext>
-                <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
+                <vista-tomcat-url>http://qa2.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>http://env-99.birchwoodsoftwaregroup.com/</vista-app-ping-url>
             </properties>
         </profile>
