@@ -15,12 +15,15 @@ package com.propertyvista.portal.prospect.ui.application.editors;
 
 import java.util.EnumSet;
 
+import com.google.gwt.user.datepicker.client.CalendarUtil;
+
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -80,21 +83,25 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
 
         this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningIncome>>() {
             @Override
-            public FieldValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().size() == 1) {
-                    CustomerScreeningIncome income = getComponent().getValue().get(0);
-                    if (!income.details().isEmpty()) {
-                        switch (income.incomeSource().getValue()) {
-                        case fulltime:
-                        case parttime:
-                            IncomeInfoEmployer employer = income.details().cast();
-                            if (employer.ends().isNull() || employer.starts().isNull()) {
-                                return null;
+            public AbstractValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    if (getComponent().getValue().size() == 1) {
+                        CustomerScreeningIncome income = getComponent().getValue().get(0);
+                        if (!income.details().isEmpty()) {
+                            switch (income.incomeSource().getValue()) {
+                            case fulltime:
+                            case parttime:
+                                IncomeInfoEmployer employer = income.details().cast();
+                                if (!employer.ends().isNull() && !employer.starts().isNull()) {
+                                    // valid, if more than 1 year, otherwise - more employment needed! 
+                                    if (CalendarUtil.getDaysBetween(employer.starts().getValue(), employer.ends().getValue()) < 366) {
+                                        return new FieldValidationError(getComponent(), i18n.tr("You need to enter more employment information"));
+                                    }
+                                }
                             }
-                            return (employer.ends().getValue().getTime() - employer.starts().getValue().getTime()) > 365 * 24 * 60 * 60 * 1000l ? null
-                                    : new FieldValidationError(getComponent(), i18n.tr("You need to enter previous employment information"));
-                            // valid, if more than 1 year, otherwise - previous employment needed! 
                         }
+                    } else if (getComponent().getValue().size() > 3) {
+                        return new FieldValidationError(getComponent(), i18n.tr("No need to supply more than 3 items"));
                     }
                 }
                 return null;

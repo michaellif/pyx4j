@@ -17,11 +17,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -36,6 +38,23 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
 
     public PersonalAssetFolder(boolean modifyable) {
         super(CustomerScreeningPersonalAsset.class, modifyable);
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningPersonalAsset>>() {
+            @Override
+            public AbstractValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    if (getComponent().getValue().size() > 3) {
+                        return new FieldValidationError(getComponent(), i18n.tr("No need to supply more than 3 items"));
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     @Override
