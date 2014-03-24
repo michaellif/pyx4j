@@ -32,6 +32,7 @@ import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -47,6 +48,7 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataFinancialSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataGeneralQuestionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataIdentificationDocumentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataLeaseSectionDTO;
@@ -78,7 +80,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         fillPeopleSection(data.sections().get(0).peopleSection().get(0), application, subjectParticipant);
         fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), application, subjectParticipant);
         fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), application, subjectParticipant);
-
+        fillFinaincialSection(data.sections().get(0).financialSection().get(0), application, subjectParticipant);
         return data;
     }
 
@@ -93,6 +95,10 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         sections.aboutYouSection().get(0).identificationDocuments().add(EntityFactory.create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class));
         sections.aboutYouSection().get(0).identificationDocuments().add(EntityFactory.create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class));
+
+        sections.additionalInfoSection().get(0).currentResidence().add(EntityFactory.create(LeaseApplicationDocumentDataResidenceDTO.class));
+        sections.additionalInfoSection().get(0).currentResidence().get(0).isRented().setValue(true);
+        sections.additionalInfoSection().get(0).currentResidence().get(0).isOwned().setValue(true);
 
         // TODO add questions for filling
     }
@@ -116,11 +122,10 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         LeaseApplicationDocumentDataAdditionalInfoSectionDTO additionalInfoSection = EntityFactory
                 .create(LeaseApplicationDocumentDataAdditionalInfoSectionDTO.class);
-        additionalInfoSection.currentResidence().add(new EntityFactory().create(LeaseApplicationDocumentDataResidenceDTO.class));
-        additionalInfoSection.currentResidence().get(0).isRented().setValue(false);
-        additionalInfoSection.currentResidence().get(0).isRented().setValue(false);
         details.additionalInfoSection().add(additionalInfoSection);
 
+        LeaseApplicationDocumentDataFinancialSectionDTO financialSection = EntityFactory.create(LeaseApplicationDocumentDataFinancialSectionDTO.class);
+        details.financialSection().add(financialSection);
         return data;
     }
 
@@ -224,6 +229,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         // Identification Documents
         CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(
                 subjectParticipant.leaseParticipant().customer(), application.lease().unit().building());
+        Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
         for (IdentificationDocumentFolder id : screening.version().documents()) {
             LeaseApplicationDocumentDataIdentificationDocumentDTO idForPrint = EntityFactory
                     .create(LeaseApplicationDocumentDataIdentificationDocumentDTO.class);
@@ -256,6 +262,24 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
             additionalInfo.generalQuestions().add(question);
         }
+
+    }
+
+    private void fillFinaincialSection(LeaseApplicationDocumentDataFinancialSectionDTO financialInfo, LeaseApplication application,
+            LeaseTermParticipant<?> subjectParticipant) {
+
+        CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(
+                subjectParticipant.leaseParticipant().customer(), application.lease().unit().building());
+        Persistence.ensureRetrieve(financialInfo.incomeSources(), AttachLevel.Attached);
+        for (CustomerScreeningIncome income : screening.version().incomes()) {
+            Persistence.ensureRetrieve(income, AttachLevel.Attached);
+            CustomerScreeningIncome casted = income.duplicate();
+            casted.details().set(income.details().duplicate(income.details().getInstanceValueClass()));
+            financialInfo.incomeSources().add(casted);
+        }
+
+        // TODO assets
+        // TODO guarantors
 
     }
 

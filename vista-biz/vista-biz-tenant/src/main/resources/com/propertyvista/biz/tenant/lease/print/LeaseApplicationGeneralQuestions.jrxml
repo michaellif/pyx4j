@@ -14,7 +14,7 @@
 	<field name="answerNo" class="java.lang.Boolean"/>
 	<detail>
 		<band height="43" splitType="Stretch">
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="410" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{question}]]></textFieldExpression>
