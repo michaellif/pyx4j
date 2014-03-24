@@ -13,7 +13,10 @@
  */
 package com.propertyvista.server.jobs;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
@@ -42,10 +45,11 @@ public class PaymentsScheduledProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        boolean yardiIntegration = VistaDeployment.getCurrentPmc().features().yardiIntegration().isBooleanTrue();
+        boolean yardiIntegration = VistaDeployment.getCurrentPmc().features().yardiIntegration().getValue(false);
         try {
             if (yardiIntegration) {
                 ServerSideFactory.create(YardiConfigurationFacade.class).initYardiCredentialCache();
+                ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
             }
 
             ServerSideFactory.create(PaymentProcessFacade.class).processPmcScheduledPayments(context.getExecutionMonitor(), paymentType,
@@ -53,6 +57,8 @@ public class PaymentsScheduledProcess implements PmcProcess {
         } finally {
             if (yardiIntegration) {
                 ServerSideFactory.create(YardiConfigurationFacade.class).clearYardiCredentialCache();
+                long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer();
+                context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
             }
         }
     }
