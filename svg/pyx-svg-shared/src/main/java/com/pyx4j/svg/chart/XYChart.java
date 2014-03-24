@@ -36,7 +36,6 @@ import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
-import com.pyx4j.svg.basic.TickProducer;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.common.Tick;
 import com.pyx4j.svg.common.Tick.Rank;
@@ -54,9 +53,9 @@ public class XYChart extends GridBase implements IsSvgElement {
 
     private final Group container;
 
-    protected final TickProducer tickProducerY;
+    protected final AxisProducer yAxisProducer;
 
-    protected final TickProducer tickProducerX;
+    protected final AxisProducer xAxisProducer;
 
     protected Area canvas;
 
@@ -69,8 +68,8 @@ public class XYChart extends GridBase implements IsSvgElement {
         this.configurator = configurator;
         factory = configurator.getFactory();
         container = factory.createGroup();
-        tickProducerY = configurator.getYTickProducer();
-        tickProducerX = configurator.getXTickProducer();
+        yAxisProducer = configurator.getYAxisProducer();
+        xAxisProducer = configurator.getXAxisProducer();
         drawBasics();
         drawChart();
     }
@@ -112,13 +111,8 @@ public class XYChart extends GridBase implements IsSvgElement {
             min.y = 0;
         }
 
-        MetricPrefix yPostfix = MetricPrefix.getMetricPrefix(max.y - min.y);
-        max.y = yPostfix.roundUp(max.y);
-        min.y = yPostfix.roundDown(min.y);
-
-        MetricPrefix xPostfix = MetricPrefix.getMetricPrefix(max.x - min.x);
-        max.x = xPostfix.roundUp(max.x);
-        min.x = xPostfix.roundDown(min.x);
+        yAxisProducer.setValueRange(min.y, max.y);
+        xAxisProducer.setValueRange(min.x, max.x);
 
         int xstart = 0;
         int ystart = configurator.getHeight();
@@ -157,7 +151,7 @@ public class XYChart extends GridBase implements IsSvgElement {
             xstart += DEFAULT_FONT_SIZE;
         }
 
-        int maxValLabelLength = String.valueOf(max.y / yPostfix.getFactor()).length() * DEFAULT_FONT_SIZE + VALUE_LABEL_PADDING;
+        int maxValLabelLength = yAxisProducer.getMaxLabelLength() * DEFAULT_FONT_SIZE + VALUE_LABEL_PADDING;
         xstart += PADDING + maxValLabelLength;
 
         if (configurator.isLegend()) {
@@ -168,8 +162,8 @@ public class XYChart extends GridBase implements IsSvgElement {
             container.add(legend);
         }
 
-        tickProducerY.updateTicks(min.y, max.y, ystart - yend);
-        tickProducerX.updateTicks(min.x, max.x, xend - xstart);
+        yAxisProducer.setPlotSize(ystart - yend);
+        xAxisProducer.setPlotSize(xend - xstart);
 
         //adjust the canvas dimension after the calculations above are done
         canvas = new Area(xstart, ystart, xend - xstart, ystart - yend);
@@ -178,11 +172,11 @@ public class XYChart extends GridBase implements IsSvgElement {
         {
             String xGL = "";
             String xA = "M" + xstart + "," + ystart + "L" + xend + "," + ystart;
-            for (Tick tick : tickProducerX.getTicks()) {
+            for (Tick tick : xAxisProducer.getTicks()) {
                 int scaledPosition = xstart + tick.getScaledPosition();
                 if (Rank.MAJOR.equals(tick.getRank())) {
                     xA += "M" + scaledPosition + "," + ystart + "L" + scaledPosition + "," + (ystart + MAJOR_TICK_LENGTH);
-                    String valueRepr = configurator.getXLabelFormatter().format(tick.getValue() / xPostfix.getFactor()) + xPostfix.getName();
+                    String valueRepr = xAxisProducer.formatLabel(tick.getValue());
                     Text lbl = factory.createText(valueRepr, scaledPosition, ystart + PADDING);
                     lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
                     lbl.setAttribute("text-anchor", "middle");
@@ -217,11 +211,11 @@ public class XYChart extends GridBase implements IsSvgElement {
 
             String yGL = "";
             String yA = "M" + xstart + "," + ystart + "L" + xstart + "," + yend;
-            for (Tick tick : tickProducerY.getTicks()) {
+            for (Tick tick : yAxisProducer.getTicks()) {
                 if (Rank.MAJOR.equals(tick.getRank())) {
                     int scaledPosition = ystart - tick.getScaledPosition();
                     yA += "M" + xstart + "," + scaledPosition + "L" + (xstart - MAJOR_TICK_LENGTH) + "," + scaledPosition;
-                    String valueRepr = configurator.getYLabelFormatter().format(tick.getValue() / yPostfix.getFactor()) + yPostfix.getName();
+                    String valueRepr = yAxisProducer.formatLabel(tick.getValue());
                     Text lbl = factory.createText(valueRepr, lblxstart, scaledPosition);
                     lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
                     lbl.setAttribute("text-anchor", "end");
@@ -272,8 +266,8 @@ public class XYChart extends GridBase implements IsSvgElement {
             String color = colors.next();
             for (XYData value : serie.dataset) {
                 //draw series data
-                double x = Utils.round((xstart + tickProducerX.getValuePosition(value.x)), 2);
-                double y = Utils.round((ystart - tickProducerY.getValuePosition(value.y)), 2);
+                double x = Utils.round((xstart + xAxisProducer.getValuePosition(value.x)), 2);
+                double y = Utils.round((ystart - yAxisProducer.getValuePosition(value.y)), 2);
 
                 switch (configurator.getChartType()) {
                 case Line:
@@ -334,7 +328,7 @@ public class XYChart extends GridBase implements IsSvgElement {
                 }
 
                 if (configurator.isShowValueLabels()) {
-                    String valueRepr = configurator.getYLabelFormatter().format(value.y);
+                    String valueRepr = yAxisProducer.formatLabel(value.y);
                     Text label = factory.createText(valueRepr, (int) x, (int) (y - DOT_RADIUS - CHART_LABEL_PADDING));
                     label.setAttribute("text-anchor", "middle");
                     label.setFill(color);

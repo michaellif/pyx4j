@@ -100,7 +100,7 @@ public class ChartTestPanel extends SplitLayoutPanel {
     }
 
     private void createChart() {
-        if (currnetTestConfiguration != null) {
+        if ((currnetTestConfiguration != null) && (chartHolder.getOffsetWidth() != 0) && (chartHolder.getOffsetHeight() != 0)) {
             chartHolder.setWidget(testChartBuilder.createChart(chartHolder.getOffsetWidth(), chartHolder.getOffsetHeight(), currnetTestConfiguration));
         }
     }

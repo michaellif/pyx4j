@@ -26,7 +26,7 @@ import com.pyx4j.svg.basic.SvgFactory;
 
 public abstract class BasicChartConfigurator {
 
-    private static final int DEFAULT_LABEL_PRECISION = 2;
+    static final int DEFAULT_LABEL_PRECISION = 2;
 
     private final DataSource datasourse;
 
@@ -107,12 +107,14 @@ public abstract class BasicChartConfigurator {
         this.showValueLabels = showValueLabels;
     }
 
+    @Deprecated
     public void setLabelPrecision(int precision) {
         if (precision < 0) {
             this.labelPrecision = 0;
         }
     }
 
+    @Deprecated
     public int getLabelPrecision() {
         return labelPrecision;
     }

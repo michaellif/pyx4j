@@ -14,22 +14,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 3, 2014
+ * Created on Mar 24, 2014
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.svg.chart;
 
-import com.pyx4j.commons.SimpleMessageFormat;
+import java.util.List;
 
-public class DefaultLabelFormatter implements LabelFormatter {
+import com.pyx4j.svg.basic.TickProducer;
+import com.pyx4j.svg.common.Tick;
 
-    public DefaultLabelFormatter() {
-    }
+public interface AxisProducer {
 
-    @Override
-    public String format(double value) {
-        return SimpleMessageFormat.format("{0,number,#.##}", value);
-    }
+    void setTickProducer(TickProducer tickProducer);
 
+    void setLabelFormatter(LabelFormatter labelFormatter);
+
+    void setValueRange(double from, double to);
+
+    void setPlotSize(int plotSize);
+
+    List<Tick> getTicks();
+
+    double getValuePosition(double value);
+
+    String formatLabel(double value);
+
+    int getMaxLabelLength();
 }

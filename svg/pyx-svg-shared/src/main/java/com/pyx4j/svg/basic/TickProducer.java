@@ -6,7 +6,7 @@ import com.pyx4j.svg.common.Tick;
 
 public interface TickProducer {
 
-    List<Tick> updateTicks(double from, double to, int width);
+    List<Tick> updateTicks(double from, double to, int plotSize);
 
     List<Tick> getTicks();
 

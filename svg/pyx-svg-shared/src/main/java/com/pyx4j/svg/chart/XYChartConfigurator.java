@@ -23,7 +23,6 @@ package com.pyx4j.svg.chart;
 import java.util.List;
 
 import com.pyx4j.svg.basic.SvgFactory;
-import com.pyx4j.svg.basic.TickProducer;
 
 public class XYChartConfigurator extends GridBasedChartConfigurator {
 
@@ -37,11 +36,9 @@ public class XYChartConfigurator extends GridBasedChartConfigurator {
 
     private int barWidth = 10;
 
-    private LabelFormatter xLabelFormatter;
+    private AxisProducer xAxisProducer;
 
-    private LabelFormatter yLabelFormatter;
-
-    private TickProducer xTickProducer;
+    private AxisProducer yAxisProducer;
 
     public enum ChartType {
         Line, Bar, BarDistribution
@@ -89,46 +86,31 @@ public class XYChartConfigurator extends GridBasedChartConfigurator {
         this.barWidth = barWidth;
     }
 
-    public LabelFormatter getXLabelFormatter() {
-        if (xLabelFormatter == null) {
-            xLabelFormatter = new DefaultLabelFormatter(this.getLabelPrecision());
+    public AxisProducer getXAxisProducer() {
+        if (xAxisProducer == null) {
+            xAxisProducer = new DecimalAxisProducer();
         }
-        return xLabelFormatter;
+        return xAxisProducer;
     }
 
+    public void setXAxisProducer(AxisProducer xAxisProducer) {
+        this.xAxisProducer = xAxisProducer;
+    }
+
+    public AxisProducer getYAxisProducer() {
+        if (yAxisProducer == null) {
+            yAxisProducer = new DecimalAxisProducer();
+        }
+        return yAxisProducer;
+    }
+
+    public void setYAxisProducer(AxisProducer yAxisProducer) {
+        this.yAxisProducer = yAxisProducer;
+    }
+
+    @Deprecated
     public void setXLabelFormatter(LabelFormatter xLabelFormatter) {
-        this.xLabelFormatter = xLabelFormatter;
-    }
-
-    public LabelFormatter getYLabelFormatter() {
-        if (yLabelFormatter == null) {
-            yLabelFormatter = new DefaultLabelFormatter(this.getLabelPrecision());
-        }
-        return yLabelFormatter;
-    }
-
-    public void setYLabelFormatter(LabelFormatter yLabelFormatter) {
-        this.yLabelFormatter = yLabelFormatter;
-    }
-
-    public TickProducer getXTickProducer() {
-        if (xTickProducer == null) {
-            return new BasicTickProducer();
-        }
-        return xTickProducer;
-    }
-
-    public void setXTickProducer(TickProducer xTickProducer) {
-        this.xTickProducer = xTickProducer;
-    }
-
-    //This is just a proper name for super
-    public TickProducer getYTickProducer() {
-        return super.getValueTickProducer();
-    }
-
-    public void setYTickProducer(TickProducer yTickProducer) {
-        super.setValueTickProducer(yTickProducer);
+        getXAxisProducer().setLabelFormatter(xLabelFormatter);
     }
 
 }

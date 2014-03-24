@@ -56,10 +56,12 @@ public class ChartTestConfigurationFactory {
         defaultConfig.xValuesType().setValue(ChartXYTestConfiguration.ValuesType.Numbers);
         defaultConfig.xFrom().setValue(0.0);
         defaultConfig.xTo().setValue(100.0);
+        defaultConfig.xMultiplication().setValue(1.0);
 
         defaultConfig.yValuesType().setValue(ChartXYTestConfiguration.ValuesType.Numbers);
         defaultConfig.yFrom().setValue(0.0);
         defaultConfig.yTo().setValue(100.0);
+        defaultConfig.yMultiplication().setValue(1.0);
 
         return defaultConfig;
     }

@@ -29,6 +29,7 @@ import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.ChartTheme;
+import com.pyx4j.svg.chart.DurationAxisProducer;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.XYChart;
 import com.pyx4j.svg.chart.XYChartConfigurator;
@@ -67,6 +68,16 @@ public class TestXYChartBuilder implements TestChartBuilder {
         config.setChartColors(ChartTheme.bright);
         config.setPointsType(PointsType.valueOf(testConfiguration.pointsType().getValue().name()));
 
+        switch (testConfiguration.xValuesType().getValue()) {
+        case Duration:
+            config.setXAxisProducer(new DurationAxisProducer());
+        }
+
+        switch (testConfiguration.yValuesType().getValue()) {
+        case Duration:
+            config.setYAxisProducer(new DurationAxisProducer());
+        }
+
         XYChart lchart = new XYChart(config);
         g.add(lchart);
         g.setTransform("translate(" + x + "," + y + ")");
@@ -77,15 +88,19 @@ public class TestXYChartBuilder implements TestChartBuilder {
     private List<XYSeries> createXYSeries(ChartXYTestConfiguration testConfiguration) {
         List<XYSeries> series = new ArrayList<>();
 
-        double height = testConfiguration.yTo().getValue() - testConfiguration.yFrom().getValue();
-        double width = testConfiguration.xTo().getValue() - testConfiguration.xFrom().getValue();
+        double height = (testConfiguration.yTo().getValue() - testConfiguration.yFrom().getValue()) * testConfiguration.yMultiplication().getValue(1.0);
+        double width = (testConfiguration.xTo().getValue() - testConfiguration.xFrom().getValue()) * testConfiguration.xMultiplication().getValue(1.0);
+
+        double yFrom = testConfiguration.yFrom().getValue() * testConfiguration.yMultiplication().getValue(1.0);
+        double xFrom = testConfiguration.xFrom().getValue() * testConfiguration.xMultiplication().getValue(1.0);
+
         double xStep = width / (testConfiguration.points().getValue() - 1);
         {
             XYSeries serie = new XYSeries("sine");
             series.add(serie);
             for (int i = 0; i < testConfiguration.points().getValue(); i++) {
-                double x = testConfiguration.xFrom().getValue() + i * xStep;
-                double y = testConfiguration.yFrom().getValue() + 0.5 * height + (height / 2) * Math.sin(4.0 * Math.PI * x / width);
+                double x = xFrom + i * xStep;
+                double y = yFrom + 0.5 * height + (height / 2) * Math.sin(4.0 * Math.PI * x / width);
                 serie.add(x, y);
             }
         }
@@ -94,8 +109,8 @@ public class TestXYChartBuilder implements TestChartBuilder {
             XYSeries serie = new XYSeries("cosine");
             series.add(serie);
             for (int i = 0; i < testConfiguration.points().getValue() - 1; i++) {
-                double x = (xStep / 2) + testConfiguration.xFrom().getValue() + i * xStep;
-                double y = testConfiguration.yFrom().getValue() + 0.5 * height + (height / 2) * Math.cos(4.0 * Math.PI * x / width);
+                double x = (xStep / 2) + xFrom + i * xStep;
+                double y = yFrom + 0.5 * height + (height / 2) * Math.cos(4.0 * Math.PI * x / width);
                 serie.add(x, y);
             }
         }

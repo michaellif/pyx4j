@@ -59,6 +59,10 @@ public interface ChartXYTestConfiguration extends ChartTestConfiguration {
     IPrimitive<Double> xTo();
 
     @NotNull
+    @Format("0.000")
+    IPrimitive<Double> xMultiplication();
+
+    @NotNull
     IPrimitive<ValuesType> yValuesType();
 
     @NotNull
@@ -68,4 +72,8 @@ public interface ChartXYTestConfiguration extends ChartTestConfiguration {
     @NotNull
     @Format("0.000")
     IPrimitive<Double> yTo();
+
+    @NotNull
+    @Format("0.000")
+    IPrimitive<Double> yMultiplication();
 }
