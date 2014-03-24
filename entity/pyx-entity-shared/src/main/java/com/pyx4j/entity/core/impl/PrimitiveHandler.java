@@ -237,6 +237,10 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
             //Assert value is not detached, simple trick just to call the function and discard result
             assert getValue() != this;
             return (((IPrimitive<?>) other).isNull());
+        } else if (this.getValueClass().equals(BigDecimal.class)) {
+            @SuppressWarnings("unchecked")
+            IPrimitive<BigDecimal> otherBigDecimalPrimitive = (IPrimitive<BigDecimal>) other;
+            return ((BigDecimal) this.getValue()).compareTo(otherBigDecimalPrimitive.getValue()) == 0;
         } else {
             return this.getValue().equals(((IPrimitive<?>) other).getValue());
         }
