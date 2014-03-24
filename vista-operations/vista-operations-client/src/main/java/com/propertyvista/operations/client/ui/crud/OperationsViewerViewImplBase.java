@@ -85,6 +85,8 @@ public class OperationsViewerViewImplBase<E extends IEntity> extends AbstractVie
 
     @Override
     public void populate(E value) {
+        reset();
+
         super.populate(value);
 
         if (editButton != null) {

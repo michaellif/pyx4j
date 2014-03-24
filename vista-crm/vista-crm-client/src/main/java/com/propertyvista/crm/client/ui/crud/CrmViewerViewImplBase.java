@@ -259,6 +259,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     @Override
     public void populate(E value) {
+        reset();
+
         super.populate(value);
 
         if (value instanceof IVersionedEntity) {
