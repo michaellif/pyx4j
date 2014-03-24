@@ -73,6 +73,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class EmailTemplateRootObjectLoader {
+
     private static final I18n i18n = I18n.get(EmailTemplateRootObjectLoader.class);
 
     public static <T extends IEntity> T loadRootObject(T tObj, EmailTemplateContext context) {
@@ -82,15 +83,19 @@ public class EmailTemplateRootObjectLoader {
         if (tObj instanceof CompanyInfoT) {
             CompanyInfoT t = (CompanyInfoT) tObj;
             PmcCompanyInfo info = Persistence.service().retrieve(EntityQueryCriteria.create(PmcCompanyInfo.class));
-            t.CompanyName().setValue(info.companyName().getValue());
-            for (PmcCompanyInfoContact cont : info.contacts()) {
-                if (cont.type().isNull()) {
-                    continue;
-                } else if (cont.type().getValue().equals(CompanyInfoContactType.administrator)) {
-                    t.Administrator().ContactName().set(cont.name());
-                    t.Administrator().Phone().set(cont.phone());
-                    t.Administrator().Email().set(cont.email());
+            if (info != null) {
+                t.CompanyName().setValue(info.companyName().getValue());
+                for (PmcCompanyInfoContact cont : info.contacts()) {
+                    if (cont.type().isNull()) {
+                        continue;
+                    } else if (cont.type().getValue().equals(CompanyInfoContactType.administrator)) {
+                        t.Administrator().ContactName().set(cont.name());
+                        t.Administrator().Phone().set(cont.phone());
+                        t.Administrator().Email().set(cont.email());
+                    }
                 }
+            } else {
+                //TODO communicate to CRM admin about setup problem.
             }
         } else if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
