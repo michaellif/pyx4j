@@ -129,13 +129,17 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
     }
 
     private void getPMCTerm(AsyncCallback<LegalTermTO> callback, LegalTermsPolicyItem policyItem) {
-        LegalTermTO result = null;
+        LegalTermTO term = null;
         if (policyItem.enabled().isBooleanTrue()) {
-            result = EntityFactory.create(LegalTermTO.class);
-            result.caption().setValue(policyItem.caption().getValue());
-            result.content().setValue(policyItem.content().getValue());
+            term = EntityFactory.create(LegalTermTO.class);
+            term.caption().setValue(policyItem.caption().getValue());
+            term.content().setValue(policyItem.content().getValue());
         }
-        callback.onSuccess(result);
+        if (term == null) {
+            throw new RuntimeException("Terms not found");
+        } else {
+            callback.onSuccess(term);
+        }
     }
 
     private String getPMCTermCaption(LegalTermsPolicyItem policyItem) {
