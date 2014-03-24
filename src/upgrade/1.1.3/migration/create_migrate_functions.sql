@@ -1643,6 +1643,8 @@ BEGIN
 				||'			_dba_.lease_application_legal_term t )';
         
         
+        /*
+        
         -- legal_terms_policy_item
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.legal_terms_policy_item(id,caption,enabled,content) '
@@ -1651,6 +1653,7 @@ BEGIN
                 
                 
         -- legal_terms_policy
+        
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.legal_terms_policy(id,node_discriminator,node) '
                 ||'(SELECT nextval(''public.legal_terms_policy_seq'') AS id, '
@@ -1673,6 +1676,8 @@ BEGIN
                 ||'AND          c.caption = ''ONLINE APPLICATION TERMS AND CONDITIONS'' '
                 ||'AND          d.caption = ''ONLINE APPLICATION PRIVACY POLICY'' ';
         
+        
+        */ 
                 
         -- maintenance_request
         
