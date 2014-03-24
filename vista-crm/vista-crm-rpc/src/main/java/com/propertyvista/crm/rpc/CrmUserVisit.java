@@ -28,4 +28,9 @@ public class CrmUserVisit extends VistaUserVisit<CrmUser> {
     public CrmUserVisit(VistaApplication application, CrmUser user) {
         super(application, user);
     }
+
+    @Override
+    public String toString() {
+        return "CRM " + super.toString();
+    }
 }

@@ -45,4 +45,9 @@ public class ResidentUserVisit extends CustomerUserVisit {
         setChanged();
     }
 
+    @Override
+    public String toString() {
+        return "Resident " + super.toString();
+    }
+
 }

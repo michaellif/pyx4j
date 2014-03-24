@@ -45,4 +45,9 @@ public class ProspectUserVisit extends CustomerUserVisit {
         setChanged();
     }
 
+    @Override
+    public String toString() {
+        return "Prospect " + super.toString();
+    }
+
 }

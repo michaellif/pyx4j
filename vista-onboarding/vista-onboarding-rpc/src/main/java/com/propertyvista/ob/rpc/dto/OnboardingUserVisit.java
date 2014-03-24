@@ -38,4 +38,9 @@ public class OnboardingUserVisit extends UserVisit {
         this.accountCreationDeferredCorrelationId = deferredCorrelationId;
         setChanged();
     }
+
+    @Override
+    public String toString() {
+        return "Onboarding " + super.toString();
+    }
 }

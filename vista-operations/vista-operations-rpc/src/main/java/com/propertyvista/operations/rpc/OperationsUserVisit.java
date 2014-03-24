@@ -29,4 +29,9 @@ public class OperationsUserVisit extends VistaUserVisit<OperationsUser> {
         super(application, user);
     }
 
+    @Override
+    public String toString() {
+        return "Operations " + super.toString();
+    }
+
 }
