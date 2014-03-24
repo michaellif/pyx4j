@@ -39,7 +39,8 @@ public class YardiLicense {
 
     private final static Logger log = LoggerFactory.getLogger(YardiLicense.class);
 
-    static String[] errorMessage_License_Fragements = new String[] { "License invalid for Vendor", "Interface License expired" };
+    static String[] errorMessage_License_Fragements = new String[] { "License invalid for Vendor", "Interface License expired",
+            "Invalid Yardi Interface License", "Interface License Error" };
 
     private static boolean configLoaded = false;
 
@@ -119,12 +120,13 @@ public class YardiLicense {
         if (configLoaded) {
             return;
         }
-        String configUrls = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getConfigProperties()
+        String licenseLessSystemsUrlConfig = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getConfigProperties()
                 .getValue("yardi.licenseLessSystemsUrl");
-        if (configUrls != null) {
+        log.info("yardi.licenseLessSystemsUrl {}", licenseLessSystemsUrlConfig);
+        if (licenseLessSystemsUrlConfig != null) {
             synchronized (licenseLessSystemsUrl) {
                 licenseLessSystemsUrl.clear();
-                licenseLessSystemsUrl.addAll(Arrays.asList(configUrls.split(";")));
+                licenseLessSystemsUrl.addAll(Arrays.asList(licenseLessSystemsUrlConfig.split(";")));
             }
         }
         configLoaded = true;
