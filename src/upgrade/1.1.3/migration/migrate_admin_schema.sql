@@ -276,7 +276,7 @@ SET search_path = '_admin_';
         UPDATE  funds_transfer_record AS r
         SET     status_change_date = DATE_TRUNC('day',f.acknowledged)
         FROM    _admin_.funds_transfer_file f,
-                _admin_._admin_.funds_transfer_batch b
+                _admin_.funds_transfer_batch b
         WHERE   r.pad_batch = b.id 
         AND     b.pad_file = f.id;
         
