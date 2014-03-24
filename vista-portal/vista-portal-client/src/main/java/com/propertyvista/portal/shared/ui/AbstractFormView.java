@@ -51,6 +51,7 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
 
     @Override
     public void populate(E value) {
+        form.reset();
         form.populate(value);
     }
 
