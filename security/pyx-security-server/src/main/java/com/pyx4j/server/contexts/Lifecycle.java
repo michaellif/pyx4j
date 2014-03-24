@@ -217,6 +217,9 @@ public class Lifecycle {
                 newSession.setAttribute(me.getKey(), me.getValue());
             }
             beginSession(newSession);
+
+            //"Guessed User name" org.apache.catalina.manager.util.SessionUtils 
+            newSession.setAttribute("User", userVisit);
         }
         Context.getVisit().beginSession(userVisit, SecurityController.instance().authorize(behaviours));
         Context.getRequest().removeAttribute(END_SESSION_ATR);
