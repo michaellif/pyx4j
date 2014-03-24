@@ -26,12 +26,14 @@ public class FundsTransferBatchLister extends AbstractLister<FundsTransferBatchD
 
         setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().padFile().id()).columnTitle("File Id").searchableOnly().build(),    
+                    new MemberColumnDescriptor.Builder(proto().padFile().sent()).build(),
                     new MemberColumnDescriptor.Builder(proto().batchNumber()).build(),    
                     
                     new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                     new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
                     
                     new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
+                    
                     
                     new MemberColumnDescriptor.Builder(proto().bankId()).build(),
                     new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),

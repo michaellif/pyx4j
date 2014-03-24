@@ -20,7 +20,6 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -252,6 +251,7 @@ abstract class AbstractReconciliationProcessor {
             @Override
             public Void call() {
                 padDebitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.ReconciliationProcessed);
+                padDebitRecord.statusChangeDate().setValue(SystemDateManager.getDate());
                 padDebitRecord.processed().setValue(Boolean.TRUE);
                 Persistence.service().persist(padDebitRecord);
 

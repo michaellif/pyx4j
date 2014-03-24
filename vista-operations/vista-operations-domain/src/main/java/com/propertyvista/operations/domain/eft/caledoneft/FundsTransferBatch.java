@@ -98,6 +98,7 @@ public interface FundsTransferBatch extends IEntity {
     @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> batchAmount();
 
+    @Caption(name = "Ack. Code")
     IPrimitive<String> acknowledgmentStatusCode();
 
     IPrimitive<FundsTransferBatchProcessingStatus> processingStatus();

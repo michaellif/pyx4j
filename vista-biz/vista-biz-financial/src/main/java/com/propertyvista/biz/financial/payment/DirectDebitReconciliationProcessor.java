@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.Validate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
@@ -121,6 +122,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                     @Override
                     public Void call() {
                         padDebitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.ReconciliationReceived);
+                        padDebitRecord.statusChangeDate().setValue(SystemDateManager.getDate());
                         Persistence.service().persist(padDebitRecord);
                         return null;
                     }

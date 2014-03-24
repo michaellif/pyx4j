@@ -47,6 +47,7 @@ public class FundsTransferDebitRecordForm extends OperationsEntityForm<FundsTran
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processed())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().statusChangeDate())).build());
 
         panel.setH1(++row, 0, 2, i18n.tr("Reconciliation Record Paid Or Rejected"));
 

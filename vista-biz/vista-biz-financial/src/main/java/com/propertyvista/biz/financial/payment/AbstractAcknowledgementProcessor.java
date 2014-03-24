@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -130,6 +131,7 @@ abstract class AbstractAcknowledgementProcessor {
                 // mark BatchRecords as AcknowledgeProcesed
                 for (FundsTransferRecord debitRecord : padBatch.records()) {
                     debitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.AcknowledgeReject);
+                    debitRecord.statusChangeDate().setValue(SystemDateManager.getDate());
                     Persistence.service().persist(debitRecord);
                     executionMonitor.addFailedEvent("Debit Record", debitRecord.amount().getValue());
                 }
@@ -192,6 +194,7 @@ abstract class AbstractAcknowledgementProcessor {
             @Override
             public Void call() {
                 debitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.AcknowledgeProcessed);
+                debitRecord.statusChangeDate().setValue(SystemDateManager.getDate());
                 Persistence.service().persist(debitRecord);
                 return null;
             }

@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.eft.caledoneft;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -142,10 +143,13 @@ public interface FundsTransferFile extends IEntity {
 
     // Updated when batch is received from Caledon
 
+    @Caption(name = "Ack. Code")
     IPrimitive<String> acknowledgmentStatusCode();
 
+    @Caption(name = "Ack. Message")
     IPrimitive<String> acknowledgmentRejectReasonMessage();
 
+    @Caption(name = "Ack. Status")
     IPrimitive<FileAcknowledgmentStatus> acknowledgmentStatus();
 
     IPrimitive<String> acknowledgmentFileName();

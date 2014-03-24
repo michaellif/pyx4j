@@ -28,6 +28,7 @@ public class FundsTransferDebitRecordLister extends AbstractLister<FundsTransfer
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().id()).columnTitle("File Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().fileName(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().status(), false).columnTitle("File status").build(),
+                    new MemberColumnDescriptor.Builder(proto().padBatch().padFile().sent()).build(),
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().fundsTransferType()).build(),
                     
                     new MemberColumnDescriptor.Builder(proto().padBatch().pmc()).build(),
@@ -42,7 +43,9 @@ public class FundsTransferDebitRecordLister extends AbstractLister<FundsTransfer
                     new MemberColumnDescriptor.Builder(proto().transactionId()).build(),
                     new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(),
                     new MemberColumnDescriptor.Builder(proto().processed()).build(),
-                    new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
+                    new MemberColumnDescriptor.Builder(proto().processingStatus()).build(),
+                    new MemberColumnDescriptor.Builder(proto().statusChangeDate()).build()
+
             );//@formatter:on
     }
 }

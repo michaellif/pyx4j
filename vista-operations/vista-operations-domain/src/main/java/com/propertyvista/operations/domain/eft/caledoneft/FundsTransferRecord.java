@@ -14,9 +14,13 @@
 package com.propertyvista.operations.domain.eft.caledoneft;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -72,6 +76,7 @@ public interface FundsTransferRecord extends IEntity {
     @JoinColumn(TransactionId.class)
     IPrimitive<String> transactionId();
 
+    @Caption(name = "Ack. Code")
     IPrimitive<String> acknowledgmentStatusCode();
 
     // Not coming from Caledon, Record processing status
@@ -80,6 +85,9 @@ public interface FundsTransferRecord extends IEntity {
     // Not coming from Caledon, this is our processing flag
     @ToString
     IPrimitive<FundsTransferRecordProcessingStatus> processingStatus();
+
+    @Editor(type = EditorType.label)
+    IPrimitive<Date> statusChangeDate();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)

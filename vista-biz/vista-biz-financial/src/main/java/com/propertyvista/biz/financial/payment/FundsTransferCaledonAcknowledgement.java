@@ -26,12 +26,12 @@ import com.propertyvista.eft.caledoneft.CaledonPadUtils;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatchProcessingStatus;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile.FileAcknowledgmentStatus;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
-import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile.FileAcknowledgmentStatus;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckBatch;
-import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
+import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckRecord;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 
 class FundsTransferCaledonAcknowledgement {
@@ -191,6 +191,7 @@ class FundsTransferCaledonAcknowledgement {
             }
 
             padDebitRecord.processingStatus().setValue(FundsTransferRecordProcessingStatus.AcknowledgedReceived);
+            padDebitRecord.statusChangeDate().setValue(SystemDateManager.getDate());
             padDebitRecord.acknowledgmentStatusCode().setValue(akDebitRecord.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padDebitRecord);
 
