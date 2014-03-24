@@ -231,7 +231,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig(this);
+        return VistaSMTPMailServiceConfig.getDefaultConfig(this);
     }
 
     @Override

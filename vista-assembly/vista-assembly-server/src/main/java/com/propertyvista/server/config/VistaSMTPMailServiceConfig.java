@@ -34,7 +34,8 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
     private String configurationId;
 
-    static VistaSMTPMailServiceConfig getGmailConfig(VistaServerSideConfiguration sideConfiguration) {
+    static VistaSMTPMailServiceConfig getDefaultConfig(VistaServerSideConfiguration serverSideConfiguration) {
+        String prefix = "mail";
 
         VistaSMTPMailServiceConfig config = new VistaSMTPMailServiceConfig();
         config.configurationId = "Default";
@@ -43,10 +44,12 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
         config.port = 465;
         config.starttls = true;
 
-        File credentialsFile = new File(sideConfiguration.getConfigDirectory(), VistaInterfaceCredentials.mailSMTPvista);
+        config.readProperties(prefix, serverSideConfiguration.getConfigProperties().getProperties());
+
+        File credentialsFile = new File(serverSideConfiguration.getConfigDirectory(), VistaInterfaceCredentials.mailSMTPvista);
 
         Map<String, String> configProperties = PropertiesConfiguration.loadProperties(credentialsFile);
-        config.readProperties("mail", configProperties);
+        config.readProperties(prefix, configProperties);
 
         Credentials credentials = CredentialsFileStorage.getCredentials(credentialsFile);
         config.user = credentials.userName;
@@ -68,7 +71,7 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
     }
 
     static IMailServiceConfigConfiguration getCustomConfig(String prefix, VistaServerSideConfiguration serverSideConfiguration) {
-        VistaSMTPMailServiceConfig config = getGmailConfig(serverSideConfiguration);
+        VistaSMTPMailServiceConfig config = getDefaultConfig(serverSideConfiguration);
         config.configurationId = prefix;
 
         config.readProperties(prefix, serverSideConfiguration.getConfigProperties().getProperties());
