@@ -218,8 +218,10 @@ public class Lifecycle {
             }
             beginSession(newSession);
 
-            //"Guessed User name" org.apache.catalina.manager.util.SessionUtils 
-            newSession.setAttribute("User", userVisit);
+            if (userVisit != null) {
+                //"Guessed User name" org.apache.catalina.manager.util.SessionUtils 
+                newSession.setAttribute("User", userVisit);
+            }
         }
         Context.getVisit().beginSession(userVisit, SecurityController.instance().authorize(behaviours));
         Context.getRequest().removeAttribute(END_SESSION_ATR);
