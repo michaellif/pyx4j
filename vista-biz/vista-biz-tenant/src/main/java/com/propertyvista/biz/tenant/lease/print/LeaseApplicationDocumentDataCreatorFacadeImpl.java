@@ -270,12 +270,11 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(
                 subjectParticipant.leaseParticipant().customer(), application.lease().unit().building());
-        Persistence.ensureRetrieve(financialInfo.incomeSources(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
+
         for (CustomerScreeningIncome income : screening.version().incomes()) {
             Persistence.ensureRetrieve(income, AttachLevel.Attached);
-            CustomerScreeningIncome casted = income.duplicate();
-            casted.details().set(income.details().duplicate(income.details().getInstanceValueClass()));
-            financialInfo.incomeSources().add(casted);
+            financialInfo.incomeSources().add(income);
         }
 
         // TODO assets
