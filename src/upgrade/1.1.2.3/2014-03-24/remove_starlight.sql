@@ -15,4 +15,4 @@ BEGIN TRANSACTION;
 COMMIT;
 
 
-DROP FUNCTION _dba_.remove_pmc(text);
+DROP FUNCTION _dba_.remove_pmc(text,boolean);
