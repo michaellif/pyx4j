@@ -1628,7 +1628,7 @@ BEGIN
         -- lease_application_legal_policy
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_application_legal_policy (id,node_discriminator,node,updated) '
-                ||'(SELECT nextval(''public.lease_agreement_legal_policy_seq'') AS id, '
+                ||'(SELECT nextval(''public.lease_application_legal_policy_seq'') AS id, '
                 ||' ''OrganizationPoliciesNode'' AS node_discriminator, id AS node, '
                 ||'DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated '
                 ||'FROM     '||v_schema_name||'.organization_policies_node )';
@@ -1637,10 +1637,19 @@ BEGIN
 		-- lease_application_legal_term
 		
 		EXECUTE 'INSERT INTO '||v_schema_name||'.lease_application_legal_term(id,policy,title,body,apply_to_role,signature_format,order_id) '
-				||'(SELECT 	nextval(''public.lease_agreement_legal_term_seq'') AS id, '
+				||'(SELECT 	nextval(''public.lease_application_legal_term_seq'') AS id, '
 				||'			p.id AS policy,t.title,t.body,t.apply_to_role,t.signature_format,t.order_id '
 				||'FROM 	'||v_schema_name||'.lease_application_legal_policy p, '
 				||'			_dba_.lease_application_legal_term t )';
+        
+        
+        -- lease_application_confirmation_term
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_application_confirmation_term(id,policy,title,body,apply_to_role,signature_format,order_id) '
+				||'(SELECT 	nextval(''public.lease_application_confirmation_term_seq'') AS id, '
+				||'			p.id AS policy,t.title,t.body,t.apply_to_role,t.signature_format,t.order_id '
+				||'FROM 	'||v_schema_name||'.lease_application_legal_policy p, '
+				||'			_dba_.lease_application_confirmation_term t )';
         
         
         /*
