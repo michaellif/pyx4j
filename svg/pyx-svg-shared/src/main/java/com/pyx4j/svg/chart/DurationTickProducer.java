@@ -21,7 +21,6 @@
 package com.pyx4j.svg.chart;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.svg.basic.TickProducer;
@@ -40,10 +39,12 @@ public class DurationTickProducer implements TickProducer {
 
     private double toValue;
 
-    private static final List<TimeUnit> unitsOrdered = new ArrayList<>(Arrays.asList(TimeUnit.values()));
-
     public DurationTickProducer() {
-        valueTimeUnit = TimeUnit.MINUTES;
+        this(TimeUnit.MINUTES);
+    }
+
+    public DurationTickProducer(TimeUnit valueTimeUnit) {
+        this.valueTimeUnit = valueTimeUnit;
     }
 
     @Override
@@ -52,57 +53,39 @@ public class DurationTickProducer implements TickProducer {
         toValue = to;
         long duration = (long) (to - from);
 
-        System.out.println();
-        System.out.println();
+        TimeUnit stepUnit;
 
-        System.out.println("plotSize:" + plotSize);
-        System.out.println("values:[" + from + ", " + to + "]");
-        System.out.println("duration:" + duration);
-
-        TimeUnit majorStepUnit;
-        TimeUnit minorStepUnit;
-        TimeUnit microStepUnit;
-        int majorStep;
-        int minorStep;
-        int microStep;
-
-        if (valueTimeUnit.toDays(duration) > 0) {
-            majorStepUnit = TimeUnit.DAYS;
-        } else if (valueTimeUnit.toHours(duration) > 20) {
-            majorStepUnit = TimeUnit.DAYS;
+        if (valueTimeUnit.toDays(duration) > 3) {
+            stepUnit = TimeUnit.DAYS;
         } else {
-            majorStepUnit = TimeUnit.HOURS;
+            stepUnit = TimeUnit.HOURS;
         }
 
         scale = 1.0 * plotSize / duration;
-        System.out.println("scale:" + scale);
-
-        // TODO Round from and to
-
-        // One Tick per 50 pix
-        int approxNumOfMajorTicks = plotSize / 50 + 1;
-        System.out.println("approxNumOfMajorTicks:" + approxNumOfMajorTicks);
-        double approxMajorStep = (duration) / approxNumOfMajorTicks;
-        if (approxMajorStep == 0.0) {
-            approxMajorStep = 1.0;
-        }
-        System.out.println("approxMajorStep:" + approxMajorStep);
-
-        long majorStepValue = valueTimeUnit.convert(1, majorStepUnit);
-        System.out.println("majorStepValue:" + majorStepValue);
+        long stepValue = valueTimeUnit.convert(1, stepUnit);
 
         ticks = new ArrayList<>();
 
-        for (int i = 0; i < approxNumOfMajorTicks; i++) {
-            long value = (long) fromValue + i * majorStepValue;
+        Tick previousMajorTick = null;
+        for (int i = 0;; i++) {
+            long value = (long) fromValue + i * stepValue;
+            if (value > toValue) {
+                break;
+            }
+            double position = getValuePosition(value);
+            Rank rank = Rank.MAJOR;
+            if ((previousMajorTick != null) && (position - previousMajorTick.getScaledPosition() < 50)) {
+                rank = Rank.MINOR;
+            }
 
-            Tick tick = new Tick(value, Rank.MAJOR, value * scale);
+            Tick tick = new Tick(value, rank, getValuePosition(value));
             tick.scale(1);
             ticks.add(tick);
 
-            System.out.println("tick  " + tick);
+            if (rank == Rank.MAJOR) {
+                previousMajorTick = tick;
+            }
         }
-
         return null;
     }
 

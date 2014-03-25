@@ -31,13 +31,22 @@ public class DurationAxisProducer implements AxisProducer {
 
     protected LabelFormatter labelFormatter;
 
+    private final TimeUnit valueTimeUnit;
+
     private double fromValue;
 
     private double toValue;
 
+    private boolean valueRangeFixed = false;
+
     public DurationAxisProducer() {
+        this(TimeUnit.MINUTES);
+    }
+
+    public DurationAxisProducer(TimeUnit valueTimeUnit) {
+        this.valueTimeUnit = valueTimeUnit;
         labelFormatter = new DurationLabelFormatter();
-        tickProducer = new DurationTickProducer();
+        tickProducer = new DurationTickProducer(valueTimeUnit);
     }
 
     @Override
@@ -50,10 +59,37 @@ public class DurationAxisProducer implements AxisProducer {
         this.labelFormatter = labelFormatter;
     }
 
+    public void setFixedValueRange(double from, double to) {
+        setValueRange(from, to);
+        valueRangeFixed = true;
+    }
+
     @Override
     public void setValueRange(double from, double to) {
-        toValue = to;
-        fromValue = from;
+        if (valueRangeFixed) {
+            return;
+        }
+        long duration = (long) (to - from);
+
+        TimeUnit stepUnit;
+        if (valueTimeUnit.toDays(duration) > 4) {
+            stepUnit = TimeUnit.DAYS;
+        } else {
+            stepUnit = TimeUnit.HOURS;
+        }
+
+        long majorStepValue = valueTimeUnit.convert(1, stepUnit);
+
+        toValue = roundUp(to, majorStepValue);
+        fromValue = roundDown(from, majorStepValue);
+    }
+
+    private double roundUp(double value, long majorStepValue) {
+        return Math.ceil(value / majorStepValue) * majorStepValue;
+    }
+
+    private double roundDown(double value, long majorStepValue) {
+        return Math.floor(value / majorStepValue) * majorStepValue;
     }
 
     @Override
