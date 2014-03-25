@@ -160,6 +160,10 @@ public class TableModelCollections {
             }
 
             sql.append(")");
+
+            if (PersistenceTrace.traceWrite) {
+                log.info("DBWrite Insert {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
@@ -309,6 +313,9 @@ public class TableModelCollections {
                                 log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt(member.sqlOrderColumnName())
                                         + "->" + valueIdx + ")", member.sqlName());
                             }
+                            if (PersistenceTrace.traceWrite) {
+                                log.info("DBWrite Update {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                            }
                             persistenceContext.setUncommittedChanges();
                             rs.updateInt(member.sqlOrderColumnName(), valueIdx);
                             rs.updateRow();
@@ -327,6 +334,9 @@ public class TableModelCollections {
                     }
 
                     if (removeFromFoinTable) {
+                        if (PersistenceTrace.traceWrite) {
+                            log.info("DBWrite Update {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                        }
                         if (PersistenceTrace.traceSql) {
                             log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), "delete row from cursor",
                                     Trace.getCallOrigin(EntityPersistenceServiceRDB.class));

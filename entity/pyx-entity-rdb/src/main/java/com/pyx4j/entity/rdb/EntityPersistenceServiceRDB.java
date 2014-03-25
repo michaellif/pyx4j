@@ -1894,6 +1894,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
 
+            if (PersistenceTrace.traceWrite) {
+                log.info("DBWrite Delete {}\n{}", cascadedeleteDataEntity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
+
             if (!tm.delete(getPersistenceContext(), primaryKey)) {
                 throw new RuntimeException("Entity '" + entityMeta.getCaption() + "' " + primaryKey + " NotFound");
             }

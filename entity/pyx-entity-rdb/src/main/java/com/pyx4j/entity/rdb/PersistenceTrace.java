@@ -38,6 +38,8 @@ public final class PersistenceTrace {
 
     public static final boolean traceWarnings = false;
 
+    public static final boolean traceWrite = false;
+
     public static final boolean traceEntity = false;
 
     public static final List<String> traceEntities = Arrays.asList("SampleShortClassName1", "SampleShotClassName2");

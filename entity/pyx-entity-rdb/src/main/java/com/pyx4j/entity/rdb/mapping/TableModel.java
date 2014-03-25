@@ -590,6 +590,9 @@ public class TableModel {
             sql.append(getFullTableName());
             sql.append(sqlInsert());
 
+            if (PersistenceTrace.traceWrite) {
+                log.info("DBWrite Insert {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
@@ -655,6 +658,9 @@ public class TableModel {
             sql.append(getFullTableName());
             sql.append(sqlUpdate());
 
+            if (PersistenceTrace.traceWrite) {
+                log.info("DBWrite Update {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
@@ -1487,6 +1493,7 @@ public class TableModel {
             sql.append("UPDATE  ");
             sql.append(getFullTableName());
             sql.append(sqlUpdate());
+
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
