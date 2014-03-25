@@ -12,8 +12,14 @@
 	<field name="name" class="com.propertyvista.domain.person.Name"/>
 	<field name="sex" class="com.propertyvista.domain.person.Person.Sex"/>
 	<field name="birthDate" class="java.util.Date"/>
+	<field name="address" class="com.propertyvista.domain.contact.AddressSimple"/>
+	<field name="relationship" class="com.propertyvista.domain.tenant.PersonRelationship"/>
+	<field name="homePhone" class="java.lang.String"/>
+	<field name="workPhone" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="mobilePhone" class="java.lang.String"/>
 	<detail>
-		<band height="375" splitType="Stretch">
+		<band height="457" splitType="Stretch">
 			<staticText>
 				<reportElement positionType="Float" x="0" y="1" width="159" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
@@ -53,7 +59,7 @@
 			<staticText>
 				<reportElement positionType="Float" x="0" y="43" width="159" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 					<paragraph rightIndent="20"/>
 				</textElement>
 				<text><![CDATA[Middle Name:]]></text>
@@ -64,14 +70,14 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="44" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}.middleName().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="64" width="159" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 					<paragraph rightIndent="20"/>
 				</textElement>
 				<text><![CDATA[Name Prefix:]]></text>
@@ -82,14 +88,14 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="65" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}.namePrefix().getValue().toString()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="86" width="159" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 					<paragraph rightIndent="20"/>
 				</textElement>
 				<text><![CDATA[Name Suffix:]]></text>
@@ -100,7 +106,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="87" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}.nameSuffix().getValue()]]></textFieldExpression>
 			</textField>
@@ -110,14 +116,14 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="108" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sex}.toString()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="107" width="159" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 					<paragraph rightIndent="20"/>
 				</textElement>
 				<text><![CDATA[Gender:]]></text>
@@ -128,18 +134,238 @@
 			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="129" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{birthDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="128" width="159" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font isBold="true"/>
+					<font isBold="false"/>
 					<paragraph rightIndent="20"/>
 				</textElement>
 				<text><![CDATA[Birth Date:]]></text>
 			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="180" width="408" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="160" width="159" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false" isItalic="true"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Contact Info:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="180" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Relationship:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="181" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{relationship}.toString()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="140" y="201" width="268" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="140" y="222" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="201" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Home Phone:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="202" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{homePhone}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="223" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mobilePhone}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="140" y="243" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="222" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Mobile Phone:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="245" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{workPhone}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="140" y="265" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="244" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Work Phone:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="266" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="140" y="286" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="265" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[E-Mail:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="322" width="408" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="302" width="159" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false" isItalic="true"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Address:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="323" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/street1")).getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="140" y="343" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="322" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Address 1:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="140" y="363" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="342" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Address 2:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="343" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/street2")).getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="140" y="384" width="268" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="364" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/city")).getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="363" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[City:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="140" y="426" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="405" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Postal Code:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="406" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/postalCode")).getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="384" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Province/State:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="140" y="405" width="268" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="385" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/province/name")).getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="424" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="false"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Country:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="140" y="445" width="268" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="159" y="425" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/country/name")).getValue()]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
