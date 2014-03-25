@@ -88,13 +88,13 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
 
         // Save services and features:
         for (Feature feature : building.productCatalog().features()) {
-            if (feature.defaultCatalogItem().isBooleanTrue()) {
+            if (feature.defaultCatalogItem().getValue(false)) {
                 Persistence.service().persist(feature);
             }
         }
 
         for (Service service : building.productCatalog().services()) {
-            if (service.defaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().getValue(false)) {
                 Persistence.service().persist(service);
             }
         }
@@ -107,7 +107,7 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
 
         for (Service service : building.productCatalog().services()) {
-            if (service.defaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().getValue(false)) {
                 if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     ProductItem item = createUnitItem(unit, service);
                     Persistence.service().persist(item);
@@ -127,7 +127,7 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
 
         for (Service service : building.productCatalog().services()) {
-            if (service.defaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().getValue(false)) {
                 if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     updateUnitItem(unit, service);
                 }
@@ -146,7 +146,7 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
         Iterator<Service> serviceIterator = catalog.services().iterator();
         while (serviceIterator.hasNext()) {
             Service service = serviceIterator.next();
-            if (service.defaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().getValue(false)) {
                 serviceIterator.remove();
             }
         }
@@ -186,7 +186,7 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
         Iterator<Feature> featureIterator = catalog.features().iterator();
         while (featureIterator.hasNext()) {
             Feature feature = featureIterator.next();
-            if (feature.defaultCatalogItem().isBooleanTrue()) {
+            if (feature.defaultCatalogItem().getValue(false)) {
                 featureIterator.remove();
             }
         }
@@ -235,10 +235,10 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
 
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (service.defaultCatalogItem().isBooleanTrue()) {
+            if (service.defaultCatalogItem().getValue(false)) {
                 for (Feature feature : catalog.features()) {
                     Persistence.ensureRetrieve(feature, AttachLevel.Attached);
-                    if (feature.defaultCatalogItem().isBooleanTrue()) {
+                    if (feature.defaultCatalogItem().getValue(false)) {
                         service.version().features().add(feature);
                     }
                 }

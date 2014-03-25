@@ -112,11 +112,8 @@ public interface ARCode extends IEntity {
         }
 
         public static EnumSet<Type> services() {
-            if (VistaTODO.removedForProduction) {
-                return EnumSet.of(Residential);
-            } else {
-                return EnumSet.of(Residential, ResidentialShortTerm, Commercial);
-            }
+            // TDOO: currently we work with units only:
+            return unitRelatedServices();
         }
 
         public static EnumSet<Type> unitRelatedServices() {

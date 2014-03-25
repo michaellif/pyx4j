@@ -143,7 +143,7 @@ public class YardiProductCatalogProcessor {
     // ----------------------------------------------------------------------------------
     private void updateServices(ProductCatalog catalog, RentableItems rentableItems) {
         deleteServices(catalog);
-        for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.services())) {
+        for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.unitRelatedServices())) {
             ensureService(catalog, typeData);
         }
 
@@ -220,6 +220,7 @@ public class YardiProductCatalogProcessor {
 
     private Service findService(ProductCatalog catalog, final YardiRentableItemTypeData typeData) {
         return CollectionUtils.find(catalog.services(), new Predicate<Service>() {
+
 
             @Override
             public boolean evaluate(Service service) {
@@ -306,6 +307,7 @@ public class YardiProductCatalogProcessor {
 
     private Feature findFeature(ProductCatalog catalog, final YardiRentableItemTypeData typeData) {
         return CollectionUtils.find(catalog.features(), new Predicate<Feature>() {
+
 
             @Override
             public boolean evaluate(Feature feature) {

@@ -142,11 +142,11 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
             depositPanel.setVisible(!getValue().deposits().isEmpty());
 
         } else if (!getValue().item().isEmpty()) {
-            if (ARCode.Type.services().contains(getValue().item().product().holder().code().type().getValue())) {
+            if (getValue().item().product().isInstanceOf(Service.ServiceV.class)) {
                 // hide effective dates:
                 get(proto().effectiveDate()).setVisible(false);
                 get(proto().expirationDate()).setVisible(false);
-            } else if (ARCode.Type.features().contains(getValue().item().product().holder().code().type().getValue())) {
+            } else if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
                 // show/hide effective dates (hide expiration for non-recurring; show in editor, hide in viewer if empty):
                 boolean recurring = isRecurringFeature(getValue().item().product());
                 get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());

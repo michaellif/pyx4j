@@ -81,7 +81,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         // check unit catalog/lease readiness:
         if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().product().holder().code().type(), ARCode.Type.services()));
+            criteria.add(PropertyCriterion.in(criteria.proto().product().holder().code().type(), ARCode.Type.unitRelatedServices()));
             criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));
 
             to.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
