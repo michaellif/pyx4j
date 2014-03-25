@@ -101,7 +101,12 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> void persist(Iterable<T> entityIterable);
 
-    public void merge(IEntity entity);
+    /**
+     * @param entity
+     *            entity to persist
+     * @return true if there where changes and entity was updated in DB
+     */
+    public boolean merge(IEntity entity);
 
     public <T extends IEntity> void merge(Iterable<T> entityIterable);
 

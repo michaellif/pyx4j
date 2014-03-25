@@ -965,12 +965,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public void merge(IEntity entity) {
+    public boolean merge(IEntity entity) {
         startCallContext(ConnectionReason.forUpdate);
         try {
             entity = entity.cast();
             TableModel tm = tableModel(entity.getEntityMeta());
-            merge(tm, entity);
+            return merge(tm, entity);
         } finally {
             endCallContext();
         }
@@ -985,50 +985,60 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             entityMembersModificationAdapters = adapters.memberModificationAdapters();
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getAllMembers()) {
+            if (member.getMember(entity).getAttachLevel() == AttachLevel.Detached) {
+                continue;
+            }
+
             MemberMeta memberMeta = member.getMemberMeta();
-            Serializable value;
-            Serializable lastValue;
+            Object newValue;
+            Object prevValue;
             if (memberMeta.getObjectClassType() == ObjectClassType.Entity) {
                 if (memberMeta.isOwnedRelationships() && !memberMeta.isCascadePersist()) {
                     continue;
                 }
-                IEntity memberEntity = (IEntity) member.getMember(entity);
-                if (memberEntity.getAttachLevel() == AttachLevel.Detached) {
-                    continue;
-                }
-                value = memberEntity.getPrimaryKey();
+                IEntity newMemberEntity = (IEntity) member.getMember(entity);
+                newValue = newMemberEntity.getPrimaryKey();
+
+                IEntity prevMemberEntity = (IEntity) member.getMember(baseEntity);
                 // merge incomplete data
-                if (AttachLevel.Detached == member.getMember(baseEntity).getAttachLevel()) {
-                    tm.retrieveMember(getPersistenceContext(), baseEntity, (IEntity) member.getMember(baseEntity));
+                if (AttachLevel.Detached == prevMemberEntity.getAttachLevel()) {
+                    tm.retrieveMember(getPersistenceContext(), baseEntity, prevMemberEntity);
                 }
-                lastValue = ((IEntity) member.getMember(baseEntity)).getPrimaryKey();
+                prevValue = prevMemberEntity.getPrimaryKey();
 
                 // ignore version data in non versioned key
                 if (memberMeta.getAnnotation(Versioned.class) == null) {
-                    if (value != null) {
-                        value = ((Key) value).asCurrentKey();
+                    if (newValue != null) {
+                        newValue = ((Key) newValue).asCurrentKey();
                     }
-                    if (lastValue != null) {
-                        lastValue = ((Key) lastValue).asCurrentKey();
+                    if (prevValue != null) {
+                        prevValue = ((Key) prevValue).asCurrentKey();
                     }
                 }
-            } else if (memberMeta.isOwnedRelationships() && !memberMeta.isCascadePersist()
-                    && ((memberMeta.getObjectClassType() == ObjectClassType.EntityList) || (memberMeta.getObjectClassType() == ObjectClassType.EntitySet))) {
-                continue;
-            } else {
-                if (member.getMember(entity).getAttachLevel() == AttachLevel.Detached) {
+            } else if ((memberMeta.getObjectClassType() == ObjectClassType.EntityList) || (memberMeta.getObjectClassType() == ObjectClassType.EntitySet)) {
+                if (memberMeta.isOwnedRelationships() && !memberMeta.isCascadePersist()) {
                     continue;
                 }
+                ICollection<IEntity, ?> newCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                ICollection<IEntity, ?> prevCollectionMember = (ICollection<IEntity, ?>) member.getMember(baseEntity);
+                if (AttachLevel.Detached == prevCollectionMember.getAttachLevel()) {
+                    prevCollectionMember.setAttachLevel(AttachLevel.Attached);
+                    tm.retrieveMember(getPersistenceContext(), baseEntity, prevCollectionMember);
+                }
 
-                value = member.getMemberValue(entity);
-                lastValue = member.getMemberValue(baseEntity);
+                newValue = newCollectionMember;
+                prevValue = prevCollectionMember;
+
+            } else {
+                newValue = member.getMemberValue(entity);
+                prevValue = member.getMemberValue(baseEntity);
             }
-            if (!EqualsHelper.equals(lastValue, value)) {
+            if (!EqualsHelper.equals(prevValue, newValue)) {
                 updated = true;
                 ReadOnly readOnly = memberMeta.getAnnotation(ReadOnly.class);
                 if (readOnly != null) {
-                    if (!((lastValue == null) && (readOnly.allowOverrideNull()))) {
-                        log.error("Changing readonly property [{}] -> [{}]", lastValue, value);
+                    if (!((prevValue == null) && (readOnly.allowOverrideNull()))) {
+                        log.error("Changing readonly property [{}] -> [{}]", prevValue, newValue);
                         throw new Error("Changing readonly property '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
                     }
                 }
@@ -1037,8 +1047,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     for (Class<? extends MemberModificationAdapter<?>> adapterClass : memberColumn.modificationAdapters()) {
                         @SuppressWarnings("rawtypes")
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
-                        if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {
-                            log.error("Forbidden change [{}] -> [{}]", lastValue, value);
+                        if (!adapter.allowModifications(entity, memberMeta, prevValue, newValue)) {
+                            log.error("Forbidden change [{}] -> [{}]", prevValue, newValue);
                             throw new Error("Forbidden change '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
                         }
                     }
@@ -1047,8 +1057,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMembersModificationAdapters) {
                         @SuppressWarnings("rawtypes")
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
-                        if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {
-                            log.error("Forbidden change [{}] -> [{}]", lastValue, value);
+                        if (!adapter.allowModifications(entity, memberMeta, prevValue, newValue)) {
+                            log.error("Forbidden change [{}] -> [{}]", prevValue, newValue);
                             throw new Error("Forbidden change '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
                         }
                     }

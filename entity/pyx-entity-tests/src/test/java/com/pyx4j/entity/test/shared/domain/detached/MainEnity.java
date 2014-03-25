@@ -30,6 +30,8 @@ import com.pyx4j.entity.core.IPrimitive;
 @Table(prefix = "test")
 public interface MainEnity extends IEntity {
 
+    IPrimitive<String> testId();
+
     IPrimitive<String> name();
 
     @Detached

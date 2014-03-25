@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -449,7 +450,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             return KeyFactory.createKey(ent.getEntityMeta().getPersistenceName(), ent.getPrimaryKey().asLong());
         } else {
             entity = adapter.onEntityCreation(entity);
-            return persistImpl(entity, false);
+            return persistImpl(entity, false, null);
         }
     }
 
@@ -502,7 +503,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                             // attempt to attach to different entity graphs
                             throw new SecurityViolationException("Permission denied");
                         }
-                        value = persistImpl(childIEntity, merge);
+                        value = persistImpl(childIEntity, merge, null);
                         // Cascade delete
                         if (isUpdate && merge) {
                             if ((origKeyValue != null) && (origKeyValue.equals(value))) {
@@ -554,7 +555,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         value = childValue;
                     } else {
                         for (IEntity childIEntity : memberSet) {
-                            Key key = persistImpl(childIEntity, merge);
+                            Key key = persistImpl(childIEntity, merge, null);
                             childKeys.add(key);
                         }
                         value = childKeys;
@@ -595,7 +596,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     // Save Owned iEntity
                     IList<IEntity> memberList = (IList<IEntity>) iEntity.getMember(me.getKey());
                     for (IEntity childIEntity : memberList) {
-                        Key key = persistImpl(childIEntity, merge);
+                        Key key = persistImpl(childIEntity, merge, null);
                         childKeys.add(key);
                         if (childKeysOrder.length() > 0) {
                             childKeysOrder.append(',');
@@ -795,12 +796,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public void persist(IEntity iEntity) {
-        persistImpl(iEntity, false);
+        persistImpl(iEntity, false, null);
     }
 
     @Override
-    public void merge(IEntity iEntity) {
-        persistImpl(iEntity, true);
+    public boolean merge(IEntity iEntity) {
+        AtomicBoolean updated = new AtomicBoolean(false);
+        persistImpl(iEntity, true, updated);
+        return updated.get();
     }
 
     @Override
@@ -892,7 +895,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return entityUpdateWrapper;
     }
 
-    private Key persistImpl(IEntity iEntity, boolean merge) {
+    private Key persistImpl(IEntity iEntity, boolean merge, AtomicBoolean updated) {
         EntityUpdateWrapper entity = createEntity(iEntity, merge);
         if (!entity.updated) {
             // no update required
@@ -903,6 +906,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 Key keyCreated = datastore.put(entity.entity);
                 iEntity.setPrimaryKey(new com.pyx4j.commons.Key(keyCreated.getId()));
                 cacheService.put(iEntity);
+                if (updated != null) {
+                    updated.set(true);
+                }
                 return keyCreated;
             } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
                 throw new UnRecoverableRuntimeException(degradeGracefullyMessage());

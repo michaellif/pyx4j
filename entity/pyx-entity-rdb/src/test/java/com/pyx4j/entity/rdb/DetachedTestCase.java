@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.detached.DetachedCompletely;
+import com.pyx4j.entity.test.shared.domain.detached.DetachedCompletelyChildM;
 import com.pyx4j.entity.test.shared.domain.detached.DetachedEntity;
 import com.pyx4j.entity.test.shared.domain.detached.MainEnity;
 import com.pyx4j.entity.test.shared.domain.detached.MainHolderEnity;
@@ -66,6 +67,29 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
 
     public void testDetachedMemberMerge() {
         testDetachedMember(TestCaseMethod.Merge);
+    }
+
+    public void testDetachedMemberMerge2() {
+        String testId = uniqueString();
+
+        MainEnity main = EntityFactory.create(MainEnity.class);
+        main.testId().setValue(testId);
+        main.detachedEntity().name().setValue("Test v1");
+
+        srv.persist(main);
+
+        MainEnity mainR = srv.retrieve(MainEnity.class, main.getPrimaryKey());
+        srv.retrieve(mainR.detachedEntity());
+
+        Assert.assertFalse("no changes made, no save", srv.merge(mainR));
+
+        mainR.detachedEntity().name().setValue("Test v2");
+        Assert.assertTrue("changes made, save should happen", srv.merge(mainR));
+
+        MainEnity mainR2 = srv.retrieve(MainEnity.class, main.getPrimaryKey());
+        srv.retrieve(mainR2.detachedEntity());
+        Assert.assertEquals("value updated", mainR.detachedEntity().name().getValue(), mainR2.detachedEntity().name().getValue());
+
     }
 
     private void testDetachedMemberInList(TestCaseMethod testCaseMethod) {
@@ -105,8 +129,39 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         testDetachedMemberInList(TestCaseMethod.Persist);
     }
 
-    public void testDetachedMembeInListrMerge() {
+    public void testDetachedMemberInListMerge() {
         testDetachedMemberInList(TestCaseMethod.Merge);
+    }
+
+    public void testDetachedMembeInListrMerge2() {
+        MainEnity main = EntityFactory.create(MainEnity.class);
+        DetachedEntity d0 = EntityFactory.create(DetachedEntity.class);
+        d0.name().setValue("Test v1");
+        main.detachedEntities().add(d0);
+
+        srv.persist(main);
+
+        {
+            MainEnity mainR = srv.retrieve(MainEnity.class, main.getPrimaryKey());
+            Assert.assertFalse("no changes made, no save", srv.merge(mainR));
+        }
+
+        {
+            MainEnity mainR = srv.retrieve(MainEnity.class, main.getPrimaryKey());
+            srv.retrieve(mainR.detachedEntities());
+            Assert.assertFalse("no changes made, no save", srv.merge(mainR));
+        }
+
+        {
+            MainEnity mainR = srv.retrieve(MainEnity.class, main.getPrimaryKey());
+            srv.retrieve(mainR.detachedEntities());
+            mainR.detachedEntities().get(0).name().setValue("Test v2");
+            Assert.assertTrue("changes made, save should happen", srv.merge(mainR));
+
+            MainEnity mainR2 = srv.retrieve(MainEnity.class, main.getPrimaryKey());
+            srv.retrieve(mainR2.detachedEntities());
+            Assert.assertEquals("value updated", "Test v2", mainR2.detachedEntities().get(0).name().getValue());
+        }
     }
 
     public void testDetachedMemberInOwnedObject(TestCaseMethod testCaseMethod) {
@@ -283,6 +338,70 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
 
         Assert.assertEquals(testId, o.child().testId().getValue());
         Assert.assertEquals(cName2, o.child().name().getValue());
+    }
+
+    public void testDetachedCompletelyMerge2() {
+        String testId = uniqueString();
+
+        DetachedCompletely main = EntityFactory.create(DetachedCompletely.class);
+        main.testId().setValue(testId);
+        main.child().name().setValue("Test v1");
+
+        srv.persist(main);
+
+        {
+            DetachedCompletely mainR = srv.retrieve(DetachedCompletely.class, main.getPrimaryKey());
+            Assert.assertFalse("no changes made, no save", srv.merge(mainR));
+        }
+
+        {
+            DetachedCompletely mainR = srv.retrieve(DetachedCompletely.class, main.getPrimaryKey());
+            srv.retrieveMember(mainR.child());
+            Assert.assertFalse("no changes made, no save", srv.merge(mainR));
+        }
+
+        {
+            DetachedCompletely mainR = srv.retrieve(DetachedCompletely.class, main.getPrimaryKey());
+            srv.retrieveMember(mainR.child());
+            mainR.child().name().setValue("Test v2");
+            Assert.assertTrue("changes made, save should happen", srv.merge(mainR));
+
+            DetachedCompletely mainR2 = srv.retrieve(DetachedCompletely.class, main.getPrimaryKey());
+            srv.retrieveMember(mainR2.child());
+            Assert.assertEquals("value updated", "Test v2", mainR2.child().name().getValue());
+        }
+
+    }
+
+    public void testDetachedCompletelyInListMerge2() {
+        DetachedCompletely main = EntityFactory.create(DetachedCompletely.class);
+        DetachedCompletelyChildM d0 = EntityFactory.create(DetachedCompletelyChildM.class);
+        d0.name().setValue("Test v1");
+        main.children().add(d0);
+
+        srv.persist(main);
+
+        {
+            DetachedCompletely mainR = srv.retrieve(DetachedCompletely.class, main.getPrimaryKey());
+            Assert.assertFalse("no changes made, no save", srv.merge(mainR));
+        }
+
+        {
+            DetachedCompletely mainR = srv.retrieve(DetachedCompletely.class, main.getPrimaryKey());
+            srv.retrieveMember(mainR.children());
+            Assert.assertFalse("no changes made, no save", srv.merge(mainR));
+        }
+
+        {
+            DetachedCompletely mainR = srv.retrieve(DetachedCompletely.class, main.getPrimaryKey());
+            srv.retrieveMember(mainR.children());
+            mainR.children().iterator().next().name().setValue("Test v2");
+            Assert.assertTrue("changes made, save should happen", srv.merge(mainR));
+
+            DetachedCompletely mainR2 = srv.retrieve(DetachedCompletely.class, main.getPrimaryKey());
+            srv.retrieveMember(mainR2.children());
+            Assert.assertEquals("value updated", "Test v2", mainR.children().iterator().next().name().getValue());
+        }
     }
 
     public void testDetachedMerge() {
