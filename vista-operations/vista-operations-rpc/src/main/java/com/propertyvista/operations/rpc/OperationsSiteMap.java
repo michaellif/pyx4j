@@ -30,6 +30,9 @@ public class OperationsSiteMap implements SiteMap {
     }
 
     public static class Login extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
     }
 
     /**
@@ -45,6 +48,9 @@ public class OperationsSiteMap implements SiteMap {
 
     @PlaceProperties(caption = "Reset Password")
     public static class PasswordReset extends AppPlace {
+        {
+            setStable(false);
+        }
     }
 
     @PlaceProperties(caption = "Change Password")
