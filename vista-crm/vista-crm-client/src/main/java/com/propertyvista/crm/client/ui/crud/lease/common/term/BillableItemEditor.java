@@ -158,32 +158,26 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         return flexPanel;
     }
 
+    @Override
+    public void onReset() {
+        super.onReset();
+
+        if (isEditable()) {
+            get(proto().item()).setEditable(true);
+
+            get(proto().agreedPrice()).setEditable(false);
+            get(proto().agreedPrice()).setMandatory(false);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
         // tweak UI for ProductItem:
-        if (VistaFeatures.instance().yardiIntegration()) {
-
-            get(proto().item()).setVisible(isEditable() || !getValue().item().isNull());
-
-            get(proto().agreedPrice()).setEditable(false);
-            get(proto().agreedPrice()).setMandatory(false);
-
-            get(proto().effectiveDate()).setVisible(false);
-            get(proto().expirationDate()).setVisible(false);
-
-            adjustmentPanel.setVisible((isEditable() || !getValue().adjustments().isEmpty()));
-
-            if (ARCode.Type.services().contains(getValue().item().product().holder().code().type().getValue())) {
-                depositPanel.setVisible((isEditable() || !getValue().deposits().isEmpty()));
-            } else if (ARCode.Type.features().contains(getValue().item().product().holder().code().type().getValue())) {
-                depositPanel.setVisible(false);
-            }
-
-        } else if (!getValue().item().isEmpty()) {
-            if (ARCode.Type.services().contains(getValue().item().product().holder().code().type().getValue())) {
+        if (!getValue().item().isEmpty()) {
+            if (getValue().item().product().isInstanceOf(Service.ServiceV.class)) {
                 // hide effective dates:
                 get(proto().effectiveDate()).setVisible(false);
                 get(proto().expirationDate()).setVisible(false);
@@ -195,7 +189,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                     get(proto().agreedPrice()).setEditable(!isLeaseApproved);
                     get(proto().agreedPrice()).setMandatory(!leaseTerm.getValue().unit().isNull());
                 }
-            } else if (ARCode.Type.features().contains(getValue().item().product().holder().code().type().getValue())) {
+            } else if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
                 // show/hide effective dates (hide expiration for non-recurring; show in editor, hide in viewer if empty):
                 boolean recurring = isRecurringFeature(getValue().item().product());
                 get(proto().effectiveDate()).setVisible((isEditable() || !getValue().effectiveDate().isNull()));
@@ -241,13 +235,36 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
             adjustmentPanel.setVisible(false);
 
             if (isEditable()) {
-                get(proto().item()).setEditable(false);
+                get(proto().item()).setEditable(!leaseTerm.getValue().selectedServiceItems().isEmpty());
+
                 get(proto().agreedPrice()).setEditable(false);
                 get(proto().agreedPrice()).setMandatory(false);
             }
         }
 
         get(proto().description()).setVisible(isEditable() || !getValue().description().isNull());
+
+        // Yardi mode correction:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().item()).setVisible(isEditable() || !getValue().item().isNull());
+
+            get(proto().agreedPrice()).setEditable(false);
+            get(proto().agreedPrice()).setMandatory(false);
+
+//            get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
+//            get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
+            get(proto().effectiveDate()).setVisible(false);
+            get(proto().expirationDate()).setVisible(false);
+
+//            adjustmentPanel.setVisible((isEditable() || !getValue().adjustments().isEmpty()));
+            adjustmentPanel.setVisible(false);
+
+            if (getValue().item().product().isInstanceOf(Service.ServiceV.class)) {
+                depositPanel.setVisible((isEditable() || !getValue().deposits().isEmpty()));
+            } else if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
+                depositPanel.setVisible(false);
+            }
+        }
     }
 
     @Override
