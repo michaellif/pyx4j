@@ -138,9 +138,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     protected void setFilters(List<Criterion> filters) {
                         assert (filters != null);
 
-                        //TODO
-                        //filters.add(new UnitAvaliabilitCriteria(dateFrom));
-
                         LeaseTermDTO currentValue = LeaseTermForm.this.getValue();
                         if (currentValue.lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
                             filters.add(new UnitAvailabilityCriteria(AptUnitOccupancySegment.Status.pending, ClientContext.getServerDate()));
@@ -158,9 +155,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             if (VistaFeatures.instance().yardiIntegration()) {
                                 filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE));
                                 filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().availableOnline(), Boolean.TRUE));
-                            } else {
-                                filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().defaultCatalogItem(), currentValue
-                                        .unit().building().defaultProductCatalog().isBooleanTrue()));
                             }
                         } else {
                             assert false : "Weird! Value shouln'd be edited in this lease status!";
@@ -212,8 +206,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE));
                                 filters.add(PropertyCriterion.in(proto().productItems().$().product().availableOnline(), Boolean.TRUE));
                             } else {
-                                filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), currentValue.unit()
-                                        .building().defaultProductCatalog().isBooleanTrue()));
+                                filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().defaultCatalogItem(), currentValue.building()
+                                        .defaultProductCatalog().getValue(false)));
                             }
                         } else {
                             assert false : "Weird! Value shouln'd be edited in this lease status!";

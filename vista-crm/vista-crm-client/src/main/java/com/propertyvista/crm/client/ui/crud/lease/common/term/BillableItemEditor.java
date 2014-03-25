@@ -197,7 +197,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
                 if (isEditable()) {
                     get(proto().item()).setEditable(false);
-                    get(proto().agreedPrice()).setEditable(!getValue().finalized().isBooleanTrue());
+                    get(proto().agreedPrice()).setEditable(!getValue().finalized().getValue(false));
                     get(proto().agreedPrice()).setMandatory(true);
                 }
 
@@ -322,11 +322,11 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
     }
 
     private boolean isMandatoryFeature(Product.ProductV<?> product) {
-        return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().isBooleanTrue();
+        return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().getValue(false);
     }
 
     private boolean isRecurringFeature(Product.ProductV<?> product) {
-        return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
+        return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).recurring().getValue(false);
     }
 
     private class AdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
