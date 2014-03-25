@@ -80,7 +80,7 @@ public class SiteGeneralCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
     }
 
     @Override
-    protected void persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
+    protected boolean persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
         // keep the sort order
         for (int idx = 0; idx < in.locales().size(); idx++) {
             in.locales().get(idx).displayOrder().setValue(idx);
@@ -104,6 +104,8 @@ public class SiteGeneralCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
             onDeleteLocale(locale);
             Persistence.service().delete(locale);
         }
+
+        return true;
     }
 
     private void onDeleteLocale(AvailableLocale locale) {

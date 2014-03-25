@@ -58,17 +58,21 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
     }
 
     @Override
-    protected void save(OperationsUserCredential entity, OperationsUserDTO dto) {
+    protected boolean save(OperationsUserCredential entity, OperationsUserDTO dto) {
         OperationsUserCredential orig = Persistence.secureRetrieve(boClass, entity.getPrimaryKey());
 
-        super.save(entity, dto);
+        boolean updated = super.save(entity, dto);
 
-        ServerSideFactory.create(AuditFacade.class).updated(entity.user(),
-                CommonsStringUtils.nvl_concat(EntityDiff.getChanges(orig, entity), EntityDiff.getChanges(orig.user(), entity.user()), "\n"));
+        if (updated) {
+            ServerSideFactory.create(AuditFacade.class).updated(entity.user(),
+                    CommonsStringUtils.nvl_concat(EntityDiff.getChanges(orig, entity), EntityDiff.getChanges(orig.user(), entity.user()), "\n"));
+        }
+
+        return updated;
     }
 
     @Override
-    protected void persist(OperationsUserCredential dbo, OperationsUserDTO to) {
+    protected boolean persist(OperationsUserCredential dbo, OperationsUserDTO to) {
         dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(to.email().getValue()));
         Persistence.service().merge(dbo.user());
 
@@ -79,7 +83,7 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
             dbo.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(to.password().getValue()));
         }
         dbo.setPrimaryKey(dbo.user().getPrimaryKey());
-        Persistence.service().merge(dbo);
+        return Persistence.service().merge(dbo);
     }
 
 }

@@ -103,7 +103,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     }
 
     @Override
-    protected void persist(PaymentRecord bo, PaymentDTO to) {
+    protected boolean persist(PaymentRecord bo, PaymentDTO to) {
         Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getLeaseIdStub().getPrimaryKey());
 
         bo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
@@ -135,6 +135,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         } catch (PaymentException e) {
             throw new UserRuntimeException(i18n.tr("Payment processing has been Failed!"), e);
         }
+
+        return true;
     }
 
     @Override

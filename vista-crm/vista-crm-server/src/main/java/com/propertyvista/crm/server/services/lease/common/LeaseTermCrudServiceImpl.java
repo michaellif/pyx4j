@@ -123,7 +123,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    protected void save(LeaseTerm dbo, LeaseTermDTO dto) {
+    protected boolean save(LeaseTerm dbo, LeaseTermDTO dto) {
         updateAdjustments(dbo);
 
         if (VersionedEntityUtils.equalsIgnoreVersion(dbo, dbo.lease().currentTerm())) {
@@ -134,10 +134,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         } else {
             ServerSideFactory.create(LeaseFacade.class).persist(dbo);
         }
+        return true;
     }
 
     @Override
-    protected void persist(LeaseTerm dbo, LeaseTermDTO in) {
+    protected boolean persist(LeaseTerm dbo, LeaseTermDTO in) {
         throw new Error("Facade should be used");
     }
 

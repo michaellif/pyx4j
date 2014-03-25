@@ -70,7 +70,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
     }
 
     @Override
-    protected void persist(POLICY dbo, POLICY_DTO in) {
+    protected boolean persist(POLICY dbo, POLICY_DTO in) {
         PolicyNode node = ((PolicyDTOBase) in).node().cast();
 
         if (node.getInstanceValueClass().equals(OrganizationPoliciesNode.class)) {
@@ -100,15 +100,16 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             orig = Persistence.service().retrieve(boClass, dbo.getPrimaryKey());
         }
 
-        super.persist(dbo, in);
+        boolean updated = super.persist(dbo, in);
 
         ServerSideFactory.create(PolicyFacade.class).resetPolicyCache();
 
         if (isNewPolicy) {
             ServerSideFactory.create(AuditFacade.class).created(dbo);
-        } else {
+        } else if (updated) {
             ServerSideFactory.create(AuditFacade.class).updated(dbo, EntityDiff.getChanges(orig, dbo));
         }
+        return updated;
     }
 
     @Override

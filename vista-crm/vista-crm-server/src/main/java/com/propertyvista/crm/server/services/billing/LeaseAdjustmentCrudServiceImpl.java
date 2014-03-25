@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
@@ -56,9 +55,9 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     }
 
     @Override
-    protected void persist(LeaseAdjustment dbo, LeaseAdjustment to) {
+    protected boolean persist(LeaseAdjustment dbo, LeaseAdjustment to) {
         updateAdjustments(dbo);
-        super.persist(dbo, to);
+        return super.persist(dbo, to);
     }
 
     @Override

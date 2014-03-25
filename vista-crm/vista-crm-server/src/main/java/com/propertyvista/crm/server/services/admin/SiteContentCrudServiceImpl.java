@@ -65,7 +65,7 @@ public class SiteContentCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
     }
 
     @Override
-    protected void persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
+    protected boolean persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
         dbo._updateFlag().updated().setValue(new Date());
 
         for (SiteImageSet images : dbo.banner()) {
@@ -76,6 +76,6 @@ public class SiteContentCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
             SiteImageResourcePersister.persist(images.small());
         }
 
-        super.persist(dbo, in);
+        return super.persist(dbo, in);
     }
 }

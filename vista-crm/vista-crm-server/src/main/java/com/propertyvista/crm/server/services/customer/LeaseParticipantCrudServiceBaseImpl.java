@@ -103,7 +103,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
     }
 
     @Override
-    protected void persist(BO bo, TO to) {
+    protected boolean persist(BO bo, TO to) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(bo.customer());
 
         // delete payment methods removed in UI:
@@ -128,7 +128,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
         }
 
-        super.persist(bo, to);
+        return super.persist(bo, to);
     }
 
     @Override

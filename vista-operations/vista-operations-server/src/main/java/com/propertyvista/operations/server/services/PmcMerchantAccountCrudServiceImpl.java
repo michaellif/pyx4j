@@ -116,7 +116,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    protected void persist(PmcMerchantAccountIndex bo, PmcMerchantAccountDTO to) {
+    protected boolean persist(PmcMerchantAccountIndex bo, PmcMerchantAccountDTO to) {
         Pmc pmc = Persistence.service().retrieve(Pmc.class, to.pmc().getPrimaryKey());
 
         // Copy RpcTransient value
@@ -131,5 +131,6 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
             criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccountKey(), to.merchantAccount().getPrimaryKey()));
             bo.set(Persistence.service().retrieve(criteria));
         }
+        return true;
     }
 }

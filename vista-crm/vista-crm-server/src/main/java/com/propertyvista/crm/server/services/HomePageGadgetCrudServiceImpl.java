@@ -55,7 +55,7 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
     }
 
     @Override
-    protected void persist(HomePageGadget bo, HomePageGadget to) {
+    protected boolean persist(HomePageGadget bo, HomePageGadget to) {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         SiteDescriptor site = Persistence.service().retrieve(criteria);
         if (bo.getPrimaryKey() == null) {
@@ -73,5 +73,6 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
             super.persist(bo, to);
         }
         PMSiteContentCache.siteDescriptorUpdated();
+        return true;
     }
 }

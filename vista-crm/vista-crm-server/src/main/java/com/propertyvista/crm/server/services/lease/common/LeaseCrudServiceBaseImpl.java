@@ -81,7 +81,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    protected void persist(Lease dbo, DTO in) {
+    protected boolean persist(Lease dbo, DTO in) {
         throw new Error("Facade should be used");
     }
 

@@ -54,26 +54,26 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsU
     }
 
     @Override
-    protected void enhanceRetrieved(OperationsUserCredential bo, OperationsUserDTO to, RetrieveTarget retrieveTarget ) {
+    protected void enhanceRetrieved(OperationsUserCredential bo, OperationsUserDTO to, RetrieveTarget retrieveTarget) {
         if (!bo.behaviors().isEmpty()) {
             to.role().setValue(bo.behaviors().iterator().next());
         }
     }
 
     @Override
-    protected void retrievedSingle(OperationsUserCredential bo, RetrieveTarget retrieveTarget ) {
+    protected void retrievedSingle(OperationsUserCredential bo, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(bo.user());
     }
 
     @Override
-    protected void persist(OperationsUserCredential dbo, OperationsUserDTO to) {
+    protected boolean persist(OperationsUserCredential dbo, OperationsUserDTO to) {
         dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(to.email().getValue()));
-        Persistence.service().merge(dbo.user());
+        boolean updated = Persistence.service().merge(dbo.user());
 
         // ignore role changes (don't copy role from dto to dbo);
 
         dbo.setPrimaryKey(dbo.user().getPrimaryKey());
-        Persistence.service().merge(dbo);
+        return updated || Persistence.service().merge(dbo);
     }
 
 }

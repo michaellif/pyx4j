@@ -79,7 +79,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    protected void persist(PageDescriptor dbo, PageDescriptor to) {
+    protected boolean persist(PageDescriptor dbo, PageDescriptor to) {
         // update caption:
         dbo.caption().clear();
         for (PageContent content : dbo.content()) {
@@ -108,5 +108,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
 
         // set update flag
         PMSiteContentCache.siteDescriptorUpdated();
+
+        return true;
     }
 }

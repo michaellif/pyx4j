@@ -87,7 +87,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    protected void persist(Employee bo, EmployeeDTO to) {
+    protected boolean persist(Employee bo, EmployeeDTO to) {
         assertSamePortfolios(to);
         // Enforce access only to current user
         to.setPrimaryKey(CrmAppContext.getCurrentUserEmployee().getPrimaryKey());
@@ -97,6 +97,8 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
 
         // Update name label in UI
         Context.getVisit().getUserVisit().setName(bo.name().getStringView());
+
+        return true;
     }
 
     @Override

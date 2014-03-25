@@ -64,7 +64,7 @@ public class LandlordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Landlord
     }
 
     @Override
-    protected void persist(Landlord bo, LandlordDTO to) {
+    protected boolean persist(Landlord bo, LandlordDTO to) {
         super.persist(bo, to);
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -83,5 +83,7 @@ public class LandlordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Landlord
                 Persistence.service().persist(building);
             }
         }
+
+        return true;
     }
 }

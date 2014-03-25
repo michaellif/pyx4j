@@ -159,7 +159,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    protected void persist(PaymentRecord bo, PaymentRecordDTO to) {
+    protected boolean persist(PaymentRecord bo, PaymentRecordDTO to) {
         bo.paymentMethod().customer().set(to.leaseTermParticipant().leaseParticipant().customer());
 
         // Do not change profile methods
@@ -179,6 +179,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.billingAccount(), to.paymentMethod(), VistaApplication.crm);
         ServerSideFactory.create(PaymentFacade.class).validatePayment(bo, VistaApplication.crm);
         ServerSideFactory.create(PaymentFacade.class).persistPayment(bo);
+
+        return true;
     }
 
     @Override

@@ -137,7 +137,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void persist(Lead dbo, Lead in) {
+    protected boolean persist(Lead dbo, Lead in) {
         throw new Error("Facade should be used");
     }
 
@@ -148,7 +148,8 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void save(Lead entity, Lead to) {
+    protected boolean save(Lead entity, Lead to) {
         ServerSideFactory.create(LeadFacade.class).persist(entity);
+        return true;
     }
 }

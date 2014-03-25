@@ -76,13 +76,13 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         if (retrieveTarget == RetrieveTarget.Edit) {
             TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
                     TenantInsurancePolicy.class);
-            if (insurancePolicy.requireMinimumLiability().isBooleanTrue()) {
+            if (insurancePolicy.requireMinimumLiability().getValue(false)) {
                 to.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
             }
 
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
                     RestrictionsPolicy.class);
-            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+            if (restrictionsPolicy.enforceAgeOfMajority().getValue(false)) {
                 to.ageOfMajority().setValue((to.role().getValue() != Role.Dependent) ? restrictionsPolicy.ageOfMajority().getValue() : null);
             }
         }
@@ -104,11 +104,13 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     }
 
     @Override
-    protected void persist(Tenant tenant, TenantDTO tenantDto) {
+    protected boolean persist(Tenant tenant, TenantDTO tenantDto) {
         super.persist(tenant, tenantDto);
 
         savePreauthorizedPayments(tenantDto);
         updateInsuranceCertificates(tenantDto);
+
+        return true;
     }
 
     private LeaseTermTenant retrieveTenant(LeaseTerm.LeaseTermV termV, Tenant leaseCustomer) {
@@ -146,7 +148,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         while (it.hasNext()) {
             PreauthorizedPaymentDTO papDTO = it.next();
             LeasePaymentMethod lpm = Persistence.service().retrieve(LeasePaymentMethod.class, papDTO.paymentMethod().getPrimaryKey());
-            if (lpm == null || lpm.isDeleted().isBooleanTrue()) {
+            if (lpm == null || lpm.isDeleted().getValue(false)) {
                 it.remove();
             }
         }
@@ -171,7 +173,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
 
         for (InsuranceCertificate<?> insuranceCertificate : tenantDto.insuranceCertificates()) {
             // skip certificates that cannot be updated by pmc
-            if ((insuranceCertificate instanceof PropertyVistaIntegratedInsurance) || insuranceCertificate.isManagedByTenant().isBooleanTrue()) {
+            if ((insuranceCertificate instanceof PropertyVistaIntegratedInsurance) || insuranceCertificate.isManagedByTenant().getValue(false)) {
                 log.debug("skip update of ManagedByTenant Certificate", insuranceCertificate);
                 continue;
             }
@@ -182,7 +184,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
                 // check that nobody is tampering the PV/Tenant managed insurance certificates (we have to validate the type of the data based on pk from our db and don't rely on flags from outside)
                 InsuranceCertificate<?> oldInsuranceCertificate = Persistence.service().retrieve(InsuranceCertificate.class,
                         insuranceCertificate.getPrimaryKey());
-                if (!(oldInsuranceCertificate instanceof PropertyVistaIntegratedInsurance) || !oldInsuranceCertificate.isManagedByTenant().isBooleanTrue()) {
+                if (!(oldInsuranceCertificate instanceof PropertyVistaIntegratedInsurance) || !oldInsuranceCertificate.isManagedByTenant().getValue(false)) {
                     Persistence.secureSave(insuranceCertificate);
                 } else {
                     log.debug("skip update of ManagedByTenant Certificate", insuranceCertificate);
@@ -192,7 +194,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         }
 
         for (InsuranceCertificate<?> deletedCertificate : deletedInsuranceCertificates) {
-            if ((deletedCertificate instanceof PropertyVistaIntegratedInsurance) || deletedCertificate.isManagedByTenant().isBooleanTrue()) {
+            if ((deletedCertificate instanceof PropertyVistaIntegratedInsurance) || deletedCertificate.isManagedByTenant().getValue(false)) {
                 throw new SecurityViolationException("it's forbidden to delete property vista integrated or user managed insurance certificates");
             }
             ServerSideFactory.create(GeneralInsuranceFacade.class).deleteGeneralInsurance((GeneralInsuranceCertificate) deletedCertificate.cast());

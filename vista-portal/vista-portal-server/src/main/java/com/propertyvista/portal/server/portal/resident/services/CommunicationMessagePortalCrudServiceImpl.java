@@ -65,7 +65,7 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
     }
 
     @Override
-    protected void persist(CommunicationThread bo, CommunicationMessageDTO to) {
+    protected boolean persist(CommunicationThread bo, CommunicationMessageDTO to) {
         if (bo.isPrototype()) {
             bo.created().setValue(SystemDateManager.getDate());
         }
@@ -80,7 +80,7 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
         m.text().set(to.text());
         bo.subject().set(to.subject());
         bo.content().add(m);
-        super.persist(bo, to);
+        return super.persist(bo, to);
     }
 
     @Override

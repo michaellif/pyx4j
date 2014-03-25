@@ -31,10 +31,10 @@ public class CrmRoleCrudServiceImpl extends AbstractCrudServiceImpl<CrmRole> imp
     }
 
     @Override
-    protected void persist(CrmRole bo, CrmRole to) {
+    protected boolean persist(CrmRole bo, CrmRole to) {
         bo.behaviors().clear();
         VistaCrmBehaviorDTOCoverter.toDBO(bo.permissions(), bo.behaviors());
-        super.persist(bo, null);
+        return super.persist(bo, null);
     }
 
     @Override

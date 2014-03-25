@@ -41,10 +41,11 @@ public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<
     }
 
     @Override
-    protected void persist(LeaseBillingPolicy dbo, LeaseBillingPolicyDTO in) {
-        super.persist(dbo, in);
+    protected boolean persist(LeaseBillingPolicy dbo, LeaseBillingPolicyDTO in) {
+        boolean updated = super.persist(dbo, in);
 
         ServerSideFactory.create(BillingCycleFacade.class).onLeaseBillingPolicyChange(dbo);
+        return updated;
     }
 
     @Override

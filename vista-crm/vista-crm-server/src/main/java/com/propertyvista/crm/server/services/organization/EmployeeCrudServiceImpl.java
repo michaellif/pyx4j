@@ -112,7 +112,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
-    protected void persist(Employee dbo, EmployeeDTO in) {
+    protected boolean persist(Employee dbo, EmployeeDTO in) {
         if (dbo.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
@@ -126,7 +126,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         in.email().setValue(EmailValidator.normalizeEmailAddress(in.email().getStringView()));
 
-        super.persist(dbo, in);
+        boolean updated = super.persist(dbo, in);
 
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
             CrmUser user;
@@ -199,6 +199,8 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 ServerSideFactory.create(UserManagementFacade.class).updateGlobalCrmUserIndex(user);
             }
         }
+
+        return updated;
     }
 
     @Override

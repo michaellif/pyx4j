@@ -88,7 +88,7 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
     }
 
     @Override
-    protected void persist(Complex dbo, ComplexDTO in) {
+    protected boolean persist(Complex dbo, ComplexDTO in) {
         super.persist(dbo, in);
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -115,5 +115,7 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
                 Persistence.service().persist(building);
             }
         }
+
+        return true;
     }
 }

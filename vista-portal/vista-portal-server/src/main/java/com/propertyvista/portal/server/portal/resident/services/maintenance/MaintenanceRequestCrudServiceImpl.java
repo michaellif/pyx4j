@@ -126,7 +126,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    protected void persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
+    protected boolean persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
         if (!to.reportedForOwnUnit().isBooleanTrue()) {
             bo.permissionToEnter().setValue(false);
         } else if (!to.reporter().isNull()) {
@@ -135,6 +135,8 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
         }
         ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo);
         ServerSideFactory.create(MaintenanceFacade.class).addStatusHistoryRecord(bo, null);
+
+        return true;
     }
 
     @Override

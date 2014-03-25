@@ -54,7 +54,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
     }
 
     @Override
-    protected void persist(Bill bo, BillDataDTO to) {
+    protected boolean persist(Bill bo, BillDataDTO to) {
         throw new IllegalArgumentException();
     }
 

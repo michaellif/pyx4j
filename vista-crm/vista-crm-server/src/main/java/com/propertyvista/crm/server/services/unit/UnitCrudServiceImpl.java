@@ -109,8 +109,9 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     @Override
-    protected void persist(AptUnit bo, AptUnitDTO to) {
+    protected boolean persist(AptUnit bo, AptUnitDTO to) {
         ServerSideFactory.create(BuildingFacade.class).persist(bo);
+        return true;
     }
 
     private void retrieveServicePrices(AptUnitDTO dto) {

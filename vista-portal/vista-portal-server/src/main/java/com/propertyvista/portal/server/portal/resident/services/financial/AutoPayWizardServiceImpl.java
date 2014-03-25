@@ -20,7 +20,6 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -91,7 +90,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
     }
 
     @Override
-    protected void persist(AutopayAgreement bo, AutoPayDTO to) {
+    protected boolean persist(AutopayAgreement bo, AutoPayDTO to) {
         Lease lease = ResidentPortalContext.getLease();
 
         if (bo.paymentMethod().getPrimaryKey() == null) {
@@ -107,6 +106,8 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.resident);
         bo.set(ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(bo,
                 EntityFactory.createIdentityStub(Tenant.class, ResidentPortalContext.getTenant().getPrimaryKey())));
+
+        return true;
     }
 
     @Override

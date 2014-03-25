@@ -87,10 +87,11 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
     }
 
     @Override
-    protected void save(Trigger entity, TriggerDTO dto) {
+    protected boolean save(Trigger entity, TriggerDTO dto) {
         Trigger origProcess = Persistence.service().retrieve(Trigger.class, entity.getPrimaryKey());
-        super.save(entity, dto);
+        boolean updated = super.save(entity, dto);
         JobUtils.updateSchedule(origProcess, entity);
+        return updated;
     }
 
     @Override

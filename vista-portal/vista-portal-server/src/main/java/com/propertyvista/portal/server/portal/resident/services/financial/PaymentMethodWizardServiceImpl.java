@@ -61,7 +61,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
     }
 
     @Override
-    protected void persist(LeasePaymentMethod bo, PaymentMethodDTO to) {
+    protected boolean persist(LeasePaymentMethod bo, PaymentMethodDTO to) {
         Lease lease = ResidentPortalContext.getLease();
 
         bo.customer().set(ResidentPortalContext.getCustomer());
@@ -69,6 +69,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo, VistaApplication.resident);
         ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(bo, lease.unit().building());
+        return true;
     }
 
     @Override

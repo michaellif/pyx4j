@@ -32,7 +32,7 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
     }
 
     @Override
-    protected void enhanceRetrieved(IdAssignmentPolicy entity, IdAssignmentPolicyDTO dto, RetrieveTarget retrieveTarget ) {
+    protected void enhanceRetrieved(IdAssignmentPolicy entity, IdAssignmentPolicyDTO dto, RetrieveTarget retrieveTarget) {
         // tune up UI items in case of YardyInegration mode:
         if (VistaFeatures.instance().yardiIntegration()) {
             for (IdAssignmentItem item : entity.items()) {
@@ -47,7 +47,7 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
     }
 
     @Override
-    protected void persist(IdAssignmentPolicy dbo, IdAssignmentPolicyDTO in) {
+    protected boolean persist(IdAssignmentPolicy dbo, IdAssignmentPolicyDTO in) {
         List<IdAssignmentItem> newItemsList = new ArrayList<IdAssignmentItem>();
         newItemsList.addAll(in.editableItems());
 
@@ -64,6 +64,6 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
         dbo.items().clear();
         dbo.items().addAll(newItemsList);
 
-        super.persist(dbo, in);
+        return super.persist(dbo, in);
     }
 }

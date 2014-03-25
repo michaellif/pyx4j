@@ -157,7 +157,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    protected void persist(Building bo, BuildingDTO to) {
+    protected boolean persist(Building bo, BuildingDTO to) {
 
         {
             Persistence.service().retrieveMember(bo.merchantAccounts());
@@ -176,6 +176,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         saveUtilities(bo, to);
 
         saveILS(bo, to);
+
+        return true;
     }
 
     private void loadUtilities(Building bo) {

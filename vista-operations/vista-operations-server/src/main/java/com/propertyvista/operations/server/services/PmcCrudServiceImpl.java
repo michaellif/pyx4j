@@ -121,7 +121,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    protected void persist(Pmc bo, PmcDTO to) {
+    protected boolean persist(Pmc bo, PmcDTO to) {
         if (!PmcNameValidator.isDnsNameValid(bo.dnsName().getValue())) {
             throw new UserRuntimeException("PMC DNS name is not valid");
         }
@@ -144,9 +144,11 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         }
         encryptPassword(bo.equifaxInfo());
 
-        super.persist(bo, to);
+        boolean updated = super.persist(bo, to);
 
-        ServerSideFactory.create(AuditFacade.class).updated(bo, EntityDiff.getChanges(orig, bo));
+        if (updated) {
+            ServerSideFactory.create(AuditFacade.class).updated(bo, EntityDiff.getChanges(orig, bo));
+        }
 
         TaskRunner.runInTargetNamespace(bo, new Callable<Void>() {
             @Override
@@ -155,6 +157,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
                 return null;
             }
         });
+        return updated;
     }
 
     @Override

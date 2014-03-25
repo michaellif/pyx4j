@@ -69,7 +69,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
     }
 
     @Override
-    protected void persist(CommunicationMessage bo, CommunicationMessageDTO to) {
+    protected boolean persist(CommunicationMessage bo, CommunicationMessageDTO to) {
         if (to.thread().created().isNull() || to.thread().created().isPrototype()) {
             to.thread().subject().set(to.subject());
             Persistence.service().persist(to.thread());
@@ -84,7 +84,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         bo.isRead().setValue(false);
         bo.text().set(to.text());
         bo.thread().set(to.thread());
-        super.persist(bo, to);
+        return super.persist(bo, to);
     }
 
     @Override

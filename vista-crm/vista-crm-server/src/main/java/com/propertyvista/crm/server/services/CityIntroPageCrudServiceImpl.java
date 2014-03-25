@@ -53,7 +53,7 @@ public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIn
     }
 
     @Override
-    protected void persist(CityIntroPage bo, CityIntroPage to) {
+    protected boolean persist(CityIntroPage bo, CityIntroPage to) {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         SiteDescriptor site = Persistence.service().retrieve(criteria);
         if (bo.getPrimaryKey() == null) {
@@ -63,6 +63,7 @@ public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIn
             super.persist(bo, to);
         }
         PMSiteContentCache.siteDescriptorUpdated();
+        return true;
     }
 
     private CityIntroPage findDuplicate(CityIntroPage newPage) {

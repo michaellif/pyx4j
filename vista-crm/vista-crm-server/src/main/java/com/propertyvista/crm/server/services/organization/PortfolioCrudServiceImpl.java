@@ -45,9 +45,9 @@ public class PortfolioCrudServiceImpl extends AbstractCrudServiceImpl<Portfolio>
     }
 
     @Override
-    protected void persist(Portfolio bo, Portfolio to) {
+    protected boolean persist(Portfolio bo, Portfolio to) {
         validate(bo);
-        super.persist(bo, to);
+        return super.persist(bo, to);
     }
 
     private void validate(Portfolio portfolio) {

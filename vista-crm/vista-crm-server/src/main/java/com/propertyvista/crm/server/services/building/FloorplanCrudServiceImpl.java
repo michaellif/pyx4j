@@ -65,7 +65,7 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
     }
 
     @Override
-    protected void persist(Floorplan dbo, FloorplanDTO in) {
+    protected boolean persist(Floorplan dbo, FloorplanDTO in) {
         boolean isCreate = dbo.id().isNull();
 
         if (dbo.counters().id().isNull()) {
@@ -121,6 +121,7 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
                 Persistence.service().merge(profile);
             }
         }
+        return true;
     }
 
     private void updateCounters(Floorplan dbo, String origMarketingName) {

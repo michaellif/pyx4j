@@ -31,9 +31,10 @@ public class VendorCrudServiceImpl extends AbstractCrudServiceImpl<Vendor> imple
     }
 
     @Override
-    protected void persist(Vendor bo, Vendor vendor) {
+    protected boolean persist(Vendor bo, Vendor vendor) {
         Persistence.service().merge(bo.phones());
         Persistence.service().merge(bo.emails());
         Persistence.service().persist(bo);
+        return true;
     }
 }

@@ -89,9 +89,11 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
     }
 
     @Override
-    protected void persist(Service bo, Service to) {
+    protected boolean persist(Service bo, Service to) {
         super.persist(bo, to);
 
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(bo);
+
+        return true;
     }
 }
