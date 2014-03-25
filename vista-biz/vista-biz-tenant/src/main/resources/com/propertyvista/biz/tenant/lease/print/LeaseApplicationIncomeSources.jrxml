@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LeaseApplicationIdentificationDocuments" pageWidth="410" pageHeight="450" whenNoDataType="AllSectionsNoDetail" columnWidth="410" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="649"/>
+	<property name="ireport.y" value="1083"/>
 	<parameter name="landlordName" class="java.lang.String"/>
 	<parameter name="landlordAddress" class="java.lang.String"/>
 	<parameter name="landlordLogo" class="java.io.InputStream"/>
@@ -913,6 +913,252 @@
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="161" y="62" width="249" height="2"/>
+			</line>
+		</band>
+		<band height="386" splitType="Stretch">
+			<printWhenExpression><![CDATA[($F{incomeSource} == com.propertyvista.domain.tenant.income.IncomeSource.student)]]></printWhenExpression>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="-1" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isBold="true"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Income Source:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="20" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[School:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="142" y="41" width="268" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="142" y="20" width="268" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="20" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{details}.name().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="0" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{incomeSource}.toString()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="142" y="94" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="73" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Address 1:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="73" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).address().getMember("street1").getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="72" width="406" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="4" y="52" width="100" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Address:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="96" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Address 2:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="96" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).address().getMember("street2").getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="144" y="116" width="266" height="2"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="142" y="139" width="268" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="118" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).address().getMember("city").getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="118" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[City:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="140" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).address().getMember("province"))).getMember("name").getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="142" y="161" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="140" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Province/State:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="162" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).address().getMember("postalCode").getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="142" y="183" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="162" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Postal Code:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="184" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Country:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="184" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).address().getMember("country"))).getMember("name").getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="142" y="205" width="268" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="4" y="219" width="96" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Program Info:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="4" y="239" width="406" height="1"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="240" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Gross Monthly Amount:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="144" y="260" width="266" height="2"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="240" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="262" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Field of Study:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="262" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).fieldOfStudy().getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="144" y="282" width="266" height="2"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="336" width="157" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Program Start:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="338" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{details}.starts().getValue()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="142" y="356" width="266" height="2"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="144" y="378" width="266" height="2"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="358" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{details}.ends().getValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="358" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Program End:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="284" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Program:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="284" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).program().getValue().toString()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="144" y="304" width="266" height="2"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="2" y="304" width="159" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<text><![CDATA[Funding:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="161" y="304" width="249" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
+)$F{details}.cast()).fundingChoices().getValue().toString()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="144" y="324" width="266" height="2"/>
 			</line>
 		</band>
 	</detail>
