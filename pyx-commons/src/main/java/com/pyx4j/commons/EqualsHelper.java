@@ -20,6 +20,7 @@
  */
 package com.pyx4j.commons;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +38,8 @@ public abstract class EqualsHelper {
             return CommonsStringUtils.equals((String) value1, value2);
         } else if (value2 instanceof String) {
             return CommonsStringUtils.equals((String) value2, value1);
+        } else if (value1 instanceof BigDecimal && value2 instanceof BigDecimal) {
+            return ((BigDecimal) value1).compareTo((BigDecimal) value2) == 0;
         } else if (value1 instanceof List<?>) {
             return equals((List<?>) value1, (List<?>) value2);
         } else if (value1 instanceof Collection<?>) {
