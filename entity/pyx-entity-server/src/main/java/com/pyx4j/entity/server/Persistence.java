@@ -147,7 +147,11 @@ public class Persistence {
         return secureRetrieve(EntityCriteriaByPK.create(entityClass, primaryKey));
     }
 
-    public static <T extends IEntity> void secureSave(T entity) {
+    /**
+     * @param entity
+     * @return true is entity was updated/changed in DB
+     */
+    public static <T extends IEntity> boolean secureSave(T entity) {
         if (ServerSideConfiguration.instance().datastoreReadOnly()) {
             throw new DatastoreReadOnlyRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
         }
@@ -159,7 +163,7 @@ public class Persistence {
 
         //TODO we should apply DatasetAccessRule
 
-        Persistence.service().merge(entity);
+        return Persistence.service().merge(entity);
     }
 
     public static <T extends IVersionedEntity<?>> T retriveFinalOrDraft(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel) {

@@ -79,12 +79,24 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         persist(bo, to);
     }
 
-    protected void save(BO bo, TO to) {
-        persist(bo, to);
+    /**
+     * 
+     * @param bo
+     * @param to
+     * @return true is entity was updated/changed in DB
+     */
+    protected boolean save(BO bo, TO to) {
+        return persist(bo, to);
     }
 
-    protected void persist(BO bo, TO to) {
-        Persistence.secureSave(bo);
+    /**
+     * 
+     * @param bo
+     * @param to
+     * @return true is entity was updated/changed in DB
+     */
+    protected boolean persist(BO bo, TO to) {
+        return Persistence.secureSave(bo);
     }
 
     /**
