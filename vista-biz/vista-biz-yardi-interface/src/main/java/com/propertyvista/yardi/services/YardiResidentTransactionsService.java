@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.axis2.AxisFault;
 import org.apache.commons.lang.StringUtils;
@@ -49,6 +50,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
@@ -812,22 +814,30 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             try {
                 log.info("  Processing building: {}", propertyCode);
 
-                Building building = importProperty(yardiInterfaceId, property.getPropertyID(), executionMonitor);
+                // don't update existing building
+                Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
+                if (building == null) {
+                    building = importProperty(yardiInterfaceId, property.getPropertyID(), executionMonitor);
+                }
                 executionMonitor.addProcessedEvent("Building");
 
                 log.info("  Processing units for building: {}", propertyCode);
 
-                // clear unit availability to handle yardi Unit "Exclude" checkbox (no data sent for those units)
-                clearUnitAvailability(building, executionMonitor);
+                // handle yardi Unit "Exclude" check box (no data sent for those units)
+                Persistence.ensureRetrieve(building.units(), AttachLevel.IdOnly);
+                Set<AptUnit> excludedUnits = building.units();
 
                 // process new availability data
                 for (ILSUnit ilsUnit : property.getILSUnit()) {
                     AptUnit aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
                     updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor);
                     updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
+                    excludedUnits.remove(aptUnit);
                     executionMonitor.addProcessedEvent("Unit");
                 }
 
+                // clear unit availability for excluded units
+                clearUnitAvailability(excludedUnits, executionMonitor);
             } catch (YardiServiceException e) {
                 executionMonitor.addFailedEvent("Building", propertyCode, e);
             } catch (Throwable t) {
@@ -840,14 +850,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    private void clearUnitAvailability(final Building building, ExecutionMonitor executionMonitor) throws YardiServiceException {
-        log.info("    clear unit availability: {}", building.propertyCode().getValue());
+    private void clearUnitAvailability(final Set<AptUnit> units, ExecutionMonitor executionMonitor) throws YardiServiceException {
+        log.info("    clear unit availability: {}", units.size());
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
-                EntityQueryCriteria<AptUnit> crit = EntityQueryCriteria.create(AptUnit.class);
-                crit.eq(crit.proto().building(), building);
-                for (AptUnit unit : Persistence.service().query(crit)) {
+                for (AptUnit unit : units) {
                     new YardiILSMarketingProcessor().updateAvailability(unit, null);
                 }
                 return null;

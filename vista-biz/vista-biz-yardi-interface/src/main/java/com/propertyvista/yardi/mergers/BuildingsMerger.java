@@ -38,7 +38,9 @@ public class BuildingsMerger {
     }
 
     private void merge(BuildingInfo imported, BuildingInfo existing) {
-        merge(imported.address(), existing.address());
+        if (existing.address().isEmpty()) {
+            merge(imported.address(), existing.address());
+        }
     }
 
     private void merge(AddressStructured imported, AddressStructured existing) {
