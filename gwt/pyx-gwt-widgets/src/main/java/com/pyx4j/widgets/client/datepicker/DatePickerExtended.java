@@ -43,12 +43,11 @@ public abstract class DatePickerExtended extends DatePicker {
 
     public DatePickerExtended() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public DatePickerExtended(MonthSelectorExtended selector, ArrayList<LogicalDate> disabledDates) {
         super(selector, new CalendarViewExtended(selector.getMinDate(), selector.getMaxDate(), disabledDates, selector instanceof MonthSelectorMultiple),
-                new CalendarModel());
+                new CalendarModelExtended());
         this.minDate = selector.getMinDate();
         this.maxDate = selector.getMaxDate();
         this.disabledDates = disabledDates;

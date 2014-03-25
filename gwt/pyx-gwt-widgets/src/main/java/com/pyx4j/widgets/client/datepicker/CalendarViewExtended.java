@@ -28,9 +28,8 @@ import java.util.Date;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormatInfo;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.i18n.shared.DateTimeFormatInfo;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.CalendarView;
@@ -47,8 +46,6 @@ public class CalendarViewExtended extends CalendarView {
     private final DateGrid grid;
 
     private DatePicker picker;
-
-    private final String[] daysOfWeek = new String[7];
 
     public CalendarViewExtended(LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates, boolean inMultiple) {
         grid = new DateGrid(minDate, maxDate, disabledDates, inMultiple);
@@ -119,20 +116,8 @@ public class CalendarViewExtended extends CalendarView {
         grid.redraw(firstDisplayed);
     }
 
-    private void setDaysOfWeek() {
-        LogicalDate date = new LogicalDate();
-
-        for (int i = 1; i <= 7; i++) {
-            date.setDate(i);
-            int dayOfWeek = date.getDay();
-            daysOfWeek[dayOfWeek] = DateTimeFormat.getFormat("E").format(date).substring(0, 2);
-        }
-    }
-
     @Override
     protected void setup() {
-        setDaysOfWeek();
-
         DateTimeFormatInfo dateTimeFormatInfo = LocaleInfo.getCurrentLocale().getDateTimeFormatInfo();
         int firstDayOfWeekend = dateTimeFormatInfo.weekendStart();
         int lastDayOfWeekend = dateTimeFormatInfo.weekendEnd();
@@ -141,7 +126,7 @@ public class CalendarViewExtended extends CalendarView {
             int shift = CalendarUtil.getStartingDayOfWeek();
             int dayIdx = i + shift < CalendarModel.DAYS_IN_WEEK ? i + shift : i + shift - CalendarModel.DAYS_IN_WEEK;
 
-            grid.setText(0, i, daysOfWeek[dayIdx]);
+            grid.setText(0, i, getModel().formatDayOfWeek(dayIdx));
 
             if (dayIdx == firstDayOfWeekend || dayIdx == lastDayOfWeekend) {
                 grid.getCellFormatter().addStyleName(0, i, DefaultDatePickerTheme.StyleName.DatePickerWeekendDayLabel.name());

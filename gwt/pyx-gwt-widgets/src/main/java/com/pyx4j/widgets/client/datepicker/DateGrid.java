@@ -94,7 +94,6 @@ public class DateGrid extends Grid {
 
     public void redraw(LogicalDate firstDisplayed) {
         LogicalDate lastDisplayed = new LogicalDate();
-        LogicalDate enabledDate;
         int displayedMonth;
 
         if (selectedCell != null) {
@@ -108,12 +107,17 @@ public class DateGrid extends Grid {
             displayedMonth = (displayedMonth == 11) ? 0 : displayedMonth + 1;
         }
 
+        if (!this.inMultiple && (firstDisplayed.getDate() == 1)) {
+            // show one previous month week if date is Monday is the first in month.
+            CalendarUtil.addDaysToDate(firstDisplayed, -7);
+        }
+
         lastDisplayed.setTime(firstDisplayed.getTime());
 
         for (int i = 0; i < getNumCells(); i++) {
             DateCell cell = getCell(i);
 
-            if ((this.inMultiple || (i >= ((this.numRows - 1) * this.numColumns - 7))) && lastDisplayed.getMonth() != displayedMonth) {
+            if (this.inMultiple && (lastDisplayed.getMonth() != displayedMonth)) {
                 cell.setEmpty();
             } else {
                 cell.setDate(lastDisplayed);

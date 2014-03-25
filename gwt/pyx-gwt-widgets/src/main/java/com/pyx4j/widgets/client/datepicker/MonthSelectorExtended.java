@@ -33,7 +33,6 @@ import com.google.gwt.user.datepicker.client.MonthSelector;
 
 import com.pyx4j.commons.LogicalDate;
 
-@SuppressWarnings("deprecation")
 public abstract class MonthSelectorExtended extends MonthSelector {
 
     protected CalendarModel model;
