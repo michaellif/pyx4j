@@ -12,7 +12,8 @@
 	<field name="peopleSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="aboutYouSection" class="com.pyx4j.entity.core.IList"/>
 	<field name="additionalInfoSection" class="com.pyx4j.entity.core.IList"/>
-    <field name="financialSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="financialSection" class="com.pyx4j.entity.core.IList"/>
+	<field name="emergencyContactsSection" class="com.pyx4j.entity.core.IList"/>
 	<background>
 		<band height="750" splitType="Stretch">
 			<image scaleImage="FillFrame" hAlign="Right" vAlign="Top" isUsingCache="true">
@@ -126,14 +127,21 @@
 			<subreport>
 				<reportElement x="104" y="0" width="450" height="1"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{additionalInfoSection})]]></dataSourceExpression>
-                <subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseApplicationAdditionalInfoSection")]]></subreportExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseApplicationAdditionalInfoSection")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="1" splitType="Stretch">
 			<subreport>
 				<reportElement x="104" y="0" width="450" height="1"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{financialSection})]]></dataSourceExpression>
-                <subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseApplicationFinancialSection")]]></subreportExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseApplicationFinancialSection")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="1" splitType="Stretch">
+			<subreport>
+				<reportElement x="104" y="0" width="450" height="1"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{emergencyContactsSection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.tenant.lease.print.LeaseApplicationEmergencyContactsSection")]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

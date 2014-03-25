@@ -49,6 +49,7 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataEmergencyContactsSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataFinancialSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataGeneralQuestionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataGuarantorDTO;
@@ -83,6 +84,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), application, subjectParticipant);
         fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), application, subjectParticipant);
         fillFinaincialSection(data.sections().get(0).financialSection().get(0), application, subjectParticipant);
+        fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), application, subjectParticipant);
         return data;
     }
 
@@ -102,7 +104,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         sections.additionalInfoSection().get(0).currentResidence().get(0).isRented().setValue(true);
         sections.additionalInfoSection().get(0).currentResidence().get(0).isOwned().setValue(true);
 
-        // TODO add questions for filling
+        // TODO add questions for filling ?
     }
 
     /**
@@ -128,6 +130,11 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         LeaseApplicationDocumentDataFinancialSectionDTO financialSection = EntityFactory.create(LeaseApplicationDocumentDataFinancialSectionDTO.class);
         details.financialSection().add(financialSection);
+
+        LeaseApplicationDocumentDataEmergencyContactsSectionDTO emergencyContactsSection = EntityFactory
+                .create(LeaseApplicationDocumentDataEmergencyContactsSectionDTO.class);
+        details.emergencyContactsSection().add(emergencyContactsSection);
+
         return data;
     }
 
@@ -323,6 +330,12 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         residence.moveOutDate().setValue(address.moveOutDate().getValue());
         residence.isOwned().setValue(address.rented().getValue() == OwnedRented.owned);
         residence.isRented().setValue(address.rented().getValue() == OwnedRented.rented);
+    }
+
+    private void fillEmergencyContacts(LeaseApplicationDocumentDataEmergencyContactsSectionDTO emergencyContacts, LeaseApplication application,
+            LeaseTermParticipant<?> subjectParticipant) {
+        Persistence.ensureRetrieve(subjectParticipant.leaseParticipant().customer().emergencyContacts(), AttachLevel.Attached);
+        emergencyContacts.emergencyContacts().addAll(subjectParticipant.leaseParticipant().customer().emergencyContacts());
     }
 
     private String retrieveUtilities(LeaseTerm term) {
