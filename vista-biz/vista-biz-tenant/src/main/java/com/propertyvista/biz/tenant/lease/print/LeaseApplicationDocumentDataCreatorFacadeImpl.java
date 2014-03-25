@@ -35,6 +35,7 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -50,6 +51,7 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDependentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataFinancialSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataGeneralQuestionDTO;
+import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataGuarantorDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataIdentificationDocumentDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataLeaseSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataPeopleSectionDTO;
@@ -277,8 +279,30 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             financialInfo.incomeSources().add(income);
         }
 
-        // TODO assets
-        // TODO guarantors
+        Persistence.ensureRetrieve(screening.version().assets(), AttachLevel.Attached);
+        financialInfo.assets().addAll(screening.version().assets());
+
+        // guarantors:
+
+        if (subjectParticipant.role().getValue() == Role.Guarantor) {
+            return;
+        }
+
+        EntityQueryCriteria<LeaseTermGuarantor> criteria = new EntityQueryCriteria<LeaseTermGuarantor>(LeaseTermGuarantor.class);
+        criteria.eq(criteria.proto().leaseTermV().holder(), application.lease().currentTerm());
+        criteria.eq(criteria.proto().tenant().customer(), subjectParticipant.leaseParticipant().customer());
+
+        for (LeaseTermGuarantor ltg : Persistence.service().query(criteria)) {
+            LeaseApplicationDocumentDataGuarantorDTO guarantor = EntityFactory.create(LeaseApplicationDocumentDataGuarantorDTO.class);
+
+            guarantor.relationship().setValue(ltg.relationship().getValue());
+
+            guarantor.firstName().setValue(ltg.leaseParticipant().customer().person().name().firstName().getValue());
+            guarantor.lastName().setValue(ltg.leaseParticipant().customer().person().name().lastName().getValue());
+            guarantor.email().setValue(ltg.leaseParticipant().customer().person().email().getValue());
+
+            financialInfo.guarantors().add(guarantor);
+        }
 
     }
 
