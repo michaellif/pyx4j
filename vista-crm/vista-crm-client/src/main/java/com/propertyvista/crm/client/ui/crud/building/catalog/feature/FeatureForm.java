@@ -33,7 +33,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
 
     private static final I18n i18n = I18n.get(FeatureForm.class);
 
-    private Widget headerLMR, headerMoveIn, headerSecurity;
+    private Widget headerDeposits, headerLMR, headerMoveIn, headerSecurity;
 
     public FeatureForm(IForm<Feature> view) {
         super(Feature.class, view);
@@ -61,6 +61,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Deposits"));
+        headerDeposits = content.getWidget(row, 0);
 
         content.setH3(++row, 0, 2, i18n.tr("Last Month Rent"));
         headerLMR = content.getWidget(row, 0);
@@ -108,15 +109,19 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         get(proto().expiredFrom()).setVisible(isEditable() || !getValue().expiredFrom().isNull());
 
         if (!isEditable()) {
-            headerLMR.setVisible(getValue().version().depositLMR().enabled().isBooleanTrue());
-            get(proto().version().depositLMR()).setVisible(getValue().version().depositLMR().enabled().isBooleanTrue());
+            headerLMR.setVisible(getValue().version().depositLMR().enabled().getValue(false));
+            get(proto().version().depositLMR()).setVisible(getValue().version().depositLMR().enabled().getValue(false));
 
             if (!VistaFeatures.instance().yardiIntegration()) {
-                headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().isBooleanTrue());
-                get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().isBooleanTrue());
+                headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
+                get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
 
-                headerSecurity.setVisible(getValue().version().depositSecurity().enabled().isBooleanTrue());
-                get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().isBooleanTrue());
+                headerSecurity.setVisible(getValue().version().depositSecurity().enabled().getValue(false));
+                get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().getValue(false));
+
+                headerDeposits.setVisible(headerLMR.isVisible() || headerMoveIn.isVisible() || headerSecurity.isVisible());
+            } else {
+                headerDeposits.setVisible(headerLMR.isVisible());
             }
         }
     }
