@@ -175,7 +175,12 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
             get(proto().expirationDate()).setVisible(false);
 
             adjustmentPanel.setVisible((isEditable() || !getValue().adjustments().isEmpty()));
-            depositPanel.setVisible((isEditable() || !getValue().deposits().isEmpty()));
+
+            if (ARCode.Type.services().contains(getValue().item().product().holder().code().type().getValue())) {
+                depositPanel.setVisible((isEditable() || !getValue().deposits().isEmpty()));
+            } else if (ARCode.Type.features().contains(getValue().item().product().holder().code().type().getValue())) {
+                depositPanel.setVisible(false);
+            }
 
         } else if (!getValue().item().isEmpty()) {
             if (ARCode.Type.services().contains(getValue().item().product().holder().code().type().getValue())) {
