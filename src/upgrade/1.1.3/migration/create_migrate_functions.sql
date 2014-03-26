@@ -1355,9 +1355,9 @@ BEGIN
         ALTER TABLE proof_of_asset_document_folder OWNER TO vista;
         
         
-        -- proof_of_employment_document_blob
+        -- proof_of_income_document_blob
         
-        CREATE TABLE proof_of_employment_document_blob
+        CREATE TABLE proof_of_income_document_blob
         (       
                 id                              BIGINT                  NOT NULL,
                 name                            VARCHAR(500),
@@ -1365,16 +1365,16 @@ BEGIN
                 content_type                    VARCHAR(500),
                 updated                         TIMESTAMP,
                 created                         TIMESTAMP,
-                        CONSTRAINT proof_of_employment_document_blob_pk PRIMARY KEY(id)
+                        CONSTRAINT proof_of_income_document_blob_pk PRIMARY KEY(id)
         );
         
         
-        ALTER TABLE proof_of_employment_document_blob OWNER TO vista;
+        ALTER TABLE proof_of_income_document_blob OWNER TO vista;
         
         
-        -- proof_of_employment_document_file
+        -- proof_of_income_document_file
         
-        CREATE TABLE proof_of_employment_document_file
+        CREATE TABLE proof_of_income_document_file
         (
                 id                              BIGINT                  NOT NULL,
                 owner                           BIGINT,
@@ -1386,24 +1386,24 @@ BEGIN
                 file_blob_key                   BIGINT,
                 description 					VARCHAR(500),
                 order_in_owner                  INT,
-                        CONSTRAINT proof_of_employment_document_file_pk PRIMARY KEY(id)
+                        CONSTRAINT proof_of_income_document_file_pk PRIMARY KEY(id)
         );
         
         
-        ALTER TABLE proof_of_employment_document_file OWNER TO vista;
+        ALTER TABLE proof_of_income_document_file OWNER TO vista;
         
         
-        -- proof_of_employment_document_folder
+        -- proof_of_income_document_folder
         
-        CREATE TABLE proof_of_employment_document_folder
+        CREATE TABLE proof_of_income_document_folder
         (
                 id                              BIGINT                  NOT NULL,
                 owner                           BIGINT                  NOT NULL,
                 description                     VARCHAR(500),
-                        CONSTRAINT proof_of_employment_document_folder_pk PRIMARY KEY(id)
+                        CONSTRAINT proof_of_income_document_folder_pk PRIMARY KEY(id)
         );
         
-        ALTER TABLE proof_of_employment_document_folder OWNER TO vista;
+        ALTER TABLE proof_of_income_document_folder OWNER TO vista;
         
         -- prospect_portal_policy
         
@@ -1778,8 +1778,8 @@ BEGIN
         -- tax
         
         EXECUTE 'UPDATE '||v_schema_name||'.tax '
-                        ||'SET  policy_node_discriminator = ''Province'' '
-                        ||'WHERE policy_node_discriminator = ''Disc_Province'' ';
+                ||'SET  policy_node_discriminator = ''Province'' '
+                ||'WHERE policy_node_discriminator = ''Disc_Province'' ';
                         
                         
         /**     
@@ -1830,9 +1830,25 @@ BEGIN
                 EXECUTE 'DELETE FROM '||v_schema_name||'.product';
         ELSE
         
-			/*
+			-- delete products that exist as drafts only
             
-			*/
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product_item '
+                    ||'WHERE product IN     (SELECT     id '
+                    ||'                     FROM    '||v_schema_name||'.product_v '
+                    ||'                     WHERE   holder IN   (SELECT     holder '
+                    ||'                                         FROM    '||v_schema_name||'.product_v '
+                    ||'                                         GROUP BY    holder '
+                    ||'                                         HAVING  MAX(COALESCE(version_number,0)) = 0)) ';
+            
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
+                    ||'WHERE holder IN  (SELECT     holder '
+                    ||'                 FROM    '||v_schema_name||'.product_v '
+                    ||'                 GROUP BY    holder '
+                    ||'                 HAVING  MAX(COALESCE(version_number,0)) = 0) ';
+                    
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product '
+                    ||'WHERE    id NOT IN   (SELECT DISTINCT holder '
+                    ||'                     FROM    '||v_schema_name||'.product_v) ';
 			
 			/*
 			
@@ -1904,6 +1920,8 @@ BEGIN
                 
         
             -- insert new records into product table 
+            
+            SET CONSTRAINTS ALL IMMEDIATE;
         
             ALTER TABLE product ALTER COLUMN code_type DROP NOT NULL;
         
@@ -2446,10 +2464,10 @@ BEGIN
                 REFERENCES proof_of_asset_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE proof_of_asset_document_folder ADD CONSTRAINT proof_of_asset_document_folder_owner_fk FOREIGN KEY(owner) 
                 REFERENCES customer_screening_personal_asset(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE proof_of_employment_document_file ADD CONSTRAINT proof_of_employment_document_file_owner_fk FOREIGN KEY(owner) 
-                REFERENCES proof_of_employment_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE proof_of_employment_document_folder ADD CONSTRAINT proof_of_employment_document_folder_owner_fk FOREIGN KEY(owner) 
-                REFERENCES customer_screening_income(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_income_document_file ADD CONSTRAINT proof_of_income_document_file_owner_fk FOREIGN KEY(owner) 
+            REFERENCES proof_of_income_document_folder(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE proof_of_income_document_folder ADD CONSTRAINT proof_of_income_document_folder_owner_fk FOREIGN KEY(owner) 
+            REFERENCES customer_screening_income(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE signed_agreement_confirmation_term ADD CONSTRAINT signed_agreement_confirmation_term_signature_fk FOREIGN KEY(signature) 
                 REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE signed_agreement_confirmation_term ADD CONSTRAINT signed_agreement_confirmation_term_term_fk FOREIGN KEY(term) 
