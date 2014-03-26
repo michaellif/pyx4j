@@ -1791,9 +1791,17 @@ BEGIN
         **/
         
         
-        -- Insert into arcode - if necessary
+        -- arcode may exist already, but have a different name
         
+        EXECUTE 'UPDATE '||v_schema_name||'.arcode '
+				||'SET	name = ''Residential'' '
+				||'WHERE	code_type = ''Residential'' '
+				||'AND		gl_code = (	SELECT 	id '
+				||'						FROM 	'||v_schema_name||'.gl_code '
+				||'						WHERE	code_id = 5110) '
+				||'AND		name != ''Residential'' ';
         
+        -- Insert into arcode - if necessary (meaning the previous update didn't work)
         
         EXECUTE 'SELECT COUNT(id) '
                 ||'FROM '||v_schema_name||'.arcode '
@@ -1822,14 +1830,48 @@ BEGIN
                 EXECUTE 'DELETE FROM '||v_schema_name||'.product';
         ELSE
         
-            EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
+			/*
+            
+			*/
+			
+			/*
+			
+			EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
+                    ||'SET  code = t.min_code, '
+                    ||'		default_catalog_item = ''FALSE'' '	
+                    ||'FROM         (SELECT pv.holder,MIN(pi.code) AS min_code '
+                    ||'             FROM    '||v_schema_name||'.product_v pv '
+                    ||'             JOIN    '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
+                    ||'             WHERE   pi.product_discriminator = ''service'' '
+                    ||'             AND     pv.to_date IS NULL '
+                    ||'             AND     pv.from_date IS NOT NULL '
+                    ||'             GROUP BY pv.holder ) AS t '
+                    ||'WHERE p.id = t.holder ';
+			*/
+			
+			EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
+                    ||'SET  code = t.code, '
+                    ||'		default_catalog_item = ''FALSE'' '
+                    ||'FROM	(SELECT DISTINCT 	p.id,pi.code '
+                    ||'		FROM 	'||v_schema_name||'.product p '
+                    ||'		JOIN 	'||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
+                    ||'		JOIN 	'||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
+                    ||'		WHERE	p.id_discriminator = ''service'' ) AS t '
+                    ||'WHERE	p.id = t.id ';
+                    
+            -- all records that are not updated with previous query (products with no items)
+                   
+			EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
                     ||'SET  default_catalog_item = ''FALSE'', '
                     ||'     code = a.id '
-                    ||'FROM '||v_schema_name||'.arcode AS a '
-                    ||'WHERE a.name = ''Residential'' '
-                    ||'AND  p.id_discriminator = ''service'' ';
-       
-        
+                    ||'FROM '||v_schema_name||'.arcode AS a, '
+                    ||'		'||v_schema_name||'.gl_code g '
+                    ||'WHERE 	a.gl_code = g.id '
+                    ||'AND	g.code_id = 5110 '	
+                    ||'AND  p.id_discriminator = ''service'' '
+                    ||'AND	p.code IS NULL ';
+			
+			
             EXECUTE 'UPDATE '||v_schema_name||'.product_v '
                     ||'SET  price = 0.00 '
                     ||'WHERE holder IN      (SELECT DISTINCT id FROM '||v_schema_name||'.product '
@@ -1861,7 +1903,7 @@ BEGIN
                     ||'WHERE p.id = t.holder ';
                 
         
-            -- insert new records into product_table 
+            -- insert new records into product table 
         
             ALTER TABLE product ALTER COLUMN code_type DROP NOT NULL;
         
@@ -1911,7 +1953,21 @@ BEGIN
                     ||'         FROM        t0 '
                     ||'         JOIN        t1 ON (t0.catalog = t1.catalog AND t0.pi_code = t1.code)) AS t2 '
                     ||'WHERE   pi.id = t2.pi_id ';
-                
+            
+            
+            -- delete those rare rows that do not have a code still
+		
+			
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
+                    ||'WHERE 	holder IN 	(SELECT 	id '
+                    ||'						FROM 	'||v_schema_name||'.product '
+                    ||'						WHERE	code IS NULL) ';
+		
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product '
+                    ||'WHERE	code IS NULL';
+				
+            
+              
             -- insert on product_v$features
         
             EXECUTE 'INSERT INTO '||v_schema_name||'.product_v$features (id,owner,value_discriminator,value) '
@@ -1929,17 +1985,8 @@ BEGIN
                     ||'         AND         id NOT IN (SELECT DISTINCT value FROM '||v_schema_name||'.product_v$features)) AS f )';
                 
 		
-            -- delete those rare rows that do not have a code still
-		
-            EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
-                    ||'WHERE 	holder IN 	(SELECT 	id '
-                    ||'						FROM 	'||v_schema_name||'.product '
-                    ||'						WHERE	code IS NULL) ';
-		
-            EXECUTE 'DELETE FROM '||v_schema_name||'.product '
-                    ||'WHERE	code IS NULL';
-				
-	
+            
+			
             -- update product_v with deposits
 		
             EXECUTE 'UPDATE '||v_schema_name||'.product_v AS p '
