@@ -830,8 +830,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 // process new availability data
                 for (ILSUnit ilsUnit : property.getILSUnit()) {
                     AptUnit aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
-                    updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor);
-                    updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
+                    if (updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor)) {
+                        updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
+                    }
                     excludedUnits.remove(aptUnit);
                     executionMonitor.addProcessedEvent("Unit");
                 }
@@ -863,13 +864,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         });
     }
 
-    private void updateAvailability(final AptUnit unit, final Availability avail, ExecutionMonitor executionMonitor) throws YardiServiceException {
+    private boolean updateAvailability(final AptUnit unit, final Availability avail, ExecutionMonitor executionMonitor) throws YardiServiceException {
         log.info("    availability: {}: {}", unit.getStringView(), (avail == null || avail.getVacateDate() == null ? "Not " : "") + "Available");
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Boolean, YardiServiceException>() {
             @Override
-            public Void execute() throws YardiServiceException {
-                new YardiILSMarketingProcessor().updateAvailability(unit, avail);
-                return null;
+            public Boolean execute() throws YardiServiceException {
+                return new YardiILSMarketingProcessor().updateAvailability(unit, avail);
             }
         });
     }

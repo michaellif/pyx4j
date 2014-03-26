@@ -186,12 +186,12 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
     }
 
     @Override
-    public void setAvailability(AptUnit unit, LogicalDate availableForRent) {
+    public boolean setAvailability(AptUnit unit, LogicalDate availableForRent) {
         EntityQueryCriteria<AptUnitEffectiveAvailability> criteria = EntityQueryCriteria.create(AptUnitEffectiveAvailability.class);
         criteria.eq(criteria.proto().unit(), unit);
         AptUnitEffectiveAvailability availability = Persistence.service().retrieve(criteria);
         availability.availableForRent().setValue(availableForRent);
-        Persistence.service().merge(availability);
+        return Persistence.service().merge(availability);
     }
 
     @Override

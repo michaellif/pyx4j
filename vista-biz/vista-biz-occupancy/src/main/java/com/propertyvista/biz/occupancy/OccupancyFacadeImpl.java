@@ -846,7 +846,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void setAvailability(AptUnit unit, LogicalDate availableForRent) {
+    public boolean setAvailability(AptUnit unit, LogicalDate availableForRent) {
         throw new Error("unsupported");
     }
 

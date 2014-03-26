@@ -120,7 +120,13 @@ public interface OccupancyFacade {
     boolean unreserveIfReservered(Lease leaseId);
 
     // Used only in Yardi for now
-    void setAvailability(AptUnit unit, LogicalDate availableForRent);
+    /**
+     * 
+     * @param unit
+     * @param availableForRent
+     * @return true if the availability has been modified
+     */
+    boolean setAvailability(AptUnit unit, LogicalDate availableForRent);
 
     Criterion buildAvalableCriteria(AptUnit unitProto, AptUnitOccupancySegment.Status status, Date from, Date fromDeadline);
 

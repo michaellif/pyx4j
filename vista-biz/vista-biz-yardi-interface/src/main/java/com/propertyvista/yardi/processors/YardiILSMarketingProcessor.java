@@ -50,7 +50,7 @@ public class YardiILSMarketingProcessor {
         this.executionMonitor = executionMonitor;
     }
 
-    public void updateAvailability(AptUnit unit, Availability avail) throws YardiServiceException {
+    public boolean updateAvailability(AptUnit unit, Availability avail) throws YardiServiceException {
         // no availability means "not available"
         LogicalDate dateAvail = null;
         if (avail != null) {
@@ -60,7 +60,7 @@ public class YardiILSMarketingProcessor {
                 dateAvail = toDate(avail.getVacateDate());
             }
         }
-        ServerSideFactory.create(OccupancyFacade.class).setAvailability(unit, dateAvail);
+        return ServerSideFactory.create(OccupancyFacade.class).setAvailability(unit, dateAvail);
     }
 
     public Map<String, BigDecimal> getDepositInfo(Property property) {
