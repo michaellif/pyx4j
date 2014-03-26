@@ -68,7 +68,7 @@ public class DepositFacadeImpl implements DepositFacade {
         List<Deposit> deposits = new ArrayList<Deposit>();
         for (DepositType type : DepositType.values()) {
             ProductDeposit productDeposit = getProductDepositByType(type, billableItem.item());
-            if (productDeposit.enabled().isBooleanTrue()) {
+            if (productDeposit.enabled().getValue(false)) {
                 deposits.add(makeDeposit(productDeposit, billableItem));
             }
         }
@@ -247,7 +247,7 @@ public class DepositFacadeImpl implements DepositFacade {
     public void onConfirmedBill(Bill bill) {
         // update status of newly created deposits to Billed
         for (InvoiceDeposit invoiceDeposit : BillingUtils.getLineItemsForType(bill, InvoiceDeposit.class)) {
-            if (!invoiceDeposit.deposit().isProcessed().isBooleanTrue()) {
+            if (!invoiceDeposit.deposit().isProcessed().getValue(false)) {
                 invoiceDeposit.deposit().isProcessed().setValue(true);
                 invoiceDeposit.deposit().lifecycle().status().setValue(DepositStatus.Processed);
                 // TODO - remove next line when Paid status update implemented....
@@ -259,7 +259,7 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     private Deposit makeDeposit(ProductDeposit productDeposit, BillableItem billableItem) {
-        if (!productDeposit.enabled().isBooleanTrue()) {
+        if (!productDeposit.enabled().getValue(false)) {
             return null;
         }
 

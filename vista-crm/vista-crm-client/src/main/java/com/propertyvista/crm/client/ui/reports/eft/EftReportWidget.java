@@ -154,7 +154,7 @@ public class EftReportWidget extends Composite implements ReportWidget {
                     while (paymentRecordIterator.hasNext() & (i < 300)) {
                         ++i;
                         EftReportRecordDTO paymentRecord = paymentRecordIterator.next();
-                        if (eftReportData.agregateByBuildings().isBooleanTrue()) {
+                        if (eftReportData.agregateByBuildings().getValue(false)) {
                             if (!currentPropertyCode.equals(paymentRecord.building().getValue())) {
                                 appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0}:", currentPropertyCode), propertyCodeTotal);
                                 currentPropertyCode = paymentRecord.building().getValue();
@@ -178,7 +178,7 @@ public class EftReportWidget extends Composite implements ReportWidget {
                     reportHtml.setHTML(new SafeHtmlBuilder().appendHtmlConstant("<div style='text-align: center;'>").appendEscaped("Finished...")
                             .appendHtmlConstant("</div>").toSafeHtml());
 
-                    if (eftReportData.agregateByBuildings().isBooleanTrue()) {
+                    if (eftReportData.agregateByBuildings().getValue(false)) {
                         appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
                     }
                     appendRenderedTotalRow(builder, NumberFormat.getFormat("#,##0"), i18n.tr("Total # of Payment Records:"),

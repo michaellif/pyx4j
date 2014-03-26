@@ -185,7 +185,7 @@ class FundsTransferCaledonAcknowledgement {
                         + akDebitRecord.clientId().getValue() + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
 
-            if (padDebitRecord.processed().isBooleanTrue()) {
+            if (padDebitRecord.processed().getValue(false)) {
                 throw new Error("Already processed transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '"
                         + akDebitRecord.clientId().getValue() + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }

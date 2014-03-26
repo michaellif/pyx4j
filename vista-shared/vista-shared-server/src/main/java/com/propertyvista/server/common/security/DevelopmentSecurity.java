@@ -46,7 +46,7 @@ public class DevelopmentSecurity {
         if (developmentUser == null) {
             return null;
         }
-        if ((developmentUserHostBased != null) && (!developmentUser.testCallsOnHosts().isBooleanTrue())) {
+        if ((developmentUserHostBased != null) && (!developmentUser.testCallsOnHosts().getValue(false))) {
             return null;
         }
         if ((number != null)

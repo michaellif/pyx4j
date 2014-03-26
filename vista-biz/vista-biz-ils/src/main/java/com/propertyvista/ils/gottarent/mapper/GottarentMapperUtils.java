@@ -59,7 +59,7 @@ public class GottarentMapperUtils {
 
     public static AddressStructured getAddress(com.propertyvista.domain.property.asset.building.Building building) {
         AddressStructured address = building.marketing().marketingAddress();
-        if (isNull(address) || address.isEmpty() || !building.marketing().useCustomAddress().isBooleanTrue()) {
+        if (isNull(address) || address.isEmpty() || !building.marketing().useCustomAddress().getValue(false)) {
             address = building.info().address();
         }
         return address;

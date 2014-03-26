@@ -49,7 +49,7 @@ public abstract class AbstractProofOfAssetDocumentUploadServiceImpl extends Abst
 
     @Override
     public String getUploadFileTypeName() {
-        return i18n.tr("Application Document");
+        return i18n.tr("Proof Of Asset Document");
     }
 
     @Override

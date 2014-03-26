@@ -96,9 +96,9 @@ public class ProductCatalogGenerator {
 
     public void buildEligibilityMatrix(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (ARCode.Type.services().contains(service.code().type().getValue()) && !service.defaultCatalogItem().isBooleanTrue()) {
+            if (ARCode.Type.services().contains(service.code().type().getValue()) && !service.defaultCatalogItem().getValue(false)) {
                 for (Feature feature : catalog.features()) {
-                    if (!feature.defaultCatalogItem().isBooleanTrue()) {
+                    if (!feature.defaultCatalogItem().getValue(false)) {
                         service.version().features().add(feature);
                     }
                 }
@@ -301,7 +301,7 @@ public class ProductCatalogGenerator {
         List<Service> services = new ArrayList<Service>();
 
         for (Service service : catalog.services()) {
-            if (service.code().equals(arCode) && !service.defaultCatalogItem().isBooleanTrue()) {
+            if (service.code().equals(arCode) && !service.defaultCatalogItem().getValue(false)) {
                 services.add(service);
             }
         }

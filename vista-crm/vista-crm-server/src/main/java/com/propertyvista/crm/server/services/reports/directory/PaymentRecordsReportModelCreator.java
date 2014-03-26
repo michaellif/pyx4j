@@ -39,7 +39,7 @@ public class PaymentRecordsReportModelCreator implements GadgetReportModelCreato
         callback.onFailure(new RuntimeException("not implemented"));
 
 //        final PaymentRecordsGadgetMetadata paymentRecordsGadgetMetadata = gadgetMetadata.duplicate(PaymentRecordsGadgetMetadata.class);
-//        final LogicalDate targetDate = paymentRecordsGadgetMetadata.customizeTargetDate().isBooleanTrue() ? paymentRecordsGadgetMetadata.targetDate()
+//        final LogicalDate targetDate = paymentRecordsGadgetMetadata.customizeTargetDate().getValue(false) ? paymentRecordsGadgetMetadata.targetDate()
 //                .getValue() : new LogicalDate(SysDateManager.getSysDate());
 //        final Vector<PaymentType> paymentTypeCriteria = new Vector<PaymentType>(paymentRecordsGadgetMetadata.paymentMethodFilter().getValue());
 //        final Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria = new Vector<PaymentRecord.PaymentStatus>(

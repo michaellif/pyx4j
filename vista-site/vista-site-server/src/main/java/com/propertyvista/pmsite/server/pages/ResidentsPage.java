@@ -33,7 +33,7 @@ public class ResidentsPage extends BasePage {
         // redirect if not enabled
         boolean residentPortalEnabled = false;
         try {
-            residentPortalEnabled = getCM().getSiteDescriptor().residentPortalEnabled().isBooleanTrue();
+            residentPortalEnabled = getCM().getSiteDescriptor().residentPortalEnabled().getValue(false);
         } catch (Exception ignore) {
         }
 

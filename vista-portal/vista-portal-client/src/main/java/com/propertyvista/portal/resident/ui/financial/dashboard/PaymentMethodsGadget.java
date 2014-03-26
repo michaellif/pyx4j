@@ -130,7 +130,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         @Override
         protected void removeItem(final CEntityFolderItem<PaymentMethodInfoDTO> item) {
             String text = i18n.tr("Do you really want to delete the Payment Method?");
-            if (item.getValue().usedByAutoPay().isBooleanTrue()) {
+            if (item.getValue().usedByAutoPay().getValue(false)) {
                 text = i18n.tr("This Payment Method is used in AutoPay(s). Do you really want to delete it with corresponding AutoPay(s)?");
             }
 
@@ -177,11 +177,11 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
-                if (getValue().usedByAutoPay().isBooleanTrue()) {
-                    ((CEntityFolderItem<PaymentMethodInfoDTO>) getParent()).setRemovable(parentView.getValue().allowCancelationByResident().isBooleanTrue());
+                if (getValue().usedByAutoPay().getValue(false)) {
+                    ((CEntityFolderItem<PaymentMethodInfoDTO>) getParent()).setRemovable(parentView.getValue().allowCancelationByResident().getValue(false));
                 }
 
-                if (getValue().restricted().isBooleanTrue()) {
+                if (getValue().restricted().getValue(false)) {
                     get(proto().paymentMethod().type()).setNote(i18n.tr("This Payment Method Type is currently restricted and cannot be used in Portal!"),
                             NoteStyle.Warn);
                 }

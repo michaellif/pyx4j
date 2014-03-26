@@ -26,29 +26,29 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.rpc.services.lease.ProofOfEmploymentDocumentCrmUploadService;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
+import com.propertyvista.crm.rpc.services.lease.ProofOfIncomeDocumentCrmUploadService;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 
-public class ProofOfEmploymentDocumentFileFolder extends VistaBoxFolder<ProofOfEmploymentDocumentFile> {
+public class ProofOfIncomeDocumentFileFolder extends VistaBoxFolder<ProofOfIncomeDocumentFile> {
 
-    private static final I18n i18n = I18n.get(ProofOfEmploymentDocumentFileFolder.class);
+    private static final I18n i18n = I18n.get(ProofOfIncomeDocumentFileFolder.class);
 
-    public ProofOfEmploymentDocumentFileFolder() {
-        super(ProofOfEmploymentDocumentFile.class, i18n.tr("File"));
+    public ProofOfIncomeDocumentFileFolder() {
+        super(ProofOfIncomeDocumentFile.class, i18n.tr("File"));
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof ProofOfEmploymentDocumentFile) {
+        if (member instanceof ProofOfIncomeDocumentFile) {
             return new DocumentEditor();
         }
         return super.create(member);
     }
 
-    private class DocumentEditor extends CEntityForm<ProofOfEmploymentDocumentFile> {
+    private class DocumentEditor extends CEntityForm<ProofOfIncomeDocumentFile> {
 
         public DocumentEditor() {
-            super(ProofOfEmploymentDocumentFile.class);
+            super(ProofOfIncomeDocumentFile.class);
         }
 
         @Override
@@ -56,8 +56,8 @@ public class ProofOfEmploymentDocumentFileFolder extends VistaBoxFolder<ProofOfE
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfEmploymentDocumentCrmUploadService.class), new VistaFileURLBuilder(
-                    ProofOfEmploymentDocumentFile.class));
+            CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfIncomeDocumentCrmUploadService.class), new VistaFileURLBuilder(
+                    ProofOfIncomeDocumentFile.class));
 
             main.setWidget(++row, 0, 1, inject(proto().file(), cfile));
 

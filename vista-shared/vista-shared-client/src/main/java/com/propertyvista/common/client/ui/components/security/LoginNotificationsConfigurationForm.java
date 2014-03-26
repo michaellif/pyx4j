@@ -54,9 +54,9 @@ public class LoginNotificationsConfigurationForm extends CEntityForm<LoginNotifi
         super.onValueSet(populate);
 
         if (isEditable()) {
-            get(proto().email()).setEnabled(getValue().isEmailNotificationEnabled().isBooleanTrue());
+            get(proto().email()).setEnabled(getValue().isEmailNotificationEnabled().getValue(false));
         } else {
-            get(proto().email()).setVisible(getValue().isEmailNotificationEnabled().isBooleanTrue());
+            get(proto().email()).setVisible(getValue().isEmailNotificationEnabled().getValue(false));
         }
     }
 }

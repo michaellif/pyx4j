@@ -85,7 +85,7 @@ public class L1DelinquentLeaseSearchActivity extends AbstractActivity implements
         } else {
             if (selected.getPreset() == L1CandidateSelectionPresets.Reviewed) {
                 for (LegalActionCandidateDTO c : dataProvider.getList()) {
-                    selectionModel.setSelected(c, c.isReviewed().isBooleanTrue());
+                    selectionModel.setSelected(c, c.isReviewed().getValue(false));
                 }
             }
         }

@@ -161,7 +161,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         fillMerchantAccountStatus(getValue().merchantAccount());
 
-        ilsEmailProfilePanel.setVisible(getValue() != null && getValue().ilsEmailConfigured().isBooleanTrue());
+        ilsEmailProfilePanel.setVisible(getValue() != null && getValue().ilsEmailConfigured().getValue(false));
     }
 
     @Override

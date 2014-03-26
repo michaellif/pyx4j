@@ -167,7 +167,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     public void populate(AptUnitDTO value) {
         super.populate(value);
 
-        setActionVisible(existingLeaseAction, value.isAvailableForExistingLease().isBooleanTrue());
+        setActionVisible(existingLeaseAction, value.isAvailableForExistingLease().getValue(false));
     }
 
     @Override

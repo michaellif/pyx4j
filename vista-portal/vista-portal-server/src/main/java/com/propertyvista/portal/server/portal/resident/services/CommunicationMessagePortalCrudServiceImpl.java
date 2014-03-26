@@ -162,7 +162,7 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
                 if (ResidentPortalContext.getCurrentUser().equals(m.sender())) {
                     continue;
                 }
-                if (!m.isRead().isBooleanTrue()) {
+                if (!m.isRead().getValue(false)) {
                     thread.isRead().set(m.isRead());
                 }
                 continue;

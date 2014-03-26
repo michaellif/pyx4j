@@ -183,7 +183,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 detailsViewAnchor.setVisible(!getValue().paymentMethod().isNull());
 
                 ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isNull()
-                        && parentView.getValue().allowCancelationByResident().isBooleanTrue());
+                        && parentView.getValue().allowCancelationByResident().getValue(false));
             }
         }
     }

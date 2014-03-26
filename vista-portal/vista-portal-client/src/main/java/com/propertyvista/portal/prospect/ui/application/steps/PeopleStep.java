@@ -143,11 +143,11 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         public boolean enforceAgeOfMajority() {
-            return wizard.getValue().enforceAgeOfMajority().isBooleanTrue();
+            return wizard.getValue().enforceAgeOfMajority().getValue(false);
         }
 
         public boolean maturedOccupantsAreApplicants() {
-            return wizard.getValue().maturedOccupantsAreApplicants().isBooleanTrue();
+            return wizard.getValue().maturedOccupantsAreApplicants().getValue(false);
         }
 
         @Override

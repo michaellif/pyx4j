@@ -25,16 +25,16 @@ import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
+import com.propertyvista.domain.blob.ProofOfIncomeDocumentBlob;
 
-public abstract class AbstractProofOfEmploymentDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, ProofOfEmploymentDocumentBlob> {
+public abstract class AbstractProofOfIncomeDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, ProofOfIncomeDocumentBlob> {
 
-    private static final I18n i18n = I18n.get(AbstractProofOfEmploymentDocumentUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(AbstractProofOfIncomeDocumentUploadServiceImpl.class);
 
     private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF);
 
-    public AbstractProofOfEmploymentDocumentUploadServiceImpl() {
+    public AbstractProofOfIncomeDocumentUploadServiceImpl() {
     }
 
     @Override
@@ -44,17 +44,17 @@ public abstract class AbstractProofOfEmploymentDocumentUploadServiceImpl extends
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(ProofOfEmploymentDocumentBlob.class).data().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(ProofOfIncomeDocumentBlob.class).data().getMeta().getLength();
     }
 
     @Override
     public String getUploadFileTypeName() {
-        return i18n.tr("Application Document");
+        return i18n.tr("Proof Of Income Application");
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<ProofOfEmploymentDocumentBlob> response) {
-        ProofOfEmploymentDocumentBlob blob = EntityFactory.create(ProofOfEmploymentDocumentBlob.class);
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<ProofOfIncomeDocumentBlob> response) {
+        ProofOfIncomeDocumentBlob blob = EntityFactory.create(ProofOfIncomeDocumentBlob.class);
         blob.data().setValue(uploadedData.binaryContent);
         blob.contentType().setValue(uploadedData.contentMimeType);
 

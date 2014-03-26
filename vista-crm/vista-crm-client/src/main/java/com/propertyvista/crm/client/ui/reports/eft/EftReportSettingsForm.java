@@ -150,14 +150,14 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().billingPeriod()).setVisible(getValue().filterByBillingCycle().isBooleanTrue());
-        get(proto().billingCycleStartDate()).setVisible(getValue().filterByBillingCycle().isBooleanTrue());
+        get(proto().billingPeriod()).setVisible(getValue().filterByBillingCycle().getValue(false));
+        get(proto().billingCycleStartDate()).setVisible(getValue().filterByBillingCycle().getValue(false));
 
-        get(proto().selectedPortfolios()).setVisible((getValue().filterByPortfolio().isBooleanTrue()));
-        get(proto().selectedBuildings()).setVisible((getValue().filterByBuildings().isBooleanTrue()));
+        get(proto().selectedPortfolios()).setVisible((getValue().filterByPortfolio().getValue(false)));
+        get(proto().selectedBuildings()).setVisible((getValue().filterByBuildings().getValue(false)));
 
-        get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
-        get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
+        get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOut().getValue(false));
+        get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOut().getValue(false));
     }
 
     private CComboBox<ReportOrderColumnMetadata> makeOrderByComboBox() {
@@ -171,7 +171,7 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
             @Override
             public String format(ReportOrderColumnMetadata o) {
                 if (o != null && !o.memberPath().isNull()) {
-                    String direction = o.isDesc().isBooleanTrue() ? "\u21E7" : "\u21E9";
+                    String direction = o.isDesc().getValue(false) ? "\u21E7" : "\u21E9";
                     return direction + " "
                             + EntityFactory.getEntityMeta(EftReportRecordDTO.class).getMemberMeta(new Path(o.memberPath().getValue())).getCaption();
                 } else {
@@ -200,7 +200,7 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
                 int cmp = meta.getMemberMeta(new Path(o1.memberPath().getValue())).getCaption()
                         .compareTo(meta.getMemberMeta(new Path(o2.memberPath().getValue())).getCaption());
                 if (cmp == 0) {
-                    cmp = -Boolean.valueOf(o1.isDesc().isBooleanTrue()).compareTo(o2.isDesc().isBooleanTrue());
+                    cmp = -Boolean.valueOf(o1.isDesc().getValue(false)).compareTo(o2.isDesc().getValue(false));
                 }
                 return cmp;
             }

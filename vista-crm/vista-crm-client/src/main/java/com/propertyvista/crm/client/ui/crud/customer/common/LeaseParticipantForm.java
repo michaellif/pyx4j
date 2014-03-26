@@ -261,7 +261,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
             @Override
             protected void addItem() {
-                if (LeaseParticipantForm.this.getValue().electronicPaymentsAllowed().isBooleanTrue()) {
+                if (LeaseParticipantForm.this.getValue().electronicPaymentsAllowed().getValue(false)) {
                     super.addItem();
                 } else {
                     MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Merchant Account is not setup to receive Electronic Payments"));

@@ -178,7 +178,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     public List<Item> getSelectedItems() {
         List<Item> selected = new LinkedList<Item>();
         for (Item item : itemsHolderForm.getValue().items()) {
-            if (item.isSelected().isBooleanTrue()) {
+            if (item.isSelected().getValue(false)) {
                 selected.add(item);
             }
         }

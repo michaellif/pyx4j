@@ -196,7 +196,7 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
     }
 
     private LogicalDate getStatusDate() {
-        return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
+        return getMetadata().customizeDate().getValue(false) ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
     }
 
     private Widget initAsOfBannerPanel() {

@@ -85,7 +85,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
             }
         }
         if (hasEquifax) {
-            prevTwoStepVerificationValue = getValue().requireTwoStepVerificationOnLogin().isBooleanTrue();
+            prevTwoStepVerificationValue = getValue().requireTwoStepVerificationOnLogin().getValue(false);
             get(proto().requireTwoStepVerificationOnLogin()).setValue(true);
             get(proto().requireTwoStepVerificationOnLogin()).setEditable(false);
         } else {

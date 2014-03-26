@@ -11,13 +11,11 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.lease;
+package com.propertyvista.portal.server.portal.prospect.services;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfIncomeDocumentProspectUploadService;
+import com.propertyvista.server.common.upload.AbstractProofOfIncomeDocumentUploadServiceImpl;
 
-import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
-
-public interface ProofOfEmploymentDocumentCrmUploadService extends UploadService<IEntity, ProofOfEmploymentDocumentBlob> {
+public class ProofOfIncomeDocumentProspectUploadServiceImpl extends AbstractProofOfIncomeDocumentUploadServiceImpl implements ProofOfIncomeDocumentProspectUploadService {
 
 }

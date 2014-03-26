@@ -54,6 +54,6 @@ public class PmcFeaturesForm extends CEntityForm<PmcVistaFeatures> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().yardiMaintenance()).setEnabled(getValue() != null && getValue().yardiIntegration().isBooleanTrue());
+        get(proto().yardiMaintenance()).setEnabled(getValue() != null && getValue().yardiIntegration().getValue(false));
     }
 }

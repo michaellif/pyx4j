@@ -156,7 +156,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
         paymentService.deletePaymentMethod(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                if (paymentMethod.usedByAutoPay().isBooleanTrue()) {
+                if (paymentMethod.usedByAutoPay().getValue(false)) {
                     populateAutoPaySummary();
                 }
             }

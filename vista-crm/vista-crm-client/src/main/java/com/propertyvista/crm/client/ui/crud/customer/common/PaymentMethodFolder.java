@@ -163,7 +163,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
 //                if (value != null && !value.isEmpty()) {
 //                    boolean primaryFound = false;
 //                    for (PaymentMethod item : value) {
-//                        if (item.isDefault().isBooleanTrue()) {
+//                        if (item.isDefault().getValue(false)) {
 //                            primaryFound = true;
 //                            break;
 //                        }

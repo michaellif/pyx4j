@@ -32,7 +32,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.YardiServiceRequest;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -54,7 +54,7 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusSe
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfAssetDocumentProspectUploadService;
-import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfEmploymentDocumentProspectUploadService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfIncomeDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessageAttachmentUploadPortalService;
@@ -90,7 +90,7 @@ import com.propertyvista.portal.server.security.access.prospect.IdentificationDo
 import com.propertyvista.portal.server.security.access.prospect.LeasePaymentMethodProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.LeaseTermTenantProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.ProofOfAssetDocumentFileProspectDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.prospect.ProofOfEmploymentDocumentFileProspectDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.prospect.ProofOfIncomeDocumentFileProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementCoveredItemTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.BillTenantDatasetAccessRule;
@@ -226,10 +226,10 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CreditCardValidationService.class));
 
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(IdentificationDocumentProspectUploadService.class));
-        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ProofOfEmploymentDocumentProspectUploadService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ProofOfIncomeDocumentProspectUploadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ProofOfAssetDocumentProspectUploadService.class));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(IdentificationDocumentFile.class, CRUD));
-        grant(PortalProspectBehavior.Prospect, new EntityPermission(ProofOfEmploymentDocumentFile.class, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(ProofOfIncomeDocumentFile.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(ProofOfAssetDocumentFile.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(LeasePaymentMethod.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(CustomerPicture.class, CRUD));
@@ -280,7 +280,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);
         grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerPictureProspectDatasetAccessRule(), CustomerPicture.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new IdentificationDocumentFileProspectDatasetAccessRule(), IdentificationDocumentFile.class);
-        grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfEmploymentDocumentFileProspectDatasetAccessRule(), ProofOfEmploymentDocumentFile.class);
+        grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfIncomeDocumentFileProspectDatasetAccessRule(), ProofOfIncomeDocumentFile.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfAssetDocumentFileProspectDatasetAccessRule(), ProofOfAssetDocumentFile.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new LeasePaymentMethodProspectDatasetAccessRule(), LeasePaymentMethod.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new LeaseTermTenantProspectDatasetAccessRule(), LeaseTermTenant.class);

@@ -418,7 +418,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     }
                 });
 
-                if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
+                if (getValue().paymentMethod().isProfiledMethod().getValue(false)) {
                     profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false, populate);
                     paymentMethodEditor.setEditable(false);
                 } else {
@@ -434,7 +434,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         } else { // view mode:
 
-            if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
+            if (getValue().paymentMethod().isProfiledMethod().getValue(false)) {
                 profiledPaymentMethodsCombo.setVisible(true);
                 profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false, populate);
             }

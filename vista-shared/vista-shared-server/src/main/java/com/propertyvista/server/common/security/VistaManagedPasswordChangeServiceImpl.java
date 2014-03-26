@@ -58,7 +58,7 @@ public abstract class VistaManagedPasswordChangeServiceImpl<E extends AbstractUs
         }
         E credential = Persistence.service().retrieve(credentialClass, request.userPk().getValue());
         credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
-        if (request.requireChangePasswordOnNextSignIn().isBooleanTrue()) {
+        if (request.requireChangePasswordOnNextSignIn().getValue(false)) {
             credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
         }
         ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());

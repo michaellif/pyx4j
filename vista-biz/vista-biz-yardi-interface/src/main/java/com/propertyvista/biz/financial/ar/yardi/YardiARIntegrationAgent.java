@@ -193,7 +193,7 @@ public class YardiARIntegrationAgent {
     private static Detail getReceiptReversalDetail(YardiReceiptReversal reversal) {
         Detail detail = new Detail();
         PaymentDetailReversal reversalType = new PaymentDetailReversal();
-        if (reversal.applyNSF().isBooleanTrue()) {
+        if (reversal.applyNSF().getValue(false)) {
             reversalType.setType("NSF");
         } else {
             reversalType.setType("Reverse");

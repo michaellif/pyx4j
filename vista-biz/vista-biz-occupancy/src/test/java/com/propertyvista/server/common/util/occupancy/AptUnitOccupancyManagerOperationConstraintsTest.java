@@ -234,7 +234,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-12").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-12");
-        Assert.assertTrue(getUOM().getCancelMoveOutConstraints(unitId).canCancelMoveOut().isBooleanTrue());
+        Assert.assertTrue(getUOM().getCancelMoveOutConstraints(unitId).canCancelMoveOut().getValue(false));
     }
 
     /** check that constraints returned forbid move out operation */
@@ -249,7 +249,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
 
         now("2010-01-12");
         CancelMoveOutConstraintsDTO constraints = getUOM().getCancelMoveOutConstraints(unitId);
-        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().isBooleanTrue());
+        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().getValue(false));
         Assert.assertEquals(CancelMoveOutConstraintsDTO.ConstraintsReason.LeasedOrReserved, constraints.reason().getValue());
         Assert.assertEquals(lease2.getPrimaryKey(), constraints.leaseStub().getPrimaryKey());
     }
@@ -265,7 +265,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
 
         now("2010-01-12");
         CancelMoveOutConstraintsDTO constraints = getUOM().getCancelMoveOutConstraints(unitId);
-        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().isBooleanTrue());
+        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().getValue(false));
         Assert.assertEquals(CancelMoveOutConstraintsDTO.ConstraintsReason.RenovatedOrOffMarket, constraints.reason().getValue());
         Assert.assertTrue(constraints.leaseStub().isNull());
     }
@@ -282,7 +282,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
 
         now("2010-11-10");
         CancelMoveOutConstraintsDTO constraints = getUOM().getCancelMoveOutConstraints(unitId);
-        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().isBooleanTrue());
+        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().getValue(false));
         Assert.assertEquals(CancelMoveOutConstraintsDTO.ConstraintsReason.RenovatedOrOffMarket, constraints.reason().getValue());
         Assert.assertTrue(constraints.leaseStub().isNull());
     }
@@ -301,7 +301,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
 
         now("2010-11-10");
         CancelMoveOutConstraintsDTO constraints = getUOM().getCancelMoveOutConstraints(unitId);
-        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().isBooleanTrue());
+        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().getValue(false));
         Assert.assertEquals(CancelMoveOutConstraintsDTO.ConstraintsReason.LeasedOrReserved, constraints.reason().getValue());
         Assert.assertNotNull(constraints.leaseStub().getPrimaryKey());
     }

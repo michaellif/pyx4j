@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
-import com.propertyvista.crm.rpc.services.lease.ProofOfEmploymentDocumentCrmUploadService;
-import com.propertyvista.server.common.upload.AbstractProofOfEmploymentDocumentUploadServiceImpl;
+import com.propertyvista.crm.rpc.services.lease.ProofOfIncomeDocumentCrmUploadService;
+import com.propertyvista.server.common.upload.AbstractProofOfIncomeDocumentUploadServiceImpl;
 
-public class ProofOfEmploymentDocumentCrmUploadServiceImpl extends AbstractProofOfEmploymentDocumentUploadServiceImpl implements ProofOfEmploymentDocumentCrmUploadService {
+public class ProofOfIncomeDocumentCrmUploadServiceImpl extends AbstractProofOfIncomeDocumentUploadServiceImpl implements ProofOfIncomeDocumentCrmUploadService {
 
 }

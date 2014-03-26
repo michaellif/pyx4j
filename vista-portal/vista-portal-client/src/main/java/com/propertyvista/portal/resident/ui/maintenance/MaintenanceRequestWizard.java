@@ -86,9 +86,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     @Override
     protected void onFinish() {
         if (getValue() != null && //
-                getValue().reportedForOwnUnit().isBooleanTrue() && //
-                !getValue().permissionToEnter().isBooleanTrue() && //
-                !getValue().confirmedNoPermissionToEnter().isBooleanTrue() //
+                getValue().reportedForOwnUnit().getValue(false) && //
+                !getValue().permissionToEnter().getValue(false) && //
+                !getValue().confirmedNoPermissionToEnter().getValue(false) //
         ) {
             MessageDialog.confirm( //
                     i18n.tr("Confirm 'No Entry'"), //
@@ -249,7 +249,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
                 value.reportedForOwnUnit().setValue(true);
             }
             if (value.permissionToEnter().isNull()) {
-                value.permissionToEnter().setValue(value.reportedForOwnUnit().isBooleanTrue()); // according reportedForOwnUnit
+                value.permissionToEnter().setValue(value.reportedForOwnUnit().getValue(false)); // according reportedForOwnUnit
             }
         }
         return value;
@@ -284,8 +284,8 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         get(proto().updated()).setVisible(!getValue().updated().isNull());
         get(proto().status()).setVisible(!getValue().submitted().isNull());
 
-        permissionPanel.setVisible(getValue().reportedForOwnUnit().isBooleanTrue());
-        accessPanel.setVisible(getValue().permissionToEnter().isBooleanTrue());
+        permissionPanel.setVisible(getValue().reportedForOwnUnit().getValue(false));
+        accessPanel.setVisible(getValue().permissionToEnter().getValue(false));
         statusPanel.setVisible(!getValue().id().isNull());
     }
 
@@ -315,7 +315,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         }
         if (!isViewable()) {
             // set options and re-populate
-            mrCategory.setOptionsMeta(meta, getValue() == null ? true : getValue().reportedForOwnUnit().isBooleanTrue());
+            mrCategory.setOptionsMeta(meta, getValue() == null ? true : getValue().reportedForOwnUnit().getValue(false));
         }
         // re-populate after parent categories have been added
         if (getValue() != null) {

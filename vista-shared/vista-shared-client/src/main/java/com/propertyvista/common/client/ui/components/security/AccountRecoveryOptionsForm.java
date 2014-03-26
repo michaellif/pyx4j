@@ -77,7 +77,7 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
     }
 
     private void setUpSecurityQuestionControls() {
-        if (getValue().useSecurityQuestionChallengeForPasswordReset().isBooleanTrue()) {
+        if (getValue().useSecurityQuestionChallengeForPasswordReset().getValue(false)) {
             get(proto().securityQuestion()).setVisible(true);
             List<String> suggestedSecurityQuestions = new ArrayList<String>();
             for (SecurityQuestion q : getValue().securityQuestionsSuggestions()) {

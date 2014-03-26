@@ -145,7 +145,7 @@ public class CrmSite extends VistaSite {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
-                HeaderViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().isBooleanTrue());
+                HeaderViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().getValue(false));
                 Window.setTitle(i18n.tr("Property Vista") + " - " + descriptor.siteTitles().crmHeader().getStringView());
                 StyleManager.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());

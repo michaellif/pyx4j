@@ -150,7 +150,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                 if (getComponent().getValue() != null && !getComponent().getValue().isEmpty()) {
                     boolean primaryFound = false;
                     for (Building item : getComponent().getValue()) {
-                        if (item.complexPrimary().isBooleanTrue()) {
+                        if (item.complexPrimary().getValue(false)) {
                             primaryFound = true;
                             break;
                         }

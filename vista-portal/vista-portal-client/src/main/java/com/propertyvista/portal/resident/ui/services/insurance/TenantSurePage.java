@@ -105,11 +105,11 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        updateCC.setVisible(!getValue().isCancelled().isBooleanTrue() && !getValue().isPaymentFailed().isBooleanTrue());
-        updateCCAndPay.setVisible(getValue().isPaymentFailed().isBooleanTrue());
+        updateCC.setVisible(!getValue().isCancelled().getValue(false) && !getValue().isPaymentFailed().getValue(false));
+        updateCCAndPay.setVisible(getValue().isPaymentFailed().getValue(false));
 
-        cancelTenantSure.setVisible(!getValue().isCancelled().isBooleanTrue());
-        reinstateTenantSure.setVisible(getValue().isCancelled().isBooleanTrue());
+        cancelTenantSure.setVisible(!getValue().isCancelled().getValue(false));
+        reinstateTenantSure.setVisible(getValue().isCancelled().getValue(false));
     }
 
     @Override

@@ -179,7 +179,7 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
                 upgradedGadgetMetadata.customizeCategory().setValue(true);
                 upgradedGadgetMetadata.category().setValue(oldGadgetMetadata.category().getValue());
             }
-            if (oldGadgetMetadata.customizeDate().isBooleanTrue()) {
+            if (oldGadgetMetadata.customizeDate().getValue(false)) {
                 upgradedGadgetMetadata.customizeDate().setValue(true);
                 upgradedGadgetMetadata.asOf().setValue(oldGadgetMetadata.asOf().getValue());
             }

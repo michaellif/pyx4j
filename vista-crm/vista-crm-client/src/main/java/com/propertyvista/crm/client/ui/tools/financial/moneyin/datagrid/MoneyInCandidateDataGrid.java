@@ -323,7 +323,7 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         Column<MoneyInCandidateDTO, Boolean> processColumn = new Column<MoneyInCandidateDTO, Boolean>(new CheckboxCell(false, false)) {
             @Override
             public Boolean getValue(MoneyInCandidateDTO object) {
-                return object.processPayment().isBooleanTrue();
+                return object.processPayment().getValue(false);
             }
         };
         processColumn.setFieldUpdater(new FieldUpdater<MoneyInCandidateDTO, Boolean>() {

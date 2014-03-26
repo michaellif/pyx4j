@@ -75,10 +75,10 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
         }
 
         PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings);
-        if (autoPayChangesReportMetadata.filterByExpectedMoveOut().isBooleanTrue()) {
+        if (autoPayChangesReportMetadata.filterByExpectedMoveOut().getValue(false)) {
             reportCriteria.setExpectedMoveOutCriteris(autoPayChangesReportMetadata.minimum().getValue(), autoPayChangesReportMetadata.maximum().getValue());
         }
-        reportCriteria.setLeasesOnNoticeOnly(autoPayChangesReportMetadata.leasesOnNoticeOnly().isBooleanTrue());
+        reportCriteria.setLeasesOnNoticeOnly(autoPayChangesReportMetadata.leasesOnNoticeOnly().getValue(false));
 
         Vector<AutoPayReviewLeaseDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewLeaseDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportPreauthorizedPaymentsRequiredReview(reportCriteria));

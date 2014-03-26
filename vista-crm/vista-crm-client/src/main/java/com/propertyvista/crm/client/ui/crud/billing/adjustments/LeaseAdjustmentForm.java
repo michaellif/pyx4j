@@ -180,7 +180,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     }
 
     private void recalculateTaxesAndTotal() {
-        if (getValue().overwriteDefaultTax().isBooleanTrue()) {
+        if (getValue().overwriteDefaultTax().getValue(false)) {
             get(proto().tax()).setEditable(true);
             get(proto().taxType()).setEditable(true);
 

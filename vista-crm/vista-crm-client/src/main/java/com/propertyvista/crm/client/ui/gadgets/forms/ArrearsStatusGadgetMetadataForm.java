@@ -66,7 +66,7 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityForm<ArrearsStatusGa
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
+        get(proto().asOf()).setVisible(getValue().customizeDate().getValue(false));
     }
 
 }

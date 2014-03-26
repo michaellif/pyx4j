@@ -126,7 +126,7 @@ public class EftReportGenerator implements ReportExporter {
 
         EftReportDataDTO reportData = EntityFactory.create(EftReportDataDTO.class);
 
-        if (reportMetadata.forthcomingEft().isBooleanTrue()) {
+        if (reportMetadata.forthcomingEft().getValue(false)) {
             reportProgressStatusHolder.setExecutionMonitor(new ExecutionMonitor());
             // Create forthcoming payment records here
             Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>();
@@ -141,16 +141,16 @@ public class EftReportGenerator implements ReportExporter {
             }
 
             List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
-                    reportMetadata.filterByPortfolio().isBooleanTrue() ? reportMetadata.selectedPortfolios() : null,
-                    reportMetadata.filterByBuildings().isBooleanTrue() ? reportMetadata.selectedBuildings() : null
+                    reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null,
+                    reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
             );//formatter:on
 
             for (LogicalDate padGenerationDate : padGenerationDays) {
                 PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
-                if (reportMetadata.filterByExpectedMoveOut().isBooleanTrue()) {
+                if (reportMetadata.filterByExpectedMoveOut().getValue(false)) {
                     reportCriteria.setExpectedMoveOutCriteris(reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue());
                 }
-                reportCriteria.setLeasesOnNoticeOnly(reportMetadata.leasesOnNoticeOnly().isBooleanTrue());
+                reportCriteria.setLeasesOnNoticeOnly(reportMetadata.leasesOnNoticeOnly().getValue(false));
                 paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria,
                         reportProgressStatusHolder.getExecutionMonitor()));
             }
@@ -226,34 +226,34 @@ public class EftReportGenerator implements ReportExporter {
             criteria.asc(criteria.proto().amount());
         } else {
             Sort orderBy = new Sort(criteria.proto().getMember(dtoBinder.getBoundDboMemberPath(new Path(reportMetadata.orderBy().memberPath().getValue()))),
-                    reportMetadata.orderBy().isDesc().isBooleanTrue());
+                    reportMetadata.orderBy().isDesc().getValue(false));
             criteria.sort(orderBy);
         }
 
         criteria.isNotNull(criteria.proto().padBillingCycle());
 
         criteria.eq(criteria.proto().billingAccount().lease().status(), Lease.Status.Active);
-        if (reportMetadata.leasesOnNoticeOnly().isBooleanTrue()) {
+        if (reportMetadata.leasesOnNoticeOnly().getValue(false)) {
             criteria.eq(criteria.proto().billingAccount().lease().completion(), Lease.CompletionType.Notice);
         }
         if (!reportMetadata.paymentStatus().isNull()) {
             criteria.eq(criteria.proto().paymentStatus(), reportMetadata.paymentStatus().getValue());
         }
-        if (reportMetadata.onlyWithNotice().isBooleanTrue()) {
+        if (reportMetadata.onlyWithNotice().getValue(false)) {
             criteria.isNotNull(criteria.proto().notice());
         }
-        if (reportMetadata.filterByBillingCycle().isBooleanTrue()) {
+        if (reportMetadata.filterByBillingCycle().getValue(false)) {
             criteria.eq(criteria.proto().padBillingCycle().billingType().billingPeriod(), reportMetadata.billingPeriod());
             criteria.eq(criteria.proto().padBillingCycle().billingCycleStartDate(), reportMetadata.billingCycleStartDate());
         }
 
         buildingCriteriaNormalizer.addBuildingCriterion(//@formatter:off
                 criteria,
-                reportMetadata.filterByPortfolio().isBooleanTrue() ? reportMetadata.selectedPortfolios() : null,
-                reportMetadata.filterByBuildings().isBooleanTrue() ? reportMetadata.selectedBuildings() : null
+                reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null,
+                reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
         );//@formatter:on
 
-        if (reportMetadata.filterByExpectedMoveOut().isBooleanTrue()) {
+        if (reportMetadata.filterByExpectedMoveOut().getValue(false)) {
             criteria.ge(criteria.proto().billingAccount().lease().expectedMoveOut(), reportMetadata.minimum());
             criteria.le(criteria.proto().billingAccount().lease().expectedMoveOut(), reportMetadata.maximum());
         }
@@ -286,8 +286,8 @@ public class EftReportGenerator implements ReportExporter {
 
     private void normalizeBuildingsFilter(EftReportMetadata reportMetadata) {
         List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
-                reportMetadata.filterByPortfolio().isBooleanTrue() ? reportMetadata.selectedPortfolios() : null,
-                reportMetadata.filterByBuildings().isBooleanTrue() ? reportMetadata.selectedBuildings() : null
+                reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null,
+                reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
         );//@formatter:on
         reportMetadata.filterByBuildings().setValue(!selectedBuildings.isEmpty());
         reportMetadata.selectedBuildings().clear();

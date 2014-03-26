@@ -56,7 +56,7 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
         }
         if (messages.size() > 0) {
             log.error("validation failed {}; {}", messages.size(), ConverterUtils.convertStringCollection(messages, "\n"));
-            if (!uploadRequestInfo.ignoreMissingMedia().isBooleanTrue()) {
+            if (!uploadRequestInfo.ignoreMissingMedia().getValue(false)) {
                 throw new Error("Validation error count:" + messages.size() + "; messages:" + ConverterUtils.convertStringCollection(messages, "\n"));
             }
         }

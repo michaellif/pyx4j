@@ -303,7 +303,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
     }
 
     private LogicalDate getStatusDate() {
-        return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
+        return getMetadata().customizeDate().getValue(false) ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
     }
 
     private static final class PaymentFeesForm extends CEntityForm<PaymentFeesHolderDTO> {

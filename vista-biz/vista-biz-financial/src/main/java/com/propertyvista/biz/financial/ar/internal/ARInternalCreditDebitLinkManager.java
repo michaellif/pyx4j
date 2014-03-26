@@ -152,7 +152,7 @@ class ARInternalCreditDebitLinkManager {
         links = getDebitCreditLinksByItem(payment);
         if (links != null && links.size() > 0) {
             for (DebitCreditLink link2 : links) {
-                if (!link2.hardLink().isBooleanTrue()) {
+                if (!link2.hardLink().getValue(false)) {
                     sum = sum.add(link2.amount().getValue());
                 }
             }
@@ -171,7 +171,7 @@ class ARInternalCreditDebitLinkManager {
                 firstCredit = links.iterator().next().creditItem();
             }
             for (DebitCreditLink link2 : links) {
-                if (!link2.hardLink().isBooleanTrue()) {
+                if (!link2.hardLink().getValue(false)) {
                     sum = sum.add(link2.amount().getValue());
                 }
             }
@@ -232,7 +232,7 @@ class ARInternalCreditDebitLinkManager {
     }
 
     void removeHardLink(DebitCreditLink link) {
-        if (link.hardLink().isBooleanTrue()) {
+        if (link.hardLink().getValue(false)) {
             link.hardLink().setValue(false);
             Persistence.service().persist(link);
         }
@@ -302,7 +302,7 @@ class ARInternalCreditDebitLinkManager {
                 Persistence.service().retrieve(credit.debitLinks());
                 if (!credit.debitLinks().isEmpty()) {
                     for (DebitCreditLink link : credit.debitLinks()) {
-                        if (!link.hardLink().isBooleanTrue() || (skipFirst == true && credits.get(0).equals(credit))) {
+                        if (!link.hardLink().getValue(false) || (skipFirst == true && credits.get(0).equals(credit))) {
                             InvoiceDebit debit = link.debitItem().cast();
                             debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(link.amount().getValue()));
                             credit.outstandingCredit().setValue(credit.outstandingCredit().getValue().add(link.amount().getValue().negate()));

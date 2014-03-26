@@ -41,11 +41,11 @@ public class ArrearsStatusReportModelCreator implements GadgetReportModelCreator
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
         callback.onFailure(new Error("not implemented"));
 //        final ArrearsStatusGadgetMetadata metadata = gadgetMetadata.duplicate(ArrearsStatusGadgetMetadata.class);
-//        final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
+//        final LogicalDate asOf = metadata.customizeDate().getValue(false) ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
 //        final DebitType arrearsCategory = metadata.category().getValue();
 //        final Vector<Sort> sortingCriteria = new Vector<Sort>();
 //        if (!metadata.primarySortColumn().isNull()) {
-//            sortingCriteria.add(new Sort(metadata.primarySortColumn().propertyPath().getValue(), !metadata.sortAscending().isBooleanTrue()));
+//            sortingCriteria.add(new Sort(metadata.primarySortColumn().propertyPath().getValue(), !metadata.sortAscending().getValue(false)));
 //        }
 //
 //        AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> serviceCallback = new AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>>() {

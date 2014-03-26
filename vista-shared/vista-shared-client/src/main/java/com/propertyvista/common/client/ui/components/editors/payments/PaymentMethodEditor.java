@@ -152,7 +152,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());
+        get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().getValue(false));
 
         paymentDetailsHeader.setVisible(this.contains(proto().details()));
 

@@ -95,12 +95,12 @@ public class BillingUtils {
 
     public static boolean isRecurringFeature(Product.ProductV<?> product) {
         boolean isFeature = isFeature(product);
-        return isFeature && ((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
+        return isFeature && ((Feature.FeatureV) product.cast()).recurring().getValue(false);
     }
 
     public static boolean isOneTimeFeature(Product.ProductV<?> product) {
         boolean isFeature = isFeature(product);
-        return isFeature && !((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
+        return isFeature && !((Feature.FeatureV) product.cast()).recurring().getValue(false);
     }
 
     public static List<InvoiceLineItem> getUnclaimedLineItems(BillingAccount billingAccount, BillingCycle cycle) {

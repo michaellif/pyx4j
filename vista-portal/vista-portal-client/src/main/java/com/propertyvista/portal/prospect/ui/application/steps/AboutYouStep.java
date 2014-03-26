@@ -81,7 +81,7 @@ public class AboutYouStep extends ApplicationWizardStep {
             fileUpload.setDocumentsPolicy(getValue().applicant().documentsPolicy());
         }
 
-        get(proto().applicant().person().birthDate()).setMandatory(getWizard().getValue().enforceAgeOfMajority().isBooleanTrue());
+        get(proto().applicant().person().birthDate()).setMandatory(getWizard().getValue().enforceAgeOfMajority().getValue(false));
     }
 
     @Override
@@ -109,6 +109,6 @@ public class AboutYouStep extends ApplicationWizardStep {
     }
 
     public boolean enforceAgeOfMajority() {
-        return getWizard().getValue().enforceAgeOfMajority().isBooleanTrue();
+        return getWizard().getValue().enforceAgeOfMajority().getValue(false);
     }
 }

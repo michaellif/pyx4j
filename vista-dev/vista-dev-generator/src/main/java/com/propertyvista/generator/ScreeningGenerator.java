@@ -37,13 +37,13 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.blob.IdentificationDocumentBlob;
 import com.propertyvista.domain.blob.ProofOfAssetDocumentBlob;
-import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
+import com.propertyvista.domain.blob.ProofOfIncomeDocumentBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFolder;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -151,14 +151,14 @@ public class ScreeningGenerator {
             CustomerScreeningIncome income = EntityFactory.create(CustomerScreeningIncome.class);
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.details().set(createEmployer());
-            income.documents().add(createProofOfEmploymentDocument());
+            income.documents().add(createProofOfIncomeDocument());
             incomes.add(income);
         }
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             CustomerScreeningIncome income = EntityFactory.create(CustomerScreeningIncome.class);
             income.incomeSource().setValue(IncomeSource.selfemployed);
             income.details().set(createSelfEmployed());
-            income.documents().add(createProofOfEmploymentDocument());
+            income.documents().add(createProofOfIncomeDocument());
             incomes.add(income);
         }
 
@@ -280,16 +280,16 @@ public class ScreeningGenerator {
         return document;
     }
 
-    private ProofOfEmploymentDocumentFolder createProofOfEmploymentDocument() {
-        ProofOfEmploymentDocumentFolder document = EntityFactory.create(ProofOfEmploymentDocumentFolder.class);
-        document.description().setValue("proof of employment document " + RandomUtil.randomLetters(10));
-        document.files().add(createDocumentPage(ProofOfEmploymentDocumentFile.class, "doc-income" + RandomUtil.randomInt(3) + ".jpg"));
+    private ProofOfIncomeDocumentFolder createProofOfIncomeDocument() {
+        ProofOfIncomeDocumentFolder document = EntityFactory.create(ProofOfIncomeDocumentFolder.class);
+        document.description().setValue("Proof of income document " + RandomUtil.randomLetters(10));
+        document.files().add(createDocumentPage(ProofOfIncomeDocumentFile.class, "doc-income" + RandomUtil.randomInt(3) + ".jpg"));
         return document;
     }
 
     private ProofOfAssetDocumentFolder createProofOfAssetDocument() {
         ProofOfAssetDocumentFolder document = EntityFactory.create(ProofOfAssetDocumentFolder.class);
-        document.description().setValue("proof of employment document " + RandomUtil.randomLetters(10));
+        document.description().setValue("Proof of asset document " + RandomUtil.randomLetters(10));
         document.files().add(createDocumentPage(ProofOfAssetDocumentFile.class, "doc-asset" + RandomUtil.randomInt(3) + ".jpg"));
         return document;
     }
@@ -305,7 +305,7 @@ public class ScreeningGenerator {
             attachDocumentData(document);
         }
         for (CustomerScreeningIncome income : screening.version().incomes()) {
-            for (ProofOfEmploymentDocumentFolder document : income.documents()) {
+            for (ProofOfIncomeDocumentFolder document : income.documents()) {
                 attachDocumentData(document);
             }
         }
@@ -341,17 +341,17 @@ public class ScreeningGenerator {
         }
     }
 
-    private static void attachDocumentData(ProofOfEmploymentDocumentFolder document) {
-        for (ProofOfEmploymentDocumentFile applicationDocument : document.files()) {
+    private static void attachDocumentData(ProofOfIncomeDocumentFolder document) {
+        for (ProofOfIncomeDocumentFile applicationDocument : document.files()) {
             String fileName = applicationDocument.file().fileName().getValue();
-            ProofOfEmploymentDocumentBlob applicationDocumentData;
+            ProofOfIncomeDocumentBlob applicationDocumentData;
             try {
                 byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, ScreeningGenerator.class);
                 if (data == null) {
                     throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
                 }
                 String contentType = MimeMap.getContentType(FilenameUtils.getExtension(fileName));
-                applicationDocumentData = EntityFactory.create(ProofOfEmploymentDocumentBlob.class);
+                applicationDocumentData = EntityFactory.create(ProofOfIncomeDocumentBlob.class);
                 applicationDocumentData.data().setValue(data);
                 applicationDocumentData.contentType().setValue(contentType);
 

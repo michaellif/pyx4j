@@ -44,7 +44,7 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> selectedBuildings) {
         callback.onFailure(new Error("not implemented"));
 //        final PaymentsSummaryGadgetMetadata paymentsSummaryGadgetMetadata = gadgetMetadata.duplicate(PaymentsSummaryGadgetMetadata.class);
-//        final LogicalDate targetDate = paymentsSummaryGadgetMetadata.customizeDate().isBooleanTrue() ? paymentsSummaryGadgetMetadata.asOf().getValue()
+//        final LogicalDate targetDate = paymentsSummaryGadgetMetadata.customizeDate().getValue(false) ? paymentsSummaryGadgetMetadata.asOf().getValue()
 //                : new LogicalDate(SysDateManager.getSysDate());
 //        final Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria = new Vector<PaymentRecord.PaymentStatus>(paymentsSummaryGadgetMetadata.paymentStatus()
 //                .getValue());

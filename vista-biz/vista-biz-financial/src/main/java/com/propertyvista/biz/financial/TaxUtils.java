@@ -92,7 +92,7 @@ public class TaxUtils {
                     }
                 }
             }
-            if (tax.compound().isBooleanTrue()) {
+            if (tax.compound().getValue(false)) {
                 amountPerTax = amountPerTax.add(taxCombinedAmount);
                 taxCombinedAmount = taxCombinedAmount.add(DomainUtil.roundMoney(amountPerTax.multiply(tax.rate().getValue())));
                 break;
@@ -143,7 +143,7 @@ public class TaxUtils {
         if (taxes != null) {
             BigDecimal interimAmount = baseAmount;
             for (Tax tax : taxes) {
-                if (!tax.compound().isBooleanTrue()) {
+                if (!tax.compound().getValue(false)) {
                     InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
                     chargeTax.amount().setValue(DomainUtil.roundMoney(baseAmount.multiply(tax.rate().getValue())));
@@ -152,7 +152,7 @@ public class TaxUtils {
                 }
             }
             for (Tax tax : taxes) {
-                if (tax.compound().isBooleanTrue()) {
+                if (tax.compound().getValue(false)) {
                     InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
                     chargeTax.amount().setValue(DomainUtil.roundMoney(interimAmount.multiply(tax.rate().getValue())));

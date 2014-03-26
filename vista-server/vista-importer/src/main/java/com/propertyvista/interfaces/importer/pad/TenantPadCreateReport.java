@@ -49,7 +49,7 @@ public class TenantPadCreateReport {
             }
             reportModel.actualChargeCodeAmount().setValue(reportModel._processorInformation().actualChargeCodeAmount().getValue());
 
-            if (!reportModel.invalid().isBooleanTrue()) {
+            if (!reportModel.invalid().getValue(false)) {
                 StringBuilder amountStored = new StringBuilder();
                 for (PadFileModel charge : data._processorInformation().accountCharges()) {
                     if (amountStored.length() > 0) {

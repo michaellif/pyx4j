@@ -101,7 +101,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         approvalLink.setVisible(true || !isEditable() & getValue().equifaxInfo().status().getValue() == PmcEquifaxStatus.PendingVistaApproval);
 
-        get(proto().features().yardiMaintenance()).setEnabled(getValue() != null && getValue().features().yardiIntegration().isBooleanTrue());
+        get(proto().features().yardiMaintenance()).setEnabled(getValue() != null && getValue().features().yardiIntegration().getValue(false));
     }
 
     private TwoColumnFlexFormPanel createGeneralTab() {

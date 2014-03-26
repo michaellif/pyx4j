@@ -66,7 +66,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor<InternalBi
         //This is first time charge have been issued - add deposit
         for (Deposit deposit : billableItem.deposits()) {
             LogicalDate effectiveDate = billableItem.effectiveDate().getValue();
-            if (!deposit.isProcessed().isBooleanTrue()
+            if (!deposit.isProcessed().getValue(false)
                     && (effectiveDate == null || !effectiveDate.after(getBillProducer().getNextPeriodBill().billingPeriodEndDate().getValue()))) {
                 InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
                 invoiceDeposit.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());

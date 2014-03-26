@@ -288,7 +288,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder {
 
         int columnNum = 0;
         for (ColumnDescriptorEntity columnDescriptor : columnDescriptors) {
-            if (columnDescriptor.isVisible().isBooleanTrue()) {
+            if (columnDescriptor.isVisible().getValue(false)) {
                 visibleColumns.add(columnDescriptor);
             }
         }
@@ -329,7 +329,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder {
         int offset = 0;
         int columnNum = 0;
         for (ColumnDescriptorEntity columnDescriptor : columnDescriptors) {
-            if (columnDescriptor.isVisible().isBooleanTrue()) {
+            if (columnDescriptor.isVisible().getValue(false)) {
                 int width = columnWidths[columnNum++];
                 addMemberField(columnDescriptor, offset, width);
                 offset += width;

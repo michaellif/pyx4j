@@ -77,9 +77,9 @@ public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChanges
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().buildings()).setVisible(getValue().filterByBuildings().isBooleanTrue());
-        get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
-        get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
+        get(proto().buildings()).setVisible(getValue().filterByBuildings().getValue(false));
+        get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOut().getValue(false));
+        get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOut().getValue(false));
     }
 
 }

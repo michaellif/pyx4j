@@ -72,7 +72,7 @@ class GlobalLoginManager {
                     if (credentials == null) {
                         throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
                     }
-                    if (!credentials.enabled().isBooleanTrue()) {
+                    if (!credentials.enabled().getValue(false)) {
                         return null;
                     }
 
@@ -99,7 +99,7 @@ class GlobalLoginManager {
                 if (credentials == null) {
                     throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
                 }
-                if (!credentials.enabled().isBooleanTrue()) {
+                if (!credentials.enabled().getValue(false)) {
                     return null;
                 }
 

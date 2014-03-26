@@ -51,8 +51,8 @@ public class KijijiUnitMapper {
         to.setPrice(from.minPrice().getValue().toPlainString());
         to.setSquareFootage(DomainUtil.getAreaInSqFeet(from.floorplan().area(), from.floorplan().areaUnits()));
 
-        to.setFurnished(from.isFurnished().isBooleanTrue() ? IsFurnished.YES : IsFurnished.NO);
-        to.setPetsAllowed(from.isPetsAllowed().isBooleanTrue() ? IsPetsAllowed.YES : IsPetsAllowed.NO);
+        to.setFurnished(from.isFurnished().getValue(false) ? IsFurnished.YES : IsFurnished.NO);
+        to.setPetsAllowed(from.isPetsAllowed().getValue(false) ? IsPetsAllowed.YES : IsPetsAllowed.NO);
     }
 
     private BedroomsEnum getBedrooms(Integer beds) {

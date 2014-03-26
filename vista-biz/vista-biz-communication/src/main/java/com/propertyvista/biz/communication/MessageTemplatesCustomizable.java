@@ -397,13 +397,13 @@ class MessageTemplatesCustomizable {
         Object headerHtml;
         Object footerHtml;
 
-        if (emailTemplate.useHeader().isBooleanTrue()) {
+        if (emailTemplate.useHeader().getValue(false)) {
             headerHtml = EmailTemplateManager.parseTemplate(emailTemplate.policy().header().getValue(), data);
         } else {
             headerHtml = "";
         }
 
-        if (emailTemplate.useHeader().isBooleanTrue()) {
+        if (emailTemplate.useHeader().getValue(false)) {
             footerHtml = EmailTemplateManager.parseTemplate(emailTemplate.policy().footer().getValue(), data);
         } else {
             footerHtml = "";

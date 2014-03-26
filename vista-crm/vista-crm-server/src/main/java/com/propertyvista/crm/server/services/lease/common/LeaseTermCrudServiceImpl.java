@@ -72,7 +72,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     @Override
     protected LeaseTermDTO init(InitializationData initializationData) {
         LeaseTermInitializationData initData = (LeaseTermInitializationData) initializationData;
-        if (initData.isOffer().isBooleanTrue()) {
+        if (initData.isOffer().getValue(false)) {
             return createOffer(initData.lease(), initData.termType().getValue());
         } else { // creating new Application/Lease:
             Lease lease = createNewLease(initData.leaseType().getValue(), initData.leaseStatus().getValue());
@@ -112,7 +112,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         updateAdjustments(dbo);
 
         // check for newly created parent (lease/application):
-        if (dto.isNewLease().isBooleanTrue()) {
+        if (dto.isNewLease().getValue(false)) {
             dbo.lease().currentTerm().set(dbo);
             dbo.lease().unit().set(dbo.unit());
             dbo.lease().billingAccount().carryforwardBalance().setValue(dto.carryforwardBalance().getValue());
@@ -289,7 +289,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             Persistence.ensureRetrieve(selectedService.features(), AttachLevel.Attached);
             for (Feature feature : selectedService.features()) {
                 if (!VistaFeatures.instance().yardiIntegration() || VistaFeatures.instance().yardiIntegration()
-                        && feature.version().availableOnline().isBooleanTrue()) {
+                        && feature.version().availableOnline().getValue(false)) {
                     if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
                         Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                         for (ProductItem item : feature.version().items()) {
@@ -314,7 +314,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         Persistence.ensureRetrieve(currentValue.unit().building(), AttachLevel.Attached);
 
         // use default product catalog items for specific cases:
-        boolean useDefaultCatalog = (currentValue.unit().building().defaultProductCatalog().isBooleanTrue() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
+        boolean useDefaultCatalog = (currentValue.unit().building().defaultProductCatalog().getValue(false) || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
         LogicalDate termFrom = (currentValue.termFrom().isNull() ? SystemDateManager.getLogicalDate() : currentValue.termFrom().getValue());
 
         if (VistaFeatures.instance().yardiIntegration()) {

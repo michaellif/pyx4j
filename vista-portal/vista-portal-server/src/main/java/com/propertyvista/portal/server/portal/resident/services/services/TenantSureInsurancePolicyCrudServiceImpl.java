@@ -210,7 +210,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     @Override
     public void retrieve(AsyncCallback<TenantSureInsurancePolicyDTO> callback, Key entityId,
             com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
         TenantSureInsurancePolicyDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
@@ -225,7 +225,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void create(final AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO policyDto) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
 
@@ -256,7 +256,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, InsurancePaymentMethod paymentMethod) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
         paymentMethod.tenant().set(ResidentPortalContext.getTenant());
@@ -270,7 +270,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void cancelTenantSure(AsyncCallback<VoidSerializable> callback) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
 
@@ -281,7 +281,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void reinstate(AsyncCallback<VoidSerializable> callback) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
 
@@ -291,7 +291,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void sendCertificate(AsyncCallback<String> callback, String email) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
 
@@ -301,7 +301,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     }
 
     private TenantSureAgreementParamsDTO getAgreementParams() {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
         if (ServerSideFactory.create(TenantSureFacade.class).getStatus(ResidentPortalContext.getTenant().<Tenant> createIdentityStub()) != null) {
@@ -314,7 +314,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                 lease.unit().<AptUnit> createIdentityStub(), TenantInsurancePolicy.class);
 
-        BigDecimal minRequiredLiabiliy = tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue() ? tenantInsurancePolicy.minimumRequiredLiability()
+        BigDecimal minRequiredLiabiliy = tenantInsurancePolicy.requireMinimumLiability().getValue(false) ? tenantInsurancePolicy.minimumRequiredLiability()
                 .getValue() : BigDecimal.ZERO;
         params.generalLiabilityCoverageOptions().addAll(filterGeneralLiabilityOptions(minRequiredLiabiliy));
         params.contentsCoverageOptions().addAll(CONTENTS_COVERAGE_OPTIONS);

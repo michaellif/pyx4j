@@ -58,7 +58,7 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
         if (VistaDemo.isDemo() || ApplicationMode.isDevelopment()) {
             DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
             if (developmentUser != null) {
-                if (developmentUser.forwardAll().isBooleanTrue()) {
+                if (developmentUser.forwardAll().getValue(false)) {
                     config.forwardAllTo = developmentUser.email().getValue();
                 }
             }

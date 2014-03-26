@@ -54,7 +54,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         if (credential == null) {
             throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
         }
-        if (!credential.enabled().isBooleanTrue()) {
+        if (!credential.enabled().getValue(false)) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
 
@@ -72,7 +72,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
     public <E extends AbstractUserCredential<? extends AbstractUser>> void managedSetPassword(Class<E> credentialClass, PasswordChangeRequest request) {
         E credential = Persistence.service().retrieve(credentialClass, request.userPk().getValue());
         credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
-        if (request.requireChangePasswordOnNextSignIn().isBooleanTrue()) {
+        if (request.requireChangePasswordOnNextSignIn().getValue(false)) {
             credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
         }
         Persistence.service().persist(credential);
@@ -87,7 +87,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         addAllBehaviors(behaviors, credential.roles(), new HashSet<CrmRole>());
 
-        if (credential.accessAllBuildings().isBooleanTrue()) {
+        if (credential.accessAllBuildings().getValue(false)) {
             behaviors.add(VistaDataAccessBehavior.BuildingsAll);
         } else {
             behaviors.add(VistaDataAccessBehavior.BuildingsAssigned);
@@ -104,7 +104,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
                 behaviors.addAll(role.behaviors());
                 addAllBehaviors(behaviors, role.roles(), processed);
             }
-            if (role.requireSecurityQuestionForPasswordReset().isBooleanTrue()) {
+            if (role.requireSecurityQuestionForPasswordReset().getValue(false)) {
                 behaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
             }
         }

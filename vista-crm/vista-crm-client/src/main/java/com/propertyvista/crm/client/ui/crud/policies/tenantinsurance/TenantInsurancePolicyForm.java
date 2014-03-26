@@ -78,6 +78,6 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().minimumRequiredLiability()).setVisible(getValue().requireMinimumLiability().isBooleanTrue());
+        get(proto().minimumRequiredLiability()).setVisible(getValue().requireMinimumLiability().getValue(false));
     }
 }

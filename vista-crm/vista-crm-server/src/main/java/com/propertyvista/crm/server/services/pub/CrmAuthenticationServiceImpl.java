@@ -103,7 +103,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     @Override
     protected Set<Behavior> getBehaviors(CrmUserCredential userCredential) {
         Set<Behavior> behaviors = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(userCredential);
-        if (!userCredential.accessAllBuildings().isBooleanTrue()) {
+        if (!userCredential.accessAllBuildings().getValue(false)) {
             CrmUserBuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
         }
         return behaviors;

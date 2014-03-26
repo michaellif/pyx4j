@@ -56,7 +56,7 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
     @Override
     public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
         E credential = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
-        if (!credential.enabled().isBooleanTrue()) {
+        if (!credential.enabled().getValue(false)) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         Persistence.service().retrieve(credential.user());

@@ -78,10 +78,10 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         }
 
         PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings);
-        if (filterSettings.filterByExpectedMoveOut().isBooleanTrue()) {
+        if (filterSettings.filterByExpectedMoveOut().getValue(false)) {
             reportCriteria.setExpectedMoveOutCriteris(filterSettings.minimum().getValue(), filterSettings.maximum().getValue());
         }
-        reportCriteria.setLeasesOnNoticeOnly(filterSettings.leasesOnNoticeOnly().isBooleanTrue());
+        reportCriteria.setLeasesOnNoticeOnly(filterSettings.leasesOnNoticeOnly().getValue(false));
         return reportCriteria;
     }
 
@@ -100,7 +100,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         PapReviewDTO papReview = EntityFactory.create(PapReviewDTO.class);
         papReview.papId().set(autoPay.pap());
         papReview.caption().set(papReviewCaption.duplicate(PapReviewCaptionDTO.class));
-        papReview.caption().changedByTenant().setValue(autoPay.changedByTenant().isBooleanTrue());
+        papReview.caption().changedByTenant().setValue(autoPay.changedByTenant().getValue(false));
         papReview.caption().paymentMethod().setValue(autoPay.paymentMethodView().getStringView());
         papReview.caption().tenant().setValue(autoPay.tenantName().getStringView());
         papReview.caption().tenant_().set(autoPay.tenant_());

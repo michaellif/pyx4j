@@ -169,12 +169,12 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         super.populate(value);
 
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
-        viewHistoricTerms.setVisible(value.historyPresent().isBooleanTrue());
+        viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
 
         Lease.Status status = value.status().getValue();
         boolean reservationPreconditions = (!value.unit().isNull() && status.isDraft() && status != Lease.Status.ExistingLease);
         setActionVisible(reserveUnit, reservationPreconditions && !value.isUnitReserved().getValue(false));
-        setActionVisible(unreserveUnit, reservationPreconditions && value.isUnitReserved().isBooleanTrue());
+        setActionVisible(unreserveUnit, reservationPreconditions && value.isUnitReserved().getValue(false));
 
         setupPapsMenu(value);
     }

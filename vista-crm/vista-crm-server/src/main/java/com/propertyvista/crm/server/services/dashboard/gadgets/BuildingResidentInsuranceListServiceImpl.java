@@ -92,7 +92,7 @@ public class BuildingResidentInsuranceListServiceImpl implements BuildingResiden
             insuranceCriteria.le(insuranceCriteria.proto().inceptionDate(), now);
 
             TenantInsurancePolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(b, TenantInsurancePolicy.class);
-            if (policy.requireMinimumLiability().isBooleanTrue()) {
+            if (policy.requireMinimumLiability().getValue(false)) {
                 insuranceCriteria.ge(insuranceCriteria.proto().liabilityCoverage(), policy.minimumRequiredLiability().getValue());
             }
 

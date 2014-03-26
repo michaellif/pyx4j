@@ -95,7 +95,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
             request.workHistory().add(schedule);
             request.status().set(status);
 
-            if (!request.unit().isNull() && request.permissionToEnter().isBooleanTrue()) {
+            if (!request.unit().isNull() && request.permissionToEnter().getValue(false)) {
                 // send notice of entry if permission to access unit is granted
                 MailMessage email = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request);
 

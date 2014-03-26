@@ -31,6 +31,6 @@ public class ServiceViewerViewImpl extends CrmViewerViewImplBase<Service> implem
     @Override
     public void populate(Service value) {
         super.populate(value);
-        setEditingVisible(!value.defaultCatalogItem().isBooleanTrue());
+        setEditingVisible(!value.defaultCatalogItem().getValue(false));
     }
 }

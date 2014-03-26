@@ -51,7 +51,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
     private final SimplePanel detailsHolder = new SimplePanel();
 
-    private final ProofOfEmploymentUploaderFolder fileUpload = new ProofOfEmploymentUploaderFolder();
+    private final ProofOfIncomeUploaderFolder fileUpload = new ProofOfIncomeUploaderFolder();
 
     public PersonalIncomeEditor(ApplicationDocumentationPolicy policy) {
         super(CustomerScreeningIncome.class);
@@ -87,7 +87,6 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
             detailsHolder.setWidget(null);
         }
 
-        fileUpload.setVisible(false);
         if (type != null && getValue() != null) {
             @SuppressWarnings("rawtypes")
             CEntityForm editor = null;
@@ -97,23 +96,18 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
             case fulltime:
             case parttime:
                 editor = createEmployerEditor();
-                fileUpload.setVisible(true);
                 break;
             case selfemployed:
                 editor = createSelfEmployedEditor();
-                fileUpload.setVisible(true);
                 break;
             case seasonallyEmployed:
                 editor = createSeasonallyEmployedEditor();
-                fileUpload.setVisible(true);
                 break;
             case socialServices:
                 editor = createSocialServicesEditor();
-                fileUpload.setVisible(true);
                 break;
             case student:
                 editor = createStudentIncomeEditor();
-                fileUpload.setVisible(true);
                 break;
             default:
                 editor = createOtherIncomeInfoEditor(type);

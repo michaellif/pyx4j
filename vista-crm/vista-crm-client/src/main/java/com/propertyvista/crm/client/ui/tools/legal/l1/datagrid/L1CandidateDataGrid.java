@@ -176,7 +176,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
         Column<LegalActionCandidateDTO, Boolean> isReviewedColumn = new Column<LegalActionCandidateDTO, Boolean>(new CheckboxCell(false, false)) {
             @Override
             public Boolean getValue(LegalActionCandidateDTO object) {
-                return object.isReviewed().isBooleanTrue();
+                return object.isReviewed().getValue(false);
             }
         };
         isReviewedColumn.setFieldUpdater(new FieldUpdater<LegalActionCandidateDTO, Boolean>() {
@@ -212,7 +212,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
                 Object preset = L1CandidateSelectionPresets.Reviewed;
                 state = MultiSelectorState.Preset;
                 for (LegalActionCandidateDTO c : selectionModel.getSelectedSet()) {
-                    if (!c.isReviewed().isBooleanTrue()) {
+                    if (!c.isReviewed().getValue(false)) {
                         preset = null;
                         state = MultiSelectorState.Some;
                     }

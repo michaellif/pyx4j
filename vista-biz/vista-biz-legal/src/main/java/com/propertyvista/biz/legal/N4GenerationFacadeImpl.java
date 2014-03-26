@@ -101,7 +101,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.owedRent().rentOwingBreakdown().addAll(leaseData.rentOwingBreakdown());
         fieldsData.owedRent().totalRentOwing().setValue(leaseData.totalRentOwning().getValue());
 
-        fieldsData.signature().signedBy().setValue(batchData.isLandlord().isBooleanTrue() ? SignedBy.Landlord : SignedBy.Agent);
+        fieldsData.signature().signedBy().setValue(batchData.isLandlord().getValue(false) ? SignedBy.Landlord : SignedBy.Agent);
         fieldsData.signature().signature().setValue(batchData.signature().getValue());
         fieldsData.signature().signatureDate().setValue(batchData.signatureDate().getValue());
 

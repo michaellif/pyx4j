@@ -61,7 +61,7 @@ public class HeaderPanel extends Panel {
         // show login if Residents page is enabled
         boolean residentsEnabled = false;
         try {
-            residentsEnabled = cm.getSiteDescriptor().residentPortalEnabled().isBooleanTrue() && SystemState.Online.equals(SystemMaintenance.getState());
+            residentsEnabled = cm.getSiteDescriptor().residentPortalEnabled().getValue(false) && SystemState.Online.equals(SystemMaintenance.getState());
         } catch (Exception ignore) {
         }
         add(residentsEnabled ? new PageLink("auth", ResidentsPage.class).setText(i18n.tr("Resident Login")) : new Label("auth"));

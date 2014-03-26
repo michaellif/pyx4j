@@ -101,6 +101,6 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().targetDate()).setVisible(getValue().customizeTargetDate().isBooleanTrue());
+        get(proto().targetDate()).setVisible(getValue().customizeTargetDate().getValue(false));
     }
 }

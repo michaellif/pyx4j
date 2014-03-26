@@ -92,7 +92,7 @@ public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
 
         bindValueEditor(getValue().valueType().getValue(), true);
 
-        setStateEnabled(getValue().enabled().isBooleanTrue());
+        setStateEnabled(getValue().enabled().getValue(false));
     }
 
     private void bindValueEditor(ValueType valueType, boolean repopulatevalue) {

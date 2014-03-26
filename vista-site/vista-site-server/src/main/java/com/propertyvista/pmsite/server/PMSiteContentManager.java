@@ -108,7 +108,7 @@ public class PMSiteContentManager implements Serializable {
         } catch (NamespaceNotFoundException e) {
             foundSiteDescriptor = null;
         }
-        if ((foundSiteDescriptor == null) || (!foundSiteDescriptor.enabled().isBooleanTrue() && !foundSiteDescriptor.residentPortalEnabled().isBooleanTrue())) {
+        if ((foundSiteDescriptor == null) || (!foundSiteDescriptor.enabled().getValue(false) && !foundSiteDescriptor.residentPortalEnabled().getValue(false))) {
             throw new SiteWasNotSetUpUserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
         siteDescriptor = foundSiteDescriptor;
@@ -169,7 +169,7 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public boolean isAptListEnabled() {
-        return !siteDescriptor.disableBuildingDetails().isBooleanTrue();
+        return !siteDescriptor.disableBuildingDetails().getValue(false);
     }
 
     public List<AvailableLocale> getAllAvailableLocale() {
@@ -576,10 +576,10 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public boolean isWebsiteEnabled() {
-        return siteDescriptor.enabled().isBooleanTrue();
+        return siteDescriptor.enabled().getValue(false);
     }
 
     public boolean isResidentOnlyMode() {
-        return siteDescriptor.residentPortalEnabled().isBooleanTrue() && !siteDescriptor.enabled().isBooleanTrue();
+        return siteDescriptor.residentPortalEnabled().getValue(false) && !siteDescriptor.enabled().getValue(false);
     }
 }

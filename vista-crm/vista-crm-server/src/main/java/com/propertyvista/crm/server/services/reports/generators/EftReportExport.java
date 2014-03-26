@@ -39,7 +39,7 @@ public class EftReportExport {
 
         int counter = 0;
 
-        ExportTotals<?, EftReportExportModel> totals = eftReportData.agregateByBuildings().isBooleanTrue() ? new EftReportExportBuildingTotals()
+        ExportTotals<?, EftReportExportModel> totals = eftReportData.agregateByBuildings().getValue(false) ? new EftReportExportBuildingTotals()
                 : new EftReportOverallTotals();
 
         for (EftReportRecordDTO paymentRecord : eftReportData.eftReportRecords()) {

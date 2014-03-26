@@ -383,7 +383,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 get(proto().permissionToEnter()).setValue(event.getValue());
                 unitAccessPanel.setVisible(event.getValue().booleanValue());
                 getValue().category().set(null);
-                accessPanel.setVisible(getValue().permissionToEnter().isBooleanTrue() && event.getValue().booleanValue());
+                accessPanel.setVisible(getValue().permissionToEnter().getValue(false) && event.getValue().booleanValue());
                 setMaintenanceRequestCategoryMeta();
             }
         });
@@ -398,7 +398,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 value.reportedForOwnUnit().setValue(true);
             }
             if (value.permissionToEnter().isNull()) {
-                value.permissionToEnter().setValue(value.reportedForOwnUnit().isBooleanTrue()); // according reportedForOwnUnit
+                value.permissionToEnter().setValue(value.reportedForOwnUnit().getValue(false)); // according reportedForOwnUnit
             }
         }
         return value;
@@ -439,7 +439,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
         if (!isViewable()) {
             // set options
-            mrCategory.setOptionsMeta(meta, getValue().reportedForOwnUnit().isNull() ? true : getValue().reportedForOwnUnit().isBooleanTrue());
+            mrCategory.setOptionsMeta(meta, getValue().reportedForOwnUnit().isNull() ? true : getValue().reportedForOwnUnit().getValue(false));
         }
         // re-populate after parent categories have been added
         if (getValue() != null) {
@@ -486,9 +486,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         statusPanel.setVisible(!mr.id().isNull());
         surveyPanel.setVisible(phase == StatusPhase.Resolved);
 
-        unitSelector.setVisible(mr.reportedForOwnUnit().isBooleanTrue());
-        unitAccessPanel.setVisible(mr.reportedForOwnUnit().isBooleanTrue());
-        accessPanel.setVisible(mr.permissionToEnter().isBooleanTrue() && getValue().reportedForOwnUnit().isBooleanTrue());
+        unitSelector.setVisible(mr.reportedForOwnUnit().getValue(false));
+        unitAccessPanel.setVisible(mr.reportedForOwnUnit().getValue(false));
+        accessPanel.setVisible(mr.permissionToEnter().getValue(false) && getValue().reportedForOwnUnit().getValue(false));
         setMaintenanceRequestCategoryMeta();
     }
 

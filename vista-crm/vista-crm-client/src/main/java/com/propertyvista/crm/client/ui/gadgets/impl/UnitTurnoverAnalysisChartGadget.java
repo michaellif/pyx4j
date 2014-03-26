@@ -167,7 +167,7 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
     }
 
     private LogicalDate getStatusDate() {
-        return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
+        return getMetadata().customizeDate().getValue(false) ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
     }
 
     private Widget initAsOfBannerPanel() {
@@ -253,7 +253,7 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-                get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
+                get(proto().asOf()).setVisible(getValue().customizeDate().getValue(false));
             }
 
         };

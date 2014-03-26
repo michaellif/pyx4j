@@ -34,7 +34,7 @@ public class GuarantorCrudServiceImpl extends LeaseParticipantCrudServiceBaseImp
         if (retrieveTarget == RetrieveTarget.Edit) {
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
                     RestrictionsPolicy.class);
-            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+            if (restrictionsPolicy.enforceAgeOfMajority().getValue(false)) {
                 to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
             }
         }

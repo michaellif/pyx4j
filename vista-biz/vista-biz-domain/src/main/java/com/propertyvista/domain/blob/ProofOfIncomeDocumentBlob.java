@@ -16,6 +16,6 @@ package com.propertyvista.domain.blob;
 import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface ProofOfEmploymentDocumentBlob extends IFileBlob {
+public interface ProofOfIncomeDocumentBlob extends IFileBlob {
 
 }

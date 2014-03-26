@@ -818,9 +818,9 @@ public abstract class LeaseAbstractManager {
         Persistence.ensureRetrieve(service.features(), AttachLevel.Attached);
         for (Feature feature : service.features()) {
             if (!VistaFeatures.instance().yardiIntegration() || VistaFeatures.instance().yardiIntegration()
-                    && feature.version().availableOnline().isBooleanTrue()) {
+                    && feature.version().availableOnline().getValue(false)) {
                 if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
-                    if (feature.version().mandatory().isBooleanTrue()) {
+                    if (feature.version().mandatory().getValue(false)) {
                         Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                         if (!feature.version().items().isEmpty()) {
                             leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, feature.version().items().get(0)));
@@ -1186,7 +1186,7 @@ public abstract class LeaseAbstractManager {
         LogicalDate termFrom = (leaseTerm.termFrom().isNull() ? SystemDateManager.getLogicalDate() : leaseTerm.termFrom().getValue());
 
         // use default product catalog items for specific cases:
-        boolean useDefaultCatalog = (leaseTerm.unit().building().defaultProductCatalog().isBooleanTrue() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);
+        boolean useDefaultCatalog = (leaseTerm.unit().building().defaultProductCatalog().getValue(false) || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);
         if (VistaFeatures.instance().yardiIntegration()) {
             useDefaultCatalog = false;
         }

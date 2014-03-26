@@ -16,8 +16,8 @@ package com.propertyvista.portal.rpc.portal.prospect.services;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.domain.blob.ProofOfEmploymentDocumentBlob;
+import com.propertyvista.domain.blob.ProofOfIncomeDocumentBlob;
 
-public interface ProofOfEmploymentDocumentProspectUploadService extends UploadService<IEntity, ProofOfEmploymentDocumentBlob> {
+public interface ProofOfIncomeDocumentProspectUploadService extends UploadService<IEntity, ProofOfIncomeDocumentBlob> {
 
 }

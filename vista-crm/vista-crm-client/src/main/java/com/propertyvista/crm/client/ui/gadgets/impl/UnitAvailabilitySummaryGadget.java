@@ -143,6 +143,6 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
     }
 
     private LogicalDate getStatusDate() {
-        return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
+        return getMetadata().customizeDate().getValue(false) ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
     }
 }

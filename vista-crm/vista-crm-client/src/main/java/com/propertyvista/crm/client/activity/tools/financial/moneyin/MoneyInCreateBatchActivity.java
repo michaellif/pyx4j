@@ -129,7 +129,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         candidate.processPayment().setValue(process);
         validate(candidate);
 
-        if (candidate.processPayment().isBooleanTrue()) {
+        if (candidate.processPayment().getValue(false)) {
             selectedForProcessingProvider.getList().add(candidate);
         } else {
             selectedForProcessingProvider.getList().remove(candidate);
@@ -228,7 +228,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     // TODO validation needs refactoring
     private void validate(MoneyInCandidateDTO candidate) {
-        if (candidate.processPayment().isBooleanTrue()) {
+        if (candidate.processPayment().getValue(false)) {
             List<String> paymentAmountErrors = new LinkedList<String>();
             if (candidate.payment().payedAmount().isNull()) {
                 paymentAmountErrors.add(i18n.tr("Amount is required."));

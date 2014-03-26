@@ -121,7 +121,7 @@ public class VistaDeployment {
         }
         for (PmcDnsName alias : pmc.dnsNameAliases()) {
             if (alias.target().getValue() == target) {
-                if (secure && !alias.httpsEnabled().isBooleanTrue()) {
+                if (secure && !alias.httpsEnabled().getValue(false)) {
                     // Fallback to default
                     continue;
                 }

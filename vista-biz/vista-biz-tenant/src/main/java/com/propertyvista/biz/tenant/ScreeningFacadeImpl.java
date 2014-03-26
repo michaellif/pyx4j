@@ -45,8 +45,8 @@ import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFolder;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
@@ -315,8 +315,8 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             }
         }
         for (CustomerScreeningIncome income : screening.version().incomes()) {
-            for (ProofOfEmploymentDocumentFolder document : income.documents()) {
-                for (ProofOfEmploymentDocumentFile applicationDocument : document.files()) {
+            for (ProofOfIncomeDocumentFolder document : income.documents()) {
+                for (ProofOfIncomeDocumentFile applicationDocument : document.files()) {
                     FileUploadRegistry.register(applicationDocument.file());
                 }
             }

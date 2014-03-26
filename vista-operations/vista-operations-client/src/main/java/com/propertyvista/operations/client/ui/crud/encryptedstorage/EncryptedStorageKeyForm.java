@@ -79,9 +79,9 @@ public class EncryptedStorageKeyForm extends CEntityForm<EncryptedStorageKeyDTO>
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        makeCurrent.setEnabled(!getValue().isCurrent().isBooleanTrue());
-        decryptOnOff.setCaption(!getValue().decryptionEnabled().isBooleanTrue() ? i18n.tr("Activate Decryption") : i18n.tr("Disable Decryption"));
-        startKeyRotation.setEnabled(!getValue().isCurrent().isBooleanTrue() && getValue().decryptionEnabled().isBooleanTrue());
+        makeCurrent.setEnabled(!getValue().isCurrent().getValue(false));
+        decryptOnOff.setCaption(!getValue().decryptionEnabled().getValue(false) ? i18n.tr("Activate Decryption") : i18n.tr("Disable Decryption"));
+        startKeyRotation.setEnabled(!getValue().isCurrent().getValue(false) && getValue().decryptionEnabled().getValue(false));
     }
 
     private Widget makeStatusPanel() {
@@ -120,7 +120,7 @@ public class EncryptedStorageKeyForm extends CEntityForm<EncryptedStorageKeyDTO>
         decryptOnOff = new Button("", new Command() {
             @Override
             public void execute() {
-                if (!getValue().decryptionEnabled().isBooleanTrue()) {
+                if (!getValue().decryptionEnabled().getValue(false)) {
                     new PasswordEntryDialog(false) {
                         @Override
                         public boolean onClickOk() {

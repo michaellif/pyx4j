@@ -60,7 +60,7 @@ public class ARCodeCrudServiceImpl extends AbstractCrudServiceImpl<ARCode> imple
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         ARCode arCode = Persistence.service().retrieve(ARCode.class, entityId);
-        if (arCode.reserved().isBooleanTrue()) {
+        if (arCode.reserved().getValue(false)) {
             throw new IntegrityConstraintUserRuntimeException(i18n.tr("Cannot Delete a reserved ARCode"), EntityFactory.getEntityPrototype(ARCode.class));
         }
         super.delete(callback, entityId);

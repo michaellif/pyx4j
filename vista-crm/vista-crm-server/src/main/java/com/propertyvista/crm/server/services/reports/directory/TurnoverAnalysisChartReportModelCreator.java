@@ -57,7 +57,7 @@ public class TurnoverAnalysisChartReportModelCreator implements GadgetReportMode
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
 
         final UnitTurnoverAnalysisGadgetMetadata turnoverAnalysisMetadata = (UnitTurnoverAnalysisGadgetMetadata) gadgetMetadata;
-        final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate(
+        final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().getValue(false) ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate(
                 SystemDateManager.getDate());
 
         LocalService.create(UnitTurnoverAnalysisGadgetService.class).turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {

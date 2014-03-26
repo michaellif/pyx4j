@@ -37,7 +37,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFile;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
@@ -111,7 +111,7 @@ public class VistaAccessControlListTest {
     public void publicApplicationEntityInstanceAccess() {
         TestLifecycle.beginRequest();
 
-        assertEntityPermission(false, ProofOfEmploymentDocumentFile.class, null);
+        assertEntityPermission(false, ProofOfIncomeDocumentFile.class, null);
         assertEntityPermission(false, ProofOfAssetDocumentFile.class, null);
         assertEntityPermission(false, TenantInLeaseListDTO.class, null);
         assertEntityPermission(false, LeaseTermTenant.class, null);
@@ -129,7 +129,7 @@ public class VistaAccessControlListTest {
         application.setPrimaryKey(new Key(-251));
         ProspectPortalContext.setOnlineApplication(application);
 
-        assertEntityPermission(true, ProofOfEmploymentDocumentFile.class, application);
+        assertEntityPermission(true, ProofOfIncomeDocumentFile.class, application);
         assertEntityPermission(true, ProofOfAssetDocumentFile.class, application);
         assertEntityPermission(true, TenantInLeaseListDTO.class, application);
         assertEntityPermission(true, LeaseTermTenant.class, application);
@@ -137,7 +137,7 @@ public class VistaAccessControlListTest {
 
         OnlineApplication application2 = EntityFactory.create(OnlineApplication.class);
         application2.setPrimaryKey(new Key(-252));
-        assertEntityPermission(false, ProofOfEmploymentDocumentFile.class, application2);
+        assertEntityPermission(false, ProofOfIncomeDocumentFile.class, application2);
         assertEntityPermission(false, ProofOfAssetDocumentFile.class, application2);
         assertEntityPermission(false, TenantInLeaseListDTO.class, application2);
         assertEntityPermission(false, LeaseTermTenant.class, application2);

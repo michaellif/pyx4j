@@ -105,7 +105,7 @@ public class ResidentInsuranceReportGenerator implements ReportGenerator {
                 status.postalCode().setValue(lease.unit().building().info().address().postalCode().getValue());
                 status.unit().setValue(lease.unit().info().number().getValue());
 
-                if (residentInsuranceReportMetadata.onlyLeasesWithInsurance().isBooleanTrue() && !status.hasResidentInsurance().isBooleanTrue()) {
+                if (residentInsuranceReportMetadata.onlyLeasesWithInsurance().getValue(false) && !status.hasResidentInsurance().getValue(false)) {
                     continue;
                 }
                 reportData.add(status);

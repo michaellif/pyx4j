@@ -151,7 +151,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         noRequirementsLabel.setVisible(getValue().minimumRequiredLiability().isNull());
 
         if (!isEditable() & VistaFeatures.instance().yardiIntegration()) {
-            get(proto().leaseTermV()).setVisible(!getValue().isPotentialTenant().isBooleanTrue());
+            get(proto().leaseTermV()).setVisible(!getValue().isPotentialTenant().getValue(false));
         }
     }
 

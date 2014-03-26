@@ -66,7 +66,7 @@ public class MaintenanceRequestsMockupPreloader extends BaseVistaDevDataPreloade
         maintenanceRequest.summary().setValue(CommonsGenerator.lipsumShort());
         maintenanceRequest.description().setValue(CommonsGenerator.lipsum());
         maintenanceRequest.permissionToEnter().setValue(RandomUtil.randomBoolean());
-        if (maintenanceRequest.permissionToEnter().isBooleanTrue()) {
+        if (maintenanceRequest.permissionToEnter().getValue(false)) {
             maintenanceRequest.petInstructions().setValue(CommonsGenerator.lipsum());
         }
 

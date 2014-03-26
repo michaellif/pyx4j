@@ -290,7 +290,7 @@ public class BillingManager {
     }
 
     public void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
-        if (adjustment.overwriteDefaultTax().isBooleanTrue()) {
+        if (adjustment.overwriteDefaultTax().getValue(false)) {
             return; // do nothing - use stored tax value
         }
 

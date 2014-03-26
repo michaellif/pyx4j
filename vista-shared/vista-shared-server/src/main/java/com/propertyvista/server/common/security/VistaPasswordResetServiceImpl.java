@@ -68,7 +68,7 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         if (credentials == null) {
             throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
         }
-        if (!credentials.enabled().isBooleanTrue()) {
+        if (!credentials.enabled().getValue(false)) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
 

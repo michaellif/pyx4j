@@ -48,7 +48,7 @@ public class ARCodeViewerActivity extends CrmViewerActivity<ARCode> {
 
     @Override
     protected void populateView(ARCode result) {
-        canEdit = !result.reserved().isBooleanTrue();
+        canEdit = !result.reserved().getValue(false);
         super.populateView(result);
     }
 }

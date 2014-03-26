@@ -195,7 +195,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         }
         imagePanel.setVisible(mr.pictures() != null && !mr.pictures().isNull() && !mr.pictures().isEmpty());
         rateIt.setVisible(StatusPhase.Resolved.equals(mr.status().phase().getValue()));
-        scheduledPanel.setVisible(mr.reportedForOwnUnit().isBooleanTrue());
+        scheduledPanel.setVisible(mr.reportedForOwnUnit().getValue(false));
         if (!mr.surveyResponse().isNull() && !mr.surveyResponse().isEmpty() && !mr.surveyResponse().rating().isNull()) {
             rateIt.setRating(mr.surveyResponse().rating().getValue());
         }

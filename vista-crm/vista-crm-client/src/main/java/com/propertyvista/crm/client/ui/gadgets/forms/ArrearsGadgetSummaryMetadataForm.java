@@ -57,8 +57,8 @@ public class ArrearsGadgetSummaryMetadataForm extends CEntityForm<ArrearsSummary
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
-        get(proto().category()).setVisible(getValue().customizeCategory().isBooleanTrue());
+        get(proto().asOf()).setVisible(getValue().customizeDate().getValue(false));
+        get(proto().category()).setVisible(getValue().customizeCategory().getValue(false));
     }
 
 }

@@ -39,7 +39,7 @@ public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCre
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> selectedBuildings) {
         final UnitAvailabilityGadgetMetadata metadata = gadgetMetadata.duplicate(UnitAvailabilityGadgetMetadata.class);
         callback.onFailure(new Error("not implemented"));
-//        final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
+//        final LogicalDate asOf = metadata.customizeDate().getValue(false) ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
 //
 //        LocalService.create(UnitAvailabilityGadgetService.class).unitAvailabilityStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
 //

@@ -231,11 +231,11 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
     }
 
     private LogicalDate getStatusDate() {
-        return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
+        return getMetadata().customizeDate().getValue(false) ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
     }
 
     private void redrawTitleBanner() {
-        String arrearsCategory = getMetadata().filterByCategory().isBooleanTrue() ? getMetadata().category().getValue().toString() : i18n.tr("Total");
+        String arrearsCategory = getMetadata().filterByCategory().getValue(false) ? getMetadata().category().getValue().toString() : i18n.tr("Total");
         String unescaptedBanner = i18n.tr("{0} arrears as of {1,date,short}", arrearsCategory, getStatusDate());
         titleBannerLabel.setHTML(new SafeHtmlBuilder().appendEscaped(unescaptedBanner).toSafeHtml());
     }

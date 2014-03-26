@@ -29,7 +29,7 @@ public class RestrictionsPolicyCrudServiceImpl extends GenericPolicyCrudService<
 
     @Override
     public void save(AsyncCallback<Key> callback, RestrictionsPolicyDTO dto) {
-        if (!dto.enforceAgeOfMajority().isBooleanTrue()) {
+        if (!dto.enforceAgeOfMajority().getValue(false)) {
             dto.ageOfMajority().setValue(null);
         }
         super.save(callback, dto);

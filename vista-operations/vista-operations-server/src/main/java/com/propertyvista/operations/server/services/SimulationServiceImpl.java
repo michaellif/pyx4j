@@ -78,10 +78,10 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
     @Override
     public void save(AsyncCallback<Key> callback, SimulationDTO entity) {
 
-        CacheService.setDisabled(!entity.generalCacheEnabled().isBooleanTrue());
+        CacheService.setDisabled(!entity.generalCacheEnabled().getValue(false));
 
         IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
-        entityCacheService.setDisabled(!entity.entityCacheServiceEnabled().isBooleanTrue());
+        entityCacheService.setDisabled(!entity.entityCacheServiceEnabled().getValue(false));
 
         NetworkSimulationServiceFilter.setNetworkSimulationConfig(entity.networkSimulation());
 

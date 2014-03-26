@@ -128,7 +128,7 @@ public class AccessKey {
         if (credential == null) {
             return null;
         }
-        if (!credential.enabled().isBooleanTrue()) {
+        if (!credential.enabled().getValue(false)) {
             return null;
         }
 

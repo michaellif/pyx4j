@@ -30,7 +30,7 @@ public class MediaConfig {
     public static MediaConfig create(ImportUploadDTO importDTO) {
         MediaConfig mediaConfig = new MediaConfig();
         mediaConfig.baseFolder = "data/export/images/" + NamespaceManager.getNamespace();
-        mediaConfig.ignoreMissingMedia = importDTO.ignoreMissingMedia().isBooleanTrue();
+        mediaConfig.ignoreMissingMedia = importDTO.ignoreMissingMedia().getValue(false);
         return mediaConfig;
     }
 }

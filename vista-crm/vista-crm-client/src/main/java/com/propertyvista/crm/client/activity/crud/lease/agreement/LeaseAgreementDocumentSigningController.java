@@ -114,7 +114,7 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
 
                 boolean canBeSignedDigitally = true;
                 for (LeaseAgreementStakeholderSigningProgressDTO siginingProgress : leaseAgreementDocuments.signingProgress().stackholdersProgressBreakdown()) {
-                    canBeSignedDigitally &= siginingProgress.hasSigned().isBooleanTrue()
+                    canBeSignedDigitally &= siginingProgress.hasSigned().getValue(false)
                             && siginingProgress.singatureType().getValue() == SignatureType.Digital;
                 }
                 canBeSignedDigitally &= leaseAgreementDocuments.digitallySignedDocument().signedEmployeeUploader().isNull();

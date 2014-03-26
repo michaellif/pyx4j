@@ -42,7 +42,7 @@ public class PublicDataUpdater {
         criteriaCity.eq(criteriaCity.proto().province(), building.info().address().province());
         City city = Persistence.service().retrieve(criteriaCity);
         if (city != null) {
-            if (city.hasProperties().isBooleanTrue() != visibleBuildingExists) {
+            if (city.hasProperties().getValue(false) != visibleBuildingExists) {
                 city.hasProperties().setValue(visibleBuildingExists);
                 Persistence.service().persist(city);
             }

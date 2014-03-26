@@ -51,7 +51,7 @@ public class MarketingEditor extends CEntityForm<Marketing> {
 
     @Override
     public boolean isValid() {
-        if (getValue() != null && !getValue().useCustomAddress().isBooleanTrue()) {
+        if (getValue() != null && !getValue().useCustomAddress().getValue(false)) {
             // clear custom address
             if (emptyAddr == null) {
                 emptyAddr = EntityFactory.create(AddressStructured.class);
@@ -109,7 +109,7 @@ public class MarketingEditor extends CEntityForm<Marketing> {
     protected void setEditorValue(Marketing value) {
         // reset address editor state (
         if (value != null) {
-            setAddressEditorState(value.useCustomAddress().isBooleanTrue());
+            setAddressEditorState(value.useCustomAddress().getValue(false));
         }
         super.setEditorValue(value);
     }

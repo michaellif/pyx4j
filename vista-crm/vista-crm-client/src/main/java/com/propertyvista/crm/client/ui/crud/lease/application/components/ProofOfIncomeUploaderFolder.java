@@ -27,25 +27,25 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.media.ProofOfEmploymentDocumentFolder;
+import com.propertyvista.domain.media.ProofOfIncomeDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 
-public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmploymentDocumentFolder> {
+public class ProofOfIncomeUploaderFolder extends VistaBoxFolder<ProofOfIncomeDocumentFolder> {
 
-    private final static I18n i18n = I18n.get(ProofOfEmploymentUploaderFolder.class);
+    private final static I18n i18n = I18n.get(ProofOfIncomeUploaderFolder.class);
 
     private ApplicationDocumentationPolicy documentationPolicy;
 
-    public ProofOfEmploymentUploaderFolder() {
-        super(ProofOfEmploymentDocumentFolder.class, i18n.tr("Proof Of Employment"));
+    public ProofOfIncomeUploaderFolder() {
+        super(ProofOfIncomeDocumentFolder.class, i18n.tr("Proof Of Income"));
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
         this.documentationPolicy = policy;
 
         setNoDataNotificationWidget(null);
-        if (documentationPolicy != null && documentationPolicy.mandatoryProofOfIncome().isBooleanTrue()) {
-            setNoDataNotificationWidget(new Label(i18n.tr("Proof of Employment should be supplied!")));
+        if (documentationPolicy != null && documentationPolicy.mandatoryProofOfIncome().getValue(false)) {
+            setNoDataNotificationWidget(new Label(i18n.tr("Proof of Income should be supplied!")));
         }
     }
 
@@ -53,12 +53,12 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
     public void addValidations() {
         super.addValidations();
 
-        addComponentValidator(new AbstractComponentValidator<IList<ProofOfEmploymentDocumentFolder>>() {
+        addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFolder>>() {
             @Override
             public FieldValidationError isValid() {
                 if (getComponent().getValue() != null && documentationPolicy != null) {
-                    if (documentationPolicy.mandatoryProofOfIncome().isBooleanTrue() && getValue().isEmpty()) {
-                        return new FieldValidationError(getComponent(), i18n.tr("Proof of Employment should be supplied!"));
+                    if (documentationPolicy.mandatoryProofOfIncome().getValue(false) && getValue().isEmpty()) {
+                        return new FieldValidationError(getComponent(), i18n.tr("Proof of Income should be supplied!"));
                     }
                 }
                 return null;
@@ -68,16 +68,16 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof ProofOfEmploymentDocumentFolder) {
-            return new ProofOfEmploymentDocumentEditor();
+        if (member instanceof ProofOfIncomeDocumentFolder) {
+            return new ProofOfIncomeDocumentEditor();
         }
         return super.create(member);
     }
 
-    private class ProofOfEmploymentDocumentEditor extends CEntityForm<ProofOfEmploymentDocumentFolder> {
+    private class ProofOfIncomeDocumentEditor extends CEntityForm<ProofOfIncomeDocumentFolder> {
 
-        public ProofOfEmploymentDocumentEditor() {
-            super(ProofOfEmploymentDocumentFolder.class);
+        public ProofOfIncomeDocumentEditor() {
+            super(ProofOfIncomeDocumentFolder.class);
         }
 
         @Override
@@ -87,7 +87,7 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
             int row = -1;
             content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 50, true).build());
             content.setH3(++row, 0, 2, i18n.tr("Files"));
-            content.setWidget(++row, 0, 2, inject(proto().files(), new ProofOfEmploymentDocumentFileFolder()));
+            content.setWidget(++row, 0, 2, inject(proto().files(), new ProofOfIncomeDocumentFileFolder()));
 
             return content;
         }

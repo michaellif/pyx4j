@@ -126,7 +126,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
         }
 
         private boolean isMandatoryFeature(Product.ProductV product) {
-            return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().isBooleanTrue();
+            return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().getValue(false);
         }
 
         @Override

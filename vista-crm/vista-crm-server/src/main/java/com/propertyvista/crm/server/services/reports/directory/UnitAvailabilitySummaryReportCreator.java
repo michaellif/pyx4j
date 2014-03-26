@@ -36,7 +36,7 @@ public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCr
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
         callback.onFailure(new Error("not implemented"));
 //        final UnitAvailabilitySummaryGadgetMetadata availabilitySummaryMetadata = (UnitAvailabilitySummaryGadgetMetadata) gadgetMetadata;
-//        final LogicalDate asOf = availabilitySummaryMetadata.customizeDate().isBooleanTrue() ? availabilitySummaryMetadata.asOf().getValue() : new LogicalDate(
+//        final LogicalDate asOf = availabilitySummaryMetadata.customizeDate().getValue(false) ? availabilitySummaryMetadata.asOf().getValue() : new LogicalDate(
 //                SysDateManager.getSysDate());
 //
 //        LocalService.create(UnitAvailabilitySummaryGadgetService.class).summary(new AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>>() {//@formatter:off

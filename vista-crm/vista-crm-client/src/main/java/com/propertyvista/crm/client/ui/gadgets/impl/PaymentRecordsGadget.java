@@ -158,7 +158,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
     }
 
     private LogicalDate getTargetDate() {
-        return getMetadata().customizeTargetDate().isBooleanTrue() ? getMetadata().targetDate().getValue() : new LogicalDate(ClientContext.getServerDate());
+        return getMetadata().customizeTargetDate().getValue(false) ? getMetadata().targetDate().getValue() : new LogicalDate(ClientContext.getServerDate());
     }
 
     private Widget initTitleWidget() {

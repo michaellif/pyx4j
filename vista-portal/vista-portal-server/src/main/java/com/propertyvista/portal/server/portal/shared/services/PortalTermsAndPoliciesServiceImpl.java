@@ -130,7 +130,7 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
 
     private void getPMCTerm(AsyncCallback<LegalTermTO> callback, LegalTermsPolicyItem policyItem) {
         LegalTermTO term = null;
-        if (policyItem.enabled().isBooleanTrue()) {
+        if (policyItem.enabled().getValue(false)) {
             term = EntityFactory.create(LegalTermTO.class);
             term.caption().setValue(policyItem.caption().getValue());
             term.content().setValue(policyItem.content().getValue());
@@ -143,7 +143,7 @@ public class PortalTermsAndPoliciesServiceImpl implements PortalTermsAndPolicies
     }
 
     private String getPMCTermCaption(LegalTermsPolicyItem policyItem) {
-        if (policyItem.enabled().isBooleanTrue()) {
+        if (policyItem.enabled().getValue(false)) {
             return policyItem.caption().getValue();
         }
         return null;

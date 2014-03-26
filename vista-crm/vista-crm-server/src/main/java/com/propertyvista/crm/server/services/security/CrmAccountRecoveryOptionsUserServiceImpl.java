@@ -101,7 +101,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             }
         }
 
-        if (request.useSecurityQuestionChallengeForPasswordReset().isBooleanTrue()
+        if (request.useSecurityQuestionChallengeForPasswordReset().getValue(false)
                 || SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion)) {
             assertIsDefined(request.securityQuestion());
             assertIsDefined(request.securityAnswer());
