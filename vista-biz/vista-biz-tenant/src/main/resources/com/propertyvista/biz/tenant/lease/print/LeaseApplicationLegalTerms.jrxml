@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LeaseApplicationEmergencyContacts" pageWidth="410" pageHeight="800" whenNoDataType="AllSectionsNoDetail" columnWidth="410" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="landlordName" class="java.lang.String"/>
+	<parameter name="landlordAddress" class="java.lang.String"/>
+	<parameter name="landlordLogo" class="java.io.InputStream"/>
+	<parameter name="backgroundImage" class="java.io.InputStream"/>
+	<parameter name="applicants" class="com.pyx4j.entity.core.IList"/>
+	<parameter name="landlordAgentsSignatures" class="java.util.List"/>
+	<field name="wordingHtml" class="java.lang.String"/>
+	<field name="signature" class="com.pyx4j.entity.shared.ISignature"/>
+	<field name="title" class="java.lang.String"/>
+	<field name="makeWithSignaturePlaceholder" class="java.lang.Boolean"/>
+	<variable name="TERM_NUMBER" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{title}]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<detail>
+		<band height="62" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="42" y="0" width="368" height="20"/>
+				<textElement markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="0" y="20" width="410" height="35"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA[$F{wordingHtml}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="42" height="20"/>
+				<textElement textAlignment="Right" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["" + $V{TERM_NUMBER} + "."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="49" splitType="Stretch">
+			<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}
+  && (($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.FullName)
+       || ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName))]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="171" height="20"/>
+				<textElement/>
+				<text><![CDATA[Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="171" y="0" width="87" height="20"/>
+				<textElement/>
+				<text><![CDATA[IP ADDRESS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="0" width="152" height="20"/>
+				<textElement/>
+				<text><![CDATA[Signed On:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="20" width="171" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.fullName().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="171" y="20" width="87" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="d MMM yyyy HH:mm:ss">
+				<reportElement x="258" y="20" width="152" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="49" splitType="Stretch">
+			<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}
+  && ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials)
+       ]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="171" height="20"/>
+				<textElement/>
+				<text><![CDATA[Initials:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="171" y="0" width="87" height="20"/>
+				<textElement/>
+				<text><![CDATA[IP ADDRESS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="0" width="152" height="20"/>
+				<textElement/>
+				<text><![CDATA[Signed On:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="20" width="171" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.initials().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="171" y="20" width="87" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="d MMM yyyy HH:mm:ss">
+				<reportElement x="258" y="20" width="152" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="49" splitType="Stretch">
+			<printWhenExpression><![CDATA[!$F{makeWithSignaturePlaceholder}
+  && ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials)
+       ]]></printWhenExpression>
+			<staticText>
+				<reportElement x="171" y="0" width="87" height="20"/>
+				<textElement/>
+				<text><![CDATA[IP ADDRESS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="0" width="152" height="20"/>
+				<textElement/>
+				<text><![CDATA[Signed On:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="20" width="171" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.agree().getValue(false) ? "I agree with the terms above": ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="171" y="20" width="87" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.ipAddress().getValue()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="d MMM yyyy HH:mm:ss">
+				<reportElement x="258" y="20" width="152" height="20"/>
+				<textElement markup="none">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signature}.signDate().getValue()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<printWhenExpression><![CDATA[$F{makeWithSignaturePlaceholder}
+  && (($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.FullName)
+       || ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBoxAndFullName))]]></printWhenExpression>
+			<staticText>
+				<reportElement x="258" y="0" width="152" height="30"/>
+				<textElement/>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="0" width="124" height="30"/>
+				<textElement/>
+				<text><![CDATA[Signature:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="134" height="30"/>
+				<textElement/>
+				<text><![CDATA[Name:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="30" width="122" height="1"/>
+			</line>
+			<line>
+				<reportElement x="134" y="30" width="112" height="1"/>
+			</line>
+			<line>
+				<reportElement x="259" y="30" width="140" height="1"/>
+			</line>
+		</band>
+		<band height="50">
+			<printWhenExpression><![CDATA[$F{makeWithSignaturePlaceholder}
+  && ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.Initials)
+       ]]></printWhenExpression>
+			<staticText>
+				<reportElement x="258" y="0" width="152" height="30"/>
+				<textElement/>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="0" width="124" height="30"/>
+				<textElement/>
+				<text><![CDATA[Signature:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="134" height="30"/>
+				<textElement/>
+				<text><![CDATA[Initials:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="30" width="122" height="1"/>
+			</line>
+			<line>
+				<reportElement x="134" y="30" width="112" height="1"/>
+			</line>
+			<line>
+				<reportElement x="259" y="30" width="140" height="1"/>
+			</line>
+		</band>
+		<band height="50">
+			<printWhenExpression><![CDATA[$F{makeWithSignaturePlaceholder}
+  && ($F{signature}.signatureFormat().getValue() == com.pyx4j.entity.shared.ISignature.SignatureFormat.AgreeBox)]]></printWhenExpression>
+			<staticText>
+				<reportElement x="258" y="0" width="152" height="30"/>
+				<textElement/>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="0" width="124" height="30"/>
+				<textElement/>
+				<text><![CDATA[Signature:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="134" height="30"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[I agree to the terms]]></text>
+			</staticText>
+			<line>
+				<reportElement x="134" y="30" width="112" height="1"/>
+			</line>
+			<line>
+				<reportElement x="259" y="30" width="140" height="1"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>
