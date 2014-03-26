@@ -138,9 +138,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         comfirmationStep = addStep(createConfirmationStep());
 
         totalWidget = new FormWidgetDecoratorBuilder(inject(proto().total()), 100).build();
-
-        // TODO : workaround!!! onStepSelected is not called for the very first step!?? 
-        switchTotal(detailsTotalHolder);
     }
 
     private BasicFlexFormPanel createDetailsStep() {
@@ -263,6 +260,13 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
         return panel;
+    }
+
+    @Override
+    public void onReset() {
+        super.onReset();
+
+        switchTotal(detailsTotalHolder);
     }
 
     @Override

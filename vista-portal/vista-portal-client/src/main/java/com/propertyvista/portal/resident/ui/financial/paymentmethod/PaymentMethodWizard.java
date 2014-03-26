@@ -62,7 +62,8 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
     private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
 
-    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PortalPaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PortalPaymentMethodEditor<LeasePaymentMethod>(
+            LeasePaymentMethod.class) {
 
         @Override
         public Set<PaymentType> getPaymentTypes() {
@@ -144,6 +145,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     @Override
     protected void onStepSelected(WizardStep selectedStep) {
         super.onStepSelected(selectedStep);
+
         if (selectedStep.equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());

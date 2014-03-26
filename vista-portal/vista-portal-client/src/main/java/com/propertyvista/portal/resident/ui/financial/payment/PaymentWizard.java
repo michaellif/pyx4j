@@ -305,8 +305,16 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         });
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    public void onReset() {
+        super.onReset();
+
+        ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnNext().setVisible(true);
+//      ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnCancel().setVisible(true);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     protected void onStepSelected(WizardStep selectedStep) {
         super.onStepSelected(selectedStep);
 
