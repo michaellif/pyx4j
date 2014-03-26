@@ -985,7 +985,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             entityMembersModificationAdapters = adapters.memberModificationAdapters();
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getAllMembers()) {
-            if (member.getMember(entity).getAttachLevel() == AttachLevel.Detached) {
+            if (!TableModelCollections.isUpdatableMember(member.getMember(entity))) {
                 continue;
             }
 
@@ -1001,7 +1001,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
                 IEntity prevMemberEntity = (IEntity) member.getMember(baseEntity);
                 // merge incomplete data
-                if (AttachLevel.Detached == prevMemberEntity.getAttachLevel()) {
+                if (!TableModelCollections.isUpdatableMember(prevMemberEntity)) {
                     tm.retrieveMember(getPersistenceContext(), baseEntity, prevMemberEntity);
                 }
                 prevValue = prevMemberEntity.getPrimaryKey();
@@ -1021,7 +1021,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
                 ICollection<IEntity, ?> newCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 ICollection<IEntity, ?> prevCollectionMember = (ICollection<IEntity, ?>) member.getMember(baseEntity);
-                if (AttachLevel.Detached == prevCollectionMember.getAttachLevel()) {
+                if (!TableModelCollections.isUpdatableMember(prevCollectionMember)) {
                     prevCollectionMember.setAttachLevel(AttachLevel.Attached);
                     tm.retrieveMember(getPersistenceContext(), baseEntity, prevCollectionMember);
                 }
