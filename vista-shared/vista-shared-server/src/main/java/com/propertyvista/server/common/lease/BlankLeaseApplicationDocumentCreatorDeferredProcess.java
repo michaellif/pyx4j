@@ -29,6 +29,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentDataCreatorFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentDataCreatorFacade.DocumentMode;
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentPdfCreatorFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -36,7 +37,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 
 /**
- * Creates Blank Form for Lease Application
+ * Creates a lease application form for signing by ink
  */
 public class BlankLeaseApplicationDocumentCreatorDeferredProcess extends AbstractDeferredProcess {
 
@@ -46,13 +47,13 @@ public class BlankLeaseApplicationDocumentCreatorDeferredProcess extends Abstrac
 
     private final Lease leaseId;
 
-    private volatile Throwable error;
+    private final LeaseTermParticipant<?> participantId;
 
-    private LeaseApplication application;
+    private volatile Throwable error;
 
     private String fileName;
 
-    private final LeaseTermParticipant<?> participantId;
+    private LeaseApplication application;
 
     private LeaseTermParticipant participant;
 
@@ -69,8 +70,8 @@ public class BlankLeaseApplicationDocumentCreatorDeferredProcess extends Abstrac
         try {
             retrieveApplication();
             retrieveLeaseParticipant();
-            LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class).createApplicationDataForBlankForm(
-                    application, participant);
+            LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class).createApplicationData(
+                    DocumentMode.InkSinging, application, participant);
             byte[] pdfBytes = ServerSideFactory.create(LeaseApplicationDocumentPdfCreatorFacade.class).createPdf(data);
             Downloadable applicationDocument = new Downloadable(pdfBytes, MimeMap.getContentType(DownloadFormat.PDF));
             applicationDocument.save(fileName = "application.pdf");

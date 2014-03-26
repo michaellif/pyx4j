@@ -31,6 +31,7 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentDataCreatorFacade;
+import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentDataCreatorFacade.DocumentMode;
 import com.propertyvista.biz.tenant.lease.print.LeaseApplicationDocumentPdfCreatorFacade;
 import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -41,7 +42,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataDTO;
 
 /**
- * Creates Signed Lease Application
+ * Creates digitally signed Lease application document
  */
 public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends AbstractDeferredProcess {
 
@@ -72,8 +73,8 @@ public class SignedLeaseApplicationDocumentCreatorDeferredProcess extends Abstra
                     retrieveApplication();
                     retrieveLeaseParticipant();
 
-                    LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class)
-                            .createApplicationDataForSignedForm(application, participant);
+                    LeaseApplicationDocumentDataDTO data = ServerSideFactory.create(LeaseApplicationDocumentDataCreatorFacade.class).createApplicationData(
+                            DocumentMode.OnlineDigitalSigning, application, participant);
                     byte[] pdfBytes = ServerSideFactory.create(LeaseApplicationDocumentPdfCreatorFacade.class).createPdf(data);
                     LeaseApplicationDocument documentId = saveDocument(pdfBytes);
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationDocumentCopy(documentId);

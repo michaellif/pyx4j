@@ -19,14 +19,13 @@ import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDa
 
 public interface LeaseApplicationDocumentDataCreatorFacade {
 
-    public enum SignaturesMode {
+    public enum DocumentMode {
 
-        PlaceholdersOnly, SignaturesOnly, None
+        InkSinging, OnlineDigitalSigning
 
+        // TODO maybe blank?
     }
 
-    LeaseApplicationDocumentDataDTO createApplicationDataForSignedForm(LeaseApplication application, LeaseTermParticipant<?> participant);
-
-    LeaseApplicationDocumentDataDTO createApplicationDataForBlankForm(LeaseApplication application, LeaseTermParticipant<?> participant);
+    LeaseApplicationDocumentDataDTO createApplicationData(DocumentMode documentMode, LeaseApplication application, LeaseTermParticipant<?> participant);
 
 }

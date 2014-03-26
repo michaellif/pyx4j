@@ -161,7 +161,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
 
         EntityQueryCriteria<LeaseTermParticipant> participantCriteria = EntityQueryCriteria.<LeaseTermParticipant> create(LeaseTermParticipant.class);
-        participantCriteria.eq(participantCriteria.proto().leaseParticipant().customer(), ProspectPortalContext.getCustomerUserIdStub());
+        participantCriteria.eq(participantCriteria.proto().leaseParticipant().customer(), ProspectPortalContext.getCustomer());
         participantCriteria.eq(participantCriteria.proto().leaseParticipant().lease(), ProspectPortalContext.getLease());
 
         LeaseTermParticipant<?> participantId = Persistence.service().retrieve(participantCriteria, AttachLevel.IdOnly);

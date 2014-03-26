@@ -35,7 +35,6 @@ import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -46,9 +45,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
-import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
-import com.propertyvista.dto.LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO;
-import com.propertyvista.dto.LeaseAgreementDocumentLegalTermTenantDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAboutYouSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataAdditionalInfoSectionDTO;
 import com.propertyvista.dto.leaseapplicationdocument.LeaseApplicationDocumentDataCoApplicantDTO;
@@ -70,12 +66,8 @@ import com.propertyvista.server.common.util.AddressRetriever;
 public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseApplicationDocumentDataCreatorFacade {
 
     @Override
-    public LeaseApplicationDocumentDataDTO createApplicationDataForSignedForm(LeaseApplication application, LeaseTermParticipant<?> participant) {
-        return createApplicationDataForBlankForm(application, participant); // TODO 
-    }
-
-    @Override
-    public LeaseApplicationDocumentDataDTO createApplicationDataForBlankForm(LeaseApplication application, LeaseTermParticipant<?> subjectParticipant) {
+    public LeaseApplicationDocumentDataDTO createApplicationData(DocumentMode documentMode, LeaseApplication application,
+            LeaseTermParticipant<?> subjectParticipant) {
         LeaseApplicationDocumentDataDTO data = makeDocumentData();
 
         Persistence.ensureRetrieve(application.lease().unit().building().landlord(), AttachLevel.Attached);
@@ -83,16 +75,18 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         data.landlordAddress().setValue(application.lease().unit().building().landlord().address().getStringView());
         // TODO add landlord's LOGO
 
-        makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
+        if (false /* TODO && (documentMode == blank) */) {
+            makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
 
-        // TODO move this to only signed form
-        fillLeaseSection(data.sections().get(0).leaseSection().get(0), application);
-        fillPeopleSection(data.sections().get(0).peopleSection().get(0), application, subjectParticipant);
-        fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), application, subjectParticipant);
-        fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), application, subjectParticipant);
-        fillFinaincialSection(data.sections().get(0).financialSection().get(0), application, subjectParticipant);
-        fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), application, subjectParticipant);
-        fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, true); // TODO change blankSignatures <- true
+        } else {
+            fillLeaseSection(data.sections().get(0).leaseSection().get(0), application);
+            fillPeopleSection(data.sections().get(0).peopleSection().get(0), application, subjectParticipant);
+            fillAboutYouSection(data.sections().get(0).aboutYouSection().get(0), application, subjectParticipant);
+            fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), application, subjectParticipant);
+            fillFinaincialSection(data.sections().get(0).financialSection().get(0), application, subjectParticipant);
+            fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), application, subjectParticipant);
+            fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode == DocumentMode.InkSinging);
+        }
         return data;
     }
 
@@ -146,44 +140,6 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         LeaseApplicationDocumentDataLegalSectionDTO legalSection = EntityFactory.create(LeaseApplicationDocumentDataLegalSectionDTO.class);
         details.legalSection().add(legalSection);
         return data;
-    }
-
-    private LeaseAgreementDocumentLegalTermTenantDTO makeApplicant(OnlineApplication onlineApplication) {
-        LeaseAgreementDocumentLegalTermTenantDTO applicant = EntityFactory.create(LeaseAgreementDocumentLegalTermTenantDTO.class);
-        applicant.fullName().setValue(onlineApplication.customer().person().name().getStringView());
-        return applicant;
-    }
-
-    private LeaseAgreementDocumentLegalTerm4PrintDTO makeTermForPrint(Customer customer, SignedOnlineApplicationLegalTerm signedTerm,
-            SignaturesMode signaturesMode) {
-        LeaseAgreementDocumentLegalTerm4PrintDTO term4print = EntityFactory.create(LeaseAgreementDocumentLegalTerm4PrintDTO.class);
-        term4print.title().setValue(signedTerm.term().title().getValue());
-        term4print.body().setValue(signedTerm.term().body().getValue());
-
-        if (signaturesMode == null) {
-            signaturesMode = SignaturesMode.None;
-        }
-        switch (signaturesMode) {
-        case SignaturesOnly:
-            if (PrintableSignatureChecker.isPrintable(signedTerm.signature())) {
-                term4print.signatures().add(signedTerm.signature());
-            }
-            break;
-
-        case PlaceholdersOnly:
-            if (PrintableSignatureChecker.needsPlaceholder(signedTerm.signature())) {
-                LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO signaturePlaceHolder = EntityFactory
-                        .create(LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO.class);
-                signaturePlaceHolder.tenantName().setValue(customer.person().name().getStringView());
-                term4print.signaturePlaceholders().add(signaturePlaceHolder);
-            }
-            break;
-
-        default:
-            break;
-        }
-
-        return term4print;
     }
 
     private void fillLeaseSection(LeaseApplicationDocumentDataLeaseSectionDTO leaseSection, LeaseApplication application) {
@@ -265,6 +221,8 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             LeaseTermParticipant<?> subjectParticipant) {
         CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(
                 subjectParticipant.leaseParticipant().customer(), application.lease().unit().building());
+
+        additionalInfo.currentResidence().add(EntityFactory.create(LeaseApplicationDocumentDataResidenceDTO.class));
 
         fillResidence(additionalInfo.currentResidence().get(0), screening.version().currentAddress());
         if (!screening.version().previousAddress().isNull()) {
