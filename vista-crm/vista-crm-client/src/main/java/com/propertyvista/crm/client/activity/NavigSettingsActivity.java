@@ -64,13 +64,13 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         NavigFolder folder = null;
 
         folder = new NavigFolder(i18n.tr("Profile"));
-        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+        if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport)) {
             folder.addNavigItem(new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1)));
             folder.addNavigItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)));
         }
         list.add(folder);
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+        if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport)) {
             if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
                 folder = new NavigFolder(i18n.tr("Settings"));
                 folder.addNavigItem(new Settings.OnlinePaymentSetup());

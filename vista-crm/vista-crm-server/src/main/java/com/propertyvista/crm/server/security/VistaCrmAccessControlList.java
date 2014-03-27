@@ -119,10 +119,10 @@ import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrint
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
+import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.IdentificationDocumentCrmUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
-import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
@@ -565,6 +565,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerCreditCheckLongReportService.class));
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckWizardService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCardValidationService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(OnlinePaymentWizardService.class));
@@ -573,6 +574,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(PmcCompanyInfoCrudService.class));
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(ILSConfigCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ILSConfigCrudService.class));
 
         grant(VistaCrmBehavior.Equifax, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
         grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
