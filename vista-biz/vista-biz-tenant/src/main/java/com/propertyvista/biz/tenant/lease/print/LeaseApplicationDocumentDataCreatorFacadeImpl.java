@@ -28,6 +28,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
+import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
@@ -73,7 +74,12 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         Persistence.ensureRetrieve(application.lease().unit().building().landlord(), AttachLevel.Attached);
         data.landlordName().setValue(application.lease().unit().building().landlord().name().getValue());
         data.landlordAddress().setValue(application.lease().unit().building().landlord().address().getStringView());
-        // TODO add landlord's LOGO
+        if (!application.lease().unit().building().landlord().logo().isEmpty()) {
+            Persistence.ensureRetrieve(application.lease().unit().building().landlord().logo().file(), AttachLevel.Attached);
+            LandlordMediaBlob blob = Persistence.service().retrieve(LandlordMediaBlob.class,
+                    application.lease().unit().building().landlord().logo().file().blobKey().getValue());
+            data.landlordLogo().setValue((blob.data().getValue()));
+        }
 
         if (false /* TODO && (documentMode == blank) */) {
             makeDataPlaceholders(data.sections().get(0)); // TODO not sure it's supposed to work like that at all...
@@ -85,7 +91,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), application, subjectParticipant);
             fillFinaincialSection(data.sections().get(0).financialSection().get(0), application, subjectParticipant);
             fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), application, subjectParticipant);
-            fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode == DocumentMode.InkSinging);
+            fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode != DocumentMode.InkSinging);
         }
         return data;
     }
