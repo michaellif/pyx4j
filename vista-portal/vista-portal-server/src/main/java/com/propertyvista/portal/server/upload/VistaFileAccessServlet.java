@@ -30,6 +30,7 @@ import com.propertyvista.domain.blob.operations.PmcDocumentBlob;
 import com.propertyvista.domain.communication.CommunicationMessageAttachment;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
@@ -55,6 +56,7 @@ public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
         register(ProofOfAssetDocumentFile.class, ProofOfAssetDocumentBlob.class);
         register(IdentificationDocumentFile.class, IdentificationDocumentBlob.class);
         register(LegalLetter.class, LegalLetterBlob.class);
+        register(N4LegalLetter.class, LegalLetterBlob.class);
         register(LeaseTermAgreementDocument.class, LeaseTermAgreementDocumentBlob.class);
         register(LeaseApplicationDocument.class, LeaseApplicationDocumentBlob.class);
         register(LandlordMedia.class, LandlordMediaBlob.class);
