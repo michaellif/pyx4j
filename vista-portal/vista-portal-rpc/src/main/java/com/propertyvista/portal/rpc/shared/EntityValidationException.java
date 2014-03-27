@@ -72,13 +72,13 @@ public class EntityValidationException extends UserRuntimeException {
         public Builder<E> addError(IObject<?> member, String message) {
             // check that member belongs to the entity:
             try {
-                proto.getMember(new Path(member.getPath().toString()));
+                IObject<?> child = proto.getMember(new Path(member.getPath().toString()));
+                entityValidationException.validationErrors.put(child.getPath().toString(), message);
             } catch (RuntimeException e) {
                 throw new IllegalArgumentException("member " + member.getPath().toString() + " doesn't belong to entity "
                         + this.proto.getInstanceValueClass().getName());
             }
 
-            entityValidationException.validationErrors.put(member.getPath().toString(), message);
             return this;
         }
 
@@ -117,6 +117,16 @@ public class EntityValidationException extends UserRuntimeException {
             messageBuilder.append("; ");
         }
         return messageBuilder.toString();
+    }
+
+    public boolean clearError(IObject<?> member) {
+        IObject<?> child = proto.getMember(new Path(member.getPath().toString()));
+        return validationErrors.remove(child.getPath().toString()) != null;
+    }
+
+    public MemberValidationError getError(IObject<?> member) {
+        IObject<?> child = proto.getMember(new Path(member.getPath().toString()));
+        return new MemberValidationError(child, validationErrors.get(child.getPath().toString()));
     }
 
     public static <E extends IEntity> Builder<E> make(Class<E> clazz) {

@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.resident.ui.signup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -35,6 +38,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
@@ -140,7 +144,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         private BuildingSuggestBox buildingSelector;
 
-        private EntityValidationException entityValidationError;
+        private EntityValidationException entityValidationException;
 
         private Image signUpBuildingImage;
 
@@ -152,9 +156,12 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         private final TenantPasswordStrengthRule passwordStrengthRule;
 
+        private final List<CComponent<?>> validationList;
+
         public SignUpForm() {
             super(ResidentSelfRegistrationDTO.class);
             this.passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
+            validationList = new ArrayList<CComponent<?>>();
         }
 
         @SuppressWarnings("unchecked")
@@ -211,14 +218,23 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
             flexPanel.setH4(row, 1, 1, i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
 
-            CTextFieldBase<?, ?> securityCodeField;
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode()))
+            final CTextFieldBase<String, ?> securityCodeField;
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(securityCodeField = (CTextFieldBase<String, ?>) inject(proto().securityCode()))
                     .componentWidth("180px").build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             securityCodeField
                     .setTooltip(i18n
                             .tr("You should have received Security Code by mail. Don't have a Security Code? To get your own unique access code, please contact the Property Manager directly."));
+            securityCodeField.addValueChangeHandler(new ValueChangeHandler<String>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<String> event) {
+                    // This clears Security Code error when field value is changed
+                    if (SignUpForm.this.entityValidationException != null && SignUpForm.this.entityValidationException.clearError(proto().securityCode())) {
+                        securityCodeField.revalidate();
+                    }
+                }
+            });
 
             passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
             flexPanel.setWidget(++row, 0,
@@ -241,31 +257,6 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             });
             get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
 
-            for (String memberName : proto().getEntityMeta().getMemberNames()) {
-                final IObject<?> member = proto().getMember(memberName);
-                CComponent<?> boundMember = null;
-                try {
-                    boundMember = get(member);
-                } catch (Throwable e) {
-                    // just skip the unbound member
-                }
-                if (boundMember != null) {
-                    boundMember.addComponentValidator(new AbstractComponentValidator() {
-                        @Override
-                        public FieldValidationError isValid() {
-                            if (SignUpForm.this.entityValidationError != null) {
-                                for (MemberValidationError memberValidationError : SignUpForm.this.entityValidationError.getErrors()) {
-                                    if (memberValidationError.getMember().getPath().equals(member.getPath())) {
-                                        return new FieldValidationError(getComponent(), memberValidationError.getMessage());
-                                    }
-                                }
-                            }
-                            return null;
-                        }
-                    });
-                }
-            }
-
             flexPanel.setBR(++row, 0, 2);
 
             return flexPanel;
@@ -277,11 +268,16 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
         }
 
         public void setEntityValidationError(EntityValidationException caught) {
-            this.entityValidationError = caught;
+            this.entityValidationException = caught;
             if (caught != null) {
-                // call revalidate() explicitly as the children have already been visited (visited = true)
-                for (MemberValidationError memberValidationError : caught.getErrors()) {
-                    CComponent<?> comp = get(memberValidationError.getMember());
+                for (MemberValidationError memberError : caught.getErrors()) {
+                    // add member validator if not done before
+                    CComponent<?> comp = get(memberError.getMember());
+                    if (!validationList.contains(comp)) {
+                        comp.addComponentValidator(new FormMemberValidator(memberError.getMember()));
+                        validationList.add(comp);
+                    }
+                    // call revalidate() explicitly as the children have already been visited (visited = true)
                     comp.revalidate();
                 }
             }
@@ -298,6 +294,23 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             });
 
             get(proto().password()).addComponentValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+        }
+
+        class FormMemberValidator<T> extends AbstractComponentValidator<T> {
+            private final IObject<T> member;
+
+            public FormMemberValidator(IObject<T> member) {
+                this.member = member;
+            }
+
+            @Override
+            public AbstractValidationError isValid() {
+                if (SignUpForm.this.entityValidationException != null) {
+                    MemberValidationError error = SignUpForm.this.entityValidationException.getError(member);
+                    return (error == null || error.getMessage() == null) ? null : new FieldValidationError(getComponent(), error.getMessage());
+                }
+                return null;
+            }
         }
     }
 
