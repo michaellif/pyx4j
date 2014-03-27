@@ -194,16 +194,16 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
                address.streetName().getValue(),
                (address.streetType().getValue() != null || address.streetType().getValue() == StreetType.other)? address.streetType().getValue().toAbbr() : null,
                address.streetDirection().getValue() != null ? address.streetDirection().getValue().toAbbr() : null
-       ));//@formatter.on
+       ));//@formatter:on
         formattedAddress.append("\n");
         formattedAddress.append(address.city().getValue());
         formattedAddress.append(" ");
-        formattedAddress.append(address.province().code().getValue());        
+        formattedAddress.append(address.province().code().getValue());
         formattedAddress.append("  ");
         formattedAddress.append(address.postalCode().getValue());
-       return formattedAddress.toString();
+        return formattedAddress.toString();
     }
-    
+
     private String sanitzeSuiteNumber(String suiteNumber) {
         return suiteNumber.replaceFirst("^[^\\d]*", ""); // remove all non starting digits, i.e. "Suite, Apt, APARTMENT, #" etc.
     }
@@ -261,7 +261,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
                 checkFailed = true;
                 break;
             }
-        }        
+        }
         if (checkFailed) {
             throw new RuntimeException("'to' field of N4 form won't fit the the box (line length exceeds maximum):\n" + toFieldString);
         }
