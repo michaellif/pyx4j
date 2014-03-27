@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
@@ -213,9 +214,15 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
             termBuilder.append("<br>");
             termBuilder.append("Included Utilities:<br>");
             for (BuildingUtility utility : leaseTerm.version().utilities()) {
-                termBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;").append(
-                        SimpleMessageFormat.format(SimpleMessageFormat.format("{0}: {1} ({2})<br>", utility.type().getValue(), utility.name().getValue(),
-                                utility.description().getValue())));
+                String uitiltyString = utility.type().getValue().toString();
+                if (!CommonsStringUtils.isEmpty(utility.name().getValue())) {
+                    uitiltyString += ": " + utility.name().getValue();
+                }
+                if (!CommonsStringUtils.isEmpty(utility.description().getValue())) {
+                    uitiltyString += " (" + utility.description().getValue() + ")";
+                }
+                uitiltyString += "<br>";
+                termBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;").append(uitiltyString);
             }
         }
         term4print.body().setValue(termBuilder.toString());
