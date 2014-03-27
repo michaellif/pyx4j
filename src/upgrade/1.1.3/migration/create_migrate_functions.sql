@@ -1567,6 +1567,27 @@ BEGIN
                 ||'     lease = NULL '
                 ||'WHERE    status = ''reserved'' ';
                 
+        -- background_check_policy and background_check_policy_v
+        
+        EXECUTE 'SELECT COUNT(id) '
+                ||'FROM '||v_schema_name||'.background_check_policy '
+                INTO v_rowcount;
+                
+        IF (v_rowcount = 0 )
+        THEN
+            
+            EXECUTE 'INSERT INTO '||v_schema_name||'.background_check_policy_v (id,bankruptcy,judgment,collection,charge_off) '
+                    ||'(SELECT  nextval(''public.background_check_policy_v_seq'') AS id, '
+                    ||' ''m12'',''m12'',''m12'',''m12'')';
+                    
+            EXECUTE 'INSERT INTO '||v_schema_name||'.background_check_policy (id,node_discriminator,node,updated,version,strategy_number) '
+                    ||'(SELECT  nextval(''public.background_check_policy_seq'') AS id, ''OrganizationPoliciesNode'' ,'
+                    ||'p.id AS node, DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated, '
+                    ||'v.id AS version, 1 '
+                    ||'FROM     '||v_schema_name||'.organization_policies_node p, '
+                    ||'         '||v_schema_name||'.background_check_policy_v v )';
+        END IF;
+        
                 
         -- billable_item
 		
@@ -1732,7 +1753,16 @@ BEGIN
 		EXECUTE 'UPDATE '||v_schema_name||'.notes_and_attachments '
 				||'SET		owner_discriminator = ''Lease'' '
 				||'WHERE 	owner_discriminator = ''LeaseTerm'' ';
-         
+        
+        
+        -- pmc_company_info
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.pmc_company_info (id,company_name) '
+                ||'(SELECT  nextval(''public.pmc_company_info_seq''),p.name '
+                ||'FROM     _admin_.admin_pmc p '
+                ||'WHERE    namespace ='''||v_schema_name||''')';
+                
+        
         -- policy tables
         
         PERFORM * FROM _dba_.update_policy_tables(v_schema_name);
