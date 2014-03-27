@@ -17,7 +17,9 @@ import java.util.concurrent.Callable;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.CrmUser;
@@ -54,7 +56,16 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
 
     @Override
     protected void onPmcCreated() {
-        ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(onboardingUser, pmcId);
+        new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(onboardingUser, pmcId);
+                return null;
+            }
+
+        });
+
         visit.setStatus(OnboardingApplicationStatus.accountCreated);
 
         TaskRunner.runInTargetNamespace(onboardingUser.pmc(), new Callable<Void>() {

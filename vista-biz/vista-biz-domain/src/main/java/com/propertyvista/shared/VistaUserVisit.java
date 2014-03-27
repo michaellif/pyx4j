@@ -30,6 +30,11 @@ public abstract class VistaUserVisit<E extends AbstractUser> extends UserVisit {
         super();
     }
 
+    protected VistaUserVisit(VistaApplication application) {
+        super();
+        this.application = application;
+    }
+
     public VistaUserVisit(VistaApplication application, E user) {
         super(user.getPrimaryKey(), user.name().getValue());
         setEmail(user.email().getValue());

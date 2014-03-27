@@ -24,15 +24,15 @@ import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.security.common.AbstractUser;
 
 @Caption(name = "User")
 @Table(namespace = VistaNamespace.operationsNamespace)
-public interface OnboardingUser extends IEntity {
+public interface OnboardingUser extends AbstractUser {
 
     Pmc pmc();
 

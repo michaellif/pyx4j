@@ -58,7 +58,7 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
     }
 
     protected String createSession(ClientSystemInfo clientSystemInfo) {
-        OnboardingUserVisit visit = new OnboardingUserVisit();
+        OnboardingUserVisit visit = new OnboardingUserVisit(VistaApplication.onboarding);
         visit.setStatus(OnboardingApplicationStatus.starting);
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(getVistaApplication());

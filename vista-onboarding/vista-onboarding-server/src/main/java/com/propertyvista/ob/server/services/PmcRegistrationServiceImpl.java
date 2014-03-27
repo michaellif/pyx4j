@@ -69,6 +69,25 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                     throw new UserRuntimeException(i18n.tr("Requested DNS name {0} already reserved", request.dnsName().getValue()));
                 }
 
+                OnboardingUser user = EntityFactory.create(OnboardingUser.class);
+                user.firstName().setValue(request.firstName().getValue());
+                user.lastName().setValue(request.lastName().getValue());
+                user.email().setValue(EmailValidator.normalizeEmailAddress(request.email().getValue()));
+
+                Persistence.service().persist(user);
+
+                Persistence.service().commit();
+
+                return user;
+            }
+        });
+
+        OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
+
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+
                 Pmc pmc = EntityFactory.create(Pmc.class);
 
                 pmc.name().setValue(request.name().getValue());
@@ -83,23 +102,18 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
                 ServerSideFactory.create(PmcFacade.class).create(pmc);
 
-                OnboardingUser user = EntityFactory.create(OnboardingUser.class);
-                user.pmc().set(pmc);
-                user.firstName().setValue(request.firstName().getValue());
-                user.lastName().setValue(request.lastName().getValue());
-                user.email().setValue(EmailValidator.normalizeEmailAddress(request.email().getValue()));
+                onboardingUser.pmc().set(pmc);
 
-                Persistence.service().persist(user);
+                Persistence.service().persist(onboardingUser);
 
                 Persistence.service().commit();
 
-                return user;
+                return null;
             }
         });
 
         log.info("New PMC {} created", onboardingUser.pmc());
 
-        OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
         visit.setStatus(OnboardingApplicationStatus.accountCreation);
         visit.setPmcNamespace(onboardingUser.pmc().namespace().getValue());
         visit.setEmail(onboardingUser.email().getValue());

@@ -13,16 +13,27 @@
  */
 package com.propertyvista.ob.rpc.dto;
 
-import com.pyx4j.security.shared.UserVisit;
+import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.shared.VistaUserVisit;
 
 @SuppressWarnings("serial")
-public class OnboardingUserVisit extends UserVisit {
+public class OnboardingUserVisit extends VistaUserVisit<OnboardingUser> {
 
     public OnboardingApplicationStatus status;
 
     public String pmcNamespace;
 
     public String accountCreationDeferredCorrelationId;
+
+    // to make it GWT Serializable ?
+    public OnboardingUserVisit() {
+        super();
+    }
+
+    public OnboardingUserVisit(VistaApplication application) {
+        super(application);
+    }
 
     public void setStatus(OnboardingApplicationStatus status) {
         this.status = status;
