@@ -153,7 +153,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     @Override
     public void submitOnlineApplication(OnlineApplication application) {
         application.status().setValue(OnlineApplication.Status.Submitted);
-        Persistence.service().persist(application);
+        Persistence.service().merge(application);
 
 // TODO: update behavior somehow: 
 //            CustomerUser user = application.customer().user();
