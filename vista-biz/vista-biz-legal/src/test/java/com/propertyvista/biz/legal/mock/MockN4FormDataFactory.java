@@ -35,7 +35,7 @@ import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4Signature.SignedBy;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class MockN4FormDataFactory {
 
@@ -108,9 +108,9 @@ public class MockN4FormDataFactory {
 
     public static N4LeaseData makeLeaseData() {
         N4LeaseData leaseData = EntityFactory.create(N4LeaseData.class);
-        Tenant tenant1 = EntityFactory.create(Tenant.class);
-        tenant1.customer().person().name().firstName().setValue("Tenant");
-        tenant1.customer().person().name().lastName().setValue("Tenantovic");
+        LeaseTermTenant tenant1 = EntityFactory.create(LeaseTermTenant.class);
+        tenant1.leaseParticipant().customer().person().name().firstName().setValue("Tenant");
+        tenant1.leaseParticipant().customer().person().name().lastName().setValue("Tenantovic");
         leaseData.leaseTenants().add(tenant1);
 
         leaseData.rentalUnitAddress().streetNumber().setValue("2222");

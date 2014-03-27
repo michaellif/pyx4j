@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 @Transient
 public interface N4LeaseData extends IEntity {
@@ -32,7 +32,7 @@ public interface N4LeaseData extends IEntity {
 
     AddressStructured landlordAddress();
 
-    IList<Tenant> leaseTenants();
+    IList<LeaseTermTenant> leaseTenants();
 
     AddressStructured rentalUnitAddress();
 

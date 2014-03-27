@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
 
@@ -33,12 +34,14 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
@@ -49,12 +52,14 @@ import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4Signature.SignedBy;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationFacadeImpl implements N4GenerationFacade {
+
+    private static final int MAX_ADDRESS_BOX_LINE_LENGTH = 24; // only 24 captial 'M' letters can fit in to the 'to' box
 
     private static final String N4_FORM_FILE = "n4.pdf";
 
@@ -79,9 +84,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     @Override
     public N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData) {
         N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
-        fieldsData.to().setValue(
-                SimpleMessageFormat.format("{0}\n{1}", formatTenants(leaseData.leaseTenants()), formatRentalAddress(leaseData.rentalUnitAddress())));
-
+        fieldsData.to().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
+        validateToField(fieldsData.to().getValue());
         fieldsData.from().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", leaseData.landlordName().getValue(), formatBuildingOwnerAddress(leaseData.landlordAddress())));
 
@@ -130,7 +134,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
         for (LeaseTermTenant termTenantIdStub : lease.currentTerm().version().tenants()) {
             LeaseTermTenant termTenant = Persistence.service().retrieve(LeaseTermTenant.class, termTenantIdStub.getPrimaryKey());
-            n4LeaseData.leaseTenants().add(termTenant.leaseParticipant().<Tenant> createIdentityStub());
+            n4LeaseData.leaseTenants().add(termTenant.<LeaseTermTenant> createIdentityStub());
         }
 
         n4LeaseData.rentalUnitAddress().set(AddressRetriever.getUnitLegalAddress(lease.unit()));
@@ -153,18 +157,55 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return n4LeaseData;
     }
 
-    private String formatTenants(Iterable<Tenant> tenants) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Tenant tenantIdStub : tenants) {
-            Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantIdStub.getPrimaryKey());
-            stringBuilder.append(tenant.customer().person().name().getStringView());
-            stringBuilder.append("; ");
+    private String formatTo(IList<LeaseTermTenant> leaseTenants, AddressStructured rentalUnitAddress) {
+        StringBuilder toField = new StringBuilder();
+        toField.append(formatTenants(leaseTenants));
+        toField.append("\n");
+        toField.append(formatRentalAddress(rentalUnitAddress));
+        return toField.toString().toUpperCase(Locale.CANADA);
+    }
+
+    private String formatTenants(Iterable<LeaseTermTenant> tenants) {
+        StringBuilder lineBuilder = new StringBuilder();
+        for (LeaseTermTenant tenantIdStub : tenants) {
+            LeaseTermTenant tenant = Persistence.service().retrieve(LeaseTermTenant.class, tenantIdStub.getPrimaryKey());
+            Persistence.ensureRetrieve(tenant.leaseParticipant(), AttachLevel.Attached);
+            if (tenant.role().getValue() == Role.Applicant /* TODO ? || tenant.role().getValue() == Role.CoApplicant */) {
+                if (lineBuilder.length() > 0) {
+                    lineBuilder.append(", ");
+                }
+                lineBuilder.append(tenant.leaseParticipant().customer().person().name().firstName().getValue() + " "
+                        + tenant.leaseParticipant().customer().person().name().lastName().getValue());
+            }
         }
-        return stringBuilder.toString();
+        if (lineBuilder.length() > MAX_ADDRESS_BOX_LINE_LENGTH) {
+            throw new RuntimeException("'To' field of recipient address is too long'");
+        }
+        return lineBuilder.toString();
     }
 
     private String formatRentalAddress(AddressStructured address) {
-        return address.getStringView();
+        StringBuilder formattedAddress = new StringBuilder();
+        formattedAddress.append(SimpleMessageFormat.format(//@formatter:off
+               "{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}",
+               sanitzeSuiteNumber(address.suiteNumber().getValue()),
+               address.streetNumber().getValue(),
+               address.streetNumberSuffix().getValue(),
+               address.streetName().getValue(),
+               (address.streetType().getValue() != null || address.streetType().getValue() == StreetType.other)? address.streetType().getValue().toAbbr() : null,
+               address.streetDirection().getValue() != null ? address.streetDirection().getValue().toAbbr() : null
+       ));//@formatter.on
+        formattedAddress.append("\n");
+        formattedAddress.append(address.city().getValue());
+        formattedAddress.append(" ");
+        formattedAddress.append(address.province().code().getValue());        
+        formattedAddress.append("  ");
+        formattedAddress.append(address.postalCode().getValue());
+       return formattedAddress.toString();
+    }
+    
+    private String sanitzeSuiteNumber(String suiteNumber) {
+        return suiteNumber.replaceFirst("^[^\\d]*", ""); // remove all non starting digits, i.e. "Suite, Apt, APARTMENT, #" etc.
     }
 
     private String formatBuildingOwnerAddress(AddressStructured address) {
@@ -212,4 +253,17 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return new AddressConverter.StructuredToSimpleAddressConverter().getStreetAddress(companyAddress);
     }
 
+    // We can fit to this field only three lines 
+    private void validateToField(String toFieldString) {
+        boolean checkFailed = false;
+        for (String line : toFieldString.split("\n")) {
+            if (line.length() > MAX_ADDRESS_BOX_LINE_LENGTH) {
+                checkFailed = true;
+                break;
+            }
+        }        
+        if (checkFailed) {
+            throw new RuntimeException("'to' field of N4 form won't fit the the box (line length exceeds maximum):\n" + toFieldString);
+        }
+    }
 }

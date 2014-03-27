@@ -39,40 +39,111 @@ public interface AddressStructured extends IEntity {
 
     @I18n
     @I18nComment("Street Type")
-    public enum StreetType {
+    public enum StreetType {//@formatter:off
+        // reference http://www.canadapost.ca/tools/pg/manual/PGaddress-e.asp#1423617
+        alley("ALLEY"),        
+        approach("APPROACH"), // FIXME: not in list of recognized by Canada Post street types
+        arcade("ARCADE"), // FIXME: not in list of recognized by Canada Post street types
+        avenue("AVE"),
+        boulevard("BLVD"), 
+        brow("BROW"), // FIXME: not in list of recognized by Canada Post street types
+        bypass("BYPASS"),
+        causeway("CAUSEWAY"), // FIXME: not in list of recognized by Canada Post street types
+        circuit("CIRCT"),
+        circle("CIR"),
+        circus("CIRCUS"), // FIXME: not in list of recognized by Canada Post street types
+        close("CLOSE"),
+        copse("COPSE"), // FIXME: not in list of recognized by Canada Post street types
+        corner("CORNER"), // FIXME: not in list of recognized by Canada Post street types
+        court("CRT"),
+        cove("COVE"),
+        crescent("CRES"),
+        drive("DR"),
+        end("END"),
+        esplanande("ESPL"),
+        flat("FLAT"), // FIXME: not in list of recognized by Canada Post street types
+        freeway("FWY"),
+        frontage("FRONTAGE"), // FIXME: not in list of recognized by Canada Post street types
+        gardens("GDNS"),
+        glade("GLADE"),
+        glen("GLEN"),
+        green("GREEN"),
+        grove("GROVE"),
+        heights("HARBR"),
+        highway("HWY"),
+        lane("LANE"),
+        line("LINE"),
+        link("LINK"),
+        loop("LOOP"),
+        mall("MALL"),
+        mews("MEWS"),
+        packet("PACKET"), // FIXME: not in list of recognized by Canada Post street types
+        parade("PARADE"),
+        park("PK"),
+        parkway("PKY"),
+        place("PL"),
+        promenade("PROM"),
+        reserve("RESERVE"), // FIXME: not in list of recognized by Canada Post street types
+        ridge("RIDGE"),
+        rise("RISE"),
+        road("RD"),
+        row("ROW"),    
+        square("SQ"),
+        street("ST"),
+        strip("STRIP"), // FIXME: not in list of recognized by Canada Post street types
+        tarn("TARN"), // FIXME: not in list of recognized by Canada Post street types
+        terrace("TERR"),
+        thoroughfaree("THOROUGHFAREE"), // FIXME: not in list of recognized by Canada Post street types
+        track("TRACK"), // FIXME: not in list of recognized by Canada Post street types
+        trunkway("TRUNKWAY"), // FIXME: not in list of recognized by Canada Post street types
+        view("VIEW"),
+        vista("VISTA"),
+        walk("WALK"),
+        way("WAY"),
+        walkway("WALKWAY"), // FIXME: not in list of recognized by Canada Post street types
+        yard("YARD"), // FIXME: not in list of recognized by Canada Post street types
 
-        alley, approach, arcade, avenue, boulevard, brow, bypass, causeway,
+        other("OTHER");
+        
+        private final String abbr;
 
-        circuit, circle, circus, close, copse, corner, cove, court, crescent,
+        private StreetType(String abbr) {
+            this.abbr = abbr;
+        }
 
-        drive, end, esplanande, flat, freeway, frontage, gardens, glade, glen, green, grove,
-
-        heights, highway, lane, line, link, loop, mall, mews, packet, parade, park, parkway, place,
-
-        promenade, reserve, ridge, rise, road, row, square, street, strip, tarn, terrace, thoroughfaree,
-
-        track, trunkway, view, vista, walk, way, walkway, yard,
-
-        other;
 
         @Override
         public String toString() {
             return I18nEnum.toString(this);
         }
-    }
+        
+        public String toAbbr() {
+            return this.abbr;
+        }
+    }// @formatter:on
 
     @I18n
     public enum StreetDirection {
 
-        east, north, south, west,
+        east("E"), north("N"), south("S"), west("W"),
 
-        southEast, southWest,
+        southEast("SE"), southWest("SW"),
 
-        northEast, northWest;
+        northEast("NE"), northWest("NW");
+
+        private final String abbr;
+
+        private StreetDirection(String abbr) {
+            this.abbr = abbr;
+        }
 
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        public String toAbbr() {
+            return this.abbr;
         }
     }
 
