@@ -91,7 +91,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
             fillAdditionalInfoSection(data.sections().get(0).additionalInfoSection().get(0), application, subjectParticipant);
             fillFinaincialSection(data.sections().get(0).financialSection().get(0), application, subjectParticipant);
             fillEmergencyContacts(data.sections().get(0).emergencyContactsSection().get(0), application, subjectParticipant);
-            fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode != DocumentMode.InkSinging);
+            fillLegalSection(data.sections().get(0).legalSection().get(0), application, subjectParticipant, documentMode == DocumentMode.InkSinging);
         }
         return data;
     }
