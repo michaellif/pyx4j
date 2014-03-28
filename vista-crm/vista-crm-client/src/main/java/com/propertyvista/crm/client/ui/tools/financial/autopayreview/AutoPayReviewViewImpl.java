@@ -25,7 +25,7 @@ public class AutoPayReviewViewImpl extends BulkOperationToolViewImpl<AutoPayChan
     private static final I18n i18n = I18n.get(AutoPayReviewViewImpl.class);
 
     public AutoPayReviewViewImpl() {
-        super(i18n.tr("Auto Pay Reivew"), PapReviewsHolder.class, new PapReviewsHolderForm());
+        super(i18n.tr("Auto Pays Review"), PapReviewsHolder.class, new PapReviewsHolderForm());
         setSettingsForm(new AutoPayChangesReportSettingsForm(this));
     }
 
