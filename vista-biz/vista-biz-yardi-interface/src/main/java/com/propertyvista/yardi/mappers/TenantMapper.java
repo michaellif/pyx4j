@@ -86,7 +86,7 @@ public class TenantMapper {
         }
 
         // set Yardi's email just in case of import where use is not yet created and non-former leases:
-        if (!isEmailAlreadyUsed && customer.user().id().isNull() && !isFormerLease(yardiCustomer)) {
+        if (!isEmailAlreadyUsed && (customer.user().isNull()) && !isFormerLease(yardiCustomer)) {
             setEmail(yardiCustomer, customer);
         }
 
@@ -98,7 +98,7 @@ public class TenantMapper {
         Customer customerOrig = customer.duplicate();
         customer.set(mapCustomer(yardiCustomer, customer));
 
-        if (!isFormerLease(yardiCustomer)) {
+        if (!isFormerLease(yardiCustomer) && customer.user().isNull()) {
             String email = retrieveYardiCustomerEmail(yardiCustomer);
             if (!CommonsStringUtils.isEmpty(email) && !isEmailRegistered(email)) {
                 setEmail(yardiCustomer, customer);
