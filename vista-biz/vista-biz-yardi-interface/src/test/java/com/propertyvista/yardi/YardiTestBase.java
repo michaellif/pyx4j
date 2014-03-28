@@ -47,6 +47,7 @@ import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.mock.stub.YardiMockGuestManagementStubImpl;
@@ -103,6 +104,7 @@ public class YardiTestBase extends IntegrationTestBase {
         models.add(ARPolicyDataModel.class);
         models.add(AutoPayPolicyDataModel.class);
         models.add(AgreementLegalPolicyDataModel.class);
+        models.add(RestrictionsPolicyDataModel.class);
         return models;
     }
 

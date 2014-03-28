@@ -32,6 +32,7 @@ import com.propertyvista.test.mock.models.GLCodeDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 
 public abstract class ILSTestBase extends IntegrationTestBase {
@@ -53,6 +54,7 @@ public abstract class ILSTestBase extends IntegrationTestBase {
         models.add(ARCodeDataModel.class);
         models.add(BuildingDataModel.class);
         models.add(MerchantAccountDataModel.class);
+        models.add(RestrictionsPolicyDataModel.class);
         return models;
     }
 

@@ -37,6 +37,7 @@ import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
+import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 
 public class PolicyManagerTestBase extends IntegrationTestBase {
@@ -61,6 +62,7 @@ public class PolicyManagerTestBase extends IntegrationTestBase {
         models.add(AgreementLegalPolicyDataModel.class);
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(LeaseDataModel.class);
+        models.add(RestrictionsPolicyDataModel.class);
         return models;
     }
 

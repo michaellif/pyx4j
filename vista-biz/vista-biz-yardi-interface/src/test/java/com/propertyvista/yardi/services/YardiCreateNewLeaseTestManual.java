@@ -67,6 +67,7 @@ import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 
@@ -102,6 +103,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(LeaseDataModel.class);
         models.add(AgreementLegalPolicyDataModel.class);
+        models.add(RestrictionsPolicyDataModel.class);
         return models;
     }
 

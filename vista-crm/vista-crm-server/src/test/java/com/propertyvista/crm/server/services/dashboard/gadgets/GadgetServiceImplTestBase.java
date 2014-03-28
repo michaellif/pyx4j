@@ -36,6 +36,7 @@ import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
 
 public class GadgetServiceImplTestBase extends IntegrationTestBase {
 
@@ -61,7 +62,8 @@ public class GadgetServiceImplTestBase extends IntegrationTestBase {
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         return Arrays.<Class<? extends MockDataModel<?>>> asList(//@formatter:off
                 PmcDataModel.class,
-                LocationsDataModel.class
+                LocationsDataModel.class,
+                RestrictionsPolicyDataModel.class
         );//@formatter:on
     }
 
