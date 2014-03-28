@@ -34,9 +34,6 @@ public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermPartici
         if (!VistaFeatures.instance().yardiIntegration()) {
             bind(proto().leaseParticipant().customer().person().name().lastName(), new NotNullValidator());
         }
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            bind(proto().leaseParticipant().customer().person().birthDate(), new NotNullValidator());
-        }
 
         // Screening is automatically finalized
         if (!ScreeningValidator.screeningIsAutomaticallyFinalized) {

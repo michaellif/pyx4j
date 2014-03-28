@@ -19,6 +19,8 @@ import com.propertyvista.biz.validation.framework.validators.CompositeEntityVali
 import com.propertyvista.biz.validation.framework.validators.NotNullValidator;
 import com.propertyvista.biz.validation.framework.validators.ValueConstraintValidator;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 /**
  * This class defines/validates the conditions that must be met by a lease to get an approval.
@@ -41,7 +43,9 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
         bind(proto().currentTerm().version().tenants(), new HasAtLeastOneApplicantValidator());
         bind(proto().currentTerm().version().tenants(), new TenantInApprovedLeaseValidator());
+        bind(proto().currentTerm().version().tenants(), new LeaseTermParticipantBirthDateValidator<LeaseTermTenant>());
         bind(proto().currentTerm().version().guarantors(), new GuarantorInApprovedLeaseValidator());
+        bind(proto().currentTerm().version().guarantors(), new LeaseTermParticipantBirthDateValidator<LeaseTermGuarantor>());
 
         bind(proto().currentTerm().version().leaseProducts().serviceItem(), new NotNullValidator());
 
