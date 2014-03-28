@@ -42,7 +42,7 @@
     </scm>
 
     <properties>
-        <pyxVersion>2.2.4-SNAPSHOT</pyxVersion><!--pyx-version-->
+        <pyxVersion>2.2.5-SNAPSHOT</pyxVersion><!--pyx-version-->
     </properties>
 
     <dependencyManagement>
