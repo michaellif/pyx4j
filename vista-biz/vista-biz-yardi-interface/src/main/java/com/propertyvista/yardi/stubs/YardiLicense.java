@@ -49,9 +49,8 @@ public class YardiLicense {
     private static Map<YardiInterface, String> licenseBody = new HashMap<YardiInterface, String>();
 
     static {
+        // License for Old Yardi can be disabled in file "config.properties"  yardi.licenseLessSystemsUrl
         //licenseLessSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com/");
-        // Starlight is old, can be disabled in file "config.properties"  yardi.licenseLessSystemsUrl 
-        licenseLessSystemsUrl.add("https://yardi.starlightinvest.com/");
     }
 
     static String getInterfaceLicense(YardiInterface yardiInterface, PmcYardiCredential yc) {
