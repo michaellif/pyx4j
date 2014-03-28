@@ -32,4 +32,6 @@ public interface VistaSystemsSimulationConfigDTO extends IEntity {
     IPrimitive<Boolean> useEquifaxSimulator();
 
     NetworkSimulation yardiInterfaceNetworkSimulation();
+
+    IPrimitive<Boolean> yardiAllTenantsToHaveEmails();
 }

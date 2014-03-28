@@ -24,10 +24,11 @@ import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.mits.YardiCustomer;
 
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -108,7 +109,7 @@ public class TenantMerger {
             LeaseTermParticipant<?> participant = findParticipant(term.version().tenants(), term.version().guarantors(), customer.getCustomerID());
 
             if (new TenantMapper(executionMonitor).updateCustomerData(customer, participant.leaseParticipant().customer())) {
-                Persistence.service().merge(participant.leaseParticipant().customer());
+                ServerSideFactory.create(CustomerFacade.class).persistCustomer(participant.leaseParticipant().customer());
             }
 
             LeaseTermParticipant.Role newRole = TenantMapper.getRole(customer, participant);

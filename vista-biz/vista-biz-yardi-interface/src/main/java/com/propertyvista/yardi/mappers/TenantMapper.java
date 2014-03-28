@@ -29,9 +29,13 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -81,8 +85,8 @@ public class TenantMapper {
             tenant.role().setValue(Role.Dependent);
         }
 
-        // set Yardi's email just in case of initial import and non-former leases:
-        if (!isEmailAlreadyUsed && customer.id().isNull() && !isFormerLease(yardiCustomer)) {
+        // set Yardi's email just in case of import where use is not yet created and non-former leases:
+        if (!isEmailAlreadyUsed && customer.user().id().isNull() && !isFormerLease(yardiCustomer)) {
             setEmail(yardiCustomer, customer);
         }
 
@@ -90,9 +94,18 @@ public class TenantMapper {
     }
 
     public boolean updateCustomerData(YardiCustomer yardiCustomer, Customer customer) {
-        //TODO detect changes.
+        // detect changes.
+        Customer customerOrig = customer.duplicate();
         customer.set(mapCustomer(yardiCustomer, customer));
-        return true;
+
+        if (!isFormerLease(yardiCustomer)) {
+            String email = retrieveYardiCustomerEmail(yardiCustomer);
+            if (!CommonsStringUtils.isEmpty(email) && !isEmailRegistered(email)) {
+                setEmail(yardiCustomer, customer);
+            }
+        }
+
+        return !EntityGraph.fullyEqual(customerOrig, customer);
     }
 
     public static LeaseTermParticipant.Role getRole(YardiCustomer yardiCustomer, LeaseTermParticipant<?> participant) {
@@ -164,6 +177,15 @@ public class TenantMapper {
         return false;
     }
 
+    private boolean isEmailRegistered(String email) {
+        if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
+            EntityQueryCriteria<CustomerUser> criteria = EntityQueryCriteria.create(CustomerUser.class);
+            criteria.eq(criteria.proto().email(), EmailValidator.normalizeEmailAddress(email));
+            return Persistence.service().exists(criteria);
+        }
+        return false;
+    }
+
     private Customer findCustomer(YardiCustomer yardiCustomer) {
         String email = retrieveYardiCustomerEmail(yardiCustomer);
         if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
@@ -204,10 +226,11 @@ public class TenantMapper {
             }
         }
         // Mass email testing
-//        if (true) {
-//            return yardiCustomer.getCustomerID() + "@pyx4j.com";
-//        }
-        return null;
+        if (!VistaDeployment.isVistaProduction() && VistaSystemsSimulationConfig.getConfiguration().yardiAllTenantsToHaveEmails().getValue(false)) {
+            return yardiCustomer.getCustomerID() + "@pyx4j.com";
+        } else {
+            return null;
+        }
     }
 
     private void setEmail(YardiCustomer yardiCustomer, Customer customer) {

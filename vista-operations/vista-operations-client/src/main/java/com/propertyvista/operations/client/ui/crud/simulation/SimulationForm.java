@@ -85,6 +85,8 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Yardi"));
         int row = -1;
 
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().yardiAllTenantsToHaveEmails()), 5, true).build());
+
         content.setH2(++row, 0, 2, i18n.tr("Yardi Network Simulation"));
 
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().yardiInterfaceNetworkSimulation().enabled()), 5, true).build());
