@@ -29,6 +29,8 @@ public class PaymentsScheduledProcess implements PmcProcess {
 
     private final PaymentType paymentType;
 
+    private long yardiRequestsTimeTotal = 0;
+
     public PaymentsScheduledProcess(PaymentType paymentType) {
         this.paymentType = paymentType;
     }
@@ -59,11 +61,15 @@ public class PaymentsScheduledProcess implements PmcProcess {
                 ServerSideFactory.create(YardiConfigurationFacade.class).clearYardiCredentialCache();
                 long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer();
                 context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
+                yardiRequestsTimeTotal += yardiTime;
             }
         }
     }
 
     @Override
     public void complete(PmcProcessContext context) {
+        if (yardiRequestsTimeTotal != 0) {
+            context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiRequestsTimeTotal), new BigDecimal(yardiRequestsTimeTotal));
+        }
     }
 }

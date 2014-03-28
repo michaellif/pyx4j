@@ -25,6 +25,8 @@ import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class PaymentsDbpPostProcess implements PmcProcess {
 
+    private long yardiRequestsTimeTotal = 0;
+
     @Override
     public boolean start(PmcProcessContext context) {
         return true;
@@ -51,12 +53,16 @@ public class PaymentsDbpPostProcess implements PmcProcess {
                 ServerSideFactory.create(YardiConfigurationFacade.class).clearYardiCredentialCache();
                 long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer();
                 context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
+                yardiRequestsTimeTotal += yardiTime;
             }
         }
     }
 
     @Override
     public void complete(PmcProcessContext context) {
+        if (yardiRequestsTimeTotal != 0) {
+            context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiRequestsTimeTotal), new BigDecimal(yardiRequestsTimeTotal));
+        }
     }
 
 }
