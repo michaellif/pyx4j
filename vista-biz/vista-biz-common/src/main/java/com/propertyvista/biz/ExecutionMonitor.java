@@ -175,6 +175,16 @@ public class ExecutionMonitor {
         }
     }
 
+    public Long getCounter(String sectionName, CompletionType type) {
+        ReportSectionId id = new ReportSectionId(sectionName, type);
+        ReportSection section = sections.get(id);
+        if (section != null) {
+            return section.counter;
+        } else {
+            return null;
+        }
+    }
+
     public void addEvent(String sectionName, CompletionType type, String message) {
         addEvent(sectionName, type, null, message);
     }
@@ -332,6 +342,7 @@ public class ExecutionMonitor {
         }
 
         private void add(ReportSection otherSection) {
+            counter += otherSection.counter;
             add(otherSection.accumulator);
             messages.addAll(otherSection.messages);
             Collections.sort(messages);

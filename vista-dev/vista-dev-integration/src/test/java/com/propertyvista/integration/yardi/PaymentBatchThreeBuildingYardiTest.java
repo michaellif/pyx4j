@@ -28,6 +28,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentRecordTester;
@@ -36,7 +37,6 @@ import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
 import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.updater.PropertyUpdater;
-import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 @Category(FunctionalTests.class)
 public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
@@ -74,7 +74,7 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
         createYardiLease("prop3", "t000312");
 
         setSysDate("2011-01-01");
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123,prop2,prop3"), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential("prop123,prop2,prop3"));
 
         loadBuildingToModel("prop123");
         loadBuildingToModel("prop2");
@@ -107,7 +107,7 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
         setSysDate("2011-01-02");
 
         //Run the batch process
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+        ExecutionMonitor executionMonitor = SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
 
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
         new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
@@ -117,6 +117,9 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
 
         new PaymentRecordTester(lease31.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
         new PaymentRecordTester(lease32.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        assertEquals("Batches", Long.valueOf(3), executionMonitor.getCounter("Batch", CompletionType.processed));
+        assertEquals("PaymentPosted", Long.valueOf(6), executionMonitor.getCounter("PaymentPosted", CompletionType.processed));
     }
 
     public void testOneBatchFailedPosting() throws Exception {
@@ -129,7 +132,7 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
         setSysDate("2011-01-02");
 
         //Run the batch process
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+        ExecutionMonitor executionMonitor = SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
 
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
         new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
@@ -139,6 +142,9 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
 
         new PaymentRecordTester(lease31.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
         new PaymentRecordTester(lease32.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        assertEquals("Batches", Long.valueOf(2), executionMonitor.getCounter("Batch", CompletionType.processed));
+        assertEquals("PaymentPosted", Long.valueOf(4), executionMonitor.getCounter("PaymentPosted", CompletionType.processed));
 
         // Test how process will recover
         {

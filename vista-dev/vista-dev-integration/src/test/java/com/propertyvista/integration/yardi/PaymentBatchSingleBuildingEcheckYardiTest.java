@@ -33,6 +33,7 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.integration.InvoiceLineItemTester;
@@ -95,7 +96,7 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
         new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential("prop123"));
         Persistence.service().commit();
 
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");
@@ -121,13 +122,16 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         setSysDate("2011-01-02");
 
         //Run the batch process
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+        ExecutionMonitor executionMonitor = SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
 
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
         new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
         new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+        assertEquals("Batches", Long.valueOf(1), executionMonitor.getCounter("Batch", CompletionType.processed));
+        assertEquals("PaymentPosted", Long.valueOf(3), executionMonitor.getCounter("PaymentPosted", CompletionType.processed));
+
+        yardiImportAll(getYardiCredential("prop123"));
         Persistence.service().commit();
 
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");

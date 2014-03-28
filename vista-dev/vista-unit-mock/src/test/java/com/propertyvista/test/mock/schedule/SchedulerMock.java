@@ -25,6 +25,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.server.TaskRunner;
@@ -39,14 +40,14 @@ public class SchedulerMock {
     // Pass the Namespace of single PMC context to OperationsTriggerFacadeMock (example PadReceiveAcknowledgmentProcess)
     static final ThreadLocal<String> requestNamspaceLocal = new ThreadLocal<String>();
 
-    public static void runProcess(PmcProcessType processType, String forDateStr) {
-        runProcess(processType, DateUtils.detectDateformat(forDateStr));
+    public static ExecutionMonitor runProcess(PmcProcessType processType, String forDateStr) {
+        return runProcess(processType, DateUtils.detectDateformat(forDateStr));
     }
 
     /**
      * We run the process only for single PMC in Mock
      */
-    public static void runProcess(PmcProcessType processType, Date forDate) {
+    public static ExecutionMonitor runProcess(PmcProcessType processType, Date forDate) {
         try {
             requestNamspaceLocal.set(NamespaceManager.getNamespace());
             Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess);
@@ -61,13 +62,14 @@ public class SchedulerMock {
                 }
             });
             if (canStart) {
-
+                ExecutionMonitor executionMonitor = null;
                 if (!processType.hasOption(PmcProcessOptions.GlobalOnly)) {
 
                     PmcProcessContext pmcContext = new PmcProcessContext(forDate);
                     pmcProcess.executePmcJob(pmcContext);
                     log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", forDate, pmcProcess.getClass().getSimpleName(),
                             pmcContext.getExecutionMonitor());
+                    executionMonitor = pmcContext.getExecutionMonitor();
                 }
 
                 TaskRunner.runInOperationsNamespace(new Callable<Void>() {
@@ -77,6 +79,10 @@ public class SchedulerMock {
                         return null;
                     }
                 });
+
+                return executionMonitor;
+            } else {
+                return null;
             }
         } finally {
             requestNamspaceLocal.remove();
