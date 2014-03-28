@@ -91,12 +91,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     @Override
     protected String getAddItemDialogCaption() {
-        return i18n.tr("Add New Tenant");
+        return i18n.tr("Add New Prospect/Tenant");
     }
 
     @Override
     protected String getAddItemDialogBody() {
-        return i18n.tr("Do you want to select existing Tenant?");
+        return i18n.tr("Do you want to select existing Prospect/Tenant?");
     }
 
     public boolean getMaturedOccupantsAreApplicants() {
