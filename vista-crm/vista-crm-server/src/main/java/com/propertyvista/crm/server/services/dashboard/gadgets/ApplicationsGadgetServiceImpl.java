@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import java.util.Arrays;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -69,7 +70,9 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
         IObject<?> applicationsFilterMember = proto.getMember(new Path(applicationsFilter));
 
         if (proto.applications() == applicationsFilterMember) {
-            // this was intentionally left empty
+            // I don't know why but Persistence.count() works wrong in if we don't add this criterion 
+            criteria.in(criteria.proto().leaseApplication().status(), Arrays.asList(LeaseApplication.Status.Created, LeaseApplication.Status.Approved,
+                    LeaseApplication.Status.Declined, LeaseApplication.Status.Cancelled));
         } else if (proto.pending() == applicationsFilterMember) {
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Created));
         } else if (proto.approved() == applicationsFilterMember) {
