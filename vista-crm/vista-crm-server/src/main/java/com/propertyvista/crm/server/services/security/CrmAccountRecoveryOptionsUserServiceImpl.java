@@ -125,7 +125,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
 
     private void assertIsDefined(IPrimitive<String> str) {
         if (isEmpty(str.getValue())) {
-            throw new UserRuntimeException(i18n.tr("\"{0}\" is required", str.getMeta().getCaption()));
+            throw new UserRuntimeException(true, i18n.tr("\"{0}\" is required", str.getMeta().getCaption()));
         }
     }
 
