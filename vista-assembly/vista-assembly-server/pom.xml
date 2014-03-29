@@ -155,14 +155,7 @@
 
         <dependency>
             <groupId>org.openid4java</groupId>
-            <artifactId>openid4java-consumer</artifactId>
-            <type>pom</type>
-        </dependency>
-
-        <!-- fixed guice groupId used in openid4java -->
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
+            <artifactId>openid4java</artifactId>
         </dependency>
 
         <dependency>
