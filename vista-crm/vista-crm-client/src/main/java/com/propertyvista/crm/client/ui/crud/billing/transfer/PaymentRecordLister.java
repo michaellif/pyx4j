@@ -48,7 +48,6 @@ public class PaymentRecordLister extends AbstractLister<PaymentRecordDTO> {
             new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
             new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
             new MemberColumnDescriptor.Builder(proto().notice()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().createdBy()).visible(false).searchable(false).build()
         );//@formatter:on

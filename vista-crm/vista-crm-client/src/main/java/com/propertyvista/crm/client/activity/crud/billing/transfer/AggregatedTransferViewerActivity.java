@@ -29,7 +29,6 @@ import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferV
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> implements AggregatedTransferViewerView.Presenter {
@@ -58,18 +57,18 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
     protected void onPopulateSuccess(AggregatedTransfer result) {
         super.onPopulateSuccess(result);
 
+        PaymentRecordDTO proto = EntityFactory.getEntityPrototype(PaymentRecordDTO.class);
+
         paymentLister.clearPreDefinedFilters();
-        paymentLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransfer(), result));
+        paymentLister.addPreDefinedFilter(PropertyCriterion.eq(proto.aggregatedTransfer(), result));
         paymentLister.populate();
 
         returnedPaymentLister.clearPreDefinedFilters();
-        returnedPaymentLister.addPreDefinedFilter(PropertyCriterion
-                .eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransferReturn(), result));
+        returnedPaymentLister.addPreDefinedFilter(PropertyCriterion.eq(proto.aggregatedTransferReturn(), result));
         returnedPaymentLister.populate();
 
         rejectedBatchPaymentsLister.clearPreDefinedFilters();
-        rejectedBatchPaymentsLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).processing().$()
-                .aggregatedTransfer(), result));
+        rejectedBatchPaymentsLister.addPreDefinedFilter(PropertyCriterion.eq(proto.processing().$().aggregatedTransfer(), result));
         rejectedBatchPaymentsLister.populate();
     }
 
