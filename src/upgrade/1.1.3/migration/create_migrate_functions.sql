@@ -1804,6 +1804,21 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
                 ||'SET  age_of_majority = 18 '
                 ||'WHERE age_of_majority IS NULL ';
+                
+		EXECUTE 'INSERT INTO '||v_schema_name||'.restrictions_policy (id,node_discriminator,node,updated, '
+				||'occupants_per_bed_room,max_parking_spots,max_lockers,max_pets,age_of_majority,enforce_age_of_majority, '
+				||'matured_occupants_are_applicants) '
+				||'(SELECT	nextval(''public.restrictions_policy_seq'') AS id, '
+				||'	''Province'' AS node_discriminator,p.id AS node, '
+				||' DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated, '
+				||' r.occupants_per_bed_room,r.max_parking_spots,r.max_lockers, '
+				||' r.max_pets,t.age_of_majority,t.enforce_age_of_majority,'
+				||' t.matured_occupants_are_applicants '
+				||'FROM	'||v_schema_name||'.province p, '
+				||'		'||v_schema_name||'.restrictions_policy r, '
+				||'		_dba_.restrictions_policy t '
+				||'WHERE	t.code = p.code '
+				||'AND		r.node_discriminator = ''OrganizationPoliciesNode'' )';
         
         -- tax
         

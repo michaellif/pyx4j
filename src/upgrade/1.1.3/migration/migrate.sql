@@ -274,5 +274,6 @@ DROP TABLE _dba_.email_template;
 DROP TABLE _dba_.lease_agreement_legal_term;
 DROP TABLE _dba_.lease_application_legal_term;
 DROP TABLE _dba_.lease_application_confirmation_term;
+DROP TABLE _dba_.restrictions_policy;
 
 

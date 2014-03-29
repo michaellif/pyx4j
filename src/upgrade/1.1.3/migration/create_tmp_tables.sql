@@ -23,4 +23,10 @@ CREATE TABLE _dba_.lease_application_confirmation_term AS
 (SELECT     title,body,signature_format,apply_to_role,order_id 
  FROM       vista.lease_application_confirmation_term );
  
-#pg_dump -U psql_dba -h localhost -O -t _dba_.email_template -t _dba_.lease_agreement_legal_term -t _dba_.lease_application_legal_term -t _dba_.lease_application_confirmation_term vista_trunk > insert_tmp_policies.sql
+CREATE TABLE _dba_.restrictions_policy AS 
+(SELECT  r.age_of_majority, r.enforce_age_of_majority,
+        r.matured_occupants_are_applicants, p.code
+FROM    vista.restrictions_policy r
+JOIN    vista.province p ON (p.id = r.node)); 
+ 
+#pg_dump -U psql_dba -h localhost -O -t _dba_.email_template -t _dba_.lease_agreement_legal_term -t _dba_.lease_application_legal_term -t _dba_.lease_application_confirmation_term -t _dba_.restrictions_policy vista_trunk > insert_tmp_policies.sql
