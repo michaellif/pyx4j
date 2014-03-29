@@ -55,7 +55,7 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
         config.user = credentials.userName;
         config.password = credentials.password;
 
-        if (VistaDemo.isDemo() || ApplicationMode.isDevelopment()) {
+        if (VistaDemo.isDemo() || serverSideConfiguration.isVistaQa() || ApplicationMode.isDevelopment()) {
             DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
             if (developmentUser != null) {
                 if (developmentUser.forwardAll().getValue(false)) {
