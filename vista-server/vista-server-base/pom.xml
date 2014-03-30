@@ -46,7 +46,18 @@
             <artifactId>jsch</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-server-config</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+                    
     </dependencies>
 
 </project>

@@ -48,6 +48,16 @@ public class WorldDateManager {
         }
     }
 
+    public static Date toWorldTime(Date date) {
+        long now = System.currentTimeMillis();
+        if ((ApplicationMode.offlineDevelopment) || remoteTimeEol <= now) {
+            getRemoteTime();
+            return new Date(date.getTime() + timedelta);
+        } else {
+            return new Date(date.getTime() + timedelta);
+        }
+    }
+
     public static Date getRemoteTime() {
         Date remoteTime = null;
         long start = System.currentTimeMillis();

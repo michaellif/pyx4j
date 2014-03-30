@@ -20,9 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.openid4java.OpenIDException;
 import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.consumer.VerificationResult;
+import org.openid4java.discovery.Discovery;
 import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.discovery.Identifier;
 import org.openid4java.discovery.UrlIdentifier;
+import org.openid4java.discovery.yadis.YadisResolver;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.AuthSuccess;
 import org.openid4java.message.MessageExtension;
@@ -32,7 +34,9 @@ import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
 import org.openid4java.message.pape.PapeRequest;
+import org.openid4java.server.RealmVerifierFactory;
 import org.openid4java.util.HttpClientFactory;
+import org.openid4java.util.HttpFetcherFactory;
 import org.openid4java.util.ProxyProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +46,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.server.contexts.DevSession;
 
+import com.propertyvista.biz.system.dev.TimeShiftX509TrustManager;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
 
@@ -69,7 +74,8 @@ public class OpenId {
                     proxyProps.setProxyPort(proxy.getPort());
                     HttpClientFactory.setProxyProperties(proxyProps);
                 }
-                manager = new ConsumerManager();
+                HttpFetcherFactory httpFetcherFactory = new HttpFetcherFactory(TimeShiftX509TrustManager.createTimeShiftSSLContext());
+                manager = new ConsumerManager(new RealmVerifierFactory(new YadisResolver(new HttpFetcherFactory())), new Discovery(), httpFetcherFactory);
                 manager.setNonceVerifier(new TimeShiftInMemoryNonceVerifier());
             }
 
