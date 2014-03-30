@@ -75,7 +75,7 @@ public class OpenId {
                     HttpClientFactory.setProxyProperties(proxyProps);
                 }
                 HttpFetcherFactory httpFetcherFactory = new HttpFetcherFactory(TimeShiftX509TrustManager.createTimeShiftSSLContext());
-                manager = new ConsumerManager(new RealmVerifierFactory(new YadisResolver(new HttpFetcherFactory())), new Discovery(), httpFetcherFactory);
+                manager = new ConsumerManager(new RealmVerifierFactory(new YadisResolver(httpFetcherFactory)), new Discovery(), httpFetcherFactory);
                 manager.setNonceVerifier(new TimeShiftInMemoryNonceVerifier());
             }
 
