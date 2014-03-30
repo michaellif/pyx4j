@@ -110,6 +110,8 @@ public class EmailTemplateManager {
             values.add(EntityFactory.create(BuildingT.class));
             break;
         case AutoPaySetupConfirmation:
+        case AutoPayChanges:
+        case AutoPayCancellation:
             values.add(EntityFactory.create(AutopayAgreementT.class));
             values.add(EntityFactory.create(TenantT.class));
             values.add(EntityFactory.create(LeaseT.class));
