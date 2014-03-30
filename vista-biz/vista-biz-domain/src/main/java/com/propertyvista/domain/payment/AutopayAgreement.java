@@ -44,6 +44,7 @@ import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
+//TODO rename to AutoPayAgreement
 @Caption(name = "Pre-Authorized Payment Agreement")
 @DiscriminatorValue("AutopayAgreement")
 public interface AutopayAgreement extends IEntity, HasNotesAndAttachments {

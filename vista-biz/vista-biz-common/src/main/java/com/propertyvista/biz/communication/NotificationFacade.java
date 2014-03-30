@@ -34,7 +34,11 @@ public interface NotificationFacade {
 
     public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage);
 
-    public void autopaySetupCompleted(AutopayAgreement autopayAgreement);
+    public void autoPaySetupCompleted(AutopayAgreement autopayAgreement);
+
+    public void autoPayChanges(AutopayAgreement autopayAgreement);
+
+    public void autoPayCancellation(AutopayAgreement autopayAgreement);
 
     public void autoPayReviewRequiredNotification(Lease leaseId);
 

@@ -77,7 +77,7 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
         aggregateOrSend(new RejectPaymentNotification(paymentRecord, applyNSF));
-        ServerSideFactory.create(CommunicationFacade.class).sendTenantPaymenttRejected(paymentRecord, applyNSF);
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantPaymentRejected(paymentRecord, applyNSF);
     }
 
     @Override
@@ -86,18 +86,24 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
-    public void autoPayCancelledByResidentNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
-        aggregateOrSend(new AutoPayCancelledByResidentNotification(leaseId, canceledAgreements));
-    }
-
-    @Override
     public void autoPayReviewRequiredNotification(Lease leaseId) {
         aggregateOrSend(new AutoPayReviewRequiredNotification(leaseId));
     }
 
     @Override
+    public void autoPayCancelledByResidentNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
+        aggregateOrSend(new AutoPayCancelledByResidentNotification(leaseId, canceledAgreements));
+        for (AutopayAgreement autopayAgreement : canceledAgreements) {
+            autoPayCancellation(autopayAgreement);
+        }
+    }
+
+    @Override
     public void autoPayCancelledBySystemNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
         aggregateOrSend(new AutoPayCancelledBySystemNotification(leaseId, canceledAgreements));
+        for (AutopayAgreement autopayAgreement : canceledAgreements) {
+            autoPayCancellation(autopayAgreement);
+        }
     }
 
     @Override
@@ -111,8 +117,18 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
-    public void autopaySetupCompleted(AutopayAgreement autopayAgreement) {
-        ServerSideFactory.create(CommunicationFacade.class).sendTenantAutopaySetupCompleted(autopayAgreement);
+    public void autoPaySetupCompleted(AutopayAgreement autopayAgreement) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantAutoPaySetupCompleted(autopayAgreement);
+    }
+
+    @Override
+    public void autoPayChanges(AutopayAgreement autopayAgreement) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantAutoPayChanges(autopayAgreement);
+    }
+
+    @Override
+    public void autoPayCancellation(AutopayAgreement autopayAgreement) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantAutoPayCancellation(autopayAgreement);
     }
 
 }

@@ -56,6 +56,10 @@ public enum EmailTemplateType {
 
     AutoPaySetupConfirmation,
 
+    AutoPayChanges,
+
+    AutoPayCancellation,
+
     OneTimePaymentSubmitted,
 
     PaymentReceipt,

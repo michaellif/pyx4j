@@ -63,7 +63,15 @@ public class NotificationFacadeMock implements NotificationFacade {
     }
 
     @Override
-    public void autopaySetupCompleted(AutopayAgreement autopayAgreement) {
+    public void autoPaySetupCompleted(AutopayAgreement autopayAgreement) {
+    }
+
+    @Override
+    public void autoPayChanges(AutopayAgreement autopayAgreement) {
+    }
+
+    @Override
+    public void autoPayCancellation(AutopayAgreement autopayAgreement) {
     }
 
 }

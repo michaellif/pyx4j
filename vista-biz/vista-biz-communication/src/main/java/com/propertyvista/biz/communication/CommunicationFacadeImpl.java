@@ -237,7 +237,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF) {
+    public void sendTenantPaymentRejected(PaymentRecord paymentRecord, boolean applyNSF) {
         MailMessage m = MessageTemplatesCustomizable.createTenantPaymenttRejected(paymentRecord, applyNSF);
         if (m != null) {
             Mail.queue(m, null, null);
@@ -253,8 +253,24 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement) {
-        MailMessage m = MessageTemplatesCustomizable.createTenantAutopaySetupCompleted(autopayAgreement);
+    public void sendTenantAutoPaySetupCompleted(AutopayAgreement autopayAgreement) {
+        MailMessage m = MessageTemplatesCustomizable.createTenantAutoPaySetupCompleted(autopayAgreement);
+        if (m != null) {
+            Mail.queue(m, null, null);
+        }
+    }
+
+    @Override
+    public void sendTenantAutoPayChanges(AutopayAgreement autopayAgreement) {
+        MailMessage m = MessageTemplatesCustomizable.createTenantAutoPayChanges(autopayAgreement);
+        if (m != null) {
+            Mail.queue(m, null, null);
+        }
+    }
+
+    @Override
+    public void sendTenantAutoPayCancellation(AutopayAgreement autopayAgreement) {
+        MailMessage m = MessageTemplatesCustomizable.createTenantAutoPayCancellation(autopayAgreement);
         if (m != null) {
             Mail.queue(m, null, null);
         }

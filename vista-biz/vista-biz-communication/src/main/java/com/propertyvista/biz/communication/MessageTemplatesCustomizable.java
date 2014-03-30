@@ -322,7 +322,19 @@ class MessageTemplatesCustomizable {
         }
     }
 
-    public static MailMessage createTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement) {
+    public static MailMessage createTenantAutoPaySetupCompleted(AutopayAgreement autopayAgreement) {
+        return createTenantAutopay(EmailTemplateType.AutoPaySetupConfirmation, autopayAgreement);
+    }
+
+    public static MailMessage createTenantAutoPayChanges(AutopayAgreement autopayAgreement) {
+        return createTenantAutopay(EmailTemplateType.AutoPayChanges, autopayAgreement);
+    }
+
+    public static MailMessage createTenantAutoPayCancellation(AutopayAgreement autopayAgreement) {
+        return createTenantAutopay(EmailTemplateType.AutoPayCancellation, autopayAgreement);
+    }
+
+    private static MailMessage createTenantAutopay(EmailTemplateType type, AutopayAgreement autopayAgreement) {
         Persistence.ensureRetrieve(autopayAgreement.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(autopayAgreement.tenant().customer().user(), AttachLevel.Attached);
         String customerEmail = autopayAgreement.tenant().customer().user().email().getValue();

@@ -83,11 +83,15 @@ public interface CommunicationFacade {
 
     void sendTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord);
 
-    void sendTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF);
+    void sendTenantPaymentRejected(PaymentRecord paymentRecord, boolean applyNSF);
 
     void sendTenantPaymentCleared(PaymentRecord paymentRecord);
 
-    void sendTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement);
+    void sendTenantAutoPaySetupCompleted(AutopayAgreement autopayAgreement);
+
+    void sendTenantAutoPayChanges(AutopayAgreement autopayAgreement);
+
+    void sendTenantAutoPayCancellation(AutopayAgreement autopayAgreement);
 
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 

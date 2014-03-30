@@ -80,6 +80,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         policy.templates().add(defaultEmailTemplateMaintenanceRequestEntryNotice());
 
         policy.templates().add(defaultEmailTemplateAutoPaySetupConfirmation());
+        policy.templates().add(defaultEmailTemplateAutoPayChanges());
+        policy.templates().add(defaultEmailTemplateAutoPayCancellation());
+
         policy.templates().add(defaultEmailTemplateOneTimePaymentSubmitted());
         policy.templates().add(defaultEmailTemplatePaymentReceipt());
         policy.templates().add(defaultEmailTemplatePaymentReceiptWithWebPaymentFee());
@@ -1056,6 +1059,60 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Your payment of <b>{1}</b> has been successfully setup and will be processed automatically on the 1st of the month.<br/><br/>" + 
                 "Your first payment will be processed on <b>{2}</b><br/><br/>" + 
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{3}|here]]</b> and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
+                "Thank you for choosing {4}.",
+                EmailTemplateManager.getVarname(tenantT.FirstName()),
+                EmailTemplateManager.getVarname(paymentT.Amount()),
+                EmailTemplateManager.getVarname(paymentT.NextPaymentDate()),
+                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                EmailTemplateManager.getVarname(portalT.CompanyName())
+        ));//@formatter:on
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateAutoPayChanges() {
+        EmailTemplateType type = EmailTemplateType.AutoPayChanges;
+
+        AutopayAgreementT paymentT = EmailTemplateManager.getProto(type, AutopayAgreementT.class);
+        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
+        template.type().setValue(type);
+        template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.content().setValue(i18n.tr(//@formatter:off
+                "Dear {0},<br/><br/>" +
+                "Your AutoPay payment has been updated to reflect your most recent changes on your account.<br/><br/>" + 
+                "Your monthly payment of <b>{1}</b> has been successfully setup and will be processed automatically on the 1st of the month.<br/><br/>" + 
+                "Your first payment with the new payment amount will be processed on <b>{2}</b><br/><br/>" + 
+                "You can review the status of your payment at anytime in your myCommunity portal <b>[[{3}|here]]</b> and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
+                "Thank you for choosing {4}.",
+                EmailTemplateManager.getVarname(tenantT.FirstName()),
+                EmailTemplateManager.getVarname(paymentT.Amount()),
+                EmailTemplateManager.getVarname(paymentT.NextPaymentDate()),
+                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                EmailTemplateManager.getVarname(portalT.CompanyName())
+        ));//@formatter:on
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateAutoPayCancellation() {
+        EmailTemplateType type = EmailTemplateType.AutoPayCancellation;
+
+        AutopayAgreementT paymentT = EmailTemplateManager.getProto(type, AutopayAgreementT.class);
+        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
+        template.type().setValue(type);
+        template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.content().setValue(i18n.tr(//@formatter:off
+                "Dear {0},<br/><br/>" +
+                "Your AutoPay payment of <b>{1}</b> has been cancelled effective immediately.<br/><br/>" + 
+                "Please remember all rent is due in full on the 1st of the month. If you believe the AutoPay payment has been cancelled in error you can login to your myCommunity portal <b>[[{3}|here]]</b> to add a new AutoPay payment.<br/><br/>" + 
                 "Thank you for choosing {4}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),
