@@ -24,6 +24,7 @@ import org.openid4java.discovery.Discovery;
 import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.discovery.Identifier;
 import org.openid4java.discovery.UrlIdentifier;
+import org.openid4java.discovery.html.HtmlResolver;
 import org.openid4java.discovery.yadis.YadisResolver;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.AuthSuccess;
@@ -75,7 +76,8 @@ public class OpenId {
                     HttpClientFactory.setProxyProperties(proxyProps);
                 }
                 HttpFetcherFactory httpFetcherFactory = new HttpFetcherFactory(TimeShiftX509TrustManager.createTimeShiftSSLContext());
-                manager = new ConsumerManager(new RealmVerifierFactory(new YadisResolver(httpFetcherFactory)), new Discovery(), httpFetcherFactory);
+                Discovery discovery = new Discovery(new HtmlResolver(httpFetcherFactory), new YadisResolver(httpFetcherFactory), Discovery.getXriResolver());
+                manager = new ConsumerManager(new RealmVerifierFactory(new YadisResolver(httpFetcherFactory)), discovery, httpFetcherFactory);
                 manager.setNonceVerifier(new TimeShiftInMemoryNonceVerifier());
             }
 
