@@ -16,9 +16,11 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -82,7 +84,8 @@ class AutopayAgreementMananger {
         AutopayAgreement origPreauthorizedPayment;
         AutopayAgreement orig = null;
 
-        boolean isNew = false;
+        boolean isNewEntity = false;
+        boolean isNewAgreement = false;
         // Creates a new version of PAP if values changed and there are payments created
         if (!preauthorizedPayment.id().isNull()) {
             origPreauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPayment.getPrimaryKey());
@@ -100,7 +103,7 @@ class AutopayAgreementMananger {
                     Persistence.service().merge(origPreauthorizedPayment);
 
                     ServerSideFactory.create(AuditFacade.class).updated(origPreauthorizedPayment, EntityDiff.getChanges(orig, origPreauthorizedPayment));
-                    isNew = true;
+                    isNewEntity = true;
 
                     preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
                     preauthorizedPayment.reviewOfPap().set(origPreauthorizedPayment);
@@ -113,7 +116,8 @@ class AutopayAgreementMananger {
                 return preauthorizedPayment;
             }
         } else {
-            isNew = true;
+            isNewEntity = true;
+            isNewAgreement = true;
             preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
             preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
             preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
@@ -130,14 +134,37 @@ class AutopayAgreementMananger {
 
         Persistence.service().merge(preauthorizedPayment);
 
-        if (isNew) {
+        if (isNewEntity) {
             ServerSideFactory.create(AuditFacade.class).created(preauthorizedPayment);
-            ServerSideFactory.create(NotificationFacade.class).autoPaySetupCompleted(preauthorizedPayment);
         } else {
             ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, EntityDiff.getChanges(orig, preauthorizedPayment));
         }
 
+        if (isNewAgreement) {
+            ServerSideFactory.create(NotificationFacade.class).autoPaySetupCompleted(preauthorizedPayment);
+        } else if (isAmountsChanged(orig, preauthorizedPayment)) {
+            ServerSideFactory.create(NotificationFacade.class).autoPayChanges(preauthorizedPayment);
+        }
+
         return preauthorizedPayment;
+    }
+
+    private boolean isAmountsChanged(AutopayAgreement orig, AutopayAgreement preauthorizedPayment) {
+        Set<BigDecimal> origAmounts = new HashSet<>();
+        BigDecimal origAmountTotal = BigDecimal.ZERO;
+        for (AutopayAgreementCoveredItem item : preauthorizedPayment.coveredItems()) {
+            origAmountTotal = origAmountTotal.add(item.amount().getValue());
+            origAmounts.add(item.amount().getValue());
+        }
+
+        BigDecimal newAmountTotal = BigDecimal.ZERO;
+        for (AutopayAgreementCoveredItem item : preauthorizedPayment.coveredItems()) {
+            newAmountTotal = newAmountTotal.add(item.amount().getValue());
+            if (origAmounts.contains(item.amount().getValue())) {
+                return true;
+            }
+        }
+        return newAmountTotal.compareTo(origAmountTotal) == 0;
     }
 
     void persitAutopayAgreementReview(ReviewedAutopayAgreementDTO preauthorizedPaymentChanges) {
@@ -190,6 +217,8 @@ class AutopayAgreementMananger {
                 ServerSideFactory.create(NotificationFacade.class).autoPayCancelledByResidentNotification(preauthorizedPayment.tenant().lease(),
                         canceledAgreements);
             }
+        } else {
+            ServerSideFactory.create(NotificationFacade.class).autoPayCancellation(preauthorizedPayment);
         }
 
         BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(preauthorizedPayment.tenant().lease());

@@ -334,7 +334,7 @@ class MessageTemplatesCustomizable {
         return createTenantAutopay(EmailTemplateType.AutoPayCancellation, autopayAgreement);
     }
 
-    private static MailMessage createTenantAutopay(EmailTemplateType type, AutopayAgreement autopayAgreement) {
+    private static MailMessage createTenantAutopay(EmailTemplateType templateType, AutopayAgreement autopayAgreement) {
         Persistence.ensureRetrieve(autopayAgreement.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(autopayAgreement.tenant().customer().user(), AttachLevel.Attached);
         String customerEmail = autopayAgreement.tenant().customer().user().email().getValue();
@@ -345,7 +345,7 @@ class MessageTemplatesCustomizable {
         MailMessage email = new MailMessage();
         email.setTo(customerEmail);
 
-        EmailTemplate emailTemplate = getEmailTemplate(EmailTemplateType.AutoPaySetupConfirmation, autopayAgreement.tenant().lease());
+        EmailTemplate emailTemplate = getEmailTemplate(templateType, autopayAgreement.tenant().lease());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         context.preauthorizedPayment().set(autopayAgreement);
@@ -353,7 +353,7 @@ class MessageTemplatesCustomizable {
         context.lease().set(autopayAgreement.tenant().lease());
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
-        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(EmailTemplateType.AutoPaySetupConfirmation)) {
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(templateType)) {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
 
