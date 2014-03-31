@@ -40,6 +40,7 @@ import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.PmcNameValidator;
+import com.propertyvista.biz.system.YardiOperationsFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
@@ -58,6 +59,7 @@ import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerPmcSelectionType;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
+import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.server.TaskRunner;
@@ -290,5 +292,16 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         Run run = ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(trigger, pmc, executionDate);
         callback.onSuccess(run.<Run> createIdentityStub());
+    }
+
+    @Override
+    public void testYardiConnection(AsyncCallback<ConnectionTestResultDTO> callback, PmcYardiCredential credential) {
+        if (!credential.password().newNumber().isNull()) {
+            ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(credential.password(), credential.password().newNumber().getValue());
+        } else if (credential.getPrimaryKey() != null) {
+            PmcYardiCredential orig = Persistence.service().retrieve(PmcYardiCredential.class, credential.getPrimaryKey());
+            credential.password().encrypted().setValue(orig.password().encrypted().getValue());
+        }
+        callback.onSuccess(ServerSideFactory.create(YardiOperationsFacade.class).verifyInterface(credential));
     }
 }

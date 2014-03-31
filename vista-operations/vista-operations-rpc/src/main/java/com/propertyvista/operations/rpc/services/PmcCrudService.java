@@ -20,8 +20,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
@@ -35,4 +37,6 @@ public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
     public void cancelPmc(AsyncCallback<VoidSerializable> callback, Key entityId);
 
     public void runPmcProcess(AsyncCallback<Run> callback, Key entityId, PmcProcessType processType, LogicalDate executionDate);
+
+    public void testYardiConnection(AsyncCallback<ConnectionTestResultDTO> callback, PmcYardiCredential credential);
 }

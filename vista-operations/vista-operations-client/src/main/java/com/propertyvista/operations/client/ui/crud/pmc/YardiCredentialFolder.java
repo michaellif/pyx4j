@@ -13,13 +13,21 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.operations.client.resources.OperationsImages;
 
 public class YardiCredentialFolder extends VistaBoxFolder<PmcYardiCredential> {
+
+    private static final I18n i18n = I18n.get(YardiCredentialFolder.class);
 
     public YardiCredentialFolder() {
         super(PmcYardiCredential.class);
@@ -31,5 +39,19 @@ public class YardiCredentialFolder extends VistaBoxFolder<PmcYardiCredential> {
             return new YardiCredentialEditor();
         }
         return super.create(member);
+    }
+
+    @Override
+    protected CEntityFolderItem<PmcYardiCredential> createItem(boolean first) {
+        final CEntityFolderItem<PmcYardiCredential> item = super.createItem(first);
+
+        item.addAction(ActionType.Cust1, i18n.tr("Test Connection"), OperationsImages.INSTANCE.connectionTestButton(), new Command() {
+
+            @Override
+            public void execute() {
+                new TestConnectionDialog(item.getValue()).show();
+            }
+        });
+        return item;
     }
 }

@@ -14,6 +14,8 @@
 package com.propertyvista.biz.system;
 
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
+import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.stubs.YardiLicense;
 
 public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
@@ -24,8 +26,18 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
     }
 
     @Override
-    public void verifyInterface(PmcYardiCredential yc, Void yardiInterfaceType) {
+    public ConnectionTestResultDTO verifyInterface(PmcYardiCredential yc) {
+        ConnectionTestResultDTO result = new ConnectionTestResultDTO();
         // TODO implement ping   VISTA-3820
-    }
 
+        for (YardiInterface yardiInterface : YardiInterface.values()) {
+            result.append("TODO Connection Ping ").append(yardiInterface.name()).ok().cr();
+            result.append("Version ").append(yardiInterface.name()).append(" v1.5").ok().cr();
+        }
+
+        result.error("Mandaroy resdentTransaction interface not working").cr();
+        result.warn("Collections not requeired and it do not work");
+
+        return result;
+    }
 }

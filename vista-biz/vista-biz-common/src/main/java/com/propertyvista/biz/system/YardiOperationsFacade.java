@@ -14,12 +14,12 @@
 package com.propertyvista.biz.system;
 
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
 
 public interface YardiOperationsFacade {
 
     public void restLicenseCache();
 
-    //TODO VISTA-3820
-    public void verifyInterface(PmcYardiCredential yc, Void yardiInterfaceType);
+    public ConnectionTestResultDTO verifyInterface(PmcYardiCredential yc);
 
 }

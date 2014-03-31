@@ -17,6 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
+import com.pyx4j.widgets.client.images.ButtonImages;
+
 public interface OperationsImages extends ClientBundle {
 
     OperationsImages INSTANCE = GWT.create(OperationsImages.class);
@@ -113,4 +115,21 @@ public interface OperationsImages extends ClientBundle {
 
     @Source("Dashboards_normal.png")
     ImageResource dashboardsNormal();
+
+    ConnectionTestButtonImages connectionTestButton();
+
+    public interface ConnectionTestButtonImages extends ButtonImages {
+
+        @Override
+        @Source("connection-test.png")
+        ImageResource regular();
+
+        @Override
+        @Source("connection-test_hover.png")
+        ImageResource hover();
+
+        @Override
+        @Source("connection-test.png")
+        ImageResource active();
+    }
 }
