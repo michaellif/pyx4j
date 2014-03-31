@@ -43,12 +43,13 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
         public IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             int row = -1;
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class)))).build());
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().generatedOn())).build());
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amountOwed())).build());
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cancellationThreshold())).build());
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().terminationDate())).build());
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isActive())).build());
+            panel.setWidget(++row, 0, 2,
+                    new FormDecoratorBuilder(inject(proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class)))).build());
+            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().generatedOn())).build());
+            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().amountOwed())).build());
+            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cancellationThreshold())).build());
+            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().terminationDate())).build());
+            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().isActive())).build());
             return panel;
         }
     }
@@ -65,7 +66,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
             int row = -1;
 
             panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().file(), new CFile(null, new VistaFileURLBuilder(LegalLetter.class)))).build());
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().generatedOn())).build());
+            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().generatedOn())).build());
             panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().notes())).build());
 
             return panel;
