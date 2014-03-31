@@ -255,6 +255,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
         }
 
         class Decorator extends Dialog implements IFolderDecorator<T>, Custom1Option, Custom2Option, CancelOption {
+            ScrollPanel scrollPanel = new ScrollPanel();
 
             public Decorator() {
                 super(i18n.tr("Image Organizer"));
@@ -262,6 +263,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
                 if (organizerWidth > 0) {
                     setDialogPixelWidth(organizerWidth);
                 }
+                setBody(scrollPanel);
             }
 
             @Override
@@ -270,8 +272,17 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
             }
 
             @Override
+            public void layout() {
+                super.layout();
+                // adjust scroll panel accordingly
+                if (scrollPanel != null) {
+                    scrollPanel.getElement().getStyle().setProperty("maxHeight", getContentMaxHeight() + "px");
+                }
+            }
+
+            @Override
             public void onValueChange(ValueChangeEvent<IList<T>> event) {
-                // TODO Auto-generated method stub
+                layout();
             }
 
             @Override
@@ -287,10 +298,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
 
             @Override
             public void setComponent(CEntityFolder<T> folder) {
-                ScrollPanel panel = new ScrollPanel();
-                panel.add(folder.createContent());
-                panel.getElement().getStyle().setProperty("maxHeight", "500px");
-                setBody(panel);
+                scrollPanel.setWidget(folder.createContent());
             }
 
             @Override

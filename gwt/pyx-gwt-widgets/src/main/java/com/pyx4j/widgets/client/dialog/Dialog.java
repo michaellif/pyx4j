@@ -133,6 +133,8 @@ public class Dialog implements ProvidesResize, IsWidget {
 
     private int dialogPixelWidth;
 
+    private int dialogMaxHeight;
+
     public Dialog(String caption) {
         this(caption, null, null);
     }
@@ -389,6 +391,10 @@ public class Dialog implements ProvidesResize, IsWidget {
         layout();
     }
 
+    public int getContentMaxHeight() {
+        return dialogMaxHeight - captionPanel.getOffsetHeight() - buttonsPanel.getOffsetHeight();
+    }
+
     public void layout() {
         if (Window.getClientWidth() > dialogPixelWidth) {
             popupPanel.setWidth(dialogPixelWidth + "px");
@@ -396,7 +402,8 @@ public class Dialog implements ProvidesResize, IsWidget {
             popupPanel.setWidth(Window.getClientWidth() + "px");
         }
 
-        popupPanel.getElement().getStyle().setPropertyPx("maxHeight", (int) (Window.getClientHeight() * 0.9));
+        dialogMaxHeight = (int) (Window.getClientHeight() * 0.9);
+        popupPanel.getElement().getStyle().setPropertyPx("maxHeight", dialogMaxHeight);
 
         int left = Math.max(Window.getScrollLeft() + (Window.getClientWidth() - popupPanel.getOffsetWidth()) / 2, 0);
         popupPanel.getElement().getStyle().setPropertyPx("left", left);
