@@ -96,12 +96,15 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
 
         TwoColumnFlexFormPanel signaturePanel = new TwoColumnFlexFormPanel(i18n.tr("Signature"));
-        FlowPanel companyNameAndPhones = new FlowPanel();
+        TwoColumnFlexFormPanel companyNameAndPhonesPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
         signaturePanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
 
-        companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().companyName())).build());
+        int subRow = -1;
+        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, new FormDecoratorBuilder(inject(proto().companyName())).build());
+        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
+
         CPhoneField phoneNumberField = inject(proto().phoneNumber(), new CPhoneField() {
             @Override
             public IFormat<String> getFormat() {
@@ -110,7 +113,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         });
         phoneNumberField.setWatermark("(___) ___-____");
         phoneNumberField.setFormat(PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
-        companyNameAndPhones.add(new FormDecoratorBuilder(phoneNumberField).build());
+        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, new FormDecoratorBuilder(phoneNumberField).build());
 
         CPhoneField faxNumberField = inject(proto().faxNumber(), new CPhoneField() {
             @Override
@@ -120,9 +123,9 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         });
         faxNumberField.setWatermark("(___) ___-____");
         faxNumberField.setFormat(PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
-        companyNameAndPhones.add(new FormDecoratorBuilder(faxNumberField).build());
-        companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().emailAddress())).build());
-        signaturePanel.setWidget(++row, 0, 1, companyNameAndPhones);
+        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, new FormDecoratorBuilder(faxNumberField).build());
+
+        signaturePanel.setWidget(++row, 0, 1, companyNameAndPhonesPanel);
         signaturePanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
         AddressStructuredEditor addressEditor = new AddressStructuredEditor();
