@@ -1787,7 +1787,8 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.product_item '
                 ||'SET  element_discriminator = ''LockerArea'' '
                 ||'WHERE element_discriminator = ''LockerArea_BuildingElement'' '; 
-              
+        
+        /*
 		-- prospect_portal_policy
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.prospect_portal_policy (id,node_discriminator,node,updated, '
@@ -1798,6 +1799,8 @@ BEGIN
                 ||'20 AS unit_availability_span, 3 AS max_exact_match_units, '
                 ||'5 AS max_partial_match_units, ''none'' AS fee_payment, 0.00 AS fee_amount '
                 ||'FROM     '||v_schema_name||'.organization_policies_node )';
+        
+        */
         
         -- restrictions_policy
         
