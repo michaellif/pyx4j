@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -34,6 +35,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -45,9 +47,11 @@ import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionListerViewImpl.CardServiceSimulationTransactionLister;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationToken;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
+import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
 
 public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationCard> implements
         CardServiceSimulationCardEditorView {
@@ -105,8 +109,12 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
 
     private class CardServiceSimulationForm extends OperationsEntityForm<CardServiceSimulationCard> {
 
+        private CardServiceSimulationTransactionLister transactionLister;
+
         public CardServiceSimulationForm(IForm<CardServiceSimulationCard> view) {
             super(CardServiceSimulationCard.class, view);
+
+            transactionLister = new CardServiceSimulationTransactionListerViewImpl.CardServiceSimulationTransactionLister();
 
             TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
@@ -129,9 +137,6 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
             contentPanel.setH2(row++, 0, 2, "Transactions");
 
             // TODO transactions 
-            if (false) {
-                contentPanel.setWidget(row++, 0, 2, inject(proto().transactions(), new CardServiceSimulationTransactionsViewer()));
-            }
 
             contentPanel.setWidget(row++, 0, 2, new Button("Add New Transaction...", new Command() {
                 @Override
@@ -143,6 +148,9 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
                     ((CardServiceSimulationCardEditorView.Presenter) CardServiceSimulationCardEditorViewImpl.this.getPresenter()).addTransaction();
                 }
             }));
+            contentPanel.setWidget(row++, 0, 2, transactionLister);
+            transactionLister.setDataSource(new ListerDataSource<CardServiceSimulationTransaction>(CardServiceSimulationTransaction.class, GWT
+                    .<CardServiceSimulationTransactionCrudService> create(CardServiceSimulationTransactionCrudService.class)));
 
             setTabBarVisible(false);
             selectTab(addTab(contentPanel));
@@ -161,6 +169,13 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
                 }
 
             });
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+            transactionLister.getDataSource().setParentFiltering(getValue().getPrimaryKey());
+            transactionLister.obtain(0);
         }
 
         private void generateCreditCard() {
