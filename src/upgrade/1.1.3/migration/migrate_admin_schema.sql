@@ -202,6 +202,11 @@ SET search_path = '_admin_';
         -- funds_transfer_record
         
         ALTER TABLE funds_transfer_record ADD COLUMN  status_change_date TIMESTAMP;
+        
+        -- onboarding_user
+        
+        ALTER TABLE onboarding_user ADD COLUMN name VARCHAR(500),
+                                    ADD COLUMN updated TIMESTAMP;
                                         
         -- outgoing_mail_queue
         
@@ -433,6 +438,7 @@ SET search_path = '_admin_';
         CREATE INDEX funds_transfer_record_pad_batch_idx ON funds_transfer_record USING btree (pad_batch);
         CREATE INDEX funds_transfer_record_transaction_id_idx ON funds_transfer_record USING btree (transaction_id);
         CREATE INDEX funds_transfer_record_transaction_pad_debit_record_idx ON funds_transfer_record_transaction USING btree (pad_debit_record);
+        CREATE INDEX onboarding_user_name_idx ON onboarding_user USING btree (name);
         
 
 COMMIT;

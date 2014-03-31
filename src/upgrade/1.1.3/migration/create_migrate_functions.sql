@@ -1914,8 +1914,7 @@ BEGIN
 			*/
 			
 			EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
-                    ||'SET  code = t.code, '
-                    ||'		default_catalog_item = ''FALSE'' '
+                    ||'SET  code = t.code '
                     ||'FROM	(SELECT DISTINCT 	p.id,pi.code '
                     ||'		FROM 	'||v_schema_name||'.product p '
                     ||'		JOIN 	'||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
