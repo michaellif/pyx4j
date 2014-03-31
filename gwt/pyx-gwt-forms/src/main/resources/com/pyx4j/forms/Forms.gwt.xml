@@ -8,6 +8,8 @@
     <inherits name='com.pyx4j.Commons'/>
     <inherits name='com.pyx4j.SVG'/>
     <inherits name='com.pyx4j.gwt.GwtClient'/>
+    <inherits name='com.pyx4j.entity.Entity'/>
+    <inherits name='com.pyx4j.entity.EntityRPC'/>
 
 	<source path="client" />
 
