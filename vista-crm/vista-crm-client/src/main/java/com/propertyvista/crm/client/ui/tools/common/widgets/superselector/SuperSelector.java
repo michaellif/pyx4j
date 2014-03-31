@@ -241,9 +241,10 @@ public abstract class SuperSelector<DataType> extends Composite {
     }
 
     /**
-     * Called after an item has been added. Default implementation does nothing.
+     * Called after an item has been added.
      */
     protected void onItemAdded(DataType item) {
+        setInput("");
     }
 
     /**

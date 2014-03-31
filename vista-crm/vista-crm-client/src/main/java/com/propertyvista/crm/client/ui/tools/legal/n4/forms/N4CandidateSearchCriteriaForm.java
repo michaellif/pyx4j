@@ -130,6 +130,7 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
     private CSuperSelector<PortfolioForSelectionDTO> createPortfolioSelector() {
         return new CSuperSelector<PortfolioForSelectionDTO>(portfolioSelector = new PortfolioSelector() {//@formatter:off
             @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
+                super.onItemAdded(item);
                 N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.portfolios().add(item);
                 N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);                
@@ -151,6 +152,7 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
     private CSuperSelector<BuildingForSelectionDTO> createBuildingSelector() {
         return new CSuperSelector<BuildingForSelectionDTO>(buildingSelector = new BuildingSelector() {//@formatter:off
             @Override protected void onItemAdded(BuildingForSelectionDTO item) {
+                super.onItemAdded(item);
                 N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.buildings().add(item);
                 N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);

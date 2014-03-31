@@ -90,6 +90,7 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
     private CSuperSelector<PortfolioForSelectionDTO> createPortfolioSelector() {
         return new CSuperSelector<PortfolioForSelectionDTO>(portfolioSelector = new PortfolioSelector() {//@formatter:off
             @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
+                super.onItemAdded(item);
                 MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.portfolios().add(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);                
@@ -111,6 +112,7 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
     private CSuperSelector<BuildingForSelectionDTO> createBuildingSelector() {
         return new CSuperSelector<BuildingForSelectionDTO>(buildingSelector = new BuildingSelector() {//@formatter:off
             @Override protected void onItemAdded(BuildingForSelectionDTO item) {
+                super.onItemAdded(item);
                 MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
                 searchCriteria.buildings().add(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
