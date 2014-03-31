@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -131,7 +132,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             }
         }));
 
-        if (VistaFeatures.instance().yardiIntegration()) {
+        if (VistaFeatures.instance().yardiIntegration() && ApplicationMode.isDevelopment()) {
             addAction(new MenuItem(i18n.tr("Update From Yardi"), new Command() {
                 @Override
                 public void execute() {

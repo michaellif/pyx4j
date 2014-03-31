@@ -76,12 +76,9 @@ public class YardiLeaseProcessor {
 
     private final ExecutionMonitor executionMonitor;
 
-    public YardiLeaseProcessor() {
-        this(null);
-    }
-
     public YardiLeaseProcessor(ExecutionMonitor executionMonitor) {
         this.executionMonitor = executionMonitor;
+        assert (executionMonitor != null);
     }
 
     public Lease findLease(Key yardiInterfaceId, String propertyCode, String customerId) {
@@ -204,10 +201,9 @@ public class YardiLeaseProcessor {
 
             if (LeaseChargesMergeStatus.TotalAmount.equals(mergeStatus)) {
                 String msg = SimpleMessageFormat.format("charges changed for lease {0}", leaseId.leaseId());
+
                 log.info(msg);
-                if (executionMonitor != null) {
-                    executionMonitor.addInfoEvent("chargesChanged", msg);
-                }
+                executionMonitor.addInfoEvent("chargesChanged", msg);
             }
         }
 

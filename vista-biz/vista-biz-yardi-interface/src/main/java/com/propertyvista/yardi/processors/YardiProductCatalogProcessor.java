@@ -24,6 +24,8 @@ import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
@@ -32,6 +34,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.Pair;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -41,6 +44,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
@@ -54,6 +58,15 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class YardiProductCatalogProcessor {
 
+    private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
+
+    private final ExecutionMonitor executionMonitor;
+
+    public YardiProductCatalogProcessor(ExecutionMonitor executionMonitor) {
+        this.executionMonitor = executionMonitor;
+        assert (executionMonitor != null);
+    }
+
     public void processCatalog(Building building, RentableItems rentableItems, Key yardiInterfaceId) {
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
@@ -62,6 +75,10 @@ public class YardiProductCatalogProcessor {
         updateFeatures(building.productCatalog(), rentableItems);
 
         updateEligibilityMatrixes(building.productCatalog());
+
+        String msg = SimpleMessageFormat.format("Process Catalog for Building {0}", building.getStringView());
+        executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
+        log.info(">> " + msg);
     }
 
     public void updateUnits(Building building, Map<String, BigDecimal> depositInfo) {
@@ -81,6 +98,10 @@ public class YardiProductCatalogProcessor {
         }
 
         replaceOriginalDraftServices(building.productCatalog(), updatedServices);
+
+        String msg = SimpleMessageFormat.format("Update Units for Building {0}", building.getStringView());
+        executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
+        log.info(">> " + msg);
     }
 
     public void persistCatalog(Building building) {
@@ -99,6 +120,10 @@ public class YardiProductCatalogProcessor {
                 Persistence.service().merge(service);
             }
         }
+
+        String msg = SimpleMessageFormat.format("Persist Catalog for Building {0}", building.getStringView());
+        executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
+        log.info(">> " + msg);
     }
 
     // ----------------------------------------------------------------------------------
@@ -143,14 +168,20 @@ public class YardiProductCatalogProcessor {
     // ----------------------------------------------------------------------------------
     private void updateServices(ProductCatalog catalog, RentableItems rentableItems) {
         deleteServices(catalog);
-        for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.unitRelatedServices())) {
-            ensureService(catalog, typeData);
+
+        if (rentableItems != null && !rentableItems.getItemType().isEmpty()) {
+            for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.unitRelatedServices())) {
+                ensureService(catalog, typeData);
+            }
         }
 
         // create default one if no set in Yardi: 
         if (!isAnyServicePresent(catalog)) {
             ARCode arCode = getServiceArCode();
             assert (arCode != null);
+
+            log.info("    Service arCode: {}", arCode.getStringView());
+            executionMonitor.addInfoEvent("YardiProductCatalogProcessor", arCode.getStringView());
 
             RentableItemType itemType = new RentableItemType();
             itemType.setRent("0.00");
@@ -212,6 +243,7 @@ public class YardiProductCatalogProcessor {
 
     private ARCode getServiceArCode() {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+
         criteria.eq(criteria.proto().type(), ARCode.Type.Residential);
         criteria.isNotNull(criteria.proto().yardiChargeCodes());
 
@@ -220,15 +252,10 @@ public class YardiProductCatalogProcessor {
 
     private Service findService(ProductCatalog catalog, final YardiRentableItemTypeData typeData) {
         return CollectionUtils.find(catalog.services(), new Predicate<Service>() {
-
-
             @Override
             public boolean evaluate(Service service) {
-                //@formatter:off
-                return (!service.defaultCatalogItem().getValue(false) 
-                      && service.code().equals(typeData.getArCode())
-                      && CommonsStringUtils.equals(service.yardiCode().getValue(), typeData.getItemType().getCode()));
-                //@formatter:on
+                return (!service.defaultCatalogItem().getValue(false) && service.code().equals(typeData.getArCode()) && CommonsStringUtils.equals(service
+                        .yardiCode().getValue(), typeData.getItemType().getCode()));
             }
         });
     }
@@ -251,8 +278,11 @@ public class YardiProductCatalogProcessor {
 
     private void updateFeatures(ProductCatalog catalog, RentableItems rentableItems) {
         deleteFeatures(catalog);
-        for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.features())) {
-            ensureFeature(catalog, typeData);
+
+        if (rentableItems != null && !rentableItems.getItemType().isEmpty()) {
+            for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.features())) {
+                ensureFeature(catalog, typeData);
+            }
         }
     }
 
@@ -307,15 +337,10 @@ public class YardiProductCatalogProcessor {
 
     private Feature findFeature(ProductCatalog catalog, final YardiRentableItemTypeData typeData) {
         return CollectionUtils.find(catalog.features(), new Predicate<Feature>() {
-
-
             @Override
             public boolean evaluate(Feature feature) {
-                //@formatter:off
-                return (!feature.defaultCatalogItem().getValue(false) 
-                      && feature.code().equals(typeData.getArCode())
-                      && CommonsStringUtils.equals(feature.yardiCode().getValue(), typeData.getItemType().getCode()));
-                //@formatter:on
+                return (!feature.defaultCatalogItem().getValue(false) && feature.code().equals(typeData.getArCode()) && CommonsStringUtils.equals(feature
+                        .yardiCode().getValue(), typeData.getItemType().getCode()));
             }
         });
     }

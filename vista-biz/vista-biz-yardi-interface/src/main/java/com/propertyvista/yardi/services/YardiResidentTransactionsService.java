@@ -265,9 +265,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, BigDecimal> depositInfo) throws YardiServiceException {
         YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
         RentableItems rentableItems = stub.getRentableItems(yc, building.propertyCode().getValue());
-        if (rentableItems != null && !rentableItems.getItemType().isEmpty()) {
-            importProductCatalog(yc.getPrimaryKey(), building, rentableItems, depositInfo);
-        }
+        importProductCatalog(yc.getPrimaryKey(), building, rentableItems, depositInfo);
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
@@ -417,7 +415,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         log.info("Updating building {}", propertyId.getIdentification().getPrimaryID());
 
         Building building = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Building, YardiServiceException>() {
-
             @Override
             public Building execute() throws YardiServiceException {
                 Building building = new YardiBuildingProcessor(executionMonitor).updateBuilding(yardiInterfaceId, propertyId);
@@ -562,7 +559,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
-                YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor();
+                YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor(new ExecutionMonitor());
 
                 processor.processCatalog(building, rentableItems, yardiInterfaceId);
                 processor.updateUnits(building, depositInfo);
@@ -706,7 +703,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
         // grab customerId from the first available ChargeDetail element
         String customerId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
-        final Lease lease = new YardiLeaseProcessor().findLease(yardiInterfaceId, propertyCode, customerId);
+        final Lease lease = new YardiLeaseProcessor(executionMonitor).findLease(yardiInterfaceId, propertyCode, customerId);
         if (lease == null) {
             throw new YardiServiceException(i18n.tr("Lease not found for customer: {0} on interface {1}", customerId, yardiInterfaceId));
         }
