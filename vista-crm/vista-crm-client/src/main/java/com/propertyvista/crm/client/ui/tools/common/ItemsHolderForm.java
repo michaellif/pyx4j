@@ -37,7 +37,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
 
     public enum Styles implements IStyleName {
 
-        BulkStatsPanel, BulkActionsPanel, BulkSelectAllBox, BulkEverythingIsSelected, BulkSuperCaptionsPanel, BulkFolderHolder, AutoPayLoadMore
+        BulkStatsPanel, BulkActionsPanel, BulkSelectAllBox, BulkEverythingIsSelected, BulkSuperCaptionsPanel, BulkFolderHolder, BulkHolderLoadMore
 
     }
 
@@ -165,7 +165,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         folderHolder.add(inject(proto().items(), createItemsFolder()));
 
         moreButton = new HTML(i18n.tr("More..."));
-        moreButton.setStyleName(Styles.AutoPayLoadMore.name());
+        moreButton.setStyleName(Styles.BulkHolderLoadMore.name());
         moreButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

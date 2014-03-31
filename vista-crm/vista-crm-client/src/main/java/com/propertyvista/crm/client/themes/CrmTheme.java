@@ -775,6 +775,13 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("right", "0px");
         addStyle(style);
 
+        style = new Style("." + ItemsHolderForm.Styles.BulkHolderLoadMore.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("padding-top", "10px");
+        style.addProperty("padding-bottom", "10px");
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
         style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name() + " .EntityFolderBoxItem");
         style.addProperty("padding", "0px");
         addStyle(style);
