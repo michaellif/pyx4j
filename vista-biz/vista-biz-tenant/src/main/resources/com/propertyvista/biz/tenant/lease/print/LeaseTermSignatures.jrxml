@@ -25,26 +25,26 @@
 				<textFieldExpression><![CDATA[$F{fullName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="368" y="1" width="82" height="20"/>
+				<reportElement x="307" y="1" width="143" height="20"/>
 				<textElement verticalAlignment="Bottom">
 					<font isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Date:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="194" y="21" width="164" height="20"/>
+				<reportElement x="194" y="21" width="113" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ipAddress}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="194" y="1" width="164" height="20"/>
+				<reportElement x="194" y="1" width="113" height="20"/>
 				<textElement verticalAlignment="Bottom">
 					<font isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[IP:]]></text>
 			</staticText>
-			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="368" y="21" width="82" height="20"/>
+			<textField pattern="d MMM yyyy HH:mm:ss">
+				<reportElement x="307" y="21" width="143" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{signDate}]]></textFieldExpression>
 			</textField>
