@@ -21,8 +21,8 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 public class BillingProcessFacadeImpl implements BillingProcessFacade {
 
     @Override
-    public void initializeFutureBillingCycles(final ExecutionMonitor executionMonitor) {
-        BillingProcessManager.instance().initializeFutureBillingCycles(executionMonitor);
+    public void initializeFutureBillingCycles(LogicalDate forDate, ExecutionMonitor executionMonitor) {
+        BillingProcessManager.instance().initializeFutureBillingCycles(forDate, executionMonitor);
     }
 
     @Override

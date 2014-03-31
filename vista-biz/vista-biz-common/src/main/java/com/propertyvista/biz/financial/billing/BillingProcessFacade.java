@@ -20,7 +20,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public interface BillingProcessFacade {
 
-    void initializeFutureBillingCycles(ExecutionMonitor executionMonitor);
+    void initializeFutureBillingCycles(LogicalDate forDate, ExecutionMonitor executionMonitor);
 
     void runBilling(LogicalDate date, ExecutionMonitor executionMonitor);
 

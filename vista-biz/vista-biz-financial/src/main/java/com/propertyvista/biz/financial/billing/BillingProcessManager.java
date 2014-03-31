@@ -28,7 +28,6 @@ import com.pyx4j.commons.Filter;
 import com.pyx4j.commons.FilterIterator;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -59,7 +58,7 @@ public class BillingProcessManager {
         return SingletonHolder.INSTANCE;
     }
 
-    void initializeFutureBillingCycles(final ExecutionMonitor executionMonitor) {
+    void initializeFutureBillingCycles(final LogicalDate forDate, final ExecutionMonitor executionMonitor) {
         for (final BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
             try {
                 //TODO change to TransactionScopeOption.Readonly
@@ -81,7 +80,7 @@ public class BillingProcessManager {
                             BillingCycle latestBillingCycle = Persistence.service().retrieve(criteria);
 
                             Calendar createUntill = new GregorianCalendar();
-                            createUntill.setTime(SystemDateManager.getDate());
+                            createUntill.setTime(forDate);
                             createUntill.add(Calendar.MONTH, 1);
 
                             while (latestBillingCycle.billingCycleStartDate().getValue().before(createUntill.getTime())) {

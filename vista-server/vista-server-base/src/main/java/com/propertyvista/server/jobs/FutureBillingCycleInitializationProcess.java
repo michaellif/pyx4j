@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.jobs;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.billing.BillingProcessFacade;
@@ -32,7 +33,8 @@ public class FutureBillingCycleInitializationProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(BillingProcessFacade.class).initializeFutureBillingCycles(context.getExecutionMonitor());
+        ServerSideFactory.create(BillingProcessFacade.class)
+                .initializeFutureBillingCycles(new LogicalDate(context.getForDate()), context.getExecutionMonitor());
     }
 
     @Override
