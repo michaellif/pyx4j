@@ -218,14 +218,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         // Each DB update function called in this method should be UnitOfWork, Unable to wrap here because for dual exception thrown.
         //This transaction should not update Lease, only in child unit of work
 
-        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
         final Key yardiInterfaceId = yc.getPrimaryKey();
         String propertyCode = lease.unit().building().propertyCode().getValue();
+        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+        ExecutionMonitor executionMonitor = new ExecutionMonitor();
+
         ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
         if (transaction != null && !transaction.getProperty().isEmpty()) {
             Property property = transaction.getProperty().iterator().next();
             if (!property.getRTCustomer().isEmpty()) {
-                importLease(yardiInterfaceId, propertyCode, property.getRTCustomer().iterator().next(), null);
+                importLease(yardiInterfaceId, propertyCode, property.getRTCustomer().iterator().next(), executionMonitor);
             }
         }
 
@@ -238,7 +240,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
             // Do not remove lease charges from submitted lease applications
             if (lease.status().getValue() != Lease.Status.Approved) {
-                terminateLeaseCharges(lease, null);
+                terminateLeaseCharges(lease, executionMonitor);
             }
         }
         if (leaseCharges != null) {
@@ -246,12 +248,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             // we should just get one element in the list for the requested leaseId
             for (Property property : leaseCharges.getProperty()) {
                 for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                    processed |= importLeaseCharges(yardiInterfaceId, propertyCode, rtCustomer, null);
+                    processed |= importLeaseCharges(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
                 }
             }
             // handle non-processed lease
             if ((!processed) && (lease.status().getValue() != Lease.Status.Approved)) {
-                terminateLeaseCharges(lease, null);
+                terminateLeaseCharges(lease, executionMonitor);
             }
         }
     }
