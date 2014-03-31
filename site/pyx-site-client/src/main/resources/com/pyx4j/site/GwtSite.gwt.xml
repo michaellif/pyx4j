@@ -8,6 +8,7 @@
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     <inherits name='com.pyx4j.forms.Forms'/>
 	<inherits name='com.pyx4j.entity.Entity' />
+    <inherits name='com.pyx4j.entity.EntityRPC'/>
     <inherits name='com.pyx4j.site.SiteShared'/>
     <inherits name='com.pyx4j.security.Security'/>
     <inherits name='com.google.gwt.storage.Storage'/>
