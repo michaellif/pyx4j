@@ -63,6 +63,7 @@ import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
+import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4BatchData;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
@@ -126,7 +127,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     @Override
-    public void issueN4(N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException {
+    public void issueN4(N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException, FormFillError {
         // TODO fix this: policy should be applied on lease level, right now n4 policy can be set up for Organization so it should be fine        
         N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
@@ -158,7 +159,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void generateN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) {
+    private void generateN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
         try {
             N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
                     batchData.deliveryMethod().getValue(), relevantArCodes);
@@ -196,8 +197,11 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
         } catch (Throwable error) {
             log.error("Failed to generate n4 for lease pk='" + leaseId.getPrimaryKey() + "'", error);
-
-            throw new RuntimeException(error);
+            if (error instanceof FormFillError) {
+                throw new FormFillError(error.getMessage());
+            } else {
+                throw new RuntimeException(error);
+            }
         }
     }
 

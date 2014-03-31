@@ -44,6 +44,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4BatchData;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
@@ -82,7 +83,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData) {
+    public N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData) throws FormFillError {
         N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
         fieldsData.to().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
         validateToField(fieldsData.to().getValue());
@@ -178,9 +179,6 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
                         + tenant.leaseParticipant().customer().person().name().lastName().getValue());
             }
         }
-        if (lineBuilder.length() > MAX_ADDRESS_BOX_LINE_LENGTH) {
-            throw new RuntimeException("'To' field of recipient address is too long'");
-        }
         return lineBuilder.toString();
     }
 
@@ -254,7 +252,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     // We can fit to this field only three lines 
-    private void validateToField(String toFieldString) {
+    private void validateToField(String toFieldString) throws FormFillError {
         boolean checkFailed = false;
         for (String line : toFieldString.split("\n")) {
             if (line.length() > MAX_ADDRESS_BOX_LINE_LENGTH) {
@@ -263,7 +261,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
             }
         }
         if (checkFailed) {
-            throw new RuntimeException("'to' field of N4 form won't fit the the box (line length exceeds maximum):\n" + toFieldString);
+            throw new FormFillError("'to' field of N4 form won't fit the the box (line length exceeds maximum):\n" + toFieldString);
         }
     }
 }

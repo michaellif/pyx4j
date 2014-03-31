@@ -18,6 +18,7 @@ import java.util.Collection;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.n4.N4BatchData;
 import com.propertyvista.domain.legal.n4.N4DeliveryMethod;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
@@ -28,7 +29,7 @@ public interface N4GenerationFacade {
 
     byte[] generateN4Letter(N4FormFieldsData formData);
 
-    N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData);
+    N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData) throws FormFillError;
 
     N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod, Collection<ARCode> acceptedARCodes);
 }

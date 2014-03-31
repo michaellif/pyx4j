@@ -136,8 +136,6 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
 
             contentPanel.setH2(row++, 0, 2, "Transactions");
 
-            // TODO transactions 
-
             contentPanel.setWidget(row++, 0, 2, new Button("Add New Transaction...", new Command() {
                 @Override
                 public void execute() {
