@@ -3,6 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
 	<inherits name='com.pyx4j.security.SecurityShared'/>
+    <inherits name='com.pyx4j.rpc.RPC'/>
 	<inherits name='com.pyx4j.security.RPC'/>
 	
     <inherits name='com.pyx4j.webstorage.HTML5Storage'/>
