@@ -1928,8 +1928,7 @@ BEGIN
             -- all records that are not updated with previous query (products with no items)
                    
 			EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
-                    ||'SET  default_catalog_item = ''FALSE'', '
-                    ||'     code = a.id '
+                    ||'SET   code = a.id '
                     ||'FROM '||v_schema_name||'.arcode AS a, '
                     ||'		'||v_schema_name||'.gl_code g '
                     ||'WHERE 	a.gl_code = g.id '
@@ -2044,8 +2043,7 @@ BEGIN
                     ||'FROM    (SELECT      id  '
                     ||'         FROM        '||v_schema_name||'.product_v '
                     ||'         WHERE       id_discriminator = ''service'' '
-                    ||'         AND         to_date IS NULL '
-                    ||'         AND         name IN (''Residential Unit'',''Commercial Unit'')) AS s, '
+                    ||'         AND         to_date IS NULL ) AS s, '
                     ||'         (SELECT     id,id_discriminator '
                     ||'         FROM        '||v_schema_name||'.product '
                     ||'         WHERE       code IS NOT NULL '
