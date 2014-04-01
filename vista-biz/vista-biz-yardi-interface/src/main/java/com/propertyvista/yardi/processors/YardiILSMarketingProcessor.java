@@ -26,6 +26,8 @@ import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.MadeReadyDate;
 import com.yardi.entity.ils.Property;
 import com.yardi.entity.ils.VacateDate;
+import com.yardi.entity.mits.Address;
+import com.yardi.entity.mits.PropertyIDType;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -61,6 +63,38 @@ public class YardiILSMarketingProcessor {
             }
         }
         return ServerSideFactory.create(OccupancyFacade.class).setAvailability(unit, dateAvail);
+    }
+
+    /**
+     * Yardi bug TR#333065 - addressed in 7S ILSGuestCard Plugin v3
+     * AddressLine1 = marketing name, AddressLine2 = property address
+     * ==============================================================
+     * <PropertyID>
+     * <MITS:Identification Type="other">
+     * <MITS:PrimaryID>aven2175</MITS:PrimaryID>
+     * <MITS:MarketingName>PD Kanco LP - 2175 Avenue Road</MITS:MarketingName>
+     * </MITS:Identification>
+     * <MITS:Address Type="property">
+     * <MITS:Address1>PD Kanco LP - 2175 Avenue Road</MITS:Address1>
+     * <MITS:Address2>2175 Avenue Road</MITS:Address2>
+     * . . .
+     * </MITS:Address>
+     * </PropertyID>
+     */
+    public PropertyIDType fixPropertyID(PropertyIDType propertyID) {
+        // fix the address if the addressLine1 is the same as marketing name
+        String marketingName = propertyID.getIdentification().getMarketingName();
+        Address addr = propertyID.getAddress().get(0);
+        String addr1 = addr.getAddress1();
+        if (addr1 == null || addr1.equals(marketingName)) {
+            StringBuilder address2 = new StringBuilder();
+            for (String item : addr.getAddress2()) {
+                address2.append(item);
+            }
+            addr.setAddress1(address2.toString());
+            addr.getAddress2().clear();
+        }
+        return propertyID;
     }
 
     public Map<String, BigDecimal> getDepositInfo(Property property) {

@@ -191,7 +191,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         break;
                     }
                     // process each property info
-                    importPropertyMarketingInfo(yardiInterfaceId, property, executionMonitor);
+                    importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor);
                 }
             }
 
@@ -804,7 +804,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return marketingInfo;
     }
 
-    private void importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, final ExecutionMonitor executionMonitor) {
+    private void importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
+            final ExecutionMonitor executionMonitor) {
         log.info("PropertyMarketing: import started...");
 
         for (final com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
@@ -813,10 +814,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             try {
                 log.info("  Processing building: {}", propertyCode);
 
-                // don't update existing building
+                // only update new buildings
                 Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
-                if (building == null) {
-                    building = importProperty(yardiInterfaceId, property.getPropertyID(), executionMonitor);
+                if (building == null || !importedBuildings.contains(building)) {
+                    building = importProperty(yardiInterfaceId, new YardiILSMarketingProcessor().fixPropertyID(property.getPropertyID()), executionMonitor);
                 }
                 executionMonitor.addProcessedEvent("Building");
 

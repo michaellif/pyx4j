@@ -73,9 +73,7 @@ public class YardiBuildingProcessor {
     }
 
     private Building merge(Building imported, Building existing) {
-        Building merged = new BuildingsMerger().merge(imported, existing);
-//        update(merged);
-        return merged;
+        return new BuildingsMerger().merge(imported, existing);
     }
 
     private AptUnit updateUnitForBuilding(AptUnit importedUnit, Building building) throws YardiServiceException {
@@ -86,9 +84,7 @@ public class YardiBuildingProcessor {
     }
 
     private AptUnit mergeUnit(Building building, AptUnit importedUnit, AptUnit existingUnit) {
-        AptUnit merged = new UnitsMerger().merge(building, importedUnit, existingUnit);
-//        update(merged);
-        return merged;
+        return new UnitsMerger().merge(building, importedUnit, existingUnit);
     }
 
     private AptUnit getUnit(Building building, String unitNumber) {
