@@ -36,7 +36,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.property.asset.BuildingElement;
 
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{0}, {1} - ${2}")
 public interface ProductItem extends IEntity {
 
     @Owner
@@ -55,25 +55,21 @@ public interface ProductItem extends IEntity {
     @ToString(index = 1)
     IPrimitive<String> name();
 
-    @NotNull
     @ToString(index = 2)
     @Format("#,##0.00")
     @Caption(name = "Market Price")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> price();
 
-    @NotNull
     @Format("#,##0.00")
     @Caption(name = "Deposit LMR")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> depositLMR();
 
-    @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> depositMoveIn();
 
-    @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> depositSecurity();

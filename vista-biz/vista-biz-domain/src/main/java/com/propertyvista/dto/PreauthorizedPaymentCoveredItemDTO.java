@@ -20,12 +20,14 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
+@ToStringFormat("{10}, {11,number,percent}")
 public interface PreauthorizedPaymentCoveredItemDTO extends AutopayAgreement.AutopayAgreementCoveredItem {
 
     @ReadOnly

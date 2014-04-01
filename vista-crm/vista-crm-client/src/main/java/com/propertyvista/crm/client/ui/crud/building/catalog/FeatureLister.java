@@ -42,21 +42,39 @@ public class FeatureLister extends AbstractLister<Feature> {
         this.parentView = parentView;
         getDataTablePanel().setFilteringEnabled(false);
 
-        setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().code(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().version().price()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
-            new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
-            new MemberColumnDescriptor.Builder(proto().expiredFrom()).build()
-        );//@formatter:on
+        if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
+            setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().code(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().version().price()).build(),
+                new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
+                new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
+                new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
+                new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
+                new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(),
+                new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build()
+            );//@formatter:on
+        } else {
+            setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().code(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().version().price()).build(),
+                new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
+                new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
+                new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
+                new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
+                new MemberColumnDescriptor.Builder(proto().expiredFrom()).build()
+            );//@formatter:on
+        }
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().code(), false), new Sort(proto().version().name(), false));
+        if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
+            return Arrays.asList(new Sort(proto().code(), false), new Sort(proto().defaultCatalogItem(), false));
+        } else {
+            return Arrays.asList(new Sort(proto().code(), false), new Sort(proto().version().name(), false));
+        }
     }
 
     @Override

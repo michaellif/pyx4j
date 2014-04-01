@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
 //TODO add IVersionedEntity which will have effective date, expiration date
-@ToStringFormat("{0}, {1}, {2}")
+@ToStringFormat("{0}, {1}, {2,number,percent}")
 public interface Tax extends IEntity {
 
     @NotNull

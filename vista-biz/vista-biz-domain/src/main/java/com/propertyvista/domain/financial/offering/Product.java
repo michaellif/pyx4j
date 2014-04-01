@@ -31,6 +31,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IList;
@@ -45,8 +46,9 @@ import com.propertyvista.domain.financial.offering.Product.ProductV;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 
 @AbstractEntity
-@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@ToStringFormat("{1}, {0}{2,choice,null#|!null# - ${2}}")
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILooseVersioning, HasNotesAndAttachments {
 
     @Owner
@@ -93,6 +95,7 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
         IPrimitive<String> description();
 
         @NotNull
+        @ToString(index = 2)
         @Format("#,##0.00")
         @Caption(name = "Market Price")
         @Editor(type = EditorType.money)

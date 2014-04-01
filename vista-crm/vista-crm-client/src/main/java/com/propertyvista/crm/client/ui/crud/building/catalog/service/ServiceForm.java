@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -53,12 +54,15 @@ public class ServiceForm extends CrmEntityForm<Service> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 20).build());
 
-        row = 0;
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
+        int rrow = 0;
+        content.setWidget(++rrow, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
+        content.setWidget(++rrow, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
+        content.setWidget(++rrow, 1, new FormDecoratorBuilder(inject(proto().version().availableOnline()), 4).build());
+        if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
+            content.setWidget(++rrow, 0, new FormDecoratorBuilder(inject(proto().defaultCatalogItem(), new CBooleanLabel()), 4).build());
+        }
 
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().availableOnline()), 4).build());
-
+        row = Math.max(row, rrow);
         content.setH1(++row, 0, 2, i18n.tr("Deposits"));
         headerDeposits = content.getWidget(row, 0);
 
