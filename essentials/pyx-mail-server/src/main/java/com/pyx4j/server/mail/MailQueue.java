@@ -124,7 +124,7 @@ public class MailQueue implements Runnable {
         }
     }
 
-    static void queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
+    static void queue(MailMessage mailMessage, Class<? extends MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
         final AbstractOutgoingMailQueue persistable = EntityFactory.create(persistableEntities.get(mailConfig.configurationId()));
         if (persistable == null) {
             throw new Error("MailQueue Persistence not configured for '" + mailConfig.configurationId() + "'");

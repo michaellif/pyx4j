@@ -47,11 +47,11 @@ public class Mail {
      *            optional class that will be instantiated and called once email was sent
      * @return false if message can't be sent because address is invalid, You may get exception by calling filter function on the same message
      */
-    public static boolean queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
+    public static boolean queue(MailMessage mailMessage, Class<? extends MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
         return getMailService().queue(mailMessage, callbackClass, mailConfig);
     }
 
-    public static boolean queueUofW(final MailMessage mailMessage, final Class<MailDeliveryCallback> callbackClass,
+    public static boolean queueUofW(final MailMessage mailMessage, final Class<? extends MailDeliveryCallback> callbackClass,
             final IMailServiceConfigConfiguration mailConfig) {
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Boolean, RuntimeException>() {
 

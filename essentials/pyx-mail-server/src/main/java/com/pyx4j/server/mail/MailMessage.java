@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.Vector;
 
 /**
@@ -38,6 +39,8 @@ import java.util.Vector;
 public class MailMessage implements Serializable {
 
     private static final long serialVersionUID = 3457527924951058240L;
+
+    private final String mailMessageObjectId;
 
     private String sender;
 
@@ -64,7 +67,11 @@ public class MailMessage implements Serializable {
     private transient String deliveryErrorMessage;
 
     public MailMessage() {
+        mailMessageObjectId = UUID.randomUUID().toString();
+    }
 
+    public String getMailMessageObjectId() {
+        return mailMessageObjectId;
     }
 
     public String getSender() {
@@ -250,4 +257,30 @@ public class MailMessage implements Serializable {
         this.deliveryErrorMessage = deliveryErrorMessage;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((mailMessageObjectId == null) ? 0 : mailMessageObjectId.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MailMessage other = (MailMessage) obj;
+        if (mailMessageObjectId == null) {
+            return false;
+        } else {
+            return mailMessageObjectId.equals(other.mailMessageObjectId);
+        }
+    }
 }
