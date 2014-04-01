@@ -20,8 +20,18 @@
  */
 package com.pyx4j.server.mail;
 
+import com.pyx4j.entity.shared.AbstractOutgoingMailQueue.MailQueueStatus;
+
 public interface MailDeliveryCallback {
 
-    public void onDeliveryCompleted(MailMessage mailMessage, MailDeliveryStatus status);
+    /**
+     * Called for each attempt to deliver message, If mailQueueStatus != MailQueueStatus.Queued there will be no more attempts to deliver message.
+     * 
+     * @param mailMessage
+     * @param status
+     * @param mailQueueStatus
+     * @param deliveryAttemptsMade
+     */
+    public void onDeliveryCompleted(MailMessage mailMessage, MailDeliveryStatus status, MailQueueStatus mailQueueStatus, int deliveryAttemptsMade);
 
 }

@@ -46,6 +46,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AbstractOutgoingMailQueue;
 import com.pyx4j.entity.shared.AbstractOutgoingMailQueue.MailQueueStatus;
+import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 //TODO re-read configuration upon errors
@@ -81,7 +82,7 @@ public class MailQueue implements Runnable {
     private static synchronized void init() {
         if (instance == null) {
             instance = new MailQueue();
-            Thread caseWatch = new Thread(instance, "MailQueueDeliveryThread");
+            Thread caseWatch = new Thread(instance, LoggerConfig.getContextName() + "_MailQueueDeliveryThread");
             caseWatch.setDaemon(true);
             caseWatch.start();
         }
@@ -263,7 +264,8 @@ public class MailQueue implements Runnable {
                                 }
                             });
                             if (!persistable.statusCallbackClass().isNull()) {
-                                invokeCallback(persistable.statusCallbackClass().getValue(), persistable.namespace().getValue(), mailMessage, status);
+                                invokeCallback(persistable.statusCallbackClass().getValue(), persistable.namespace().getValue(), mailMessage, status,
+                                        persistableUpdate.status().getValue(), persistable.attempts().getValue(0));
                             }
                         }
                     } while (continueDelivery && !shutdown);
@@ -290,7 +292,8 @@ public class MailQueue implements Runnable {
         }
     }
 
-    private void invokeCallback(String statusCallbackClass, String targetNamespace, final MailMessage mailMessage, final MailDeliveryStatus status) {
+    private void invokeCallback(String statusCallbackClass, String targetNamespace, final MailMessage mailMessage, final MailDeliveryStatus status,
+            final MailQueueStatus mailQueueStatus, final int deliveryAttemptsMade) {
         Class<?> callbackClass;
         try {
             callbackClass = Thread.currentThread().getContextClassLoader().loadClass(statusCallbackClass);
@@ -310,7 +313,7 @@ public class MailQueue implements Runnable {
             @Override
             public Void execute() {
                 try {
-                    callback.onDeliveryCompleted(mailMessage, status);
+                    callback.onDeliveryCompleted(mailMessage, status, mailQueueStatus, deliveryAttemptsMade);
                 } catch (Throwable e) {
                     log.error("Mail statusCallback invocation error", e);
                 }
