@@ -40,7 +40,7 @@ public class TenantSureOrderConfirmationPage extends CPortalEntityForm<TenantSur
         int row = -1;
 
         Label label = new Label();
-        label.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
+        label.addStyleName(TenantSureTheme.StyleName.TenantSurePucrhaseViewMessageText.name());
         label.setText(i18n.tr("An email with your insurance policy has been sent to your email."));
         mainPanel.setWidget(++row, 0, label);
         return mainPanel;

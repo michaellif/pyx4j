@@ -145,10 +145,10 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         quotationRequestStepPanel.setH1(++row, 0, 1, i18n.tr("Quote"));
 
         FlowPanel quoteSection = new FlowPanel();
-        quoteSection.addStyleName(TenantSureTheme.StyleName.TSPurchaseViewSection.name());
+        quoteSection.addStyleName(TenantSureTheme.StyleName.TenantSurePurchaseViewSection.name());
 
         pleaseFillOutTheFormMessage = new Label();
-        pleaseFillOutTheFormMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
+        pleaseFillOutTheFormMessage.addStyleName(TenantSureTheme.StyleName.TenantSurePucrhaseViewMessageText.name());
         pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote from Highcourt Partners Limited"));
         quoteSection.add(pleaseFillOutTheFormMessage);
 
@@ -161,13 +161,13 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         quoteSendButton.setVisible(false);
 
         retrievingQuoteMessage = new Label();
-        retrievingQuoteMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
+        retrievingQuoteMessage.addStyleName(TenantSureTheme.StyleName.TenantSurePucrhaseViewMessageText.name());
         retrievingQuoteMessage.setText(i18n.tr("Please wait while we preparing your quote..."));
         retrievingQuoteMessage.setVisible(false);
         quoteSection.add(retrievingQuoteMessage);
 
         SimplePanel quoteSendHolder = new SimplePanel(quoteSendButton);
-        quoteSendHolder.setStyleName(TenantSureTheme.StyleName.TSSendDocs.name());
+        quoteSendHolder.setStyleName(TenantSureTheme.StyleName.TenantSureSendDocs.name());
         quoteSection.add(quoteSendHolder);
 
         quoteSection.add(inject(proto().quote(), quoteViewer));
