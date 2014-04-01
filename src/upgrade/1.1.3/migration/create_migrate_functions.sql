@@ -1936,12 +1936,13 @@ BEGIN
                     ||'AND  p.id_discriminator = ''service'' '
                     ||'AND	p.code IS NULL ';
 			
-			
+			/*
             EXECUTE 'UPDATE '||v_schema_name||'.product_v '
                     ||'SET  price = 0.00 '
                     ||'WHERE holder IN      (SELECT DISTINCT id FROM '||v_schema_name||'.product '
                     ||'                     WHERE   id_discriminator  = ''service'' )';   
                 
+            */
             
             -- update name on product_item
             
