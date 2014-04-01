@@ -47,7 +47,7 @@ import com.propertyvista.domain.note.HasNotesAndAttachments;
 
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-@ToStringFormat("{1}, {0}{2,choice,null#|!null# - ${2}}")
+@ToStringFormat("{1}, {0}")
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILooseVersioning, HasNotesAndAttachments {
 

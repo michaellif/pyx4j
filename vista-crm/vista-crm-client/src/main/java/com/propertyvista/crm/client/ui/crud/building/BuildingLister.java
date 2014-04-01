@@ -70,6 +70,8 @@ public class BuildingLister extends AbstractLister<BuildingDTO> {
             new MemberColumnDescriptor.Builder(proto().financial().marketPrice(), false).build(),
             new MemberColumnDescriptor.Builder(proto().financial().lastAppraisalDate(), true).build(),
             new MemberColumnDescriptor.Builder(proto().financial().lastAppraisalValue(), true).build(),
+            
+            new MemberColumnDescriptor.Builder(proto().defaultProductCatalog(), false).sortable(false).build(),
 
             new MemberColumnDescriptor.Builder(proto().merchantAccountPresent(), false).sortable(false).build(),
             new MemberColumnDescriptor.Builder(proto().financial().currency().name(), false).title(proto().financial().currency()).build(),
