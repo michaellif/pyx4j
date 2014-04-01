@@ -2010,14 +2010,14 @@ BEGIN
             -- wondrously perverted update of product_item
         
             EXECUTE 'WITH   t0 AS   (SELECT     p.id AS p_id, p.catalog,p.code, '
-                    ||'                         pv.id AS pv_id,'
+                    ||'                         pv.id AS pv_id, p.default_catalog_item,'
                     ||'                         pi.id AS pi_id, pi.code AS pi_code '
                     ||'             FROM        '||v_schema_name||'.product p '
                     ||'             JOIN        '||v_schema_name||'.product_v pv  ON (p.id = pv.holder) '
                     ||'             JOIN        '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
                     ||'             WHERE       p.id_discriminator = ''feature'' '
                     ||'             AND         p.code != pi.code), '
-                    ||'     t1 AS   (SELECT     p.id AS p_id,p.catalog,p.code,pv.id AS pv_id '
+                    ||'     t1 AS   (SELECT     p.id AS p_id,p.catalog,p.code,pv.id AS pv_id, p.default_catalog_item '
                     ||'             FROM        '||v_schema_name||'.product p '
                     ||'             JOIN        '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
                     ||'             WHERE       p.id_discriminator = ''feature'' '
@@ -2026,7 +2026,8 @@ BEGIN
                     ||'SET      product = t2.pv_id '
                     ||'FROM    (SELECT      t0.pi_id, t1.pv_id  '
                     ||'         FROM        t0 '
-                    ||'         JOIN        t1 ON (t0.catalog = t1.catalog AND t0.pi_code = t1.code)) AS t2 '
+                    ||'         JOIN        t1 '
+                    ||'ON (t0.catalog = t1.catalog AND t0.pi_code = t1.code AND t0.default_catalog_item = t1.default_catalog_item)) AS t2 '
                     ||'WHERE   pi.id = t2.pi_id ';
             
             
