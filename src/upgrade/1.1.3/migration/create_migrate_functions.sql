@@ -1942,7 +1942,15 @@ BEGIN
                     ||'WHERE holder IN      (SELECT DISTINCT id FROM '||v_schema_name||'.product '
                     ||'                     WHERE   id_discriminator  = ''service'' )';   
                 
-                
+            
+            -- update name on product_item
+            
+            EXECUTE 'UPDATE '||v_schema_name||'.product_item  AS pi '
+                    ||'SET  name = a.code_type||'', ''||a.name '
+                    ||'FROM '||v_schema_name||'.arcode a '
+                    ||'WHERE    a.id = pi.code ';
+            
+            
             -- update of old product_v records 
 		
             EXECUTE	'UPDATE '||v_schema_name||'.product_v AS pv '
@@ -1978,7 +1986,7 @@ BEGIN
             EXECUTE 'INSERT INTO '||v_schema_name||'.product (id,id_discriminator,catalog,updated,default_catalog_item,code) '
                     ||'(SELECT      nextval(''public.product_seq'') AS id, pi.product_discriminator AS id_discriminator,'
                     ||'             p.catalog,DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated,'
-                    ||'             TRUE, pi.code '
+                    ||'             p.default_catalog_item, pi.code '
                     ||'FROM '||v_schema_name||'.product p '
                     ||'JOIN '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
                     ||'JOIN '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
@@ -2040,15 +2048,17 @@ BEGIN
             EXECUTE 'INSERT INTO '||v_schema_name||'.product_v$features (id,owner,value_discriminator,value) '
                     ||'(SELECT  nextval(''public.product_v$features_seq'') AS id, s.id AS owner, '
                     ||'         f.id_discriminator AS value_discriminator,f.id AS value '
-                    ||'FROM    (SELECT      id  '
-                    ||'         FROM        '||v_schema_name||'.product_v '
-                    ||'         WHERE       id_discriminator = ''service'' '
-                    ||'         AND         to_date IS NULL ) AS s, '
-                    ||'         (SELECT     id,id_discriminator '
+                    ||'FROM    (SELECT      pv.id, p.default_catalog_item '
+                    ||'         FROM        '||v_schema_name||'.product_v pv '
+                    ||'         JOIN        '||v_schema_name||'.product p ON (p.id = pv.holder) '
+                    ||'         WHERE       pv.id_discriminator = ''service'' '
+                    ||'         AND         pv.to_date IS NULL ) AS s '
+                    ||'JOIN     (SELECT     id,id_discriminator, default_catalog_item '
                     ||'         FROM        '||v_schema_name||'.product '
                     ||'         WHERE       code IS NOT NULL '
                     ||'         AND         id_discriminator = ''feature'' '
-                    ||'         AND         id NOT IN (SELECT DISTINCT value FROM '||v_schema_name||'.product_v$features)) AS f )';
+                    ||'         AND         id NOT IN (SELECT DISTINCT value FROM '||v_schema_name||'.product_v$features)) AS f '
+                    ||'ON       (s.default_catalog_item = f.default_catalog_item ))';
                 
 		
             
