@@ -201,12 +201,12 @@ public class YardiProductCatalogProcessor {
     }
 
     private boolean isAnyServicePresent(ProductCatalog catalog) {
-        return (CollectionUtils.find(catalog.services(), new Predicate<Service>() {
+        return CollectionUtils.exists(catalog.services(), new Predicate<Service>() {
             @Override
             public boolean evaluate(Service service) {
                 return (!service.defaultCatalogItem().getValue(false) && service.expiredFrom().isNull());
             }
-        }) != null);
+        });
     }
 
     private Service ensureService(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
