@@ -1984,7 +1984,7 @@ BEGIN
         
         
             EXECUTE 'INSERT INTO '||v_schema_name||'.product (id,id_discriminator,catalog,updated,default_catalog_item,code) '
-                    ||'(SELECT      nextval(''public.product_seq'') AS id, pi.product_discriminator AS id_discriminator,'
+                    ||'(SELECT      DISTINCT nextval(''public.product_seq'') AS id, pi.product_discriminator AS id_discriminator,'
                     ||'             p.catalog,DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated,'
                     ||'             p.default_catalog_item, pi.code '
                     ||'FROM '||v_schema_name||'.product p '
@@ -2031,8 +2031,20 @@ BEGIN
                     ||'WHERE   pi.id = t2.pi_id ';
             
             
+            -- delete product that do not have items 
+            
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
+                    ||'WHERE    id NOT IN   (SELECT DISTINCT product '
+                    ||'                     FROM    '||v_schema_name||'.product_item) '
+                    ||'AND      id_discriminator = ''feature'' ';
+                    
+            EXECUTE 'DELETE FROM '||v_schema_name||'.product '
+                    ||'WHERE    id NOT IN   (SELECT DISTINCT holder '
+                    ||'                     FROM    '||v_schema_name||'.product_v ) '
+                    ||'AND      id_discriminator = ''feature'' ';
+
+
             -- delete those rare rows that do not have a code still
-		
 			
             EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
                     ||'WHERE 	holder IN 	(SELECT 	id '
