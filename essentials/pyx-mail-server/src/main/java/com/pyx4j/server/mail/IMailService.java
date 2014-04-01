@@ -40,7 +40,7 @@ public interface IMailService {
      *            optional default configuration will be used
      * @return false if message can't be sent because address is invalid, You may get exception by calling filter function on the same message
      */
-    public boolean queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig);
+    public boolean queue(MailMessage mailMessage, Class<? extends MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig);
 
     /**
      * Apply address restrictions to the messages

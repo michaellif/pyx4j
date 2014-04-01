@@ -81,7 +81,7 @@ class SMTPMailServiceImpl implements IMailService {
     }
 
     @Override
-    public boolean queue(MailMessage mailMessage, Class<MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
+    public boolean queue(MailMessage mailMessage, Class<? extends MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
         if (disabled) {
             return true;
         }
