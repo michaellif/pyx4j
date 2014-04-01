@@ -2001,7 +2001,7 @@ BEGIN
                     ||'from_date,holder_discriminator,holder,name,mandatory) '
                     ||'(SELECT  nextval(''public.product_v_seq'') AS id,p.id_discriminator AS id_discriminator, '
                     ||'1,DATE_TRUNC(''second'',current_timestamp)::timestamp AS from_date, '
-                    ||'p.id_discriminator AS holder_discriminator,p.id AS holder,a.code_type AS name, FALSE '
+                    ||'p.id_discriminator AS holder_discriminator,p.id AS holder,a.code_type||'', ''||a.name AS name, FALSE '
                     ||'FROM '||v_schema_name||'.product p '
                     ||'JOIN '||v_schema_name||'.arcode a ON (p.code = a.id) '
                     ||'WHERE    p.id NOT IN (SELECT DISTINCT holder FROM '||v_schema_name||'.product_v ) )';
