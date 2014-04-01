@@ -50,6 +50,7 @@ import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.log4j.LoggerConfig;
 
 public class SchedulerHelper {
 
@@ -108,6 +109,11 @@ public class SchedulerHelper {
         default:
             throw new Error("Unsupported databaseType " + rdbConfiguration.databaseType());
         }
+
+        quartzProperties.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, LoggerConfig.getContextName());
+        quartzProperties.put(StdSchedulerFactory.PROP_SCHED_THREAD_NAME, LoggerConfig.getContextName() + "_DefaultQuartzSchedulerThread");
+        quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadNamePrefix", LoggerConfig.getContextName()
+                + "_DefaultQuartzSchedulerWorkerThread");
 
         // Lets quartz manage its connections pool for now.
         String dataSourceName = "main";
