@@ -36,7 +36,6 @@ import com.pyx4j.essentials.server.dev.DebugServlet;
 import com.pyx4j.essentials.server.dev.DevDumpProxyServlet;
 import com.pyx4j.essentials.server.dev.OutOfMemorySimulationServlet;
 import com.pyx4j.essentials.server.download.DownloadServlet;
-import com.pyx4j.essentials.server.download.LogViewServlet;
 import com.pyx4j.gwt.server.GWTCacheFilter;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.rpc.server.RemoteServiceServlet;
@@ -57,6 +56,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.portal.PublicMediaServlet;
 import com.propertyvista.portal.server.upload.SiteImageResourceServlet;
 import com.propertyvista.portal.server.upload.VistaFileAccessServlet;
+import com.propertyvista.server.VistaLogViewServlet;
 import com.propertyvista.server.VistaUploadServlet;
 import com.propertyvista.server.ci.DBResetServlet;
 import com.propertyvista.server.ci.EnvLinksServlet;
@@ -250,9 +250,9 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 sc.addMapping("/o/version");
                 sc.addMapping("/public/version");
             }
-            if (false) {
-                ServletRegistration.Dynamic sc = ctx.addServlet("LogViewServlet", LogViewServlet.class);
-                sc.addMapping("/logs/*");
+            {
+                ServletRegistration.Dynamic sc = ctx.addServlet("LogViewServlet", VistaLogViewServlet.class);
+                sc.addMapping(urlPattern(VistaApplication.operations, "/logs/*"));
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("DBResetServlet", DBResetServlet.class);
