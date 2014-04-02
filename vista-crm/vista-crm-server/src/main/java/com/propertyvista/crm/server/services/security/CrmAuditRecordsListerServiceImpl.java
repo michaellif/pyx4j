@@ -44,6 +44,7 @@ public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl
         bind(toProto.event(), boProto.event());
         bind(toProto.application(), boProto.app());
         bind(toProto.targetEntity(), boProto.entityClass());
+        bind(toProto.targetEntityId(), boProto.entityId());
         bind(toProto.details(), boProto.details());
     }
 
