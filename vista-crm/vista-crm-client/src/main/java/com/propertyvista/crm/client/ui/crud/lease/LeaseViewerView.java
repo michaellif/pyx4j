@@ -75,6 +75,10 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void onInsuredTenantClicked(Tenant tenantId);
 
+        void setLegalStatus();
+
+        void clearLegalStatus();
+
         void issueN4(N4BatchRequestDTO n4GenerationQuery);
 
         void viewApplication();

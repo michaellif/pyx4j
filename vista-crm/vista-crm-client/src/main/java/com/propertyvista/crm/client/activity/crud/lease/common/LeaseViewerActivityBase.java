@@ -78,16 +78,6 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
     }
 
     @Override
-    public void setLegalStatus() {
-    }
-
-    @Override
-    public void clearLegalStatus() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void reserveUnit(int durationHours) {
         ((LeaseViewerCrudServiceBase<DTO>) getService()).reserveUnit(new DefaultAsyncCallback<VoidSerializable>() {
             @Override

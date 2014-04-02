@@ -27,7 +27,6 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
@@ -105,25 +104,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         papsButton = new Button(i18n.tr("Auto Payments"));
         papsButton.setMenu(papsMenu = papsButton.createMenu());
         addHeaderToolbarItem(papsButton.asWidget());
-
-        Button legalStatusButton = new Button(i18n.tr("Legal"));
-        ButtonMenuBar legalStatusMenu = legalStatusButton.createMenu();
-        legalStatusButton.setMenu(legalStatusMenu);
-        MenuItem setLegalStatus = new MenuItem(i18n.tr("Set Legal Status"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).setLegalStatus();
-            }
-        });
-        legalStatusMenu.addItem(setLegalStatus);
-        MenuItem clearLegalStatus = new MenuItem(i18n.tr("Clear Legal Status"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).clearLegalStatus();
-            }
-        });
-        legalStatusMenu.addItem(clearLegalStatus);
-        addHeaderToolbarItem(legalStatusButton);
 
         reserveUnit = new MenuItem(i18n.tr("Reserve Unit"), new Command() {
             @Override

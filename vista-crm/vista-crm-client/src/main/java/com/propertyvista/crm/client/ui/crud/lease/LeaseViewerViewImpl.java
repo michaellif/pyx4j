@@ -141,8 +141,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem yardiImportAction;
 
-    private MenuItem issueN4Action;
-
     private MenuItem downloadSignedAgreementItem;
 
     private MenuItem uploadSignedAgreementItem;
@@ -470,18 +468,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             });
         }
 
-        if (false) {
-            addActionSeparator();
-            issueN4Action = new MenuItem(i18n.tr("Issue N4"), new Command() {
-                @Override
-                public void execute() {
-                    issueN4();
-                }
-            });
-            addAction(issueN4Action);
-        }
-
         addAgreementDocumentMenu();
+        addLegalStatusMenu();
 
     }
 
@@ -874,6 +862,27 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
         addHeaderToolbarItem(leaseAgreementDocument);
+    }
+
+    private void addLegalStatusMenu() {
+        Button legalStatusButton = new Button(i18n.tr("Legal"));
+        ButtonMenuBar legalStatusMenu = legalStatusButton.createMenu();
+        legalStatusButton.setMenu(legalStatusMenu);
+        MenuItem setLegalStatus = new MenuItem(i18n.tr("Set Legal Status"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).setLegalStatus();
+            }
+        });
+        legalStatusMenu.addItem(setLegalStatus);
+        MenuItem clearLegalStatus = new MenuItem(i18n.tr("Clear Legal Status"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).clearLegalStatus();
+            }
+        });
+        legalStatusMenu.addItem(clearLegalStatus);
+        addHeaderToolbarItem(legalStatusButton);
     }
 
     private abstract class RenewLeaseBox extends OkCancelDialog {
