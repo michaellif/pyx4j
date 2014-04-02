@@ -1953,7 +1953,7 @@ BEGIN
                     ||'FROM '||v_schema_name||'.arcode a '
                     ||'WHERE    a.id = pi.code ';
             
-            
+        /*
             -- update of old product_v records 
 		
             EXECUTE	'UPDATE '||v_schema_name||'.product_v AS pv '
@@ -1965,6 +1965,8 @@ BEGIN
                     ||'			WHERE   from_date IS NULL ) AS t '
                     ||'WHERE	pv.id = t.id ';
 		
+        */
+        
             -- Update existing features in product table 
         
             EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
@@ -2035,7 +2037,7 @@ BEGIN
             
             
             -- delete product that do not have items 
-            
+            /*
             EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
                     ||'WHERE    id NOT IN   (SELECT DISTINCT product '
                     ||'                     FROM    '||v_schema_name||'.product_item) '
@@ -2046,7 +2048,8 @@ BEGIN
                     ||'                     FROM    '||v_schema_name||'.product_v ) '
                     ||'AND      id_discriminator = ''feature'' ';
 
-
+            */
+            
             -- delete those rare rows that do not have a code still
 			
             EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
