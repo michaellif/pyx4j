@@ -22,7 +22,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.legal.LeaseLegalFacade;
@@ -38,8 +37,6 @@ import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LegalStatusDTO;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrudServiceDtoImpl<Lease, DTO> {
-
-    private static final I18n i18n = I18n.get(LeaseCrudServiceBaseImpl.class);
 
     protected LeaseCrudServiceBaseImpl(Class<DTO> dtoClass) {
         super(Lease.class, dtoClass);
@@ -60,13 +57,13 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (LeaseTermTenant item : to.currentTerm().version().tenants()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers, false);
             fillPreauthorizedPayments(item);
+            loadTenantInsurance(to, item);
         }
 
         for (LeaseTermGuarantor item : to.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers, false);
         }
 
-        loadTenantInsurance(to);
         loadCommunicationLetters(to);
         loadLegalStatus(to);
         // TODO loadLeaseAgreementSigningProgress(to);
@@ -100,8 +97,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
     }
 
-    private void loadTenantInsurance(LeaseDTO lease) {
-        Tenant tenantId = lease.currentTerm().version().tenants().get(0).leaseParticipant().<Tenant> createIdentityStub();
+    private void loadTenantInsurance(LeaseDTO lease, LeaseTermTenant tenant) {
+        Tenant tenantId = tenant.leaseParticipant().<Tenant> createIdentityStub();
         lease.tenantInsuranceCertificates().addAll(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenantId, false));
     }
 
