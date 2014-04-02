@@ -450,6 +450,7 @@ public class LogViewServlet extends HttpServlet {
                     continue;
                 }
                 ZipEntry ze = new ZipEntry(file.getName());
+                ze.setTime(file.lastModified());
                 zip.putNextEntry(ze);
 
                 FileInputStream is = null;
