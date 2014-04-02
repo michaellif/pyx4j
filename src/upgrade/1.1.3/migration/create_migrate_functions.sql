@@ -2113,6 +2113,14 @@ BEGIN
                     ||'			FROM    '||v_schema_name||'.product_v )AS t '
                     ||'WHERE	pv.id = t.id ';
             
+            -- update for product_v.to_date
+            
+            EXECUTE 'UPDATE '||v_schema_name||'.product_v AS t0 '
+                    ||'SET  to_date = t1.from_date '
+                    ||'FROM '||v_schema_name||'.product_v AS t1 '
+                    ||'WHERE    t0.holder = t1.holder '
+                    ||'AND      t0.version_number = t1.version_number - 1 '
+                    ||'AND      t0.to_date IS NOT NULL ';
               
             -- insert on product_v$features
         
