@@ -2075,16 +2075,7 @@ BEGIN
                     ||'WHERE   pi.id = t2.pi_id ';
             
             
-            -- update for product_v.version_number
             
-		
-            EXECUTE	'UPDATE '||v_schema_name||'.product_v AS pv '
-                    ||'SET	    version_number = t.version '
-                    ||'FROM 	(SELECT id, '
-                    ||'					row_number() OVER (PARTITION BY holder ORDER BY id) AS version '
-                    ||'			FROM    '||v_schema_name||'.product_v '
-                    ||'			WHERE   from_date IS NULL ) AS t '
-                    ||'WHERE	pv.id = t.id ';
 
             
             -- delete product that do not have items 
@@ -2111,6 +2102,16 @@ BEGIN
             EXECUTE 'DELETE FROM '||v_schema_name||'.product '
                     ||'WHERE	code IS NULL';
 				
+            
+            -- update for product_v.version_number
+            
+		
+            EXECUTE	'UPDATE '||v_schema_name||'.product_v AS pv '
+                    ||'SET	    version_number = t.version '
+                    ||'FROM 	(SELECT id, '
+                    ||'					row_number() OVER (PARTITION BY holder ORDER BY from_date) AS version '
+                    ||'			FROM    '||v_schema_name||'.product_v )AS t '
+                    ||'WHERE	pv.id = t.id ';
             
               
             -- insert on product_v$features
