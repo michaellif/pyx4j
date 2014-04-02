@@ -39,6 +39,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -130,7 +132,9 @@ public class LogViewServlet extends HttpServlet {
         }
         verifyPath(path);
 
-        if (path.endsWith("/")) {
+        if (request.getParameterValues("download") != null) {
+            sendFilesZip(path, response, request.getParameterValues("download"));
+        } else if (path.endsWith("/")) {
             listDirectory(request, path, urlPrefix, response);
         } else {
             sendFile(path, response);
@@ -158,9 +162,10 @@ public class LogViewServlet extends HttpServlet {
         out.println(dir.getAbsolutePath());
         out.println("</h1>");
 
+        out.println("<form method=\"get\">");
         out.println("<table>");
 
-        out.println("<tr><th align=\"left\">Name</th><th align=\"left\">Last Modified</th><th align=\"right\">Size</th></tr>");
+        out.println("<tr><th></th><th align=\"left\">Name</th><th align=\"left\">Last Modified</th><th align=\"right\">Size</th></tr>");
 
         if (path.length() != 1) {
             out.println("<tr><td>");
@@ -194,8 +199,16 @@ public class LogViewServlet extends HttpServlet {
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS z");
 
+        int idx = 0;
         for (File file : filesSorted) {
             out.println("<tr><td>");
+
+            if (file.isFile()) {
+                out.println("<input name=\"download\" id=\"" + (idx++) + "\" type=\"checkbox\" value=\"" + file.getName() + "\">");
+            }
+
+            out.println("</td><td>");
+
             out.println("<a href=\"");
             out.println(urlPrefix);
             String name = file.getName();
@@ -218,6 +231,10 @@ public class LogViewServlet extends HttpServlet {
         }
 
         out.println("</table>");
+
+        out.println("<input type=\"submit\" value=\"Download Selected as zip\" />");
+
+        out.println("</form>");
 
         out.println("</body>");
         out.println("</html>");
@@ -414,6 +431,47 @@ public class LogViewServlet extends HttpServlet {
             return mime;
         } else {
             return "text/plain";
+        }
+    }
+
+    private void sendFilesZip(String path, HttpServletResponse response, String[] fileNameArrays) throws ServletException, IOException {
+        List<String> filesNames = Arrays.asList(fileNameArrays);
+        File dir = new File(rootDirectory, path);
+        File[] files = dir.listFiles();
+
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment; filename=\"logs.zip\"");
+
+        ServletOutputStream out = response.getOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(out);
+        try {
+            for (File file : files) {
+                if (!filesNames.contains(file.getName())) {
+                    continue;
+                }
+                ZipEntry ze = new ZipEntry(file.getName());
+                zip.putNextEntry(ze);
+
+                FileInputStream is = null;
+                DataInputStream in = null;
+                byte[] bbuf = new byte[1024];
+                try {
+                    in = new DataInputStream(is = new FileInputStream(file));
+                    int length;
+                    while ((in != null) && ((length = in.read(bbuf)) != -1)) {
+                        zip.write(bbuf, 0, length);
+                    }
+                } finally {
+                    IOUtils.closeQuietly(in);
+                    IOUtils.closeQuietly(is);
+                }
+                zip.closeEntry();
+            }
+            zip.close();
+            out.flush();
+        } finally {
+            IOUtils.closeQuietly(zip);
+            IOUtils.closeQuietly(out);
         }
     }
 
