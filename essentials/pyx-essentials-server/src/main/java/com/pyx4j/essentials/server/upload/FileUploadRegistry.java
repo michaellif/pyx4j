@@ -62,6 +62,9 @@ public class FileUploadRegistry {
     }
 
     public static boolean allowModifications(IHasFile<?> entity, MemberMeta meta, Object valueOrig, Object valueNew) {
+        if (!entity.file().hasValues()) {
+            return true;
+        }
         if (entity.file().accessKey().isNull()) {
             log.debug("file of entity {} do not have accessKey", entity);
             return false;
