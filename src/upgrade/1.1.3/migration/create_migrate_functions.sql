@@ -1287,7 +1287,8 @@ BEGIN
                                     
         -- temporary columnt for product catalog migration
         
-        ALTER TABLE product_item    ADD COLUMN version INTEGER;
+        ALTER TABLE product_item    ADD COLUMN version INTEGER,
+                                    ADD COLUMN from_date TIMESTAMP;
         
         -- product_v
         
@@ -1969,7 +1970,8 @@ BEGIN
             -- match product_item with version
             
             EXECUTE 'UPDATE '||v_schema_name||'.product_item AS pi '
-                    ||'SET  version = pv.version_number '
+                    ||'SET  version = pv.version_number,  '
+                    ||'     from_date = pv.from_date '
                     ||'FROM '||v_schema_name||'.product_v  AS pv '
                     ||'WHERE    pv.id = pi.product ';
         
@@ -2026,7 +2028,7 @@ BEGIN
             EXECUTE 'INSERT INTO '||v_schema_name||'.product_v (id,id_discriminator,version_number,'
                     ||'from_date,holder_discriminator,holder,name,mandatory) '
                     ||'(SELECT  nextval(''public.product_v_seq'') AS id,p.id_discriminator AS id_discriminator, '
-                    ||'pi.version ,DATE_TRUNC(''second'',current_timestamp)::timestamp AS from_date, '
+                    ||'pi.version ,pi.from_date AS from_date, '
                     ||'p.id_discriminator AS holder_discriminator,p.id AS holder,a.code_type||'', ''||a.name AS name, FALSE '
                     ||'FROM '||v_schema_name||'.product p '
                     ||'JOIN '||v_schema_name||'.arcode a ON (p.code = a.id) '
@@ -2072,6 +2074,18 @@ BEGIN
                     ||'             AND t0.version = t1.version_number )) AS t2 '
                     ||'WHERE   pi.id = t2.pi_id ';
             
+            
+            -- update for product_v.version_number
+            
+		
+            EXECUTE	'UPDATE '||v_schema_name||'.product_v AS pv '
+                    ||'SET	    version_number = t.version '
+                    ||'FROM 	(SELECT id, '
+                    ||'					row_number() OVER (PARTITION BY holder ORDER BY id) AS version '
+                    ||'			FROM    '||v_schema_name||'.product_v '
+                    ||'			WHERE   from_date IS NULL ) AS t '
+                    ||'WHERE	pv.id = t.id ';
+
             
             -- delete product that do not have items 
             
@@ -2404,7 +2418,8 @@ BEGIN
         
         ALTER TABLE product_item        DROP COLUMN code,
                                         DROP COLUMN is_default,
-                                        DROP COLUMN version;
+                                        DROP COLUMN version,
+                                        DROP COLUMN from_date;
         
         
         -- proof_of_employment_document
