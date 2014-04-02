@@ -19,6 +19,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 @DiscriminatorValue("AutomateEndpoint")
 public interface SystemEndpoint extends CommunicationEndpoint {
+
     public enum EndpointType {
         automate, unassigned
     }

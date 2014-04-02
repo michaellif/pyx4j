@@ -21,6 +21,7 @@ import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.unit.shared.UniqueLong;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.VistaNamespace;
@@ -36,6 +37,12 @@ public class PmcDataModel extends MockDataModel<Pmc> {
     private OrganizationPoliciesNode orgNode;
 
     public PmcDataModel() {
+    }
+
+    private static String namespaceBase = String.valueOf(System.currentTimeMillis());
+
+    public static String uniqueNamespaceId() {
+        return "t" + UniqueLong.getInstance("Pmc").nextAsString() + "_" + namespaceBase;
     }
 
     @Override
@@ -59,6 +66,7 @@ public class PmcDataModel extends MockDataModel<Pmc> {
 
         final Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.namespace().setValue(NamespaceManager.getNamespace());
+        pmc.dnsName().setValue(pmc.namespace().getValue());
 
         pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
 

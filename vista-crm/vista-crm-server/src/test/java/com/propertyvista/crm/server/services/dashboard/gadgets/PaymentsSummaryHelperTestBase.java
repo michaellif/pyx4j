@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
+import com.pyx4j.unit.shared.UniqueInteger;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -143,11 +144,13 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         return paymentRecord;
     }
 
+    private static UniqueInteger midSingleton = new UniqueInteger("accountNumbers");
+
     private MerchantAccount makeMerchantAccount(String accountNumber) {
         MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
         merchantAccount.accountNumber().setValue(accountNumber);
+        merchantAccount.merchantTerminalId().setValue(String.valueOf(midSingleton.next()));
         Persistence.service().persist(merchantAccount);
         return merchantAccount;
     }
-
 }

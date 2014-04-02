@@ -54,6 +54,7 @@ import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;
 import com.propertyvista.test.mock.NotificationFacadeMock;
+import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
 
 public abstract class IntegrationTestBase extends VistaDBTestBase {
@@ -79,7 +80,7 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        NamespaceManager.setNamespace("t" + System.currentTimeMillis());
+        NamespaceManager.setNamespace(PmcDataModel.uniqueNamespaceId());
         VistaTestDBSetup.initNamespace();
 
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);

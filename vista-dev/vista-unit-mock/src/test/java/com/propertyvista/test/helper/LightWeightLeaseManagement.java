@@ -16,6 +16,7 @@ package com.propertyvista.test.helper;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.unit.shared.UniqueLong;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -31,22 +32,17 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class LightWeightLeaseManagement {
 
-    static long uniqueId = 0;
-
-    synchronized static String uniqueId() {
-        return String.valueOf(uniqueId++);
-    }
-
     public static Lease create(Status status) {
         Lease lease = EntityFactory.create(Lease.class);
 
         lease.status().setValue(status);
 
         lease.type().setValue(ARCode.Type.Residential);
-        lease.leaseId().setValue(uniqueId());
+        lease.leaseId().setValue(UniqueLong.getInstance("Lease").nextAsString());
         lease.integrationSystemId().setValue(IntegrationSystem.internal);
 
         BillingAccount billingAccount = EntityFactory.create(BillingAccount.class);
+        billingAccount.accountNumber().setValue(UniqueLong.getInstance("BillingAccount").nextAsString());
         lease.billingAccount().set(billingAccount);
         lease.billingAccount().billingPeriod().setValue(BillingPeriod.Monthly);
 
@@ -78,7 +74,7 @@ public class LightWeightLeaseManagement {
             for (LeaseTermTenant tenantInLease : term.version().tenants()) {
                 Customer customer = tenantInLease.leaseParticipant().customer();
                 Tenant tenant = EntityFactory.create(Tenant.class);
-                tenant.participantId().setValue(uniqueId());
+                tenant.participantId().setValue(UniqueLong.getInstance("Tenant").nextAsString());
                 tenant.lease().set(lease);
                 tenant.customer().set(customer);
                 Persistence.service().persist(customer);

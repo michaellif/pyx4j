@@ -64,7 +64,6 @@
             <artifactId>hsqldb</artifactId>
             <classifier>jdk6debug</classifier>
             <scope>test</scope>
-            <optional>true</optional>
         </dependency>
 
     </dependencies>

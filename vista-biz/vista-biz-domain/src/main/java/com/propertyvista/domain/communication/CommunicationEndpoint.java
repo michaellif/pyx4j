@@ -27,6 +27,7 @@ import com.pyx4j.entity.core.IPrimitive;
 @Inheritance
 @AbstractEntity
 public interface CommunicationEndpoint extends IEntity {
+
     @NotNull
     @ToString
     @Indexed
