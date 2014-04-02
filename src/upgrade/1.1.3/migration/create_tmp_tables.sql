@@ -19,6 +19,10 @@ CREATE TABLE _dba_.lease_application_legal_term AS
 (SELECT     title,body,signature_format,apply_to_role,order_id 
  FROM vista.lease_application_legal_term);
 
+CREATE TABLE _dba_.lease_agreement_confirmation_term AS
+(SELECT     title,body,signature_format,order_id 
+ FROM       vista.lease_agreement_confirmation_term );
+
 CREATE TABLE _dba_.lease_application_confirmation_term AS
 (SELECT     title,body,signature_format,apply_to_role,order_id 
  FROM       vista.lease_application_confirmation_term );
@@ -29,4 +33,7 @@ CREATE TABLE _dba_.restrictions_policy AS
 FROM    vista.restrictions_policy r
 JOIN    vista.province p ON (p.id = r.node)); 
  
-#pg_dump -U psql_dba -h localhost -O -t _dba_.email_template -t _dba_.lease_agreement_legal_term -t _dba_.lease_application_legal_term -t _dba_.lease_application_confirmation_term -t _dba_.restrictions_policy vista_trunk > insert_tmp_policies.sql
+#pg_dump -U psql_dba -h localhost -O -t _dba_.email_template \
+-t _dba_.lease_agreement_legal_term -t _dba_.lease_application_legal_term \
+-t _dba_.lease_agreement_confirmation_term -t _dba_.lease_application_confirmation_term \
+-t _dba_.restrictions_policy vista_trunk > insert_tmp_policies.sql

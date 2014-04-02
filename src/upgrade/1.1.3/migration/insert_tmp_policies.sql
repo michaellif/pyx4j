@@ -29,6 +29,18 @@ CREATE TABLE email_template (
 
 
 --
+-- Name: lease_agreement_confirmation_term; Type: TABLE; Schema: _dba_; Owner: -; Tablespace: 
+--
+
+CREATE TABLE lease_agreement_confirmation_term (
+    title character varying(500),
+    body character varying(48000),
+    signature_format character varying(50),
+    order_id integer
+);
+
+
+--
 -- Name: lease_agreement_legal_term; Type: TABLE; Schema: _dba_; Owner: -; Tablespace: 
 --
 
@@ -106,6 +118,16 @@ COPY email_template (order_in_policy, subject, use_header, use_footer, content, 
 20	${PortalLinks.CompanyName} - Your payment has been Processed	t	t	Dear ${Tenant.FirstName},<br/><br/>Thank you for submitting your payment.<br/><br/>Your payment of <b>${Payment.Amount}</b> was successfully processed on <b>${Payment.Date}</b> and your file has been updated accordingly.<br/><br/>Your Payment Identification Reference Number for this payment is:<br/><br/><div style="margin-left:80px">#<b>${Payment.ReferenceNumber}</b></div><br/><br/>You can review the status of your payment at anytime in your myCommunity portal <b>[[${PortalLinks.TenantPortalUrl}|here]]</b><br/><br/>Thank you for choosing ${PortalLinks.CompanyName}.	PaymentReceipt
 21	${PortalLinks.CompanyName} - Your payment has been Processed	t	t	Dear ${Tenant.FirstName},<br/><br/>Thank you for submitting your payment.<br/><br/>Your payment of <b>${Payment.Amount}</b> and your Web Payment Fee of <b>${Payment.ConvenienceFee}</b> were submitted successfully on <b>${Payment.Date}</b>. You will see two transaction lines for the payments above from your payment provider. The fee will appear as 'CCS*Web Payment Fee' on your credit card statement<br/><br/>Your Payment Identification Reference Number for these payments is:<br/><br/><div style="margin-left:80px">#<b>${Payment.ReferenceNumber}</b></div><br/><br/>You can review the status of your payment at anytime in your myCommunity portal <b>[[${PortalLinks.TenantPortalUrl}|here]]</b><br/><br/>Thank you for choosing ${PortalLinks.CompanyName}.	PaymentReceiptWithWebPaymentFee
 22	${PortalLinks.CompanyName} - YOUR PAYMENT WAS NOT PROCESSED	t	t	Dear ${Tenant.FirstName},<br/><br/>Your payment of <b>${Payment.Amount}</b> on <b>${Payment.Date}</b> was <b>not</b> successfully processed for the following reason:<br/><br/><div style="margin-left:80px"><b>${Payment.RejectReason}</b></div><br/><br/>Where applicable, an administrative fee has been added to your account for this payment reversal as per your agreement.<br/><br/><b>Please sign in to your myCommunity account [[${PortalLinks.TenantPortalUrl}|here]] to resubmit your payment to avoid any legal consequences.</b> <br/><br/>For your reference, your payment Reference number for this transaction is:<br/><br/><div style="margin-left:80px">#<b>${Payment.ReferenceNumber}</b></div><br/><br/>You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click <b>[[${PortalLinks.TenantPortalUrl}|here]]</b><br/><br/>Thank you for choosing ${PortalLinks.CompanyName}.	PaymentReturned
+\.
+
+
+--
+-- Data for Name: lease_agreement_confirmation_term; Type: TABLE DATA; Schema: _dba_; Owner: -
+--
+
+COPY lease_agreement_confirmation_term (title, body, signature_format, order_id) FROM stdin;
+Privacy Policy	By clicking the "Submit" button, I agree with the terms of the Privacy Policy <Link to Privacy Policy>	AgreeBox	0
+Digital Signature	Electronic signatures have the same legal effect as ink signatures on hard copies. By typing your name in the box below you are explicitly indicating that you have read and that you agree to terms and conditions of this Lease Agreement and the terms and conditions of the policy documents, and that you have signed them electronically.<br><br>By clicking "Submit", I understand and request that it will serve as my electronic signature for signing and binding of the Lease Agreement and that it will be legally upheld in a court of law.	FullName	1
 \.
 
 

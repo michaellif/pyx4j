@@ -179,6 +179,7 @@ BEGIN
         ALTER TABLE tenant_charge DROP CONSTRAINT tenant_charge_pk;
 
         
+        
         /**
         ***     ======================================================================================================
         ***
@@ -1283,7 +1284,10 @@ BEGIN
                                     ADD COLUMN deposit_lmr NUMERIC(18,2),
                                     ADD COLUMN deposit_move_in NUMERIC(18,2),
                                     ADD COLUMN deposit_security NUMERIC(18,2);
+                                    
+        -- temporary columnt for product catalog migration
         
+        ALTER TABLE product_item    ADD COLUMN version INTEGER;
         
         -- product_v
         
@@ -1650,6 +1654,14 @@ BEGIN
 				||'			p.id AS policy,t.title,t.body,t.signature_format,t.order_id '
 				||'FROM 	'||v_schema_name||'.lease_agreement_legal_policy p, '
 				||'			_dba_.lease_agreement_legal_term t )';
+                
+        -- lease_agreement_confirmation_term
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_agreement_confirmation_term(id,policy,title,body,signature_format,order_id) '
+				||'(SELECT 	nextval(''public.lease_agreement_confirmation_term_seq'') AS id, '
+				||'			p.id AS policy,t.title,t.body,t.signature_format,t.order_id '
+				||'FROM 	'||v_schema_name||'.lease_agreement_legal_policy p, '
+				||'			_dba_.lease_agreement_confirmation_term t )';
         
         -- lease_application_legal_policy
         
@@ -1952,6 +1964,15 @@ BEGIN
                     ||'SET  name = a.code_type||'', ''||a.name '
                     ||'FROM '||v_schema_name||'.arcode a '
                     ||'WHERE    a.id = pi.code ';
+                    
+            
+            -- match product_item with version
+            
+            EXECUTE 'UPDATE '||v_schema_name||'.product_item AS pi '
+                    ||'SET  version = pv.version_number '
+                    ||'FROM '||v_schema_name||'.product_v  AS pv '
+                    ||'WHERE    pv.id = pi.product ';
+        
             
         /*
             -- update of old product_v records 
@@ -2005,24 +2026,37 @@ BEGIN
             EXECUTE 'INSERT INTO '||v_schema_name||'.product_v (id,id_discriminator,version_number,'
                     ||'from_date,holder_discriminator,holder,name,mandatory) '
                     ||'(SELECT  nextval(''public.product_v_seq'') AS id,p.id_discriminator AS id_discriminator, '
-                    ||'1,DATE_TRUNC(''second'',current_timestamp)::timestamp AS from_date, '
+                    ||'pi.version ,DATE_TRUNC(''second'',current_timestamp)::timestamp AS from_date, '
                     ||'p.id_discriminator AS holder_discriminator,p.id AS holder,a.code_type||'', ''||a.name AS name, FALSE '
                     ||'FROM '||v_schema_name||'.product p '
                     ||'JOIN '||v_schema_name||'.arcode a ON (p.code = a.id) '
+                    ||'JOIN '||v_schema_name||'.product_item pi ON (pi.code = a.id) '
                     ||'WHERE    p.id NOT IN (SELECT DISTINCT holder FROM '||v_schema_name||'.product_v ) )';
-                
+                    
+            
+            EXECUTE 'UPDATE '||v_schema_name||'.product_v  AS pv '
+                    ||'SET  to_date = DATE_TRUNC(''second'',current_timestamp)::timestamp '
+                    ||'FROM     (SELECT     holder,MAX(version_number) AS max_version '
+                    ||'         FROM '||v_schema_name||'.product_v '
+                    ||'         GROUP BY holder ) AS t '
+                    ||'WHERE    pv.holder = t.holder '
+                    ||'AND      pv.version_number < t.max_version '
+                    ||'AND      to_date IS NULL ';
+                            
                 
             -- wondrously perverted update of product_item
         
             EXECUTE 'WITH   t0 AS   (SELECT     p.id AS p_id, p.catalog,p.code, '
                     ||'                         pv.id AS pv_id, p.default_catalog_item,'
-                    ||'                         pi.id AS pi_id, pi.code AS pi_code '
+                    ||'                         pi.id AS pi_id, pi.code AS pi_code, '
+                    ||'                         pi.version '
                     ||'             FROM        '||v_schema_name||'.product p '
                     ||'             JOIN        '||v_schema_name||'.product_v pv  ON (p.id = pv.holder) '
                     ||'             JOIN        '||v_schema_name||'.product_item pi ON (pv.id = pi.product) '
                     ||'             WHERE       p.id_discriminator = ''feature'' '
                     ||'             AND         p.code != pi.code), '
-                    ||'     t1 AS   (SELECT     p.id AS p_id,p.catalog,p.code,pv.id AS pv_id, p.default_catalog_item '
+                    ||'     t1 AS   (SELECT     p.id AS p_id,p.catalog,p.code,pv.id AS pv_id, '
+                    ||'                         p.default_catalog_item, pv.version_number  '
                     ||'             FROM        '||v_schema_name||'.product p '
                     ||'             JOIN        '||v_schema_name||'.product_v pv ON (p.id = pv.holder) '
                     ||'             WHERE       p.id_discriminator = ''feature'' '
@@ -2032,12 +2066,15 @@ BEGIN
                     ||'FROM    (SELECT      t0.pi_id, t1.pv_id  '
                     ||'         FROM        t0 '
                     ||'         JOIN        t1 '
-                    ||'ON (t0.catalog = t1.catalog AND t0.pi_code = t1.code AND t0.default_catalog_item = t1.default_catalog_item)) AS t2 '
+                    ||'         ON (t0.catalog = t1.catalog '
+                    ||'             AND t0.pi_code = t1.code '
+                    ||'             AND t0.default_catalog_item = t1.default_catalog_item '
+                    ||'             AND t0.version = t1.version_number )) AS t2 '
                     ||'WHERE   pi.id = t2.pi_id ';
             
             
             -- delete product that do not have items 
-            /*
+            
             EXECUTE 'DELETE FROM '||v_schema_name||'.product_v '
                     ||'WHERE    id NOT IN   (SELECT DISTINCT product '
                     ||'                     FROM    '||v_schema_name||'.product_item) '
@@ -2048,7 +2085,7 @@ BEGIN
                     ||'                     FROM    '||v_schema_name||'.product_v ) '
                     ||'AND      id_discriminator = ''feature'' ';
 
-            */
+            
             
             -- delete those rare rows that do not have a code still
 			
@@ -2366,7 +2403,8 @@ BEGIN
         -- product_item
         
         ALTER TABLE product_item        DROP COLUMN code,
-                                        DROP COLUMN is_default;
+                                        DROP COLUMN is_default,
+                                        DROP COLUMN version;
         
         
         -- proof_of_employment_document
