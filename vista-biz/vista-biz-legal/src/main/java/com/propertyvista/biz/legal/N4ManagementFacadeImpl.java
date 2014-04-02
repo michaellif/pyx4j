@@ -176,7 +176,6 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
             n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
             n4Letter.cancellationThreshold().setValue(new BigDecimal("0.00")); // TODO should be defined by user input
-            n4Letter.isActive().setValue(true);
             n4Letter.generatedOn().setValue(generationTime);
 
             n4Letter.file().blobKey().setValue(blob.getPrimaryKey());

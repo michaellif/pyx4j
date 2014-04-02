@@ -32,8 +32,6 @@ public interface N4LegalLetter extends LegalLetter {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> cancellationThreshold();
 
-    IPrimitive<Boolean> isActive();
-
     IPrimitive<LogicalDate> terminationDate();
 
 }

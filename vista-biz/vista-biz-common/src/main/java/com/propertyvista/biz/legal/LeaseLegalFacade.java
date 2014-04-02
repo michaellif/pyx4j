@@ -27,6 +27,9 @@ public interface LeaseLegalFacade {
 
     List<LegalStatus> getLegalStatusHistory(Lease leaseId);
 
+    void removeLegalStatus(LegalStatus legalStatusId);
+
+    // TODO this probably needs refactoring
     void setLegalStatus(Lease leaseId, LegalStatus.Status status, String details, String notes, CrmUser setBy, Date asOf, List<LegalLetter> attachedLetters);
 
 }

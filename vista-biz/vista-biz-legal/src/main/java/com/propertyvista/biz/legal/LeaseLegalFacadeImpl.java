@@ -27,7 +27,9 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
@@ -35,6 +37,25 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
+
+    private static final I18n i18n = I18n.get(LeaseLegalFacade.class);
+
+    @Override
+    public LegalStatus getCurrentLegalStatus(Lease leaseId) {
+        EntityQueryCriteria<LegalStatus> criteria = EntityQueryCriteria.create(LegalStatus.class);
+        criteria.eq(criteria.proto().lease(), leaseId.getPrimaryKey());
+        criteria.desc(criteria.proto().setOn());
+        LegalStatus status = Persistence.service().retrieve(criteria);
+        if (status != null) {
+            Persistence.ensureRetrieve(status.setBy(), AttachLevel.Attached);
+        } else {
+            status = EntityFactory.create(LegalStatus.class);
+            status.status().setValue(Status.None);
+            status.details().setValue(i18n.tr("Computed Automatically"));
+        }
+
+        return status;
+    }
 
     @Override
     public List<LegalStatus> getLegalStatusHistory(Lease leaseId) {
@@ -49,6 +70,20 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
             statusesHistory.add(getCurrentLegalStatus(leaseId));
         }
         return statusesHistory;
+    }
+
+    @Override
+    public void removeLegalStatus(LegalStatus legalStatusId) {
+        if (legalStatusId.getPrimaryKey() == null) {
+            return;
+        }
+        EntityQueryCriteria<LegalLetter> lettersCriteria = EntityQueryCriteria.create(LegalLetter.class);
+        lettersCriteria.eq(lettersCriteria.proto().status(), legalStatusId);
+        for (LegalLetter letter : Persistence.service().query(lettersCriteria)) {
+            Persistence.service().delete(LegalLetterBlob.class, letter.file().blobKey().getValue());
+        }
+        Persistence.service().delete(lettersCriteria);
+        Persistence.service().delete(LegalStatus.class, legalStatusId.getPrimaryKey());
     }
 
     @Override
@@ -70,22 +105,6 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
                 Persistence.service().persist(letter);
             }
         }
-    }
-
-    @Override
-    public LegalStatus getCurrentLegalStatus(Lease leaseId) {
-        EntityQueryCriteria<LegalStatus> criteria = EntityQueryCriteria.create(LegalStatus.class);
-        criteria.eq(criteria.proto().lease(), leaseId.getPrimaryKey());
-        criteria.desc(criteria.proto().setOn());
-        LegalStatus status = Persistence.service().retrieve(criteria);
-        if (status != null) {
-            Persistence.ensureRetrieve(status.setBy(), AttachLevel.Attached);
-        } else {
-            status = EntityFactory.create(LegalStatus.class);
-            status.status().setValue(Status.None);
-        }
-
-        return status;
     }
 
 }
