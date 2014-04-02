@@ -1617,13 +1617,15 @@ BEGIN
         
         EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.email_template';
         
+        
         EXECUTE 'INSERT INTO '||v_schema_name||'.email_template '
                 ||'(id,policy,order_in_policy,subject,use_header,use_footer,content,template_type) '
                 ||'(SELECT nextval(''public.email_template_seq'') AS id, p.id AS policy, '
                 ||' t.order_in_policy,t.subject,t.use_header,t.use_footer,t.content,t.template_type '
                 ||'FROM     '||v_schema_name||'.email_templates_policy  AS p, '
                 ||'         _dba_.email_template AS t ) ';
-            
+        
+        
         -- insurance_certificate_scan
         
         EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_scan AS s '
@@ -2592,11 +2594,12 @@ BEGIN
         ALTER TABLE deposit_policy ADD CONSTRAINT deposit_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE email_template ADD CONSTRAINT email_template_template_type_e_ck 
-                CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 'ApplicationCreatedGuarantor', 
-                'ApplicationDeclined', 'AutoPaySetupConfirmation', 'MaintenanceRequestCancelled', 'MaintenanceRequestCompleted', 'MaintenanceRequestCreatedPMC', 
-                'MaintenanceRequestCreatedTenant', 'MaintenanceRequestEntryNotice', 'MaintenanceRequestUpdated', 'OneTimePaymentSubmitted', 'PasswordRetrievalCrm', 
-                'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 'PaymentReceipt', 'PaymentReceiptWithWebPaymentFee', 'PaymentReturned', 'ProspectWelcome', 
-                'TenantInvitation'));
+            CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 
+            'ApplicationCreatedGuarantor', 'ApplicationDeclined', 'AutoPayCancellation', 'AutoPayChanges', 'AutoPaySetupConfirmation', 
+            'MaintenanceRequestCancelled', 'MaintenanceRequestCompleted', 'MaintenanceRequestCreatedPMC', 'MaintenanceRequestCreatedTenant', 
+            'MaintenanceRequestEntryNotice', 'MaintenanceRequestUpdated', 'OneTimePaymentSubmitted', 'PasswordRetrievalCrm', 
+            'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 'PaymentReceipt', 'PaymentReceiptWithWebPaymentFee', 
+            'PaymentReturned', 'ProspectWelcome', 'TenantInvitation'));
         ALTER TABLE email_templates_policy ADD CONSTRAINT email_templates_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE emergency_contact ADD CONSTRAINT emergency_contact_relationship_e_ck 
