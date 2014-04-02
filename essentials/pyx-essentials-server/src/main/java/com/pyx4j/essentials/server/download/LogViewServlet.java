@@ -22,15 +22,23 @@ package com.pyx4j.essentials.server.download;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -44,6 +52,8 @@ import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.Context;
 
@@ -74,6 +84,10 @@ public class LogViewServlet extends HttpServlet {
         } else {
             this.rootDirectory = new File(containerHome, root);
         }
+    }
+
+    protected boolean searchEnabled() {
+        return true;
     }
 
     private void verifyPath(String path) throws ServletException {
@@ -117,23 +131,29 @@ public class LogViewServlet extends HttpServlet {
         verifyPath(path);
 
         if (path.endsWith("/")) {
-            listDirectory(path, urlPrefix, response);
+            listDirectory(request, path, urlPrefix, response);
         } else {
             sendFile(path, response);
         }
     }
 
-    private void listDirectory(String path, String urlPrefix, HttpServletResponse response) throws ServletException, IOException {
+    private void listDirectory(HttpServletRequest request, String path, String urlPrefix, HttpServletResponse response) throws ServletException, IOException {
         File dir = new File(rootDirectory, path);
         if (!dir.isDirectory()) {
             throw new ServletException("No such directory: " + dir);
         }
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+        out.println("<!DOCTYPE html>");
         out.println("<html><head><title>LogView</title>");
         out.println("<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">");
         out.println("</head>");
         out.println("<body>");
+
+        if (searchEnabled()) {
+            searchForm(request, out);
+        }
+
         out.println("<h1> Index of ");
         out.println(dir.getAbsolutePath());
         out.println("</h1>");
@@ -148,7 +168,12 @@ public class LogViewServlet extends HttpServlet {
             out.println("</td><td>-</td></tr>");
         }
 
-        File files[] = dir.listFiles();
+        File files[];
+        if (searchEnabled()) {
+            files = searchFile(request, dir);
+        } else {
+            files = dir.listFiles();
+        }
         List<File> filesSorted = Arrays.asList(files);
 
         Comparator<File> fileByNameComparator = new Comparator<File>() {
@@ -197,6 +222,180 @@ public class LogViewServlet extends HttpServlet {
         out.println("</body>");
         out.println("</html>");
 
+    }
+
+    protected File[] searchFile(HttpServletRequest request, File dir) {
+        final String text = request.getParameter("text");
+        final Time fromTime = timeValue(dateValue(request, "ft", "HH:mm"));
+        final Time toTime = timeValue(dateValue(request, "tt", "HH:mm"));
+
+        final Date fromDate = datePlusTime(dateValue(request, "fd", "yyyy-MM-dd"), fromTime, false);
+        final Date toDate = datePlusTime(dateValue(request, "td", "yyyy-MM-dd"), toTime, true);
+
+        final Calendar fromTimeC = new GregorianCalendar();
+        if (fromTime != null) {
+            DateUtils.setTime(fromTimeC, fromTime);
+        }
+
+        final Calendar toTimeC = new GregorianCalendar();
+        if (toTime != null) {
+            DateUtils.setTime(toTimeC, toTime);
+        }
+
+        return dir.listFiles(new FileFilter() {
+
+            @Override
+            public boolean accept(File file) {
+                Date fileDate = new Date(file.lastModified());
+                Calendar fileTimeC = new GregorianCalendar();
+                DateUtils.setTime(fileTimeC, new Time(fileDate.getTime()));
+
+                if (fromDate != null) {
+                    if (fileDate.before(fromDate)) {
+                        return false;
+                    }
+                } else if (fromTime != null) {
+                    if (fileTimeC.before(fromTimeC)) {
+                        return false;
+                    }
+                }
+
+                if (toDate != null) {
+                    if (fileDate.after(toDate)) {
+                        return false;
+                    }
+                } else if (toTime != null) {
+                    if (fileTimeC.after(toTimeC)) {
+                        return false;
+                    }
+                }
+
+                if (file.isDirectory()) {
+                    return true;
+                } else if (CommonsStringUtils.isStringSet(text)) {
+                    return contains(file, text);
+                } else {
+                    return true;
+                }
+            }
+        });
+
+    }
+
+    protected boolean contains(File file, String text) {
+        Scanner scanner;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+        try {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.contains(text)) {
+                    return true;
+                }
+            }
+        } finally {
+            scanner.close();
+        }
+        return false;
+    }
+
+    private Date datePlusTime(Date date, Time time, boolean nextDay) {
+        if (date == null) {
+            return null;
+        }
+
+        if (time == null) {
+            if (nextDay) {
+                return DateUtils.dayEnd(date);
+            } else {
+                return date;
+            }
+        } else {
+            Calendar c = new GregorianCalendar();
+            c.setTime(date);
+            DateUtils.setTime(c, time);
+            return c.getTime();
+        }
+    }
+
+    private Time timeValue(Date date) {
+        if (date == null) {
+            return null;
+        } else {
+            return new Time(date.getTime());
+        }
+    }
+
+    private Date dateValue(HttpServletRequest request, String name, String format) {
+        String text = request.getParameter(name);
+        if (text == null) {
+            return null;
+        } else {
+            Date date;
+            try {
+                date = new SimpleDateFormat(format, Locale.ENGLISH).parse(text.trim());
+            } catch (ParseException e1) {
+                try {
+                    date = DateUtils.detectDateformat(text.trim());
+                } catch (RuntimeException e2) {
+                    return null;
+                }
+            }
+            return date;
+        }
+    }
+
+    protected void searchForm(HttpServletRequest request, PrintWriter out) {
+        out.println("<form method=\"get\">");
+        out.println("Search File Date From:<input name=\"fd\" placeholder=\"yyyy-MM-dd\" type=\"date\" value=\"" + dateValue(request, "fd") + "\" />");
+        out.println("<input name=\"ft\" placeholder=\"HH:mm\" type=\"time\" value=\"" + timeValue(request, "ft") + "\" />");
+        out.println(" To:<input name=\"td\" placeholder=\"yyyy-MM-dd\" type=\"date\" value=\"" + dateValue(request, "td") + "\" />");
+        out.println("<input name=\"tt\" placeholder=\"HH:mm\" type=\"time\" value=\"" + timeValue(request, "tt") + "\" />");
+        out.println(" Containing:<input name=\"text\" type=\"text\" value=\"" + textValue(request) + "\" />");
+        out.println("<input type=\"submit\" value=\"Submit\" />");
+        out.println("</form>");
+    }
+
+    private String timeValue(HttpServletRequest request, String name) {
+        String text = request.getParameter(name);
+        if (text == null) {
+            return "";
+        } else {
+            Date date;
+            try {
+                date = new SimpleDateFormat("HH:mm", Locale.ENGLISH).parse(text.trim());
+            } catch (ParseException e) {
+                return "";
+            }
+            return HtmlUtils.escapeText(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
+        }
+    }
+
+    private String dateValue(HttpServletRequest request, String name) {
+        String text = request.getParameter(name);
+        if (text == null) {
+            return "";
+        } else {
+            Date date;
+            try {
+                date = DateUtils.detectDateformat(text.trim());
+            } catch (RuntimeException e) {
+                return "";
+            }
+            return HtmlUtils.escapeText(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(date));
+        }
+    }
+
+    private String textValue(HttpServletRequest request) {
+        String text = request.getParameter("text");
+        if (text == null) {
+            return "";
+        } else {
+            return HtmlUtils.escapeText(text);
+        }
     }
 
     private String formatSize(long length) {
