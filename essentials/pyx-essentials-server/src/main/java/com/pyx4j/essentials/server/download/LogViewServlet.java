@@ -168,7 +168,7 @@ public class LogViewServlet extends HttpServlet {
         out.println("<tr><th></th><th align=\"left\">Name</th><th align=\"left\">Last Modified</th><th align=\"right\">Size</th></tr>");
 
         if (path.length() != 1) {
-            out.println("<tr><td>");
+            out.println("<tr><td></td><td>");
             out.println("<a href=\"../\">..</a>");
             out.println("</td><td>-</td></tr>");
         }
