@@ -102,4 +102,9 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         new DirectDebitPostProcessor().processDirectDebitRecords(executionMonitor);
     }
 
+    @Override
+    public void heathMonitor(ExecutionMonitor executionMonitor) {
+        new PaymentHeathMonitor().heathMonitor(executionMonitor);
+    }
+
 }

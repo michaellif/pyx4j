@@ -54,4 +54,6 @@ public interface PaymentProcessFacade {
     Integer receiveBmoFiles(ExecutionMonitor executionMonitor);
 
     void processDirectDebitRecords(ExecutionMonitor executionMonitor);
+
+    void heathMonitor(ExecutionMonitor executionMonitor);
 }
