@@ -71,11 +71,19 @@ class SMTPMailUtils {
         return filtered;
     }
 
+    static InternetAddress newInternetAddress(String email) throws AddressException {
+        try {
+            return new InternetAddress(email.trim());
+        } catch (AddressException e) {
+            throw new AddressException("email [" + email.trim() + "] has error:" + e.getMessage());
+        }
+    }
+
     static InternetAddress email(String email) throws AddressException {
         if (email == null) {
             return null;
         }
-        return new InternetAddress(email.trim());
+        return newInternetAddress(email);
     }
 
     static List<InternetAddress> emails(Collection<String> emails) throws AddressException {
@@ -84,7 +92,7 @@ class SMTPMailUtils {
         }
         List<InternetAddress> addreses = new ArrayList<>();
         for (String email : emails) {
-            addreses.add(new InternetAddress(email.trim()));
+            addreses.add(newInternetAddress(email));
         }
         return addreses;
     }
