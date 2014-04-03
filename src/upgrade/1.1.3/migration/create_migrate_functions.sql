@@ -2123,7 +2123,7 @@ BEGIN
                     ||'AND      t0.to_date IS NOT NULL ';
               
             -- insert on product_v$features
-        
+            /*
             EXECUTE 'INSERT INTO '||v_schema_name||'.product_v$features (id,owner,value_discriminator,value) '
                     ||'(SELECT  nextval(''public.product_v$features_seq'') AS id, s.id AS owner, '
                     ||'         f.id_discriminator AS value_discriminator,f.id AS value '
@@ -2139,8 +2139,26 @@ BEGIN
                     ||'         AND         id NOT IN (SELECT DISTINCT value FROM '||v_schema_name||'.product_v$features)) AS f '
                     ||'ON       (s.default_catalog_item = f.default_catalog_item ))';
                 
-		
+            */
             
+            
+            EXECUTE 'INSERT INTO '||v_schema_name||'.product_v$features (id,owner,value_discriminator,value) '
+                    ||'(WITH t AS ( SELECT  pf.owner, pf.value, '
+                    ||'                     p.default_catalog_item, a.code_type '
+                    ||'             FROM    '||v_schema_name||'.product p  '
+                    ||'             JOIN    '||v_schema_name||'.product_v$features pf ON (p.id = pf.value) '
+                    ||'             JOIN    '||v_schema_name||'.arcode a ON (a.id = p.code)), '
+                    ||'     t1 AS ( SELECT  p.id AS value, p.id_discriminator, '
+                    ||'                     p.default_catalog_item, a.code_type '
+                    ||'             FROM    '||v_schema_name||'.product p '
+                    ||'             JOIN    '||v_schema_name||'.arcode a ON (a.id = p.code) '
+                    ||'             WHERE   p.id_discriminator = ''feature'' '
+                    ||'             AND p.id NOT IN (SELECT DISTINCT value FROM '||v_schema_name||'.product_v$features)) '        
+                    ||'SELECT   nextval(''public.product_v$features_seq'') AS id, t.owner, '
+                    ||'         t1.id_discriminator AS value_discriminator,t1.value '
+                    ||'FROM t '
+                    ||'JOIN t1 ON (t.default_catalog_item = t1.default_catalog_item '
+                    ||'             AND t.code_type = t1.code_type)) ';
 			
             -- update product_v with deposits
 		
