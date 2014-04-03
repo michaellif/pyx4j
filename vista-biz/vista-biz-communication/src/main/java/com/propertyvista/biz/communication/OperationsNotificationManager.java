@@ -64,7 +64,7 @@ public class OperationsNotificationManager {
     public static MailMessage createInvalidDirectDebitReceivedEmail(DirectDebitRecord paymentRecord) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
-        email.setTo("leonard@propertyvista.com, support@propertyvista.com");
+        email.addToList("leonard@propertyvista.com, support@propertyvista.com");
         email.setSubject(i18n.tr("Invalid Direct Debit Received"));
 
         MessageTemplate template = new MessageTemplate();

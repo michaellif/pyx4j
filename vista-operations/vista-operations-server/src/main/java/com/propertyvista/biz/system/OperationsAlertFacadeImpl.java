@@ -72,7 +72,7 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
 
                 if (!ServerSideFactory.create(VistaSystemFacade.class).isCommunicationsDisabled()) {
                     MailMessage m = new MailMessage();
-                    m.setTo("support_team@propertyvista.com,support-payments@propertyvista.com");
+                    m.addToList("support_team@propertyvista.com,support-payments@propertyvista.com");
                     m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
                     m.setSubject("Vista Operations Alert");
                     m.setTextBody(details);
