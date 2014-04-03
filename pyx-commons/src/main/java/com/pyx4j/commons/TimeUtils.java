@@ -138,11 +138,15 @@ public class TimeUtils {
         timeUnits.put("minutes:minute:min", Consts.MIN2SEC);
         timeUnits.put("hours:hour", Consts.HOURS2SEC);
         timeUnits.put("days:day", Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("weeks:week", 7 * Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("years:year", 365 * Consts.DAY2HOURS * Consts.HOURS2SEC);
 
         timeUnits.put("s", 1);
         timeUnits.put("m", Consts.MIN2SEC);
         timeUnits.put("h", Consts.HOURS2SEC);
         timeUnits.put("d", Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("w", 7 * Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("y", 365 * Consts.DAY2HOURS * Consts.HOURS2SEC);
         int seconds = 0;
 
         Collection<String> texts = SimpleRegExp.matches(value, "\\d+\\s*[a-zA-Z]*\\s*");
@@ -171,6 +175,7 @@ public class TimeUtils {
 
     public static String durationFormatSeconds(int seconds) {
         Map<String, Integer> timeUnits = new LinkedHashMap<String, Integer>();
+        timeUnits.put("years:year", 365 * Consts.DAY2HOURS * Consts.HOURS2SEC);
         timeUnits.put("month:months", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
         timeUnits.put("day:days", Consts.DAY2HOURS * Consts.HOURS2SEC);
         timeUnits.put("hour:hours", Consts.HOURS2SEC);
