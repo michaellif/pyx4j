@@ -90,7 +90,7 @@ class PaymentHeathMonitor {
             if (count > 0) {
                 criteria.asc(criteria.proto().padBatch().padFile().sent());
                 FundsTransferRecord instance = Persistence.service().retrieve(criteria);
-                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are {0} FundsTransferRecord(s) withut Reconciliation)", count);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are {0} FundsTransferRecord(s) withut Reconciliation", count);
                 executionMonitor.addFailedEvent("FundsTransferRecord", instance.amount().getValue());
             }
         }
