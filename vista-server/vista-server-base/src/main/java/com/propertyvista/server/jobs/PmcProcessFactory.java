@@ -114,7 +114,7 @@ public class PmcProcessFactory {
         case vistaCaleonReport:
             return new VistaBusinessCaledonReportProcess();
         case vistaHeathMonitor:
-
+            return new VistaHeathMonitorProcess();
         case cleanup:
             return new CleanupPmcProcess();
         case updateArrears:

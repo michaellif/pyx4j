@@ -31,6 +31,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -129,9 +130,9 @@ class VistaBusinessStatsReport {
         EntityReportFormatter<VistaBusinessStatsPmcModel> er = new EntityReportFormatter<VistaBusinessStatsPmcModel>(VistaBusinessStatsPmcModel.class);
         VistaBusinessStatsPmcModel data = EntityFactory.create(VistaBusinessStatsPmcModel.class);
 
-        Date reportSince = DateUtils.addDays(new Date(), -7);
+        Date reportSince = DateUtils.addDays(SystemDateManager.getDate(), -7);
 
-        Date monthlyPeriod = DateUtils.addMonths(new Date(), -1);
+        Date monthlyPeriod = DateUtils.addMonths(SystemDateManager.getDate(), -1);
 
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         data.name().setValue(pmc.name().getStringView());

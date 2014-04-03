@@ -104,7 +104,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public void heathMonitor(ExecutionMonitor executionMonitor) {
-        new PaymentHeathMonitor().heathMonitor(executionMonitor);
+        new PaymentHeathMonitor(executionMonitor).heathMonitor();
     }
 
 }
