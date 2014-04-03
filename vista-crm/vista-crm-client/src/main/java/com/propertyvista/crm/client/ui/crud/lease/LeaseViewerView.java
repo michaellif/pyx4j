@@ -33,7 +33,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.LegalStatusDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -75,11 +74,7 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void onInsuredTenantClicked(Tenant tenantId);
 
-        void setLegalStatus();
-
-        void clearLegalStatus();
-
-        void issueN4(N4BatchRequestDTO n4GenerationQuery);
+        void issueN4(N4BatchRequestDTO n4GenerationQuery); // TODO move this to LegalStateVisor
 
         void viewApplication();
 
@@ -90,6 +85,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void downloadAgreementForSigning();
 
         void signingProgressOrUploadAgreement();
+
+        void legalState();
 
     }
 
@@ -107,5 +104,4 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
     void reportCancelNoticeFailed(UserRuntimeException caught);
 
-    void requestNewLegalStatus(AsyncCallback<LegalStatusDTO> legalStatusUpadate);
 }

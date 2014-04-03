@@ -45,6 +45,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.billing.bill.BillListerController;
 import com.propertyvista.crm.client.activity.crud.lease.agreement.LeaseAgreementDocumentSigningController;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
+import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateController;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
@@ -60,7 +61,6 @@ import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudServi
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -71,7 +71,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.LegalStatusDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -350,30 +349,14 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void setLegalStatus() {
-        ((LeaseViewerView) getView()).requestNewLegalStatus(new DefaultAsyncCallback<LegalStatusDTO>() {
+    public void legalState() {
+        new LeaseLegalStateController(this.getView(), EntityFactory.createIdentityStub(Lease.class, getEntityId())) {
             @Override
-            public void onSuccess(LegalStatusDTO result) {
-                ((LeaseViewerCrudService) getService()).setLegalStatus(new DefaultAsyncCallback<VoidSerializable>() {
-                    @Override
-                    public void onSuccess(VoidSerializable result) {
-                        refresh();
-                    }
-                }, EntityFactory.createIdentityStub(Lease.class, getEntityId()), result);
-            }
-        });
-    }
-
-    @Override
-    public void clearLegalStatus() {
-        final LegalStatusDTO status = EntityFactory.create(LegalStatusDTO.class);
-        status.status().setValue(Status.None);
-        ((LeaseViewerCrudService) getService()).setLegalStatus(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                refresh();
-            }
-        }, EntityFactory.createIdentityStub(Lease.class, getEntityId()), status);
+            public void hide() {
+                super.hide();
+                populate(); // refresh legal status (well, it's crude, but I'm lazy right now)
+            };
+        }.show();
     }
 
     @Override

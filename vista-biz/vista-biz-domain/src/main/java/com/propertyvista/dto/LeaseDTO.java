@@ -61,8 +61,6 @@ public interface LeaseDTO extends Lease {
 
     IPrimitive<String> currentLegalStatus();
 
-    IList<LegalStatusDTO> legalStatusHistory();
-
     @Editor(type = EditorType.label)
     IPrimitive<Boolean> isUnitReserved();
 

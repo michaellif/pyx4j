@@ -54,6 +54,8 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.AgreementInkSignatures;
@@ -65,6 +67,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.LegalStatusDTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
@@ -116,6 +119,8 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         }
 
         to.isMoveOutWithinNextBillingCycle().setValue(ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(in));
+
+        loadcurrentLegalStatus(to);
     }
 
     @Override
@@ -286,8 +291,29 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4BatchRequestDTO n4GenerationQuery) {
-        // TODO implement this 
+    public void getLegalState(AsyncCallback<LeaseLegalStateDTO> callback, Lease leaseId) {
+        LeaseLegalStateDTO legalState = EntityFactory.create(LeaseLegalStateDTO.class);
+        LegalStatus current = ServerSideFactory.create(LeaseLegalFacade.class).getCurrentLegalStatus(leaseId);
+        legalState.current().set(toDto(current));
+
+        List<LegalStatus> history = ServerSideFactory.create(LeaseLegalFacade.class).getLegalStatusHistory(leaseId);
+        for (LegalStatus status : history) {
+
+            legalState.historical().add(toDto(status));
+        }
+
+        callback.onSuccess(legalState);
+    }
+
+    private LegalStatusDTO toDto(LegalStatus status) {
+        LegalStatusDTO dto = status.duplicate(LegalStatusDTO.class);
+
+        EntityQueryCriteria<LegalLetter> criteria = EntityQueryCriteria.create(LegalLetter.class);
+        criteria.eq(criteria.proto().lease(), status.lease());
+        criteria.eq(criteria.proto().status(), status);
+        dto.letters().addAll(Persistence.service().query(criteria));
+
+        return dto;
     }
 
     @Override
@@ -303,6 +329,18 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         );//@formatter:on
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void deleteLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatus statusId) {
+        ServerSideFactory.create(LeaseLegalFacade.class).removeLegalStatus(statusId);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4BatchRequestDTO n4GenerationQuery) {
+        // TODO implement this 
     }
 
     @Override
@@ -407,6 +445,14 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Persistence.service().commit();
 
         callback.onSuccess(null);
+    }
+
+    private void loadcurrentLegalStatus(LeaseDTO lease) {
+        LegalStatus current = ServerSideFactory.create(LeaseLegalFacade.class).getCurrentLegalStatus(lease.<LeaseDTO> createIdentityStub());
+        if (current.status().getValue() != LegalStatus.Status.None) {
+            lease.currentLegalStatus().setValue(SimpleMessageFormat.format("{0} ({1})", current.status().getValue().toString(), current.details().getValue()));
+        }
+
     }
 
 }

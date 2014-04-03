@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.crm.client.ui.crud.lease.common.LegalStatusForm;
+import com.propertyvista.crm.client.ui.crud.lease.legal.LegalStatusForm;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.dto.LegalStatusDTO;
 

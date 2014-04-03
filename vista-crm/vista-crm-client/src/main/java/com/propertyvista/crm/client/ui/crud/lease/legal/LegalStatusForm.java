@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.common;
+package com.propertyvista.crm.client.ui.crud.lease.legal;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -53,7 +53,7 @@ public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().setBy().name())).customLabel(i18n.tr("Set By")).componentWidth("200px").build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().details())).componentWidth("200px").build());
 
-        panel.setH1(++row, 0, 2, i18n.tr("Attached Letters"));
+        panel.setH2(++row, 0, 2, i18n.tr("Attached Letters"));
         if (uploadable) {
             panel.setWidget(++row, 0, 2, inject(proto().letters(), new UploadableLegalLetterFolder()));
         } else {

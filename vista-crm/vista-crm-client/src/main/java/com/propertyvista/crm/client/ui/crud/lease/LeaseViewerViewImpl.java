@@ -22,7 +22,6 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -81,7 +80,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.LegalStatusDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -814,16 +812,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
     }
 
-    @Override
-    public void requestNewLegalStatus(final AsyncCallback<LegalStatusDTO> legalStatusUpadate) {
-        new LegalStatusDialog() {
-            @Override
-            public void onSetLegalStatus(LegalStatusDTO legalStatus) {
-                legalStatusUpadate.onSuccess(legalStatus);
-            }
-        }.show();
-    }
-
     private void issueN4() {
         new N4GenerationQueryDialog() {
             @Override
@@ -866,22 +854,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private void addLegalStatusMenu() {
         Button legalStatusButton = new Button(i18n.tr("Legal"));
-        ButtonMenuBar legalStatusMenu = legalStatusButton.createMenu();
-        legalStatusButton.setMenu(legalStatusMenu);
-        MenuItem setLegalStatus = new MenuItem(i18n.tr("Set Legal Status"), new Command() {
+        legalStatusButton.setCommand(new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).setLegalStatus();
+                ((LeaseViewerView.Presenter) getPresenter()).legalState();
             }
         });
-        legalStatusMenu.addItem(setLegalStatus);
-        MenuItem clearLegalStatus = new MenuItem(i18n.tr("Clear Legal Status"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).clearLegalStatus();
-            }
-        });
-        legalStatusMenu.addItem(clearLegalStatus);
         addHeaderToolbarItem(legalStatusButton);
     }
 
