@@ -43,6 +43,8 @@ import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
@@ -190,5 +192,12 @@ public class CrmSite extends VistaSite {
      */
     private boolean hasVistaSupportCookie() {
         return CommonsStringUtils.isStringSet(Cookies.getCookie(DeploymentConsts.vistaEmployeeCookie));
+    }
+
+    @Override
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
+        NotificationAppPlace place = new CrmSiteMap.RuntimeError();
+        place.setNotification(notification);
+        return place;
     }
 }

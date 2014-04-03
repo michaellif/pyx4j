@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -63,8 +64,7 @@ public class RuntimeErrorViewImpl extends VerticalPanel implements RuntimeErrorV
         Button back = new Button("OK", new Command() {
             @Override
             public void execute() {
-                // TODO Auto-generated method stub
-                presenter.backToOrigin();
+                History.back();
             }
         });
         content.setWidget(++row, 0, back);

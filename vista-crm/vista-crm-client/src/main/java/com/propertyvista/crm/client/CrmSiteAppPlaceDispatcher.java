@@ -13,14 +13,11 @@
  */
 package com.propertyvista.crm.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.NotificationAppPlace;
-import com.pyx4j.site.shared.domain.Notification;
+import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -28,36 +25,32 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
-    protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
+    protected boolean isPlaceNavigable(AppPlace targetPlace) {
         // TODO security for places
-        callback.onSuccess(Boolean.TRUE);
+        return true;
     }
 
     @Override
-    protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
+    protected AppPlace obtainDefaultPlace() {
         if (ClientContext.isAuthenticated()) {
-            callback.onSuccess(CrmSite.getSystemDashboardPlace());
+            return CrmSite.getSystemDashboardPlace();
         } else {
-            callback.onSuccess(new CrmSiteMap.Login());
+            return new CrmSiteMap.Login();
         }
     }
 
     @Override
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
+        if (!(newPlace instanceof PublicPlace) && !ClientContext.isAuthenticated()) {
+            return new CrmSiteMap.Login();
+        }
         if (SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequired)) {
             return new CrmSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
             return new CrmSiteMap.Account.AccountRecoveryOptionsRequired();
         } else {
-            return null;
+            return newPlace;
         }
-    }
-
-    @Override
-    public NotificationAppPlace getNotificationPlace(Notification notification) {
-        NotificationAppPlace place = new CrmSiteMap.RuntimeError();
-        place.setNotification(notification);
-        return place;
     }
 
 }

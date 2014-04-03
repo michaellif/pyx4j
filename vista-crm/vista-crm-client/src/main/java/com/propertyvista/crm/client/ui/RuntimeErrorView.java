@@ -23,7 +23,7 @@ public interface RuntimeErrorView extends IsWidget, IsView {
     void setPresenter(Presenter presenter);
 
     public interface Presenter {
-        void backToOrigin();
+
     }
 
     public void setError(Notification error);

@@ -23,6 +23,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.SingletonViewFactory;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
@@ -88,4 +90,8 @@ public class OperationsSite extends VistaSite {
         }
     }
 
+    @Override
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
+        return null;
+    }
 }

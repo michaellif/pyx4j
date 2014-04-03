@@ -17,7 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -41,8 +40,4 @@ public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErr
         container.setWidget(view);
     }
 
-    @Override
-    public void backToOrigin() {
-        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
-    }
 }

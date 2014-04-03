@@ -13,15 +13,12 @@
  */
 package com.propertyvista.portal.resident;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.NotificationAppPlace;
-import com.pyx4j.site.shared.domain.Notification;
+import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
@@ -34,41 +31,38 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     private static final I18n i18n = I18n.get(ResidentPortalSiteDispatcher.class);
 
     @Override
-    public NotificationAppPlace getNotificationPlace(Notification notification) {
-        NotificationAppPlace place = new PortalSiteMap.NotificationPlace();
-        place.setNotification(notification);
-        return place;
-    }
-
-    @Override
-    protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
+    protected AppPlace obtainDefaultPlace() {
         if (ClientContext.isAuthenticated()) {
-            callback.onSuccess(new ResidentPortalSiteMap.Dashboard());
+            return new ResidentPortalSiteMap.Dashboard();
         } else {
-            callback.onSuccess(new PortalSiteMap.Login());
+            return new PortalSiteMap.Login();
         }
     }
 
     @Override
-    protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
+    protected boolean isPlaceNavigable(AppPlace targetPlace) {
         if (targetPlace instanceof ResidentPortalSiteMap.LeaseContextSelection) {
-            callback.onSuccess(SecurityController.checkAnyBehavior(PortalResidentBehavior.LeaseSelectionRequired, PortalResidentBehavior.HasMultipleLeases));
+            return SecurityController.checkAnyBehavior(PortalResidentBehavior.LeaseSelectionRequired, PortalResidentBehavior.HasMultipleLeases);
         } else {
-            callback.onSuccess(Boolean.TRUE);
+            return true;
         }
     }
 
     @Override
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
-        if (newPlace instanceof PortalSiteMap.NotificationPlace) {
-            return null;
-        } else if (SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
+        if (!(newPlace instanceof PublicPlace) && !ClientContext.isAuthenticated()) {
+            return new PortalSiteMap.Login();
+        }
+        if (newPlace instanceof PortalSiteMap.Logout) {
+            return newPlace;
+        }
+        if (SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
         } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
             if ((newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) || (newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation)) {
-                return null;
+                return newPlace;
             }
             if (!(newPlace instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage
                     || newPlace instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage || newPlace == AppPlace.NOWHERE)) {
@@ -80,9 +74,7 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
                 return new ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage();
             }
         }
-
-        return null;
-
+        return newPlace;
     }
 
 }

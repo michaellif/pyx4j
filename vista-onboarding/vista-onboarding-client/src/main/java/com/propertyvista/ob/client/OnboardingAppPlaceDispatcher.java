@@ -13,13 +13,9 @@
  */
 package com.propertyvista.ob.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.NotificationAppPlace;
-import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
@@ -27,45 +23,35 @@ import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
-    public NotificationAppPlace getNotificationPlace(Notification notification) {
-        NotificationAppPlace place = new OnboardingSiteMap.RuntimeError();
-        place.setNotification(notification);
-        return place;
-    }
-
-    @Override
-    protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
+    protected AppPlace obtainDefaultPlace() {
         if (ClientContext.isAuthenticated()) {
             if (ClientContext.getUserVisit() instanceof OnboardingUserVisit) {
                 OnboardingUserVisit visit = ClientContext.getUserVisit(OnboardingUserVisit.class);
                 switch (visit.status) {
                 case accountCreated:
-                    callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationComplete());
-                    break;
+                    return new OnboardingSiteMap.PmcAccountCreationComplete();
                 case accountCreation:
-                    callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationProgress().placeArg("id", visit.accountCreationDeferredCorrelationId));
-                    break;
+                    return new OnboardingSiteMap.PmcAccountCreationProgress().placeArg("id", visit.accountCreationDeferredCorrelationId);
                 default:
-                    callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
-                    break;
+                    return new OnboardingSiteMap.PmcAccountCreationRequest();
                 }
 
             } else {
-                callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
+                return new OnboardingSiteMap.PmcAccountCreationRequest();
             }
         } else {
-            callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
+            return new OnboardingSiteMap.PmcAccountCreationRequest();
         }
     }
 
     @Override
-    protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
-        callback.onSuccess(true);
+    protected boolean isPlaceNavigable(AppPlace targetPlace) {
+        return true;
     }
 
     @Override
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
-        return null;
+        return newPlace;
     }
 
 }

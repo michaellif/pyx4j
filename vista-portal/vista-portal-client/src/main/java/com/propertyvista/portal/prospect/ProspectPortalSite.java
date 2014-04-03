@@ -17,9 +17,12 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.portal.prospect.themes.ProspectPortalTheme;
 import com.propertyvista.portal.prospect.ui.ProspectPortalRootPane;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
@@ -37,4 +40,10 @@ public class ProspectPortalSite extends PortalSite {
         super.onSiteLoad();
     }
 
+    @Override
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
+        NotificationAppPlace place = new PortalSiteMap.NotificationPlace();
+        place.setNotification(notification);
+        return place;
+    }
 }

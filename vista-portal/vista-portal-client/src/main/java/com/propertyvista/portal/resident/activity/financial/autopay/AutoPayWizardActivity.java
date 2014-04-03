@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -75,7 +76,7 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
             super.finish();
         } else {
             getView().reset();
-            AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
+            History.back();
         }
     }
 

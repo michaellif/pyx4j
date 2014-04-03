@@ -34,6 +34,8 @@ import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
@@ -147,4 +149,10 @@ public class OnboardingSite extends VistaSite {
         return root;
     }
 
+    @Override
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
+        NotificationAppPlace place = new OnboardingSiteMap.RuntimeError();
+        place.setNotification(notification);
+        return place;
+    }
 }

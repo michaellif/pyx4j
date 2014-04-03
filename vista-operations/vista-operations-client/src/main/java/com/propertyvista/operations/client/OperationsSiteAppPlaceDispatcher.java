@@ -13,12 +13,11 @@
  */
 package com.propertyvista.operations.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
@@ -26,26 +25,29 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 public class OperationsSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
-    protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
+    protected boolean isPlaceNavigable(AppPlace targetPlace) {
         // TODO security for places
-        callback.onSuccess(Boolean.TRUE);
+        return true;
     }
 
     @Override
-    protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
+    protected AppPlace obtainDefaultPlace() {
         if (ClientContext.isAuthenticated()) {
-            callback.onSuccess(new OperationsSiteMap.Management.PMC());
+            return new OperationsSiteMap.Management.PMC();
         } else {
-            callback.onSuccess(new OperationsSiteMap.Login());
+            return new OperationsSiteMap.Login();
         }
     }
 
     @Override
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
+        if (!(newPlace instanceof PublicPlace) && !ClientContext.isAuthenticated()) {
+            return new OperationsSiteMap.Login();
+        }
         if (SecurityController.checkBehavior(VistaBasicBehavior.OperationsPasswordChangeRequired)) {
             return new OperationsSiteMap.PasswordReset();
         } else {
-            return null;
+            return newPlace;
         }
     }
 
