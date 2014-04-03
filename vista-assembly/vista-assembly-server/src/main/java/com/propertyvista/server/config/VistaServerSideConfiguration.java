@@ -250,6 +250,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public IMailServiceConfigConfiguration getOperationsAlertMailServiceConfiguration() {
+        return VistaSMTPMailServiceConfig.getCustomConfig("mail.operations-alert", this);
+    }
+
+    @Override
     public Collection<LifecycleListener> getLifecycleListeners() {
         Collection<LifecycleListener> rc = new ArrayList<LifecycleListener>(super.getLifecycleListeners());
         if (ApplicationMode.isDevelopment()) {

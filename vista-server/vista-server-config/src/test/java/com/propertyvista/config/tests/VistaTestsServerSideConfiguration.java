@@ -221,6 +221,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public IMailServiceConfigConfiguration getOperationsAlertMailServiceConfiguration() {
+        return getMailServiceConfigConfiguration();
+    }
+
+    @Override
     public IMailServiceConfigConfiguration getTenantSureMailServiceConfiguration() {
         return getMailServiceConfigConfiguration();
     }

@@ -32,6 +32,7 @@ import com.pyx4j.server.contexts.Visit;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.operations.domain.vista2pmc.OperationsAlert;
 import com.propertyvista.server.TaskRunner;
@@ -76,7 +77,8 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
                     m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
                     m.setSubject("Vista Operations Alert");
                     m.setTextBody(details);
-                    Mail.queueUofW(m, null, null);
+                    Mail.queueUofW(m, null, ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class)
+                            .getOperationsAlertMailServiceConfiguration());
                 }
                 return null;
             }

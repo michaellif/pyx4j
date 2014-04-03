@@ -17,11 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
@@ -47,18 +50,22 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
         }
     }
 
+    private static IMailServiceConfigConfiguration getMailConfig() {
+        return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getOperationsAlertMailServiceConfiguration();
+    }
+
     @Override
     public void invalidDirectDebitReceived(DirectDebitRecord paymentRecord) {
-        Mail.queueUofW(OperationsNotificationManager.createInvalidDirectDebitReceivedEmail(paymentRecord), null, null);
+        Mail.queueUofW(OperationsNotificationManager.createInvalidDirectDebitReceivedEmail(paymentRecord), null, getMailConfig());
     }
 
     @Override
     public void sendTenantSureCfcOperationProblem(Throwable error) {
-        Mail.queueUofW(OperationsNotificationManager.createCfcErrorMessage(error), null, null);
+        Mail.queueUofW(OperationsNotificationManager.createCfcErrorMessage(error), null, getMailConfig());
     }
 
     private void sendOrFaile(MailMessage m) throws UserRuntimeException {
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
+        if (MailDeliveryStatus.Success != Mail.send(m, getMailConfig())) {
             throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
     }

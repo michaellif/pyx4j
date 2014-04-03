@@ -66,6 +66,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract boolean isAppsContextlessDepoyment();
 
+    public abstract IMailServiceConfigConfiguration getOperationsAlertMailServiceConfiguration();
+
     public abstract String getApplicationURLNamespace(boolean secure);
 
     public abstract String getDefaultApplicationURL(VistaApplication application, String pmcDnsName);

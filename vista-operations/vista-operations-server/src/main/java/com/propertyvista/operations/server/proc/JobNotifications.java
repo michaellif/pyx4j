@@ -123,6 +123,6 @@ public class JobNotifications {
             m.setHeader("X-Priority", "1");
         }
 
-        Mail.queueUofW(m, null, null);
+        Mail.queueUofW(m, null, ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getOperationsAlertMailServiceConfiguration());
     }
 }
