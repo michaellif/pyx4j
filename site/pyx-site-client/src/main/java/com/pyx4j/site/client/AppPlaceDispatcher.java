@@ -20,16 +20,10 @@
  */
 package com.pyx4j.site.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.NotificationAppPlace;
-import com.pyx4j.site.shared.domain.Notification;
 
 public interface AppPlaceDispatcher {
 
-    void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback);
-
-    NotificationAppPlace getNotificationPlace(Notification notification);
+    AppPlace forwardTo(AppPlace newPlace);
 
 }

@@ -32,7 +32,6 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
@@ -49,8 +48,6 @@ public final class AppPlaceContorller {
     private final EventBus eventBus;
 
     private AppPlace where = AppPlace.NOWHERE;
-
-    private AppPlace forwardedFrom = AppPlace.NOWHERE;
 
     private final AppPlaceDispatcher dispatcher;
 
@@ -71,13 +68,9 @@ public final class AppPlaceContorller {
         return where;
     }
 
-    public Place getForwardedFrom() {
-        return forwardedFrom;
-    }
-
     public void showNotification(Notification notification, AppPlace continuePlace) {
         AppPlace currentPlace = getWhere();
-        NotificationAppPlace notificationPlace = dispatcher.getNotificationPlace(notification);
+        NotificationAppPlace notificationPlace = AppSite.instance().getNotificationPlace(notification);
         if (notificationPlace.equals(currentPlace)) {
             log.warn("Can't navigate to Notification Place while beeng on Notification Place");
         } else {
@@ -92,16 +85,12 @@ public final class AppPlaceContorller {
 
     public void goTo(final AppPlace newPlace, final boolean withConfirm) {
         log.debug("requested to go to: " + newPlace);
-        dispatcher.forwardTo(newPlace, new DefaultAsyncCallback<AppPlace>() {
-            @Override
-            public void onSuccess(final AppPlace result) {
-                if (withConfirm) {
-                    maybeGoTo(result);
-                } else {
-                    sureGoTo(result);
-                }
-            }
-        });
+        AppPlace result = dispatcher.forwardTo(newPlace);
+        if (withConfirm) {
+            maybeGoTo(result);
+        } else {
+            sureGoTo(result);
+        }
     }
 
     public void goTo(final AppPlace newPlace) {
@@ -150,10 +139,8 @@ public final class AppPlaceContorller {
 
     private void sureGoTo(AppPlace newPlace) {
         PopupPanel.hideAll();
-        forwardedFrom = where;
         where = newPlace;
-        log.debug("forwarded to: {} from {}", where, forwardedFrom);
-
+        log.debug("forwarded to: {}", where);
         eventBus.fireEvent(new PlaceChangeEvent(where));
     }
 

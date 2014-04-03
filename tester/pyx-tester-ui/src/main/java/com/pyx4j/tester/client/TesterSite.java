@@ -40,6 +40,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.SingletonViewFactory;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.tester.client.theme.TesterPalette;
 import com.pyx4j.tester.client.theme.TesterTheme;
 import com.pyx4j.tester.client.ui.TesterRootPane;
@@ -123,6 +125,11 @@ public class TesterSite extends AppSite {
 
     public Message getMessage() {
         return message;
+    }
+
+    @Override
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
+        return null;
     }
 
 }

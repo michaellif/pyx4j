@@ -20,20 +20,20 @@
  */
 package com.pyx4j.site.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.NotificationAppPlace;
-import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
 public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
-    private AppPlace entryPlace = AppPlace.NOWHERE;
+    private final static Logger log = LoggerFactory.getLogger(AbstractAppPlaceDispatcher.class);
+
+    private AppPlace targetPlace = AppPlace.NOWHERE;
 
     protected AbstractAppPlaceDispatcher() {
 
@@ -48,14 +48,9 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
                 if ((current instanceof PublicPlace) || (!ClientContext.isAuthenticated())) {
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
                 } else {
-                    isPlaceNavigable(current, new DefaultAsyncCallback<Boolean>() {
-                        @Override
-                        public void onSuccess(Boolean result) {
-                            if (!result) {
-                                AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
-                            }
-                        }
-                    });
+                    if (!isPlaceNavigable(current)) {
+                        AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
+                    }
                 }
 
             }
@@ -64,12 +59,12 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
     }
 
-    protected abstract void obtainDefaultPlace(AsyncCallback<AppPlace> callback);
+    protected abstract AppPlace obtainDefaultPlace();
 
     /**
      * Define security for places. Called before each navigation. If it returns FALSE we will go to DefaultAuthenticatedPlace
      */
-    protected abstract void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback);
+    protected abstract boolean isPlaceNavigable(AppPlace targetPlace);
 
     /**
      * This the only customization point, used for places like PasswordChangeRequired e.g. user can only go to one single place.
@@ -77,54 +72,23 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
      */
     protected abstract AppPlace mandatoryActionForward(AppPlace newPlace);
 
-    @Deprecated
-    //TODO reimplement forwardTo() to use same mandatoryActionForward to handle all forward events except authentication which should use some authenticationActionForward() for it
-    protected AppPlace mandatoryPublicActionForward(AppPlace newPlace) {
-        return newPlace;
-    }
-
     @Override
-    public NotificationAppPlace getNotificationPlace(Notification notification) {
-        return null;
-    }
-
-    @Override
-    public final void forwardTo(AppPlace newPlace, final AsyncCallback<AppPlace> callback) {
-        AppPlace mandatoryPublicPlace = mandatoryPublicActionForward(newPlace);
-        if (mandatoryPublicPlace != newPlace) {
-            callback.onSuccess(mandatoryPublicPlace);
-            return;
-        }
-
-        if (newPlace instanceof PublicPlace) {
-            callback.onSuccess(newPlace);
-        } else if (ClientContext.isAuthenticated()) {
-            AppPlace special = mandatoryActionForward(newPlace);
-            if (special != null) {
-                callback.onSuccess(special);
+    public final AppPlace forwardTo(AppPlace place) {
+        AppPlace forwardPlace = mandatoryActionForward(place);
+        if (forwardPlace == AppPlace.NOWHERE) {
+            if (targetPlace != AppPlace.NOWHERE) {
+                forwardPlace = targetPlace;
+                targetPlace = AppPlace.NOWHERE;
             } else {
-                final AppPlace targetPlace;
-                if ((entryPlace != AppPlace.NOWHERE) && (newPlace == AppPlace.NOWHERE)) {
-                    targetPlace = entryPlace;
-                } else {
-                    targetPlace = newPlace;
-                }
-                isPlaceNavigable(targetPlace, new DefaultAsyncCallback<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        if (result && (targetPlace != AppPlace.NOWHERE)) {
-                            callback.onSuccess(targetPlace);
-                        } else {
-                            obtainDefaultPlace(callback);
-                        }
-                    }
-                });
-                entryPlace = AppPlace.NOWHERE;
+                forwardPlace = obtainDefaultPlace();
             }
         } else {
-            entryPlace = newPlace;
-            obtainDefaultPlace(callback);
+            if (forwardPlace != place) {
+                targetPlace = place;
+            }
         }
+        forwardPlace = isPlaceNavigable(forwardPlace) ? forwardPlace : obtainDefaultPlace();
+        log.info("Forward from place [{}] to place[{}]", place.getPlaceId(), forwardPlace.getPlaceId());
+        return forwardPlace;
     }
-
 }

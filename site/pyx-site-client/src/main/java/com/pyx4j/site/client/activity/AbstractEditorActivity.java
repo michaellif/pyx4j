@@ -22,6 +22,7 @@ package com.pyx4j.site.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -260,7 +261,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     @Override
     public void cancel() {
         if (isNewEntity()) {
-            AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
+            History.back();
         } else {
             goToViewer(entityId);
         }

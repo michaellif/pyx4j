@@ -22,6 +22,7 @@ package com.pyx4j.site.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -34,7 +35,6 @@ import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -147,7 +147,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     @Override
     public void cancel() {
-        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
+        History.back();
     }
 
     public void trySave() {
@@ -168,7 +168,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     protected void onSaved(Key result) {
         view.reset();
-        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
+        History.back();
     }
 
     protected void onSaveFail(Throwable caught) {

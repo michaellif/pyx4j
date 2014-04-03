@@ -46,6 +46,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.tester.client.images.Images;
 import com.pyx4j.tester.client.theme.TesterPalette;
 import com.pyx4j.tester.client.theme.TesterTheme;
@@ -81,6 +83,11 @@ public class TesterEntryPoint implements EntryPoint {
         new AppSite("tester", null, null) {
             @Override
             public void onSiteLoad() {
+            }
+
+            @Override
+            public NotificationAppPlace getNotificationPlace(Notification notification) {
+                return null;
             }
         }.hideLoadingIndicator();
 
