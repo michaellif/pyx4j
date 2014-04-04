@@ -16,8 +16,7 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
