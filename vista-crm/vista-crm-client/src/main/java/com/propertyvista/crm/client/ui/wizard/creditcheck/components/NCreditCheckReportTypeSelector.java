@@ -69,7 +69,7 @@ public class NCreditCheckReportTypeSelector extends NFocusField<CreditCheckRepor
         getEditor().addValueChangeHandler(new ValueChangeHandler<CreditCheckReportType>() {
             @Override
             public void onValueChange(ValueChangeEvent<CreditCheckReportType> event) {
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
     }

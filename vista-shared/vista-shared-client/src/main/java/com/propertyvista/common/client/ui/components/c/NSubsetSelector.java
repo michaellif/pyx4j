@@ -63,7 +63,7 @@ public class NSubsetSelector<OPTION_TYPE> extends NFocusField<Set<OPTION_TYPE>, 
         getEditor().addValueChangeHandler(new ValueChangeHandler<Set<OPTION_TYPE>>() {
             @Override
             public void onValueChange(ValueChangeEvent<Set<OPTION_TYPE>> event) {
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
         setTabIndex(getCComponent().getTabIndex());
