@@ -45,7 +45,7 @@ public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CAbstractSugge
             @Override
             public void onSelection(SelectionEvent event) {
                 setFocus(true);
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
         refreshOptions();

@@ -49,7 +49,7 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
         addResponseValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
-                component.onEditingStop();
+                component.stopEditing();
             }
         });
     }

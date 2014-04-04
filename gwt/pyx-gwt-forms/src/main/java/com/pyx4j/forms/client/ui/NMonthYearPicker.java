@@ -61,7 +61,7 @@ public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, 
 
             @Override
             public void onChange(ChangeEvent event) {
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
     }

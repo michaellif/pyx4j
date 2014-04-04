@@ -66,7 +66,7 @@ public class NRadioGroup<E> extends NFocusField<E, RadioGroup<E>, CRadioGroup<E>
         getEditor().addValueChangeHandler(new ValueChangeHandler<E>() {
             @Override
             public void onValueChange(ValueChangeEvent<E> event) {
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
     }

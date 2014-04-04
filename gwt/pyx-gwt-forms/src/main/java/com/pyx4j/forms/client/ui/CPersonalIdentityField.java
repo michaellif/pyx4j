@@ -98,7 +98,6 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
             // clear obfuscated value to indicate user input
             getValue().obfuscatedNumber().setValue(null);
         }
-        super.onEditingStop();
     }
 
     // catch exception here to avoid null-value set by CComponent#update(null)

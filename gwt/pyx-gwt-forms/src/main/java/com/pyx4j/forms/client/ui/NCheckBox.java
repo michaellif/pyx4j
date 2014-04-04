@@ -49,7 +49,7 @@ public class NCheckBox extends NFocusField<Boolean, CheckBox, CCheckBox, HTML> i
         getEditor().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
         setTabIndex(getCComponent().getTabIndex());

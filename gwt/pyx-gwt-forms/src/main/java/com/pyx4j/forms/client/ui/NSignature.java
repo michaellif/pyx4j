@@ -174,7 +174,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 setFocus(true);
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
 

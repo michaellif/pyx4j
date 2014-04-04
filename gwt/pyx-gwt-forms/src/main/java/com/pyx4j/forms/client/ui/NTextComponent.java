@@ -49,7 +49,7 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    getCComponent().onEditingStop();
+                    getCComponent().stopEditing();
                 }
             }
         });

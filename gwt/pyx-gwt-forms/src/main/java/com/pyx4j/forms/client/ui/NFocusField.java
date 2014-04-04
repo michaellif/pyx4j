@@ -47,14 +47,14 @@ public abstract class NFocusField<DATA, WIDGET extends IFocusWidget, CCOMP exten
         getEditor().addFocusHandler(new FocusHandler() {
             @Override
             public void onFocus(FocusEvent event) {
-                getCComponent().onEditingStart();
+                getCComponent().startEditing();
             }
         });
 
         getEditor().addBlurHandler(new BlurHandler() {
             @Override
             public void onBlur(BlurEvent event) {
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
     }

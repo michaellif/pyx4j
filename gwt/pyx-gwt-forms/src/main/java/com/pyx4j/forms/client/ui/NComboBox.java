@@ -71,7 +71,7 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
 
             @Override
             public void onChange(ChangeEvent event) {
-                getCComponent().onEditingStop();
+                getCComponent().stopEditing();
             }
         });
         setTabIndex(getCComponent().getTabIndex());

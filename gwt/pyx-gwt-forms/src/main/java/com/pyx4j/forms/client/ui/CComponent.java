@@ -635,14 +635,15 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return editingInProgress;
     }
 
-    public void onEditingStart() {
+    public final void startEditing() {
         if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
             editingInProgress = true;
         }
     }
 
-    public void onEditingStop() {
+    public final void stopEditing() {
         if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
+            onEditingStop();
             boolean wasEmpty = isValueEmpty();
             boolean wasVisited = isVisited();
             editingInProgress = false;
@@ -660,6 +661,9 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             }
         }
 
+    }
+
+    protected void onEditingStop() {
     }
 
     protected String getDebugInfo() {
