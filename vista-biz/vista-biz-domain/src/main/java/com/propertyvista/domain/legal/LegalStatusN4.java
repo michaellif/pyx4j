@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-04
+ * Created on 2014-04-04
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.n4;
+package com.propertyvista.domain.legal;
 
 import java.math.BigDecimal;
 
@@ -19,19 +19,22 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.legal.LegalLetter;
+@DiscriminatorValue("LegalStatusN4")
+public interface LegalStatusN4 extends LegalStatus {
 
-@DiscriminatorValue("N4LegalLetter")
-public interface N4LegalLetter extends LegalLetter {
-
+    /**
+     * Maximum possible outstanding balance of rent related charges that cancels this N4 notice, i.e. if equals <code>$0.00</code> tenant is supposed to pay
+     * everything he owes, if <code>$100.00</code> tenant will need pay everything but the last $100 to cancel this notice.
+     */
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> amountOwed();
+    @NotNull
+    IPrimitive<BigDecimal> cancellationThreshold();
 
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> cancellationThreshold(); // TODO doesn't belong here
-
+    /** This is the last date until which tenant is supposed pay (or leave), after that date an eviction process can be initiated. */
+    @NotNull
     IPrimitive<LogicalDate> terminationDate();
 
 }

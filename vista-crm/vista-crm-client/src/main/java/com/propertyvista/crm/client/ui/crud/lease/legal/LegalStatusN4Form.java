@@ -31,16 +31,16 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.services.legal.LegalLetterUploadService;
 import com.propertyvista.domain.legal.GenericLegalLetter;
 import com.propertyvista.domain.legal.LegalLetter;
-import com.propertyvista.dto.LegalStatusDTO;
+import com.propertyvista.dto.LegalStatusN4DTO;
 
-public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
+public class LegalStatusN4Form extends CEntityForm<LegalStatusN4DTO> {
 
-    private static final I18n i18n = I18n.get(LegalStatusForm.class);
+    private static final I18n i18n = I18n.get(LegalStatusN4Form.class);
 
     private final boolean uploadable;
 
-    public LegalStatusForm(boolean uploadable) {
-        super(LegalStatusDTO.class);
+    public LegalStatusN4Form(boolean uploadable) {
+        super(LegalStatusN4DTO.class);
         this.uploadable = uploadable;
     }
 
@@ -53,6 +53,8 @@ public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate())).componentWidth("200px").build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiry())).componentWidth("200px").build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cancellationThreshold())).componentWidth("200px").build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().terminationDate())).componentWidth("200px").build());
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().setOn())).componentWidth("200px").build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().setBy().name())).customLabel(i18n.tr("Set By")).componentWidth("200px").build());

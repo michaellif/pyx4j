@@ -7,27 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-02-20
+ * Created on 2014-04-04
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IList;
-import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.legal.LegalLetter;
-import com.propertyvista.domain.legal.LegalStatus;
+import com.propertyvista.domain.legal.LegalStatusN4;
 
 @Transient
-public interface LegalStatusDTO extends LegalStatus {
+public interface LegalStatusN4DTO extends LegalStatusDTO, LegalStatusN4 {
 
-    IList<LegalLetter> letters();
-
-    @Caption(name = "Expiry")
-    /** this field is for user input since it looks like we don't have widgets for editing <code>java.util.Date</code> values */
-    IPrimitive<LogicalDate> expiryDate();
 }

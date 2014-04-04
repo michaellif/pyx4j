@@ -11,26 +11,26 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease;
+package com.propertyvista.crm.client.ui.crud.lease.legal;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.crm.client.ui.crud.lease.legal.LegalStatusForm;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.dto.LegalStatusDTO;
+import com.propertyvista.dto.LegalStatusN4DTO;
 
-public class LegalStatusDialog extends OkCancelDialog {
+public class LegalStatusN4Dialog extends OkCancelDialog {
 
-    private static final I18n i18n = I18n.get(LegalStatusDialog.class);
+    private static final I18n i18n = I18n.get(LegalStatusN4Dialog.class);
 
-    private final LegalStatusForm form;
+    private final LegalStatusN4Form form;
 
-    public LegalStatusDialog() {
+    public LegalStatusN4Dialog(LegalStatusN4DTO initialValue) {
         super(i18n.tr("Set Legal Status"));
-        form = new LegalStatusForm(true);
+        form = new LegalStatusN4Form(true);
         form.initContent();
-        form.populateNew();
+        form.populate(initialValue);
         setBody(form);
         setDialogPixelWidth(600);
     }

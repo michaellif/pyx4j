@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -63,6 +62,7 @@ import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
+import com.propertyvista.domain.legal.LegalStatusN4;
 import com.propertyvista.domain.legal.errors.FormFillError;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4BatchData;
@@ -135,7 +135,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         Date batchGenerationDate = SystemDateManager.getDate();
 
         for (Lease leaseId : batchRequest.targetDelinquentLeases()) {
-            generateN4ForLease(leaseId, makeBatchData(batchRequest), relevantArCodes, batchGenerationDate);
+            issueN4ForLease(leaseId, makeBatchData(batchRequest), relevantArCodes, batchGenerationDate);
             progress.set(progress.get() + 1);
         }
 
@@ -159,7 +159,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void generateN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
+    private void issueN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
         try {
             N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
                     batchData.deliveryMethod().getValue(), relevantArCodes);
@@ -175,22 +175,29 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             n4Letter.lease().set(leaseId);
             n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
             n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
-            n4Letter.cancellationThreshold().setValue(new BigDecimal("0.00")); // TODO should be defined by user input
             n4Letter.generatedOn().setValue(generationTime);
 
             n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
             n4Letter.file().fileSize().setValue(n4LetterBinary.length);
-            n4Letter.file().fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
+            n4Letter.file().fileName().setValue(MessageFormat.format("n4-notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
 
             Persistence.service().persist(n4Letter);
 
+            LegalStatusN4 n4Status = EntityFactory.create(LegalStatusN4.class);
+            n4Status.status().setValue(Status.N4);
+
+            n4Status.expiry().setValue(null); // TODO set expiry from policy
+
+            n4Status.cancellationThreshold().setValue(new BigDecimal("0.00")); // TODO should be defined by user input/ policy
+            n4Status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+
+            n4Status.notes().setValue("created via N4 notice batch");
+            n4Status.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
+            n4Status.setOn().setValue(generationTime);
+
             ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
                     leaseId,
-                    Status.N4,
-                    SimpleMessageFormat.format("termination date: {0,date,short}", n4LeaseData.terminationDate().getValue()),
-                    "created via issue of N4 notice",                    
-                    EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()),
-                    generationTime,
+                    n4Status,
                     Arrays.<LegalLetter>asList(n4Letter)
             );//@formatter:on
 

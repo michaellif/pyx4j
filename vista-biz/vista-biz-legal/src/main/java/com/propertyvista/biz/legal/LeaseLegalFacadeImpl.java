@@ -20,9 +20,9 @@
  */
 package com.propertyvista.biz.legal;
 
-import java.util.Date;
 import java.util.List;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -33,7 +33,6 @@ import com.propertyvista.domain.blob.LegalLetterBlob;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.legal.LegalStatus.Status;
-import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
@@ -46,14 +45,14 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
         criteria.eq(criteria.proto().lease(), leaseId.getPrimaryKey());
         criteria.desc(criteria.proto().setOn());
         LegalStatus status = Persistence.service().retrieve(criteria);
-        if (status != null) {
+
+        if (status != null && isActive(status)) {
             Persistence.ensureRetrieve(status.setBy(), AttachLevel.Attached);
         } else {
             status = EntityFactory.create(LegalStatus.class);
             status.status().setValue(Status.None);
             status.details().setValue(i18n.tr("Computed Automatically"));
         }
-
         return status;
     }
 
@@ -66,8 +65,9 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
         for (LegalStatus status : statusesHistory) {
             Persistence.ensureRetrieve(status.setBy(), AttachLevel.Attached);
         }
-        if (statusesHistory.isEmpty()) {
-            statusesHistory.add(getCurrentLegalStatus(leaseId));
+        if (!statusesHistory.isEmpty() && isActive(statusesHistory.get(0))) {
+            // remove the current status
+            statusesHistory = statusesHistory.subList(1, statusesHistory.size());
         }
         return statusesHistory;
     }
@@ -78,7 +78,7 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
             return;
         }
         EntityQueryCriteria<LegalLetter> lettersCriteria = EntityQueryCriteria.create(LegalLetter.class);
-        lettersCriteria.eq(lettersCriteria.proto().status(), legalStatusId);
+        lettersCriteria.eq(lettersCriteria.proto().status().id(), legalStatusId.getPrimaryKey());
         for (LegalLetter letter : Persistence.service().query(lettersCriteria)) {
             Persistence.service().delete(LegalLetterBlob.class, letter.file().blobKey().getValue());
         }
@@ -87,23 +87,32 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
     }
 
     @Override
-    public void setLegalStatus(Lease leaseId, Status status, String details, String notes, CrmUser setBy, Date asOf, List<LegalLetter> letters) {
-        LegalStatus legalStatus = EntityFactory.create(LegalStatus.class);
-        legalStatus.lease().set(leaseId);
-        legalStatus.status().setValue(status);
-        legalStatus.details().setValue(details);
-        legalStatus.notes().setValue(notes);
-        legalStatus.setBy().set(setBy);
-        legalStatus.setOn().setValue(asOf);
-        Persistence.service().persist(legalStatus);
+    public void setLegalStatus(Lease leaseId, LegalStatus update, List<LegalLetter> letters) {
+        LegalStatus current = getCurrentLegalStatus(leaseId);
+
+        if (current.getPrimaryKey() != null && update.status().getValue() == Status.None && current.status().getValue() == Status.None && letters.isEmpty()) {
+            return;
+        }
+        update.lease().set(leaseId);
+
+        // TODO add validations
+        Persistence.service().persist(update);
 
         if (letters != null) {
             for (LegalLetter letter : letters) {
                 letter.lease().set(leaseId);
-                letter.status().set(legalStatus);
-                letter.generatedOn().setValue(legalStatus.setOn().getValue());
+                letter.status().set(update);
+                letter.generatedOn().setValue(update.setOn().getValue());
                 Persistence.service().persist(letter);
             }
+        }
+    }
+
+    private boolean isActive(LegalStatus status) {
+        if (!status.expiry().isNull()) {
+            return status.expiry().getValue().compareTo(SystemDateManager.getDate()) <= 0;
+        } else {
+            return true; // TODO check for other status type specific conditions;
         }
     }
 

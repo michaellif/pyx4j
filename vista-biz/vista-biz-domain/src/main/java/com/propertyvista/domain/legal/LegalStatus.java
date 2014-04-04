@@ -37,7 +37,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 @DiscriminatorValue("LegalStatus")
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
-@ToStringFormat("{0} (since {1})")
+@ToStringFormat("{0}{1,choice,null#|!null#, since {1}}{2,choice,null#|!null#, expiry {2}}")
 public interface LegalStatus extends IEntity {
 
     @I18n(context = "Legal Status")

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +56,9 @@ import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
+import com.propertyvista.domain.legal.LegalStatus.Status;
+import com.propertyvista.domain.legal.LegalStatusN4;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.tenant.lease.AgreementInkSignatures;
@@ -67,6 +72,7 @@ import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.LegalStatusDTO;
+import com.propertyvista.dto.LegalStatusN4DTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
 
@@ -294,7 +300,13 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     private LegalStatusDTO toDto(LegalStatus status) {
-        LegalStatusDTO dto = status.duplicate(LegalStatusDTO.class);
+        LegalStatusDTO dto = null;
+        if (status.getInstanceValueClass().equals(LegalStatusN4.class)) {
+            dto = status.duplicate(LegalStatusN4DTO.class);
+        } else {
+            dto = status.duplicate(LegalStatusDTO.class);
+        }
+        dto.expiryDate().setValue(!status.expiry().isNull() ? new LogicalDate(status.expiry().getValue()) : null);
 
         EntityQueryCriteria<LegalLetter> criteria = EntityQueryCriteria.create(LegalLetter.class);
         criteria.eq(criteria.proto().lease(), status.lease());
@@ -305,15 +317,35 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void setLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatusDTO status) {
+    public void setLegalStatus(AsyncCallback<VoidSerializable> callback, Lease leaseId, LegalStatusDTO dto) {
+        LegalStatus legalStatus = null;
+        List<LegalLetter> attachedLetters;
+        if (dto.status().getValue() == Status.N4) {
+            LegalStatusN4 legalStatusN4 = EntityFactory.create(LegalStatusN4.class);
+            legalStatusN4.cancellationThreshold().setValue(((LegalStatusN4DTO) dto).cancellationThreshold().getValue());
+            legalStatusN4.terminationDate().setValue(((LegalStatusN4DTO) dto).terminationDate().getValue());
+            legalStatus = legalStatusN4;
+            attachedLetters = new ArrayList<>(dto.letters().size());
+            for (LegalLetter letter : dto.letters()) {
+                N4LegalLetter n4Letter = letter.duplicate(LegalLetter.class).duplicate(N4LegalLetter.class);
+                n4Letter.terminationDate().setValue(legalStatusN4.terminationDate().getValue());
+                attachedLetters.add(n4Letter);
+            }
+        } else {
+            legalStatus = EntityFactory.create(LegalStatus.class);
+            attachedLetters = dto.letters();
+        }
+        legalStatus.status().setValue(dto.status().getValue());
+        legalStatus.expiry().setValue(!dto.expiryDate().isNull() ? new Date(dto.expiryDate().getValue().getTime()) : null);
+        legalStatus.details().setValue(dto.details().getValue());
+        legalStatus.notes().setValue("set manually via CRM");
+        legalStatus.setBy().set(CrmAppContext.getCurrentUser());
+        legalStatus.setOn().setValue(SystemDateManager.getDate());
+
         ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
                 leaseId,
-                status.status().getValue(),
-                status.details().getValue(),
-                "set manually via CRM",  // this is for inner use no need for i18n
-                CrmAppContext.getCurrentUser(),
-                SystemDateManager.getDate(),
-                status.letters()
+                legalStatus,
+                attachedLetters
         );//@formatter:on
         Persistence.service().commit();
         callback.onSuccess(null);

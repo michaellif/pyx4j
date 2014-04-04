@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -39,6 +38,8 @@ public class LeaseLegalStateForm extends CEntityForm<LeaseLegalStateDTO> {
 
     private Button clear;
 
+    private LegalStatusHistoryFolder historyFolder;
+
     public LeaseLegalStateForm(LeaseLegalStateController controller) {
         super(LeaseLegalStateDTO.class);
         setViewable(true);
@@ -53,11 +54,10 @@ public class LeaseLegalStateForm extends CEntityForm<LeaseLegalStateDTO> {
         panel.setWidget(++row, 0, 2, inject(proto().current(), new LegalStatusForm(false)));
         panel.setWidget(++row, 0, 2, createCommandBar());
         panel.setH1(++row, 0, 2, i18n.tr("History"));
-        panel.setWidget(++row, 0, 2, inject(proto().historical(), new LegalStatusHistoryFolder() {
+        panel.setWidget(++row, 0, 2, inject(proto().historical(), historyFolder = new LegalStatusHistoryFolder() {
             @Override
-            protected void removeItem(CEntityFolderItem<LegalStatus> item) {
-                super.removeItem(item);
-                LeaseLegalStateForm.this.deleteStatus(item.getValue());
+            protected void onRemoved(LegalStatus item) {
+                LeaseLegalStateForm.this.deleteStatus(item);
             }
         }).asWidget());
         return panel;

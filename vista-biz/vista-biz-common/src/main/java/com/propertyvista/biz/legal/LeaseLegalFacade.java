@@ -13,12 +13,10 @@
  */
 package com.propertyvista.biz.legal;
 
-import java.util.Date;
 import java.util.List;
 
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalStatus;
-import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseLegalFacade {
@@ -29,7 +27,6 @@ public interface LeaseLegalFacade {
 
     void removeLegalStatus(LegalStatus legalStatusId);
 
-    // TODO this probably needs refactoring
-    void setLegalStatus(Lease leaseId, LegalStatus.Status status, String details, String notes, CrmUser setBy, Date asOf, List<LegalLetter> attachedLetters);
+    void setLegalStatus(Lease leaseId, LegalStatus status, List<LegalLetter> attachedLetters);
 
 }

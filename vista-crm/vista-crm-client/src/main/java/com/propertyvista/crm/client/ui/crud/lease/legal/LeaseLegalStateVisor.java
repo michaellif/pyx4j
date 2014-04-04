@@ -13,15 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.legal;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
 
 import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateController;
-import com.propertyvista.crm.client.ui.crud.lease.LegalStatusDialog;
+import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.LegalStatusDTO;
+import com.propertyvista.dto.LegalStatusN4DTO;
 
 public class LeaseLegalStateVisor extends AbstractVisorViewer<LeaseLegalStateDTO> {
 
@@ -33,11 +37,34 @@ public class LeaseLegalStateVisor extends AbstractVisorViewer<LeaseLegalStateDTO
         setForm(new LeaseLegalStateForm(controller));
     }
 
-    public void requestNewLegalStatus(final AsyncCallback<LegalStatusDTO> legalStatusUpadate) {
-        new LegalStatusDialog() {
+    public void requestNewLegalStatus(final AsyncCallback<LegalStatusDTO> legalStatusUpdateCallback) {
+        new LegalStatusTypeSelectorDialog() {
             @Override
-            public void onSetLegalStatus(LegalStatusDTO legalStatus) {
-                legalStatusUpadate.onSuccess(legalStatus);
+            public void onSelected(Status status) {
+                if (status == Status.N4) {
+                    LegalStatusN4DTO initialValue = EntityFactory.create(LegalStatusN4DTO.class);
+                    initialValue.status().setValue(status);
+
+                    initialValue.cancellationThreshold().setValue(new BigDecimal("0.00")); // TODO set default value from policy
+                    initialValue.expiryDate().setValue(null); // TODO set default value form policy
+                    initialValue.terminationDate().setValue(null); // TODO set default value from policy and delivery type
+
+                    new LegalStatusN4Dialog(initialValue) {
+                        @Override
+                        public void onSetLegalStatus(LegalStatusDTO legalStatus) {
+                            legalStatusUpdateCallback.onSuccess(legalStatus);
+                        };
+                    }.show();
+                } else {
+                    LegalStatusDTO initialValue = EntityFactory.create(LegalStatusDTO.class);
+                    initialValue.status().setValue(status);
+                    new LegalStatusDialog(initialValue) {
+                        @Override
+                        public void onSetLegalStatus(LegalStatusDTO legalStatus) {
+                            legalStatusUpdateCallback.onSuccess(legalStatus);
+                        }
+                    }.show();
+                }
             }
         }.show();
     }

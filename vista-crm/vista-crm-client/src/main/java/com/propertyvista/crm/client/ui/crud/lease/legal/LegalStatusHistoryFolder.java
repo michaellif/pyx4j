@@ -13,15 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.legal;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.legal.LegalStatus;
 
-public class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatus> {
+public abstract class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatus> {
+
+    private static final I18n i18n = I18n.get(LegalStatusHistoryFolder.class);
 
     public LegalStatusHistoryFolder() {
         super(LegalStatus.class);
@@ -48,10 +55,23 @@ public class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatus> {
     }
 
     @Override
+    protected void removeItem(final CEntityFolderItem<LegalStatus> item) {
+        MessageDialog.confirm(i18n.tr("Remove Status"), i18n.tr("Are you sure"), new Command() {
+            @Override
+            public void execute() {
+                LegalStatusHistoryFolder.super.removeItem(item);
+                LegalStatusHistoryFolder.this.onRemoved(item.getValue());
+            }
+        });
+    }
+
+    @Override
     public IFolderItemDecorator<LegalStatus> createItemDecorator() {
         VistaBoxFolderItemDecorator<LegalStatus> d = (VistaBoxFolderItemDecorator<LegalStatus>) super.createItemDecorator();
         d.setExpended(false);
         return d;
     }
+
+    protected abstract void onRemoved(LegalStatus item);
 
 }
