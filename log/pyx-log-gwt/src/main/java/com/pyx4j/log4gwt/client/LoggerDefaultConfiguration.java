@@ -32,12 +32,11 @@ class LoggerDefaultConfiguration {
 
     static void setUp() {
         if (GWT.isClient()) {
-            if (GWT.isScript()) {
-                Impl impl = GWT.create(Impl.class);
-                if (impl != null) {
-                    impl.setUp();
-                }
-            } else {
+            Impl impl = GWT.create(Impl.class);
+            if (impl != null) {
+                impl.setUp();
+            }
+            if (!GWT.isScript()) {
                 ClientLogger.addAppender(new AppenderStdOut());
                 ClientLogger.addAppender(new AppenderHosted());
             }
