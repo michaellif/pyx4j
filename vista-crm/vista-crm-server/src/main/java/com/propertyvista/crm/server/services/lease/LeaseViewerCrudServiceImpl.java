@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
-import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,10 +42,9 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.legal.LeaseLegalFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.system.YardiARFacade;
-import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.biz.tenant.lease.print.LeaseTermAgreementSigningProgressFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
@@ -262,19 +260,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void updateFromYardi(AsyncCallback<VoidSerializable> callback, Key entityId) {
+    public void updateFromYardiDeferred(AsyncCallback<String> callback, Key entityId) {
         Lease lease = Persistence.service().retrieve(boClass, entityId);
-
-        try {
-            ServerSideFactory.create(YardiARFacade.class).updateLease(lease);
-        } catch (RemoteException e) {
-            throw new UserRuntimeException(i18n.tr("Yardi connection problem"), e);
-        } catch (YardiServiceException e) {
-            throw new UserRuntimeException(i18n.tr("Error updating lease form Yardi"), e);
-        }
-
-        Persistence.service().commit();
-        callback.onSuccess(null);
+        callback.onSuccess(DeferredProcessRegistry.fork(new LeaseYardiUpdateDeferredProcess(lease), ThreadPoolNames.IMPORTS));
     }
 
     /**

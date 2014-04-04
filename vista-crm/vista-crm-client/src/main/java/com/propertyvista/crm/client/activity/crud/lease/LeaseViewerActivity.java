@@ -299,10 +299,18 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void updateFromYardi() {
-        ((LeaseViewerCrudService) getService()).updateFromYardi(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseViewerCrudService) getService()).updateFromYardiDeferred(new DefaultAsyncCallback<String>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
+            public void onSuccess(String deferredCorrelationId) {
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Lease Update"), i18n.tr("Updating Lease..."), false) {
+                    @Override
+                    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                        super.onDeferredSuccess(result);
+                        populate();
+                    }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
             }
         }, getEntityId());
     }

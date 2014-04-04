@@ -60,7 +60,7 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     /**
      * Yardi Integration stuff
      */
-    void updateFromYardi(AsyncCallback<VoidSerializable> callback, Key entityId);
+    void updateFromYardiDeferred(AsyncCallback<String> callback, Key entityId);
 
     /**
      * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
