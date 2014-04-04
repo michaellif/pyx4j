@@ -637,6 +637,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     public final void startEditing() {
         if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
+            onEditingStart();
             editingInProgress = true;
         }
     }
@@ -661,6 +662,9 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             }
         }
 
+    }
+
+    protected void onEditingStart() {
     }
 
     protected void onEditingStop() {
