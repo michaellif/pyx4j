@@ -32,7 +32,9 @@ SET client_min_messages = 'error';
 
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'a' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -41,25 +43,37 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+
+        SELECT  'b' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
         AND     schema_version != '1.1.3'
         AND     namespace ~ '^b';
+
 COMMIT;
 
+
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+
+        SELECT  'c' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
         AND     schema_version != '1.1.3'
         AND     namespace ~ '^c';
+
 COMMIT;
 
+
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'd' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -69,7 +83,9 @@ COMMIT;
 
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'e' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -77,8 +93,11 @@ BEGIN TRANSACTION;
         AND     namespace ~ '^e';
 COMMIT;
 
+
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'f' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -87,7 +106,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'g' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -96,7 +117,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'h' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -105,7 +128,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'i' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -114,7 +139,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'j' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -123,7 +150,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'k' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -132,7 +161,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'l' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -141,7 +172,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'm' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -150,7 +183,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'n' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -159,7 +194,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'o' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -168,7 +205,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'p' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -177,7 +216,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'q' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -186,7 +227,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'r' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -195,7 +238,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  's' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -204,7 +249,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  't' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -213,7 +260,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'u' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -222,7 +271,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'v' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -231,7 +282,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'w' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -240,7 +293,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'x' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -249,7 +304,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'y' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -258,7 +315,9 @@ BEGIN TRANSACTION;
 COMMIT;
 
 BEGIN TRANSACTION;
-        SELECT  namespace,_dba_.migrate_pmc_113(namespace)
+        SELECT  'z' AS letter,
+                COUNT(namespace) AS to_process,
+                COUNT(_dba_.migrate_pmc_113(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
@@ -272,6 +331,7 @@ DROP FUNCTION _dba_.update_policy_tables(text);
 DROP TABLE _dba_.email_template;
 -- DROP TABLE _dba_.legal_terms_policy_item;
 DROP TABLE _dba_.lease_agreement_legal_term;
+DROP TABLE _dba_.lease_agreement_confirmation_term;
 DROP TABLE _dba_.lease_application_legal_term;
 DROP TABLE _dba_.lease_application_confirmation_term;
 DROP TABLE _dba_.restrictions_policy;
