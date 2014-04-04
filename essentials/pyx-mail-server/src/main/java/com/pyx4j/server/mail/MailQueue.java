@@ -245,7 +245,8 @@ public class MailQueue implements Runnable {
                             persistableUpdate.lastAttemptErrorMessage().setValue(
                                     trunkLength(mailMessage.getDeliveryErrorMessage(), persistableUpdate.lastAttemptErrorMessage().getMeta().getLength()));
                             persistableUpdate.attempts().setValue(persistable.attempts().getValue(0) + 1);
-                            if ((persistable.attempts().getValue() > 40) && (persistableUpdate.status().getValue() != MailQueueStatus.Success)) {
+                            if ((persistable.attempts().getValue() > mailConfig.maxDeliveryAttempts())
+                                    && (persistableUpdate.status().getValue() != MailQueueStatus.Success)) {
                                 persistableUpdate.status().setValue(MailQueueStatus.GiveUp);
                                 log.warn("message {} was not sent, delivery attempts stoppered", persistable.getPrimaryKey());
                             }

@@ -39,6 +39,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
     protected boolean debug;
 
+    protected int maxDeliveryAttempts = 40;
+
     protected String allowSendToEmailSufix;
 
     protected String blockedMailForwardTo;
@@ -76,6 +78,11 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         return starttls;
     }
 
+    @Override
+    public int maxDeliveryAttempts() {
+        return maxDeliveryAttempts;
+    }
+
     public boolean isDebug() {
         return debug;
     }
@@ -101,6 +108,9 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         this.host = c.getValue("host", this.host);
         this.port = c.getIntegerValue("port", this.port);
         this.starttls = c.getBooleanValue("starttls", this.starttls);
+
+        this.maxDeliveryAttempts = c.getIntegerValue("maxDeliveryAttempts", this.maxDeliveryAttempts);
+
         this.allowSendToEmailSufix = c.getValue("allowSendToEmailSufix", this.allowSendToEmailSufix);
         this.blockedMailForwardTo = c.getValue("blockedMailForwardTo", this.blockedMailForwardTo);
         this.forwardAllTo = c.getValue("forwardAllTo", this.forwardAllTo);

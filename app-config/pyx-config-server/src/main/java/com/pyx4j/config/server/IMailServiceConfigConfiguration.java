@@ -24,4 +24,6 @@ public interface IMailServiceConfigConfiguration {
 
     String configurationId();
 
+    int maxDeliveryAttempts();
+
 }
