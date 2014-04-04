@@ -52,18 +52,21 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
+        if (!VistaFeatures.instance().onlineApplication()) {
+            Notification message = new Notification(null, i18n.tr("We're sorry, this site has not been activated yet."), NotificationType.INFO);
+            PortalSiteMap.NotificationPlace place = new PortalSiteMap.NotificationPlace();
+            place.setNotification(message);
+            return place;
+        }
+
         if (!(newPlace instanceof PublicPlace) && !ClientContext.isAuthenticated()) {
             return new PortalSiteMap.Login();
         }
         if (newPlace instanceof PortalSiteMap.Logout) {
             return newPlace;
         }
-        if (!VistaFeatures.instance().onlineApplication()) {
-            Notification message = new Notification(null, i18n.tr("We're sorry, this site has not been activated yet."), NotificationType.INFO);
-            PortalSiteMap.NotificationPlace place = new PortalSiteMap.NotificationPlace();
-            place.setNotification(message);
-            return place;
-        } else if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectPortalPasswordChangeRequired)) {
+
+        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(PortalProspectBehavior.ApplicationSelectionRequired)) {
             return new ProspectPortalSiteMap.ApplicationContextSelection();

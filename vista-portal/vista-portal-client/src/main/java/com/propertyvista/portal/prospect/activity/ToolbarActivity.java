@@ -31,6 +31,7 @@ import com.propertyvista.portal.prospect.ui.ToolbarView.ToolbarPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarActivity extends AbstractActivity implements ToolbarPresenter {
@@ -53,7 +54,7 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
             view.onLogedIn(ClientContext.getUserVisit().getName());
             view.setApplicationsSelectorEnabled(SecurityController.checkAnyBehavior(PortalProspectBehavior.HasMultipleApplications));
         } else {
-            boolean hideLoginButton = place instanceof PortalSiteMap.Login;
+            boolean hideLoginButton = place instanceof PortalSiteMap.Login || !VistaFeatures.instance().onlineApplication();
             view.onLogedOut(hideLoginButton);
             view.setApplicationsSelectorEnabled(false);
         }
