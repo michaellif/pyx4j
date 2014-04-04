@@ -65,7 +65,9 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         repopulated,
 
-        reset
+        reset,
+
+        editingInProgress,
 
     };
 

@@ -216,7 +216,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
                     updateTooltip();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
                     updateNote();
-                } else if (event.isEventOfType(PropertyName.valid)) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.editingInProgress)) {
                     renderValidationMessage();
                 } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable,
                         PropertyName.mandatory)) {
@@ -282,7 +282,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
     }
 
     protected void renderValidationMessage() {
-        if (!component.isValid()) {
+        if (!component.isValid() && !component.isEditingInProgress()) {
             validationLabel.setHTML(component.getValidationResults().getValidationMessage(true));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);

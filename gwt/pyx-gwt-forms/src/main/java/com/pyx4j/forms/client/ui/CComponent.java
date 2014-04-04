@@ -639,6 +639,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
             onEditingStart();
             editingInProgress = true;
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingInProgress);
         }
     }
 
@@ -660,8 +661,8 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             } else {
                 setVisited(wasVisited);
             }
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingInProgress);
         }
-
     }
 
     protected void onEditingStart() {
