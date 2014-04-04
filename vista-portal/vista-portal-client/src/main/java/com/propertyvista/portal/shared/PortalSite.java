@@ -14,6 +14,12 @@
 package com.propertyvista.portal.shared;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.commons.css.StyleManager;
@@ -49,6 +55,10 @@ public abstract class PortalSite extends VistaSite {
     private final RootPane<ResponsiveLayoutPanel> rootPane;
 
     private final PortalTheme portalTheme;
+
+    private int windowHeight;
+
+    private boolean canHideAddrBar = false;
 
     public PortalSite(String appId, Class<? extends PortalSiteMap> siteMapClass, RootPane<ResponsiveLayoutPanel> rootPane, AppPlaceDispatcher placeDispatcher,
             PortalTheme portalTheme) {
@@ -86,6 +96,55 @@ public abstract class PortalSite extends VistaSite {
         PortalSessionInactiveHandler.register();
 
         ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(PortalPolicyRetrieveService.class));
+
+        initAddressBarControl();
+    }
+
+    public final native boolean isTouchScreenDevice() /*-{
+		// from the "word on the street"...
+		return (!!$doc["createTouch"]) || (!!$doc["ontouchstart"]);
+    }-*/;
+
+    /** Enable Address Bar hiding on scroll - subject to availability of the feature on mobile platform. */
+    // TODO - NOTE. Currently no consistent behavior between various platforms and browsers in providing
+    // window scroll or resize events has been found. So the implementation is rather ugly...
+    private void initAddressBarControl() {
+        if (isTouchScreenDevice()) {
+            windowHeight = Window.getClientHeight();
+            // this dummy element will serve as window repaint trigger when it's content is updated, see below...
+            // TODO - This is a hack - browser compatibility is not guaranteed.
+            final HTML repaintTrigger = new HTML();
+            repaintTrigger.getElement().getStyle().setProperty("position", "fixed");
+            repaintTrigger.getElement().getStyle().setProperty("top", "-100px");
+            Document.get().getDocumentElement().appendChild(repaintTrigger.getElement());
+
+            // extend body height for about the size of address bar
+            Document.get().getBody().getStyle().setProperty("height", (windowHeight + 48) + "px");
+            RootLayoutPanel.get().getElement().getStyle().setProperty("bottom", "-48px");
+            // check if address bar will hide
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    Window.scrollTo(0, 48);
+                    // we have to keep this timer going to refresh page via repaintTrigger.setHTML(), see below...
+                    new Timer() {
+                        @Override
+                        public void run() {
+                            int curHeight = Window.getClientHeight();
+                            // increased window height indicates that the address bar has moved up and we can safely attach
+                            // content back to the window bottom... NOTE. This is Android behavior - not supported by iOS...
+                            if (!canHideAddrBar && curHeight > windowHeight) {
+                                RootLayoutPanel.get().getElement().getStyle().setProperty("bottom", "0");
+                                canHideAddrBar = true;
+                            }
+                            // this seems to trigger content repaint that will keep it in sync with the window height.
+                            // NOTE. for this to work the content must come from a variable...
+                            repaintTrigger.setHTML("" + curHeight);
+                        }
+                    }.scheduleRepeating(500);
+                }
+            }); // scroll down to hide address bar
+        }
     }
 
     private void initSiteTheme() {
