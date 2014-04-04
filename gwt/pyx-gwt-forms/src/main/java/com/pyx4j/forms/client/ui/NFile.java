@@ -111,6 +111,7 @@ public class NFile extends NField<IFile<?>, NFile.ContentPanel, CFile, NFile.Con
         private final Anchor uploadAnchor;
 
         public ContentPanel() {
+            getElement().getStyle().setProperty("wordBreak", "break-all");
             fileNameAnchor = new Anchor("", new Command() {
 
                 @Override
