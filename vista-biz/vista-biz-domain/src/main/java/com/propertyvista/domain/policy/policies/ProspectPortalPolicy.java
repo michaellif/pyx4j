@@ -65,10 +65,10 @@ public interface ProspectPortalPolicy extends Policy {
 
     @NotNull
     @Editor(type = EditorType.combo)
-    @Caption(description = "Type of fee definition")
+    @Caption(description = "Does submitting an application require a fee")
     IPrimitive<FeePayment> feePayment();
 
     @Format("#,##0.00")
-    @Caption(description = "Amount of fee definition")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> feeAmount();
 }

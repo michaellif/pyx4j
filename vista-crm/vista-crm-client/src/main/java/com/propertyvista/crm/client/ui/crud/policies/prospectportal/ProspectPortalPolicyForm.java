@@ -16,6 +16,9 @@ package com.propertyvista.crm.client.ui.crud.policies.prospectportal;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -23,6 +26,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ProspectPortalPolicyDTO;
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 
 public class ProspectPortalPolicyForm extends PolicyDTOTabPanelBasedForm<ProspectPortalPolicyDTO> {
 
@@ -50,7 +54,24 @@ public class ProspectPortalPolicyForm extends PolicyDTOTabPanelBasedForm<Prospec
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().feePayment()), 10, true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().feeAmount()), 10, true).build());
 
+        get(proto().feePayment()).addValueChangeHandler(new ValueChangeHandler<FeePayment>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<FeePayment> event) {
+                setFeeAmountStatus(event.getValue());
+            }
+        });
+
         return content;
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        setFeeAmountStatus(getValue().feePayment().getValue());
+    }
+
+    protected void setFeeAmountStatus(FeePayment value) {
+        get(proto().feeAmount()).setEditable(!FeePayment.none.equals(value));
+        get(proto().feeAmount()).setMandatory(!FeePayment.none.equals(value));
+    }
 }
