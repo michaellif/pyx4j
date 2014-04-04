@@ -192,7 +192,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
             type.setOptions(getPaymentTypes());
             // set single-available option preselected for new items: 
             if (getValue().id().isNull() && !type.getOptions().isEmpty()) {
-                type.setValue(type.getOptions().get(0), false, populate);
+                type.setValue(type.getOptions().get(0), true, populate);
             }
             setPaymentTypeSelectionEditable(getValue().id().isNull());
         }
