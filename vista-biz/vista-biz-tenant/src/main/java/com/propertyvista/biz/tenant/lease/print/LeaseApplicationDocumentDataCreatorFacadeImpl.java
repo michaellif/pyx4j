@@ -30,7 +30,6 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
-import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
@@ -173,18 +172,17 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         for (LeaseTermTenant leaseTermTenant : Persistence.service().query(criteria)) {
             if (leaseTermTenant.role().getValue() == Role.Dependent) {
                 LeaseApplicationDocumentDataDependentDTO dependent = peopleSection.dependents().$();
-                dependent.firstName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().firstName().getValue());
-                dependent.lastName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().lastName().getValue());
-                dependent.relationship().setValue(leaseTermTenant.relationship().getValue().toString());
+                dependent.firstName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().firstName().getStringView());
+                dependent.lastName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().lastName().getStringView());
+                dependent.relationship().setValue(leaseTermTenant.relationship().getStringView());
                 dependent.birthDate().setValue(leaseTermTenant.leaseParticipant().customer().person().birthDate().getValue());
                 peopleSection.dependents().add(dependent);
             } else if (leaseTermTenant.role().getValue() != Role.Guarantor && !leaseTermTenant.getPrimaryKey().equals(subjectParticipant.getPrimaryKey())) {
                 LeaseApplicationDocumentDataCoApplicantDTO coapplicant = peopleSection.coApplicants().$();
-                coapplicant.firstName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().firstName().getValue());
-                coapplicant.lastName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().lastName().getValue());
-                coapplicant.relationship().setValue(
-                        leaseTermTenant.relationship().getValue() != null ? leaseTermTenant.relationship().getValue().toString() : null);
-                coapplicant.email().setValue(leaseTermTenant.leaseParticipant().customer().person().email().getValue());
+                coapplicant.firstName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().firstName().getStringView());
+                coapplicant.lastName().setValue(leaseTermTenant.leaseParticipant().customer().person().name().lastName().getStringView());
+                coapplicant.relationship().setValue(leaseTermTenant.relationship().getStringView());
+                coapplicant.email().setValue(leaseTermTenant.leaseParticipant().customer().person().email().getStringView());
                 peopleSection.coApplicants().add(coapplicant);
             }
         }
@@ -193,13 +191,12 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillAboutYouSection(LeaseApplicationDocumentDataAboutYouSectionDTO aboutYou, LeaseApplication application,
             LeaseTermParticipant<?> subjectParticipant) {
         // Personal Information
-        aboutYou.firstName().setValue(subjectParticipant.leaseParticipant().customer().person().name().firstName().getValue());
-        aboutYou.lastName().setValue(subjectParticipant.leaseParticipant().customer().person().name().lastName().getValue());
-        aboutYou.middleName().setValue(subjectParticipant.leaseParticipant().customer().person().name().middleName().getValue());
-        Prefix prefix = subjectParticipant.leaseParticipant().customer().person().name().namePrefix().getValue();
-        aboutYou.namePrefix().setValue(prefix != null ? prefix.toString() : "");
-        aboutYou.nameSuffix().setValue(subjectParticipant.leaseParticipant().customer().person().name().nameSuffix().getValue());
-        aboutYou.gender().setValue(subjectParticipant.leaseParticipant().customer().person().sex().getValue().toString());
+        aboutYou.firstName().setValue(subjectParticipant.leaseParticipant().customer().person().name().firstName().getStringView());
+        aboutYou.lastName().setValue(subjectParticipant.leaseParticipant().customer().person().name().lastName().getStringView());
+        aboutYou.middleName().setValue(subjectParticipant.leaseParticipant().customer().person().name().middleName().getStringView());
+        aboutYou.namePrefix().setValue(subjectParticipant.leaseParticipant().customer().person().name().namePrefix().getStringView());
+        aboutYou.nameSuffix().setValue(subjectParticipant.leaseParticipant().customer().person().name().nameSuffix().getStringView());
+        aboutYou.gender().setValue(subjectParticipant.leaseParticipant().customer().person().sex().getStringView());
         aboutYou.birthDate().setValue(subjectParticipant.leaseParticipant().customer().person().birthDate().getValue());
 
         // Contact Information:
@@ -294,12 +291,12 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
 
         residence.streetNumberSuffix().setValue(address.streetNumberSuffix().getValue());
         residence.streetName().setValue(address.streetName().getValue());
-        residence.streetType().setValue(address.streetType().getValue() != null ? address.streetType().getValue().toString() : "");
-        residence.streetDirection().setValue(address.streetDirection().getValue() != null ? address.streetDirection().getValue().toString() : "");
+        residence.streetType().setValue(address.streetType().getStringView());
+        residence.streetDirection().setValue(address.streetDirection().getStringView());
         residence.city().setValue(address.city().getValue());
-        residence.province().setValue(!address.province().name().isNull() ? address.province().name().getValue() : "");
-        residence.postalCode().setValue(address.postalCode().getValue());
-        residence.country().setValue(!address.province().country().name().isNull() ? address.province().country().name().getValue() : "");
+        residence.province().setValue(address.province().name().getStringView());
+        residence.postalCode().setValue(address.postalCode().getStringView());
+        residence.country().setValue(address.province().country().name().getStringView());
 
         residence.moveInDate().setValue(address.moveInDate().getValue());
         residence.moveOutDate().setValue(address.moveOutDate().getValue());
@@ -367,7 +364,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         for (BuildingUtility utility : term.version().utilities()) {
             utilites.add(utility.getStringView());
         }
-        return StringUtils.join(utilites, ";");
+        return StringUtils.join(utilites, "; ");
     }
 
 }
