@@ -252,7 +252,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             // check that selected guarantors/co-applicants have online-applications
             if (user.application().isNull()) {
                 throw new UserRuntimeException(
-                        i18n.tr("Failed to invite users, application invitation for {0} can be sent only after the main applicant will have finished his own applicaiton",
+                        i18n.tr("Failed to invite users, application invitation for {0} can be sent only after the main applicant will have finished his own application",
                                 user.leaseParticipant().customer().person().name().getStringView()));
             }
         }
