@@ -397,7 +397,7 @@ SET search_path = '_admin_';
                 CHECK ((processing_status) IN ('AcknowledgeProcessed', 'AcknowledgeReject', 'AcknowledgedReceived', 'ReconciliationProcessed', 'ReconciliationReceived'));
         ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
         ALTER TABLE outgoing_mail_queue ADD CONSTRAINT outgoing_mail_queue_id_discriminator_ck 
-            CHECK ((id_discriminator) IN ('Default', 'TenantSure'));
+            CHECK ((id_discriminator) IN ('Default','Operations','TenantSure'));
         ALTER TABLE outgoing_mail_queue ADD CONSTRAINT outgoing_mail_queue_status_e_ck 
             CHECK ((status) IN ('Cancelled', 'GiveUp', 'Queued', 'Success'));
         ALTER TABLE pmc_personal_information_document ADD CONSTRAINT pmc_personal_information_document_personal_info_doc_type_e_ck 
