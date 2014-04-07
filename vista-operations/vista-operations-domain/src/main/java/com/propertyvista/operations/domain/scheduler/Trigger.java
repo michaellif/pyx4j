@@ -48,6 +48,9 @@ public interface Trigger extends IEntity {
     @Caption(name = "Description")
     IPrimitive<String> name();
 
+    @Caption(name = "Number of Threads")
+    IPrimitive<Integer> threads();
+
     @NotNull
     IPrimitive<TriggerPmcSelectionType> populationType();
 

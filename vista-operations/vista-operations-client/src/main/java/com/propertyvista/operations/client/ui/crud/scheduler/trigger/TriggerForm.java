@@ -48,8 +48,9 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().populationType()), 10).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().threads()), 10).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().triggerType())).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().populationType()), 10).build());
 
         main.setWidget(++row, 0, 2, inject(proto().population(), new PopulationFolder(this)));
 
