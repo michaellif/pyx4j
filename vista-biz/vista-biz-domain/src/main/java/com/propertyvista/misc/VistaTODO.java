@@ -82,4 +82,5 @@ public class VistaTODO {
 
     public static boolean COMMUNICATION_FUNCTIONALITY_ENABLED = true;
 
+    public static boolean VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented = true;
 }

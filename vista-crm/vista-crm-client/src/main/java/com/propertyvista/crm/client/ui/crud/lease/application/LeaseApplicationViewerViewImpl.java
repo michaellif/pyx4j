@@ -259,7 +259,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     });
                 }
             });
-            addAction(moreInfoAction);
+            if (!VistaTODO.VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented) {
+                addAction(moreInfoAction);
+            }
 
             declineAction = new MenuItem(DECLINE, new Command() {
                 @Override
