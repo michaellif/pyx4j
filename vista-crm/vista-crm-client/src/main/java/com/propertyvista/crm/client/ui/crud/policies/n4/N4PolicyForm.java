@@ -147,7 +147,16 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().mailDeliveryAdvanceDays())).build());
         deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().courierDeliveryAdvanceDays())).build());
 
-        return Arrays.asList(signaturePanel, arCodesPanel, deliveryPanel);
+        return Arrays.asList(signaturePanel, arCodesPanel, deliveryPanel, createAutoCancellationPanel());
+    }
+
+    private TwoColumnFlexFormPanel createAutoCancellationPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Auto Cancellation"));
+        int row = -1;
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cancellationThreshold())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDays())).build());
+
+        return panel;
     }
 
     public static class ARCodeFolder extends VistaBoxFolder<N4PolicyDTOARCodeHolderDTO> {

@@ -25,6 +25,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -72,6 +73,7 @@ import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -186,9 +188,12 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             LegalStatusN4 n4Status = EntityFactory.create(LegalStatusN4.class);
             n4Status.status().setValue(Status.N4);
 
-            n4Status.expiry().setValue(null); // TODO set expiry from policy
-
-            n4Status.cancellationThreshold().setValue(new BigDecimal("0.00")); // TODO should be defined by user input/ policy
+            N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit(leaseId), N4Policy.class);
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.setTime(generationTime);
+            cal.add(GregorianCalendar.DAY_OF_YEAR, policy.expiryDays().getValue());
+            n4Status.expiry().setValue(cal.getTime());
+            n4Status.cancellationThreshold().setValue(policy.cancellationThreshold().getValue());
             n4Status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
 
             n4Status.notes().setValue("created via N4 notice batch");
@@ -258,4 +263,8 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return batchData;
     }
 
+    private AptUnit unit(Lease leaseId) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        return lease.unit();
+    }
 }

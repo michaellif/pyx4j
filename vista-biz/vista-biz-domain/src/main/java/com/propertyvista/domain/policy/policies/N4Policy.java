@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
@@ -73,4 +75,12 @@ public interface N4Policy extends Policy {
     @NotNull
     IPrimitive<Integer> courierDeliveryAdvanceDays();
 
+    @NotNull
+    @Caption(description = "N4 will automatically expire after this number of days, if no action (i.e. eviction) is taken")
+    IPrimitive<Integer> expiryDays();
+
+    @NotNull
+    @Caption(description = "N4 will be cancelled automatically if tenant's outstanding balance is equal or below this value")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> cancellationThreshold();
 }

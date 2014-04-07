@@ -47,7 +47,6 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
                     new FormDecoratorBuilder(inject(proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class)))).build());
             panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().generatedOn())).build());
             panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().amountOwed())).build());
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cancellationThreshold())).build());
             panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().terminationDate())).build());
             return panel;
         }

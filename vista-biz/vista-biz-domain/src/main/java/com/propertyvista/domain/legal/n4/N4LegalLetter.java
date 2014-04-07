@@ -29,9 +29,6 @@ public interface N4LegalLetter extends LegalLetter {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amountOwed();
 
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> cancellationThreshold(); // TODO doesn't belong here
-
     IPrimitive<LogicalDate> terminationDate();
 
 }

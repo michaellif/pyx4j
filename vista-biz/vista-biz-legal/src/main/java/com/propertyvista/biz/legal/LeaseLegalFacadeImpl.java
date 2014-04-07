@@ -110,7 +110,7 @@ public class LeaseLegalFacadeImpl implements LeaseLegalFacade {
 
     private boolean isActive(LegalStatus status) {
         if (!status.expiry().isNull()) {
-            return status.expiry().getValue().compareTo(SystemDateManager.getDate()) <= 0;
+            return status.expiry().getValue().compareTo(SystemDateManager.getDate()) >= 0;
         } else {
             return true; // TODO check for other status type specific conditions;
         }

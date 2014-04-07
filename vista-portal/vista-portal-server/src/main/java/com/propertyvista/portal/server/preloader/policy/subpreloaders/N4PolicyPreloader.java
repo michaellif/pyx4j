@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.policy.policies.N4Policy;
@@ -35,6 +37,9 @@ public class N4PolicyPreloader extends AbstractPolicyPreloader<N4Policy> {
         policy.handDeliveryAdvanceDays().setValue(0);
         policy.mailDeliveryAdvanceDays().setValue(5);
         policy.courierDeliveryAdvanceDays().setValue(1);
+
+        policy.expiryDays().setValue(90);
+        policy.cancellationThreshold().setValue(BigDecimal.ZERO);
 
         log.append(policy.getStringView());
 
