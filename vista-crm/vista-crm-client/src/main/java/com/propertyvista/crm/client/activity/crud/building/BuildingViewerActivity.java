@@ -18,15 +18,19 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.ListerControllerFactory;
@@ -66,6 +70,7 @@ import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 
 public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.Presenter {
+    private static final I18n i18n = I18n.get(BuildingViewerActivity.class);
 
     private final Presenter<FloorplanDTO> floorplanLister;
 
@@ -214,10 +219,22 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @Override
     public void updateFromYardi() {
-        ((BuildingCrudService) getService()).updateFromYardi(new DefaultAsyncCallback<VoidSerializable>() {
+        ((BuildingCrudService) getService()).updateFromYardi(new DefaultAsyncCallback<String>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
+            public void onSuccess(String deferredCorrelationId) {
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Building Update"), i18n.tr("Updating Building..."), false) {
+                    @Override
+                    public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
+                        super.onDeferredSuccess(result);
+                        populate();
+                        if (!CommonsStringUtils.isEmpty(result.getMessage())) {
+                            hide();
+                            MessageDialog.warn(this.dialog.getTitle(), result.getMessage());
+                        }
+                    }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
             }
         }, EntityFactory.createIdentityStub(Building.class, getEntityId()));
     }

@@ -13,12 +13,10 @@
  */
 package com.propertyvista.crm.server.services.building;
 
-import java.rmi.RemoteException;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -28,13 +26,12 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
-import com.propertyvista.biz.system.YardiARFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
@@ -318,19 +315,9 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    public void updateFromYardi(AsyncCallback<VoidSerializable> callback, Building buildingId) {
+    public void updateFromYardi(AsyncCallback<String> callback, Building buildingId) {
         Building building = Persistence.service().retrieve(boClass, buildingId.getPrimaryKey());
-
-        try {
-            ServerSideFactory.create(YardiARFacade.class).updateProductCatalog(building);
-        } catch (RemoteException e) {
-            throw new UserRuntimeException(i18n.tr("Yardi connection problem"), e);
-        } catch (YardiServiceException e) {
-            throw new UserRuntimeException(i18n.tr("Error updating building form Yardi"), e);
-        }
-
-        Persistence.service().commit();
-        callback.onSuccess(null);
+        callback.onSuccess(DeferredProcessRegistry.fork(new BuildingYardiUpdateDeferredProcess(building), ThreadPoolNames.IMPORTS));
     }
 
     @Override

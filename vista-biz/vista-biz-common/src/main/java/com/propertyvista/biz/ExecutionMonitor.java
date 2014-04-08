@@ -437,14 +437,21 @@ public class ExecutionMonitor {
     }
 
     public String getTextMessages() {
+        return getTextMessages(null);
+    }
+
+    public String getTextMessages(CompletionType type) {
         StringBuilder textMessage = new StringBuilder();
 
         for (Map.Entry<ReportSectionId, ReportSection> section : sections.entrySet()) {
+            if (type != null && !section.getKey().type.equals(type)) {
+                continue;
+            }
             for (ReportMessage message : section.getValue().messages) {
                 if (textMessage.length() > 0) {
                     textMessage.append("\n");
                 }
-                textMessage.append(message.message);
+                textMessage.append(section.getKey().name).append(": ").append(message.message);
             }
         }
         return textMessage.toString();

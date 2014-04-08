@@ -141,23 +141,32 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
      *             if operation fails
      */
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-        final Key yardiInterfaceId = yc.getPrimaryKey();
         List<String> propertyListCodes = null;
+        if (yc.propertyListCodes().isNull()) {
+            List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(yc);
+            propertyListCodes = new ArrayList<String>();
+            for (YardiPropertyConfiguration yardiPropertyConfiguration : propertyConfigurations) {
+                propertyListCodes.add(yardiPropertyConfiguration.propertyID().getValue());
+            }
+        } else {
+            propertyListCodes = Arrays.asList(yc.propertyListCodes().getValue().trim().split("\\s*,\\s*"));
+        }
+        updateProperties(yc, propertyListCodes, executionMonitor);
+    }
+
+    public void updateBuilding(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
+        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), executionMonitor);
+    }
+
+    private void updateProperties(PmcYardiCredential yc, List<String> propertyListCodes, ExecutionMonitor executionMonitor) throws YardiServiceException,
+            RemoteException {
         try {
             ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
 
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
-            if (yc.propertyListCodes().isNull()) {
-                List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(stub, yc);
-                propertyListCodes = new ArrayList<String>();
-                for (YardiPropertyConfiguration yardiPropertyConfiguration : propertyConfigurations) {
-                    propertyListCodes.add(yardiPropertyConfiguration.propertyID().getValue());
-                }
-            } else {
-                propertyListCodes = Arrays.asList(yc.propertyListCodes().getValue().trim().split("\\s*,\\s*"));
-            }
 
+            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+            final Key yardiInterfaceId = yc.getPrimaryKey();
             List<Building> importedBuildings = new ArrayList<Building>();
             // resident transactions
             if (!executionMonitor.isTerminationRequested()) {
@@ -580,9 +589,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-            Building bulding = findBuilding(yardiInterfaceId, propertyListCode);
-            if (bulding != null) {
-                if (bulding.suspended().getValue()) {
+            Building building = findBuilding(yardiInterfaceId, propertyListCode);
+            if (building != null) {
+                if (building.suspended().getValue()) {
                     executionMonitor.addInfoEvent("skip suspended property code for transaction import", CompletionType.failed, propertyListCode, null);
                     continue;
                 }
@@ -753,27 +762,27 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             throw new YardiServiceException("Yardi Charge Codes not configured");
         }
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
-        for (Building bulding : buildings) {
+        for (Building building : buildings) {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-            if (bulding.suspended().getValue()) {
-                executionMonitor
-                        .addInfoEvent("skip suspended property code for charges import", CompletionType.failed, bulding.propertyCode().getValue(), null);
+            if (building.suspended().getValue()) {
+                executionMonitor.addInfoEvent("skip suspended property code for charges import", CompletionType.failed, building.propertyCode().getValue(),
+                        null);
             } else {
-                BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(bulding, BillingPeriod.Monthly, 1);
+                BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(building, BillingPeriod.Monthly, 1);
                 try {
-                    ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, bulding.propertyCode().getValue(), nextCycle
+                    ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, building.propertyCode().getValue(), nextCycle
                             .billingCycleStartDate().getValue());
                     if (residentTransactions != null) {
                         transactions.add(residentTransactions);
                     }
-                    executionMonitor.addInfoEvent("PropertyListCharges", bulding.propertyCode().getValue());
+                    executionMonitor.addInfoEvent("PropertyListCharges", building.propertyCode().getValue());
                 } catch (YardiPropertyNoAccessException e) {
-                    if (suspendBuilding(yardiInterfaceId, bulding.propertyCode().getValue())) {
+                    if (suspendBuilding(yardiInterfaceId, building.propertyCode().getValue())) {
                         executionMonitor.addErredEvent("BuildingSuspended", e);
                     } else {
-                        executionMonitor.addFailedEvent("PropertyListCharges", bulding.propertyCode().getValue(), e);
+                        executionMonitor.addFailedEvent("PropertyListCharges", building.propertyCode().getValue(), e);
                     }
                 }
             }

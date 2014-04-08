@@ -65,12 +65,12 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
     }
 
     @Override
-    public void updateProductCatalog(Building building) throws YardiServiceException, RemoteException {
+    public void updateBuilding(Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
 
         Persistence.ensureRetrieve(building, AttachLevel.Attached);
 
-        YardiResidentTransactionsService.getInstance().updateProductCatalog(getPmcYardiCredential(building), building);
+        YardiResidentTransactionsService.getInstance().updateBuilding(getPmcYardiCredential(building), building, executionMonitor);
     }
 
     @Override
