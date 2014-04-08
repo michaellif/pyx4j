@@ -33,9 +33,10 @@ public class RecaptchaConfig {
 
     static {
         domainsMap.put("propertyvista.com", new RecaptchaConfig("6LeXXM8SAAAAAIR5XVBundDyFO072XcQ0IYsSD0u", "6LeXXM8SAAAAAGN6S3-bVjixUB6gAiAdgwWPtRXu"));
-        domainsMap.put("my-community.co", new RecaptchaConfig("6LdcSuUSAAAAAO2sEo5Uazzw8tN4jMVQrPU4rbP2", "6LdcSuUSAAAAAJZUygdCvvX3DPJx54GNjjWFwydq "));
+        domainsMap.put("my-community.co", new RecaptchaConfig("6LdcSuUSAAAAAO2sEo5Uazzw8tN4jMVQrPU4rbP2", "6LdcSuUSAAAAAJZUygdCvvX3DPJx54GNjjWFwydq"));
         domainsMap.put("birchwoodsoftwaregroup.com",
                 new RecaptchaConfig("6LdzXc8SAAAAAOKyhb7lGTGWPATHH8uYjeXg5jUc", "6LdzXc8SAAAAADehmgyofUx0zjuBgghbssZCIP_X"));
+        domainsMap.put("propertyvista.biz", new RecaptchaConfig("6LdNbfESAAAAADcfVUwZvMLi3Ns8tOvrErDctT9s", "6LdNbfESAAAAAPvkarQUth6EUvLEGAoZ74l3hJ4i"));
     }
 
     public static String getReCaptchaPublicKey() {
