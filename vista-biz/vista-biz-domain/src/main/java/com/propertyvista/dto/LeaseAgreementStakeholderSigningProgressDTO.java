@@ -41,7 +41,7 @@ public interface LeaseAgreementStakeholderSigningProgressDTO extends IEntity {
 
     CrmUser stakeholderUser();
 
-    LeaseTermParticipant<?> stakeholderLeaseParticipant();
+    LeaseTermParticipant<?> stakeholderLeaseTermParticipants();
 
     IPrimitive<String> name();
 

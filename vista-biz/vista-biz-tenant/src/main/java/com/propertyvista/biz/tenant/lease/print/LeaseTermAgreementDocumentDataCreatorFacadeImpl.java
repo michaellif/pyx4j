@@ -76,8 +76,8 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         // Add Landlords Signature
         if (!makeDraft
                 && (signaturesMode == LeaseTermAgreementSignaturesMode.SignaturesOnly || signaturesMode == LeaseTermAgreementSignaturesMode.PlaceholdersAndAvailableSignatures)) {
-            if (leaseTerm.version().employeeSignature().hasValues()) {
-                CrmUserSignature signature = leaseTerm.version().employeeSignature();
+            if (leaseTerm.employeeSignature().hasValues()) {
+                CrmUserSignature signature = leaseTerm.employeeSignature();
                 signature.fullName().setValue(
                         signature.fullName().getValue() + " (Per: " + leaseTerm.lease().unit().building().landlord().name().getValue() + ")");
                 leaseAgreementData.landlordAgentsSignatures().add(signature);
@@ -103,27 +103,27 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
     private void retrieve(LeaseTerm leaseTerm) {
         Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.version().agreementLegalTerms(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(leaseTerm.version().agreementConfirmationTerm(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.agreementLegalTerms(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.agreementConfirmationTerms(), AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm.version().utilities(), AttachLevel.Attached);
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
-            Persistence.service().retrieveMember(tenant.agreementSignatures(), AttachLevel.Attached);
-            if (tenant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
-                AgreementDigitalSignatures agreementSignatures = tenant.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
+            Persistence.service().retrieveMember(tenant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
+            if (tenant.leaseParticipant().agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
+                AgreementDigitalSignatures agreementSignatures = tenant.leaseParticipant().agreementSignatures().duplicate(AgreementDigitalSignatures.class);
                 for (SignedAgreementLegalTerm legalTermSignature : agreementSignatures.legalTermsSignatures()) {
                     Persistence.ensureRetrieve(legalTermSignature.signature(), AttachLevel.Attached);
                 }
-                tenant.agreementSignatures().set(agreementSignatures);
+                tenant.leaseParticipant().agreementSignatures().set(agreementSignatures);
             }
         }
         for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
-            Persistence.service().retrieveMember(guarantor.agreementSignatures(), AttachLevel.Attached);
-            if (guarantor.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
-                AgreementDigitalSignatures agreementSignatures = guarantor.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
+            Persistence.service().retrieveMember(guarantor.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
+            if (guarantor.leaseParticipant().agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
+                AgreementDigitalSignatures agreementSignatures = guarantor.leaseParticipant().agreementSignatures().duplicate(AgreementDigitalSignatures.class);
                 for (SignedAgreementLegalTerm legalTermSignature : agreementSignatures.legalTermsSignatures()) {
                     Persistence.ensureRetrieve(legalTermSignature.signature(), AttachLevel.Attached);
                 }
-                guarantor.agreementSignatures().set(agreementSignatures);
+                guarantor.leaseParticipant().agreementSignatures().set(agreementSignatures);
             }
         }
 
@@ -260,7 +260,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
     private Collection<? extends LeaseAgreementDocumentLegalTerm4PrintDTO> makeTermsForPrint(LeaseTerm leaseTerm,
             LeaseTermAgreementSignaturesMode signaturesMode) {
         List<LeaseAgreementDocumentLegalTerm4PrintDTO> legalTerms4Print = new LinkedList<LeaseAgreementDocumentLegalTerm4PrintDTO>();
-        for (LeaseAgreementLegalTerm legalTerm : leaseTerm.version().agreementLegalTerms()) {
+        for (LeaseAgreementLegalTerm legalTerm : leaseTerm.agreementLegalTerms()) {
             legalTerms4Print.add(makeTermForPrint(leaseTerm, legalTerm, signaturesMode));
         }
         return legalTerms4Print;
@@ -318,9 +318,10 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
     }
 
     private CustomerSignature getSignature(LeaseAgreementLegalTerm legalTerm, LeaseTermParticipant<?> participant) {
-        if (!participant.agreementSignatures().isNull() && participant.agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
+        if (!participant.leaseParticipant().agreementSignatures().isNull()
+                && participant.leaseParticipant().agreementSignatures().isInstanceOf(AgreementDigitalSignatures.class)) {
             // find a signature that belongs to the term
-            for (SignedAgreementLegalTerm signedLegalTerm : (participant.agreementSignatures().duplicate(AgreementDigitalSignatures.class)
+            for (SignedAgreementLegalTerm signedLegalTerm : (participant.leaseParticipant().agreementSignatures().duplicate(AgreementDigitalSignatures.class)
                     .legalTermsSignatures())) {
                 if (signedLegalTerm.term().getPrimaryKey().equals(legalTerm.getPrimaryKey())) {
                     if (PrintableSignatureChecker.isPrintable(signedLegalTerm.signature())) {

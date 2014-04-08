@@ -28,14 +28,12 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -136,9 +134,5 @@ public interface LeaseTermParticipant<LP extends LeaseParticipant<?>> extends IE
 
     @Transient
     LeaseParticipantScreeningTO effectiveScreening();
-
-    @Owned(cascade = {})
-    @Detached(level = AttachLevel.Detached)
-    AgreementSignatures agreementSignatures();
 
 }

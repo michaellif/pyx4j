@@ -130,6 +130,18 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> creationDate();
 
+    IList<LeaseAgreementLegalTerm> agreementLegalTerms();
+
+    IList<LeaseAgreementConfirmationTerm> agreementConfirmationTerms();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.IdOnly)
+    ISet<LeaseTermAgreementDocument> agreementDocuments();
+
+    @Owned
+    /** digital signature of employee */
+    CrmUserSignature employeeSignature();
+
     public interface LeaseTermV extends IVersionData<LeaseTerm> {
 
         @Owned
@@ -145,18 +157,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
         @Detached
         IList<BuildingUtility> utilities();
-
-        IList<LeaseAgreementLegalTerm> agreementLegalTerms();
-
-        IList<LeaseAgreementConfirmationTerm> agreementConfirmationTerm();
-
-        @Owned(cascade = {})
-        @Detached(level = AttachLevel.IdOnly)
-        ISet<LeaseTermAgreementDocument> agreementDocuments();
-
-        @Owned
-        /** digital signature of employee */
-        CrmUserSignature employeeSignature();
 
     }
 

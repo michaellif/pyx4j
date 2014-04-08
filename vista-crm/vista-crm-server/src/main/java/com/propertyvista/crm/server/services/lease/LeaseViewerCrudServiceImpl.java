@@ -374,7 +374,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         signature.agree().setValue(true);
         signature.fullName().setValue(CrmAppContext.getCurrentUserEmployee().name().getStringView());
 
-        lease.currentTerm().version().employeeSignature().set(signature);
+        lease.currentTerm().employeeSignature().set(signature);
         Persistence.service().merge(lease.currentTerm().version());
         Persistence.service().commit();
 
@@ -390,9 +390,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         leaseAgreementDocuments.signingProgress().set(ServerSideFactory.create(LeaseTermAgreementSigningProgressFacade.class).getSigningProgress(leaseId));
 
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
-        Persistence.ensureRetrieve(lease.currentTerm().version().agreementDocuments(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.currentTerm().agreementDocuments(), AttachLevel.Attached);
 
-        leaseAgreementDocuments.inkSignedDocuments().addAll(lease.currentTerm().version().agreementDocuments());
+        leaseAgreementDocuments.inkSignedDocuments().addAll(lease.currentTerm().agreementDocuments());
         Iterator<LeaseTermAgreementDocument> i = leaseAgreementDocuments.inkSignedDocuments().iterator();
         while (i.hasNext()) {
             LeaseTermAgreementDocument doc = i.next();
@@ -402,7 +402,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
                 break;
             }
         }
-        if (leaseAgreementDocuments.digitallySignedDocument().isNull() && !lease.currentTerm().version().employeeSignature().isEmpty()) {
+        if (leaseAgreementDocuments.digitallySignedDocument().isNull() && !lease.currentTerm().employeeSignature().isEmpty()) {
             throw new UserRuntimeException(i18n.tr("Generation of signed agreement document is in progress. Please try again later!"));
         }
         callback.onSuccess(leaseAgreementDocuments);
@@ -411,7 +411,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     @Override
     public void updateLeaseAgreementDocuments(AsyncCallback<VoidSerializable> callback, Lease leaseId, LeaseAgreementDocumentsDTO documents) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
-        Persistence.ensureRetrieve(lease.currentTerm().version().agreementDocuments(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.currentTerm().agreementDocuments(), AttachLevel.Attached);
 
         List<LeaseTermAgreementDocument> newDocs = new LinkedList<>();
         for (LeaseTermAgreementDocument incomingInkSignedDoc : documents.inkSignedDocuments()) {
@@ -421,7 +421,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         }
 
         List<LeaseTermAgreementDocument> deletedDocs = new LinkedList<>();
-        for (LeaseTermAgreementDocument doc : lease.currentTerm().version().agreementDocuments()) {
+        for (LeaseTermAgreementDocument doc : lease.currentTerm().agreementDocuments()) {
             if (doc.isSignedByInk().getValue(false) == false) {
                 // we cannot allow user to delete digitally signed docs
                 continue;
@@ -444,20 +444,20 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
             Persistence.service().delete(LeaseTermAgreementDocument.class, deletedDoc.getPrimaryKey());
 
             for (LeaseTermParticipant<?> participant : deletedDoc.signedParticipants()) {
-                Persistence.ensureRetrieve(participant.agreementSignatures(), AttachLevel.IdOnly);
-                AgreementInkSignatures inkSignature = participant.agreementSignatures().duplicate(AgreementInkSignatures.class);
+                Persistence.ensureRetrieve(participant.leaseParticipant().agreementSignatures(), AttachLevel.IdOnly);
+                AgreementInkSignatures inkSignature = participant.leaseParticipant().agreementSignatures().duplicate(AgreementInkSignatures.class);
                 Persistence.service().delete(inkSignature);
             }
         }
 
         for (LeaseTermAgreementDocument newDoc : newDocs) {
-            newDoc.leaseTermV().set(lease.currentTerm().version());
+            newDoc.leaseTerm().set(lease.currentTerm());
             newDoc.isSignedByInk().setValue(true);
             Persistence.service().merge(newDoc);
 
             for (LeaseTermParticipant<?> participant : newDoc.signedParticipants()) {
                 AgreementInkSignatures signature = EntityFactory.create(AgreementInkSignatures.class);
-                signature.leaseTermParticipant().set(participant);
+                signature.leaseParticipant().set(participant.leaseParticipant());
                 Persistence.service().persist(signature);
             }
         }

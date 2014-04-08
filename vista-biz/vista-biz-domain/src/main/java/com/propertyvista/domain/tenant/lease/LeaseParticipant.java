@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -70,9 +71,14 @@ public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEn
     @Editor(type = EditorType.label)
     IPrimitive<String> yardiApplicantId();
 
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    AgreementSignatures agreementSignatures();
+
     //TODO
     @Transient
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = LeaseTermParticipant.class, mappedBy = LeaseTermParticipant.LeaseParticipantHolderId.class)
     ISet<E> leaseTermParticipants();
+
 }

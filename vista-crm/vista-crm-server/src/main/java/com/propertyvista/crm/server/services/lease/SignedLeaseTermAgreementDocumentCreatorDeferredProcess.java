@@ -53,7 +53,7 @@ class SignedLeaseTermAgreementDocumentCreatorDeferredProcess extends AbstractDef
         super();
         this.leaseTerm = leaseTerm;
         this.agreementDocument = EntityFactory.create(LeaseTermAgreementDocument.class);
-        this.agreementDocument.leaseTermV().set(this.leaseTerm.version());
+        this.agreementDocument.leaseTerm().set(this.leaseTerm);
     }
 
     @Override
@@ -90,7 +90,7 @@ class SignedLeaseTermAgreementDocumentCreatorDeferredProcess extends AbstractDef
         agreementDocument.file().fileSize().setValue(bytes.length);
         agreementDocument.file().blobKey().set(blob.id());
 
-        agreementDocument.leaseTermV().set(leaseTerm.version());
+        agreementDocument.leaseTerm().set(leaseTerm);
 
         agreementDocument.isSignedByInk().setValue(false);
 
@@ -102,8 +102,8 @@ class SignedLeaseTermAgreementDocumentCreatorDeferredProcess extends AbstractDef
                         "Aborting lease term agreement document creation: all lease participants required to sign digitally in order to create digitally signed document leaseId="
                                 + leaseTerm.lease().getPrimaryKey());
             }
-            if (!stackholderProgress.stakeholderLeaseParticipant().isEmpty()) {
-                agreementDocument.signedParticipants().add(stackholderProgress.stakeholderLeaseParticipant());
+            if (!stackholderProgress.stakeholderLeaseTermParticipants().isEmpty()) {
+                agreementDocument.signedParticipants().add(stackholderProgress.stakeholderLeaseTermParticipants());
             } else if (!stackholderProgress.stakeholderUser().isEmpty()) {
                 agreementDocument.signedEmployeeUploader().set(stackholderProgress.stakeholderUser());
             }

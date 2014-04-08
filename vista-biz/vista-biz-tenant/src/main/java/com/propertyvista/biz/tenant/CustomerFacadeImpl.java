@@ -227,8 +227,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
         // Do not ask existing leases to Sign Agreement (Welcome wizard)
         if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.Approved) {
-            Persistence.ensureRetrieve(termParticipant.agreementSignatures(), AttachLevel.Attached);
-            if (!termParticipant.agreementSignatures().hasValues()) {
+            Persistence.ensureRetrieve(termParticipant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
+            if (!termParticipant.leaseParticipant().agreementSignatures().hasValues()) {
                 behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
             }
         }

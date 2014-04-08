@@ -55,26 +55,27 @@ public class LeaseTermAgreementSigningProgressFacadeImpl implements LeaseTermAgr
         LeaseAgreementSigningProgressDTO progress = EntityFactory.create(LeaseAgreementSigningProgressDTO.class);
 
         for (LeaseTermParticipant<?> participant : stakeholderParticipants) {
-            Persistence.ensureRetrieve(participant.agreementSignatures(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(participant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
 
             LeaseAgreementStakeholderSigningProgressDTO stakeholdersProgress = EntityFactory.create(LeaseAgreementStakeholderSigningProgressDTO.class);
-            stakeholdersProgress.stakeholderLeaseParticipant().set(participant);
+            stakeholdersProgress.stakeholderLeaseTermParticipants().set(participant.leaseParticipant());
 
             stakeholdersProgress.name().setValue(participant.leaseParticipant().customer().person().name().getStringView());
             stakeholdersProgress.role().setValue(participant.role().getStringView());
 
             boolean hasSigned = true;
-            Iterator<LeaseAgreementLegalTerm> legalTerms = lease.currentTerm().version().agreementLegalTerms().iterator();
+            Iterator<LeaseAgreementLegalTerm> legalTerms = lease.currentTerm().agreementLegalTerms().iterator();
 
             while (hasSigned && legalTerms.hasNext()) {
                 LeaseAgreementLegalTerm legalTerm = legalTerms.next();
                 if (legalTerm.signatureFormat().getValue() != SignatureFormat.None) {
-                    if (!participant.agreementSignatures().isNull()
-                            && participant.agreementSignatures().getInstanceValueClass().equals(AgreementInkSignatures.class)) {
+                    if (!participant.leaseParticipant().agreementSignatures().isNull()
+                            && participant.leaseParticipant().agreementSignatures().getInstanceValueClass().equals(AgreementInkSignatures.class)) {
                         stakeholdersProgress.singatureType().setValue(SignatureType.Ink);
-                    } else if (participant.agreementSignatures().getInstanceValueClass().equals(AgreementDigitalSignatures.class)) {
+                    } else if (participant.leaseParticipant().agreementSignatures().getInstanceValueClass().equals(AgreementDigitalSignatures.class)) {
                         stakeholdersProgress.singatureType().setValue(SignatureType.Digital);
-                        AgreementDigitalSignatures signatures = participant.agreementSignatures().duplicate(AgreementDigitalSignatures.class);
+                        AgreementDigitalSignatures signatures = participant.leaseParticipant().agreementSignatures()
+                                .duplicate(AgreementDigitalSignatures.class);
 
                         boolean foundSignedTerm = false;
                         for (SignedAgreementLegalTerm signedTerm : signatures.legalTermsSignatures()) {
@@ -93,16 +94,16 @@ public class LeaseTermAgreementSigningProgressFacadeImpl implements LeaseTermAgr
                     }
                 }
             }
-            if (!lease.currentTerm().version().agreementLegalTerms().isEmpty()) {
+            if (!lease.currentTerm().agreementLegalTerms().isEmpty()) {
                 stakeholdersProgress.hasSigned().setValue(hasSigned);
             }
             progress.stackholdersProgressBreakdown().add(stakeholdersProgress);
         }
 
-        if (!lease.currentTerm().version().employeeSignature().isEmpty()) {
+        if (!lease.currentTerm().employeeSignature().isEmpty()) {
             LeaseAgreementStakeholderSigningProgressDTO landlordsProgress = EntityFactory.create(LeaseAgreementStakeholderSigningProgressDTO.class);
-            landlordsProgress.stakeholderUser().set(lease.currentTerm().version().employeeSignature().signingUser());
-            landlordsProgress.name().setValue(lease.currentTerm().version().employeeSignature().signingUser().name().getStringView());
+            landlordsProgress.stakeholderUser().set(lease.currentTerm().employeeSignature().signingUser());
+            landlordsProgress.name().setValue(lease.currentTerm().employeeSignature().signingUser().name().getStringView());
             landlordsProgress.role().setValue(i18n.tr("Landlord"));
             landlordsProgress.hasSigned().setValue(true);
             landlordsProgress.singatureType().setValue(SignatureType.Digital);

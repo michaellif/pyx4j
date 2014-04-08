@@ -886,8 +886,8 @@ public abstract class LeaseAbstractManager {
             if (lease.status().getValue().isDraft()) {
                 LeaseAgreementLegalPolicy agreementLegalPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                         lease.currentTerm().unit().building(), LeaseAgreementLegalPolicy.class);
-                lease.currentTerm().version().agreementLegalTerms().set(agreementLegalPolicy.legal());
-                lease.currentTerm().version().agreementConfirmationTerm().set(agreementLegalPolicy.confirmation());
+                lease.currentTerm().agreementLegalTerms().set(agreementLegalPolicy.legal());
+                lease.currentTerm().agreementConfirmationTerms().set(agreementLegalPolicy.confirmation());
             }
         }
 

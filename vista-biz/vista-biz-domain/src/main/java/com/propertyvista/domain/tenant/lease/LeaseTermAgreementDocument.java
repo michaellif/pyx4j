@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.IHasFile;
 
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
 public interface LeaseTermAgreementDocument extends IHasFile<LeaseTermAgreementDocumentBlob> {
 
@@ -36,10 +35,11 @@ public interface LeaseTermAgreementDocument extends IHasFile<LeaseTermAgreementD
     @Indexed
     @JoinColumn
     @MemberColumn(notNull = true)
-    LeaseTermV leaseTermV();
+    LeaseTerm leaseTerm();
 
     IPrimitive<Boolean> isSignedByInk();
 
+    // The same as in payment who he was at the time of document creation
     IList<LeaseTermParticipant<?>> signedParticipants();
 
     @Caption(name = "Signed Employee / Uploader")

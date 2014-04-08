@@ -49,14 +49,14 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         to.unit().set(lease.unit());
         to.leaseTerm().set(lease.currentTerm());
 
-        for (LeaseAgreementLegalTerm term : lease.currentTerm().version().agreementLegalTerms()) {
+        for (LeaseAgreementLegalTerm term : lease.currentTerm().agreementLegalTerms()) {
             SignedAgreementLegalTerm signedTerm = EntityFactory.create(SignedAgreementLegalTerm.class);
             signedTerm.term().set(term);
             signedTerm.signature().signatureFormat().set(term.signatureFormat());
             to.legalTerms().add(signedTerm);
         }
 
-        for (LeaseAgreementConfirmationTerm term : lease.currentTerm().version().agreementConfirmationTerm()) {
+        for (LeaseAgreementConfirmationTerm term : lease.currentTerm().agreementConfirmationTerms()) {
             SignedAgreementConfirmationTerm signedTerm = EntityFactory.create(SignedAgreementConfirmationTerm.class);
             signedTerm.term().set(term);
             signedTerm.signature().signatureFormat().set(term.signatureFormat());
@@ -68,7 +68,7 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
     @Override
     public void create(AsyncCallback<Key> callback, LeaseAgreementDTO editableEntity) {
         AgreementDigitalSignatures agreementSignatures = EntityFactory.create(AgreementDigitalSignatures.class);
-        agreementSignatures.leaseTermParticipant().set(ResidentPortalContext.getLeaseTermParticipant());
+        agreementSignatures.leaseParticipant().set(ResidentPortalContext.getLeaseParticipant());
         agreementSignatures.legalTermsSignatures().addAll(editableEntity.legalTerms());
         Persistence.secureSave(agreementSignatures);
         Persistence.service().commit();
