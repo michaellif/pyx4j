@@ -394,9 +394,7 @@ public abstract class LeaseAbstractManager {
 
         // memorize entry LeaseStatus:
         Status leaseStatus = lease.status().getValue();
-
         lease.status().setValue(Lease.Status.Approved);
-        lease.approvalDate().setValue(SystemDateManager.getDate());
 
         if (leaseStatus == Status.Application) {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
@@ -410,6 +408,10 @@ public abstract class LeaseAbstractManager {
         }
 
         finalize(lease);
+
+        // set approval date AFTER lease finalization:
+        lease.approvalDate().setValue(SystemDateManager.getDate());
+        Persistence.service().merge(lease);
 
         // Billing-related stuff:
         onLeaseApprovalSuccess(lease, leaseStatus);

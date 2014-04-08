@@ -144,6 +144,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             dto.currentTerm().set(Persistence.retriveFinalOrDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey(), AttachLevel.Attached));
         }
 
+        assert (!dto.currentTerm().isNull());
+        assert (!dto.currentTerm().version().isNull());
+
         Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
         Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
     }
