@@ -106,6 +106,11 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     }
 
     @Override
+    public void cancelMasterOnlineApplication(Lease leaseId) {
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).cancelMasterOnlineApplication(leaseId);
+    }
+
+    @Override
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         getLeaseYardiManager(retrieveLeseStatus(leaseId)).declineApplication(leaseId, decidedBy, decisionReason);
     }
@@ -227,5 +232,4 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
             return new LeaseYardiImportManager();
         }
     }
-
 }

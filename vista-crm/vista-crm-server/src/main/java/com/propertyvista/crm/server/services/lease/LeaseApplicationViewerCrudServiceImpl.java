@@ -235,6 +235,13 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
+    public void cancelOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        ServerSideFactory.create(LeaseFacade.class).cancelMasterOnlineApplication(EntityFactory.createIdentityStub(Lease.class, entityId));
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
     public void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseTermParticipant<?>> users) {
         CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
         if (users.isEmpty()) {

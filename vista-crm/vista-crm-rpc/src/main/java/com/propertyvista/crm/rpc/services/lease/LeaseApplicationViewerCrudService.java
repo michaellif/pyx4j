@@ -32,6 +32,8 @@ public interface LeaseApplicationViewerCrudService extends LeaseViewerCrudServic
 
     void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 
+    void cancelOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
+
     /**
      * callback returns a message that should be passed to the users.
      */

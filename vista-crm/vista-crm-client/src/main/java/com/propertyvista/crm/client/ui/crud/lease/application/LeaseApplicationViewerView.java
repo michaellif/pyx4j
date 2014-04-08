@@ -38,6 +38,8 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
         void startOnlineApplication();
 
+        void cancelOnlineApplication();
+
         void inviteUsers(List<LeaseTermParticipant<?>> users);
 
         void creditCheck(List<LeaseTermParticipant<?>> users);
@@ -60,6 +62,8 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
     void reportStartOnlineApplicationSuccess();
 
+    void reportCancelOnlineApplicationSuccess();
+
     void reportInviteUsersActionResult(String message);
 
     void reportInviteUsersActionFailure(String message);
@@ -69,4 +73,5 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
     void reportApplicationApprovalSuccess();
 
     void reportApplicationApprovalFailure(UserRuntimeException caught);
+
 }

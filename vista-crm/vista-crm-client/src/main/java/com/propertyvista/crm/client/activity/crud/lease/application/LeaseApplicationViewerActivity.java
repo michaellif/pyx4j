@@ -120,6 +120,18 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     }
 
     @Override
+    public void cancelOnlineApplication() {
+        ((LeaseApplicationViewerCrudService) getService()).cancelOnlineApplication(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                ((LeaseApplicationViewerView) getView()).reportCancelOnlineApplicationSuccess();
+                populate();
+
+            }
+        }, getEntityId());
+    }
+
+    @Override
     public void inviteUsers(List<LeaseTermParticipant<?>> users) {
         ((LeaseApplicationViewerCrudService) getService()).inviteUsers(new DefaultAsyncCallback<String>() {
             @Override

@@ -99,6 +99,11 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
     }
 
     @Override
+    public void cancelMasterOnlineApplication(Lease leaseId) {
+        new LeaseInternalManager().cancelMasterOnlineApplication(leaseId);
+    }
+
+    @Override
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         new LeaseInternalManager().declineApplication(leaseId, decidedBy, decisionReason);
     }

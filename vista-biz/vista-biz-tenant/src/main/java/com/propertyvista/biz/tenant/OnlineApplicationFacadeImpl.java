@@ -65,6 +65,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     @Override
     public void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication, Building building, Floorplan floorplan) {
+        Persistence.ensureRetrieve(masterOnlineApplication, AttachLevel.Attached);
+
         masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Incomplete);
         masterOnlineApplication.building().set(building);
         masterOnlineApplication.floorplan().set(floorplan);
@@ -96,6 +98,17 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
         if (!masterOnlineApplication.status().isNull()) {
             masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Approved);
+
+            Persistence.service().persist(masterOnlineApplication);
+        }
+    }
+
+    @Override
+    public void cancelMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication) {
+        Persistence.ensureRetrieve(masterOnlineApplication, AttachLevel.Attached);
+
+        if (!masterOnlineApplication.status().isNull()) {
+            masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Cancelled);
 
             Persistence.service().persist(masterOnlineApplication);
         }

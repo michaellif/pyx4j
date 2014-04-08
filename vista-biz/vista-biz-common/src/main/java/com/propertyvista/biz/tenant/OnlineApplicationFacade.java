@@ -36,6 +36,8 @@ public interface OnlineApplicationFacade {
 
     void approveMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
 
+    void cancelMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
+
     List<OnlineApplication> getOnlineApplications(CustomerUser customerUser);
 
     EnumSet<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication application);
@@ -46,9 +48,10 @@ public interface OnlineApplicationFacade {
 
     void submitOnlineApplication(OnlineApplication application);
 
-    void resendInvitationEmail(LeaseTermParticipant leaseParticipant);
+    void resendInvitationEmail(LeaseTermParticipant<?> leaseParticipant);
 
     MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication masterOnlineApplication);
 
     Building getOnlineApplicationPolicyNode(OnlineApplication app);
+
 }

@@ -77,7 +77,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private final MenuItem viewLease;
 
-    private final MenuItem onlineApplication;
+    private final MenuItem createOnlineApplication;
+
+    private final MenuItem cancelOnlineApplication;
 
     private final MenuItem inviteAction;
 
@@ -154,14 +156,24 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         // Actions:
 
-        onlineApplication = new MenuItem(i18n.tr("Start Online Application"), new Command() {
+        createOnlineApplication = new MenuItem(i18n.tr("Start Online Application"), new Command() {
             @Override
             public void execute() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).startOnlineApplication();
             }
         });
         if (VistaFeatures.instance().onlineApplication()) {
-            addAction(onlineApplication);
+            addAction(createOnlineApplication);
+        }
+
+        cancelOnlineApplication = new MenuItem(i18n.tr("Cancel Online Application"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).cancelOnlineApplication();
+            }
+        });
+        if (VistaFeatures.instance().onlineApplication()) {
+            addAction(cancelOnlineApplication);
         }
 
         inviteAction = new MenuItem(INVITE, new Command() {
@@ -302,7 +314,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     public void reset() {
         setViewVisible(viewLease, false);
 
-        setActionVisible(onlineApplication, false);
+        setActionVisible(createOnlineApplication, false);
+        setActionVisible(cancelOnlineApplication, false);
         setActionVisible(inviteAction, false);
         setActionVisible(checkAction, false);
         setActionVisible(approveAction, false);
@@ -322,7 +335,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         // set buttons state:
         setViewVisible(viewLease, status.isCurrent());
 
-        setActionVisible(onlineApplication, status == Status.Created);
+        setActionVisible(createOnlineApplication, status == Status.Created);
+        setActionVisible(cancelOnlineApplication, status == Status.OnlineApplication);
         setActionVisible(inviteAction, status == Status.OnlineApplication);
         setActionVisible(checkAction, status.isDraft());
         setActionVisible(approveAction, status.isDraft());
@@ -358,6 +372,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     @Override
     public void reportStartOnlineApplicationSuccess() {
         MessageDialog.info(i18n.tr("Started Online Application"));
+    }
+
+    @Override
+    public void reportCancelOnlineApplicationSuccess() {
+        MessageDialog.info(i18n.tr("Online Application has been canceled"));
     }
 
     @Override

@@ -294,7 +294,25 @@ public abstract class LeaseAbstractManager {
                 .createMasterOnlineApplication(lease.leaseApplication().onlineApplication(), building, floorplan);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.OnlineApplication);
-        lease.status().setValue(Lease.Status.Application);
+
+        Persistence.service().merge(lease);
+    }
+
+    public void cancelMasterOnlineApplication(Lease leaseId) {
+        Lease lease = load(leaseId, false);
+
+        // Verify the status
+        if (!lease.status().getValue().isDraft()) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+        if (lease.leaseApplication().status().getValue() != LeaseApplication.Status.OnlineApplication) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Application Status (\"{0}\")", lease.leaseApplication().status().getValue()));
+        }
+
+        ServerSideFactory.create(OnlineApplicationFacade.class).cancelMasterOnlineApplication(lease.leaseApplication().onlineApplication());
+
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
+
         Persistence.service().merge(lease);
     }
 

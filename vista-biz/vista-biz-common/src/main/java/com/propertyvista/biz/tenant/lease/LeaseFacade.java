@@ -70,6 +70,8 @@ public interface LeaseFacade {
 
     void createMasterOnlineApplication(Lease leaseId, Building building, Floorplan floorplan);
 
+    void cancelMasterOnlineApplication(Lease leaseId);
+
     void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
     void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason);
