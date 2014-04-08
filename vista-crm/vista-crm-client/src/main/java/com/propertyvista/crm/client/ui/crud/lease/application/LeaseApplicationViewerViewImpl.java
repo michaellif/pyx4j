@@ -119,7 +119,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     }
                 });//formatter:on
         applicationDocumentMenu.addItem(uploadApplicationDocumentMenuItem);
-        MenuItem downloadApplicationDocumentMenuItem = new MenuItem(i18n.tr("Download Blank..."), new Command() {//formatter:off            
+        MenuItem downloadApplicationDocumentMenuItem = new MenuItem(i18n.tr("Manually Sign Application..."), new Command() {//formatter:off            
                     @Override
                     public void execute() {
                         downloadApplicationDocument();
