@@ -98,7 +98,7 @@ public class ChargesSummaryGadget extends FlowPanel {
     }
 
     private void updateFees(OnlineApplicationDTO onlineApplication) {
-        if (onlineApplication.payment().applicationFee().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) > 0) {
+        if (onlineApplication != null && onlineApplication.payment().applicationFee().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) > 0) {
             feeSection.setContentHTML(formatCharge(onlineApplication.payment().applicationFee().getValue(), i18n.tr("Application Fee")));
             feeSection.setVisible(true);
         } else {
