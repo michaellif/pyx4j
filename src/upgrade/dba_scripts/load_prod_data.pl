@@ -15,7 +15,7 @@ use Getopt::Long;
 
 my $sourcedir = '/home/akinareevski/tmp/import/';
 my $dbname = 'vista';
-my $pattern = 'vista_[a-z0-9_]+\.full.sql';
+my $pattern = 'vista_[a-z0-9_]+\.full\.sql';
 my $threads = 16;
 my @filelist;
 
