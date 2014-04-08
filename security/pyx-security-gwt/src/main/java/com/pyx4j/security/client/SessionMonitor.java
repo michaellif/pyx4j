@@ -20,6 +20,8 @@
  */
 package com.pyx4j.security.client;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -169,7 +171,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
                 checkActivity();
             }
         };
-        timer.scheduleRepeating((int) (3 * Consts.MIN2MSEC));
+        timer.scheduleRepeating((int) ((maxInactiveIntervalMillis > 10 * Consts.MIN2MSEC) ? (3 * Consts.MIN2MSEC) : (Consts.MIN2MSEC)));
         monitoring = true;
         if (HTML5Storage.isSupported()) {
             HTML5Storage.getLocalStorage().setItem(HTML5_SESSION_ACTIVITY_KEY, String.valueOf(lastActivity));
@@ -217,7 +219,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
             HTML5Storage.getLocalStorage().setItem(HTML5_SESSION_ACTIVITY_KEY, String.valueOf(lastActivity));
         }
         if ((maxInactiveIntervalMillis > 0) && (System.currentTimeMillis() > (lastActivity + maxInactiveIntervalMillis))) {
-            log.debug("Session Inactive; lastActivity {} now {}", lastActivity, System.currentTimeMillis());
+            log.debug("Session Inactive; lastActivity {} now {}", new Date(lastActivity), new Date());
             onSessionInactive(true);
         } else {
             checkSessionCookie();
