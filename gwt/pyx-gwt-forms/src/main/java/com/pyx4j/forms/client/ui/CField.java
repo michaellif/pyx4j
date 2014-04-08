@@ -113,8 +113,8 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         boolean visible = isVisible();
-        if (asWidget().isVisible() != visible) {
-            asWidget().setVisible(visible);
+        if (nativeWidget.isVisible() != visible) {
+            nativeWidget.setVisible(visible);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
         }
     }
