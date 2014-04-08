@@ -103,6 +103,9 @@ public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane 
         setCaption(null);
         assert (form != null);
         form.reset();
+        if (isVisorShown()) {
+            hideVisor();
+        }
     }
 
     @Override
