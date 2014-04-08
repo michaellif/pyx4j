@@ -68,6 +68,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -383,8 +384,16 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     @Override
     public void signingProgressOrUploadAgreement() {
         List<LeaseTermParticipant<?>> participants = new LinkedList<>();
-        participants.addAll(currentValue.currentTerm().version().tenants());
-        participants.addAll(currentValue.currentTerm().version().guarantors());
+        for (LeaseTermParticipant<?> p : currentValue.currentTerm().version().tenants()) {
+            if (p.role().getValue() != Role.Dependent) {
+                participants.add(p);
+            }
+        }
+        for (LeaseTermParticipant<?> p : currentValue.currentTerm().version().guarantors()) {
+            if (p.role().getValue() != Role.Dependent) {
+                participants.add(p);
+            }
+        }
         new LeaseAgreementDocumentSigningController((LeaseViewerView) this.getView(), EntityFactory.createIdentityStub(Lease.class, getEntityId()),
                 participants).show();
     }
