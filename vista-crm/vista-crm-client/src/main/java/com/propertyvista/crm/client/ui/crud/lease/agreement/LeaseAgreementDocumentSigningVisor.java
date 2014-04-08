@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.ui.crud.lease.agreement;
 import java.util.List;
 
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
-import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
+import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 
-public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<LeaseAgreementDocumentsDTO> {
+public class LeaseAgreementDocumentSigningVisor extends AbstractVisorViewer<LeaseAgreementDocumentsDTO> {
 
     private LeaseAgreementDocumentSigningForm form;
 
@@ -33,6 +33,11 @@ public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<Leas
             @Override
             public void onSignDigitally() {
                 LeaseAgreementDocumentSigningVisor.this.onSignDigitally();
+            }
+
+            @Override
+            public void onDocumentsChanged() {
+                LeaseAgreementDocumentSigningVisor.this.onDocumentsChanged();
             }
         });
     }
@@ -49,12 +54,20 @@ public class LeaseAgreementDocumentSigningVisor extends AbstractVisorEditor<Leas
 
     }
 
+    public void onDocumentsChanged() {
+
+    }
+
     public void monitorSigningProgress(String corellationId, DeferredProgressListener callback) {
         form.monitorSigningProgress(corellationId, callback);
     }
 
     public void setCanBeSignedDigitally(boolean canBeSignedDigitally) {
         form.setCanBeSignedDigitally(canBeSignedDigitally);
+    }
+
+    public LeaseAgreementDocumentsDTO getValue() {
+        return form.getValue();
     }
 
 }

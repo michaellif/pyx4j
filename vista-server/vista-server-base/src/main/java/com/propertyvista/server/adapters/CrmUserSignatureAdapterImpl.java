@@ -28,7 +28,7 @@ public class CrmUserSignatureAdapterImpl implements CrmUserSignatureAdapter {
     public void onBeforeUpdate(CrmUserSignature origEntity, CrmUserSignature newEntity) {
         if (newEntity.agree().getValue(false)) {
             if ((origEntity == null) || !origEntity.agree().getValue(false)) {
-                Validate.isEquals(CrmUser.class, VistaContext.getCurrentUser().getValueClass(), "Only Customer can sign CustomerSignature");
+                Validate.isEquals(CrmUser.class, VistaContext.getCurrentUser().getValueClass(), "Only CrmUser can sign CrmUserSignature");
                 newEntity.signingUser().set(VistaContext.getCurrentUser());
                 newEntity.signDate().setValue(SystemDateManager.getDate());
                 newEntity.ipAddress().setValue(Context.getRequestRemoteAddr());

@@ -375,7 +375,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         signature.fullName().setValue(CrmAppContext.getCurrentUserEmployee().name().getStringView());
 
         lease.currentTerm().employeeSignature().set(signature);
-        Persistence.service().merge(lease.currentTerm().version());
+        Persistence.service().merge(lease.currentTerm().employeeSignature());
         Persistence.service().commit();
 
         String correlationId = DeferredProcessRegistry.fork(new SignedLeaseTermAgreementDocumentCreatorDeferredProcess(lease.currentTerm()),

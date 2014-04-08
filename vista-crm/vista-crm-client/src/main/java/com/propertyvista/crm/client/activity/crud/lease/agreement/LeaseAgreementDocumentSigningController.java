@@ -53,6 +53,11 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
             public void onSignDigitally() {
                 signDigitally();
             }
+
+            @Override
+            public void onDocumentsChanged() {
+                apply();
+            }
         };
         this.view = view;
         this.leaseId = leaseId;

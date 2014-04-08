@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.ui.CListBox;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -77,6 +78,22 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                 LeaseAgreementDocumentFolder.this.addItem(document);
             }
         }.show();
+    }
+
+    @Override
+    protected void addItem(LeaseTermAgreementDocument newEntity) {
+        super.addItem(newEntity);
+        onDocumentsChanged();
+    }
+
+    public void onDocumentsChanged() {
+
+    }
+
+    @Override
+    protected void removeItem(CEntityFolderItem<LeaseTermAgreementDocument> item) {
+        super.removeItem(item);
+        onDocumentsChanged();
     }
 
     public static class LeaseAgreementDocumentForm extends CEntityForm<LeaseTermAgreementDocument> {

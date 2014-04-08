@@ -90,7 +90,12 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         panel.setWidget(++row, 0, 2, sigingProgressPanelHolder);
 
         panel.setH1(++row, 0, 2, i18n.tr("Ink Signed Agreement Documents"));
-        panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder() {
+            @Override
+            public void onDocumentsChanged() {
+                LeaseAgreementDocumentSigningForm.this.onDocumentsChanged();
+            }
+        }));
 
         return panel;
     }
@@ -108,6 +113,10 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     }
 
     public void onSignDigitally() {
+
+    }
+
+    public void onDocumentsChanged() {
 
     }
 

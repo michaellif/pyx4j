@@ -58,7 +58,7 @@ public class LeaseTermAgreementSigningProgressFacadeImpl implements LeaseTermAgr
             Persistence.ensureRetrieve(participant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
 
             LeaseAgreementStakeholderSigningProgressDTO stakeholdersProgress = EntityFactory.create(LeaseAgreementStakeholderSigningProgressDTO.class);
-            stakeholdersProgress.stakeholderLeaseTermParticipants().set(participant.leaseParticipant());
+            stakeholdersProgress.stakeholderLeaseTermParticipants().set(participant);
 
             stakeholdersProgress.name().setValue(participant.leaseParticipant().customer().person().name().getStringView());
             stakeholdersProgress.role().setValue(participant.role().getStringView());
@@ -100,6 +100,7 @@ public class LeaseTermAgreementSigningProgressFacadeImpl implements LeaseTermAgr
             progress.stackholdersProgressBreakdown().add(stakeholdersProgress);
         }
 
+        Persistence.ensureRetrieve(lease.currentTerm().employeeSignature(), AttachLevel.Attached);
         if (!lease.currentTerm().employeeSignature().isEmpty()) {
             LeaseAgreementStakeholderSigningProgressDTO landlordsProgress = EntityFactory.create(LeaseAgreementStakeholderSigningProgressDTO.class);
             landlordsProgress.stakeholderUser().set(lease.currentTerm().employeeSignature().signingUser());
