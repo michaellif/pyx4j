@@ -58,7 +58,6 @@ class MessageTemplatesCrmNotification {
         template.variable("${ownerName}", user.firstName().getValue());
         template.variable("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.crm, true));
         template.variable("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.resident, true));
-        template.variable("${prospectLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.prospect, true));
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;
