@@ -198,13 +198,6 @@ public class PersistenceContext {
         return connectionTarget;
     }
 
-    void setTimeNow(Date date) {
-        timeNow = date;
-        if ((date != null) && date.after(new Date())) {
-            log.warn("Set system date in future {}", date);
-        }
-    }
-
     public Date getTimeNow() {
         if (timeNow == null) {
             timeNow = DateUtils.getDBRounded(SystemDateManager.getDate());

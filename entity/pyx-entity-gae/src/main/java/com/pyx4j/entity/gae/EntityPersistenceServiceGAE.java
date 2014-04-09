@@ -240,6 +240,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public Date getTransactionTime() {
+        // TODO
+        return new Date();
+    }
+
+    @Override
     public void startBackgroundProcessTransaction() {
         //TODO
     }
