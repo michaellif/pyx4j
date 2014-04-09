@@ -7,22 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 8, 2013
- * @author vlads
+ * Created on Apr 8, 2014
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.yardi;
 
-public enum YardiInterface {
+import java.rmi.RemoteException;
 
-    BillingAndPayments,
+import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.stubs.ExternalInterfaceLoggingStub;
 
-    Maintenance,
+public interface YardiInterface extends ExternalInterfaceLoggingStub {
 
-    ILSGuestCard,
+    String ping(PmcYardiCredential yc) throws RemoteException;
 
-    CreditScreening,
+    void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException;
 
-    Collections
+    String getPluginVersion(PmcYardiCredential yc) throws RemoteException;
 
 }

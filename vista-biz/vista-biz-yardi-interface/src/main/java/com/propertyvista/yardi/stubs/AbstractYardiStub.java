@@ -43,8 +43,9 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
+import com.propertyvista.yardi.YardiInterface;
 
-public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
+public abstract class AbstractYardiStub implements YardiInterface, ExternalInterfaceLoggingStub {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractYardiStub.class);
 

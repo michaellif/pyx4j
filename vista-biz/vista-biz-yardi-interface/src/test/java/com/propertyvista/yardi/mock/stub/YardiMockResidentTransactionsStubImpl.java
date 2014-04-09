@@ -93,4 +93,16 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
         return dumpXml("getLeaseChargesForTenant", YardiMockServer.instance().getLeaseChargesForTenant(propertyId, tenantId));
     }
 
+    @Override
+    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

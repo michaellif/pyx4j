@@ -21,9 +21,10 @@ import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.beans.Properties;
 
-public interface YardiMaintenanceRequestsStub {
+public interface YardiMaintenanceRequestsStub extends YardiInterface {
 
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 

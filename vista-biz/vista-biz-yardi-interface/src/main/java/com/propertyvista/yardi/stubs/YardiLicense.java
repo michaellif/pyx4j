@@ -32,7 +32,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.YardiInterface;
+import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.beans.Messages;
 
 public class YardiLicense {
@@ -46,14 +46,14 @@ public class YardiLicense {
 
     private final static Set<String> licenseLessSystemsUrl = new HashSet<String>();
 
-    private static Map<YardiInterface, String> licenseBody = new HashMap<YardiInterface, String>();
+    private static Map<YardiInterfaceType, String> licenseBody = new HashMap<YardiInterfaceType, String>();
 
     static {
         // License for Old Yardi can be disabled in file "config.properties"  yardi.licenseLessSystemsUrl
         //licenseLessSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com/");
     }
 
-    static String getInterfaceLicense(YardiInterface yardiInterface, PmcYardiCredential yc) {
+    static String getInterfaceLicense(YardiInterfaceType yardiInterface, PmcYardiCredential yc) {
         loadLicenseLessSystemsUrlConfiguration();
 
         if (isLicenseLessSystemUrl(yardiInterface, yc)) {
@@ -97,7 +97,7 @@ public class YardiLicense {
         licenseBody.clear();
     }
 
-    private static boolean isLicenseLessSystemUrl(YardiInterface yardiInterface, PmcYardiCredential yc) {
+    private static boolean isLicenseLessSystemUrl(YardiInterfaceType yardiInterface, PmcYardiCredential yc) {
         return isLicenseLessSystemUrl(yc.serviceURLBase().getValue()) //
                 || isLicenseLessSystemUrl(yc.residentTransactionsServiceURL().getValue()) //
                 || isLicenseLessSystemUrl(yc.sysBatchServiceURL().getValue());

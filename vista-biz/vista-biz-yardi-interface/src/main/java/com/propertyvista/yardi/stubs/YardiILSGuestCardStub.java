@@ -19,9 +19,10 @@ import com.yardi.entity.ils.PhysicalProperty;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.beans.Properties;
 
-public interface YardiILSGuestCardStub extends ExternalInterfaceLoggingStub {
+public interface YardiILSGuestCardStub extends YardiInterface {
 
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 

@@ -46,4 +46,28 @@ public class YardiMockSystemBatchesStubImpl implements YardiSystemBatchesStub {
 
     }
 
+    @Override
+    public String ping(PmcYardiCredential yc) throws RemoteException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void logRecordedTracastions() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

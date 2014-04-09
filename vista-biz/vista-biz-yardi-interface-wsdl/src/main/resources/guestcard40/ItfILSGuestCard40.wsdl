@@ -309,6 +309,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="TenantCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="AttachmentType" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="Attachment" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -393,6 +394,93 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="GetAttachmentTypesAndChargeCodesResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPropertyConfigurations">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPropertyConfigurationsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPropertyConfigurationsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportApplication_Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XmlDocument">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportApplication_LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportApplication_LoginResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetApplication_Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PropertyID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ProspectID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetApplication_LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetApplication_LoginResult">
               <s:complexType mixed="true">
                 <s:sequence>
                   <s:any />
@@ -508,6 +596,24 @@
   <wsdl:message name="GetAttachmentTypesAndChargeCodesSoapOut">
     <wsdl:part name="parameters" element="tns:GetAttachmentTypesAndChargeCodesResponse" />
   </wsdl:message>
+  <wsdl:message name="GetPropertyConfigurationsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPropertyConfigurations" />
+  </wsdl:message>
+  <wsdl:message name="GetPropertyConfigurationsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPropertyConfigurationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportApplication_LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportApplication_Login" />
+  </wsdl:message>
+  <wsdl:message name="ImportApplication_LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportApplication_LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetApplication_LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:GetApplication_Login" />
+  </wsdl:message>
+  <wsdl:message name="GetApplication_LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:GetApplication_LoginResponse" />
+  </wsdl:message>
   <wsdl:message name="GetVersionNumberSoapIn">
     <wsdl:part name="parameters" element="tns:GetVersionNumber" />
   </wsdl:message>
@@ -590,6 +696,21 @@
       <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Returns the attachment types defined in a database. Returns the application fee charge codes configured for the third party vendor by the client.</documentation>
       <wsdl:input message="tns:GetAttachmentTypesAndChargeCodesSoapIn" />
       <wsdl:output message="tns:GetAttachmentTypesAndChargeCodesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyConfigurations">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of the Property Configuration with the Database. The Unique Interface Entity name is needed in order to return the Property ID(s) the Third-Party has access to. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:GetPropertyConfigurationsSoapIn" />
+      <wsdl:output message="tns:GetPropertyConfigurationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportApplication_Login">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for Login and update of a prospect's application form and leasing specials/application fees into a Yardi Voyager database. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:ImportApplication_LoginSoapIn" />
+      <wsdl:output message="tns:ImportApplication_LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetApplication_Login">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for export of prospect's application form from Yardi Voyager database. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:GetApplication_LoginSoapIn" />
+      <wsdl:output message="tns:GetApplication_LoginSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="GetVersionNumber">
       <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Returns current version number of Interfaces concatenated with ILS/GuestCard Plugin version (XX_Y)</documentation>
@@ -729,6 +850,33 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetPropertyConfigurations">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetPropertyConfigurations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportApplication_Login">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/ImportApplication_Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetApplication_Login">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetApplication_Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetVersionNumber">
       <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetVersionNumber" style="document" />
       <wsdl:input>
@@ -751,7 +899,7 @@
   <wsdl:service name="ItfILSGuestCard">
     <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Yardi ILS/Guest Card Interface Web ServiceUtilizes XML in MITS Lead Manangement 4.0, and MITS Property Marketing 4.0. All web methods contained in this web service that read/write data from Voyager will require login credentials.</documentation>
     <wsdl:port name="ItfILSGuestCardSoap" binding="tns:ItfILSGuestCardSoap">
-      <soap:address location="http://www.iyardiasp.com/8223thirddev/Webservices/itfilsguestcard.asmx" />
+      <soap:address location="http://yardi.birchwoodsoftwaregroup.com/voyager6008sp17/webservices/itfilsguestcard.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

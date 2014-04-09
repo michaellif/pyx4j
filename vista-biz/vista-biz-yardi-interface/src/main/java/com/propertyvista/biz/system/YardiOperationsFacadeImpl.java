@@ -13,9 +13,13 @@
  */
 package com.propertyvista.biz.system;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
 import com.propertyvista.yardi.YardiInterface;
+import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.stubs.YardiLicense;
 
 public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
@@ -27,16 +31,44 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
 
     @Override
     public ConnectionTestResultDTO verifyInterface(PmcYardiCredential yc) {
+        yc.password().number().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+
         ConnectionTestResultDTO result = new ConnectionTestResultDTO();
-        // TODO implement ping   VISTA-3820
 
-        for (YardiInterface yardiInterface : YardiInterface.values()) {
-            result.append("TODO Connection Ping ").append(yardiInterface.name()).ok().cr();
-            result.append("Version ").append(yardiInterface.name()).append(" v1.5").ok().cr();
+        for (YardiInterfaceType yardiInterface : YardiInterfaceType.values()) {
+            if (yardiInterface.ifClass == null) {
+                continue;
+            }
+
+            result.append("Plugin: ").append(yardiInterface.name()).cr();
+            YardiInterface stub = ServerSideFactory.create(yardiInterface.ifClass);
+
+            result.sp().sp().append("Ping: ");
+            try {
+                stub.ping(yc);
+                result.ok();
+            } catch (Throwable t) {
+                result.error(t.getMessage());
+            }
+            result.cr();
+
+            result.sp().sp().append("Version: ");
+            try {
+                result.append(stub.getPluginVersion(yc)).ok();
+            } catch (Throwable t) {
+                result.error(t.getMessage());
+            }
+            result.cr();
+
+            result.sp().sp().append("Credentials: ");
+            try {
+                stub.validate(yc);
+                result.ok();
+            } catch (Throwable t) {
+                result.error(t.getMessage());
+            }
+            result.cr();
         }
-
-        result.error("Mandaroy resdentTransaction interface not working").cr();
-        result.warn("Collections not requeired and it do not work");
 
         return result;
     }

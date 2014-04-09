@@ -24,6 +24,8 @@ public class ConnectionTestResultDTO implements Serializable {
 
     public static final String CR = "</br>\n";
 
+    public static final String SP = "&nbsp;";
+
     public static final String OK = " <span style=\"color:#00CC33\">OK</span>";
 
     public static String htmlError(String text) {
@@ -41,6 +43,10 @@ public class ConnectionTestResultDTO implements Serializable {
 
     public ConnectionTestResultDTO ok() {
         return append(OK);
+    }
+
+    public ConnectionTestResultDTO sp() {
+        return append(SP);
     }
 
     public ConnectionTestResultDTO cr() {

@@ -22,9 +22,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.beans.Properties;
 
-public interface YardiResidentTransactionsStub extends ExternalInterfaceLoggingStub {
+public interface YardiResidentTransactionsStub extends YardiInterface {
 
     String ping(PmcYardiCredential yc) throws RemoteException;
 
@@ -33,8 +34,8 @@ public interface YardiResidentTransactionsStub extends ExternalInterfaceLoggingS
     /**
      * Returns null of there are no tenants in Yardi DB
      */
-    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyListCode) throws YardiServiceException, YardiPropertyNoAccessException,
-            RemoteException;
+    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyListCode) throws YardiServiceException,
+            YardiPropertyNoAccessException, RemoteException;
 
     ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
             RemoteException;

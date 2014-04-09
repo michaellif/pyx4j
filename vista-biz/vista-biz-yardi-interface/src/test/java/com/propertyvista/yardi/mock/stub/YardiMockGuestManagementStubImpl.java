@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
+import java.rmi.RemoteException;
+
 import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
@@ -29,6 +31,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
+import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 
@@ -87,6 +90,30 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
 
     @Override
     public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String ping(PmcYardiCredential yc) throws RemoteException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         // TODO Auto-generated method stub
         return null;
     }

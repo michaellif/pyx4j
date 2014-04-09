@@ -19,8 +19,9 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.YardiInterface;
 
-public interface YardiSystemBatchesStub {
+public interface YardiSystemBatchesStub extends YardiInterface {
 
     long openReceiptBatch(PmcYardiCredential yc, String propertyCode) throws YardiServiceException, RemoteException;
 

@@ -41,6 +41,8 @@ import com.yardi.ws.operations.transactions.GetResidentsLeaseCharges_Login;
 import com.yardi.ws.operations.transactions.GetResidentsLeaseCharges_LoginResponse;
 import com.yardi.ws.operations.transactions.GetUnitInformation_Login;
 import com.yardi.ws.operations.transactions.GetUnitInformation_LoginResponse;
+import com.yardi.ws.operations.transactions.GetVersionNumber;
+import com.yardi.ws.operations.transactions.GetVersionNumberResponse;
 import com.yardi.ws.operations.transactions.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.transactions.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.transactions.Ping;
@@ -57,7 +59,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
-import com.propertyvista.yardi.YardiInterface;
+import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;
 
@@ -92,6 +94,19 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     }
 
     @Override
+    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+        // try to pull properties
+        getPropertyConfigurations(yc);
+    }
+
+    @Override
+    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+        init(Action.GetVersionNumber);
+        GetVersionNumberResponse response = getResidentTransactionsService(yc).getVersionNumber(new GetVersionNumber());
+        return response.getGetVersionNumberResult();
+    }
+
+    @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         try {
             init(Action.GetPropertyConfigurations);
@@ -103,7 +118,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
 
             GetPropertyConfigurationsResponse response = getResidentTransactionsService(yc).getPropertyConfigurations(request);
             if ((response == null) || (response.getGetPropertyConfigurationsResult() == null)
@@ -119,15 +134,11 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                     throw new YardiServiceException(messages.toString());
                 } else {
                     log.info(messages.toString());
+                    return null;
                 }
             }
 
-            Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
-
-            log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
-
-            return properties;
-
+            return MarshallUtil.unmarshal(Properties.class, xml);
         } catch (JAXBException e) {
             throw new Error(e);
         }
@@ -148,7 +159,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
 
             GetResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).getResidentTransactions_Login(request);
@@ -201,7 +212,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
             request.setTenantId(tenantId);
 
@@ -247,7 +258,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
 
             String trXml = MarshallUtil.marshall(reversalTransactions);
             log.debug(trXml);
@@ -298,7 +309,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
 
             GetUnitInformation_LoginResponse response = getResidentTransactionsService(yc).getUnitInformation_Login(request);
@@ -347,7 +358,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyListCode);
             request.setPostMonth(calendar);
 
@@ -404,7 +415,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
             request.setTenantId(tenantId);
             request.setPostMonth(calendar);
@@ -457,5 +468,4 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             return yc.residentTransactionsServiceURL().getValue();
         }
     }
-
 }

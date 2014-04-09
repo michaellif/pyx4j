@@ -31,8 +31,12 @@ import com.yardi.ws.operations.transactionsbatch.AddReceiptsToBatch;
 import com.yardi.ws.operations.transactionsbatch.AddReceiptsToBatchResponse;
 import com.yardi.ws.operations.transactionsbatch.CancelReceiptBatch;
 import com.yardi.ws.operations.transactionsbatch.CancelReceiptBatchResponse;
+import com.yardi.ws.operations.transactionsbatch.GetVersionNumber;
+import com.yardi.ws.operations.transactionsbatch.GetVersionNumberResponse;
 import com.yardi.ws.operations.transactionsbatch.OpenReceiptBatch;
 import com.yardi.ws.operations.transactionsbatch.OpenReceiptBatchResponse;
+import com.yardi.ws.operations.transactionsbatch.Ping;
+import com.yardi.ws.operations.transactionsbatch.PingResponse;
 import com.yardi.ws.operations.transactionsbatch.PostReceiptBatch;
 import com.yardi.ws.operations.transactionsbatch.PostReceiptBatchResponse;
 import com.yardi.ws.operations.transactionsbatch.TransactionXml_type1;
@@ -43,7 +47,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
-import com.propertyvista.yardi.YardiInterface;
+import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.beans.Messages;
 
 public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSystemBatchesStub {
@@ -64,7 +68,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
 
             OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(request);
@@ -103,7 +107,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setBatchId(batchId);
 
             TransactionXml_type1 transactionXml = new TransactionXml_type1();
@@ -155,7 +159,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setBatchId(batchId);
 
             PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(request);
@@ -196,7 +200,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setBatchId(batchId);
 
             CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(request);
@@ -221,6 +225,25 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
                 log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
             }
         }
+    }
+
+    @Override
+    public String ping(PmcYardiCredential yc) throws RemoteException {
+        init(Action.Ping);
+        PingResponse pr = getResidentTransactionsSysBatchService(yc).ping(new Ping());
+        return pr.getPingResult();
+    }
+
+    @Override
+    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+        // no READ-ONLY method available to use for validation
+    }
+
+    @Override
+    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+        init(Action.GetVersionNumber);
+        GetVersionNumberResponse response = getResidentTransactionsSysBatchService(yc).getVersionNumber(new GetVersionNumber());
+        return response.getGetVersionNumberResult();
     }
 
     private ItfResidentTransactions20_SysBatch getResidentTransactionsSysBatchService(PmcYardiCredential yc) throws AxisFault {
