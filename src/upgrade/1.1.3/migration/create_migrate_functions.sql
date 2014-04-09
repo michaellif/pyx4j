@@ -627,7 +627,8 @@ BEGIN
        
         -- insurance_policy
         
-        ALTER TABLE insurance_policy ADD COLUMN signature BIGINT;
+        ALTER TABLE insurance_policy    ADD COLUMN signature BIGINT,
+                                        ADD COLUMN broker_fee numeric(18,2);
                 
         
         -- landlord
@@ -1638,6 +1639,13 @@ BEGIN
                 ||'     certificate_discriminator = d.certificate_discriminator '
                 ||'FROM '||v_schema_name||'.insurance_certificate_doc AS d '
                 ||'WHERE s.certificate_doc = d.id ';
+                
+    
+        -- insurance_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy '
+                ||'SET  broker_fee = 0.00 '
+                ||'WHERE    id_discriminator = ''TenantSureInsurancePolicy'' ';
                 
         
         -- lease_agreement_legal_policy
