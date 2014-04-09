@@ -54,6 +54,9 @@ public class SystemDateManager {
         }
     }
 
+    /**
+     * @see also Persistence.service().getTransactionTime() when you need to get time that will be stored in DB
+     */
     public static Date getDate() {
         return new Date(getTimeMillis());
     }

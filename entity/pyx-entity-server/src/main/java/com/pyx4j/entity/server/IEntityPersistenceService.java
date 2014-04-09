@@ -22,6 +22,7 @@ package com.pyx4j.entity.server;
 
 import java.io.Closeable;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,12 @@ public interface IEntityPersistenceService {
     // return  not null when there are transaction.
     // return false when transation is autoCommit
     public Boolean getTransactionScopeOption();
+
+    /**
+     * Return the Timestamp that will be stored as @Timestamp members and fromDate for versioned entity IVersionData
+     * N.B. DB does not store Milliseconds
+     */
+    public Date getTransactionTime();
 
     public void setAssertTransactionManangementCallOrigin();
 

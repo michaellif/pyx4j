@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -387,6 +388,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Date getTransactionTime() {
+        assert getPersistenceContext() != null : "Transaction Context was not started";
+        return getPersistenceContext().getTimeNow();
     }
 
     @Override
