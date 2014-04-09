@@ -201,6 +201,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             tenantSurePolicy.paymentSchedule().setValue(quote.paymentSchedule().getValue());
             tenantSurePolicy.annualPremium().setValue(quote.annualPremium().getValue());
             tenantSurePolicy.underwriterFee().setValue(quote.underwriterFee().getValue());
+            tenantSurePolicy.brokerFee().setValue(quote.brokerFee().getValue());
             tenantSurePolicy.totalAnnualTax().setValue(quote.totalAnnualTax().getValue());
             tenantSurePolicy.totalAnnualPayable().setValue(quote.totalAnnualPayable().getValue());
             tenantSurePolicy.totalMonthlyPayable().setValue(quote.totalMonthlyPayable().getValue());

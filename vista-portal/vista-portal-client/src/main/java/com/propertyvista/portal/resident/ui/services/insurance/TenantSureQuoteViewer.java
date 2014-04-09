@@ -87,6 +87,9 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
                     new ViewerRecordWriter(currencyFormat).addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Underwriter Fee*"), quote.underwriterFee()
                             .getValue());
                 }
+                if (!quote.brokerFee().isNull()) {
+                    new ViewerRecordWriter(currencyFormat).addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Broker Fee*"), quote.brokerFee().getValue());
+                }
                 if (!quote.totalAnnualTax().isNull() && quote.totalAnnualTax().getValue().compareTo(BigDecimal.ZERO) > 0) {
                     new ViewerRecordWriter(currencyFormat).addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Tax"), quote.totalAnnualTax().getValue());
                 }
@@ -98,7 +101,7 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
                     underwriterFeeLabel.setStyleName(BillingTheme.StyleName.BillingDetailItem.name());
                     underwriterFeeLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
                     underwriterFeeLabel.getElement().getStyle().setMarginTop(1, Unit.EM);
-                    underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee (plus applicable taxes) will be charged upon enrollment."));
+                    underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee and broker fee (plus applicable taxes) will be charged upon enrollment."));
                     contentPanel.add(underwriterFeeLabel);
                 }
 

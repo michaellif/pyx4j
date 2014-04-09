@@ -39,7 +39,8 @@
           <s:element minOccurs="0" maxOccurs="1" name="id" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="gross_premium" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="fee" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="tax" type="s:string" />
+		  <s:element minOccurs="0" maxOccurs="1" name="broker_fee" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="tax" type="s:string" />		  
           <s:element minOccurs="0" maxOccurs="1" name="total_payable" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="user_commission" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="discount" type="s:string" />
@@ -70,6 +71,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="quote_type" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="gross_premium" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="fee" type="s:decimal" />
+		  <s:element minOccurs="0" maxOccurs="1" name="broker_fee" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="tax" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="discount" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="quote_date" type="s:dateTime" />

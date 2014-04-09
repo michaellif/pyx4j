@@ -27,10 +27,11 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuot
 public class TenantSureAnnualPaymentSchedule implements ITenantSurePaymentSchedule {
 
     @Override
-    public void prepareQuote(TenantSureQuoteDTO quote, BigDecimal annualPremium, BigDecimal underwritingFee, BigDecimal totalAnnualTax) {
+    public void prepareQuote(TenantSureQuoteDTO quote, BigDecimal annualPremium, BigDecimal underwritingFee, BigDecimal brokerFee, BigDecimal totalAnnualTax) {
         quote.paymentSchedule().setValue(TenantSurePaymentSchedule.Annual);
         quote.annualPremium().setValue(annualPremium);
         quote.underwriterFee().setValue(underwritingFee);
+        quote.brokerFee().setValue(brokerFee);
         quote.totalAnnualTax().setValue(totalAnnualTax);
 
         quote.totalAnnualPayable().setValue(annualPremium.add(underwritingFee).add(totalAnnualTax));

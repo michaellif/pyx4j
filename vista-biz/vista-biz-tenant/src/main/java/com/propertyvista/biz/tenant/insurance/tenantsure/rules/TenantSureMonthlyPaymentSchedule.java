@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuot
 public class TenantSureMonthlyPaymentSchedule implements ITenantSurePaymentSchedule {
 
     @Override
-    public void prepareQuote(TenantSureQuoteDTO quote, BigDecimal annualPremium, BigDecimal underwritingFee, BigDecimal totalAnnualTax) {
+    public void prepareQuote(TenantSureQuoteDTO quote, BigDecimal annualPremium, BigDecimal underwritingFee, BigDecimal brokerFee, BigDecimal totalAnnualTax) {
         quote.paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
 
         RoundingMode rm = TenantSureCfcMoneyAdapter.getRoundingMode();
@@ -41,12 +41,13 @@ public class TenantSureMonthlyPaymentSchedule implements ITenantSurePaymentSched
         BigDecimal firstPayment = annualGross.subtract(monthlyPayment.multiply(new BigDecimal("11.00")));
         quote.totalAnniversaryFirstMonthPayable().setValue(firstPayment);
 
-        firstPayment = firstPayment.add(underwritingFee);
+        firstPayment = firstPayment.add(underwritingFee).add(brokerFee);
 
         quote.annualPremium().setValue(annualPremium);
         quote.underwriterFee().setValue(underwritingFee);
+        quote.brokerFee().setValue(brokerFee);
         quote.totalAnnualTax().setValue(totalAnnualTax);
-        quote.totalAnnualPayable().setValue(annualPremium.add(underwritingFee).add(totalAnnualTax));
+        quote.totalAnnualPayable().setValue(annualPremium.add(underwritingFee).add(brokerFee).add(totalAnnualTax));
         quote.totalMonthlyPayable().setValue(monthlyPayment);
         quote.totalFirstPayable().setValue(firstPayment);
     }

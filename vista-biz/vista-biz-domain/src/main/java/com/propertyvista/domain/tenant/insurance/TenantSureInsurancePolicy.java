@@ -95,6 +95,9 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
     IPrimitive<BigDecimal> underwriterFee();
 
     @Format("#,##0.00")
+    IPrimitive<BigDecimal> brokerFee();
+
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> totalAnnualTax();
 
     @Format("#,##0.00")

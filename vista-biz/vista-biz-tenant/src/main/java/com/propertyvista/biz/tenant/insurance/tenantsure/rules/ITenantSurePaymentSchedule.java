@@ -24,7 +24,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuot
 
 public interface ITenantSurePaymentSchedule {
 
-    void prepareQuote(TenantSureQuoteDTO quote, BigDecimal annualPremium, BigDecimal underwritingFee, BigDecimal totalAnnualTax);
+    void prepareQuote(TenantSureQuoteDTO quote, BigDecimal annualPremium, BigDecimal underwritingFee, BigDecimal brokerFee, BigDecimal totalAnnualTax);
 
     TenantSureTransaction initFirstTransaction(TenantSureInsurancePolicy insurancePolicy, InsurancePaymentMethod paymentMethod, LogicalDate paymentDue);
 

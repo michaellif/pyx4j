@@ -29,7 +29,7 @@ public class TenantSureCfcMoneyAdapter {
 
     public static BigDecimal parseMoney(String moneyAmountRepr) throws NumberFormatException {
         BigDecimal moneyAmount = null;
-        moneyAmount = new BigDecimal(moneyAmountRepr);
+        moneyAmount = moneyAmountRepr != null ? new BigDecimal(moneyAmountRepr) : new BigDecimal("0.00");
         return adoptMoney(moneyAmount);
     }
 

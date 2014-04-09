@@ -168,6 +168,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
         BigDecimal annualPremium = TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getGrossPremium());
         BigDecimal underwritingFee = TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getFee());
+        BigDecimal brokerFee = TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getBrokerFee());
         BigDecimal totalAnnualTax = BigDecimal.ZERO;
         int numOfTaxLines = quoteResponse.getQuoteData().getApplicableTaxes().getOutputTax().size();
         if (numOfTaxLines > 1) {
@@ -177,7 +178,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         }
 
         ITenantSurePaymentSchedule paymentSchedule = TenantSurePaymentScheduleFactory.create(coverageRequest.paymentSchedule().getValue());
-        paymentSchedule.prepareQuote(tenantSureQuote, annualPremium, underwritingFee, totalAnnualTax);
+        paymentSchedule.prepareQuote(tenantSureQuote, annualPremium, underwritingFee, brokerFee, totalAnnualTax);
 
         // not even sure we need this
         tenantSureQuote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
