@@ -234,8 +234,8 @@ BEGIN
         (
                 id                                      BIGINT                  NOT NULL,
                 id_discriminator                        VARCHAR(64)             NOT NULL,
-                lease_term_participant_discriminator    VARCHAR(50)             NOT NULL,
-                lease_term_participant                  BIGINT                  NOT NULL,
+                lease_participant_discriminator    VARCHAR(50)             NOT NULL,
+                lease_participant                  BIGINT                  NOT NULL,
                         CONSTRAINT agreement_signatures_pk PRIMARY KEY(id)
         );
         
@@ -836,6 +836,10 @@ BEGIN
         
         ALTER TABLE lease_participant ADD COLUMN yardi_applicant_id VARCHAR(500);
         
+        -- lease_term
+                
+        ALTER TABLE lease_term ADD COLUMN employee_signature BIGINT;
+        
         
         -- lease_term_agreement_document
         
@@ -848,7 +852,7 @@ BEGIN
                 file_file_size                  INT,
                 file_content_mime_type          VARCHAR(500),
                 file_blob_key                   BIGINT,
-                lease_term_v                    BIGINT                  NOT NULL,
+                lease_term                      BIGINT                  NOT NULL,
                 is_signed_by_ink                BOOLEAN,
                 signed_employee_uploader        BIGINT,
                         CONSTRAINT lease_term_agreement_document_pk PRIMARY KEY(id)
@@ -888,37 +892,33 @@ BEGIN
         ALTER TABLE lease_term_agreement_document$signed_participants OWNER TO vista;
         
         
-        -- lease_term_v
         
-        ALTER TABLE lease_term_v ADD COLUMN employee_signature BIGINT;
+        -- lease_term$agreement_confirmation_terms
         
-        
-        -- lease_term_v$agreement_confirmation_term
-        
-        CREATE TABLE lease_term_v$agreement_confirmation_term
+        CREATE TABLE lease_term$agreement_confirmation_terms
         (
                 id                              BIGINT                  NOT NULL,
                 owner                           BIGINT,
                 value                           BIGINT,
                 seq                             INT,
-                        CONSTRAINT lease_term_v$agreement_confirmation_term_pk PRIMARY KEY(id)
+                        CONSTRAINT lease_term$agreement_confirmation_terms_pk PRIMARY KEY(id)
         );
         
-        ALTER TABLE lease_term_v$agreement_confirmation_term OWNER TO vista;
+        ALTER TABLE lease_term$agreement_confirmation_terms OWNER TO vista;
         
         
-        -- lease_term_v$agreement_legal_terms
+        -- lease_term$agreement_legal_terms
         
-        CREATE TABLE lease_term_v$agreement_legal_terms
+        CREATE TABLE lease_term$agreement_legal_terms
         (
                 id                              BIGINT                  NOT NULL,
                 owner                           BIGINT,
                 value                           BIGINT,
                 seq                             INT,
-                        CONSTRAINT lease_term_v$agreement_legal_terms_pk PRIMARY KEY(id)
+                        CONSTRAINT lease_term$agreement_legal_terms_pk PRIMARY KEY(id)
         );
         
-        ALTER TABLE lease_term_v$agreement_legal_terms OWNER TO vista;
+        ALTER TABLE lease_term$agreement_legal_terms OWNER TO vista;
         
         -- lease_term_v$utilities
         
@@ -2500,8 +2500,8 @@ BEGIN
                 REFERENCES agreement_signatures(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_signatures$legal_terms_signatures ADD CONSTRAINT agreement_signatures$legal_terms_signatures_value_fk FOREIGN KEY(value) 
                 REFERENCES signed_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_participant_fk FOREIGN KEY(lease_term_participant) 
-                REFERENCES lease_term_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_participant_fk FOREIGN KEY(lease_participant) 
+            REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE apt_unit_effective_availability ADD CONSTRAINT apt_unit_effective_availability_unit_fk FOREIGN KEY(unit) 
                 REFERENCES apt_unit(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE apt_unit_reservation ADD CONSTRAINT apt_unit_reservation_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -2550,21 +2550,22 @@ BEGIN
             REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_application_legal_term ADD CONSTRAINT lease_application_legal_term_policy_fk FOREIGN KEY(policy) 
                 REFERENCES lease_application_legal_policy(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_lease_term_v_fk FOREIGN KEY(lease_term_v) 
-                REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term ADD CONSTRAINT lease_term_employee_signature_fk FOREIGN KEY(employee_signature) 
+            REFERENCES crm_user_signature(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_lease_term_fk FOREIGN KEY(lease_term) 
+                REFERENCES lease_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_agreement_document ADD CONSTRAINT lease_term_agreement_document_signed_employee_uploader_fk FOREIGN KEY(signed_employee_uploader) 
             REFERENCES crm_user(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_agreement_document$signed_participants ADD CONSTRAINT lease_term_agreement_document$signed_participants_owner_fk FOREIGN KEY(owner) 
                 REFERENCES lease_term_agreement_document(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE lease_term_v ADD CONSTRAINT lease_term_v_employee_signature_fk FOREIGN KEY(employee_signature) REFERENCES crm_user_signature(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE lease_term_v$agreement_legal_terms ADD CONSTRAINT lease_term_v$agreement_legal_terms_owner_fk FOREIGN KEY(owner) 
-                REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE lease_term_v$agreement_confirmation_term ADD CONSTRAINT lease_term_v$agreement_confirmation_term_owner_fk FOREIGN KEY(owner) 
-                REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE lease_term_v$agreement_confirmation_term ADD CONSTRAINT lease_term_v$agreement_confirmation_term_value_fk FOREIGN KEY(value) 
-                REFERENCES lease_agreement_confirmation_term(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE lease_term_v$agreement_legal_terms ADD CONSTRAINT lease_term_v$agreement_legal_terms_value_fk FOREIGN KEY(value) 
-                REFERENCES lease_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term$agreement_confirmation_terms ADD CONSTRAINT lease_term$agreement_confirmation_terms_owner_fk FOREIGN KEY(owner) 
+            REFERENCES lease_term(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term$agreement_confirmation_terms ADD CONSTRAINT lease_term$agreement_confirmation_terms_value_fk FOREIGN KEY(value) 
+            REFERENCES lease_agreement_confirmation_term(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term$agreement_legal_terms ADD CONSTRAINT lease_term$agreement_legal_terms_owner_fk FOREIGN KEY(owner) 
+            REFERENCES lease_term(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_term$agreement_legal_terms ADD CONSTRAINT lease_term$agreement_legal_terms_value_fk FOREIGN KEY(value) 
+            REFERENCES lease_agreement_legal_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_owner_fk FOREIGN KEY(owner) REFERENCES lease_term_v(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_term_v$utilities ADD CONSTRAINT lease_term_v$utilities_value_fk FOREIGN KEY(value) REFERENCES building_utility(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_status_fk FOREIGN KEY(status) REFERENCES legal_status(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -2647,8 +2648,8 @@ BEGIN
         -- check constraints
         
         ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_id_discriminator_ck CHECK ((id_discriminator) IN ('Digital', 'Ink'));
-        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_term_participant_discriminator_d_ck 
-                CHECK ((lease_term_participant_discriminator) IN ('Guarantor', 'Tenant'));
+        ALTER TABLE agreement_signatures ADD CONSTRAINT agreement_signatures_lease_participant_discriminator_d_ck 
+            CHECK ((lease_participant_discriminator) IN ('Guarantor', 'Tenant'));
         ALTER TABLE application_documentation_policy ADD CONSTRAINT application_documentation_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
         ALTER TABLE apt_unit_occupancy_segment ADD CONSTRAINT apt_unit_occupancy_segment_status_e_ck 
@@ -2825,14 +2826,14 @@ BEGIN
         ***     ====================================================================================================
         **/
         
-        CREATE INDEX agreement_signatures_lease_term_participant_discriminator_idx ON agreement_signatures USING btree (lease_term_participant_discriminator);
-        CREATE INDEX agreement_signatures_lease_term_participant_idx ON agreement_signatures USING btree (lease_term_participant);
+        CREATE INDEX agreement_signatures_lease_participant_discriminator_idx ON agreement_signatures USING btree (lease_participant_discriminator);
+        CREATE INDEX agreement_signatures_lease_participant_idx ON agreement_signatures USING btree (lease_participant);
         CREATE INDEX agreement_signatures$legal_terms_signatures_owner_idx ON agreement_signatures$legal_terms_signatures USING btree (owner);
         CREATE INDEX apt_unit_effective_availability_available_for_rent_idx ON apt_unit_effective_availability USING btree (available_for_rent);
         CREATE INDEX communication_message$to_owner_idx ON communication_message$to USING btree (owner);
         CREATE INDEX ilsprofile_email_building_idx ON ilsprofile_email USING btree (building);
-        CREATE INDEX lease_term_v$agreement_confirmation_term_owner_idx ON lease_term_v$agreement_confirmation_term USING btree (owner);
-        CREATE INDEX lease_term_v$agreement_legal_terms_owner_idx ON lease_term_v$agreement_legal_terms USING btree (owner);
+        CREATE INDEX lease_term$agreement_confirmation_terms_owner_idx ON lease_term$agreement_confirmation_terms USING btree (owner);
+        CREATE INDEX lease_term$agreement_legal_terms_owner_idx ON lease_term$agreement_legal_terms USING btree (owner);
         CREATE INDEX lease_term_v$utilities_owner_idx ON lease_term_v$utilities USING btree (owner);
         CREATE INDEX online_application$confirmation_terms_owner_idx ON online_application$confirmation_terms USING btree (owner);
         CREATE INDEX online_application$legal_terms_owner_idx ON online_application$legal_terms USING btree (owner);
@@ -2840,7 +2841,7 @@ BEGIN
         CREATE INDEX ilssummary_floorplan_floorplan_idx ON ilssummary_floorplan USING btree (floorplan);
         CREATE UNIQUE INDEX lease_application_application_id_idx ON lease_application USING btree (LOWER(application_id));
         CREATE INDEX lease_application_document_lease_idx ON lease_application_document USING btree (lease);
-        CREATE INDEX lease_term_agreement_document_lease_term_v_idx ON lease_term_agreement_document USING btree (lease_term_v);
+        CREATE INDEX lease_term_agreement_document_lease_term_idx ON lease_term_agreement_document USING btree (lease_term);
         CREATE INDEX lease_term_agreement_document$signed_participants_owner_idx ON lease_term_agreement_document$signed_participants USING btree (owner);
         CREATE INDEX maintenance_request_status_record_request_idx ON maintenance_request_status_record USING btree (request);
         CREATE INDEX notes_and_attachments_owner_discriminator_idx ON notes_and_attachments USING btree (owner_discriminator);
