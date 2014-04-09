@@ -367,15 +367,20 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void signLease(AsyncCallback<String> callback, Lease leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
-        Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.Attached);
-
         CrmUserSignature signature = EntityFactory.create(CrmUserSignature.class);
         signature.signatureFormat().setValue(SignatureFormat.FullName);
         signature.agree().setValue(true);
         signature.fullName().setValue(CrmAppContext.getCurrentUserEmployee().name().getStringView());
 
-        lease.currentTerm().employeeSignature().set(signature);
-        Persistence.service().merge(lease.currentTerm());
+        Persistence.service().merge(signature);
+
+        // Update only one field.
+        {
+            LeaseTerm update = EntityFactory.create(LeaseTerm.class);
+            update.employeeSignature().set(signature);
+            Persistence.update(lease.currentTerm().getPrimaryKey(), update);
+        }
+
         Persistence.service().commit();
 
         String correlationId = DeferredProcessRegistry.fork(new SignedLeaseTermAgreementDocumentCreatorDeferredProcess(lease.currentTerm()),
