@@ -271,4 +271,19 @@ public class Persistence {
             }
         }
     }
+
+    /**
+     * Update only members set in entityTemplate.
+     * 
+     * @param primaryKey
+     * @param entityTemplate
+     * @return
+     */
+    public static <T extends IEntity> int update(Key primaryKey, T entityTemplate) {
+        @SuppressWarnings("unchecked")
+        EntityQueryCriteria<T> criteria = EntityQueryCriteria.create((Class<T>) entityTemplate.getObjectClass());
+        criteria.eq(criteria.proto().id(), primaryKey);
+        return service().update(criteria, entityTemplate);
+    }
+
 }
