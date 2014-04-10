@@ -36,9 +36,8 @@ public class CrmUserSignatureAdapterImpl implements CrmUserSignatureAdapter {
         } else {
             // Erase signature since it is set to non signed
             if (newEntity.hasValues()) {
-                newEntity.signingUser().set(null);
-                newEntity.signDate().setValue(null);
-                newEntity.ipAddress().setValue(null);
+                Validate.isTrue(newEntity.signingUser().isNull(), "Can't erase CrmUserSignature");
+                newEntity.clearValues();
             }
         }
 

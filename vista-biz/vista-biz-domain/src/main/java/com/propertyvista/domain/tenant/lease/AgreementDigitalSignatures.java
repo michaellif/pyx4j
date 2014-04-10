@@ -23,4 +23,7 @@ public interface AgreementDigitalSignatures extends AgreementSignatures {
     @Owned(cascade = {})
     IList<SignedAgreementLegalTerm> legalTermsSignatures();
 
+    @Owned(cascade = {})
+    IList<SignedAgreementConfirmationTerm> confirmationTermSignatures();
+
 }

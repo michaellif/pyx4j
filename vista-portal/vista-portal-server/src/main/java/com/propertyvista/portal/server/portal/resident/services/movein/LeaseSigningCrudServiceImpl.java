@@ -70,6 +70,8 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         AgreementDigitalSignatures agreementSignatures = EntityFactory.create(AgreementDigitalSignatures.class);
         agreementSignatures.leaseParticipant().set(ResidentPortalContext.getLeaseParticipant());
         agreementSignatures.legalTermsSignatures().addAll(editableEntity.legalTerms());
+        agreementSignatures.confirmationTermSignatures().addAll(editableEntity.confirmationTerms());
+
         Persistence.secureSave(agreementSignatures);
         Persistence.service().commit();
 
