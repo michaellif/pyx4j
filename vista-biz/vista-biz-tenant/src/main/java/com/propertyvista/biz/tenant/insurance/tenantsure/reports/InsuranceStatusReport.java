@@ -153,10 +153,6 @@ public class InsuranceStatusReport implements Report {
                     break;
 
                 default:
-                    reportClientStatus = null;
-                }
-
-                if (reportClientStatus == null) {
                     throw new IllegalArgumentException(SimpleMessageFormat.format("wrong insurance status for report: {0} id = {1},  status = {2}",
                             TenantSureInsuranceCertificate.class.getSimpleName(), reportedStatusHolder.insurance().getPrimaryKey(), reportedStatusHolder
                                     .insurance().status().getValue()));
