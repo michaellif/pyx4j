@@ -133,7 +133,7 @@ public class DevDumpProxyServlet extends HttpServlet {
             host = path.substring(1, hostEnd);
         }
         if (protocol.equals("https")) {
-            port = 80;
+            port = 443;
         }
         ensureWhitelisted(host);
         String servicePath = path.substring(hostEnd);
@@ -141,6 +141,7 @@ public class DevDumpProxyServlet extends HttpServlet {
         if (request.getQueryString() != null) {
             url += "?" + request.getQueryString();
         }
+        log.info("proxy URL {}", url);
         return url;
     }
 
