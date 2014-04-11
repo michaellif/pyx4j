@@ -53,7 +53,11 @@ public class N4DownloadToolActivity extends AbstractBulkOperationToolActivity<N4
                 N4DownloadToolActivity.super.start(panel, eventBus);
             }
         });
+    }
 
+    @Override
+    public void cancelDownload(String url) {
+        GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, url);
     }
 
     @Override
@@ -66,15 +70,10 @@ public class N4DownloadToolActivity extends AbstractBulkOperationToolActivity<N4
     }
 
     @Override
-    protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
+    protected void onBulkOperationSuccess(DeferredProcessProgressResponse result) {
         DeferredReportProcessProgressResponse response = (DeferredReportProcessProgressResponse) result;
         String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
         ((N4DownloadToolView) getView()).displayN4DownloadLink(downloadUrl);
-    }
-
-    @Override
-    public void cancelDownload(String url) {
-        GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, url);
     }
 
 }

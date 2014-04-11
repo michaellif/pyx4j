@@ -18,8 +18,6 @@ import java.util.List;
 import com.google.gwt.core.shared.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -35,8 +33,6 @@ import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
 public class AutoPayReviewActivity extends AbstractBulkOperationToolActivity<AutoPayChangesReportMetadata, PapReviewDTO, ReviewedPapsHolderDTO> implements
         AutoPayReviewView.Presenter {
-
-    private static final I18n i18n = I18n.get(AutoPayReviewActivity.class);
 
     public AutoPayReviewActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().getView(AutoPayReviewView.class), GWT.<AutoPayReviewService> create(AutoPayReviewService.class),
@@ -62,11 +58,6 @@ public class AutoPayReviewActivity extends AbstractBulkOperationToolActivity<Aut
         }
 
         return reviewedPapsHolder;
-    }
-
-    @Override
-    protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
-
     }
 
 }

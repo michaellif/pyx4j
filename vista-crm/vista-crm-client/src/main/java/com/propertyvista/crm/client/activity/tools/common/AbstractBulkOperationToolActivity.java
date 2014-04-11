@@ -77,7 +77,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
             service.process(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String deferredCorrelationId) {
-                    startAccetanceProgress(deferredCorrelationId);
+                    startBulkOperation(deferredCorrelationId);
                 }
             }, makeProducedItems(getView().isEverythingSelected() ? items : getView().getSelectedItems()));
         } else {
@@ -127,7 +127,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
 
     protected abstract AcceptedItems makeProducedItems(List<Item> list);
 
-    protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
+    protected void onBulkOperationSuccess(DeferredProcessProgressResponse result) {
         search();
     }
 
@@ -151,12 +151,12 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
         getView().setBulkOperationEnabled(items.size() > 0);
     }
 
-    private void startAccetanceProgress(String deferredCorrelationId) {
+    private void startBulkOperation(String deferredCorrelationId) {
         DeferredProcessDialog d = new DeferredProcessDialog("", i18n.tr("Processing..."), false) {
             @Override
             public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                 super.onDeferredSuccess(result);
-                AbstractBulkOperationToolActivity.this.onSelectedProccessSuccess(result);
+                AbstractBulkOperationToolActivity.this.onBulkOperationSuccess(result);
             }
 
             @Override

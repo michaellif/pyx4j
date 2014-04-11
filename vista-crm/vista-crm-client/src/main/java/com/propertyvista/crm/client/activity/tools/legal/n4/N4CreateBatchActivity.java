@@ -126,7 +126,7 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
     }
 
     @Override
-    protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
+    protected void onBulkOperationSuccess(DeferredProcessProgressResponse result) {
         DeferredReportProcessProgressResponse reportProgress = (DeferredReportProcessProgressResponse) result;
         if (reportProgress.getDownloadLink() == null) {
             search();
