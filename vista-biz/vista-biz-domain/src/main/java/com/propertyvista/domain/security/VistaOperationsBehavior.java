@@ -25,6 +25,8 @@ public enum VistaOperationsBehavior implements Behavior {
 
     Onboarding,
 
-    ProcessAdmin
+    ProcessAdmin,
+
+    Caledon
 
 }

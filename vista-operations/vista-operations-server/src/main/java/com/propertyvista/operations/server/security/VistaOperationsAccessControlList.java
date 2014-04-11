@@ -112,7 +112,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         //TODO review and grant to VistaOperationsBehavior.SecurityAdmin
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeManagedService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminUserService.class));
+        grant(VistaBasicBehavior.Operations, new IServiceExecutePermission(AdminUserService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminUserCrudService.class));
 
         //TODO remove
@@ -134,11 +134,11 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         //TODO remove
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsUser.class, EntityPermission.READ));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadSimFileCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadSimBatchCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PadSimFileCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PadSimBatchCrudService.class));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadSimFile.class, EntityPermission.ALL));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadSimBatch.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(PadSimFile.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(PadSimBatch.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(VistaTermsCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(VistaTermsVersionService.class));
@@ -147,45 +147,45 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(VistaTerms.VistaTermsV.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(LegalDocument.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcMerchantAccountCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PmcMerchantAccountIndex.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PmcMerchantAccountCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(PmcMerchantAccountIndex.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcDirectDebitRecordCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(DirectDebitRecord.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PmcDirectDebitRecordCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(DirectDebitRecord.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationFileCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsReconciliationFile.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PadReconciliationFileCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(FundsReconciliationFile.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationDebitRecordCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsReconciliationRecordRecord.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PadReconciliationDebitRecordCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(FundsReconciliationRecordRecord.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(FundsReconciliationSummaryCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsReconciliationSummary.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(FundsReconciliationSummaryCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(FundsReconciliationSummary.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadFileCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsTransferFile.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PadFileCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(FundsTransferFile.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadDebitRecordCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsTransferRecord.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PadDebitRecordCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(FundsTransferRecord.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadBatchCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(FundsTransferBatch.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(PadBatchCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(FundsTransferBatch.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationConfigService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationCard.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(CardServiceSimulationConfigService.class));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(CardServiceSimulationCard.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationTransactionCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationTransaction.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(CardServiceSimulationTransactionCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(CardServiceSimulationTransaction.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DirectDebitSimRecordCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(DirectDebitSimRecord.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(DirectDebitSimRecordCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(DirectDebitSimRecord.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DirectDebitSimFileCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(DirectDebitSimFile.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(DirectDebitSimFileCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(DirectDebitSimFile.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
@@ -211,6 +211,11 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.Onboarding, new EntityPermission(Pmc.class, EntityPermission.READ));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(EquifaxApprovalCrudService.class));
+
+        grant(VistaOperationsBehavior.SystemAdmin, VistaOperationsBehavior.Caledon);
+
+        grant(VistaOperationsBehavior.Caledon, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(OperationsUserCredential.class, EntityPermission.ALL));
 
     }
 }

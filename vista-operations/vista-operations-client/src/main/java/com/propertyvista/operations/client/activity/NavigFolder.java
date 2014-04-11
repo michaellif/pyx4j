@@ -18,6 +18,8 @@ import java.util.List;
 
 import com.google.gwt.resources.client.ImageResource;
 
+import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class NavigFolder {
@@ -64,8 +66,15 @@ public class NavigFolder {
         return navigItems;
     }
 
+    @Deprecated
     public void addNavigItem(AppPlace item) {
         navigItems.add(item);
+    }
+
+    public void addNavigItem(AppPlace item, Behavior... behaviors) {
+        if (SecurityController.checkAnyBehavior(behaviors)) {
+            navigItems.add(item);
+        }
     }
 
     // resources:

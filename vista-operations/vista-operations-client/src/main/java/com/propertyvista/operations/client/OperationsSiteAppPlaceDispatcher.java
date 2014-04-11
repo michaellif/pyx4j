@@ -19,6 +19,7 @@ import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
@@ -33,7 +34,15 @@ public class OperationsSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher
     @Override
     protected AppPlace obtainDefaultPlace() {
         if (ClientContext.isAuthenticated()) {
-            return new OperationsSiteMap.Management.PMC();
+            if (SecurityController.checkAnyBehavior(VistaOperationsBehavior.SystemAdmin)) {
+                return new OperationsSiteMap.Management.PMC();
+            } else if (SecurityController.checkAnyBehavior(VistaOperationsBehavior.ProcessAdmin)) {
+                return new OperationsSiteMap.Management.Trigger();
+            } else if (SecurityController.checkAnyBehavior(VistaOperationsBehavior.Caledon)) {
+                return new OperationsSiteMap.Management.PmcMerchantAccount();
+            } else {
+                return new OperationsSiteMap.Account();
+            }
         } else {
             return new OperationsSiteMap.Login();
         }

@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -35,6 +36,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
@@ -118,6 +120,10 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
         super.onValueSet(populate);
         get(proto().merchantAccount().paymentsStatus()).setVisible(!getValue().id().isNull());
         updateConvenienceFeeValability();
+
+        get(proto().merchantAccount().bankId()).setEditable(SecurityController.checkAnyBehavior(VistaOperationsBehavior.SystemAdmin));
+        get(proto().merchantAccount().branchTransitNumber()).setEditable(SecurityController.checkAnyBehavior(VistaOperationsBehavior.SystemAdmin));
+        get(proto().merchantAccount().accountNumber()).setEditable(SecurityController.checkAnyBehavior(VistaOperationsBehavior.SystemAdmin));
     }
 
     @Override
