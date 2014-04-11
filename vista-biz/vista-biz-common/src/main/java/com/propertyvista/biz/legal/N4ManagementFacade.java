@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.gwt.rpc.server.Pair;
+
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -40,8 +42,9 @@ public interface N4ManagementFacade {
      * 
      * @throws IllegalStateException
      *             if one of the given leases doesn't owe any money.
+     * @return failed leases along with exceptions
      */
-    void issueN4(N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException, FormFillError;
+    List<Pair<Lease, Exception>> issueN4(N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException, FormFillError;
 
     /**
      * Retrieves N4s sorted in descending order by the date of generation. If <code>generatedCutOffDate</code> is not <code>null</code> this will be the minimum

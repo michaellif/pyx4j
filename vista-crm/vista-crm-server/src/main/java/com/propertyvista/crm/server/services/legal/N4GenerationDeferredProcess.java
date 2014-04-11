@@ -13,10 +13,13 @@
  */
 package com.propertyvista.crm.server.services.legal;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gwt.rpc.server.Pair;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
@@ -25,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
-import com.propertyvista.domain.legal.errors.FormFillError;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
 
@@ -53,10 +56,8 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
     @Override
     public void execute() {
         try {
-            ServerSideFactory.create(N4ManagementFacade.class).issueN4(batchRequest, progress);
-        } catch (FormFillError e) {
-            error = e;
-            log.error("N4 Generation failed", e);
+            List<Pair<Lease, Exception>> erredLeases = ServerSideFactory.create(N4ManagementFacade.class).issueN4(batchRequest, progress);
+            // TODO create a downloadable report of erred leases or something like that 
         } catch (Exception e) {
             error = e;
             log.error("N4 generation failed", e);
@@ -72,11 +73,7 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
         status.setProgressMaximum(progressMax);
         if (error != null) {
             status.setCompleted();
-            if (error instanceof FormFillError) {
-                status.setErrorStatusMessage(error.getMessage());
-            } else {
-                status.setErrorStatusMessage(i18n.tr("N4 Generation Failed"));
-            }
+            status.setErrorStatusMessage(i18n.tr("N4 Generation Failed"));
         }
         return status;
     }

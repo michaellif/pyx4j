@@ -36,14 +36,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.rpc.server.Pair;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -129,18 +135,30 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     @Override
-    public void issueN4(N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException, FormFillError {
+    public List<Pair<Lease, Exception>> issueN4(final N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException, FormFillError {
         // TODO fix this: policy should be applied on lease level, right now n4 policy can be set up for Organization so it should be fine        
         N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
-        Collection<ARCode> relevantArCodes = new HashSet<ARCode>(n4policy.relevantARCodes());
-        Date batchGenerationDate = SystemDateManager.getDate();
+        final Collection<ARCode> relevantArCodes = new HashSet<ARCode>(n4policy.relevantARCodes());
+        final Date batchGenerationDate = SystemDateManager.getDate();
 
-        for (Lease leaseId : batchRequest.targetDelinquentLeases()) {
-            issueN4ForLease(leaseId, makeBatchData(batchRequest), relevantArCodes, batchGenerationDate);
+        List<Pair<Lease, Exception>> failed = new LinkedList<>();
+        for (final Lease leaseId : batchRequest.targetDelinquentLeases()) {
+            try {
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, Exception>() {
+                    @Override
+                    public Void execute() throws Exception {
+                        issueN4ForLease(leaseId, makeBatchData(batchRequest), relevantArCodes, batchGenerationDate);
+                        return null;
+                    }
+                });
+            } catch (Exception e) {
+                log.error("Failed to generate n4 for lease pk='" + leaseId.getPrimaryKey() + "'", e);
+                failed.add(new Pair<>(leaseId, e));
+            }
             progress.set(progress.get() + 1);
         }
-
+        return failed;
     }
 
     @Override
@@ -162,58 +180,48 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     private void issueN4ForLease(Lease leaseId, N4BatchData batchData, Collection<ARCode> relevantArCodes, Date generationTime) throws FormFillError {
-        try {
-            N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
-                    batchData.deliveryMethod().getValue(), relevantArCodes);
-            N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
-            byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
+        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, batchData.noticeDate().getValue(),
+                batchData.deliveryMethod().getValue(), relevantArCodes);
+        N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).prepareFormData(n4LeaseData, batchData);
+        byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
 
-            LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
-            blob.data().setValue(n4LetterBinary);
-            blob.contentType().setValue("application/pdf");
-            Persistence.service().persist(blob);
+        LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);
+        blob.data().setValue(n4LetterBinary);
+        blob.contentType().setValue("application/pdf");
+        Persistence.service().persist(blob);
 
-            N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
-            n4Letter.lease().set(leaseId);
-            n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
-            n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
-            n4Letter.generatedOn().setValue(generationTime);
+        N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
+        n4Letter.lease().set(leaseId);
+        n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
+        n4Letter.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+        n4Letter.generatedOn().setValue(generationTime);
 
-            n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
-            n4Letter.file().fileSize().setValue(n4LetterBinary.length);
-            n4Letter.file().fileName().setValue(MessageFormat.format("n4-notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
+        n4Letter.file().blobKey().setValue(blob.getPrimaryKey());
+        n4Letter.file().fileSize().setValue(n4LetterBinary.length);
+        n4Letter.file().fileName().setValue(MessageFormat.format("n4-notice-{0,date,yyyy-MM-dd}.pdf", generationTime));
 
-            Persistence.service().persist(n4Letter);
+        Persistence.service().persist(n4Letter);
 
-            LegalStatusN4 n4Status = EntityFactory.create(LegalStatusN4.class);
-            n4Status.status().setValue(Status.N4);
+        LegalStatusN4 n4Status = EntityFactory.create(LegalStatusN4.class);
+        n4Status.status().setValue(Status.N4);
 
-            N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit(leaseId), N4Policy.class);
-            GregorianCalendar cal = new GregorianCalendar();
-            cal.setTime(generationTime);
-            cal.add(GregorianCalendar.DAY_OF_YEAR, policy.expiryDays().getValue());
-            n4Status.expiry().setValue(cal.getTime());
-            n4Status.cancellationThreshold().setValue(policy.cancellationThreshold().getValue());
-            n4Status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
+        N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit(leaseId), N4Policy.class);
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(generationTime);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, policy.expiryDays().getValue());
+        n4Status.expiry().setValue(cal.getTime());
+        n4Status.cancellationThreshold().setValue(policy.cancellationThreshold().getValue());
+        n4Status.terminationDate().setValue(n4LeaseData.terminationDate().getValue());
 
-            n4Status.notes().setValue("created via N4 notice batch");
-            n4Status.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
-            n4Status.setOn().setValue(generationTime);
+        n4Status.notes().setValue("created via N4 notice batch");
+        n4Status.setBy().set(EntityFactory.createIdentityStub(CrmUser.class, VistaContext.getCurrentUserPrimaryKey()));
+        n4Status.setOn().setValue(generationTime);
 
-            ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
+        ServerSideFactory.create(LeaseLegalFacade.class).setLegalStatus(//@formatter:off
                     leaseId,
                     n4Status,
                     Arrays.<LegalLetter>asList(n4Letter)
             );//@formatter:on
-
-        } catch (Throwable error) {
-            log.error("Failed to generate n4 for lease pk='" + leaseId.getPrimaryKey() + "'", error);
-            if (error instanceof FormFillError) {
-                throw new FormFillError(error.getMessage());
-            } else {
-                throw new RuntimeException(error);
-            }
-        }
     }
 
     private BigDecimal amountOwed(BillingAccount billingAccount, Collection<ARCode> acceptableArCodes, LogicalDate asOf) {
