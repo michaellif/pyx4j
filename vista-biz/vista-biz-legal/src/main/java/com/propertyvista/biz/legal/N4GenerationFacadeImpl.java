@@ -60,7 +60,7 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
-    private static final int MAX_ADDRESS_BOX_LINE_LENGTH = 24; // only 24 captial 'M' letters can fit in to the 'to' box
+    private static final int MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH = 24; // only 24 captial 'M' letters can fit in to the 'to' box
 
     private static final String N4_FORM_FILE = "n4.pdf";
 
@@ -114,7 +114,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.landlordsContactInfo().lastName().setValue(batchData.signingEmployee().name().lastName().getStringView());
         fieldsData.landlordsContactInfo().companyName().setValue(batchData.companyLegalName().getStringView());
 
-        fieldsData.landlordsContactInfo().mailingAddress().setValue(getStreetAddress(batchData.companyAddress()));
+        fieldsData.landlordsContactInfo().mailingAddress().setValue(formatStreetAddress(batchData.companyAddress()));
         fieldsData.landlordsContactInfo().unit().setValue(batchData.companyAddress().suiteNumber().getValue());
         fieldsData.landlordsContactInfo().municipality().setValue(batchData.companyAddress().city().getValue());
         fieldsData.landlordsContactInfo().province().setValue(batchData.companyAddress().province().code().getStringView());
@@ -160,28 +160,38 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private String formatTo(IList<LeaseTermTenant> leaseTenants, AddressStructured rentalUnitAddress) {
         StringBuilder toField = new StringBuilder();
-        toField.append(formatTenants(leaseTenants));
+        toField.append(formatRecipients(leaseTenants));
         toField.append("\n");
         toField.append(formatRentalAddress(rentalUnitAddress));
         return toField.toString().toUpperCase(Locale.CANADA);
     }
 
-    private String formatTenants(Iterable<LeaseTermTenant> tenants) {
+    private String formatRecipients(Iterable<LeaseTermTenant> tenants) {
         StringBuilder lineBuilder = new StringBuilder();
         for (LeaseTermTenant tenantIdStub : tenants) {
             LeaseTermTenant tenant = Persistence.service().retrieve(LeaseTermTenant.class, tenantIdStub.getPrimaryKey());
             Persistence.ensureRetrieve(tenant.leaseParticipant(), AttachLevel.Attached);
-            if (tenant.role().getValue() == Role.Applicant /* TODO ? || tenant.role().getValue() == Role.CoApplicant */) {
+            if (tenant.role().getValue() == Role.Applicant /* TODO add-co applicants? (|| tenant.role().getValue() == Role.CoApplicant) */) {
                 if (lineBuilder.length() > 0) {
                     lineBuilder.append(", ");
                 }
-                lineBuilder.append(tenant.leaseParticipant().customer().person().name().firstName().getValue() + " "
-                        + tenant.leaseParticipant().customer().person().name().lastName().getValue());
+                String formattedName = tenant.leaseParticipant().customer().person().name().firstName().getStringView() + " "
+                        + tenant.leaseParticipant().customer().person().name().lastName().getStringView();
+
+                // reduce the first name only to initial if the name is too long
+                if (formattedName.length() > MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH) {
+                    formattedName = tenant.leaseParticipant().customer().person().name().firstName().getStringView().length() > 0 ? tenant.leaseParticipant()
+                            .customer().person().name().firstName().getStringView().substring(0, 1)
+                            + ". " : "";
+                    formattedName += tenant.leaseParticipant().customer().person().name().lastName().getStringView();
+                }
+                lineBuilder.append(formattedName);
             }
         }
         return lineBuilder.toString();
     }
 
+    /** Try to format according to Canada Post guidelines */
     private String formatRentalAddress(AddressStructured address) {
         StringBuilder formattedAddress = new StringBuilder();
         formattedAddress.append(SimpleMessageFormat.format(//@formatter:off
@@ -202,12 +212,16 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return formattedAddress.toString();
     }
 
-    private String sanitzeSuiteNumber(String suiteNumber) {
-        return suiteNumber.replaceFirst("^[^\\d]*", ""); // remove all non starting digits, i.e. "Suite, Apt, APARTMENT, #" etc.
+    private String formatBuildingOwnerAddress(AddressStructured address) {
+        return address.getStringView(); // TODO maybe use same function as "format street address"
     }
 
-    private String formatBuildingOwnerAddress(AddressStructured address) {
-        return address.getStringView();
+    private String formatStreetAddress(AddressStructured companyAddress) {
+        return new AddressConverter.StructuredToSimpleAddressConverter().getStreetAddress(companyAddress);
+    }
+
+    private String sanitzeSuiteNumber(String suiteNumber) {
+        return suiteNumber.replaceFirst("^[^\\d]*", ""); // remove all non starting digits, i.e. "Suite, Apt, APARTMENT, #" etc.
     }
 
     private LogicalDate computeTerminationDate(Lease lease, LogicalDate noticeDate, N4DeliveryMethod deliveryMethod) {
@@ -247,15 +261,11 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return policy.terminationDateAdvanceDaysLongRentPeriod().getValue();
     }
 
-    private String getStreetAddress(AddressStructured companyAddress) {
-        return new AddressConverter.StructuredToSimpleAddressConverter().getStreetAddress(companyAddress);
-    }
-
     // We can fit to this field only three lines 
     private void validateToField(String toFieldString) throws FormFillError {
         boolean checkFailed = false;
         for (String line : toFieldString.split("\n")) {
-            if (line.length() > MAX_ADDRESS_BOX_LINE_LENGTH) {
+            if (line.length() > MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH) {
                 checkFailed = true;
                 break;
             }
