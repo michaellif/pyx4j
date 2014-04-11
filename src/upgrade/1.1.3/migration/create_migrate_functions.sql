@@ -234,12 +234,26 @@ BEGIN
         (
                 id                                      BIGINT                  NOT NULL,
                 id_discriminator                        VARCHAR(64)             NOT NULL,
-                lease_participant_discriminator    VARCHAR(50)             NOT NULL,
-                lease_participant                  BIGINT                  NOT NULL,
+                lease_participant_discriminator         VARCHAR(50)             NOT NULL,
+                lease_participant                       BIGINT                  NOT NULL,
                         CONSTRAINT agreement_signatures_pk PRIMARY KEY(id)
         );
         
         ALTER TABLE agreement_signatures OWNER TO vista;
+        
+        
+        -- agreement_signatures$confirmation_term_signatures
+        
+        CREATE TABLE agreement_signatures$confirmation_term_signatures
+        (
+            id                      BIGINT                  NOT NULL,
+            owner                   BIGINT,
+            value                   BIGINT,
+            seq                     INT,
+                CONSTRAINT agreement_signatures$confirmation_term_signatures_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE agreement_signatures$confirmation_term_signatures OWNER TO vista;
         
         
         -- agreement_signatures$legal_terms_signatures
@@ -1647,6 +1661,16 @@ BEGIN
                 ||'SET  broker_fee = 0.00 '
                 ||'WHERE    id_discriminator = ''TenantSureInsurancePolicy'' ';
                 
+                
+        -- lease
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease AS l '
+                ||'SET  approval_date = ltv.from_date '
+                ||'FROM     '||v_schema_name||'.lease_term lt '
+                ||'JOIN     '||v_schema_name||'.lease_term_v ltv ON (lt.id = ltv.holder) '
+                ||'WHERE    lt.lease = l.id '
+                ||'AND      ltv.version_number = 1 ';
+                
         
         -- lease_agreement_legal_policy
         
@@ -2503,7 +2527,11 @@ BEGIN
         
         
         -- foreign keys
-
+        
+        ALTER TABLE agreement_signatures$confirmation_term_signatures ADD CONSTRAINT agreement_signatures$confirmation_term_signatures_owner_fk FOREIGN KEY(owner) 
+            REFERENCES agreement_signatures(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE agreement_signatures$confirmation_term_signatures ADD CONSTRAINT agreement_signatures$confirmation_term_signatures_value_fk FOREIGN KEY(value) 
+            REFERENCES signed_agreement_confirmation_term(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_signatures$legal_terms_signatures ADD CONSTRAINT agreement_signatures$legal_terms_signatures_owner_fk FOREIGN KEY(owner) 
                 REFERENCES agreement_signatures(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE agreement_signatures$legal_terms_signatures ADD CONSTRAINT agreement_signatures$legal_terms_signatures_value_fk FOREIGN KEY(value) 
@@ -2834,6 +2862,7 @@ BEGIN
         ***     ====================================================================================================
         **/
         
+        CREATE INDEX agreement_signatures$confirmation_term_signatures_owner_idx ON agreement_signatures$confirmation_term_signatures USING btree (owner);
         CREATE INDEX agreement_signatures_lease_participant_discriminator_idx ON agreement_signatures USING btree (lease_participant_discriminator);
         CREATE INDEX agreement_signatures_lease_participant_idx ON agreement_signatures USING btree (lease_participant);
         CREATE INDEX agreement_signatures$legal_terms_signatures_owner_idx ON agreement_signatures$legal_terms_signatures USING btree (owner);
