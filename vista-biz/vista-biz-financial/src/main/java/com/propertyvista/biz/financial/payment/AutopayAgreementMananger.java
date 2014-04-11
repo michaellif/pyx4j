@@ -149,22 +149,45 @@ class AutopayAgreementMananger {
         return preauthorizedPayment;
     }
 
-    private boolean isAmountsChanged(AutopayAgreement orig, AutopayAgreement preauthorizedPayment) {
-        Set<BigDecimal> origAmounts = new HashSet<>();
-        BigDecimal origAmountTotal = BigDecimal.ZERO;
-        for (AutopayAgreementCoveredItem item : preauthorizedPayment.coveredItems()) {
-            origAmountTotal = origAmountTotal.add(item.amount().getValue());
-            origAmounts.add(item.amount().getValue());
+    private static class AllAmounts {
+
+        Set<BigDecimal> amounts = new HashSet<>();
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        void add(BigDecimal amount) {
+            total = total.add(amount);
+            amounts.add(amount.setScale(2));
         }
 
+        boolean contains(BigDecimal amount) {
+            return amounts.contains(amount.setScale(2));
+        }
+    }
+
+    private boolean isAmountsChanged(AutopayAgreement orig, AutopayAgreement preauthorizedPayment) {
+        AllAmounts origAmounts = new AllAmounts();
+        AllAmounts origPrice = new AllAmounts();
+        for (AutopayAgreementCoveredItem item : orig.coveredItems()) {
+            origAmounts.add(item.amount().getValue());
+            origPrice.add(PaymentBillableUtils.getActualPrice(item.billableItem()));
+        }
+
+        BigDecimal newPriceTotal = BigDecimal.ZERO;
         BigDecimal newAmountTotal = BigDecimal.ZERO;
         for (AutopayAgreementCoveredItem item : preauthorizedPayment.coveredItems()) {
             newAmountTotal = newAmountTotal.add(item.amount().getValue());
-            if (origAmounts.contains(item.amount().getValue())) {
+            if (!origAmounts.contains(item.amount().getValue().setScale(2))) {
+                return true;
+            }
+
+            BigDecimal price = PaymentBillableUtils.getActualPrice(item.billableItem());
+            newPriceTotal = newPriceTotal.add(price);
+            if (!origPrice.contains(price)) {
                 return true;
             }
         }
-        return newAmountTotal.compareTo(origAmountTotal) == 0;
+        return (newAmountTotal.compareTo(origAmounts.total) != 0) || (newPriceTotal.compareTo(origPrice.total) != 0);
     }
 
     void persitAutopayAgreementReview(ReviewedAutopayAgreementDTO preauthorizedPaymentChanges) {
