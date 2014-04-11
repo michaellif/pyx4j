@@ -493,6 +493,22 @@ public class EntityGraph {
     }
 
     /**
+     * Set value only if the value is null
+     * 
+     * @param valueMemeber
+     * @param value
+     * @return true if the value is changed
+     */
+    public static <S extends Serializable> boolean setDefault(IPrimitive<S> valueMember, S value) {
+        if (valueMember.isNull()) {
+            valueMember.setValue(value);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Set value only if the value is different
      * 
      * @param valueMemeber
