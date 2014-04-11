@@ -26,6 +26,7 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -160,8 +161,14 @@ class AutopayAgreementMananger {
             amounts.add(amount.setScale(2));
         }
 
-        boolean contains(BigDecimal amount) {
-            return amounts.contains(amount.setScale(2));
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof AllAmounts) {
+                AllAmounts other = (AllAmounts) obj;
+                return (total.compareTo(other.total) == 0) && EqualsHelper.equals(amounts, other.amounts);
+            } else {
+                return false;
+            }
         }
     }
 
@@ -173,21 +180,13 @@ class AutopayAgreementMananger {
             origPrice.add(PaymentBillableUtils.getActualPrice(item.billableItem()));
         }
 
-        BigDecimal newPriceTotal = BigDecimal.ZERO;
-        BigDecimal newAmountTotal = BigDecimal.ZERO;
+        AllAmounts newAmounts = new AllAmounts();
+        AllAmounts newPrice = new AllAmounts();
         for (AutopayAgreementCoveredItem item : preauthorizedPayment.coveredItems()) {
-            newAmountTotal = newAmountTotal.add(item.amount().getValue());
-            if (!origAmounts.contains(item.amount().getValue().setScale(2))) {
-                return true;
-            }
-
-            BigDecimal price = PaymentBillableUtils.getActualPrice(item.billableItem());
-            newPriceTotal = newPriceTotal.add(price);
-            if (!origPrice.contains(price)) {
-                return true;
-            }
+            newAmounts.add(item.amount().getValue());
+            newPrice.add(PaymentBillableUtils.getActualPrice(item.billableItem()));
         }
-        return (newAmountTotal.compareTo(origAmounts.total) != 0) || (newPriceTotal.compareTo(origPrice.total) != 0);
+        return !origAmounts.equals(newAmounts);
     }
 
     void persitAutopayAgreementReview(ReviewedAutopayAgreementDTO preauthorizedPaymentChanges) {
