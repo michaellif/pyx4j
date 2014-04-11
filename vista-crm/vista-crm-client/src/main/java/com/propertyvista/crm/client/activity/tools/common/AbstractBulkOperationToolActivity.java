@@ -127,7 +127,9 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
 
     protected abstract AcceptedItems makeProducedItems(List<Item> list);
 
-    protected abstract void onSelectedProccessSuccess(DeferredProcessProgressResponse result);
+    protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
+        search();
+    }
 
     protected void initSettings(AsyncCallback<Settings> callback) {
         callback.onSuccess(EntityFactory.create(settingsClass));
@@ -155,7 +157,6 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
             public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                 super.onDeferredSuccess(result);
                 AbstractBulkOperationToolActivity.this.onSelectedProccessSuccess(result);
-                search();
             }
 
             @Override

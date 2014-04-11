@@ -22,6 +22,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.essentials.rpc.download.DownloadableService;
+import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,9 +42,11 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDefaultParamsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 // TODO refactor this: this should be redesigned and refactored to fix the quick and dirty changes that have been made to deal with 'deferred' way of search for n4 candidates 
-public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchRequestDTO> {
+public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO, N4BatchRequestDTO>
+        implements N4GenerationToolView.Presenter {
 
     private static final I18n i18n = I18n.get(N4CreateBatchActivity.class);
 
@@ -56,6 +60,11 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
         super(place, CrmSite.getViewFactory().getView(N4GenerationToolView.class), GWT.<N4CreateBatchService> create(N4CreateBatchService.class),
                 N4CandidateSearchCriteriaDTO.class);
         service = GWT.<N4CreateBatchService> create(N4CreateBatchService.class);
+    }
+
+    @Override
+    public N4GenerationToolView getView() {
+        return (N4GenerationToolView) super.getView();
     }
 
     @Override
@@ -103,6 +112,11 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
     }
 
     @Override
+    public void cancelDownload(String reportUrl) {
+        GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, reportUrl);
+    }
+
+    @Override
     protected N4BatchRequestDTO makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
         N4BatchRequestDTO batchRequest = this.batchRequest.duplicate(N4BatchRequestDTO.class);
         for (LegalNoticeCandidateDTO noticeCandidate : selectedItems) {
@@ -113,7 +127,13 @@ public class N4CreateBatchActivity extends AbstractBulkOperationToolActivity<N4C
 
     @Override
     protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
-
+        DeferredReportProcessProgressResponse reportProgress = (DeferredReportProcessProgressResponse) result;
+        if (reportProgress.getDownloadLink() == null) {
+            search();
+        } else {
+            String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + reportProgress.getDownloadLink();
+            getView().displayN4GenerationReportDownloadLink(downloadUrl);
+        }
     }
 
     @Override

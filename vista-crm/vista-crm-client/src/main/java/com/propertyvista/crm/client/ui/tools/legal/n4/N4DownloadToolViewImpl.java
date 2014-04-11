@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.tools.legal.n4;
 
 import java.util.List;
 
-
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -51,7 +50,7 @@ public class N4DownloadToolViewImpl extends BulkOperationToolViewImpl<N4Download
 
     @Override
     public void displayN4DownloadLink(final String url) {
-        new LinkDialog(i18n.tr("N4's are ready"), "Download N4's", url) {
+        new LinkDialog(i18n.tr("N4's are ready"), i18n.tr("Download N4's"), url) {
             @Override
             public boolean onClickCancel() {
                 ((N4DownloadToolView.N4DownloadToolViewPresenter) getPresenter()).cancelDownload(url);

@@ -17,6 +17,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
+import com.propertyvista.crm.client.ui.tools.common.LinkDialog;
 import com.propertyvista.crm.client.ui.tools.legal.n4.datawidget.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.legal.n4.datawidget.LegalNoticeCandidateHolder;
 import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4CandidateSearchCriteriaForm;
@@ -39,5 +40,22 @@ public class N4GenerationToolViewImpl extends BulkOperationToolViewImpl<N4Candid
         setAcceptButtonCaption(i18n.tr("Issue N4's"));
         setPageIncrement(20);
         addStyleName(Styles.N4GenerationToolView.name());
+    }
+
+    @Override
+    public void displayN4GenerationReportDownloadLink(final String reportUrl) {
+        new LinkDialog(i18n.tr("Some of N4 failed"), i18n.tr("Download Errors"), reportUrl) {
+            @Override
+            public boolean onClickCancel() {
+                ((N4GenerationToolView.Presenter) getPresenter()).cancelDownload(reportUrl);
+                return false;
+            }
+
+            @Override
+            public void hide(boolean autoClosed) {
+                super.hide(autoClosed);
+                ((N4GenerationToolView.Presenter) getPresenter()).search();
+            };
+        }.show();
     }
 }

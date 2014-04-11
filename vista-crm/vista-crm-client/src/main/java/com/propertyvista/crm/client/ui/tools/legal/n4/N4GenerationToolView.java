@@ -19,4 +19,10 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 
 public interface N4GenerationToolView extends BulkOperationToolView<N4CandidateSearchCriteriaDTO, LegalNoticeCandidateDTO> {
 
+    interface Presenter extends BulkOperationToolView.Presenter {
+        void cancelDownload(String reportUrl);
+    }
+
+    void displayN4GenerationReportDownloadLink(String reportUrl);
+
 }

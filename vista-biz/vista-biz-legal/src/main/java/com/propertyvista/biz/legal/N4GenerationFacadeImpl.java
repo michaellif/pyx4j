@@ -62,6 +62,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private static final int MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH = 24; // only 24 captial 'M' letters can fit in to the 'to' box
 
+    private static final int MAX_RECIPIENT_ADDRESS_BOX_LINE_COUNT = 3; // only 3 lines can fit in to the 'to' box
+
     private static final String N4_FORM_FILE = "n4.pdf";
 
     private final InternalBillingInvoiceDebitFetcherImpl invoiceDebitFetcher;
@@ -262,16 +264,25 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     // We can fit to this field only three lines 
+    // TODO i think this kind of validation should be moved to N4FieldsMapping
     private void validateToField(String toFieldString) throws FormFillError {
-        boolean checkFailed = false;
-        for (String line : toFieldString.split("\n")) {
+
+        String[] lines = toFieldString.split("\n");
+        if (lines.length > MAX_RECIPIENT_ADDRESS_BOX_LINE_COUNT) {
+            throw new FormFillError("'to' field of N4 form won't fit too many lines (maximum : " + MAX_RECIPIENT_ADDRESS_BOX_LINE_COUNT + "):\n"
+                    + toFieldString);
+        }
+
+        boolean hasLongLine = false;
+        for (String line : lines) {
             if (line.length() > MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH) {
-                checkFailed = true;
+                hasLongLine = true;
                 break;
             }
         }
-        if (checkFailed) {
-            throw new FormFillError("'to' field of N4 form won't fit the the box (line length exceeds maximum):\n" + toFieldString);
+        if (hasLongLine) {
+            throw new FormFillError("'to' field of N4 form won't fit (line length exceeds maximum " + MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH + "):\n"
+                    + toFieldString);
         }
     }
 }
