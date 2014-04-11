@@ -54,6 +54,7 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
         b.append("  isVistaDemo                         : ").append(conf.isVistaDemo()).append("\n");
         b.append("  isVistaQa                           : ").append(conf.isVistaQa()).append("\n");
         b.append("  interfaceSSHDPort                   : ").append(conf.interfaceSSHDPort()).append("\n");
+        b.append("  rdateServer                         : ").append(conf.rdateServer()).append("\n");
         b.append("\n");
 
         b.append("  TenantSureInterfaceSftpDirectory    : ").append(conf.getTenantSureInterfaceSftpDirectory().getAbsolutePath()).append("\n");
@@ -63,7 +64,7 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
                 .append("\n");
         b.append("\n");
 
-        b.append("  CaledonInterfaceWorkDirectory         : ").append(conf.getCaledonInterfaceWorkDirectory().getAbsolutePath()).append("\n");
+        b.append("  CaledonInterfaceWorkDirectory        : ").append(conf.getCaledonInterfaceWorkDirectory().getAbsolutePath()).append("\n");
         b.append("  CaledonFundsTransferConfiguration     :\n      ")
                 .append(conf.getCaledonFundsTransferConfiguration().toString().replaceAll("\n", "\n      ")).append("\n");
         b.append("\n");

@@ -15,6 +15,8 @@ package com.propertyvista.biz.system;
 
 import java.net.InetAddress;
 import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.net.time.TimeUDPClient;
 import org.slf4j.Logger;
@@ -39,23 +41,30 @@ public class WorldDateManager {
 
     private static long remoteTimeEol = 0;
 
+    private final static Lock lock = new ReentrantLock();
+
     public static Date getWorldTime() {
-        long now = System.currentTimeMillis();
-        if ((ApplicationMode.offlineDevelopment) || remoteTimeEol <= now) {
-            getRemoteTime();
-            return new Date(System.currentTimeMillis() + timedelta);
-        } else {
-            return new Date(now + timedelta);
-        }
+        syncIfRequired();
+        return new Date(System.currentTimeMillis() + timedelta);
     }
 
     public static Date toWorldTime(Date date) {
-        long now = System.currentTimeMillis();
-        if ((ApplicationMode.offlineDevelopment) || remoteTimeEol <= now) {
-            getRemoteTime();
-            return new Date(date.getTime() + timedelta);
-        } else {
-            return new Date(date.getTime() + timedelta);
+        syncIfRequired();
+        return new Date(date.getTime() + timedelta);
+    }
+
+    /**
+     * Only one thread will locked
+     */
+    static void syncIfRequired() {
+        if ((ApplicationMode.offlineDevelopment) || remoteTimeEol <= System.currentTimeMillis()) {
+            if (lock.tryLock()) {
+                try {
+                    getRemoteTime();
+                } finally {
+                    lock.unlock();
+                }
+            }
         }
     }
 
@@ -70,7 +79,7 @@ public class WorldDateManager {
         log.debug("connecting rdateServer {}", rdateServer);
         try {
             // We want to timeout if a response takes longer than 60 seconds
-            client.setDefaultTimeout(60 * Consts.SEC2MSEC);
+            client.setDefaultTimeout(5 * Consts.SEC2MSEC);
             client.open();
             remoteTime = client.getDate(InetAddress.getByName(rdateServer));
             timedelta = remoteTime.getTime() - System.currentTimeMillis();
