@@ -278,7 +278,8 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public String rdateServer() {
-        return "98.158.137.171";
+        return "nist1-nj2.ustiming.org";
+        //return "98.158.137.171";
     }
 
 }

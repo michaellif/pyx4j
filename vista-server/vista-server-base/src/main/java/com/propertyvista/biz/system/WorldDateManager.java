@@ -20,6 +20,7 @@ import org.apache.commons.net.time.TimeUDPClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -62,11 +63,16 @@ public class WorldDateManager {
         Date remoteTime = null;
         long start = System.currentTimeMillis();
         TimeUDPClient client = new TimeUDPClient();
+        String rdateServer = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).rdateServer();
+        if (CommonsStringUtils.isEmpty(rdateServer)) {
+            return new Date();
+        }
+        log.debug("connecting rdateServer {}", rdateServer);
         try {
             // We want to timeout if a response takes longer than 60 seconds
             client.setDefaultTimeout(60 * Consts.SEC2MSEC);
             client.open();
-            remoteTime = client.getDate(InetAddress.getByName(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).rdateServer()));
+            remoteTime = client.getDate(InetAddress.getByName(rdateServer));
             timedelta = remoteTime.getTime() - System.currentTimeMillis();
             log.debug("RemoteTime {}, timeDelta {} msec, sync {}", remoteTime, timedelta, TimeUtils.secSince(start));
         } catch (Throwable e) {
