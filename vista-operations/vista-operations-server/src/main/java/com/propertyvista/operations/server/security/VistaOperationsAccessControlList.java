@@ -118,19 +118,20 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         //TODO remove
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsUserCredential.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(TriggerCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(RunCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(RunDataCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(ExecutionReportSectionService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(ExecutionReportMessageService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(SelectPmcListService.class));
+        grant(VistaOperationsBehavior.ProcessAdmin, new IServiceExecutePermission(TriggerCrudService.class));
+        grant(VistaOperationsBehavior.ProcessAdmin, new IServiceExecutePermission(RunCrudService.class));
+        grant(VistaOperationsBehavior.ProcessAdmin, new IServiceExecutePermission(RunDataCrudService.class));
+        grant(VistaOperationsBehavior.ProcessAdmin, new IServiceExecutePermission(ExecutionReportSectionService.class));
+        grant(VistaOperationsBehavior.ProcessAdmin, new IServiceExecutePermission(ExecutionReportMessageService.class));
+        grant(VistaOperationsBehavior.ProcessAdmin, new IServiceExecutePermission(SelectPmcListService.class));
+
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(Vista2PmcService.class));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Run.class, EntityPermission.ALL));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(RunData.class, EntityPermission.ALL));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(ExecutionReportSection.class, EntityPermission.READ));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(ExecutionReportMessage.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.ProcessAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.ProcessAdmin, new EntityPermission(Run.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.ProcessAdmin, new EntityPermission(RunData.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.ProcessAdmin, new EntityPermission(ExecutionReportSection.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.ProcessAdmin, new EntityPermission(ExecutionReportMessage.class, EntityPermission.READ));
         //TODO remove
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsUser.class, EntityPermission.READ));
 
@@ -213,6 +214,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(EquifaxApprovalCrudService.class));
 
         grant(VistaOperationsBehavior.SystemAdmin, VistaOperationsBehavior.Caledon);
+        grant(VistaOperationsBehavior.SystemAdmin, VistaOperationsBehavior.ProcessAdmin);
 
         grant(VistaOperationsBehavior.Caledon, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
         grant(VistaOperationsBehavior.Caledon, new EntityPermission(OperationsUserCredential.class, EntityPermission.ALL));
